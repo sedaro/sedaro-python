@@ -22,7 +22,7 @@ def start_generator():
             print('\nNote: this is intended to be used for generating a client, scroll up to see CLIENT generators.')
             language = None
 
-    client_dir = f'{language}_client'
+    client_dir = f'clients/{language}_client'
 
     # ------- check if exists and if want to overwrite -------
     proceed = False
