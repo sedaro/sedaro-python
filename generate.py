@@ -1,5 +1,6 @@
 import os
 
+# TODO: change to reference our live spec
 spec_location = '/local/sedaro-satellite.json'
 
 
