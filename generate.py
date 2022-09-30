@@ -2,6 +2,7 @@ import os
 
 # TODO: change to reference our live spec
 spec_location = '/local/sedaro-satellite.json'
+target_dir = 'generated_clients'
 
 
 def start_generator():
@@ -13,16 +14,17 @@ def start_generator():
     language = None
     while language == None:
         language = input(
-            '\nWhat coding language would you like to generate a client for? (Can also type "options")\n').lower()
+            '\nWhat coding language would you like to generate a client for? (Can also type "options")\n- ').lower()
 
         if language == "options":
             print('')
             print(os.system(
                 'docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli list'))
-            print('\nNote: this is intended to be used for generating a client, scroll up to see CLIENT generators.')
+            print(
+                '\nNote: this is intended to be used for generating a client, scroll up to "CLIENT generators".')
             language = None
 
-    client_dir = f'clients/{language}_client'
+    client_dir = f'{target_dir}/{language}_client'
 
     # ------- check if exists and if want to overwrite -------
     proceed = False
@@ -32,10 +34,10 @@ def start_generator():
         want_to_proceed = None
         while want_to_proceed not in ('y', 'n'):
             want_to_proceed = input(
-                f'\nA client has already been generated for {language}.\nWould you like to delete that client and regenerate it? (y/n)\n')
-            if want_to_proceed.lower() == 'y':
+                f'\nA client has already been generated for {language}.\nWould you like to delete that client and regenerate it? (y/n)\n- ').lower()
+            if want_to_proceed == 'y':
                 proceed = True
-            elif want_to_proceed.lower() != 'n':
+            elif want_to_proceed != 'n':
                 print(f'\n"{want_to_proceed}" is not a valid choice')
 
     if not proceed:
