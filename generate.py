@@ -1,8 +1,8 @@
 import os
 
-# TODO: change to reference our live spec
-spec_location = '/local/sedaro-satellite.json'
-target_dir = 'generated_clients'
+# TODO: change spec location to reference our live spec
+SPEC_LOCATION = '/local/sedaro-satellite.json'
+TARGET_DIR = 'generated_clients'
 
 
 def start_generator():
@@ -24,7 +24,7 @@ def start_generator():
                 '\nNote: this is intended to be used for generating a client, scroll up to "CLIENT generators".')
             language = None
 
-    client_dir = f'{target_dir}/{language}_client'
+    client_dir = f'{TARGET_DIR}/{language}_client'
 
     # ------- check if exists and if want to overwrite -------
     proceed = False
@@ -50,7 +50,7 @@ def start_generator():
 
     # --------------------- generate new ---------------------
     generate_client_cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
-        -i {spec_location} \
+        -i {SPEC_LOCATION} \
         -g {language} \
         -o /local/{client_dir}'
 
