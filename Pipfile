@@ -7,11 +7,13 @@ name = "pypi"
 autopep8 = "==1.7.0"
 pycodestyle = "==2.9.1"
 toml = "==0.10.2"
-typing-extensions = "==4.3.0" 
-# added typing-extensions b/c generated python_client tries to import from typing_extensions (convention in older
-# version of python), and should now be an import from typing. This is a workaround.
+typing-extensions = ">=4.3.0"
+certifi = ">=14.05.14"
+frozendict = ">=2.0.3"
+python-dateutil = ">=2.5.3"
+urllib3 = ">=1.15.1"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"
