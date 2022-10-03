@@ -1,20 +1,6 @@
-# Clients
+# Sedaro Python Client
 
-## Sedaro OpenAPI Client Generator
-
-An interactive tool for building clients for Sedaro Satellite based on our OpenAPI spec. Built on an **OpenAPI Generator** docker image: https://openapi-generator.tech/docs/installation#docker
-
-In this folder run:
-
-- Set up virtual environment if haven't done already:
-  - Create virtual environment: `$ python3.9 -m venv ./.venv`
-  - Active virtual environment: `source .venv/bin/activate`
-  - Install dependencies: `$ pipenv install` to install dependencies and create virtual environment
-  - Select the newly created python environment in vs-code (`cmd shift p` > "Python: Select Interpreter")
-- Activate script:
-  - `$ python3 generate.py` or `$ python3 generate.py`
-  - You will be prompted on how to proceed.
-- Install dependencies (for `python` client only):
-  - `$ pip install -r sedaro_python_client/python_client/requirements.txt`
+- In parent directory to this directory, set up virtual environment if haven't done already:
+  - run `python3 sedaro_python_client/make_virtual_env.py` or `python sedaro_python_client/make_virtual_env.py`
 
 _Note: requires python to be installed on the computer or a virtual environment to be created in the directory._
