@@ -1,6 +1,6 @@
 import os
 import urllib.request
-import shutil
+import tempfile
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
@@ -50,25 +50,18 @@ def start_generator():
         os.system(f'rm -r {client_dir}')
 
     # ----------------------- generate new client -----------------------
-    TEMP_DIR_FOR_SPEC = '.temp'
-    try:
-        # ----- download spec into temporary location -----
-        if os.path.exists(TEMP_DIR_FOR_SPEC) and os.path.isdir(TEMP_DIR_FOR_SPEC):
-            shutil.rmtree(TEMP_DIR_FOR_SPEC)
-        os.makedirs(TEMP_DIR_FOR_SPEC)
+    with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as TEMP_DIR_FOR_SPEC:
+
         TEMP_SPEC_LOCATION = f'{TEMP_DIR_FOR_SPEC}/spec.json'
         urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
 
         # ----- generate client -----
         os.system(
             f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
-            -i /local/{TEMP_SPEC_LOCATION} \
+            -i /local{TEMP_SPEC_LOCATION[1:]} \
             -g {language} \
             -o /local/{client_dir}'
         )
-    finally:
-        # ----- delete spec and temporary location for spec -----
-        shutil.rmtree(TEMP_DIR_FOR_SPEC)
 
 
 if __name__ == "__main__":
