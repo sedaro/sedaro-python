@@ -24,11 +24,7 @@ def start_generator():
                 '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
-    TARGET_DIR = 'generated_clients'
-
-    if language == 'python':
-        TARGET_DIR = 'sedaro_python_client'
-
+    TARGET_DIR = f'sedaro_{language}_client'
     client_dir = f'{TARGET_DIR}/{language}_client'
 
     # --------- check if client exists and if want to overwrite ---------
