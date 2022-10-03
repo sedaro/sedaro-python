@@ -1,8 +1,8 @@
 import os
+import urllib.request
+import shutil
 
-# TODO: change spec location to reference our live spec
-SPEC_LOCATION = '/local/sedaro-satellite.json'
-TARGET_DIR = 'generated_clients'
+DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
 
 def start_generator():
@@ -10,7 +10,7 @@ def start_generator():
 
     print('\n------< Sedaro OpenAPI Client Generator >------')
 
-    # ----------------- get desired language -----------------
+    # ----------------- get desired language for client -----------------
     language = None
     while language == None:
         language = input(
@@ -21,12 +21,13 @@ def start_generator():
             print(os.system(
                 'docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli list'))
             print(
-                '\nNote: this is intended to be used for generating a client, scroll up to "CLIENT generators".')
+                '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
+    TARGET_DIR = 'generated_clients'
     client_dir = f'{TARGET_DIR}/{language}_client'
 
-    # ------- check if exists and if want to overwrite -------
+    # --------- check if client exists and if want to overwrite ---------
     proceed = False
     if not os.path.isdir(client_dir):
         proceed = True
@@ -44,17 +45,30 @@ def start_generator():
         print('\nCancelled\n')
         return
 
-    # ----------------- remove dir if exists -----------------
+    # ----------------- remove client if already exists -----------------
     if os.path.isdir(client_dir):
         os.system(f'rm -r {client_dir}')
 
-    # --------------------- generate new ---------------------
-    generate_client_cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
-        -i {SPEC_LOCATION} \
-        -g {language} \
-        -o /local/{client_dir}'
+    # ----------------------- generate new client -----------------------
+    TEMP_DIR_FOR_SPEC = '.temp'
+    try:
+        # ----- download spec into temporary location -----
+        if os.path.exists(TEMP_DIR_FOR_SPEC) and os.path.isdir(TEMP_DIR_FOR_SPEC):
+            shutil.rmtree(TEMP_DIR_FOR_SPEC)
+        os.makedirs(TEMP_DIR_FOR_SPEC)
+        TEMP_SPEC_LOCATION = f'{TEMP_DIR_FOR_SPEC}/spec.json'
+        urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
 
-    os.system(generate_client_cmd)
+        # ----- generate client -----
+        os.system(
+            f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
+            -i /local/{TEMP_SPEC_LOCATION} \
+            -g {language} \
+            -o /local/{client_dir}'
+        )
+    finally:
+        # ----- delete spec and temporary location for spec -----
+        shutil.rmtree(TEMP_DIR_FOR_SPEC)
 
 
 if __name__ == "__main__":
