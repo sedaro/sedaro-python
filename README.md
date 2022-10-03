@@ -15,6 +15,6 @@ In this folder run:
   - `$ python3 generate.py` or `$ python3 generate.py`
   - You will be prompted on how to proceed.
 - Install dependencies (for `python` client only):
-  - `$ pip install -r generated_clients/python_client/requirements.txt`
+  - `$ pip install -r sedaro_python_client/python_client/requirements.txt`
 
 _Note: requires python to be installed on the computer or a virtual environment to be created in the directory._
