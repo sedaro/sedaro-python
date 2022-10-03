@@ -1,8 +1,5 @@
-from .python_client.openapi_client import ApiClient, Configuration
-
-config = Configuration(
-    host='http://localhost:8000/',
-)
+from .python_client.openapi_client import ApiClient
+from .configuration import config
 
 
 class SedaroApiClient(ApiClient):
