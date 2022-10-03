@@ -6,7 +6,7 @@ config = Configuration(
 
 
 class SedaroApiClient(ApiClient):
-    def __init__(self, *args, api_key='', **kwargs):
+    def __init__(self, api_key, *args, **kwargs):
         return super().__init__(
             configuration=config,
             *args,
