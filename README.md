@@ -6,7 +6,7 @@ An interactive tool for building clients for Sedaro Satellite based on our OpenA
 
 In this folder run:
 
-- `$ python generate.py` or `$ python3 generate.py`
+- `$ python client_generator.py` or `$ python3 client_generator.py`
 
 You will be prompted on how to proceed.
 
