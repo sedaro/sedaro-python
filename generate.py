@@ -24,12 +24,12 @@ def start_generator():
                 '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
-    TARGET_DIR = f'sedaro_{language}_client'
-    client_dir = f'{TARGET_DIR}/{language}_client'
+    PARENT_DIR = f'sedaro_{language}_client'
+    CLIENT_DIR = f'{PARENT_DIR}/{language}_client'
 
     # --------- check if client exists and if want to overwrite ---------
     proceed = False
-    if not os.path.isdir(client_dir):
+    if not os.path.isdir(CLIENT_DIR):
         proceed = True
     else:
         want_to_proceed = None
@@ -46,8 +46,8 @@ def start_generator():
         return
 
     # ----------------- remove client if already exists -----------------
-    if os.path.isdir(client_dir):
-        os.system(f'rm -r {client_dir}')
+    if os.path.isdir(CLIENT_DIR):
+        os.system(f'rm -r {CLIENT_DIR}')
 
     # ----------------------- generate new client -----------------------
     with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as TEMP_DIR_FOR_SPEC:
@@ -60,7 +60,7 @@ def start_generator():
             f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
                 -i /local{TEMP_SPEC_LOCATION[1:]} \
                 -g {language} \
-                -o /local/{client_dir}'
+                -o /local/{CLIENT_DIR}'
         )
 
 
