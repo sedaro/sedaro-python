@@ -58,9 +58,9 @@ def start_generator():
         # ----- generate client -----
         os.system(
             f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
-            -i /local{TEMP_SPEC_LOCATION[1:]} \
-            -g {language} \
-            -o /local/{client_dir}'
+                -i /local{TEMP_SPEC_LOCATION[1:]} \
+                -g {language} \
+                -o /local/{client_dir}'
         )
 
 
