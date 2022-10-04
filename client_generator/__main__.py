@@ -3,9 +3,8 @@ import urllib.request
 import tempfile
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
-PYTHON_CONFIG_FILE = 'python_client_config.yaml'
 
-def start_generator():
+def run_generator():
     '''Begin basic interactive terminal to create a client.'''
 
     print('\n------< Sedaro OpenAPI Client Generator >------')
@@ -24,11 +23,13 @@ def start_generator():
                 '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
-    PARENT_DIR = f'sedaro'
+    # PARENT_DIR = f'sedaro'
     # if language != 'python':
     #     PARENT_DIR = PARENT_DIR + f'_{language}'
     # CLIENT_DIR = f'{PARENT_DIR}/src/sedaro/{language}_client'
-    CLIENT_DIR = PARENT_DIR + f'_{language}' if language != 'python' else PARENT_DIR
+    CLIENT_DIR = f'sedaro'
+    if language != 'python':
+        CLIENT_DIR = CLIENT_DIR + f'_{language}'
 
     # --------- check if client exists and if want to overwrite ---------
     proceed = False
@@ -64,8 +65,9 @@ def start_generator():
                 -g {language} \
                 -o /local/{CLIENT_DIR}'
 
-        if language == 'python':
-            cmd = cmd + f' -c /local/{PYTHON_CONFIG_FILE}'
+        config_file = f'/client_generator/{language}_config.yaml'
+        if os.path.isfile('.' + config_file):
+            cmd = cmd + f' -c /local{config_file}'
 
         # TODO -- consider options:
         # --minimal-update
@@ -77,4 +79,4 @@ def start_generator():
         os.system(cmd)
 
 if __name__ == "__main__":
-    start_generator()
+    run_generator()
