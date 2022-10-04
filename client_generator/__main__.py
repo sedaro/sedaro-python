@@ -3,7 +3,7 @@ import urllib.request
 import tempfile
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
-
+PYTHON_CONFIG_FILE = 'python_client_config.yaml'
 
 def start_generator():
     '''Begin basic interactive terminal to create a client.'''
@@ -25,9 +25,10 @@ def start_generator():
             language = None
 
     PARENT_DIR = f'sedaro'
-    if language != 'python':
-        PARENT_DIR = PARENT_DIR + f'_{language}'
-    CLIENT_DIR = f'{PARENT_DIR}/src/sedaro/{language}_client'
+    # if language != 'python':
+    #     PARENT_DIR = PARENT_DIR + f'_{language}'
+    # CLIENT_DIR = f'{PARENT_DIR}/src/sedaro/{language}_client'
+    CLIENT_DIR = PARENT_DIR + f'_{language}' if language != 'python' else PARENT_DIR
 
     # --------- check if client exists and if want to overwrite ---------
     proceed = False
@@ -58,13 +59,22 @@ def start_generator():
         urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
 
         # ----- generate client -----
-        os.system(
-            f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
+        cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
                 -i /local{TEMP_SPEC_LOCATION[1:]} \
                 -g {language} \
                 -o /local/{CLIENT_DIR}'
-        )
 
+        if language == 'python':
+            cmd = cmd + f' -c /local/{PYTHON_CONFIG_FILE}'
+
+        # TODO -- consider options:
+        # --minimal-update
+        #     Only write output files that have changed.
+
+        # --dry-run
+        #     Try things out and report on potential changes (without actually
+        #     making changes).
+        os.system(cmd)
 
 if __name__ == "__main__":
     start_generator()
