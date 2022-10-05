@@ -4,16 +4,24 @@ import tempfile
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
-def run_generator():
+GO = 'go'
+DRY_RUN = 'dr'
+MINIMAL_UPDATE = 'mu'
+QUIT = 'q'
+DELETE = 'x'
+DIFFERENT_LANGUAGE = 'dl'
+
+def run_generator(skip_intro = False):
     '''Begin basic interactive terminal to create a client.'''
 
-    print('\n------< Sedaro OpenAPI Client Generator >------')
+    if not skip_intro:
+        print('\n------< 🛰️  Sedaro OpenAPI Client Generator 🛰️  >------')
 
     # ----------------- get desired language for client -----------------
     language = None
     while language == None:
-        language = input(
-            '\nWhat coding language would you like to generate a client for? (Can also type "options")\n- ').lower()
+        print('\nWhat coding language would you like to generate a client for? (Can also type "options")')
+        language = input('~ ').lower().strip()
 
         if language == "options":
             print('')
@@ -32,25 +40,33 @@ def run_generator():
         CLIENT_DIR = CLIENT_DIR + f'_{language}'
 
     # --------- check if client exists and if want to overwrite ---------
-    proceed = False
-    if not os.path.isdir(CLIENT_DIR):
-        proceed = True
-    else:
-        want_to_proceed = None
-        while want_to_proceed not in ('y', 'n'):
-            want_to_proceed = input(
-                f'\nA client has already been generated for {language}.\nWould you like to delete that client and regenerate it? (y/n)\n- ').lower()
-            if want_to_proceed == 'y':
-                proceed = True
-            elif want_to_proceed != 'n':
-                print(f'\n"{want_to_proceed}" is not a valid choice')
+    how_to_proceed = None
+    proceed_options = (GO, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, DELETE)
 
-    if not proceed:
-        print('\nCancelled\n')
+    if not os.path.isdir(CLIENT_DIR):
+        how_to_proceed = GO
+
+    while how_to_proceed not in proceed_options:
+        print(f'\nA client has already been generated for {language}. How would you like to proceed?')
+        print(f'  + "{DRY_RUN}" (dry-run) -- try things out and report on potential changes (without actually making changes)')
+        print(f'  + "{MINIMAL_UPDATE}" (minimal-update) -- only write output files that have changed')
+        print(f'  + "{QUIT}"  (quit) -- abort generator')
+        print(f'  + "{DIFFERENT_LANGUAGE}"  (different language) -- restart and pick a different language')
+        print(f'  + "{DELETE}"  (delete) -- delete and regenerate old client')
+        how_to_proceed = input(f'~ ').lower().strip()
+
+        if how_to_proceed not in proceed_options:
+            print(f'\n"{how_to_proceed}" is not a valid choice')
+
+    if how_to_proceed == QUIT:
+        print('\n------------------< 🛰️  Aborted 🛰️  >------------------\n')
         return
 
+    if how_to_proceed == DIFFERENT_LANGUAGE:
+        run_generator(skip_intro=True)
+
     # ----------------- remove client if already exists -----------------
-    if os.path.isdir(CLIENT_DIR):
+    if how_to_proceed == DELETE:
         os.system(f'rm -r {CLIENT_DIR}')
 
     # ----------------------- generate new client -----------------------
@@ -69,14 +85,14 @@ def run_generator():
         if os.path.isfile('.' + config_file):
             cmd = cmd + f' -c /local{config_file}'
 
-        # TODO -- consider options:
-        # --minimal-update
-        #     Only write output files that have changed.
+        if how_to_proceed == DRY_RUN:
+            cmd += ' --dry-run'
+        if how_to_proceed == MINIMAL_UPDATE:
+            cmd += ' --minimal-update'
 
-        # --dry-run
-        #     Try things out and report on potential changes (without actually
-        #     making changes).
         os.system(cmd)
+
+        print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
 
 if __name__ == "__main__":
     run_generator()
