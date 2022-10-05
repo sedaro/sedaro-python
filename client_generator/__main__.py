@@ -53,11 +53,11 @@ def run_generator(skip_intro = False):
 
     while how_to_proceed not in proceed_options:
         print(f'\nA client has already been generated for {language}. How would you like to proceed?')
-        print(f'  + "{DRY_RUN}" (dry-run) -- try things out and report on potential changes (without actually making changes)')
-        print(f'  + "{MINIMAL_UPDATE}" (minimal-update) -- only write output files that have changed')
-        print(f'  + "{QUIT}"  (quit) -- abort generator')
-        print(f'  + "{DIFFERENT_LANGUAGE}" (different language) -- restart and pick a different language')
-        print(f'  + "{REGENERATE}"  (regenerate) -- delete and regenerate client (use with caution)')
+        print(f'  + "{DRY_RUN}"    dry-run                try things out and report on potential changes (without actually making changes)')
+        print(f'  + "{MINIMAL_UPDATE}"    minimal-update         only write output files that have changed')
+        print(f'  + "{QUIT}"     quit                   abort generator')
+        print(f'  + "{DIFFERENT_LANGUAGE}"    different language     restart and pick a different language')
+        print(f'  + "{REGENERATE}"     regenerate             delete and regenerate client (use with caution)')
         how_to_proceed = input(f'~ ').lower().strip()
 
         if how_to_proceed not in proceed_options:
