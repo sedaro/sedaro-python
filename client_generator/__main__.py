@@ -1,14 +1,19 @@
 import os
 import urllib.request
 import tempfile
+import shutil
+import json
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
-GO = 'go'
+# CONSTANTS
+PYTHON = 'python'
+CUSTOM = 'custom'
+GENERATE_NEW = 'new'
 DRY_RUN = 'dr'
 MINIMAL_UPDATE = 'mu'
 QUIT = 'q'
-DELETE = 'x'
+REGENERATE = 'x'
 DIFFERENT_LANGUAGE = 'dl'
 
 def run_generator(skip_intro = False):
@@ -32,27 +37,27 @@ def run_generator(skip_intro = False):
             language = None
 
     # PARENT_DIR = f'sedaro'
-    # if language != 'python':
+    # if language != PYTHON:
     #     PARENT_DIR = PARENT_DIR + f'_{language}'
     # CLIENT_DIR = f'{PARENT_DIR}/src/sedaro/{language}_client'
-    CLIENT_DIR = f'sedaro'
-    if language != 'python':
+    CLIENT_DIR = 'sedaro'
+    if language != PYTHON:
         CLIENT_DIR = CLIENT_DIR + f'_{language}'
 
     # --------- check if client exists and if want to overwrite ---------
     how_to_proceed = None
-    proceed_options = (GO, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, DELETE)
+    proceed_options = (GENERATE_NEW, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, REGENERATE)
 
     if not os.path.isdir(CLIENT_DIR):
-        how_to_proceed = GO
+        how_to_proceed = GENERATE_NEW
 
     while how_to_proceed not in proceed_options:
         print(f'\nA client has already been generated for {language}. How would you like to proceed?')
         print(f'  + "{DRY_RUN}" (dry-run) -- try things out and report on potential changes (without actually making changes)')
         print(f'  + "{MINIMAL_UPDATE}" (minimal-update) -- only write output files that have changed')
         print(f'  + "{QUIT}"  (quit) -- abort generator')
-        print(f'  + "{DIFFERENT_LANGUAGE}"  (different language) -- restart and pick a different language')
-        print(f'  + "{DELETE}"  (delete) -- delete and regenerate old client')
+        print(f'  + "{DIFFERENT_LANGUAGE}" (different language) -- restart and pick a different language')
+        print(f'  + "{REGENERATE}"  (regenerate) -- delete and regenerate old client (use with caution)')
         how_to_proceed = input(f'~ ').lower().strip()
 
         if how_to_proceed not in proceed_options:
@@ -65,14 +70,26 @@ def run_generator(skip_intro = False):
     if how_to_proceed == DIFFERENT_LANGUAGE:
         run_generator(skip_intro=True)
 
-    # ----------------- remove client if already exists -----------------
-    if how_to_proceed == DELETE:
-        os.system(f'rm -r {CLIENT_DIR}')
-
     # ----------------------- generate new client -----------------------
-    with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as TEMP_DIR_FOR_SPEC:
+    with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as temp_dir:
+        
+        config_file = f'/client_generator/{language}_config.json'
 
-        TEMP_SPEC_LOCATION = f'{TEMP_DIR_FOR_SPEC}/spec.json'
+        # ----- remove client if already exists -----
+        if how_to_proceed == REGENERATE:
+            # ----- save custom dir -----
+            if language == PYTHON:
+                package_name = json.load(open('.' + config_file))['packageName']
+                custom_dir = f'{CLIENT_DIR}/{package_name}/{CUSTOM}'
+                custom_temp_dir = f'{temp_dir}/{CUSTOM}'
+                shutil.copytree(custom_dir, custom_temp_dir)
+            # ----- delete old client dir -----
+            os.system(f'rm -r {CLIENT_DIR}')
+            # ----- add back custom dir -----
+            if language == PYTHON:
+                shutil.copytree(custom_temp_dir, custom_dir)
+
+        TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
         urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
 
         # ----- generate client -----
@@ -81,10 +98,9 @@ def run_generator(skip_intro = False):
                 -g {language} \
                 -o /local/{CLIENT_DIR}'
 
-        config_file = f'/client_generator/{language}_config.yaml'
+        # ----- exta options -----
         if os.path.isfile('.' + config_file):
             cmd = cmd + f' -c /local{config_file}'
-
         if how_to_proceed == DRY_RUN:
             cmd += ' --dry-run'
         if how_to_proceed == MINIMAL_UPDATE:
