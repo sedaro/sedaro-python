@@ -57,11 +57,22 @@ def run_generator(skip_intro = False):
         print(f'  + "{MINIMAL_UPDATE}" (minimal-update) -- only write output files that have changed')
         print(f'  + "{QUIT}"  (quit) -- abort generator')
         print(f'  + "{DIFFERENT_LANGUAGE}" (different language) -- restart and pick a different language')
-        print(f'  + "{REGENERATE}"  (regenerate) -- delete and regenerate old client (use with caution)')
+        print(f'  + "{REGENERATE}"  (regenerate) -- delete and regenerate client (use with caution)')
         how_to_proceed = input(f'~ ').lower().strip()
 
         if how_to_proceed not in proceed_options:
             print(f'\n"{how_to_proceed}" is not a valid choice')
+
+    if how_to_proceed == REGENERATE:
+        yn = None
+        yn_options = ('y', 'n')
+        while yn not in yn_options:
+            print('\nAre you sure you would like to regenerate the client? Please first make sure you have saved and committed any customizations. (y/n)')
+            yn = input('~ ').lower().strip()
+            if yn not in yn_options:
+                print(f'\n"{yn}" is not a valid choice')
+            if yn == 'n':
+                how_to_proceed = QUIT
 
     if how_to_proceed == QUIT:
         print('\n------------------< 🛰️  Aborted 🛰️  >------------------\n')
