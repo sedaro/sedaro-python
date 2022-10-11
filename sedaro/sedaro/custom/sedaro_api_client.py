@@ -17,7 +17,7 @@ class SedaroApiClient(ApiClient):
             header_value=api_key
         )
 
-    def get_block_client_api(self, block_name: str, temp=False) -> Api:
+    def get_block_api(self, block_name: str, temp=False) -> Api:
         """Returns the api instance associated with the block corresponding to the `block_name` passed in.
 
         Args:
