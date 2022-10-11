@@ -19,7 +19,7 @@ class BlockClient:
     _branch_id: int
     block_open_api_instance: Api
 
-    def create(self, body: Dict, *args, **kwargs) -> Dict:  # FIXME: return value
+    def create(self, body: Dict, **kwargs) -> Dict:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
 
         Args:
@@ -31,7 +31,6 @@ class BlockClient:
         """
         create_method = getattr(self.block_open_api_instance, f'create_{self._block_snake_case}')
         res = create_method(
-            *args,
             body=self._BlockCreate(**body),
             **kwargs,
             path_params={'branchId': self._branch_id},
