@@ -16,7 +16,8 @@ QUIT = 'q'
 REGENERATE = 'x'
 DIFFERENT_LANGUAGE = 'dl'
 
-def run_generator(skip_intro = False):
+
+def run_generator(skip_intro=False):
     '''Begin basic interactive terminal to create a client.'''
 
     if not skip_intro:
@@ -46,18 +47,26 @@ def run_generator(skip_intro = False):
 
     # --------- check if client exists and if want to overwrite ---------
     how_to_proceed = None
-    proceed_options = (GENERATE_NEW, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, REGENERATE)
+    proceed_options = (
+        GENERATE_NEW, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, REGENERATE
+    )
 
     if not os.path.isdir(CLIENT_DIR):
         how_to_proceed = GENERATE_NEW
 
     while how_to_proceed not in proceed_options:
-        print(f'\nA client has already been generated for {language}. How would you like to proceed?')
-        print(f'  + "{DRY_RUN}"    dry-run                try things out and report on potential changes (without actually making changes)')
-        print(f'  + "{MINIMAL_UPDATE}"    minimal-update         only write output files that have changed')
-        print(f'  + "{QUIT}"     quit                   abort generator')
-        print(f'  + "{DIFFERENT_LANGUAGE}"    different language     restart and pick a different language')
-        print(f'  + "{REGENERATE}"     regenerate             delete and regenerate client (use with caution)')
+        print(
+            f'\nA client has already been generated for {language}. How would you like to proceed?')
+        print(
+            f'  + "{DRY_RUN}"    dry-run                try things out and report on potential changes (without actually making changes)')
+        print(
+            f'  + "{MINIMAL_UPDATE}"    minimal-update         only write output files that have changed')
+        print(
+            f'  + "{QUIT}"     quit                   abort generator')
+        print(
+            f'  + "{DIFFERENT_LANGUAGE}"    different language     restart and pick a different language')
+        print(
+            f'  + "{REGENERATE}"     regenerate             delete and regenerate client (use with caution)')
         how_to_proceed = input(f'~ ').lower().strip()
 
         if how_to_proceed not in proceed_options:
@@ -83,14 +92,15 @@ def run_generator(skip_intro = False):
 
     # ----------------------- generate new client -----------------------
     with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as temp_dir:
-        
+
         config_file = f'/client_generator/{language}_config.json'
 
         # ----- remove client if already exists -----
         if how_to_proceed == REGENERATE:
             # ----- save custom dir -----
             if language == PYTHON:
-                package_name = json.load(open('.' + config_file))['packageName']
+                package_name = json.load(open(f'.{config_file}'))[
+                    'packageName']
                 custom_dir = f'{CLIENT_DIR}/{package_name}/{CUSTOM}'
                 custom_temp_dir = f'{temp_dir}/{CUSTOM}'
                 shutil.copytree(custom_dir, custom_temp_dir)
@@ -120,6 +130,7 @@ def run_generator(skip_intro = False):
         os.system(cmd)
 
         print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
+
 
 if __name__ == "__main__":
     run_generator()
