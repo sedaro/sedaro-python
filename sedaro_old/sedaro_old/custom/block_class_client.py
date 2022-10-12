@@ -18,6 +18,9 @@ class BlockClassClient:
     create_class: type
     branch: 'Branch'
 
+    def __str__(self) -> str:
+        return f'BlockClassClient(block_name={self.block_name}, branch={self.branch.id})'
+
     def create(self, body: Dict, **kwargs) -> Dict:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
 
