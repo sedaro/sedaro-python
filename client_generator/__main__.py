@@ -1,8 +1,8 @@
 import os
 import urllib.request
 import tempfile
-import shutil
-import json
+# import shutil
+# import json
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
