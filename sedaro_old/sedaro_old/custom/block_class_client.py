@@ -3,6 +3,8 @@ from sedaro_old.api_client import Api
 from typing import TYPE_CHECKING, Dict
 from pydash.strings import snake_case
 
+from sedaro_old.sedaro_old.custom.sedaro_api_client import SedaroApiClient
+
 from .settings import CREATE
 from .block import Block
 
@@ -42,3 +44,7 @@ class BlockClassClient:
             block_class_client=self,
             block_group=block_group
         )
+
+    @property
+    def sedaro_client(self) -> SedaroApiClient:
+        return self.branch.sedaro_client
