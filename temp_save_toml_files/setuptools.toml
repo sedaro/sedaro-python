@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sedaro"
+version = "0.1.0"
+authors = [
+  { name="Sedaro", email="support@sedarotech.com" },
+]
+description = "A python client to interact with the Sedaro Satellite API."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License", # FIXME
+    "Operating System :: OS Independent", # FIXME
+    "Topic :: Software Development",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
+"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
+
+[tool.setuptools.dynamic]
+dependencies = {file = [
+  "src/sedaro/requirements.txt",
+]}
