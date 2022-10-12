@@ -5,14 +5,13 @@ from pydash.strings import snake_case
 
 from .settings import CREATE
 from .block import Block
-from .utils import parse_urllib_response
 
 if TYPE_CHECKING:
     from .branch import Branch
 
 
 @dataclass
-class BlockGroupSingleClass:
+class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     block_name: str
     block_openapi_instance: Api

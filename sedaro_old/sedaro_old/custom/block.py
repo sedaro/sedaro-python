@@ -2,14 +2,14 @@ from typing import TYPE_CHECKING, Dict
 from dataclasses import dataclass
 
 if TYPE_CHECKING:
-    from .block_group_single_class import BlockGroupSingleClass
+    from .block_class_client import BlockClassClient
 
 
 @dataclass
 class Block:
     id: int
     data: Dict
-    block_group_single_class: 'BlockGroupSingleClass'
+    block_group_single_class: 'BlockClassClient'
     '''Class for interacting with all Blocks of this class type'''
     block_group: str
     '''Corresponds to actual Sedaro BlockGroup name'''
