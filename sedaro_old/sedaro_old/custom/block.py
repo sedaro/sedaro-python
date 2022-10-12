@@ -17,5 +17,6 @@ class Block:
         return f'Block(id={self.id}, data={self.data}, block_group={self.block_group})'
 
     @property
-    def data(self):
+    def data(self) -> Dict:
+        # FIXME: handle when it's deleted... (KeyError)
         return self.block_class_client.branch.data[self.block_group][self.id]
