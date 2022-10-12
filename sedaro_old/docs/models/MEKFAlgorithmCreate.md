@@ -1,0 +1,51 @@
+# sedaro.model.mekf_algorithm_create.MEKFAlgorithmCreate
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
+
+### Dictionary Keys
+Key | Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | ------------- | -------------
+**algorithmType** | str,  | str,  |  | must be one of ["ATTITUDE_DETERMINATION", ] 
+**rate** | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+**name** | str,  | str,  |  | 
+**algorithmSubtype** | str,  | str,  |  | must be one of ["MEKF", ] 
+**id** | str,  | str,  |  | [optional] 
+**covariance** | dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | [optional] 
+**[opticalAttitudeSensors](#opticalAttitudeSensors)** | list, tuple,  | tuple,  | Relationship to one or more &#x60;OpticalAttitudeSensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | [optional] 
+**[angularVelocitySensors](#angularVelocitySensors)** | list, tuple,  | tuple,  | Relationship to one or more &#x60;AngularVelocitySensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | [optional] 
+**satellite** | str,  | str,  | Relationship to zero or one &#x60;Satellite&#x60; blocks. Reverse key: &#x60;Satellite.algorithms&#x60;. On delete: &#x60;SET_NONE&#x60; (set relationship field to &#x60;None&#x60; when referenced block is deleted). | [optional] 
+**any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
+
+# opticalAttitudeSensors
+
+Relationship to one or more `OpticalAttitudeSensor` blocks. On delete: `RESTRICT` (prevent all referenced blocks from being deleted while relationship to this one exists).
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  | Relationship to one or more &#x60;OpticalAttitudeSensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
+
+# angularVelocitySensors
+
+Relationship to one or more `AngularVelocitySensor` blocks. On delete: `RESTRICT` (prevent all referenced blocks from being deleted while relationship to this one exists).
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  | Relationship to one or more &#x60;AngularVelocitySensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | 
+
+[[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
+

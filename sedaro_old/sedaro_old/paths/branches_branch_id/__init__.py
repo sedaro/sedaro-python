@@ -1,0 +1,7 @@
+# do not import all endpoints into this module because that uses a lot of memory and stack frames
+# if you need the ability to import all endpoints from this module, import them with
+# from sedaro.paths.branches_branch_id import Api
+
+from sedaro.paths import PathValues
+
+path = PathValues.BRANCHES_BRANCH_ID
