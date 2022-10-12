@@ -9,6 +9,7 @@ DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 # CONSTANTS
 PYTHON = 'python'
 CUSTOM = 'custom'
+SEDARO = 'sedaro'
 GENERATE_NEW = 'new'
 DRY_RUN = 'dr'
 MINIMAL_UPDATE = 'mu'
@@ -37,13 +38,13 @@ def run_generator(skip_intro=False):
                 '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
-    # PARENT_DIR = f'sedaro'
+    if language == PYTHON:
+        CLIENT_DIR = f'{SEDARO}/src/{SEDARO}/{SEDARO}_base_client'
+    else:
+        CLIENT_DIR = f'{SEDARO}_{language}'
+    # CLIENT_DIR = 'sedaro'
     # if language != PYTHON:
-    #     PARENT_DIR = PARENT_DIR + f'_{language}'
-    # CLIENT_DIR = f'{PARENT_DIR}/src/sedaro/{language}_client'
-    CLIENT_DIR = 'sedaro'
-    if language != PYTHON:
-        CLIENT_DIR = CLIENT_DIR + f'_{language}'
+    #     CLIENT_DIR = CLIENT_DIR + f'_{language}'
 
     # --------- check if client exists and if want to overwrite ---------
     how_to_proceed = None
@@ -97,18 +98,18 @@ def run_generator(skip_intro=False):
 
         # ----- remove client if already exists -----
         if how_to_proceed == REGENERATE:
-            # ----- save custom dir -----
-            if language == PYTHON:
-                package_name = json.load(open(f'.{config_file}'))[
-                    'packageName']
-                custom_dir = f'{CLIENT_DIR}/{package_name}/{CUSTOM}'
-                custom_temp_dir = f'{temp_dir}/{CUSTOM}'
-                shutil.copytree(custom_dir, custom_temp_dir)
+            # # ----- save custom dir -----
+            # if language == PYTHON:
+            #     package_name = json.load(open(f'.{config_file}'))[
+            #         'packageName']
+            #     custom_dir = f'{CLIENT_DIR}/{package_name}/{CUSTOM}'
+            #     custom_temp_dir = f'{temp_dir}/{CUSTOM}'
+            #     shutil.copytree(custom_dir, custom_temp_dir)
             # ----- delete old client dir -----
             os.system(f'rm -r {CLIENT_DIR}')
-            # ----- add back custom dir -----
-            if language == PYTHON:
-                shutil.copytree(custom_temp_dir, custom_dir)
+            # # ----- add back custom dir -----
+            # if language == PYTHON:
+            #     shutil.copytree(custom_temp_dir, custom_dir)
 
         TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
         urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
@@ -128,6 +129,9 @@ def run_generator(skip_intro=False):
             cmd += ' --minimal-update'
 
         os.system(cmd)
+
+        if language == PYTHON:
+            os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
 
         print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
 
