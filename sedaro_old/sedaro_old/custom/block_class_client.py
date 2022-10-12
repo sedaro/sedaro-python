@@ -23,6 +23,11 @@ class BlockClassClient:
     def __str__(self) -> str:
         return f'BlockClassClient(block_name={self.block_name}, branch={self.branch.id})'
 
+    @property
+    def sedaro_client(self) -> 'SedaroApiClient':
+        '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
+        return self.branch.sedaro_client
+
     def create(self, body: Dict, **kwargs) -> Dict:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
 
@@ -44,8 +49,3 @@ class BlockClassClient:
             block_class_client=self,
             block_group=block_group
         )
-
-    @property
-    def sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
-        return self.branch.sedaro_client
