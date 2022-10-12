@@ -97,8 +97,8 @@ def test_update_block():
 
 
 if __name__ == "__main__":
-    # test_create_block_2()
-    test_update_block()
+    test_create_block_2()
+    # test_update_block()
 
 
 # class Block:
