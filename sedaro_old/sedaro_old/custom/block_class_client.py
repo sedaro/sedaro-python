@@ -5,7 +5,6 @@ from pydash.strings import snake_case
 
 from .settings import CREATE
 from .block import Block
-from .utils import parse_block_crud_response
 
 if TYPE_CHECKING:
     from .branch import Branch
@@ -37,10 +36,9 @@ class BlockClassClient:
             **kwargs,
             path_params={'branchId': self.branch.id},
         )
-        block_id, block_data, block_group, branch_data, action = parse_block_crud_response(res)
+        block_id, block_group = self.branch._process_block_crud_response(res)
         return Block(
             id=block_id,
-            data=block_data,
             block_class_client=self,
             block_group=block_group
         )
