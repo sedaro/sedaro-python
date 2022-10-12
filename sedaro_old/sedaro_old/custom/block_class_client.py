@@ -37,10 +37,10 @@ class BlockClassClient:
             **kwargs,
             path_params={'branchId': self.branch.id},
         )
-        res_data = parse_block_crud_response(res)
+        block_id, block_data, block_group, branch_data, action = parse_block_crud_response(res)
         return Block(
-            id=res_data['block_id'],
-            data=res_data['block_data'],
-            block_group_single_class=self,
-            block_group=res_data['block_group']
+            id=block_id,
+            data=block_data,
+            block_class_client=self,
+            block_group=block_group
         )
