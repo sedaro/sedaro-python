@@ -1,15 +1,17 @@
 from dataclasses import dataclass
 from sedaro_old.api_client import Api
 from typing import Dict
+from pydash.strings import snake_case
+
 from .settings import CREATE
 
 
 @dataclass
-class BlockCreateClient:
-    _block_snake_case: str
-    _BlockCreate: type
-    _branch_id: int
-    block_open_api_instance: Api
+class BlockGroup:
+    block_name: str
+    open_api_instance: Api
+    create_class: type
+    branch_id: int
 
     def create(self, body: Dict, **kwargs) -> Dict:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
@@ -21,8 +23,8 @@ class BlockCreateClient:
             _type_: _description_
             FIXME: ^^^^^^
         """
-        return getattr(self.block_open_api_instance, f'{CREATE}_{self._block_snake_case}')(
-            body=self._BlockCreate(**body),
+        return getattr(self.open_api_instance, f'{CREATE}_{snake_case(self.block_name)}')(
+            body=self.create_class(**body),
             **kwargs,
-            path_params={'branchId': self._branch_id},
+            path_params={'branchId': self.branch_id},
         )
