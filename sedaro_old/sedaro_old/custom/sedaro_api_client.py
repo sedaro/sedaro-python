@@ -4,9 +4,9 @@ from typing import Dict
 from pydash.strings import snake_case, pascal_case
 # FIXME: figure out how to require pydash dynamically.
 
-from sedaro.api_client import ApiClient
+from sedaro_old.api_client import ApiClient
 from .configuration import config
-from sedaro.api_client import Api
+from sedaro_old.api_client import Api
 
 PACKAGE_NAME = 'sedaro'
 
