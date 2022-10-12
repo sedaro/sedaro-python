@@ -26,5 +26,5 @@ class Branch:
             block_name=block_name,
             block_openapi_instance=block_open_api_instance,
             create_class=block_create_class,
-            branch_id=self.id
+            branch=self
         )
