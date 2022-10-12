@@ -21,7 +21,7 @@ class Block:
     @property
     def data(self) -> Dict:
         # FIXME: handle when it's deleted... (KeyError)
-        return self.block_class_client.branch.data[self.block_group][self.id]
+        return self.branch.data[self.block_group][self.id]
 
     @property
     def branch(self) -> 'Branch':
