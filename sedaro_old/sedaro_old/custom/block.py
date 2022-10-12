@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
+    from .sedaro_api_client import SedaroApiClient
+    from .branch import Branch
 
 
 @dataclass
@@ -20,3 +22,13 @@ class Block:
     def data(self) -> Dict:
         # FIXME: handle when it's deleted... (KeyError)
         return self.block_class_client.branch.data[self.block_group][self.id]
+
+    @property
+    def branch(self) -> 'Branch':
+        '''The `Branch` this `Block` is connected to'''
+        return self.block_class_client.branch
+
+    @property
+    def sedaro_client(self) -> 'SedaroApiClient':
+        '''The `SedaroApiClient` this `Block` was accessed through'''
+        return self.block_class_client.branch.sedaro_client
