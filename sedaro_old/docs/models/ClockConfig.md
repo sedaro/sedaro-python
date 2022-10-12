@@ -1,4 +1,4 @@
-# sedaro.model.clock_config.ClockConfig
+# sedaro_old.model.clock_config.ClockConfig
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

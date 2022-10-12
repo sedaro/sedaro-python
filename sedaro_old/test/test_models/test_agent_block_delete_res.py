@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old import configuration
 
 
 class TestAgentBlockDeleteRes(unittest.TestCase):

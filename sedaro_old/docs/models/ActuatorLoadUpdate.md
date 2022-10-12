@@ -1,4 +1,4 @@
-# sedaro.model.actuator_load_update.ActuatorLoadUpdate
+# sedaro_old.model.actuator_load_update.ActuatorLoadUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

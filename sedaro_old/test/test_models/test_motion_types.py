@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.motion_types import MotionTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.motion_types import MotionTypes
+from sedaro_old import configuration
 
 
 class TestMotionTypes(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_update import BranchUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_update import BranchUpdate
+from sedaro_old import configuration
 
 
 class TestBranchUpdate(unittest.TestCase):

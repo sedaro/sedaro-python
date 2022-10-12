@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.message_res import MessageRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.message_res import MessageRes
+from sedaro_old import configuration
 
 
 class TestMessageRes(unittest.TestCase):

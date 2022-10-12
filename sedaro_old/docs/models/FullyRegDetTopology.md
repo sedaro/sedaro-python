@@ -1,4 +1,4 @@
-# sedaro.model.fully_reg_det_topology.FullyRegDetTopology
+# sedaro_old.model.fully_reg_det_topology.FullyRegDetTopology
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

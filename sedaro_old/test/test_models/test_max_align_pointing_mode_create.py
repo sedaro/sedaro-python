@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.max_align_pointing_mode_create import MaxAlignPointingModeCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.max_align_pointing_mode_create import MaxAlignPointingModeCreate
+from sedaro_old import configuration
 
 
 class TestMaxAlignPointingModeCreate(unittest.TestCase):

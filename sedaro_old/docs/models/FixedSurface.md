@@ -1,4 +1,4 @@
-# sedaro.model.fixed_surface.FixedSurface
+# sedaro_old.model.fixed_surface.FixedSurface
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

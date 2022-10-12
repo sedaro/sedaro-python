@@ -1,4 +1,4 @@
-# sedaro.model.operational_mode_bg.OperationalModeBG
+# sedaro_old.model.operational_mode_bg.OperationalModeBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

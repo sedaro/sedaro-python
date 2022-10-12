@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.field_of_view_bg import FieldOfViewBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.field_of_view_bg import FieldOfViewBG
+from sedaro_old import configuration
 
 
 class TestFieldOfViewBG(unittest.TestCase):

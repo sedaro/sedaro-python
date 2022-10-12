@@ -1,4 +1,4 @@
-# sedaro.model.component_update.ComponentUpdate
+# sedaro_old.model.component_update.ComponentUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.battery_cell_create.BatteryCellCreate
+# sedaro_old.model.battery_cell_create.BatteryCellCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

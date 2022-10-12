@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.temperature_controller_api.TemperatureControllerApi
+# sedaro_old.apis.tags.temperature_controller_api.TemperatureControllerApi
 
 All URIs are relative to *http://localhost*
 
@@ -21,20 +21,20 @@ Create Cooler
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.cooler_create import CoolerCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.cooler_create import CoolerCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -62,7 +62,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->create_cooler: %s\n" % e)
 ```
 ### Parameters
@@ -148,20 +148,20 @@ Create Heater
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.heater_create import HeaterCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.heater_create import HeaterCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -188,7 +188,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->create_heater: %s\n" % e)
 ```
 ### Parameters
@@ -274,19 +274,19 @@ Delete Cooler
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -301,7 +301,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->delete_cooler: %s\n" % e)
 ```
 ### Parameters
@@ -385,19 +385,19 @@ Delete Heater
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -412,7 +412,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->delete_heater: %s\n" % e)
 ```
 ### Parameters
@@ -496,20 +496,20 @@ Update Cooler
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.cooler_update import CoolerUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.cooler_update import CoolerUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -538,7 +538,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->update_cooler: %s\n" % e)
 ```
 ### Parameters
@@ -632,20 +632,20 @@ Update Heater
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import temperature_controller_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.heater_update import HeaterUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import temperature_controller_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.heater_update import HeaterUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = temperature_controller_api.TemperatureControllerApi(api_client)
 
@@ -673,7 +673,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling TemperatureControllerApi->update_heater: %s\n" % e)
 ```
 ### Parameters

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ReferenceVectorBG(
@@ -166,8 +166,8 @@ class ReferenceVectorBG(
             **kwargs,
         )
 
-from sedaro.model.celestial_vector import CelestialVector
-from sedaro.model.collection import Collection
-from sedaro.model.local_vector import LocalVector
-from sedaro.model.reference_vector import ReferenceVector
-from sedaro.model.target_vector import TargetVector
+from sedaro_old.model.celestial_vector import CelestialVector
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.local_vector import LocalVector
+from sedaro_old.model.reference_vector import ReferenceVector
+from sedaro_old.model.target_vector import TargetVector

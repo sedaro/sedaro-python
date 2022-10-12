@@ -1,4 +1,4 @@
-# sedaro.model.solar_array_create.SolarArrayCreate
+# sedaro_old.model.solar_array_create.SolarArrayCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

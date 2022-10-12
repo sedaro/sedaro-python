@@ -1,4 +1,4 @@
-# sedaro.model.target_vector_update.TargetVectorUpdate
+# sedaro_old.model.target_vector_update.TargetVectorUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

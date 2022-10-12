@@ -1,4 +1,4 @@
-# sedaro.model.types.Types
+# sedaro_old.model.types.Types
 
 An enumeration.
 

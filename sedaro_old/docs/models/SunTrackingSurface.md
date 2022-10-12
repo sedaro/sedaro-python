@@ -1,4 +1,4 @@
-# sedaro.model.sun_tracking_surface.SunTrackingSurface
+# sedaro_old.model.sun_tracking_surface.SunTrackingSurface
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

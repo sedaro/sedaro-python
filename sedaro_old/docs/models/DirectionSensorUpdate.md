@@ -1,4 +1,4 @@
-# sedaro.model.direction_sensor_update.DirectionSensorUpdate
+# sedaro_old.model.direction_sensor_update.DirectionSensorUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

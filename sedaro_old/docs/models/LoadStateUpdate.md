@@ -1,4 +1,4 @@
-# sedaro.model.load_state_update.LoadStateUpdate
+# sedaro_old.model.load_state_update.LoadStateUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

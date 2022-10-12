@@ -1,4 +1,4 @@
-# sedaro.model.celestial_vector_create.CelestialVectorCreate
+# sedaro_old.model.celestial_vector_create.CelestialVectorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

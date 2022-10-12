@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.component import Component
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.component import Component
+from sedaro_old import configuration
 
 
 class TestComponent(unittest.TestCase):

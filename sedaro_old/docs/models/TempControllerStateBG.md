@@ -1,4 +1,4 @@
-# sedaro.model.temp_controller_state_bg.TempControllerStateBG
+# sedaro_old.model.temp_controller_state_bg.TempControllerStateBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

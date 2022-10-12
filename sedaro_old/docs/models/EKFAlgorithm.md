@@ -1,4 +1,4 @@
-# sedaro.model.ekf_algorithm.EKFAlgorithm
+# sedaro_old.model.ekf_algorithm.EKFAlgorithm
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

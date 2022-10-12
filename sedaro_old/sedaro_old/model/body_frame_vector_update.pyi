@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BodyFrameVectorUpdate(
@@ -192,6 +192,6 @@ class BodyFrameVectorUpdate(
             **kwargs,
         )
 
-from sedaro.model.body_frame_vector_types import BodyFrameVectorTypes
-from sedaro.model.spherical_angles import SphericalAngles
-from sedaro.model.vector import Vector
+from sedaro_old.model.body_frame_vector_types import BodyFrameVectorTypes
+from sedaro_old.model.spherical_angles import SphericalAngles
+from sedaro_old.model.vector import Vector

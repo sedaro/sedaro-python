@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.validation_error import ValidationError
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.validation_error import ValidationError
+from sedaro_old import configuration
 
 
 class TestValidationError(unittest.TestCase):

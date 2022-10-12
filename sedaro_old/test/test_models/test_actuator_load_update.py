@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.actuator_load_update import ActuatorLoadUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.actuator_load_update import ActuatorLoadUpdate
+from sedaro_old import configuration
 
 
 class TestActuatorLoadUpdate(unittest.TestCase):

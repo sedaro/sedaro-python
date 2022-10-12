@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.battery_pack_create import BatteryPackCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.battery_pack_create import BatteryPackCreate
+from sedaro_old import configuration
 
 
 class TestBatteryPackCreate(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.spherical_angles import SphericalAngles
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.spherical_angles import SphericalAngles
+from sedaro_old import configuration
 
 
 class TestSphericalAngles(unittest.TestCase):

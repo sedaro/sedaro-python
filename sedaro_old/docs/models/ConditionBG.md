@@ -1,4 +1,4 @@
-# sedaro.model.condition_bg.ConditionBG
+# sedaro_old.model.condition_bg.ConditionBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

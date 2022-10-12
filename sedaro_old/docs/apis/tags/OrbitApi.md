@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.orbit_api.OrbitApi
+# sedaro_old.apis.tags.orbit_api.OrbitApi
 
 All URIs are relative to *http://localhost*
 
@@ -16,20 +16,20 @@ Update Orbit
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.orbit_update import OrbitUpdate
+import sedaro_old
+from sedaro_old.apis.tags import orbit_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.orbit_update import OrbitUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_api.OrbitApi(api_client)
 
@@ -50,7 +50,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitApi->update_orbit: %s\n" % e)
 ```
 ### Parameters

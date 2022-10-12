@@ -1,4 +1,4 @@
-# sedaro.model.local_vector.LocalVector
+# sedaro_old.model.local_vector.LocalVector
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

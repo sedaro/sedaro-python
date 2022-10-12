@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.direction_sensor import DirectionSensor
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.direction_sensor import DirectionSensor
+from sedaro_old import configuration
 
 
 class TestDirectionSensor(unittest.TestCase):

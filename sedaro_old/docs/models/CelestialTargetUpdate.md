@@ -1,4 +1,4 @@
-# sedaro.model.celestial_target_update.CelestialTargetUpdate
+# sedaro_old.model.celestial_target_update.CelestialTargetUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

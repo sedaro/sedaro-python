@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.scenario_template import ScenarioTemplate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.scenario_template import ScenarioTemplate
+from sedaro_old import configuration
 
 
 class TestScenarioTemplate(unittest.TestCase):

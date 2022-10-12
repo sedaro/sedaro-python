@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.load_api.LoadApi
+# sedaro_old.apis.tags.load_api.LoadApi
 
 All URIs are relative to *http://localhost*
 
@@ -24,20 +24,20 @@ Create Actuator Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.actuator_load_create import ActuatorLoadCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.actuator_load_create import ActuatorLoadCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -60,7 +60,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->create_actuator_load: %s\n" % e)
 ```
 ### Parameters
@@ -146,20 +146,20 @@ Create Constant Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.constant_load_create import ConstantLoadCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.constant_load_create import ConstantLoadCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -186,7 +186,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->create_constant_load: %s\n" % e)
 ```
 ### Parameters
@@ -272,20 +272,20 @@ Create Temperature Controller Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.temp_control_load_create import TempControlLoadCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.temp_control_load_create import TempControlLoadCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -308,7 +308,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->create_temperature_controller_load: %s\n" % e)
 ```
 ### Parameters
@@ -394,19 +394,19 @@ Delete Actuator Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -421,7 +421,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->delete_actuator_load: %s\n" % e)
 ```
 ### Parameters
@@ -505,19 +505,19 @@ Delete Constant Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -532,7 +532,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->delete_constant_load: %s\n" % e)
 ```
 ### Parameters
@@ -616,19 +616,19 @@ Delete Temperature Controller Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -643,7 +643,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->delete_temperature_controller_load: %s\n" % e)
 ```
 ### Parameters
@@ -727,20 +727,20 @@ Update Actuator Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.actuator_load_update import ActuatorLoadUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.actuator_load_update import ActuatorLoadUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -763,7 +763,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->update_actuator_load: %s\n" % e)
 ```
 ### Parameters
@@ -857,20 +857,20 @@ Update Constant Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.constant_load_update import ConstantLoadUpdate
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.constant_load_update import ConstantLoadUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -897,7 +897,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->update_constant_load: %s\n" % e)
 ```
 ### Parameters
@@ -991,20 +991,20 @@ Update Temperature Controller Load
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import load_api
-from sedaro.model.temp_control_load_update import TempControlLoadUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import load_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.temp_control_load_update import TempControlLoadUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = load_api.LoadApi(api_client)
 
@@ -1027,7 +1027,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling LoadApi->update_temperature_controller_load: %s\n" % e)
 ```
 ### Parameters

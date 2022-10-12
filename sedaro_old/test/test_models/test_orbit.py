@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.orbit import Orbit
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.orbit import Orbit
+from sedaro_old import configuration
 
 
 class TestOrbit(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.scenario_block_update_res.ScenarioBlockUpdateRes
+# sedaro_old.model.scenario_block_update_res.ScenarioBlockUpdateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

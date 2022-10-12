@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.iro_equatorial_circ import IROEquatorialCirc
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.iro_equatorial_circ import IROEquatorialCirc
+from sedaro_old import configuration
 
 
 class TestIROEquatorialCirc(unittest.TestCase):

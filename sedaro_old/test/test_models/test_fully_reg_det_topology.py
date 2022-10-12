@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.fully_reg_det_topology import FullyRegDetTopology
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.fully_reg_det_topology import FullyRegDetTopology
+from sedaro_old import configuration
 
 
 class TestFullyRegDetTopology(unittest.TestCase):

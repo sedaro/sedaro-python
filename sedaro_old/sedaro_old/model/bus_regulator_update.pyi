@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BusRegulatorUpdate(
@@ -200,4 +200,4 @@ class BusRegulatorUpdate(
             **kwargs,
         )
 
-from sedaro.model.input_types import InputTypes
+from sedaro_old.model.input_types import InputTypes

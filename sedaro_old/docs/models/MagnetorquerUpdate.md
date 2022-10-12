@@ -1,4 +1,4 @@
-# sedaro.model.magnetorquer_update.MagnetorquerUpdate
+# sedaro_old.model.magnetorquer_update.MagnetorquerUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.parameter_b_categories.ParameterBCategories
+# sedaro_old.model.parameter_b_categories.ParameterBCategories
 
 An enumeration.
 

@@ -18,7 +18,7 @@ import certifi
 import urllib3
 from urllib3._collections import HTTPHeaderDict
 
-from sedaro.exceptions import ApiException, ApiValueError
+from sedaro_old.exceptions import ApiException, ApiValueError
 
 
 logger = logging.getLogger(__name__)

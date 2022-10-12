@@ -1,4 +1,4 @@
-# sedaro.model.agent_block_update_res.AgentBlockUpdateRes
+# sedaro_old.model.agent_block_update_res.AgentBlockUpdateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

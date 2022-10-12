@@ -1,4 +1,4 @@
-# sedaro.model.space_target.SpaceTarget
+# sedaro_old.model.space_target.SpaceTarget
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

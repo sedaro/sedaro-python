@@ -1,4 +1,4 @@
-# sedaro.model.iro_iss.IROIss
+# sedaro_old.model.iro_iss.IROIss
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

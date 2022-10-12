@@ -1,4 +1,4 @@
-# sedaro.model.job_get.JobGet
+# sedaro_old.model.job_get.JobGet
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

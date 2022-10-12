@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class Subsystem(
@@ -186,4 +186,4 @@ class Subsystem(
             **kwargs,
         )
 
-from sedaro.model.categories import Categories
+from sedaro_old.model.categories import Categories

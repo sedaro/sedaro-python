@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.algorithm_bg import AlgorithmBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.algorithm_bg import AlgorithmBG
+from sedaro_old import configuration
 
 
 class TestAlgorithmBG(unittest.TestCase):

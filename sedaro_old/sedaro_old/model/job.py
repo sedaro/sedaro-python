@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class Job(
@@ -164,4 +164,4 @@ class Job(
             **kwargs,
         )
 
-from sedaro.model.statuses import Statuses
+from sedaro_old.model.statuses import Statuses

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.sliding_mode_algorithm import SlidingModeAlgorithm
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.sliding_mode_algorithm import SlidingModeAlgorithm
+from sedaro_old import configuration
 
 
 class TestSlidingModeAlgorithm(unittest.TestCase):

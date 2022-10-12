@@ -1,4 +1,4 @@
-# sedaro.model.condition_relationship.ConditionRelationship
+# sedaro_old.model.condition_relationship.ConditionRelationship
 
 An enumeration.
 

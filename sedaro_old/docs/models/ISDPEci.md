@@ -1,4 +1,4 @@
-# sedaro.model.isdp_eci.ISDPEci
+# sedaro_old.model.isdp_eci.ISDPEci
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

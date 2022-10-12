@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.initial_state_def_type import InitialStateDefType
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.initial_state_def_type import InitialStateDefType
+from sedaro_old import configuration
 
 
 class TestInitialStateDefType(unittest.TestCase):

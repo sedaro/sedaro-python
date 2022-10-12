@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.constant_resistance import ConstantResistance
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.constant_resistance import ConstantResistance
+from sedaro_old import configuration
 
 
 class TestConstantResistance(unittest.TestCase):

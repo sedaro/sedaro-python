@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.fov_constraint import FOVConstraint
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.fov_constraint import FOVConstraint
+from sedaro_old import configuration
 
 
 class TestFOVConstraint(unittest.TestCase):

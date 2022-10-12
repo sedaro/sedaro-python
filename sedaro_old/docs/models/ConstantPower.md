@@ -1,4 +1,4 @@
-# sedaro.model.constant_power.ConstantPower
+# sedaro_old.model.constant_power.ConstantPower
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.operational_mode_update.OperationalModeUpdate
+# sedaro_old.model.operational_mode_update.OperationalModeUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

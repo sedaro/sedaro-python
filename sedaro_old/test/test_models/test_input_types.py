@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.input_types import InputTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.input_types import InputTypes
+from sedaro_old import configuration
 
 
 class TestInputTypes(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.rectangular_field_of_view_update import RectangularFieldOfViewUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.rectangular_field_of_view_update import RectangularFieldOfViewUpdate
+from sedaro_old import configuration
 
 
 class TestRectangularFieldOfViewUpdate(unittest.TestCase):

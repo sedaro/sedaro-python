@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old import configuration
 
 
 class TestBranchVehicleTemplateRes(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.passive_pointing_mode_update import PassivePointingModeUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.passive_pointing_mode_update import PassivePointingModeUpdate
+from sedaro_old import configuration
 
 
 class TestPassivePointingModeUpdate(unittest.TestCase):

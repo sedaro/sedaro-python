@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.operational_mode import OperationalMode
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.operational_mode import OperationalMode
+from sedaro_old import configuration
 
 
 class TestOperationalMode(unittest.TestCase):

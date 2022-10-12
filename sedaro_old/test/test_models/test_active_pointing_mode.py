@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.active_pointing_mode import ActivePointingMode
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.active_pointing_mode import ActivePointingMode
+from sedaro_old import configuration
 
 
 class TestActivePointingMode(unittest.TestCase):

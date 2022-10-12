@@ -1,4 +1,4 @@
-# sedaro.model.triad_algorithm_create.TriadAlgorithmCreate
+# sedaro_old.model.triad_algorithm_create.TriadAlgorithmCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

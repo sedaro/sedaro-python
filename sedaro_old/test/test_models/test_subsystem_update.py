@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.subsystem_update import SubsystemUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.subsystem_update import SubsystemUpdate
+from sedaro_old import configuration
 
 
 class TestSubsystemUpdate(unittest.TestCase):

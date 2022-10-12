@@ -1,4 +1,4 @@
-# sedaro.model.categories.Categories
+# sedaro_old.model.categories.Categories
 
 An enumeration.
 

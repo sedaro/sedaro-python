@@ -1,4 +1,4 @@
-# sedaro.model.iro_equatorial_circ.IROEquatorialCirc
+# sedaro_old.model.iro_equatorial_circ.IROEquatorialCirc
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

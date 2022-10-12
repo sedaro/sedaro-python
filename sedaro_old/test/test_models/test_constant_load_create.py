@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.constant_load_create import ConstantLoadCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.constant_load_create import ConstantLoadCreate
+from sedaro_old import configuration
 
 
 class TestConstantLoadCreate(unittest.TestCase):

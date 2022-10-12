@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.body_frame_vector_update import BodyFrameVectorUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.body_frame_vector_update import BodyFrameVectorUpdate
+from sedaro_old import configuration
 
 
 class TestBodyFrameVectorUpdate(unittest.TestCase):

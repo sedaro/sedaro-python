@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.surface_api.SurfaceApi
+# sedaro_old.apis.tags.surface_api.SurfaceApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Surface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import surface_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.surface_create import SurfaceCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import surface_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.surface_create import SurfaceCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = surface_api.SurfaceApi(api_client)
 
@@ -58,7 +58,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SurfaceApi->create_surface: %s\n" % e)
 ```
 ### Parameters
@@ -144,19 +144,19 @@ Delete Surface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import surface_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import surface_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = surface_api.SurfaceApi(api_client)
 
@@ -171,7 +171,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SurfaceApi->delete_surface: %s\n" % e)
 ```
 ### Parameters
@@ -255,20 +255,20 @@ Update Surface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import surface_api
-from sedaro.model.surface_update import SurfaceUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import surface_api
+from sedaro_old.model.surface_update import SurfaceUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = surface_api.SurfaceApi(api_client)
 
@@ -295,7 +295,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SurfaceApi->update_surface: %s\n" % e)
 ```
 ### Parameters

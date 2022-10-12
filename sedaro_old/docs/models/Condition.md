@@ -1,4 +1,4 @@
-# sedaro.model.condition.Condition
+# sedaro_old.model.condition.Condition
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.branch_vehicle_template_res.BranchVehicleTemplateRes
+# sedaro_old.model.branch_vehicle_template_res.BranchVehicleTemplateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

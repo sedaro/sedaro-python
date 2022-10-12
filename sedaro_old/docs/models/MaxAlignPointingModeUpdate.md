@@ -1,4 +1,4 @@
-# sedaro.model.max_align_pointing_mode_update.MaxAlignPointingModeUpdate
+# sedaro_old.model.max_align_pointing_mode_update.MaxAlignPointingModeUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

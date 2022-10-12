@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class SurfaceUpdate(
@@ -217,4 +217,4 @@ class SurfaceUpdate(
             **kwargs,
         )
 
-from sedaro.model.motion_types import MotionTypes
+from sedaro_old.model.motion_types import MotionTypes

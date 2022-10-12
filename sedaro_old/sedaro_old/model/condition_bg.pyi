@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ConditionBG(
@@ -164,6 +164,6 @@ class ConditionBG(
             **kwargs,
         )
 
-from sedaro.model.collection import Collection
-from sedaro.model.condition import Condition
-from sedaro.model.group_condition import GroupCondition
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.condition import Condition
+from sedaro_old.model.group_condition import GroupCondition

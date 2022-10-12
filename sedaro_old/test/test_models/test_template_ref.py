@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.template_ref import TemplateRef
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.template_ref import TemplateRef
+from sedaro_old import configuration
 
 
 class TestTemplateRef(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.lock_pointing_mode_create.LockPointingModeCreate
+# sedaro_old.model.lock_pointing_mode_create.LockPointingModeCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.simulatable_satellite import SimulatableSatellite
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.simulatable_satellite import SimulatableSatellite
+from sedaro_old import configuration
 
 
 class TestSimulatableSatellite(unittest.TestCase):

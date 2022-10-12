@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ThermalInterfaceUpdate(
@@ -204,4 +204,4 @@ class ThermalInterfaceUpdate(
             **kwargs,
         )
 
-from sedaro.model.side_categories import SideCategories
+from sedaro_old.model.side_categories import SideCategories

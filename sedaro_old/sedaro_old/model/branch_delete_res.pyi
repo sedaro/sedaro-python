@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BranchDeleteRes(
@@ -119,4 +119,4 @@ class BranchDeleteRes(
             **kwargs,
         )
 
-from sedaro.model.deleted_entity import DeletedEntity
+from sedaro_old.model.deleted_entity import DeletedEntity

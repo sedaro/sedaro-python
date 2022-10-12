@@ -1,4 +1,4 @@
-# sedaro.model.fov_constraint.FOVConstraint
+# sedaro_old.model.fov_constraint.FOVConstraint
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

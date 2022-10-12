@@ -1,4 +1,4 @@
-# sedaro.model.triad_algorithm_update.TriadAlgorithmUpdate
+# sedaro_old.model.triad_algorithm_update.TriadAlgorithmUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

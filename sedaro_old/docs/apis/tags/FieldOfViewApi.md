@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.field_of_view_api.FieldOfViewApi
+# sedaro_old.apis.tags.field_of_view_api.FieldOfViewApi
 
 All URIs are relative to *http://localhost*
 
@@ -21,20 +21,20 @@ Create Circular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.circular_field_of_view_create import CircularFieldOfViewCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.circular_field_of_view_create import CircularFieldOfViewCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -56,7 +56,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->create_circular_field_of_view: %s\n" % e)
 ```
 ### Parameters
@@ -142,20 +142,20 @@ Create Rectangular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.rectangular_field_of_view_create import RectangularFieldOfViewCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.rectangular_field_of_view_create import RectangularFieldOfViewCreate
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -179,7 +179,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->create_rectangular_field_of_view: %s\n" % e)
 ```
 ### Parameters
@@ -265,19 +265,19 @@ Delete Circular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -292,7 +292,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->delete_circular_field_of_view: %s\n" % e)
 ```
 ### Parameters
@@ -376,19 +376,19 @@ Delete Rectangular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -403,7 +403,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->delete_rectangular_field_of_view: %s\n" % e)
 ```
 ### Parameters
@@ -487,20 +487,20 @@ Update Circular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.circular_field_of_view_update import CircularFieldOfViewUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.circular_field_of_view_update import CircularFieldOfViewUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -523,7 +523,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->update_circular_field_of_view: %s\n" % e)
 ```
 ### Parameters
@@ -617,20 +617,20 @@ Update Rectangular Field of View
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.rectangular_field_of_view_update import RectangularFieldOfViewUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_api
+from sedaro_old.model.rectangular_field_of_view_update import RectangularFieldOfViewUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_api.FieldOfViewApi(api_client)
 
@@ -655,7 +655,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewApi->update_rectangular_field_of_view: %s\n" % e)
 ```
 ### Parameters

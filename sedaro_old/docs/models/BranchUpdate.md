@@ -1,4 +1,4 @@
-# sedaro.model.branch_update.BranchUpdate
+# sedaro_old.model.branch_update.BranchUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

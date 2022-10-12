@@ -1,4 +1,4 @@
-# sedaro.model.agent_block_delete_res.AgentBlockDeleteRes
+# sedaro_old.model.agent_block_delete_res.AgentBlockDeleteRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

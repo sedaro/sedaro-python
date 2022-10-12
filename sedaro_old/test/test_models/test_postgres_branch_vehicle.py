@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.postgres_branch_vehicle import PostgresBranchVehicle
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle
+from sedaro_old import configuration
 
 
 class TestPostgresBranchVehicle(unittest.TestCase):

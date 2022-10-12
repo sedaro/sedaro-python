@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class HTTPValidationError(
@@ -102,4 +102,4 @@ class HTTPValidationError(
             **kwargs,
         )
 
-from sedaro.model.validation_error import ValidationError
+from sedaro_old.model.validation_error import ValidationError

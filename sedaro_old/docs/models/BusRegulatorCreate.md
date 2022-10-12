@@ -1,4 +1,4 @@
-# sedaro.model.bus_regulator_create.BusRegulatorCreate
+# sedaro_old.model.bus_regulator_create.BusRegulatorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

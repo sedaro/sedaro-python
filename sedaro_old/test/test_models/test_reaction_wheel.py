@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.reaction_wheel import ReactionWheel
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.reaction_wheel import ReactionWheel
+from sedaro_old import configuration
 
 
 class TestReactionWheel(unittest.TestCase):

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class OrbitUpdate(
@@ -175,13 +175,13 @@ class OrbitUpdate(
             **kwargs,
         )
 
-from sedaro.model.initial_state_def_type import InitialStateDefType
-from sedaro.model.iro_equatorial_circ import IROEquatorialCirc
-from sedaro.model.iro_geostat import IROGeostat
-from sedaro.model.iro_geostat_transfer import IROGeostatTransfer
-from sedaro.model.iro_iss import IROIss
-from sedaro.model.iro_polar_circ import IROPolarCirc
-from sedaro.model.iro_sun_sync_circ import IROSunSyncCirc
-from sedaro.model.isdp_eci import ISDPEci
-from sedaro.model.isdp_orbital_elements import ISDPOrbitalElements
-from sedaro.model.isdp_tle import ISDPTle
+from sedaro_old.model.initial_state_def_type import InitialStateDefType
+from sedaro_old.model.iro_equatorial_circ import IROEquatorialCirc
+from sedaro_old.model.iro_geostat import IROGeostat
+from sedaro_old.model.iro_geostat_transfer import IROGeostatTransfer
+from sedaro_old.model.iro_iss import IROIss
+from sedaro_old.model.iro_polar_circ import IROPolarCirc
+from sedaro_old.model.iro_sun_sync_circ import IROSunSyncCirc
+from sedaro_old.model.isdp_eci import ISDPEci
+from sedaro_old.model.isdp_orbital_elements import ISDPOrbitalElements
+from sedaro_old.model.isdp_tle import ISDPTle

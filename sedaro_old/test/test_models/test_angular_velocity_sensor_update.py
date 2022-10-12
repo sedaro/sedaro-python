@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
+from sedaro_old import configuration
 
 
 class TestAngularVelocitySensorUpdate(unittest.TestCase):

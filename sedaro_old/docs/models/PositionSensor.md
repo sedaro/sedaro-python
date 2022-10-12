@@ -1,4 +1,4 @@
-# sedaro.model.position_sensor.PositionSensor
+# sedaro_old.model.position_sensor.PositionSensor
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

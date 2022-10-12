@@ -21,11 +21,11 @@ VERSION = "1.0.0"
 # http://pypi.python.org/pypi/setuptools
 
 REQUIRES = [
-    "urllib3 >= 1.15",
-    "certifi",
-    "python-dateutil",
-    "frozendict >= 2.0.3",
-    "typing_extensions",
+  "urllib3 >= 1.15",
+  "certifi",
+  "python-dateutil",
+  "frozendict >= 2.0.3",
+  "typing_extensions",
 ]
 
 setup(

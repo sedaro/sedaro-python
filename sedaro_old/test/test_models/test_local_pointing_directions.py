@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.local_pointing_directions import LocalPointingDirections
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.local_pointing_directions import LocalPointingDirections
+from sedaro_old import configuration
 
 
 class TestLocalPointingDirections(unittest.TestCase):

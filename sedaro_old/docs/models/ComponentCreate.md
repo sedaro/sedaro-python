@@ -1,4 +1,4 @@
-# sedaro.model.component_create.ComponentCreate
+# sedaro_old.model.component_create.ComponentCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.averaging_algorithm.AveragingAlgorithm
+# sedaro_old.model.averaging_algorithm.AveragingAlgorithm
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

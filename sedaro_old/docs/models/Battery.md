@@ -1,4 +1,4 @@
-# sedaro.model.battery.Battery
+# sedaro_old.model.battery.Battery
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

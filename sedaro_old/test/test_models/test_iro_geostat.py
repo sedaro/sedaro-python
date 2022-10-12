@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.iro_geostat import IROGeostat
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.iro_geostat import IROGeostat
+from sedaro_old import configuration
 
 
 class TestIROGeostat(unittest.TestCase):

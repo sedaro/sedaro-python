@@ -1,4 +1,4 @@
-# sedaro.model.constant_load_create.ConstantLoadCreate
+# sedaro_old.model.constant_load_create.ConstantLoadCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

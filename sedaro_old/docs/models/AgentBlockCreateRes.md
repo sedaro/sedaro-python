@@ -1,4 +1,4 @@
-# sedaro.model.agent_block_create_res.AgentBlockCreateRes
+# sedaro_old.model.agent_block_create_res.AgentBlockCreateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

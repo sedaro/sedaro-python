@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.configuration_types import ConfigurationTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.configuration_types import ConfigurationTypes
+from sedaro_old import configuration
 
 
 class TestConfigurationTypes(unittest.TestCase):

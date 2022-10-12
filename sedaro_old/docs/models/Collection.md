@@ -1,4 +1,4 @@
-# sedaro.model.collection.Collection
+# sedaro_old.model.collection.Collection
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

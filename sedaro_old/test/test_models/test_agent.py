@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.agent import Agent
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.agent import Agent
+from sedaro_old import configuration
 
 
 class TestAgent(unittest.TestCase):

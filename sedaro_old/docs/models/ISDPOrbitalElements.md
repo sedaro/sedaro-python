@@ -1,4 +1,4 @@
-# sedaro.model.isdp_orbital_elements.ISDPOrbitalElements
+# sedaro_old.model.isdp_orbital_elements.ISDPOrbitalElements
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.subsystem_bg import SubsystemBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.subsystem_bg import SubsystemBG
+from sedaro_old import configuration
 
 
 class TestSubsystemBG(unittest.TestCase):

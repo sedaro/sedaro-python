@@ -1,4 +1,4 @@
-# sedaro.model.input_types.InputTypes
+# sedaro_old.model.input_types.InputTypes
 
 An enumeration.
 

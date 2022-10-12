@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.temp_control_load_create import TempControlLoadCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.temp_control_load_create import TempControlLoadCreate
+from sedaro_old import configuration
 
 
 class TestTempControlLoadCreate(unittest.TestCase):

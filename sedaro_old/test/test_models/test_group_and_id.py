@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.group_and_id import GroupAndId
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.group_and_id import GroupAndId
+from sedaro_old import configuration
 
 
 class TestGroupAndId(unittest.TestCase):

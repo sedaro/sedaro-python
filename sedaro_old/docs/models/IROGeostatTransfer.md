@@ -1,4 +1,4 @@
-# sedaro.model.iro_geostat_transfer.IROGeostatTransfer
+# sedaro_old.model.iro_geostat_transfer.IROGeostatTransfer
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

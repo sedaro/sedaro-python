@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ConstantLoadUpdate(
@@ -291,7 +291,7 @@ class ConstantLoadUpdate(
             **kwargs,
         )
 
-from sedaro.model.constant_load_definition_types import ConstantLoadDefinitionTypes
-from sedaro.model.constant_power import ConstantPower
-from sedaro.model.constant_resistance import ConstantResistance
-from sedaro.model.eps_output_types import EpsOutputTypes
+from sedaro_old.model.constant_load_definition_types import ConstantLoadDefinitionTypes
+from sedaro_old.model.constant_power import ConstantPower
+from sedaro_old.model.constant_resistance import ConstantResistance
+from sedaro_old.model.eps_output_types import EpsOutputTypes

@@ -1,4 +1,4 @@
-# sedaro.model.scenario_block_delete_res.ScenarioBlockDeleteRes
+# sedaro_old.model.scenario_block_delete_res.ScenarioBlockDeleteRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

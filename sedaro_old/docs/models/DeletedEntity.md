@@ -1,4 +1,4 @@
-# sedaro.model.deleted_entity.DeletedEntity
+# sedaro_old.model.deleted_entity.DeletedEntity
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

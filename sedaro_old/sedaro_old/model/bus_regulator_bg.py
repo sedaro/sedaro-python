@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BusRegulatorBG(
@@ -131,5 +131,5 @@ class BusRegulatorBG(
             **kwargs,
         )
 
-from sedaro.model.bus_regulator import BusRegulator
-from sedaro.model.collection import Collection
+from sedaro_old.model.bus_regulator import BusRegulator
+from sedaro_old.model.collection import Collection

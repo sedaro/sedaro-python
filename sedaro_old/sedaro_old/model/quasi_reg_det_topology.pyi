@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class QuasiRegDetTopology(
@@ -663,8 +663,8 @@ class QuasiRegDetTopology(
             **kwargs,
         )
 
-from sedaro.model.topology_param_frd import TopologyParamFRD
-from sedaro.model.topology_param_qrd import TopologyParamQRD
-from sedaro.model.topology_param_sch import TopologyParamSCH
-from sedaro.model.topology_param_scm import TopologyParamSCM
-from sedaro.model.topology_param_tcm import TopologyParamTCM
+from sedaro_old.model.topology_param_frd import TopologyParamFRD
+from sedaro_old.model.topology_param_qrd import TopologyParamQRD
+from sedaro_old.model.topology_param_sch import TopologyParamSCH
+from sedaro_old.model.topology_param_scm import TopologyParamSCM
+from sedaro_old.model.topology_param_tcm import TopologyParamTCM

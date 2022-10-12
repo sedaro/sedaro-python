@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class AgentBG(
@@ -131,5 +131,5 @@ class AgentBG(
             **kwargs,
         )
 
-from sedaro.model.agent import Agent
-from sedaro.model.collection import Collection
+from sedaro_old.model.agent import Agent
+from sedaro_old.model.collection import Collection

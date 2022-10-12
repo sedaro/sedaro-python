@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.quasi_reg_det_topology import QuasiRegDetTopology
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.quasi_reg_det_topology import QuasiRegDetTopology
+from sedaro_old import configuration
 
 
 class TestQuasiRegDetTopology(unittest.TestCase):

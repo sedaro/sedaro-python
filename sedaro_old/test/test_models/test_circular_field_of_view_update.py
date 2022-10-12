@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.circular_field_of_view_update import CircularFieldOfViewUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.circular_field_of_view_update import CircularFieldOfViewUpdate
+from sedaro_old import configuration
 
 
 class TestCircularFieldOfViewUpdate(unittest.TestCase):

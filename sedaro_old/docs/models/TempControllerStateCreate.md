@@ -1,4 +1,4 @@
-# sedaro.model.temp_controller_state_create.TempControllerStateCreate
+# sedaro_old.model.temp_controller_state_create.TempControllerStateCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

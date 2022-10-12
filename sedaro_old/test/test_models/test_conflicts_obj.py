@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.conflicts_obj import ConflictsObj
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.conflicts_obj import ConflictsObj
+from sedaro_old import configuration
 
 
 class TestConflictsObj(unittest.TestCase):

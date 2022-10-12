@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.clock_config import ClockConfig
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.clock_config import ClockConfig
+from sedaro_old import configuration
 
 
 class TestClockConfig(unittest.TestCase):

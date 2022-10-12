@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class LocalVector(
@@ -369,4 +369,4 @@ class LocalVector(
             **kwargs,
         )
 
-from sedaro.model.local_pointing_directions import LocalPointingDirections
+from sedaro_old.model.local_pointing_directions import LocalPointingDirections

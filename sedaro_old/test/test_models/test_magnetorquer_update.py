@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.magnetorquer_update import MagnetorquerUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.magnetorquer_update import MagnetorquerUpdate
+from sedaro_old import configuration
 
 
 class TestMagnetorquerUpdate(unittest.TestCase):

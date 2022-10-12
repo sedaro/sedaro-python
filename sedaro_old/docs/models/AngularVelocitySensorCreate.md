@@ -1,4 +1,4 @@
-# sedaro.model.angular_velocity_sensor_create.AngularVelocitySensorCreate
+# sedaro_old.model.angular_velocity_sensor_create.AngularVelocitySensorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

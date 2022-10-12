@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.load_state import LoadState
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.load_state import LoadState
+from sedaro_old import configuration
 
 
 class TestLoadState(unittest.TestCase):

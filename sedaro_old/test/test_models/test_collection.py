@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.collection import Collection
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.collection import Collection
+from sedaro_old import configuration
 
 
 class TestCollection(unittest.TestCase):

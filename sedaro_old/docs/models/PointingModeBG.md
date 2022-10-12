@@ -1,4 +1,4 @@
-# sedaro.model.pointing_mode_bg.PointingModeBG
+# sedaro_old.model.pointing_mode_bg.PointingModeBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

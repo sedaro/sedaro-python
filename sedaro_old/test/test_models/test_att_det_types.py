@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.att_det_types import AttDetTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.att_det_types import AttDetTypes
+from sedaro_old import configuration
 
 
 class TestAttDetTypes(unittest.TestCase):

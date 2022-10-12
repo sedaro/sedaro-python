@@ -1,4 +1,4 @@
-# sedaro.model.local_pointing_directions.LocalPointingDirections
+# sedaro_old.model.local_pointing_directions.LocalPointingDirections
 
 An enumeration.
 

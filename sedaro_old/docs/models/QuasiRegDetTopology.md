@@ -1,4 +1,4 @@
-# sedaro.model.quasi_reg_det_topology.QuasiRegDetTopology
+# sedaro_old.model.quasi_reg_det_topology.QuasiRegDetTopology
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

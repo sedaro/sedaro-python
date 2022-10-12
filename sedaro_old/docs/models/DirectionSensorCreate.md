@@ -1,4 +1,4 @@
-# sedaro.model.direction_sensor_create.DirectionSensorCreate
+# sedaro_old.model.direction_sensor_create.DirectionSensorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

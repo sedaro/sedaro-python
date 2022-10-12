@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.fixed_surface import FixedSurface
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.fixed_surface import FixedSurface
+from sedaro_old import configuration
 
 
 class TestFixedSurface(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.thermal_interface_create.ThermalInterfaceCreate
+# sedaro_old.model.thermal_interface_create.ThermalInterfaceCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

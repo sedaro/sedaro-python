@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.resistance_load import ResistanceLoad
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.resistance_load import ResistanceLoad
+from sedaro_old import configuration
 
 
 class TestResistanceLoad(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.battery_pack_create.BatteryPackCreate
+# sedaro_old.model.battery_pack_create.BatteryPackCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

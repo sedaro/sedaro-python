@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.component_api.ComponentApi
+# sedaro_old.apis.tags.component_api.ComponentApi
 
 All URIs are relative to *http://localhost*
 
@@ -46,20 +46,20 @@ Create Angular Velocity Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -86,7 +86,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_angular_velocity_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -172,20 +172,20 @@ Create Battery Pack
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.battery_pack_create import BatteryPackCreate
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.battery_pack_create import BatteryPackCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -215,7 +215,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_battery_pack: %s\n" % e)
 ```
 ### Parameters
@@ -301,20 +301,20 @@ Create Component
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.component_create import ComponentCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.component_create import ComponentCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -340,7 +340,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_component: %s\n" % e)
 ```
 ### Parameters
@@ -426,20 +426,20 @@ Create Direction Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.direction_sensor_create import DirectionSensorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.direction_sensor_create import DirectionSensorCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -467,7 +467,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_direction_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -553,20 +553,20 @@ Create Magnetorquer
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.magnetorquer_create import MagnetorquerCreate
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.magnetorquer_create import MagnetorquerCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -594,7 +594,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_magnetorquer: %s\n" % e)
 ```
 ### Parameters
@@ -680,20 +680,20 @@ Create Optical Attitude Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.optical_attitude_sensor_create import OpticalAttitudeSensorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.optical_attitude_sensor_create import OpticalAttitudeSensorCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -721,7 +721,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_optical_attitude_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -807,20 +807,20 @@ Create PositionSensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.position_sensor_create import PositionSensorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.position_sensor_create import PositionSensorCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -847,7 +847,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_positionsensor: %s\n" % e)
 ```
 ### Parameters
@@ -933,20 +933,20 @@ Create Reaction Wheel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.reaction_wheel_create import ReactionWheelCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.reaction_wheel_create import ReactionWheelCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -976,7 +976,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_reaction_wheel: %s\n" % e)
 ```
 ### Parameters
@@ -1062,20 +1062,20 @@ Create Solar Panel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.solar_panel_create import SolarPanelCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.solar_panel_create import SolarPanelCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1106,7 +1106,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_solar_panel: %s\n" % e)
 ```
 ### Parameters
@@ -1192,20 +1192,20 @@ Create Vector Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.vector_sensor_create import VectorSensorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.vector_sensor_create import VectorSensorCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1233,7 +1233,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->create_vector_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -1319,19 +1319,19 @@ Delete Angular Velocity Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1346,7 +1346,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_angular_velocity_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -1430,19 +1430,19 @@ Delete Battery Pack
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1457,7 +1457,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_battery_pack: %s\n" % e)
 ```
 ### Parameters
@@ -1541,19 +1541,19 @@ Delete Component
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1568,7 +1568,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_component: %s\n" % e)
 ```
 ### Parameters
@@ -1652,19 +1652,19 @@ Delete Direction Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1679,7 +1679,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_direction_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -1763,19 +1763,19 @@ Delete Magnetorquer
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1790,7 +1790,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_magnetorquer: %s\n" % e)
 ```
 ### Parameters
@@ -1874,19 +1874,19 @@ Delete Optical Attitude Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -1901,7 +1901,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_optical_attitude_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -1985,19 +1985,19 @@ Delete PositionSensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2012,7 +2012,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_positionsensor: %s\n" % e)
 ```
 ### Parameters
@@ -2096,19 +2096,19 @@ Delete Reaction Wheel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2123,7 +2123,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_reaction_wheel: %s\n" % e)
 ```
 ### Parameters
@@ -2207,19 +2207,19 @@ Delete Solar Panel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2234,7 +2234,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_solar_panel: %s\n" % e)
 ```
 ### Parameters
@@ -2318,19 +2318,19 @@ Delete Vector Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2345,7 +2345,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->delete_vector_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -2429,20 +2429,20 @@ Update Angular Velocity Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2470,7 +2470,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_angular_velocity_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -2564,20 +2564,20 @@ Update Battery Pack
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.battery_pack_update import BatteryPackUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.battery_pack_update import BatteryPackUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2606,7 +2606,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_battery_pack: %s\n" % e)
 ```
 ### Parameters
@@ -2700,20 +2700,20 @@ Update Component
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.component_update import ComponentUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.component_update import ComponentUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2739,7 +2739,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_component: %s\n" % e)
 ```
 ### Parameters
@@ -2833,20 +2833,20 @@ Update Direction Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.direction_sensor_update import DirectionSensorUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.direction_sensor_update import DirectionSensorUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -2875,7 +2875,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_direction_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -2969,20 +2969,20 @@ Update Magnetorquer
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.magnetorquer_update import MagnetorquerUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.magnetorquer_update import MagnetorquerUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3011,7 +3011,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_magnetorquer: %s\n" % e)
 ```
 ### Parameters
@@ -3105,20 +3105,20 @@ Update Optical Attitude Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.optical_attitude_sensor_update import OpticalAttitudeSensorUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.optical_attitude_sensor_update import OpticalAttitudeSensorUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3147,7 +3147,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_optical_attitude_sensor: %s\n" % e)
 ```
 ### Parameters
@@ -3241,20 +3241,20 @@ Update PositionSensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.position_sensor_update import PositionSensorUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.position_sensor_update import PositionSensorUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3282,7 +3282,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_positionsensor: %s\n" % e)
 ```
 ### Parameters
@@ -3376,20 +3376,20 @@ Update Reaction Wheel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.reaction_wheel_update import ReactionWheelUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.reaction_wheel_update import ReactionWheelUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3420,7 +3420,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_reaction_wheel: %s\n" % e)
 ```
 ### Parameters
@@ -3514,20 +3514,20 @@ Update Solar Panel
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.solar_panel_update import SolarPanelUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.solar_panel_update import SolarPanelUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3558,7 +3558,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_solar_panel: %s\n" % e)
 ```
 ### Parameters
@@ -3652,20 +3652,20 @@ Update Topology
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.topology_update import TopologyUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.topology_update import TopologyUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3693,7 +3693,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_topology: %s\n" % e)
 ```
 ### Parameters
@@ -3787,20 +3787,20 @@ Update Vector Sensor
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import component_api
-from sedaro.model.vector_sensor_update import VectorSensorUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import component_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.vector_sensor_update import VectorSensorUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = component_api.ComponentApi(api_client)
 
@@ -3829,7 +3829,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ComponentApi->update_vector_sensor: %s\n" % e)
 ```
 ### Parameters

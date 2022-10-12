@@ -1,4 +1,4 @@
-# sedaro.model.target_pointing_directions.TargetPointingDirections
+# sedaro_old.model.target_pointing_directions.TargetPointingDirections
 
 An enumeration.
 

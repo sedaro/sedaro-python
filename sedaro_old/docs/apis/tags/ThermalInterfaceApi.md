@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.thermal_interface_api.ThermalInterfaceApi
+# sedaro_old.apis.tags.thermal_interface_api.ThermalInterfaceApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Thermal Interface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import thermal_interface_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.thermal_interface_create import ThermalInterfaceCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import thermal_interface_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.thermal_interface_create import ThermalInterfaceCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = thermal_interface_api.ThermalInterfaceApi(api_client)
 
@@ -59,7 +59,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ThermalInterfaceApi->create_thermal_interface: %s\n" % e)
 ```
 ### Parameters
@@ -145,19 +145,19 @@ Delete Thermal Interface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import thermal_interface_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import thermal_interface_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = thermal_interface_api.ThermalInterfaceApi(api_client)
 
@@ -172,7 +172,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ThermalInterfaceApi->delete_thermal_interface: %s\n" % e)
 ```
 ### Parameters
@@ -256,20 +256,20 @@ Update Thermal Interface
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import thermal_interface_api
-from sedaro.model.thermal_interface_update import ThermalInterfaceUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import thermal_interface_api
+from sedaro_old.model.thermal_interface_update import ThermalInterfaceUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = thermal_interface_api.ThermalInterfaceApi(api_client)
 
@@ -298,7 +298,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling ThermalInterfaceApi->update_thermal_interface: %s\n" % e)
 ```
 ### Parameters

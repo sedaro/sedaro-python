@@ -1,4 +1,4 @@
-# sedaro.model.gps_algorithm_update.GPSAlgorithmUpdate
+# sedaro_old.model.gps_algorithm_update.GPSAlgorithmUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

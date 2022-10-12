@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.iro_sun_sync_circ import IROSunSyncCirc
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.iro_sun_sync_circ import IROSunSyncCirc
+from sedaro_old import configuration
 
 
 class TestIROSunSyncCirc(unittest.TestCase):

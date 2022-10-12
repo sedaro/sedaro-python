@@ -1,4 +1,4 @@
-# sedaro.model.subsystem_update.SubsystemUpdate
+# sedaro_old.model.subsystem_update.SubsystemUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

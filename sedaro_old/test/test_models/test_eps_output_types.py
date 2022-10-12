@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.eps_output_types import EpsOutputTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.eps_output_types import EpsOutputTypes
+from sedaro_old import configuration
 
 
 class TestEpsOutputTypes(unittest.TestCase):

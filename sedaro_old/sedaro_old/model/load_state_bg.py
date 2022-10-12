@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class LoadStateBG(
@@ -131,5 +131,5 @@ class LoadStateBG(
             **kwargs,
         )
 
-from sedaro.model.collection import Collection
-from sedaro.model.load_state import LoadState
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.load_state import LoadState

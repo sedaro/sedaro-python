@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.vector_sensor_create import VectorSensorCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.vector_sensor_create import VectorSensorCreate
+from sedaro_old import configuration
 
 
 class TestVectorSensorCreate(unittest.TestCase):

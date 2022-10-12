@@ -1,4 +1,4 @@
-# sedaro.model.isdp_tle.ISDPTle
+# sedaro_old.model.isdp_tle.ISDPTle
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

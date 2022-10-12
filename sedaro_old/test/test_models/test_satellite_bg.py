@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.satellite_bg import SatelliteBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.satellite_bg import SatelliteBG
+from sedaro_old import configuration
 
 
 class TestSatelliteBG(unittest.TestCase):

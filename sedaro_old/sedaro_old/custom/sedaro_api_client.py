@@ -8,7 +8,7 @@ from sedaro_old.api_client import ApiClient
 from .configuration import config
 from sedaro_old.api_client import Api
 
-PACKAGE_NAME = 'sedaro'
+PACKAGE_NAME = 'sedaro_old'
 
 
 @dataclass

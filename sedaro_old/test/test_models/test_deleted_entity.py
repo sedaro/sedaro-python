@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.deleted_entity import DeletedEntity
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.deleted_entity import DeletedEntity
+from sedaro_old import configuration
 
 
 class TestDeletedEntity(unittest.TestCase):

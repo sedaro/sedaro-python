@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.celestial_target_update import CelestialTargetUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.celestial_target_update import CelestialTargetUpdate
+from sedaro_old import configuration
 
 
 class TestCelestialTargetUpdate(unittest.TestCase):

@@ -99,7 +99,7 @@ class ApiKeyError(OpenApiException, KeyError):
 
 class ApiException(OpenApiException):
 
-    def __init__(self, status=None, reason=None, api_response: 'sedaro.api_client.ApiResponse' = None):
+    def __init__(self, status=None, reason=None, api_response: 'sedaro_old.api_client.ApiResponse' = None):
         if api_response:
             self.status = api_response.response.status
             self.reason = api_response.response.reason

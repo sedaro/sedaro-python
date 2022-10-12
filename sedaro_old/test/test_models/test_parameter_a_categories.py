@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.parameter_a_categories import ParameterACategories
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.parameter_a_categories import ParameterACategories
+from sedaro_old import configuration
 
 
 class TestParameterACategories(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.statuses import Statuses
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.statuses import Statuses
+from sedaro_old import configuration
 
 
 class TestStatuses(unittest.TestCase):

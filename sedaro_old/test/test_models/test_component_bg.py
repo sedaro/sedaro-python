@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.component_bg import ComponentBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.component_bg import ComponentBG
+from sedaro_old import configuration
 
 
 class TestComponentBG(unittest.TestCase):

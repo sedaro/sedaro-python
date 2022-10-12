@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.pointing_mode_types import PointingModeTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.pointing_mode_types import PointingModeTypes
+from sedaro_old import configuration
 
 
 class TestPointingModeTypes(unittest.TestCase):

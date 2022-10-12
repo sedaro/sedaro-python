@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ConditionCreate(
@@ -385,7 +385,7 @@ class ConditionCreate(
             **kwargs,
         )
 
-from sedaro.model.condition_relationship import ConditionRelationship
-from sedaro.model.parameter_a_categories import ParameterACategories
-from sedaro.model.parameter_b_categories import ParameterBCategories
-from sedaro.model.parameters import Parameters
+from sedaro_old.model.condition_relationship import ConditionRelationship
+from sedaro_old.model.parameter_a_categories import ParameterACategories
+from sedaro_old.model.parameter_b_categories import ParameterBCategories
+from sedaro_old.model.parameters import Parameters

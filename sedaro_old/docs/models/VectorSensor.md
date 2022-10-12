@@ -1,4 +1,4 @@
-# sedaro.model.vector_sensor.VectorSensor
+# sedaro_old.model.vector_sensor.VectorSensor
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BranchMergeConflictsRes(
@@ -107,4 +107,4 @@ class BranchMergeConflictsRes(
             **kwargs,
         )
 
-from sedaro.model.conflicts_obj import ConflictsObj
+from sedaro_old.model.conflicts_obj import ConflictsObj

@@ -1,4 +1,4 @@
-# sedaro.model.two_conv_mppt_topology.TwoConvMpptTopology
+# sedaro_old.model.two_conv_mppt_topology.TwoConvMpptTopology
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

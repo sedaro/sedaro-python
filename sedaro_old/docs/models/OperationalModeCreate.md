@@ -1,4 +1,4 @@
-# sedaro.model.operational_mode_create.OperationalModeCreate
+# sedaro_old.model.operational_mode_create.OperationalModeCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-from sedaro.paths.data_.get import ApiForget
+from sedaro_old.paths.data_.get import ApiForget
 
 
 class Data(

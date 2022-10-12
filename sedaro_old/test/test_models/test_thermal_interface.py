@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.thermal_interface import ThermalInterface
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.thermal_interface import ThermalInterface
+from sedaro_old import configuration
 
 
 class TestThermalInterface(unittest.TestCase):

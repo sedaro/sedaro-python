@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class SurfaceBG(
@@ -164,6 +164,6 @@ class SurfaceBG(
             **kwargs,
         )
 
-from sedaro.model.collection import Collection
-from sedaro.model.fixed_surface import FixedSurface
-from sedaro.model.sun_tracking_surface import SunTrackingSurface
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.fixed_surface import FixedSurface
+from sedaro_old.model.sun_tracking_surface import SunTrackingSurface

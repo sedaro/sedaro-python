@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.field_of_view_constraint_api.FieldOfViewConstraintApi
+# sedaro_old.apis.tags.field_of_view_constraint_api.FieldOfViewConstraintApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Field of View Constraint
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_constraint_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.fov_constraint_create import FOVConstraintCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_constraint_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.fov_constraint_create import FOVConstraintCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_constraint_api.FieldOfViewConstraintApi(api_client)
 
@@ -54,7 +54,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewConstraintApi->create_field_of_view_constraint: %s\n" % e)
 ```
 ### Parameters
@@ -140,19 +140,19 @@ Delete Field of View Constraint
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_constraint_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_constraint_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_constraint_api.FieldOfViewConstraintApi(api_client)
 
@@ -167,7 +167,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewConstraintApi->delete_field_of_view_constraint: %s\n" % e)
 ```
 ### Parameters
@@ -251,20 +251,20 @@ Update Field of View Constraint
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import field_of_view_constraint_api
-from sedaro.model.fov_constraint_update import FOVConstraintUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import field_of_view_constraint_api
+from sedaro_old.model.fov_constraint_update import FOVConstraintUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = field_of_view_constraint_api.FieldOfViewConstraintApi(api_client)
 
@@ -288,7 +288,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling FieldOfViewConstraintApi->update_field_of_view_constraint: %s\n" % e)
 ```
 ### Parameters

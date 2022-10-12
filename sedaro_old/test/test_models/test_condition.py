@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.condition import Condition
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.condition import Condition
+from sedaro_old import configuration
 
 
 class TestCondition(unittest.TestCase):

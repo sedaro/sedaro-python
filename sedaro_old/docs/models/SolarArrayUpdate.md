@@ -1,4 +1,4 @@
-# sedaro.model.solar_array_update.SolarArrayUpdate
+# sedaro_old.model.solar_array_update.SolarArrayUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

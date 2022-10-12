@@ -1,4 +1,4 @@
-# sedaro.model.satellite_bg.SatelliteBG
+# sedaro_old.model.satellite_bg.SatelliteBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

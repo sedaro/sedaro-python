@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.data_api.DataApi
+# sedaro_old.apis.tags.data_api.DataApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,18 +18,18 @@ Queries Data Service for data under the provided `id`.
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import data_api
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import data_api
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = data_api.DataApi(api_client)
 
@@ -45,7 +45,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling DataApi->get_data: %s\n" % e)
 
     # example passing only optional values
@@ -61,7 +61,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling DataApi->get_data: %s\n" % e)
 ```
 ### Parameters

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.ekf_algorithm_create import EKFAlgorithmCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.ekf_algorithm_create import EKFAlgorithmCreate
+from sedaro_old import configuration
 
 
 class TestEKFAlgorithmCreate(unittest.TestCase):

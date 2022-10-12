@@ -1,4 +1,4 @@
-# sedaro.model.bus_regulator_bg.BusRegulatorBG
+# sedaro_old.model.bus_regulator_bg.BusRegulatorBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

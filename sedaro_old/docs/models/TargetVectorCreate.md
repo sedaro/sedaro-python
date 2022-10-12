@@ -1,4 +1,4 @@
-# sedaro.model.target_vector_create.TargetVectorCreate
+# sedaro_old.model.target_vector_create.TargetVectorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

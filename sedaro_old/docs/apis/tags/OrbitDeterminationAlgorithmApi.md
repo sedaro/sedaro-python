@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi
+# sedaro_old.apis.tags.orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi
 
 All URIs are relative to *http://localhost*
 
@@ -21,20 +21,20 @@ Create EKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.ekf_algorithm_create import EKFAlgorithmCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.ekf_algorithm_create import EKFAlgorithmCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -62,7 +62,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->create_ekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -148,20 +148,20 @@ Create GPS Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.gps_algorithm_create import GPSAlgorithmCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.gps_algorithm_create import GPSAlgorithmCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -184,7 +184,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->create_gps_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -270,19 +270,19 @@ Delete EKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -297,7 +297,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->delete_ekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -381,19 +381,19 @@ Delete GPS Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -408,7 +408,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->delete_gps_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -492,20 +492,20 @@ Update EKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.ekf_algorithm_update import EKFAlgorithmUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.ekf_algorithm_update import EKFAlgorithmUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -534,7 +534,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->update_ekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -628,20 +628,20 @@ Update GPS Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import orbit_determination_algorithm_api
-from sedaro.model.gps_algorithm_update import GPSAlgorithmUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import orbit_determination_algorithm_api
+from sedaro_old.model.gps_algorithm_update import GPSAlgorithmUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = orbit_determination_algorithm_api.OrbitDeterminationAlgorithmApi(api_client)
 
@@ -665,7 +665,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling OrbitDeterminationAlgorithmApi->update_gps_algorithm: %s\n" % e)
 ```
 ### Parameters

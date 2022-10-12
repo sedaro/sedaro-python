@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.job_get import JobGet
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.job_get import JobGet
+from sedaro_old import configuration
 
 
 class TestJobGet(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.target_group.TargetGroup
+# sedaro_old.model.target_group.TargetGroup
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

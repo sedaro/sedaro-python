@@ -1,4 +1,4 @@
-# sedaro.model.branch_scenario_template_res.BranchScenarioTemplateRes
+# sedaro_old.model.branch_scenario_template_res.BranchScenarioTemplateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

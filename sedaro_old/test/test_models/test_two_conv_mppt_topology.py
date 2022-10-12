@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.two_conv_mppt_topology import TwoConvMpptTopology
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.two_conv_mppt_topology import TwoConvMpptTopology
+from sedaro_old import configuration
 
 
 class TestTwoConvMpptTopology(unittest.TestCase):

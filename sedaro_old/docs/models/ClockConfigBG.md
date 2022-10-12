@@ -1,4 +1,4 @@
-# sedaro.model.clock_config_bg.ClockConfigBG
+# sedaro_old.model.clock_config_bg.ClockConfigBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

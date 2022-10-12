@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.solar_cell_update import SolarCellUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.solar_cell_update import SolarCellUpdate
+from sedaro_old import configuration
 
 
 class TestSolarCellUpdate(unittest.TestCase):

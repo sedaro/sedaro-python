@@ -1,4 +1,4 @@
-# sedaro.model.target_group_create.TargetGroupCreate
+# sedaro_old.model.target_group_create.TargetGroupCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

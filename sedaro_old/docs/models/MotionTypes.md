@@ -1,4 +1,4 @@
-# sedaro.model.motion_types.MotionTypes
+# sedaro_old.model.motion_types.MotionTypes
 
 An enumeration.
 

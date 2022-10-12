@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class FieldOfViewBG(
@@ -164,6 +164,6 @@ class FieldOfViewBG(
             **kwargs,
         )
 
-from sedaro.model.circular_field_of_view import CircularFieldOfView
-from sedaro.model.collection import Collection
-from sedaro.model.rectangular_field_of_view import RectangularFieldOfView
+from sedaro_old.model.circular_field_of_view import CircularFieldOfView
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.rectangular_field_of_view import RectangularFieldOfView

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.topology_param_sch import TopologyParamSCH
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.topology_param_sch import TopologyParamSCH
+from sedaro_old import configuration
 
 
 class TestTopologyParamSCH(unittest.TestCase):

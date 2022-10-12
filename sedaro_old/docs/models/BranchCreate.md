@@ -1,4 +1,4 @@
-# sedaro.model.branch_create.BranchCreate
+# sedaro_old.model.branch_create.BranchCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

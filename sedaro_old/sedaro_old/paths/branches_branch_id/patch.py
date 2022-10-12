@@ -11,7 +11,7 @@ import typing_extensions
 import urllib3
 from urllib3._collections import HTTPHeaderDict
 
-from sedaro import api_client, exceptions
+from sedaro_old import api_client, exceptions
 from datetime import date, datetime  # noqa: F401
 import decimal  # noqa: F401
 import functools  # noqa: F401
@@ -23,12 +23,12 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro.model.branch_update import BranchUpdate
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old.model.branch_update import BranchUpdate
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 
 from . import path
 

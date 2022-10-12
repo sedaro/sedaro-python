@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.solar_cell_api.SolarCellApi
+# sedaro_old.apis.tags.solar_cell_api.SolarCellApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Solar Cell
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import solar_cell_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.solar_cell_create import SolarCellCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import solar_cell_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.solar_cell_create import SolarCellCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = solar_cell_api.SolarCellApi(api_client)
 
@@ -57,7 +57,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SolarCellApi->create_solar_cell: %s\n" % e)
 ```
 ### Parameters
@@ -143,19 +143,19 @@ Delete Solar Cell
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import solar_cell_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import solar_cell_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = solar_cell_api.SolarCellApi(api_client)
 
@@ -170,7 +170,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SolarCellApi->delete_solar_cell: %s\n" % e)
 ```
 ### Parameters
@@ -254,20 +254,20 @@ Update Solar Cell
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import solar_cell_api
-from sedaro.model.solar_cell_update import SolarCellUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import solar_cell_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.solar_cell_update import SolarCellUpdate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = solar_cell_api.SolarCellApi(api_client)
 
@@ -293,7 +293,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SolarCellApi->update_solar_cell: %s\n" % e)
 ```
 ### Parameters

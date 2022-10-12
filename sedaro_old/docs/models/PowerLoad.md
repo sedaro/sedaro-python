@@ -1,4 +1,4 @@
-# sedaro.model.power_load.PowerLoad
+# sedaro_old.model.power_load.PowerLoad
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

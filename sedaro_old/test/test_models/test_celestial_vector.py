@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.celestial_vector import CelestialVector
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.celestial_vector import CelestialVector
+from sedaro_old import configuration
 
 
 class TestCelestialVector(unittest.TestCase):

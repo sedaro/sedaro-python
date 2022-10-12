@@ -1,4 +1,4 @@
-# sedaro.model.cooler_create.CoolerCreate
+# sedaro_old.model.cooler_create.CoolerCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

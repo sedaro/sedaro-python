@@ -1,4 +1,4 @@
-# sedaro.model.temp_control_load_update.TempControlLoadUpdate
+# sedaro_old.model.temp_control_load_update.TempControlLoadUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

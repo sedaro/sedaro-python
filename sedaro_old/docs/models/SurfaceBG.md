@@ -1,4 +1,4 @@
-# sedaro.model.surface_bg.SurfaceBG
+# sedaro_old.model.surface_bg.SurfaceBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

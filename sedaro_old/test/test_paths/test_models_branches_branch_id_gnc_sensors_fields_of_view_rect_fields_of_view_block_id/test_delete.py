@@ -11,9 +11,9 @@ from unittest.mock import patch
 
 import urllib3
 
-import sedaro
-from sedaro.paths.models_branches_branch_id_gnc_sensors_fields_of_view_rect_fields_of_view_block_id import delete  # noqa: E501
-from sedaro import configuration, schemas, api_client
+import sedaro_old
+from sedaro_old.paths.models_branches_branch_id_gnc_sensors_fields_of_view_rect_fields_of_view_block_id import delete  # noqa: E501
+from sedaro_old import configuration, schemas, api_client
 
 from .. import ApiTestMixin
 

@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.jobs_api.JobsApi
+# sedaro_old.apis.tags.jobs_api.JobsApi
 
 All URIs are relative to *http://localhost*
 
@@ -19,19 +19,19 @@ Get simulation status
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import jobs_api
-from sedaro.model.job_get import JobGet
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import jobs_api
+from sedaro_old.model.job_get import JobGet
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = jobs_api.JobsApi(api_client)
 
@@ -49,7 +49,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling JobsApi->get_simulation_status: %s\n" % e)
 
     # example passing only optional values
@@ -67,7 +67,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling JobsApi->get_simulation_status: %s\n" % e)
 ```
 ### Parameters
@@ -167,19 +167,19 @@ No authorization required
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import jobs_api
-from sedaro.model.job import Job
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import jobs_api
+from sedaro_old.model.job import Job
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = jobs_api.JobsApi(api_client)
 
@@ -198,7 +198,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling JobsApi->pause_resume_simulation: %s\n" % e)
 ```
 ### Parameters
@@ -300,19 +300,19 @@ Start a simulation
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import jobs_api
-from sedaro.model.job import Job
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import jobs_api
+from sedaro_old.model.job import Job
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = jobs_api.JobsApi(api_client)
 
@@ -326,7 +326,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling JobsApi->start_simulation: %s\n" % e)
 ```
 ### Parameters
@@ -402,19 +402,19 @@ Terminate a running simulation
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import jobs_api
-from sedaro.model.job import Job
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import jobs_api
+from sedaro_old.model.job import Job
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = jobs_api.JobsApi(api_client)
 
@@ -429,7 +429,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling JobsApi->terminate_simulation: %s\n" % e)
 ```
 ### Parameters

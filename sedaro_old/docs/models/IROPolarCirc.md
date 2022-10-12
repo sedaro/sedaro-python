@@ -1,4 +1,4 @@
-# sedaro.model.iro_polar_circ.IROPolarCirc
+# sedaro_old.model.iro_polar_circ.IROPolarCirc
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

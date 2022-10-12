@@ -1,4 +1,4 @@
-# sedaro.model.iro_sun_sync_circ.IROSunSyncCirc
+# sedaro_old.model.iro_sun_sync_circ.IROSunSyncCirc
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

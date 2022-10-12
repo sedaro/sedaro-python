@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_create import BranchCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_create import BranchCreate
+from sedaro_old import configuration
 
 
 class TestBranchCreate(unittest.TestCase):

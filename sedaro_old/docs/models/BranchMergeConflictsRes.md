@@ -1,4 +1,4 @@
-# sedaro.model.branch_merge_conflicts_res.BranchMergeConflictsRes
+# sedaro_old.model.branch_merge_conflicts_res.BranchMergeConflictsRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

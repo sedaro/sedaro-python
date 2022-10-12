@@ -1,4 +1,4 @@
-# sedaro.model.topology_param_scm.TopologyParamSCM
+# sedaro_old.model.topology_param_scm.TopologyParamSCM
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.lock_pointing_mode_update import LockPointingModeUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.lock_pointing_mode_update import LockPointingModeUpdate
+from sedaro_old import configuration
 
 
 class TestLockPointingModeUpdate(unittest.TestCase):

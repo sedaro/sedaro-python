@@ -1,4 +1,4 @@
-# sedaro.model.group_condition.GroupCondition
+# sedaro_old.model.group_condition.GroupCondition
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.bus_regulator_api.BusRegulatorApi
+# sedaro_old.apis.tags.bus_regulator_api.BusRegulatorApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Bus Regulator
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import bus_regulator_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.bus_regulator_create import BusRegulatorCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import bus_regulator_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.bus_regulator_create import BusRegulatorCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bus_regulator_api.BusRegulatorApi(api_client)
 
@@ -56,7 +56,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BusRegulatorApi->create_bus_regulator: %s\n" % e)
 ```
 ### Parameters
@@ -142,19 +142,19 @@ Delete Bus Regulator
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import bus_regulator_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import bus_regulator_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bus_regulator_api.BusRegulatorApi(api_client)
 
@@ -169,7 +169,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BusRegulatorApi->delete_bus_regulator: %s\n" % e)
 ```
 ### Parameters
@@ -253,20 +253,20 @@ Update Bus Regulator
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import bus_regulator_api
-from sedaro.model.bus_regulator_update import BusRegulatorUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import bus_regulator_api
+from sedaro_old.model.bus_regulator_update import BusRegulatorUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = bus_regulator_api.BusRegulatorApi(api_client)
 
@@ -291,7 +291,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BusRegulatorApi->update_bus_regulator: %s\n" % e)
 ```
 ### Parameters

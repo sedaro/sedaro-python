@@ -1,4 +1,4 @@
-# sedaro
+# sedaro_old
 
 Allows for consumption of Sedaro Satellite services.
 Read more about Sedaro Satellite at [satellite.sedaro.com](https://satellite.sedaro.com).
@@ -117,7 +117,7 @@ pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
 
 Then import the package:
 ```python
-import sedaro
+import sedaro_old
 ```
 
 ### Setuptools
@@ -131,7 +131,7 @@ python setup.py install --user
 
 Then import the package:
 ```python
-import sedaro
+import sedaro_old
 ```
 
 ## Getting Started
@@ -141,23 +141,23 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```python
 
 import time
-import sedaro
+import sedaro_old
 from pprint import pprint
-from sedaro.apis.tags import agent_template_reference_api
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.scenario_block_create_res import ScenarioBlockCreateRes
-from sedaro.model.scenario_block_delete_res import ScenarioBlockDeleteRes
-from sedaro.model.scenario_block_update_res import ScenarioBlockUpdateRes
-from sedaro.model.template_ref import TemplateRef
+from sedaro_old.apis.tags import agent_template_reference_api
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.scenario_block_create_res import ScenarioBlockCreateRes
+from sedaro_old.model.scenario_block_delete_res import ScenarioBlockDeleteRes
+from sedaro_old.model.scenario_block_update_res import ScenarioBlockUpdateRes
+from sedaro_old.model.template_ref import TemplateRef
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = agent_template_reference_api.AgentTemplateReferenceApi(api_client)
     branch_id = 1 # int | 
@@ -171,7 +171,7 @@ template_ref = TemplateRef(
         # Create Agent Template Reference
         api_response = api_instance.create_agent_template_reference(branch_idtemplate_ref)
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AgentTemplateReferenceApi->create_agent_template_reference: %s\n" % e)
 ```
 
@@ -664,20 +664,20 @@ Class | Method | HTTP request | Description
 
 
 ## Notes for Large OpenAPI documents
-If the OpenAPI document is large, imports in sedaro.apis and sedaro.models may fail with a
+If the OpenAPI document is large, imports in sedaro_old.apis and sedaro_old.models may fail with a
 RecursionError indicating the maximum recursion limit has been exceeded. In that case, there are a couple of solutions:
 
 Solution 1:
 Use specific imports for apis and models like:
-- `from sedaro.apis.default_api import DefaultApi`
-- `from sedaro.model.pet import Pet`
+- `from sedaro_old.apis.default_api import DefaultApi`
+- `from sedaro_old.model.pet import Pet`
 
 Solution 1:
 Before importing the package, adjust the maximum recursion limit as shown below:
 ```
 import sys
 sys.setrecursionlimit(1500)
-import sedaro
-from sedaro.apis import *
-from sedaro.models import *
+import sedaro_old
+from sedaro_old.apis import *
+from sedaro_old.models import *
 ```

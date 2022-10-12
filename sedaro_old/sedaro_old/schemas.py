@@ -22,11 +22,11 @@ import uuid
 from dateutil.parser.isoparser import isoparser, _takes_ascii
 import frozendict
 
-from sedaro.exceptions import (
+from sedaro_old.exceptions import (
     ApiTypeError,
     ApiValueError,
 )
-from sedaro.configuration import (
+from sedaro_old.configuration import (
     Configuration,
 )
 

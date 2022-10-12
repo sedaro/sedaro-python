@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.agent_template_reference_api.AgentTemplateReferenceApi
+# sedaro_old.apis.tags.agent_template_reference_api.AgentTemplateReferenceApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Agent Template Reference
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import agent_template_reference_api
-from sedaro.model.scenario_block_create_res import ScenarioBlockCreateRes
-from sedaro.model.template_ref import TemplateRef
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import agent_template_reference_api
+from sedaro_old.model.scenario_block_create_res import ScenarioBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.template_ref import TemplateRef
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = agent_template_reference_api.AgentTemplateReferenceApi(api_client)
 
@@ -51,7 +51,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AgentTemplateReferenceApi->create_agent_template_reference: %s\n" % e)
 ```
 ### Parameters
@@ -137,19 +137,19 @@ Delete Agent Template Reference
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import agent_template_reference_api
-from sedaro.model.scenario_block_delete_res import ScenarioBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import agent_template_reference_api
+from sedaro_old.model.scenario_block_delete_res import ScenarioBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = agent_template_reference_api.AgentTemplateReferenceApi(api_client)
 
@@ -164,7 +164,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AgentTemplateReferenceApi->delete_agent_template_reference: %s\n" % e)
 ```
 ### Parameters
@@ -248,20 +248,20 @@ Update Agent Template Reference
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import agent_template_reference_api
-from sedaro.model.scenario_block_update_res import ScenarioBlockUpdateRes
-from sedaro.model.template_ref import TemplateRef
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import agent_template_reference_api
+from sedaro_old.model.scenario_block_update_res import ScenarioBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.template_ref import TemplateRef
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = agent_template_reference_api.AgentTemplateReferenceApi(api_client)
 
@@ -282,7 +282,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AgentTemplateReferenceApi->update_agent_template_reference: %s\n" % e)
 ```
 ### Parameters

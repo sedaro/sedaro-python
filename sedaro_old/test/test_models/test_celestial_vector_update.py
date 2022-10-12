@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.celestial_vector_update import CelestialVectorUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.celestial_vector_update import CelestialVectorUpdate
+from sedaro_old import configuration
 
 
 class TestCelestialVectorUpdate(unittest.TestCase):

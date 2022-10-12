@@ -1,4 +1,4 @@
-# sedaro.model.postgres_branch_vehicle.PostgresBranchVehicle
+# sedaro_old.model.postgres_branch_vehicle.PostgresBranchVehicle
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.http_validation_error.HTTPValidationError
+# sedaro_old.model.http_validation_error.HTTPValidationError
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

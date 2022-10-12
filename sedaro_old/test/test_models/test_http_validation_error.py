@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old import configuration
 
 
 class TestHTTPValidationError(unittest.TestCase):

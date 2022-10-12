@@ -28,10 +28,10 @@ from urllib3.fields import RequestField as RequestFieldBase
 
 import frozendict
 
-from sedaro import rest
-from sedaro.configuration import Configuration
-from sedaro.exceptions import ApiTypeError, ApiValueError
-from sedaro.schemas import (
+from sedaro_old import rest
+from sedaro_old.configuration import Configuration
+from sedaro_old.exceptions import ApiTypeError, ApiValueError
+from sedaro_old.schemas import (
     NoneClass,
     BoolClass,
     Schema,

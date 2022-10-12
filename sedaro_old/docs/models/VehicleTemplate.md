@@ -1,4 +1,4 @@
-# sedaro.model.vehicle_template.VehicleTemplate
+# sedaro_old.model.vehicle_template.VehicleTemplate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

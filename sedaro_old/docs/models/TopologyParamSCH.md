@@ -1,4 +1,4 @@
-# sedaro.model.topology_param_sch.TopologyParamSCH
+# sedaro_old.model.topology_param_sch.TopologyParamSCH
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

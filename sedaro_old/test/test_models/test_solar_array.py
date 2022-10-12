@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.solar_array import SolarArray
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.solar_array import SolarArray
+from sedaro_old import configuration
 
 
 class TestSolarArray(unittest.TestCase):

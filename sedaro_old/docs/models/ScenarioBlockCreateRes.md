@@ -1,4 +1,4 @@
-# sedaro.model.scenario_block_create_res.ScenarioBlockCreateRes
+# sedaro_old.model.scenario_block_create_res.ScenarioBlockCreateRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.eps_output_types.EpsOutputTypes
+# sedaro_old.model.eps_output_types.EpsOutputTypes
 
 An enumeration.
 

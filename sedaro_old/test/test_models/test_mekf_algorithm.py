@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.mekf_algorithm import MEKFAlgorithm
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.mekf_algorithm import MEKFAlgorithm
+from sedaro_old import configuration
 
 
 class TestMEKFAlgorithm(unittest.TestCase):

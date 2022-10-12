@@ -1,4 +1,4 @@
-# sedaro.model.branch_verify_password.BranchVerifyPassword
+# sedaro_old.model.branch_verify_password.BranchVerifyPassword
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

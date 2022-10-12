@@ -1,4 +1,4 @@
-# sedaro.model.job.Job
+# sedaro_old.model.job.Job
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

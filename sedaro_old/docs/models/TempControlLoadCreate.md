@@ -1,4 +1,4 @@
-# sedaro.model.temp_control_load_create.TempControlLoadCreate
+# sedaro_old.model.temp_control_load_create.TempControlLoadCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

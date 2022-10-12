@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.local_vector_update import LocalVectorUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.local_vector_update import LocalVectorUpdate
+from sedaro_old import configuration
 
 
 class TestLocalVectorUpdate(unittest.TestCase):

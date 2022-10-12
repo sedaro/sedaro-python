@@ -1,4 +1,4 @@
-# sedaro.model.thermal_interface_update.ThermalInterfaceUpdate
+# sedaro_old.model.thermal_interface_update.ThermalInterfaceUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

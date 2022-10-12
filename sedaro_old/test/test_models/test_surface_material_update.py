@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.surface_material_update import SurfaceMaterialUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.surface_material_update import SurfaceMaterialUpdate
+from sedaro_old import configuration
 
 
 class TestSurfaceMaterialUpdate(unittest.TestCase):

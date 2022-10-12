@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.celestial_pointing_directions import CelestialPointingDirections
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.celestial_pointing_directions import CelestialPointingDirections
+from sedaro_old import configuration
 
 
 class TestCelestialPointingDirections(unittest.TestCase):

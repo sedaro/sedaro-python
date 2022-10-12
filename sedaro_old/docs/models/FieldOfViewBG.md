@@ -1,4 +1,4 @@
-# sedaro.model.field_of_view_bg.FieldOfViewBG
+# sedaro_old.model.field_of_view_bg.FieldOfViewBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

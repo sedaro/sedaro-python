@@ -1,4 +1,4 @@
-# sedaro.model.branch_merge.BranchMerge
+# sedaro_old.model.branch_merge.BranchMerge
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

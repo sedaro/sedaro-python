@@ -1,4 +1,4 @@
-# sedaro.model.group_and_id.GroupAndId
+# sedaro_old.model.group_and_id.GroupAndId
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

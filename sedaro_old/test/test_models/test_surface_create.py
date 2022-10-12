@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.surface_create import SurfaceCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.surface_create import SurfaceCreate
+from sedaro_old import configuration
 
 
 class TestSurfaceCreate(unittest.TestCase):

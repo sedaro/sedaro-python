@@ -1,4 +1,4 @@
-# sedaro.model.rectangular_field_of_view.RectangularFieldOfView
+# sedaro_old.model.rectangular_field_of_view.RectangularFieldOfView
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

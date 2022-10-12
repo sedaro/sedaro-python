@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.battery_cell_bg import BatteryCellBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.battery_cell_bg import BatteryCellBG
+from sedaro_old import configuration
 
 
 class TestBatteryCellBG(unittest.TestCase):

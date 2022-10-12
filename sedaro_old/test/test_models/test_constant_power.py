@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.constant_power import ConstantPower
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.constant_power import ConstantPower
+from sedaro_old import configuration
 
 
 class TestConstantPower(unittest.TestCase):

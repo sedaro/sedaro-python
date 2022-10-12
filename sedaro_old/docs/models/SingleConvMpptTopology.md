@@ -1,4 +1,4 @@
-# sedaro.model.single_conv_mppt_topology.SingleConvMpptTopology
+# sedaro_old.model.single_conv_mppt_topology.SingleConvMpptTopology
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

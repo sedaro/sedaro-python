@@ -1,4 +1,4 @@
-# sedaro.model.heater_update.HeaterUpdate
+# sedaro_old.model.heater_update.HeaterUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

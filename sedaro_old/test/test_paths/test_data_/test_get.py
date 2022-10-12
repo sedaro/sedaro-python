@@ -11,9 +11,9 @@ from unittest.mock import patch
 
 import urllib3
 
-import sedaro
-from sedaro.paths.data_ import get  # noqa: E501
-from sedaro import configuration, schemas, api_client
+import sedaro_old
+from sedaro_old.paths.data_ import get  # noqa: E501
+from sedaro_old import configuration, schemas, api_client
 
 from .. import ApiTestMixin
 

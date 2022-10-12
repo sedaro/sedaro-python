@@ -1,4 +1,4 @@
-# sedaro.model.topology_param_frd.TopologyParamFRD
+# sedaro_old.model.topology_param_frd.TopologyParamFRD
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_delete_res import BranchDeleteRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_delete_res import BranchDeleteRes
+from sedaro_old import configuration
 
 
 class TestBranchDeleteRes(unittest.TestCase):

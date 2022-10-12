@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class CelestialTargetUpdate(
@@ -172,4 +172,4 @@ class CelestialTargetUpdate(
             **kwargs,
         )
 
-from sedaro.model.polynomial_ephemeris_body import PolynomialEphemerisBody
+from sedaro_old.model.polynomial_ephemeris_body import PolynomialEphemerisBody

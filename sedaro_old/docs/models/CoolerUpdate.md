@@ -1,4 +1,4 @@
-# sedaro.model.cooler_update.CoolerUpdate
+# sedaro_old.model.cooler_update.CoolerUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

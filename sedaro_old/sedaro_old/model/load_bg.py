@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class LoadBG(
@@ -165,7 +165,7 @@ class LoadBG(
             **kwargs,
         )
 
-from sedaro.model.actuator_load import ActuatorLoad
-from sedaro.model.collection import Collection
-from sedaro.model.power_load import PowerLoad
-from sedaro.model.resistance_load import ResistanceLoad
+from sedaro_old.model.actuator_load import ActuatorLoad
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.power_load import PowerLoad
+from sedaro_old.model.resistance_load import ResistanceLoad

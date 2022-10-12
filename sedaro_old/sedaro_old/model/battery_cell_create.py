@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BatteryCellCreate(
@@ -31,6 +31,7 @@ class BatteryCellCreate(
 
     Do not edit the class manually.
     """
+
 
     class MetaOapg:
         required = {
@@ -43,66 +44,82 @@ class BatteryCellCreate(
             "minSoc",
             "capacity",
         }
-
+        
         class properties:
-
+            
+            
             class partNumber(
                 schemas.StrSchema
             ):
-
+            
+            
                 class MetaOapg:
                     max_length = 32
-
+            
+            
             class esr(
                 schemas.NumberSchema
             ):
-
+            
+            
                 class MetaOapg:
                     inclusive_minimum = 0.0
-
+            
+            
             class maxChargeCurrent(
                 schemas.NumberSchema
             ):
-
+            
+            
                 class MetaOapg:
                     inclusive_minimum = 0.0
-
+            
+            
             class maxDischargeCurrent(
                 schemas.NumberSchema
             ):
-
+            
+            
                 class MetaOapg:
                     inclusive_minimum = 0.0
-
+            
+            
             class minSoc(
                 schemas.NumberSchema
             ):
-
+            
+            
                 class MetaOapg:
                     inclusive_maximum = 1.0
                     inclusive_minimum = 0.0
-
+            
+            
             class curve(
                 schemas.ListSchema
             ):
-
+            
+            
                 class MetaOapg:
                     max_items = 2
                     min_items = 2
-
+                    
+                    
                     class items(
                         schemas.ListSchema
                     ):
-
+                    
+                    
                         class MetaOapg:
-
+                            
+                            
                             class items(
                                 schemas.NumberSchema
                             ):
-
+                            
+                            
                                 class MetaOapg:
                                     inclusive_minimum = 0.0
-
+                    
                         def __new__(
                             cls,
                             arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
@@ -113,10 +130,10 @@ class BatteryCellCreate(
                                 arg,
                                 _configuration=_configuration,
                             )
-
+                    
                         def __getitem__(self, i: int) -> MetaOapg.items:
                             return super().__getitem__(i)
-
+            
                 def __new__(
                     cls,
                     arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, list, tuple, ]], typing.List[typing.Union[MetaOapg.items, list, tuple, ]]],
@@ -127,23 +144,27 @@ class BatteryCellCreate(
                         arg,
                         _configuration=_configuration,
                     )
-
+            
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-
+            
+            
             class capacity(
                 schemas.NumberSchema
             ):
-
+            
+            
                 class MetaOapg:
                     inclusive_minimum = 0.0
             topology = schemas.StrSchema
             id = schemas.StrSchema
-
+            
+            
             class manufacturer(
                 schemas.StrSchema
             ):
-
+            
+            
                 class MetaOapg:
                     max_length = 32
             __annotations__ = {
@@ -158,7 +179,7 @@ class BatteryCellCreate(
                 "id": id,
                 "manufacturer": manufacturer,
             }
-
+    
     curve: MetaOapg.properties.curve
     esr: MetaOapg.properties.esr
     topology: MetaOapg.properties.topology
@@ -167,97 +188,81 @@ class BatteryCellCreate(
     maxDischargeCurrent: MetaOapg.properties.maxDischargeCurrent
     minSoc: MetaOapg.properties.minSoc
     capacity: MetaOapg.properties.capacity
-
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["partNumber"]) -> MetaOapg.properties.partNumber: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["partNumber"]) -> MetaOapg.properties.partNumber: ...
+    
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["esr"]) -> MetaOapg.properties.esr: ...
-
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["maxChargeCurrent"]) -> MetaOapg.properties.maxChargeCurrent: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["maxChargeCurrent"]) -> MetaOapg.properties.maxChargeCurrent: ...
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["maxDischargeCurrent"]) -> MetaOapg.properties.maxDischargeCurrent: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["maxDischargeCurrent"]) -> MetaOapg.properties.maxDischargeCurrent: ...
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["minSoc"]) -> MetaOapg.properties.minSoc: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["minSoc"]) -> MetaOapg.properties.minSoc: ...
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["curve"]) -> MetaOapg.properties.curve: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["curve"]) -> MetaOapg.properties.curve: ...
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["capacity"]) -> MetaOapg.properties.capacity: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["capacity"]) -> MetaOapg.properties.capacity: ...
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
+    
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-
+    
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
-
+    def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
+    
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-
+    
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-
+    
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["partNumber"]) -> MetaOapg.properties.partNumber: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["partNumber"]) -> MetaOapg.properties.partNumber: ...
+    
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["esr"]) -> MetaOapg.properties.esr: ...
-
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["maxChargeCurrent"]) -> MetaOapg.properties.maxChargeCurrent: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["maxChargeCurrent"]) -> MetaOapg.properties.maxChargeCurrent: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["maxDischargeCurrent"]) -> MetaOapg.properties.maxDischargeCurrent: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["maxDischargeCurrent"]) -> MetaOapg.properties.maxDischargeCurrent: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["minSoc"]) -> MetaOapg.properties.minSoc: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["minSoc"]) -> MetaOapg.properties.minSoc: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["curve"]) -> MetaOapg.properties.curve: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["curve"]) -> MetaOapg.properties.curve: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["capacity"]) -> MetaOapg.properties.capacity: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["capacity"]) -> MetaOapg.properties.capacity: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]
-                      ) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
-
+    def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
+    
     @typing.overload
-    def get_item_oapg(
-        self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-
+    def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
+    
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", ], str]):
         return super().get_item_oapg(name)
+    
 
     def __new__(
         cls,
@@ -271,8 +276,7 @@ class BatteryCellCreate(
         minSoc: typing.Union[MetaOapg.properties.minSoc, decimal.Decimal, int, float, ],
         capacity: typing.Union[MetaOapg.properties.capacity, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        manufacturer: typing.Union[MetaOapg.properties.manufacturer,
-                                   str, schemas.Unset] = schemas.unset,
+        manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BatteryCellCreate':

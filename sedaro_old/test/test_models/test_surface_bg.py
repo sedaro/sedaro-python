@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.surface_bg import SurfaceBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.surface_bg import SurfaceBG
+from sedaro_old import configuration
 
 
 class TestSurfaceBG(unittest.TestCase):

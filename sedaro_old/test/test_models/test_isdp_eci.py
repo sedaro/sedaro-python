@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.isdp_eci import ISDPEci
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.isdp_eci import ISDPEci
+from sedaro_old import configuration
 
 
 class TestISDPEci(unittest.TestCase):

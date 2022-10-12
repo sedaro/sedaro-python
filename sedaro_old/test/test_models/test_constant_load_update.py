@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.constant_load_update import ConstantLoadUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.constant_load_update import ConstantLoadUpdate
+from sedaro_old import configuration
 
 
 class TestConstantLoadUpdate(unittest.TestCase):

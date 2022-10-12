@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old import configuration
 
 
 class TestBranchScenarioTemplateRes(unittest.TestCase):

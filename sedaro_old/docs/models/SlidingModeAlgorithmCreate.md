@@ -1,4 +1,4 @@
-# sedaro.model.sliding_mode_algorithm_create.SlidingModeAlgorithmCreate
+# sedaro_old.model.sliding_mode_algorithm_create.SlidingModeAlgorithmCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

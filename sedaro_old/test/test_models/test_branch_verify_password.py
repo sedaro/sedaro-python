@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_verify_password import BranchVerifyPassword
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_verify_password import BranchVerifyPassword
+from sedaro_old import configuration
 
 
 class TestBranchVerifyPassword(unittest.TestCase):

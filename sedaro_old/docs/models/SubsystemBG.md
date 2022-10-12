@@ -1,4 +1,4 @@
-# sedaro.model.subsystem_bg.SubsystemBG
+# sedaro_old.model.subsystem_bg.SubsystemBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-from sedaro.paths.models_branches_branch_id_gnc_pointing_modes_passive_.post import ApiForpost
+from sedaro_old.paths.models_branches_branch_id_gnc_pointing_modes_passive_.post import ApiForpost
 
 
 class ModelsBranchesBranchIdGncPointingModesPassive(

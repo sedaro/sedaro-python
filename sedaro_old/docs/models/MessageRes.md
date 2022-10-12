@@ -1,4 +1,4 @@
-# sedaro.model.message_res.MessageRes
+# sedaro_old.model.message_res.MessageRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

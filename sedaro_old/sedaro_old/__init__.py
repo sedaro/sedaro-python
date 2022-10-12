@@ -14,15 +14,15 @@
 __version__ = "1.0.0"
 
 # import ApiClient
-from sedaro.api_client import ApiClient
+from sedaro_old.api_client import ApiClient
 
 # import Configuration
-from sedaro.configuration import Configuration
+from sedaro_old.configuration import Configuration
 
 # import exceptions
-from sedaro.exceptions import OpenApiException
-from sedaro.exceptions import ApiAttributeError
-from sedaro.exceptions import ApiTypeError
-from sedaro.exceptions import ApiValueError
-from sedaro.exceptions import ApiKeyError
-from sedaro.exceptions import ApiException
+from sedaro_old.exceptions import OpenApiException
+from sedaro_old.exceptions import ApiAttributeError
+from sedaro_old.exceptions import ApiTypeError
+from sedaro_old.exceptions import ApiValueError
+from sedaro_old.exceptions import ApiKeyError
+from sedaro_old.exceptions import ApiException

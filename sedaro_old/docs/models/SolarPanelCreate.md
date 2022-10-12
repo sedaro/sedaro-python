@@ -1,4 +1,4 @@
-# sedaro.model.solar_panel_create.SolarPanelCreate
+# sedaro_old.model.solar_panel_create.SolarPanelCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

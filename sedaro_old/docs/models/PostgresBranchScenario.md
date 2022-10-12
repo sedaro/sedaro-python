@@ -1,4 +1,4 @@
-# sedaro.model.postgres_branch_scenario.PostgresBranchScenario
+# sedaro_old.model.postgres_branch_scenario.PostgresBranchScenario
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.reference_vector_bg.ReferenceVectorBG
+# sedaro_old.model.reference_vector_bg.ReferenceVectorBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

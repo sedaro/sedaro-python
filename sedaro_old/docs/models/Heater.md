@@ -1,4 +1,4 @@
-# sedaro.model.heater.Heater
+# sedaro_old.model.heater.Heater
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class PostgresBranchScenario(
@@ -253,4 +253,4 @@ class PostgresBranchScenario(
             **kwargs,
         )
 
-from sedaro.model.scenario_template import ScenarioTemplate
+from sedaro_old.model.scenario_template import ScenarioTemplate

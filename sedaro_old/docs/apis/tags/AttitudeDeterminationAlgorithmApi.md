@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi
+# sedaro_old.apis.tags.attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi
 
 All URIs are relative to *http://localhost*
 
@@ -24,20 +24,20 @@ Create Averaging Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.averaging_algorithm_create import AveragingAlgorithmCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.averaging_algorithm_create import AveragingAlgorithmCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -61,7 +61,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->create_averaging_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -147,20 +147,20 @@ Create MEKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.mekf_algorithm_create import MEKFAlgorithmCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.mekf_algorithm_create import MEKFAlgorithmCreate
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -186,7 +186,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->create_mekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -272,20 +272,20 @@ Create Triad Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.triad_algorithm_create import TriadAlgorithmCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.triad_algorithm_create import TriadAlgorithmCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -307,7 +307,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->create_triad_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -393,19 +393,19 @@ Delete Averaging Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -420,7 +420,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->delete_averaging_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -504,19 +504,19 @@ Delete MEKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -531,7 +531,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->delete_mekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -615,19 +615,19 @@ Delete Triad Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_delete_res import AgentBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -642,7 +642,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->delete_triad_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -726,20 +726,20 @@ Update Averaging Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.averaging_algorithm_update import AveragingAlgorithmUpdate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.averaging_algorithm_update import AveragingAlgorithmUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -764,7 +764,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->update_averaging_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -858,20 +858,20 @@ Update MEKF Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
-from sedaro.model.mekf_algorithm_update import MEKFAlgorithmUpdate
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.mekf_algorithm_update import MEKFAlgorithmUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -898,7 +898,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->update_mekf_algorithm: %s\n" % e)
 ```
 ### Parameters
@@ -992,20 +992,20 @@ Update Triad Algorithm
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import attitude_determination_algorithm_api
-from sedaro.model.triad_algorithm_update import TriadAlgorithmUpdate
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import attitude_determination_algorithm_api
+from sedaro_old.model.triad_algorithm_update import TriadAlgorithmUpdate
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = attitude_determination_algorithm_api.AttitudeDeterminationAlgorithmApi(api_client)
 
@@ -1028,7 +1028,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling AttitudeDeterminationAlgorithmApi->update_triad_algorithm: %s\n" % e)
 ```
 ### Parameters

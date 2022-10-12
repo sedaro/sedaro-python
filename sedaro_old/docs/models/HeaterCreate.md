@@ -1,4 +1,4 @@
-# sedaro.model.heater_create.HeaterCreate
+# sedaro_old.model.heater_create.HeaterCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class AlgorithmBG(
@@ -168,10 +168,10 @@ class AlgorithmBG(
             **kwargs,
         )
 
-from sedaro.model.averaging_algorithm import AveragingAlgorithm
-from sedaro.model.collection import Collection
-from sedaro.model.ekf_algorithm import EKFAlgorithm
-from sedaro.model.gps_algorithm import GPSAlgorithm
-from sedaro.model.mekf_algorithm import MEKFAlgorithm
-from sedaro.model.sliding_mode_algorithm import SlidingModeAlgorithm
-from sedaro.model.triad_algorithm import TriadAlgorithm
+from sedaro_old.model.averaging_algorithm import AveragingAlgorithm
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.ekf_algorithm import EKFAlgorithm
+from sedaro_old.model.gps_algorithm import GPSAlgorithm
+from sedaro_old.model.mekf_algorithm import MEKFAlgorithm
+from sedaro_old.model.sliding_mode_algorithm import SlidingModeAlgorithm
+from sedaro_old.model.triad_algorithm import TriadAlgorithm

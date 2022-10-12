@@ -1,4 +1,4 @@
-# sedaro.model.polynomial_ephemeris_body.PolynomialEphemerisBody
+# sedaro_old.model.polynomial_ephemeris_body.PolynomialEphemerisBody
 
 An enumeration.
 

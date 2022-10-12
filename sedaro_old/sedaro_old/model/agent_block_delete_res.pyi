@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class AgentBlockDeleteRes(
@@ -121,5 +121,5 @@ class AgentBlockDeleteRes(
             **kwargs,
         )
 
-from sedaro.model.group_and_id import GroupAndId
-from sedaro.model.postgres_branch_vehicle import PostgresBranchVehicle
+from sedaro_old.model.group_and_id import GroupAndId
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle

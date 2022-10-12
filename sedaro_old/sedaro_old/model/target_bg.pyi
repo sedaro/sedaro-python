@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class TargetBG(
@@ -165,7 +165,7 @@ class TargetBG(
             **kwargs,
         )
 
-from sedaro.model.celestial_target import CelestialTarget
-from sedaro.model.collection import Collection
-from sedaro.model.ground_target import GroundTarget
-from sedaro.model.space_target import SpaceTarget
+from sedaro_old.model.celestial_target import CelestialTarget
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.ground_target import GroundTarget
+from sedaro_old.model.space_target import SpaceTarget

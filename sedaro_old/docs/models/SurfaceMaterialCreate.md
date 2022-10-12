@@ -1,4 +1,4 @@
-# sedaro.model.surface_material_create.SurfaceMaterialCreate
+# sedaro_old.model.surface_material_create.SurfaceMaterialCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

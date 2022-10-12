@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class TargetGroupBG(
@@ -131,5 +131,5 @@ class TargetGroupBG(
             **kwargs,
         )
 
-from sedaro.model.collection import Collection
-from sedaro.model.target_group import TargetGroup
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.target_group import TargetGroup

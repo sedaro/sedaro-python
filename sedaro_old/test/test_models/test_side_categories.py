@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.side_categories import SideCategories
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.side_categories import SideCategories
+from sedaro_old import configuration
 
 
 class TestSideCategories(unittest.TestCase):

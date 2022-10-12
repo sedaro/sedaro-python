@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.solar_panel import SolarPanel
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.solar_panel import SolarPanel
+from sedaro_old import configuration
 
 
 class TestSolarPanel(unittest.TestCase):

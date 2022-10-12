@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.single_conv_hybrid_topology import SingleConvHybridTopology
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.single_conv_hybrid_topology import SingleConvHybridTopology
+from sedaro_old import configuration
 
 
 class TestSingleConvHybridTopology(unittest.TestCase):

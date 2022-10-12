@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ScenarioTemplate(
@@ -259,6 +259,6 @@ class ScenarioTemplate(
             **kwargs,
         )
 
-from sedaro.model.agent_bg import AgentBG
-from sedaro.model.clock_config_bg import ClockConfigBG
-from sedaro.model.template_ref_bg import TemplateRefBG
+from sedaro_old.model.agent_bg import AgentBG
+from sedaro_old.model.clock_config_bg import ClockConfigBG
+from sedaro_old.model.template_ref_bg import TemplateRefBG

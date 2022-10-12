@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class BatteryBG(
@@ -131,5 +131,5 @@ class BatteryBG(
             **kwargs,
         )
 
-from sedaro.model.battery import Battery
-from sedaro.model.collection import Collection
+from sedaro_old.model.battery import Battery
+from sedaro_old.model.collection import Collection

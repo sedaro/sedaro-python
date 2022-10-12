@@ -1,4 +1,4 @@
-# sedaro.model.initial_state_def_type.InitialStateDefType
+# sedaro_old.model.initial_state_def_type.InitialStateDefType
 
 An enumeration.
 

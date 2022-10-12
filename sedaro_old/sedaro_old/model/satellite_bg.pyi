@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class SatelliteBG(
@@ -164,6 +164,6 @@ class SatelliteBG(
             **kwargs,
         )
 
-from sedaro.model.collection import Collection
-from sedaro.model.satellite import Satellite
-from sedaro.model.simulatable_satellite import SimulatableSatellite
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.satellite import Satellite
+from sedaro_old.model.simulatable_satellite import SimulatableSatellite

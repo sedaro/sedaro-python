@@ -1,4 +1,4 @@
-# sedaro.model.template_ref.TemplateRef
+# sedaro_old.model.template_ref.TemplateRef
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

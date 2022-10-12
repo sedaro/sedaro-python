@@ -11,7 +11,7 @@ import typing_extensions
 import urllib3
 from urllib3._collections import HTTPHeaderDict
 
-from sedaro import api_client, exceptions
+from sedaro_old import api_client, exceptions
 from datetime import date, datetime  # noqa: F401
 import decimal  # noqa: F401
 import functools  # noqa: F401
@@ -23,11 +23,11 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
-from sedaro.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro.model.constant_load_create import ConstantLoadCreate
-from sedaro.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.agent_block_create_res import AgentBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.constant_load_create import ConstantLoadCreate
 
 from . import path
 

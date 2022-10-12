@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.lock_pointing_mode_create import LockPointingModeCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.lock_pointing_mode_create import LockPointingModeCreate
+from sedaro_old import configuration
 
 
 class TestLockPointingModeCreate(unittest.TestCase):

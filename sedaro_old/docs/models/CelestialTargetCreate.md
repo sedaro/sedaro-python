@@ -1,4 +1,4 @@
-# sedaro.model.celestial_target_create.CelestialTargetCreate
+# sedaro_old.model.celestial_target_create.CelestialTargetCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.group_condition import GroupCondition
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.group_condition import GroupCondition
+from sedaro_old import configuration
 
 
 class TestGroupCondition(unittest.TestCase):

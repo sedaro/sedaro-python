@@ -1,4 +1,4 @@
-# sedaro.model.statuses.Statuses
+# sedaro_old.model.statuses.Statuses
 
 An enumeration.
 

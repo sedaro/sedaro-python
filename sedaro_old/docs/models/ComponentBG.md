@@ -1,4 +1,4 @@
-# sedaro.model.component_bg.ComponentBG
+# sedaro_old.model.component_bg.ComponentBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.averaging_algorithm import AveragingAlgorithm
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.averaging_algorithm import AveragingAlgorithm
+from sedaro_old import configuration
 
 
 class TestAveragingAlgorithm(unittest.TestCase):

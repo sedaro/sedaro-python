@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.branch_merge_conflicts_res import BranchMergeConflictsRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.branch_merge_conflicts_res import BranchMergeConflictsRes
+from sedaro_old import configuration
 
 
 class TestBranchMergeConflictsRes(unittest.TestCase):

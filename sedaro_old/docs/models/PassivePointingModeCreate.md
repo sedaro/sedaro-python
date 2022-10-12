@@ -1,4 +1,4 @@
-# sedaro.model.passive_pointing_mode_create.PassivePointingModeCreate
+# sedaro_old.model.passive_pointing_mode_create.PassivePointingModeCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

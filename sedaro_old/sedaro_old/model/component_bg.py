@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ComponentBG(
@@ -180,22 +180,22 @@ class ComponentBG(
             **kwargs,
         )
 
-from sedaro.model.angular_velocity_sensor import AngularVelocitySensor
-from sedaro.model.battery_pack import BatteryPack
-from sedaro.model.collection import Collection
-from sedaro.model.component import Component
-from sedaro.model.cooler import Cooler
-from sedaro.model.direction_sensor import DirectionSensor
-from sedaro.model.fully_reg_det_topology import FullyRegDetTopology
-from sedaro.model.heater import Heater
-from sedaro.model.magnetorquer import Magnetorquer
-from sedaro.model.optical_attitude_sensor import OpticalAttitudeSensor
-from sedaro.model.position_sensor import PositionSensor
-from sedaro.model.quasi_reg_det_topology import QuasiRegDetTopology
-from sedaro.model.reaction_wheel import ReactionWheel
-from sedaro.model.single_conv_hybrid_topology import SingleConvHybridTopology
-from sedaro.model.single_conv_mppt_topology import SingleConvMpptTopology
-from sedaro.model.solar_panel import SolarPanel
-from sedaro.model.topology import Topology
-from sedaro.model.two_conv_mppt_topology import TwoConvMpptTopology
-from sedaro.model.vector_sensor import VectorSensor
+from sedaro_old.model.angular_velocity_sensor import AngularVelocitySensor
+from sedaro_old.model.battery_pack import BatteryPack
+from sedaro_old.model.collection import Collection
+from sedaro_old.model.component import Component
+from sedaro_old.model.cooler import Cooler
+from sedaro_old.model.direction_sensor import DirectionSensor
+from sedaro_old.model.fully_reg_det_topology import FullyRegDetTopology
+from sedaro_old.model.heater import Heater
+from sedaro_old.model.magnetorquer import Magnetorquer
+from sedaro_old.model.optical_attitude_sensor import OpticalAttitudeSensor
+from sedaro_old.model.position_sensor import PositionSensor
+from sedaro_old.model.quasi_reg_det_topology import QuasiRegDetTopology
+from sedaro_old.model.reaction_wheel import ReactionWheel
+from sedaro_old.model.single_conv_hybrid_topology import SingleConvHybridTopology
+from sedaro_old.model.single_conv_mppt_topology import SingleConvMpptTopology
+from sedaro_old.model.solar_panel import SolarPanel
+from sedaro_old.model.topology import Topology
+from sedaro_old.model.two_conv_mppt_topology import TwoConvMpptTopology
+from sedaro_old.model.vector_sensor import VectorSensor

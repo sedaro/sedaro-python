@@ -1,4 +1,4 @@
-# sedaro.model.reaction_wheel.ReactionWheel
+# sedaro_old.model.reaction_wheel.ReactionWheel
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

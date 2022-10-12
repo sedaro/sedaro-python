@@ -1,4 +1,4 @@
-# sedaro.model.scenario_template.ScenarioTemplate
+# sedaro_old.model.scenario_template.ScenarioTemplate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,4 +1,4 @@
-# sedaro.model.resistance_load.ResistanceLoad
+# sedaro_old.model.resistance_load.ResistanceLoad
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

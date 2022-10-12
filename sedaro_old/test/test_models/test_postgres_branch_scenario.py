@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.postgres_branch_scenario import PostgresBranchScenario
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_old import configuration
 
 
 class TestPostgresBranchScenario(unittest.TestCase):

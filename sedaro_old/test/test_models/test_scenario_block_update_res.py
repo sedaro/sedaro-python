@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.scenario_block_update_res import ScenarioBlockUpdateRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.scenario_block_update_res import ScenarioBlockUpdateRes
+from sedaro_old import configuration
 
 
 class TestScenarioBlockUpdateRes(unittest.TestCase):

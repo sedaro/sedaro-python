@@ -1,4 +1,4 @@
-# sedaro.model.load_state_bg.LoadStateBG
+# sedaro_old.model.load_state_bg.LoadStateBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

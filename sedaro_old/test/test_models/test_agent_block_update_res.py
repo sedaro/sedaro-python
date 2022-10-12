@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.agent_block_update_res import AgentBlockUpdateRes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_old import configuration
 
 
 class TestAgentBlockUpdateRes(unittest.TestCase):

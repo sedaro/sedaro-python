@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.optical_attitude_sensor import OpticalAttitudeSensor
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.optical_attitude_sensor import OpticalAttitudeSensor
+from sedaro_old import configuration
 
 
 class TestOpticalAttitudeSensor(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.sliding_mode_algorithm_update.SlidingModeAlgorithmUpdate
+# sedaro_old.model.sliding_mode_algorithm_update.SlidingModeAlgorithmUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

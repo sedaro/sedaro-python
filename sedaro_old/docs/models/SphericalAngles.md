@@ -1,4 +1,4 @@
-# sedaro.model.spherical_angles.SphericalAngles
+# sedaro_old.model.spherical_angles.SphericalAngles
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

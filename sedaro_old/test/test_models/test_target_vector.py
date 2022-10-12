@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.target_vector import TargetVector
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.target_vector import TargetVector
+from sedaro_old import configuration
 
 
 class TestTargetVector(unittest.TestCase):

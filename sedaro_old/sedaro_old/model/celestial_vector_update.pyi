@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class CelestialVectorUpdate(
@@ -133,4 +133,4 @@ class CelestialVectorUpdate(
             **kwargs,
         )
 
-from sedaro.model.celestial_pointing_directions import CelestialPointingDirections
+from sedaro_old.model.celestial_pointing_directions import CelestialPointingDirections

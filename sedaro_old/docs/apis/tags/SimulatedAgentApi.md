@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.simulated_agent_api.SimulatedAgentApi
+# sedaro_old.apis.tags.simulated_agent_api.SimulatedAgentApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,20 +18,20 @@ Create Simulated Agent
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import simulated_agent_api
-from sedaro.model.agent import Agent
-from sedaro.model.scenario_block_create_res import ScenarioBlockCreateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import simulated_agent_api
+from sedaro_old.model.agent import Agent
+from sedaro_old.model.scenario_block_create_res import ScenarioBlockCreateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = simulated_agent_api.SimulatedAgentApi(api_client)
 
@@ -56,7 +56,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SimulatedAgentApi->create_simulated_agent: %s\n" % e)
 ```
 ### Parameters
@@ -142,19 +142,19 @@ Delete Simulated Agent
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import simulated_agent_api
-from sedaro.model.scenario_block_delete_res import ScenarioBlockDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import simulated_agent_api
+from sedaro_old.model.scenario_block_delete_res import ScenarioBlockDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = simulated_agent_api.SimulatedAgentApi(api_client)
 
@@ -169,7 +169,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SimulatedAgentApi->delete_simulated_agent: %s\n" % e)
 ```
 ### Parameters
@@ -253,20 +253,20 @@ Update Simulated Agent
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import simulated_agent_api
-from sedaro.model.agent import Agent
-from sedaro.model.scenario_block_update_res import ScenarioBlockUpdateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import simulated_agent_api
+from sedaro_old.model.agent import Agent
+from sedaro_old.model.scenario_block_update_res import ScenarioBlockUpdateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = simulated_agent_api.SimulatedAgentApi(api_client)
 
@@ -292,7 +292,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling SimulatedAgentApi->update_simulated_agent: %s\n" % e)
 ```
 ### Parameters

@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class ActivePointingMode(
@@ -200,4 +200,4 @@ class ActivePointingMode(
             **kwargs,
         )
 
-from sedaro.model.pointing_mode_types import PointingModeTypes
+from sedaro_old.model.pointing_mode_types import PointingModeTypes

@@ -1,4 +1,4 @@
-# sedaro.model.constant_load_update.ConstantLoadUpdate
+# sedaro_old.model.constant_load_update.ConstantLoadUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

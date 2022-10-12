@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.parameters import Parameters
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.parameters import Parameters
+from sedaro_old import configuration
 
 
 class TestParameters(unittest.TestCase):

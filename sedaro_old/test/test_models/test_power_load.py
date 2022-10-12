@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.power_load import PowerLoad
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.power_load import PowerLoad
+from sedaro_old import configuration
 
 
 class TestPowerLoad(unittest.TestCase):

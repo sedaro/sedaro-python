@@ -1,4 +1,4 @@
-# sedaro.model.vector_sensor_create.VectorSensorCreate
+# sedaro_old.model.vector_sensor_create.VectorSensorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -1,5 +1,5 @@
 <a name="__pageTop"></a>
-# sedaro.apis.tags.branches_api.BranchesApi
+# sedaro_old.apis.tags.branches_api.BranchesApi
 
 All URIs are relative to *http://localhost*
 
@@ -26,19 +26,19 @@ Takes all changes to the blocks on the branch with the provided `id` and commits
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.message_res import MessageRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.message_res import MessageRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -56,7 +56,7 @@ with sedaro.ApiClient(configuration) as api_client:
             query_params=query_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->commit_to_branch: %s\n" % e)
 ```
 ### Parameters
@@ -150,21 +150,21 @@ Creates a new branch based on and in the same repository as the branch associate
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.branch_create import BranchCreate
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.branch_create import BranchCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -183,7 +183,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->create_branch: %s\n" % e)
 ```
 ### Parameters
@@ -279,19 +279,19 @@ Deletes the branch with the provided `id`.
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.branch_delete_res import BranchDeleteRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.branch_delete_res import BranchDeleteRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -305,7 +305,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->delete_branch: %s\n" % e)
 ```
 ### Parameters
@@ -383,20 +383,20 @@ Retrieves the branch with the provided `id`.
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -410,7 +410,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->get_branch: %s\n" % e)
 ```
 ### Parameters
@@ -496,20 +496,20 @@ Retrieves all **committed** branch `data` (object with all the blocks) from the 
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.vehicle_template import VehicleTemplate
-from sedaro.model.scenario_template import ScenarioTemplate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.scenario_template import ScenarioTemplate
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.vehicle_template import VehicleTemplate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -523,7 +523,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->get_committed_branch_data: %s\n" % e)
 ```
 ### Parameters
@@ -609,20 +609,20 @@ Retrieves all **saved** branch `data` (object with all the blocks) from the bran
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.vehicle_template import VehicleTemplate
-from sedaro.model.scenario_template import ScenarioTemplate
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.scenario_template import ScenarioTemplate
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.vehicle_template import VehicleTemplate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -636,7 +636,7 @@ with sedaro.ApiClient(configuration) as api_client:
             path_params=path_params,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->get_saved_branch_data: %s\n" % e)
 ```
 ### Parameters
@@ -722,22 +722,22 @@ Merges branch with `incomingBranchId` into branch with `currentBranchId`. This r
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.branch_merge import BranchMerge
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro.model.branch_merge_conflicts_res import BranchMergeConflictsRes
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old.model.branch_merge_conflicts_res import BranchMergeConflictsRes
+from sedaro_old.model.branch_merge import BranchMerge
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -758,7 +758,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->merge_branches: %s\n" % e)
 ```
 ### Parameters
@@ -863,21 +863,21 @@ Updates updateable fields on the branch with the provided `id`. Note: - `shareab
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro.model.branch_update import BranchUpdate
-from sedaro.model.branch_scenario_template_res import BranchScenarioTemplateRes
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_old.model.branch_update import BranchUpdate
+from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -898,7 +898,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->update_branch: %s\n" % e)
 ```
 ### Parameters
@@ -994,20 +994,20 @@ Route to verify password when a user tries to access a branch with the provided 
 ### Example
 
 ```python
-import sedaro
-from sedaro.apis.tags import branches_api
-from sedaro.model.message_res import MessageRes
-from sedaro.model.branch_verify_password import BranchVerifyPassword
-from sedaro.model.http_validation_error import HTTPValidationError
+import sedaro_old
+from sedaro_old.apis.tags import branches_api
+from sedaro_old.model.http_validation_error import HTTPValidationError
+from sedaro_old.model.branch_verify_password import BranchVerifyPassword
+from sedaro_old.model.message_res import MessageRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
-configuration = sedaro.Configuration(
+configuration = sedaro_old.Configuration(
     host = "http://localhost"
 )
 
 # Enter a context with an instance of the API client
-with sedaro.ApiClient(configuration) as api_client:
+with sedaro_old.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = branches_api.BranchesApi(api_client)
 
@@ -1025,7 +1025,7 @@ with sedaro.ApiClient(configuration) as api_client:
             body=body,
         )
         pprint(api_response)
-    except sedaro.ApiException as e:
+    except sedaro_old.ApiException as e:
         print("Exception when calling BranchesApi->verify_branch_password: %s\n" % e)
 ```
 ### Parameters

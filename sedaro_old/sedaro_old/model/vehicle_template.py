@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class VehicleTemplate(
@@ -1403,30 +1403,30 @@ class VehicleTemplate(
             **kwargs,
         )
 
-from sedaro.model.algorithm_bg import AlgorithmBG
-from sedaro.model.battery_bg import BatteryBG
-from sedaro.model.battery_cell_bg import BatteryCellBG
-from sedaro.model.body_frame_vector_bg import BodyFrameVectorBG
-from sedaro.model.bus_regulator_bg import BusRegulatorBG
-from sedaro.model.component_bg import ComponentBG
-from sedaro.model.con_ops_bg import ConOpsBG
-from sedaro.model.condition_bg import ConditionBG
-from sedaro.model.field_of_view_bg import FieldOfViewBG
-from sedaro.model.fov_constraint_bg import FOVConstraintBG
-from sedaro.model.load_bg import LoadBG
-from sedaro.model.load_state_bg import LoadStateBG
-from sedaro.model.operational_mode_bg import OperationalModeBG
-from sedaro.model.orbit_bg import OrbitBG
-from sedaro.model.pointing_mode_bg import PointingModeBG
-from sedaro.model.reference_vector_bg import ReferenceVectorBG
-from sedaro.model.satellite_bg import SatelliteBG
-from sedaro.model.solar_array_bg import SolarArrayBG
-from sedaro.model.solar_cell_bg import SolarCellBG
-from sedaro.model.subsystem_bg import SubsystemBG
-from sedaro.model.surface_bg import SurfaceBG
-from sedaro.model.surface_material_bg import SurfaceMaterialBG
-from sedaro.model.target_bg import TargetBG
-from sedaro.model.target_group_bg import TargetGroupBG
-from sedaro.model.temp_controller_state_bg import TempControllerStateBG
-from sedaro.model.thermal_interface_bg import ThermalInterfaceBG
-from sedaro.model.thermal_interface_material_bg import ThermalInterfaceMaterialBG
+from sedaro_old.model.algorithm_bg import AlgorithmBG
+from sedaro_old.model.battery_bg import BatteryBG
+from sedaro_old.model.battery_cell_bg import BatteryCellBG
+from sedaro_old.model.body_frame_vector_bg import BodyFrameVectorBG
+from sedaro_old.model.bus_regulator_bg import BusRegulatorBG
+from sedaro_old.model.component_bg import ComponentBG
+from sedaro_old.model.con_ops_bg import ConOpsBG
+from sedaro_old.model.condition_bg import ConditionBG
+from sedaro_old.model.field_of_view_bg import FieldOfViewBG
+from sedaro_old.model.fov_constraint_bg import FOVConstraintBG
+from sedaro_old.model.load_bg import LoadBG
+from sedaro_old.model.load_state_bg import LoadStateBG
+from sedaro_old.model.operational_mode_bg import OperationalModeBG
+from sedaro_old.model.orbit_bg import OrbitBG
+from sedaro_old.model.pointing_mode_bg import PointingModeBG
+from sedaro_old.model.reference_vector_bg import ReferenceVectorBG
+from sedaro_old.model.satellite_bg import SatelliteBG
+from sedaro_old.model.solar_array_bg import SolarArrayBG
+from sedaro_old.model.solar_cell_bg import SolarCellBG
+from sedaro_old.model.subsystem_bg import SubsystemBG
+from sedaro_old.model.surface_bg import SurfaceBG
+from sedaro_old.model.surface_material_bg import SurfaceMaterialBG
+from sedaro_old.model.target_bg import TargetBG
+from sedaro_old.model.target_group_bg import TargetGroupBG
+from sedaro_old.model.temp_controller_state_bg import TempControllerStateBG
+from sedaro_old.model.thermal_interface_bg import ThermalInterfaceBG
+from sedaro_old.model.thermal_interface_material_bg import ThermalInterfaceMaterialBG

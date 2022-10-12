@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.heater_update import HeaterUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.heater_update import HeaterUpdate
+from sedaro_old import configuration
 
 
 class TestHeaterUpdate(unittest.TestCase):

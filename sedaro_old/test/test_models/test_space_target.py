@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.space_target import SpaceTarget
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.space_target import SpaceTarget
+from sedaro_old import configuration
 
 
 class TestSpaceTarget(unittest.TestCase):

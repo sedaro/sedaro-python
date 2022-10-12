@@ -1,4 +1,4 @@
-# sedaro.model.pointing_mode_types.PointingModeTypes
+# sedaro_old.model.pointing_mode_types.PointingModeTypes
 
 An enumeration.
 

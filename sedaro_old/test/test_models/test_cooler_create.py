@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.cooler_create import CoolerCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.cooler_create import CoolerCreate
+from sedaro_old import configuration
 
 
 class TestCoolerCreate(unittest.TestCase):

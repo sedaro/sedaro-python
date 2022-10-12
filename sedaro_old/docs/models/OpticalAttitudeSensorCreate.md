@@ -1,4 +1,4 @@
-# sedaro.model.optical_attitude_sensor_create.OpticalAttitudeSensorCreate
+# sedaro_old.model.optical_attitude_sensor_create.OpticalAttitudeSensorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

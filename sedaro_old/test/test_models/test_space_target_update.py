@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.space_target_update import SpaceTargetUpdate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.space_target_update import SpaceTargetUpdate
+from sedaro_old import configuration
 
 
 class TestSpaceTargetUpdate(unittest.TestCase):

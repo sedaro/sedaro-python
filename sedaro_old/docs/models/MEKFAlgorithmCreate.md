@@ -1,4 +1,4 @@
-# sedaro.model.mekf_algorithm_create.MEKFAlgorithmCreate
+# sedaro_old.model.mekf_algorithm_create.MEKFAlgorithmCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

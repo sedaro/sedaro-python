@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.triad_algorithm import TriadAlgorithm
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.triad_algorithm import TriadAlgorithm
+from sedaro_old import configuration
 
 
 class TestTriadAlgorithm(unittest.TestCase):

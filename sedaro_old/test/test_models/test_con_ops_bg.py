@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.con_ops_bg import ConOpsBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.con_ops_bg import ConOpsBG
+from sedaro_old import configuration
 
 
 class TestConOpsBG(unittest.TestCase):

@@ -1,4 +1,4 @@
-# sedaro.model.att_det_types.AttDetTypes
+# sedaro_old.model.att_det_types.AttDetTypes
 
 An enumeration.
 

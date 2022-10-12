@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.constant_load_definition_types import ConstantLoadDefinitionTypes
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.constant_load_definition_types import ConstantLoadDefinitionTypes
+from sedaro_old import configuration
 
 
 class TestConstantLoadDefinitionTypes(unittest.TestCase):

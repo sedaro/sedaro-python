@@ -1,4 +1,4 @@
-# sedaro.model.position_sensor_create.PositionSensorCreate
+# sedaro_old.model.position_sensor_create.PositionSensorCreate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.bus_regulator import BusRegulator
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.bus_regulator import BusRegulator
+from sedaro_old import configuration
 
 
 class TestBusRegulator(unittest.TestCase):

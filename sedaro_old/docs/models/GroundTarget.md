@@ -1,4 +1,4 @@
-# sedaro.model.ground_target.GroundTarget
+# sedaro_old.model.ground_target.GroundTarget
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

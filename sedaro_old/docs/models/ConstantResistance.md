@@ -1,4 +1,4 @@
-# sedaro.model.constant_resistance.ConstantResistance
+# sedaro_old.model.constant_resistance.ConstantResistance
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

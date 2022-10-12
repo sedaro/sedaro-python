@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.topology import Topology
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.topology import Topology
+from sedaro_old import configuration
 
 
 class TestTopology(unittest.TestCase):

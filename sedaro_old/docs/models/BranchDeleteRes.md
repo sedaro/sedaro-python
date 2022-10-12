@@ -1,4 +1,4 @@
-# sedaro.model.branch_delete_res.BranchDeleteRes
+# sedaro_old.model.branch_delete_res.BranchDeleteRes
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

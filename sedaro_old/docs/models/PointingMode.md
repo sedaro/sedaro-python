@@ -1,4 +1,4 @@
-# sedaro.model.pointing_mode.PointingMode
+# sedaro_old.model.pointing_mode.PointingMode
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

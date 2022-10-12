@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.ground_target_create import GroundTargetCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.ground_target_create import GroundTargetCreate
+from sedaro_old import configuration
 
 
 class TestGroundTargetCreate(unittest.TestCase):

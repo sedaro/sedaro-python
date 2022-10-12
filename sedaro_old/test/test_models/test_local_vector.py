@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.local_vector import LocalVector
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.local_vector import LocalVector
+from sedaro_old import configuration
 
 
 class TestLocalVector(unittest.TestCase):

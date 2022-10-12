@@ -1,4 +1,4 @@
-# sedaro.model.celestial_pointing_directions.CelestialPointingDirections
+# sedaro_old.model.celestial_pointing_directions.CelestialPointingDirections
 
 An enumeration.
 

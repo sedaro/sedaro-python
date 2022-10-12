@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.vehicle_template import VehicleTemplate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.vehicle_template import VehicleTemplate
+from sedaro_old import configuration
 
 
 class TestVehicleTemplate(unittest.TestCase):

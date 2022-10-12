@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.polynomial_ephemeris_body import PolynomialEphemerisBody
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.polynomial_ephemeris_body import PolynomialEphemerisBody
+from sedaro_old import configuration
 
 
 class TestPolynomialEphemerisBody(unittest.TestCase):

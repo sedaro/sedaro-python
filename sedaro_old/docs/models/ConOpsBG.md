@@ -1,4 +1,4 @@
-# sedaro.model.con_ops_bg.ConOpsBG
+# sedaro_old.model.con_ops_bg.ConOpsBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

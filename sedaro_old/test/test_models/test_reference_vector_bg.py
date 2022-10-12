@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.reference_vector_bg import ReferenceVectorBG
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.reference_vector_bg import ReferenceVectorBG
+from sedaro_old import configuration
 
 
 class TestReferenceVectorBG(unittest.TestCase):

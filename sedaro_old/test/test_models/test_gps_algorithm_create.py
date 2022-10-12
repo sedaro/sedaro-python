@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.gps_algorithm_create import GPSAlgorithmCreate
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.gps_algorithm_create import GPSAlgorithmCreate
+from sedaro_old import configuration
 
 
 class TestGPSAlgorithmCreate(unittest.TestCase):

@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.position_sensor import PositionSensor
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.position_sensor import PositionSensor
+from sedaro_old import configuration
 
 
 class TestPositionSensor(unittest.TestCase):

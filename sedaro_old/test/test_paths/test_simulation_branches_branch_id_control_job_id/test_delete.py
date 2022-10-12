@@ -11,9 +11,9 @@ from unittest.mock import patch
 
 import urllib3
 
-import sedaro
-from sedaro.paths.simulation_branches_branch_id_control_job_id import delete  # noqa: E501
-from sedaro import configuration, schemas, api_client
+import sedaro_old
+from sedaro_old.paths.simulation_branches_branch_id_control_job_id import delete  # noqa: E501
+from sedaro_old import configuration, schemas, api_client
 
 from .. import ApiTestMixin
 

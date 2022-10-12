@@ -1,4 +1,4 @@
-# sedaro.model.orbit_bg.OrbitBG
+# sedaro_old.model.orbit_bg.OrbitBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

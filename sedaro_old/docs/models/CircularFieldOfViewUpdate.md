@@ -1,4 +1,4 @@
-# sedaro.model.circular_field_of_view_update.CircularFieldOfViewUpdate
+# sedaro_old.model.circular_field_of_view_update.CircularFieldOfViewUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

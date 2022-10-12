@@ -1,4 +1,4 @@
-# sedaro.model.body_frame_vector_update.BodyFrameVectorUpdate
+# sedaro_old.model.body_frame_vector_update.BodyFrameVectorUpdate
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

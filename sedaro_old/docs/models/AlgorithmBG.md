@@ -1,4 +1,4 @@
-# sedaro.model.algorithm_bg.AlgorithmBG
+# sedaro_old.model.algorithm_bg.AlgorithmBG
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

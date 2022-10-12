@@ -1,4 +1,4 @@
-# sedaro.model.single_conv_hybrid_topology.SingleConvHybridTopology
+# sedaro_old.model.single_conv_hybrid_topology.SingleConvHybridTopology
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes

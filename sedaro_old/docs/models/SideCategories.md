@@ -1,4 +1,4 @@
-# sedaro.model.side_categories.SideCategories
+# sedaro_old.model.side_categories.SideCategories
 
 An enumeration.
 

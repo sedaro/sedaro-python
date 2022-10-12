@@ -20,7 +20,7 @@ import uuid  # noqa: F401
 
 import frozendict  # noqa: F401
 
-from sedaro import schemas  # noqa: F401
+from sedaro_old import schemas  # noqa: F401
 
 
 class PostgresBranchVehicle(
@@ -253,4 +253,4 @@ class PostgresBranchVehicle(
             **kwargs,
         )
 
-from sedaro.model.vehicle_template import VehicleTemplate
+from sedaro_old.model.vehicle_template import VehicleTemplate

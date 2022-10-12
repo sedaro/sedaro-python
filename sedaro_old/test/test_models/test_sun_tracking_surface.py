@@ -11,9 +11,9 @@
 
 import unittest
 
-import sedaro
-from sedaro.model.sun_tracking_surface import SunTrackingSurface
-from sedaro import configuration
+import sedaro_old
+from sedaro_old.model.sun_tracking_surface import SunTrackingSurface
+from sedaro_old import configuration
 
 
 class TestSunTrackingSurface(unittest.TestCase):

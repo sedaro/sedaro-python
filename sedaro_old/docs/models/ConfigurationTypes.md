@@ -1,4 +1,4 @@
-# sedaro.model.configuration_types.ConfigurationTypes
+# sedaro_old.model.configuration_types.ConfigurationTypes
 
 An enumeration.
 
