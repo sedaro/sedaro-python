@@ -24,6 +24,11 @@ class Block:
         return self.branch.data[self.block_group][self.id]
 
     @property
+    def name(self) -> str:
+        '''The name of the class associated with this `Block`'''
+        return self.block_class_client.block_name
+
+    @property
     def branch(self) -> 'Branch':
         '''The `Branch` this `Block` is connected to'''
         return self.block_class_client.branch
