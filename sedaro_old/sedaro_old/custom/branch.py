@@ -1,7 +1,10 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Tuple
 from dataclasses import dataclass
 
+from sedaro_old.api_client import ApiResponse
 from .block_class_client import BlockClassClient
+from .utils import parse_block_crud_response
+from .settings import CREATE, UPDATE, DELETE
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
@@ -28,3 +31,23 @@ class Branch:
             create_class=block_create_class,
             branch=self
         )
+
+    def _process_block_crud_response(self, block_crud_response: ApiResponse) -> Tuple[str, str]:
+        block_id, block_data, block_group, branch_data, action = parse_block_crud_response(
+            block_crud_response
+        )
+        action = action.casefold()
+
+        if action == CREATE.casefold():
+            self.data[block_group][block_id] = block_data
+
+        elif action == UPDATE.casefold():
+            self.data[block_group][block_id].update(block_data)
+
+        elif action == DELETE.casefold():
+            del self.data[block_group][block_id]
+
+        else:
+            raise NotImplementedError(f'Unsupported action type: "{action}"')
+
+        return block_id, block_group
