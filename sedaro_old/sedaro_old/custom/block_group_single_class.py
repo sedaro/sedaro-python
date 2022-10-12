@@ -7,9 +7,9 @@ from .settings import CREATE
 
 
 @dataclass
-class BlockGroup:
+class BlockGroupSingleClass:
     block_name: str
-    open_api_instance: Api
+    block_openapi_instance: Api
     create_class: type
     branch_id: int
 
@@ -23,7 +23,7 @@ class BlockGroup:
             _type_: _description_
             FIXME: ^^^^^^
         """
-        return getattr(self.open_api_instance, f'{CREATE}_{snake_case(self.block_name)}')(
+        return getattr(self.block_openapi_instance, f'{CREATE}_{snake_case(self.block_name)}')(
             body=self.create_class(**body),
             **kwargs,
             path_params={'branchId': self.branch_id},
