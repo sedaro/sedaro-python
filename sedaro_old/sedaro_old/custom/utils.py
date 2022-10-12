@@ -17,7 +17,7 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
     return json.loads(response.data.decode('utf-8'))
 
 
-def parse_block_crud_response(response: ApiResponse) -> Tuple:
+def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, dict, str]:
     """Parses the response of CRUD-ing a Sedaro Block on a `Branch` into a dictionary.
 
     Args:
