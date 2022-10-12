@@ -33,6 +33,17 @@ class Branch:
         )
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> Tuple[str, str]:
+        """Updates the local `Branch` data according to the CRUD action completed
+
+        Args:
+            block_crud_response (ApiResponse): response from a Sedaro Block CRUD action
+
+        Raises:
+            NotImplementedError: if the returned CRUD action isn't create, update, or delete
+
+        Returns:
+            Tuple[str, str]: `block_id` and `block_group`
+        """
         block_id, block_data, block_group, action = parse_block_crud_response(
             block_crud_response
         )
