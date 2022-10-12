@@ -1,0 +1,2 @@
+sedaro_base_client@ file://sedaro/src/sedaro_base_client/dist/sedaro_base_client-1.0.0.tar.gz
+typing-extensions>=4.3.0
