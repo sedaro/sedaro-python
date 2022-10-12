@@ -47,4 +47,5 @@ class BlockClassClient:
 
     @property
     def sedaro_client(self) -> 'SedaroApiClient':
+        '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
         return self.branch.sedaro_client
