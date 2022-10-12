@@ -33,7 +33,7 @@ class Branch:
         )
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> Tuple[str, str]:
-        block_id, block_data, block_group, branch_data, action = parse_block_crud_response(
+        block_id, block_data, block_group, action = parse_block_crud_response(
             block_crud_response
         )
         action = action.casefold()

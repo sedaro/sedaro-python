@@ -17,17 +17,17 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
     return json.loads(response.data.decode('utf-8'))
 
 
-def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, dict, str]:
+def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, str]:
     """Parses the response of CRUD-ing a Sedaro Block on a `Branch` into a dictionary.
 
     Args:
         response (ApiResponse): the response from CRUD-ing a Sedaro Block
 
     Returns:
-        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `branch_data`, `action`
+        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`
     """
     body = response.body
     block_id, block_group = body['block']['id'], body['block']['group']
     branch_data = body['branch']['data']
 
-    return block_id, branch_data[block_group][block_id], block_group, branch_data, body['action']
+    return block_id, branch_data[block_group][block_id], block_group, body['action']
