@@ -17,13 +17,12 @@ classifiers = [
     "Operating System :: OS Independent", # FIXME
     "Topic :: Software Development",
 ]
-dynamic = ["dependencies"]
+
+dependencies = [
+  "sedaro_base_client @ file:///src/sedaro_base_client/dist/sedaro_base_client-1.0.0.tar.gz",
+  "typing-extensions >= 4.3.0",
+]
 
 [project.urls]
 "Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
 "Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
-
-[tool.setuptools.dynamic]
-dependencies = {file = [
-  "src/sedaro/requirements.txt",
-]}
