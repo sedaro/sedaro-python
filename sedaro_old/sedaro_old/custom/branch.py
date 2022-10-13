@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class Branch:
     id: int
     data: Dict
+    dataSchema: Dict
     _sedaro_client: 'SedaroApiClient'
 
     def __str__(self):
