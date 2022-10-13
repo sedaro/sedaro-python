@@ -68,7 +68,7 @@ def run_generator(skip_intro=False):
             f'  + "{DIFFERENT_LANGUAGE}"    different language     restart and pick a different language')
         print(
             f'  + "{REGENERATE}"     regenerate             delete and regenerate client (use with caution)')
-        how_to_proceed = input(f'~ ').lower().strip()
+        how_to_proceed = input('~ ').lower().strip()
 
         if how_to_proceed not in proceed_options:
             print(f'\n"{how_to_proceed}" is not a valid choice')
@@ -130,8 +130,8 @@ def run_generator(skip_intro=False):
 
         os.system(cmd)
 
-        if language == PYTHON:
-            os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
+        # if language == PYTHON:
+        #     os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
 
         print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
 
