@@ -54,18 +54,18 @@ def test_update_block():
         print(res)
 
 
-def test_create_and_update_block():
+def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         branch = sedaro_client.get_branch(14)
         battery_cell = branch.BatteryCell.create({
             'partNumber': '987654321',
-            'manufacturer': 'Oh Yeah!',
+            'manufacturer': 'Oh Yeah!!!!!!!!!',
             'esr': 1.0,
             'maxChargeCurrent': 100,
             'maxDischargeCurrent': 100,
-            'minSoc': 0.01,
+            'minSoc': 1,
             'capacity': 5000,
-            'curve': [[0, 0.005, ], [3, 3.08]],
+            'curve': [[0, 1], [3, 5]],
             'topology': '11',
         })
 
@@ -73,21 +73,32 @@ def test_create_and_update_block():
 
         assert battery_cell == branch.BatteryCell.get(battery_cell_id)
 
-        new_part_number = "Let's gooo!!!!!!!"
+        new_part_number = "Let's gooo!!!!!!!!!!!!"
+
+        print(battery_cell)
 
         battery_cell.update({'partNumber': new_part_number})
 
-        assert branch.data['BatteryCell'][battery_cell_id]['partNumber'] == new_part_number
+        assert branch.data['BatteryCell'][battery_cell_id]['partNumber'] == battery_cell.partNumber == new_part_number
 
         print(battery_cell)
+
+        battery_cell.delete()
+
+        try:
+            print(battery_cell)
+        except KeyError as e:
+            assert str(e) == "'The referenced Sedaro Block no longer exists.'"
 
 
 if __name__ == "__main__":
     # test_get()
     # test_create_block()
     # test_update_block()
-    test_create_and_update_block()
+    test_create_update_and_delete_block()
 
+
+# ModuleNotFoundError -> AttributeError
 
 # class Block:
 
