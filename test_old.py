@@ -20,42 +20,44 @@ API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fH
 
 def test_get():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        # res = sedaro_client.call_api('/', 'GET')
-        res: HTTPResponse = sedaro_client.call_api(
-            '/models/branches/14', 'GET',)
-        print(f'\nres: {res.data}\n')
+        branch = sedaro_client.get_branch(14)
+        print(f'\nres: {branch}\n')
         return
 
 
-def test_create_block_1():
+def test_create_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch = sedaro_client.get_branch(14)
+        res = branch.BatteryCell.create({
+            'partNumber': '987654321',
+            'manufacturer': 'Oh Yeah!',
+            'esr': 1.0,
+            'maxChargeCurrent': 100,
+            'maxDischargeCurrent': 100,
+            'minSoc': 0.01,
+            'capacity': 5000,
+            'curve': [[0, 0.005, ], [3, 3.08]],
+            'topology': '11',
+        })
+        print(res)
 
-        api_instance = battery_cell_api.BatteryCellApi(sedaro_client)
-
-        body = BatteryCellCreate(
-            partNumber='1234',
-            manufacturer='abcd',
-            esr=1.0,
-            maxChargeCurrent=100,
-            maxDischargeCurrent=100,
-            minSoc=0.01,
-            capacity=5000,
-            curve=[[0, 0.005, ], [3, 3.08]],
-            topology='11',
-        )
-
-        res = api_instance.create_battery_cell(
-            path_params={'branchId': 14},
-            body=body,
-        )
-        pprint(res)
+        assert res == branch.BatteryCell.get(res.data['id'])
 
 
-def test_create_block_2():
+def test_update_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        block_client = sedaro_client.get_block_client(14, 'BatteryCell')
+        branch = sedaro_client.get_branch(14)
+        battery_cell = branch.BatteryCell.get(3604)
 
-        res = block_client.create({
+        res = battery_cell.update({'partNumber': 'Let\'s go!!!!!'})
+
+        print(res)
+
+
+def test_create_and_update_block():
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch = sedaro_client.get_branch(14)
+        battery_cell = branch.BatteryCell.create({
             'partNumber': '987654321',
             'manufacturer': 'Oh Yeah!',
             'esr': 1.0,
@@ -67,38 +69,24 @@ def test_create_block_2():
             'topology': '11',
         })
 
-        pprint(res)
-        print(res.body['block']['id'])
+        battery_cell_id = battery_cell.data['id']
 
+        assert battery_cell == branch.BatteryCell.get(battery_cell_id)
 
-def test_update_block():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        # import json
-        # res = sedaro_client.call_api(
-        #     '/models/branches/14/power/batteries/cells/3570',
-        #     'PATCH',
-        #     body=json.dumps({'partNumber': 'hello'}), headers={'Content-Type': 'application/json'}
-        # )
+        new_part_number = "Let's gooo!!!!!!!"
 
-        block_client = sedaro_client.get_block_client(14, 'BatteryCell')
+        battery_cell.update({'partNumber': new_part_number})
 
-        res = block_client.update('3572', {
-            'partNumber': 'New Part Number',
-            'manufacturer': 'Oh Yeah!',
-            'esr': 1.0,
-            'maxChargeCurrent': 100,
-            'maxDischargeCurrent': 100,
-            'minSoc': 0.01,
-            'capacity': 5000,
-            'curve': [[0, 0.005], [3, 3.08]],
-            'topology': '11',
-        })
-        pprint(res)
+        assert branch.data['BatteryCell'][battery_cell_id]['partNumber'] == new_part_number
+
+        print(battery_cell)
 
 
 if __name__ == "__main__":
-    test_create_block_2()
+    # test_get()
+    # test_create_block()
     # test_update_block()
+    test_create_and_update_block()
 
 
 # class Block:
