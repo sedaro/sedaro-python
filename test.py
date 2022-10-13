@@ -1,9 +1,4 @@
-from typing import TYPE_CHECKING
-
 from sedaro import SedaroApiClient
-
-if TYPE_CHECKING:
-    from .sedaro_old.sedaro_old.custom import SedaroApiClient
 
 API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fHqzVikT2njA6xXNRTslw'
 
