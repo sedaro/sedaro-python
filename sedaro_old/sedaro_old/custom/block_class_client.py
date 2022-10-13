@@ -39,7 +39,7 @@ class BlockClassClient:
         return self._get_create_or_update_block_model(UPDATE)
 
     @property
-    def block_openapi_instance(self) -> Api:
+    def _block_openapi_instance(self) -> Api:
         '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
         block_snake, block_pascal = get_snake_and_pascal_case(self.block_name)
         block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
@@ -86,7 +86,7 @@ class BlockClassClient:
             _type_: _description_
             FIXME: ^^^^^^
         """
-        res = getattr(self.block_openapi_instance, f'{CREATE}_{snake_case(self.block_name)}')(
+        res = getattr(self._block_openapi_instance, f'{CREATE}_{snake_case(self.block_name)}')(
             body=self.create_class(**body),
             **kwargs,
             path_params={'branchId': self.branch.id},

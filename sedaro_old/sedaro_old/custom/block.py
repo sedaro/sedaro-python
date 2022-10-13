@@ -41,9 +41,9 @@ class Block:
         return self.block_class_client.branch
 
     @property
-    def block_openapi_instance(self) -> Api:
+    def _block_openapi_instance(self) -> Api:
         '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
-        return self.block_class_client.block_openapi_instance
+        return self.block_class_client._block_openapi_instance
 
     @property
     def sedaro_client(self) -> 'SedaroApiClient':
@@ -63,7 +63,7 @@ class Block:
 
         body = self.data | body
 
-        res = getattr(self.block_openapi_instance, f'{UPDATE}_{snake_case(self.name)}')(
+        res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self.name)}')(
             body=self.block_class_client.update_class(**body),
             **kwargs,
             path_params={'branchId': self.branch.id, "blockId": int(self.id)},
