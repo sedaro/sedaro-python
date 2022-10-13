@@ -1,28 +1,38 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+# see: https://python-poetry.org/docs/pyproject/
 
-[project]
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
 name = "sedaro"
 version = "0.1.0"
-authors = [
-  { name="Sedaro", email="support@sedarotech.com" },
-]
 description = "A python client to interact with the Sedaro Satellite API."
+license = "MIT" # FIXME
+authors = [
+  "Sedaro <support@sedarotech.com>",
+]
+maintainers = [
+    "Sedaro <support@sedarotech.com>",
+]
 readme = "README.md"
-requires-python = ">=3.9"
+homepage = "https://www.sedaro.com/" # FIXME : An URL to the website of the project
+repository = "https://gitlab.sedaro.com/sedaro-satellite/clients" #FIXME
+# documentation = "..." # FIXME
+keywords = ["simuilation", "sedaro", "digital twin"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License", # FIXME
     "Operating System :: OS Independent", # FIXME
     "Topic :: Software Development",
 ]
-
-dependencies = [
-  "sedaro_base_client @ file:///src/sedaro_base_client/dist/sedaro_base_client-1.0.0.tar.gz",
-  "typing-extensions >= 4.3.0",
+packages = [
+    { include = "src/sedaro" },
 ]
 
-[project.urls]
-"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
-"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
+[tool.poetry.dependencies]
+python = "^3.7"
+pydash = "^5.1.1"
+typing-extensions = "^4.3.0"
+# added ^^^ typing-extensions b/c generated python_client tries to "import from typing_extensions" (convention in
+# older version of python), and should now be an "import from typing". This is a workaround.
