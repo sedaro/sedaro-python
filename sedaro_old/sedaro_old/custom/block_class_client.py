@@ -45,6 +45,11 @@ class BlockClassClient:
         block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
         return getattr(block_api_module, f'{block_pascal}Api')(self.sedaro_client)
 
+    @property
+    def block_group(self) -> str:
+        '''The name of the Sedaro `BlockGroup` this type of `Block` is stored in'''
+        return self.branch.data['blockToBlockGroupMapWithSuperBlockClasses'][self.block_name]
+
     def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']):
         """Gets the model class to used to validate the data to create or update a `Block`
 
