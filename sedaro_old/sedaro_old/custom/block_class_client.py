@@ -1,7 +1,7 @@
 from importlib import import_module
 from dataclasses import dataclass
 from sedaro_old.api_client import Api
-from typing import TYPE_CHECKING, Dict, Literal
+from typing import TYPE_CHECKING, Dict, Literal, Union
 from pydash.strings import snake_case
 
 
@@ -92,8 +92,26 @@ class BlockClassClient:
             path_params={'branchId': self.branch.id},
         )
         block_id, block_group = self.branch._process_block_crud_response(res)
-        return Block(
-            id=block_id,
-            block_class_client=self,
-            block_group=block_group
-        )
+
+        return Block(id=block_id, block_class_client=self)
+
+    def get(self, id: Union[str, int]) -> Block:
+        """Gets a `Block` from of the type of this `BlockClassClient`.
+
+        Args:
+            id (Union[str, int]): An integer or string version of the desired `Block` `id`.
+
+        Raises:
+            KeyError: if no corresponding `Block` exists.
+
+        Returns:
+            Block: the corresponding `Block`
+        """
+        if type(id) == int:
+            id = str(id)
+
+        if id not in self.branch.data[self.block_group]:
+            raise KeyError(
+                f'There is no {self.block_name} in the {self.block_group} BlockGroup with id {id}.')
+
+        return Block(id=id, block_class_client=self)
