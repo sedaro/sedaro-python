@@ -36,16 +36,3 @@ class SedaroApiClient(ApiClient):
             data=parse_urllib_response(res)['data'],
             sedaro_client=self
         )
-
-    def _get_block_open_api_instance(self, block_name: str) -> Api:
-        """Get a open api block api instance that can be used to call various methods.
-
-        Args:
-            block_name (str): name of an official Sedaro `Block`
-
-        Returns:
-            Api: The corresponding block api instance instantiated with the Sedaro client passed in.
-        """
-        block_snake, block_pascal = get_snake_and_pascal_case(block_name)
-        block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
-        return getattr(block_api_module, f'{block_pascal}Api')(self)

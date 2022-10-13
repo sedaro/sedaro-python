@@ -20,10 +20,8 @@ class Branch:
         return f'Branch(id: {self.id})'
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
-        block_open_api_instance = self.sedaro_client._get_block_open_api_instance(block_name)
         return BlockClassClient(
             block_name=block_name,
-            block_openapi_instance=block_open_api_instance,
             branch=self
         )
 
