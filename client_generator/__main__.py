@@ -48,16 +48,7 @@ def run_generator(skip_intro=False):
         PROJECT_NAME = f'{SEDARO}_base_client'
         PACKAGE_NAME = f'{SEDARO}_base_client'
 
-    CLIENT_DIR = f'{SEDARO}_{language}/{PROJECT_NAME}'
-
-    # if language == PYTHON:
-    #     CLIENT_DIR = f'{SEDARO}/src/{SEDARO}/{SEDARO}_base_client'
-    # else:
-    #     CLIENT_DIR = f'{SEDARO}_{language}'
-
-    # CLIENT_DIR = 'sedaro'
-    # if language != PYTHON:
-    #     CLIENT_DIR = CLIENT_DIR + f'_{language}'
+    CLIENT_DIR = f'build/{language}/{PROJECT_NAME}'
 
     # --------- check if client exists and if want to overwrite ---------
     how_to_proceed = None
@@ -90,7 +81,7 @@ def run_generator(skip_intro=False):
         yn = None
         yn_options = ('y', 'n')
         while yn not in yn_options:
-            print('\nAre you sure you would like to regenerate the client? Please first make sure you have saved and committed any customizations. (y/n)')
+            print('\nAre you sure you would like to regenerate the client? Any customizations you made will be lost. (y/n)')
             yn = input('~ ').lower().strip()
             if yn not in yn_options:
                 print(f'\n"{yn}" is not a valid choice')
@@ -109,16 +100,8 @@ def run_generator(skip_intro=False):
 
         # ----- remove client if already exists -----
         if how_to_proceed == REGENERATE:
-            # # ----- save custom dir -----
-            # if language == PYTHON:
-            #     custom_dir = f'{CLIENT_DIR}/{PACKAGE_NAME}/{CUSTOM}'
-            #     custom_temp_dir = f'{temp_dir}/{CUSTOM}'
-            #     shutil.copytree(custom_dir, custom_temp_dir)
             # ----- delete old client dir -----
             os.system(f'rm -r {CLIENT_DIR}')
-            # # ----- add back custom dir -----
-            # if language == PYTHON:
-            #     shutil.copytree(custom_temp_dir, custom_dir)
 
         TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
         urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
@@ -148,9 +131,6 @@ def run_generator(skip_intro=False):
                 f'{CLIENT_DIR}/requirements.txt',
                 f'{SEDARO}/requirements-base-client.txt'
             )
-
-            # if language == PYTHON:
-            #     os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
 
         print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
 
