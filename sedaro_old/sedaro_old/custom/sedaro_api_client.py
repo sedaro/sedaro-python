@@ -26,12 +26,11 @@ class SedaroApiClient(ApiClient):
         Returns:
             Branch: A `Branch` object that has various helpful methods on it.
         """
-        branches_api_instance = branches_api.BranchesApi(self)
-        res = branches_api_instance.get_branch(path_params={'branchId': id})
-        # ^^^ This is where I left off... the routes for branches are missing `/models` at the
-        # ^^^ beginning, so this doesn't work
+        # branches_api_instance = branches_api.BranchesApi(self)
+        # res = branches_api_instance.get_branch(path_params={'branchId': id})
+        # ^^^ FIXME... doesn't work b/c response model is wrong
 
-        # res = self.call_api(f'/models/branches/{id}', 'GET')
+        res = self.call_api(f'/models/branches/{id}', 'GET')
         return Branch(
             id=id,
             data=parse_urllib_response(res)['data'],
