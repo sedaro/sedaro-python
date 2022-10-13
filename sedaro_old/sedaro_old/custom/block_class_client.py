@@ -34,6 +34,11 @@ class BlockClassClient:
         return self._get_create_or_update_block_model(CREATE)
 
     @property
+    def update_model(self) -> type:  # FIXME
+        '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
+        return self._get_create_or_update_block_model(UPDATE)
+
+    @property
     def block_openapi_instance(self) -> Api:
         block_snake, block_pascal = get_snake_and_pascal_case(self.block_name)
         block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
