@@ -40,6 +40,7 @@ class BlockClassClient:
 
     @property
     def block_openapi_instance(self) -> Api:
+        '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
         block_snake, block_pascal = get_snake_and_pascal_case(self.block_name)
         block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
         return getattr(block_api_module, f'{block_pascal}Api')(self.sedaro_client)
