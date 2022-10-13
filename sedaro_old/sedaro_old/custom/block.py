@@ -18,12 +18,26 @@ class Block:
     '''Class for interacting with all Blocks of this class type'''
 
     def __str__(self) -> str:
-        return f'Block(id={self.id}, data={self.data}, block_group={self._block_group})'
+        attrs = ''
+        for k, v in self.data.items():
+            if type(v) is str:
+                # FIXME: figure out why we don't know when something is a string, it's this `DynamicSchema` class
+                v = f"'{v}'"
+            attrs += f'\n   {k}={v}'
+        return f'\n{self._name}({attrs}\n)\n'
+
+    def __getattr__(self, key) -> any:
+        return self.data[key]
 
     @property
     def data(self) -> Dict:
-        # FIXME: handle when it's deleted... (KeyError)
-        return self._branch.data[self._block_group][self.id]
+        try:
+            return self._branch.data[self._block_group][self.id]
+        except KeyError as e:
+            # if it's KeyError of a string id (block doesn't exist), str(e) is like this: "'1234'"
+            if str(e).replace("'", '').isdigit():
+                raise KeyError('The referenced Sedaro Block no longer exists.')
+            raise e
 
     @property
     def _name(self) -> str:

@@ -1,5 +1,5 @@
 from sedaro_old.api_client import ApiClient
-from sedaro_old.apis.tags import branches_api
+# from sedaro_old.apis.tags import branches_api
 
 from .configuration import config
 from .utils import parse_urllib_response
@@ -31,8 +31,10 @@ class SedaroApiClient(ApiClient):
         # ^^^ FIXME... doesn't work b/c response model is wrong
 
         res = self.call_api(f'/models/branches/{id}', 'GET')
+        parsed_res = parse_urllib_response(res)
         return Branch(
             id=id,
-            data=parse_urllib_response(res)['data'],
+            data=parsed_res['data'],
+            dataSchema=parsed_res['dataSchema'],
             _sedaro_client=self
         )
