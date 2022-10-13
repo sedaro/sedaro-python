@@ -3,7 +3,9 @@ from functools import cache
 from pydash.strings import snake_case, pascal_case
 from urllib3.response import HTTPResponse
 from typing import Dict, Tuple
+
 from sedaro_old.api_client import ApiResponse
+from .settings import DELETE
 
 
 @cache
@@ -27,8 +29,12 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
         Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`
     """
     body = response.body
+    action = body['action']
     block_id = body['block']['id']
     block_group = body['block']['group']
     branch_data = body['branch']['data']
 
-    return block_id, dict(branch_data[block_group][block_id]), block_group, body['action']
+    block_data = dict(branch_data[block_group][block_id]) if action.casefold() != DELETE.casefold() \
+        else None
+
+    return block_id, block_data, block_group, action
