@@ -1,2 +1,0 @@
-sedaro
-sedaro_base_client
