@@ -25,7 +25,7 @@ class Branch:
             branch=self
         )
 
-    def _process_block_crud_response(self, block_crud_response: ApiResponse) -> Tuple[str, str]:
+    def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
 
         Args:
@@ -35,7 +35,7 @@ class Branch:
             NotImplementedError: if the returned CRUD action isn't create, update, or delete
 
         Returns:
-            Tuple[str, str]: `block_id` and `block_group`
+            str: `block_id`
         """
         block_id, block_data, block_group, action = parse_block_crud_response(
             block_crud_response
@@ -54,4 +54,4 @@ class Branch:
         else:
             raise NotImplementedError(f'Unsupported action type: "{action}"')
 
-        return block_id, block_group
+        return block_id
