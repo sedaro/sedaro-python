@@ -91,7 +91,7 @@ class BlockClassClient:
             **kwargs,
             path_params={'branchId': self.branch.id},
         )
-        block_id, block_group = self.branch._process_block_crud_response(res)
+        block_id = self.branch._process_block_crud_response(res)
 
         return Block(id=block_id, block_class_client=self)
 
