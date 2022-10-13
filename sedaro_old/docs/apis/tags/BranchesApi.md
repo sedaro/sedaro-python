@@ -152,8 +152,8 @@ Creates a new branch based on and in the same repository as the branch associate
 ```python
 import sedaro_old
 from sedaro_old.apis.tags import branches_api
-from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle
 from sedaro_old.model.http_validation_error import HTTPValidationError
 from sedaro_old.model.branch_create import BranchCreate
 from pprint import pprint
@@ -246,8 +246,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[BranchVehicleTemplateRes]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) |  | 
-[BranchScenarioTemplateRes]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) |  | 
+[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
+[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
 
 #### create_branch.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -385,8 +385,8 @@ Retrieves the branch with the provided `id`.
 ```python
 import sedaro_old
 from sedaro_old.apis.tags import branches_api
-from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
-from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle
 from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -463,8 +463,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[BranchVehicleTemplateRes]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) |  | 
-[BranchScenarioTemplateRes]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) |  | 
+[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
+[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
 
 #### get_branch.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -865,9 +865,9 @@ Updates updateable fields on the branch with the provided `id`. Note: - `shareab
 ```python
 import sedaro_old
 from sedaro_old.apis.tags import branches_api
-from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
 from sedaro_old.model.branch_update import BranchUpdate
-from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle
 from sedaro_old.model.http_validation_error import HTTPValidationError
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -961,8 +961,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[BranchVehicleTemplateRes]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) | [**BranchVehicleTemplateRes**]({{complexTypePrefix}}BranchVehicleTemplateRes.md) |  | 
-[BranchScenarioTemplateRes]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) | [**BranchScenarioTemplateRes**]({{complexTypePrefix}}BranchScenarioTemplateRes.md) |  | 
+[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
+[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
 
 #### update_branch.ApiResponseFor422
 Name | Type | Description  | Notes

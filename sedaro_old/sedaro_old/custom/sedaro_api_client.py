@@ -1,4 +1,5 @@
 from sedaro_old.api_client import ApiClient
+from sedaro_old.apis.tags import branches_api
 
 from .configuration import config
 from .utils import parse_urllib_response
@@ -25,7 +26,12 @@ class SedaroApiClient(ApiClient):
         Returns:
             Branch: A `Branch` object that has various helpful methods on it.
         """
-        res = self.call_api(f'/models/branches/{id}', 'GET')
+        branches_api_instance = branches_api.BranchesApi(self)
+        res = branches_api_instance.get_branch(path_params={'branchId': id})
+        # ^^^ This is where I left off... the routes for branches are missing `/models` at the
+        # ^^^ beginning, so this doesn't work
+
+        # res = self.call_api(f'/models/branches/{id}', 'GET')
         return Branch(
             id=id,
             data=parse_urllib_response(res)['data'],

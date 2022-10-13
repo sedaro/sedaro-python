@@ -25,9 +25,9 @@ import frozendict  # noqa: F401
 
 from sedaro_old import schemas  # noqa: F401
 
-from sedaro_old.model.branch_vehicle_template_res import BranchVehicleTemplateRes
 from sedaro_old.model.branch_update import BranchUpdate
-from sedaro_old.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_old.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_old.model.postgres_branch_vehicle import PostgresBranchVehicle
 from sedaro_old.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -89,8 +89,8 @@ class SchemaFor200ResponseBodyApplicationJson(
             # classes don't exist yet because their module has not finished
             # loading
             return [
-                BranchVehicleTemplateRes,
-                BranchScenarioTemplateRes,
+                PostgresBranchVehicle,
+                PostgresBranchScenario,
             ]
 
 
