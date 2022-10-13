@@ -1,8 +1,8 @@
 import os
 import urllib.request
 import tempfile
-# import shutil
-# import json
+import shutil
+import json
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
@@ -38,10 +38,23 @@ def run_generator(skip_intro=False):
                 '\n*** Note: this is intended to be used for generating a client, scroll up to "CLIENT generators". ***')
             language = None
 
-    if language == PYTHON:
-        CLIENT_DIR = f'{SEDARO}/src/{SEDARO}/{SEDARO}_base_client'
+    CONFIG_FILE = f'/client_generator/{language}_config.json'
+    config_dict = None
+    if os.path.isfile('.' + CONFIG_FILE):
+        config_dict = json.load(open(f'.{CONFIG_FILE}'))
+        PROJECT_NAME = config_dict['projectName']
+        PACKAGE_NAME = config_dict['packageName']
     else:
-        CLIENT_DIR = f'{SEDARO}_{language}'
+        PROJECT_NAME = f'{SEDARO}_base_client'
+        PACKAGE_NAME = f'{SEDARO}_base_client'
+
+    CLIENT_DIR = f'{SEDARO}_{language}/{PROJECT_NAME}'
+
+    # if language == PYTHON:
+    #     CLIENT_DIR = f'{SEDARO}/src/{SEDARO}/{SEDARO}_base_client'
+    # else:
+    #     CLIENT_DIR = f'{SEDARO}_{language}'
+
     # CLIENT_DIR = 'sedaro'
     # if language != PYTHON:
     #     CLIENT_DIR = CLIENT_DIR + f'_{language}'
@@ -94,15 +107,11 @@ def run_generator(skip_intro=False):
     # ----------------------- generate new client -----------------------
     with tempfile.TemporaryDirectory(dir='./', prefix='.temp_dir_', suffix='_spec') as temp_dir:
 
-        config_file = f'/client_generator/{language}_config.json'
-
         # ----- remove client if already exists -----
         if how_to_proceed == REGENERATE:
             # # ----- save custom dir -----
             # if language == PYTHON:
-            #     package_name = json.load(open(f'.{config_file}'))[
-            #         'packageName']
-            #     custom_dir = f'{CLIENT_DIR}/{package_name}/{CUSTOM}'
+            #     custom_dir = f'{CLIENT_DIR}/{PACKAGE_NAME}/{CUSTOM}'
             #     custom_temp_dir = f'{temp_dir}/{CUSTOM}'
             #     shutil.copytree(custom_dir, custom_temp_dir)
             # ----- delete old client dir -----
@@ -121,8 +130,8 @@ def run_generator(skip_intro=False):
                 -o /local/{CLIENT_DIR}'
 
         # ----- exta options -----
-        if os.path.isfile('.' + config_file):
-            cmd = cmd + f' -c /local{config_file}'
+        if config_dict is not None:
+            cmd = cmd + f' -c /local{CONFIG_FILE}'
         if how_to_proceed == DRY_RUN:
             cmd += ' --dry-run'
         if how_to_proceed == MINIMAL_UPDATE:
@@ -130,11 +139,21 @@ def run_generator(skip_intro=False):
 
         os.system(cmd)
 
-        # if language == PYTHON:
-        #     os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
+        if language == PYTHON and how_to_proceed != DRY_RUN:
+            shutil.copytree(
+                f'{CLIENT_DIR}/{PACKAGE_NAME}',
+                f'{SEDARO}/src/{PACKAGE_NAME}'
+            )
+            shutil.copyfile(
+                f'{CLIENT_DIR}/requirements.txt',
+                f'{SEDARO}/requirements-base-client.txt'
+            )
+
+            # if language == PYTHON:
+            #     os.system(f'cd {CLIENT_DIR} && python setup.py sdist && cd ....')
 
         print('\n-------------< 🛰️  Closing Generator 🛰️  >-------------\n')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run_generator()
