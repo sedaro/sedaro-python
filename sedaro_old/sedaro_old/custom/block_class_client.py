@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from sedaro_old.api_client import Api
 from typing import TYPE_CHECKING, Dict, Literal, Union
 from pydash.strings import snake_case
-
+from functools import cached_property
 
 from .settings import CREATE, UPDATE, PACKAGE_NAME
 from .block import Block
@@ -47,10 +47,39 @@ class BlockClassClient:
         block_api_module = import_module(f'{PACKAGE_NAME}.apis.tags.{block_snake}_api')
         return getattr(block_api_module, f'{block_pascal}Api')(self._sedaro_client)
 
-    @property
+    @cached_property
     def _block_group(self) -> str:
         '''The name of the Sedaro `BlockGroup` this type of `Block` is stored in'''
-        return self._branch.data['blockToBlockGroupMapWithSuperBlockClasses'][self._block_name]
+        PROPERTIES = 'properties'
+        REF = '$ref'
+        ANY_OF = 'anyOf'
+        ALL_OF = 'allOf'
+
+        block_group_type = None
+
+        # Traverse branch schema to figure out block group type, then traverse again to get matching block group
+        for k, v in self._branch.dataSchema['definitions'].items():
+            # filter through all block group types
+            if PROPERTIES in v and all(attr in v[PROPERTIES] for attr in ('name', 'collection', 'data')):
+                # TODO: `if k.endswith('BG')` <-- evalutes to same as ^^^ if we always follow this convention for naming
+                # block group classes. Would still like a safer way than either of these options though.
+                blockClassOrClasses: Dict = v[PROPERTIES]['data']['additionalProperties']
+
+                blockTypes = [blockClassOrClasses[REF]] if REF in blockClassOrClasses \
+                    else [v[REF] for v in blockClassOrClasses[ANY_OF]]
+
+                if any(bT.endswith(self._block_name) for bT in blockTypes):
+                    block_group_type = k
+                    break
+
+        # check block group types (`bGT`) of all block groups to find which one matches `block_group_type`
+        for k, v in self._branch.dataSchema[PROPERTIES].items():
+            if ALL_OF in v and any(bGT[REF].endswith(block_group_type) for bGT in v[ALL_OF]):
+                return k
+
+        # this shouldn't ever happen:
+        raise ValueError(
+            f'Unable to find a block group containing the block name {self._block_name}')
 
     def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']):
         """Gets the model class to used to validate the data to create or update a `Block`
