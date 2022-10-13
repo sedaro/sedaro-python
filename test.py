@@ -10,35 +10,6 @@ def test_get():
         return
 
 
-def test_create_block():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch = sedaro_client.get_branch(14)
-        res = branch.BatteryCell.create({
-            'partNumber': '987654321',
-            'manufacturer': 'Oh Yeah!',
-            'esr': 1.0,
-            'maxChargeCurrent': 100,
-            'maxDischargeCurrent': 100,
-            'minSoc': 0.01,
-            'capacity': 5000,
-            'curve': [[0, 0.005, ], [3, 3.08]],
-            'topology': '11',
-        })
-        print(res)
-
-        assert res == branch.BatteryCell.get(res.data['id'])
-
-
-def test_update_block():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch = sedaro_client.get_branch(14)
-        battery_cell = branch.BatteryCell.get(3604)
-
-        res = battery_cell.update({'partNumber': 'Let\'s go!!!!!'})
-
-        print(res)
-
-
 def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         branch = sedaro_client.get_branch(14)
@@ -78,8 +49,6 @@ def test_create_update_and_delete_block():
 
 if __name__ == "__main__":
     # test_get()
-    # test_create_block()
-    # test_update_block()
     test_create_update_and_delete_block()
 
 
