@@ -1,12 +1,6 @@
-from importlib import import_module
-from typing import Literal
-# FIXME: figure out how to require pydash dynamically.
-
 from sedaro_old.api_client import ApiClient
-from sedaro_old.api_client import Api
 from .configuration import config
-from .utils import get_snake_and_pascal_case, parse_urllib_response
-from .settings import PACKAGE_NAME, CREATE, UPDATE
+from .utils import parse_urllib_response
 from .branch import Branch
 
 
