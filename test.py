@@ -25,9 +25,7 @@ def test_create_update_and_delete_block():
             'topology': '11',
         })
 
-        battery_cell_id = battery_cell.data['id']
-
-        assert battery_cell == branch.BatteryCell.get(battery_cell_id)
+        assert battery_cell == branch.BatteryCell.get(battery_cell.id)
 
         new_part_number = "Let's gooo!!!!!!!!!!!!"
 
@@ -35,7 +33,8 @@ def test_create_update_and_delete_block():
 
         battery_cell.update({'partNumber': new_part_number})
 
-        assert branch.data['BatteryCell'][battery_cell_id]['partNumber'] == battery_cell.partNumber == new_part_number
+        assert branch.BatteryCell.get(
+            battery_cell.id).partNumber == battery_cell.partNumber == new_part_number
 
         print(battery_cell)
 
