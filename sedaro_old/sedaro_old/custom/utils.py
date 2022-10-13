@@ -27,7 +27,8 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
         Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`
     """
     body = response.body
-    block_id, block_group = body['block']['id'], body['block']['group']
+    block_id = body['block']['id']
+    block_group = body['block']['group']
     branch_data = body['branch']['data']
 
-    return block_id, branch_data[block_group][block_id], block_group, body['action']
+    return block_id, dict(branch_data[block_group][block_id]), block_group, body['action']
