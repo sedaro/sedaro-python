@@ -18,7 +18,9 @@ if TYPE_CHECKING:
 class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     block_name: str
+    '''Name of the Sedaro Block this `BlockClassClient` is set up to interact with'''
     branch: 'Branch'
+    '''The `Branch` this `BlockClassClient` is connected to'''
 
     def __str__(self) -> str:
         return f'BlockClassClient(block_name={self.block_name}, branch={self.branch.id})'
