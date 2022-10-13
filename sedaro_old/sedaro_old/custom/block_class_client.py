@@ -17,7 +17,6 @@ class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     block_name: str
     block_openapi_instance: Api
-    create_class: type
     branch: 'Branch'
 
     def __str__(self) -> str:
@@ -27,6 +26,11 @@ class BlockClassClient:
     def sedaro_client(self) -> 'SedaroApiClient':
         '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
         return self.branch.sedaro_client
+
+    @property
+    def create_class(self) -> type:  # FIXME
+        '''The class to instantiate with appropriate kwargs when creating a Sedaro Block'''
+        return self.sedaro_client._get_create_or_update_block_model(self.block_name, CREATE)
 
     def create(self, body: Dict, **kwargs) -> Dict:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
