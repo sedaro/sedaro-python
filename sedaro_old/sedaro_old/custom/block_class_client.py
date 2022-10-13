@@ -29,12 +29,12 @@ class BlockClassClient:
         return self.branch.sedaro_client
 
     @property
-    def create_model(self) -> type:  # FIXME
+    def create_class(self) -> type:  # FIXME
         '''The model class to instantiate with appropriate kwargs when creating a Sedaro Block'''
         return self._get_create_or_update_block_model(CREATE)
 
     @property
-    def update_model(self) -> type:  # FIXME
+    def update_class(self) -> type:  # FIXME
         '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
         return self._get_create_or_update_block_model(UPDATE)
 
@@ -81,7 +81,7 @@ class BlockClassClient:
             FIXME: ^^^^^^
         """
         res = getattr(self.block_openapi_instance, f'{CREATE}_{snake_case(self.block_name)}')(
-            body=self.create_model(**body),
+            body=self.create_class(**body),
             **kwargs,
             path_params={'branchId': self.branch.id},
         )
