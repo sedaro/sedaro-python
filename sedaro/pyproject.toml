@@ -1,38 +1,27 @@
-# see: https://python-poetry.org/docs/pyproject/
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry]
+[project]
 name = "sedaro"
 version = "0.1.0"
-description = "A python client to interact with the Sedaro Satellite API."
-license = "MIT" # FIXME
 authors = [
-  "Sedaro <support@sedarotech.com>",
+  { name="Sedaro", email="support@sedarotech.com" },
 ]
-maintainers = [
-    "Sedaro <support@sedarotech.com>",
-]
+description = "A python client to interact with the Sedaro Satellite API."
 readme = "README.md"
-homepage = "https://www.sedaro.com/" # FIXME : An URL to the website of the project
-repository = "https://gitlab.sedaro.com/sedaro-satellite/clients" #FIXME
-# documentation = "..." # FIXME
-keywords = ["simuilation", "sedaro", "digital twin"]
+requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License", # FIXME
     "Operating System :: OS Independent", # FIXME
     "Topic :: Software Development",
 ]
-packages = [
-    { include = "src/sedaro" },
-]
+dynamic = ["dependencies"]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-pydash = "^5.1.1"
-typing-extensions = "^4.3.0"
-# added ^^^ typing-extensions b/c generated python_client tries to "import from typing_extensions" (convention in
-# older version of python), and should now be an "import from typing". This is a workaround.
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
+
+[project.urls]
+"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
+"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME

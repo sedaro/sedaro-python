@@ -1,0 +1,9 @@
+from sedaro_base_client.paths.models_branches_branch_id_gnc_algorithms_attitude_determination_averaging_block_id.delete import ApiFordelete
+from sedaro_base_client.paths.models_branches_branch_id_gnc_algorithms_attitude_determination_averaging_block_id.patch import ApiForpatch
+
+
+class ModelsBranchesBranchIdGncAlgorithmsAttitudeDeterminationAveragingBlockId(
+    ApiFordelete,
+    ApiForpatch,
+):
+    pass

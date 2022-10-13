@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: sedaro
+Version: 0.1.0
+Summary: A python client to interact with the Sedaro Satellite API.
+Author-email: Sedaro <support@sedarotech.com>
+Project-URL: Homepage, https://gitlab.sedaro.com/sedaro-satellite/clients
+Project-URL: Bug Tracker, https://gitlab.sedaro.com/sedaro-satellite/clients
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Sedaro Python Client
+
+- In parent directory to this directory, set up virtual environment and install dependencies:
+  - run `python3 sedaro_python_client/setup_virtual_env.py` or `python sedaro_python_client/setup_virtual_env.py`
+
+_Note: requires python to be installed on the computer or a virtual environment to be created in the directory._
