@@ -203,15 +203,15 @@ Class | Method | HTTP request | Description
 *BodyFrameVectorApi* | [**create_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#create_body_frame_vector) | **post** /models/branches/{branchId}/system/geometry/body-frame-vectors/ | Create Body Frame Vector
 *BodyFrameVectorApi* | [**delete_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#delete_body_frame_vector) | **delete** /models/branches/{branchId}/system/geometry/body-frame-vectors/{blockId} | Delete Body Frame Vector
 *BodyFrameVectorApi* | [**update_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#update_body_frame_vector) | **patch** /models/branches/{branchId}/system/geometry/body-frame-vectors/{blockId} | Update Body Frame Vector
-*BranchesApi* | [**commit_to_branch**](docs/apis/tags/BranchesApi.md#commit_to_branch) | **post** /branches/{branchId}commits/ | Commit changes to a branch
-*BranchesApi* | [**create_branch**](docs/apis/tags/BranchesApi.md#create_branch) | **post** /branches/{branchId} | Branch off existing branch
-*BranchesApi* | [**delete_branch**](docs/apis/tags/BranchesApi.md#delete_branch) | **delete** /branches/{branchId} | Delete a branch
-*BranchesApi* | [**get_branch**](docs/apis/tags/BranchesApi.md#get_branch) | **get** /branches/{branchId} | Get a branch
-*BranchesApi* | [**get_committed_branch_data**](docs/apis/tags/BranchesApi.md#get_committed_branch_data) | **get** /branches/{branchId}committed/ | Get saved branch data
-*BranchesApi* | [**get_saved_branch_data**](docs/apis/tags/BranchesApi.md#get_saved_branch_data) | **get** /branches/{branchId}saved/ | Get committed branch data
-*BranchesApi* | [**merge_branches**](docs/apis/tags/BranchesApi.md#merge_branches) | **post** /branches/{currentBranchId}/merge/{incomingBranchId} | Merge branch into another branch
-*BranchesApi* | [**update_branch**](docs/apis/tags/BranchesApi.md#update_branch) | **patch** /branches/{branchId} | Update a branch
-*BranchesApi* | [**verify_branch_password**](docs/apis/tags/BranchesApi.md#verify_branch_password) | **post** /branches/{branchId}share-auth/ | Verify branch bassword
+*BranchesApi* | [**commit_to_branch**](docs/apis/tags/BranchesApi.md#commit_to_branch) | **post** /models/branches/{branchId}commits/ | Commit changes to a branch
+*BranchesApi* | [**create_branch**](docs/apis/tags/BranchesApi.md#create_branch) | **post** /models/branches/{branchId} | Branch off existing branch
+*BranchesApi* | [**delete_branch**](docs/apis/tags/BranchesApi.md#delete_branch) | **delete** /models/branches/{branchId} | Delete a branch
+*BranchesApi* | [**get_branch**](docs/apis/tags/BranchesApi.md#get_branch) | **get** /models/branches/{branchId} | Get a branch
+*BranchesApi* | [**get_committed_branch_data**](docs/apis/tags/BranchesApi.md#get_committed_branch_data) | **get** /models/branches/{branchId}committed/ | Get saved branch data
+*BranchesApi* | [**get_saved_branch_data**](docs/apis/tags/BranchesApi.md#get_saved_branch_data) | **get** /models/branches/{branchId}saved/ | Get committed branch data
+*BranchesApi* | [**merge_branches**](docs/apis/tags/BranchesApi.md#merge_branches) | **post** /models/branches/{currentBranchId}/merge/{incomingBranchId} | Merge branch into another branch
+*BranchesApi* | [**update_branch**](docs/apis/tags/BranchesApi.md#update_branch) | **patch** /models/branches/{branchId} | Update a branch
+*BranchesApi* | [**verify_branch_password**](docs/apis/tags/BranchesApi.md#verify_branch_password) | **post** /models/branches/{branchId}share-auth/ | Verify branch bassword
 *BusRegulatorApi* | [**create_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#create_bus_regulator) | **post** /models/branches/{branchId}/power/eps/bus-regulators/ | Create Bus Regulator
 *BusRegulatorApi* | [**delete_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#delete_bus_regulator) | **delete** /models/branches/{branchId}/power/eps/bus-regulators/{blockId} | Delete Bus Regulator
 *BusRegulatorApi* | [**update_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#update_bus_regulator) | **patch** /models/branches/{branchId}/power/eps/bus-regulators/{blockId} | Update Bus Regulator

@@ -110,12 +110,12 @@ from sedaro_old.apis.paths.models_branches_branch_id_template_refs_block_id impo
 from sedaro_old.apis.paths.simulation_branches_branch_id_control_ import SimulationBranchesBranchIdControl
 from sedaro_old.apis.paths.simulation_branches_branch_id_control_job_id import SimulationBranchesBranchIdControlJobId
 from sedaro_old.apis.paths.data_ import Data
-from sedaro_old.apis.paths.branches_branch_id import BranchesBranchId
-from sedaro_old.apis.paths.branches_branch_idshare_auth_ import BranchesBranchIdshareAuth
-from sedaro_old.apis.paths.branches_branch_idcommits_ import BranchesBranchIdcommits
-from sedaro_old.apis.paths.branches_current_branch_id_merge_incoming_branch_id import BranchesCurrentBranchIdMergeIncomingBranchId
-from sedaro_old.apis.paths.branches_branch_idcommitted_ import BranchesBranchIdcommitted
-from sedaro_old.apis.paths.branches_branch_idsaved_ import BranchesBranchIdsaved
+from sedaro_old.apis.paths.models_branches_branch_id import ModelsBranchesBranchId
+from sedaro_old.apis.paths.models_branches_branch_idshare_auth_ import ModelsBranchesBranchIdshareAuth
+from sedaro_old.apis.paths.models_branches_branch_idcommits_ import ModelsBranchesBranchIdcommits
+from sedaro_old.apis.paths.models_branches_current_branch_id_merge_incoming_branch_id import ModelsBranchesCurrentBranchIdMergeIncomingBranchId
+from sedaro_old.apis.paths.models_branches_branch_idcommitted_ import ModelsBranchesBranchIdcommitted
+from sedaro_old.apis.paths.models_branches_branch_idsaved_ import ModelsBranchesBranchIdsaved
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi',
@@ -229,12 +229,12 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_: SimulationBranchesBranchIdControl,
         PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,
-        PathValues.BRANCHES_BRANCH_ID: BranchesBranchId,
-        PathValues.BRANCHES_BRANCH_IDSHAREAUTH_: BranchesBranchIdshareAuth,
-        PathValues.BRANCHES_BRANCH_IDCOMMITS_: BranchesBranchIdcommits,
-        PathValues.BRANCHES_CURRENT_BRANCH_ID_MERGE_INCOMING_BRANCH_ID: BranchesCurrentBranchIdMergeIncomingBranchId,
-        PathValues.BRANCHES_BRANCH_IDCOMMITTED_: BranchesBranchIdcommitted,
-        PathValues.BRANCHES_BRANCH_IDSAVED_: BranchesBranchIdsaved,
+        PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
+        PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
+        PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITS_: ModelsBranchesBranchIdcommits,
+        PathValues.MODELS_BRANCHES_CURRENT_BRANCH_ID_MERGE_INCOMING_BRANCH_ID: ModelsBranchesCurrentBranchIdMergeIncomingBranchId,
+        PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITTED_: ModelsBranchesBranchIdcommitted,
+        PathValues.MODELS_BRANCHES_BRANCH_IDSAVED_: ModelsBranchesBranchIdsaved,
     }
 )
 
@@ -349,11 +349,11 @@ path_to_api = PathToApi(
         PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_: SimulationBranchesBranchIdControl,
         PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,
-        PathValues.BRANCHES_BRANCH_ID: BranchesBranchId,
-        PathValues.BRANCHES_BRANCH_IDSHAREAUTH_: BranchesBranchIdshareAuth,
-        PathValues.BRANCHES_BRANCH_IDCOMMITS_: BranchesBranchIdcommits,
-        PathValues.BRANCHES_CURRENT_BRANCH_ID_MERGE_INCOMING_BRANCH_ID: BranchesCurrentBranchIdMergeIncomingBranchId,
-        PathValues.BRANCHES_BRANCH_IDCOMMITTED_: BranchesBranchIdcommitted,
-        PathValues.BRANCHES_BRANCH_IDSAVED_: BranchesBranchIdsaved,
+        PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
+        PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
+        PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITS_: ModelsBranchesBranchIdcommits,
+        PathValues.MODELS_BRANCHES_CURRENT_BRANCH_ID_MERGE_INCOMING_BRANCH_ID: ModelsBranchesCurrentBranchIdMergeIncomingBranchId,
+        PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITTED_: ModelsBranchesBranchIdcommitted,
+        PathValues.MODELS_BRANCHES_BRANCH_IDSAVED_: ModelsBranchesBranchIdsaved,
     }
 )

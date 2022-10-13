@@ -5,15 +5,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**commit_to_branch**](#commit_to_branch) | **post** /branches/{branchId}commits/ | Commit changes to a branch
-[**create_branch**](#create_branch) | **post** /branches/{branchId} | Branch off existing branch
-[**delete_branch**](#delete_branch) | **delete** /branches/{branchId} | Delete a branch
-[**get_branch**](#get_branch) | **get** /branches/{branchId} | Get a branch
-[**get_committed_branch_data**](#get_committed_branch_data) | **get** /branches/{branchId}committed/ | Get saved branch data
-[**get_saved_branch_data**](#get_saved_branch_data) | **get** /branches/{branchId}saved/ | Get committed branch data
-[**merge_branches**](#merge_branches) | **post** /branches/{currentBranchId}/merge/{incomingBranchId} | Merge branch into another branch
-[**update_branch**](#update_branch) | **patch** /branches/{branchId} | Update a branch
-[**verify_branch_password**](#verify_branch_password) | **post** /branches/{branchId}share-auth/ | Verify branch bassword
+[**commit_to_branch**](#commit_to_branch) | **post** /models/branches/{branchId}commits/ | Commit changes to a branch
+[**create_branch**](#create_branch) | **post** /models/branches/{branchId} | Branch off existing branch
+[**delete_branch**](#delete_branch) | **delete** /models/branches/{branchId} | Delete a branch
+[**get_branch**](#get_branch) | **get** /models/branches/{branchId} | Get a branch
+[**get_committed_branch_data**](#get_committed_branch_data) | **get** /models/branches/{branchId}committed/ | Get saved branch data
+[**get_saved_branch_data**](#get_saved_branch_data) | **get** /models/branches/{branchId}saved/ | Get committed branch data
+[**merge_branches**](#merge_branches) | **post** /models/branches/{currentBranchId}/merge/{incomingBranchId} | Merge branch into another branch
+[**update_branch**](#update_branch) | **patch** /models/branches/{branchId} | Update a branch
+[**verify_branch_password**](#verify_branch_password) | **post** /models/branches/{branchId}share-auth/ | Verify branch bassword
 
 # **commit_to_branch**
 <a name="commit_to_branch"></a>
