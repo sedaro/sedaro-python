@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pydash import snake_case
 
 from sedaro_old.api_client import Api
-from .settings import UPDATE
+from .settings import UPDATE, DELETE
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
@@ -82,3 +82,15 @@ class Block:
         )
         self._branch._process_block_crud_response(res)
         return self
+
+    def delete(self) -> str:
+        """Deletes the associated Sedaro Block from the Sedaro database.
+
+        Returns:
+            str: `id` of the deleted `Block`
+        """
+        id = self.id
+        res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._name)}')(
+            path_params={'branchId': self._branch.id, "blockId": int(id)}
+        )
+        return self._branch._process_block_crud_response(res)
