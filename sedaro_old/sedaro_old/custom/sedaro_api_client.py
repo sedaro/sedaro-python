@@ -34,5 +34,5 @@ class SedaroApiClient(ApiClient):
         return Branch(
             id=branch_id,
             data=parse_urllib_response(res)['data'],
-            sedaro_client=self
+            _sedaro_client=self
         )

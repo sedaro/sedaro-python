@@ -14,15 +14,15 @@ if TYPE_CHECKING:
 class Branch:
     id: int
     data: Dict
-    sedaro_client: 'SedaroApiClient'
+    _sedaro_client: 'SedaroApiClient'
 
     def __str__(self):
         return f'Branch(id: {self.id})'
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
         return BlockClassClient(
-            block_name=block_name,
-            branch=self
+            _block_name=block_name,
+            _branch=self
         )
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
