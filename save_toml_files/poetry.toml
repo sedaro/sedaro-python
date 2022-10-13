@@ -33,12 +33,11 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.7"
 pydash = "^5.1.1"
-
 typing-extensions = "^4.3.0"
 # added ^^^ typing-extensions b/c generated python_client tries to "import from typing_extensions" (convention in
 # older version of python), and should now be an "import from typing". This is a workaround.
 
-sedaro_base_client = { path = "src/sedaro_base_client/dist/sedaro_base_client-1.0.0.tar.gz", develop = false }
+# sedaro_base_client = { path = "src/sedaro_base_client/dist/sedaro_base_client-1.0.0.tar.gz", develop = false }
 # sedaro_base_client = { path = "src/sedaro_base_client/", develop = false }
 # couldn't get this to work (either way) 
 # based on: https://python-poetry.org/docs/dependency-specification#path-dependencies
