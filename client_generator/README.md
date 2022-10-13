@@ -4,7 +4,7 @@
 
 An interactive tool for building clients for Sedaro Satellite based on our OpenAPI spec. Built on an **OpenAPI Generator** docker image: https://openapi-generator.tech/docs/installation#docker
 
-In this folder run:
+In the directory containing this directory run:
 
 - `$ python client_generator.py` or `$ python3 client_generator.py`
 
