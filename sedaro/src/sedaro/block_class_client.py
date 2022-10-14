@@ -11,7 +11,7 @@ from .utils import get_snake_and_pascal_case
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
-    from .branch import Branch
+    from .branch_client import BranchClient
 
 
 @dataclass
@@ -19,7 +19,7 @@ class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block this `BlockClassClient` is set up to interact with'''
-    _branch: 'Branch'
+    _branch: 'BranchClient'
     '''The `Branch` this `BlockClassClient` is connected to'''
 
     def __str__(self) -> str:

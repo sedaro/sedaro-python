@@ -3,7 +3,7 @@ from sedaro_base_client.api_client import ApiClient
 
 from .configuration import config
 from .utils import parse_urllib_response
-from .branch import Branch
+from .branch_client import BranchClient
 
 
 class SedaroApiClient(ApiClient):
@@ -16,7 +16,7 @@ class SedaroApiClient(ApiClient):
             header_value=api_key
         )
 
-    def get_branch(self, id: int) -> Branch:
+    def get_branch(self, id: int) -> BranchClient:
         """Gets a Sedaro Branch based on the give `id`. Must be accessible to this `SedaroApiClient` via the
         `api_key`.
 
@@ -32,7 +32,7 @@ class SedaroApiClient(ApiClient):
 
         res = self.call_api(f'/models/branches/{id}', 'GET')
         parsed_res = parse_urllib_response(res)
-        return Branch(
+        return BranchClient(
             id=id,
             data=parsed_res['data'],
             dataSchema=parsed_res['dataSchema'],

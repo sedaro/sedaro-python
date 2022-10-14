@@ -8,7 +8,7 @@ from .settings import UPDATE, DELETE
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
     from .sedaro_api_client import SedaroApiClient
-    from .branch import Branch
+    from .branch_client import BranchClient
 
 
 @dataclass
@@ -50,7 +50,7 @@ class BlockClient:
         return self._block_class_client._block_group
 
     @property
-    def _branch(self) -> 'Branch':
+    def _branch(self) -> 'BranchClient':
         '''The `Branch` this `Block` is connected to'''
         return self._block_class_client._branch
 

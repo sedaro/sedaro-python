@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Branch:
+class BranchClient:
     id: int
     data: Dict
     dataSchema: Dict
