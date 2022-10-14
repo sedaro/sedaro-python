@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Block:
+class BlockClient:
     id: str
     _block_class_client: 'BlockClassClient'
     '''Class for interacting with all Blocks of this class type'''
@@ -64,7 +64,7 @@ class Block:
         '''The `SedaroApiClient` this `Block` was accessed through'''
         return self._branch._sedaro_client
 
-    def update(self, body: Dict, **kwargs) -> 'Block':
+    def update(self, body: Dict, **kwargs) -> 'BlockClient':
         """Update attributes of the `Block`
 
         Args:

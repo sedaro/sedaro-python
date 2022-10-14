@@ -6,7 +6,7 @@ from pydash.strings import snake_case
 from functools import cached_property
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
-from .block import Block
+from .block_client import BlockClient
 from .utils import get_snake_and_pascal_case
 
 if TYPE_CHECKING:
@@ -108,7 +108,7 @@ class BlockClassClient:
             f'{block_pascal}{create_or_update.capitalize()}'
         )
 
-    def create(self, body: Dict, **kwargs) -> Block:  # FIXME: return value
+    def create(self, body: Dict, **kwargs) -> BlockClient:  # FIXME: return value
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
 
         Args:
@@ -125,9 +125,9 @@ class BlockClassClient:
         )
         block_id = self._branch._process_block_crud_response(res)
 
-        return Block(id=block_id, _block_class_client=self)
+        return BlockClient(id=block_id, _block_class_client=self)
 
-    def get(self, id: Union[str, int]) -> Block:
+    def get(self, id: Union[str, int]) -> BlockClient:
         """Gets a `Block` from of the type of this `BlockClassClient`.
 
         Args:
@@ -146,4 +146,4 @@ class BlockClassClient:
             raise KeyError(
                 f'There is no {self._block_name} in the {self._block_group} BlockGroup with id {id}.')
 
-        return Block(id=id, _block_class_client=self)
+        return BlockClient(id=id, _block_class_client=self)
