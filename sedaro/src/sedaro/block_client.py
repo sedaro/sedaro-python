@@ -31,6 +31,7 @@ class BlockClient:
 
     @property
     def data(self) -> Dict:
+        '''The attributes of the corresponding Sedaro Block as a dictionary'''
         try:
             return self._branch.data[self._block_group][self.id]
         except KeyError as e:
@@ -84,7 +85,7 @@ class BlockClient:
         return self
 
     def delete(self) -> str:
-        """Deletes the associated Sedaro Block from the Sedaro database.
+        """Deletes the associated Sedaro Block
 
         Returns:
             str: `id` of the deleted `Block`
