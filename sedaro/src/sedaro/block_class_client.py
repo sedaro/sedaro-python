@@ -128,7 +128,7 @@ class BlockClassClient:
         return BlockClient(id=block_id, _block_class_client=self)
 
     def get(self, id: Union[str, int]) -> BlockClient:
-        """Gets a `Block` from of the type of this `BlockClassClient`.
+        """Gets a `BlockClient` from of the type of this `BlockClassClient`.
 
         Args:
             id (Union[str, int]): An integer or string version of the desired `Block` `id`.
