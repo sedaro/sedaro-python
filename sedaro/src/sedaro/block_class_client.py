@@ -1,7 +1,7 @@
 from importlib import import_module
 from dataclasses import dataclass
 from sedaro_base_client.api_client import Api
-from typing import TYPE_CHECKING, Dict, Literal, Union
+from typing import TYPE_CHECKING, Dict, Literal, Tuple, Union
 from pydash.strings import snake_case
 from functools import cached_property
 
@@ -108,20 +108,20 @@ class BlockClassClient:
             f'{block_pascal}{create_or_update.capitalize()}'
         )
 
-    def create(self, body: Dict, **kwargs) -> BlockClient:  # FIXME: return value
+    def create(self, timeout: Union[int, Tuple] = None, **body) -> BlockClient:
         """Creates a Sedaro `Block` of the given type in the Sedaro database.
 
         Args:
-            body (Dict): a dictionary containing key/value pairs for the Sedaro `Block`
+            timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
+            **body (any): all remaining kwargs form the `body`
 
         Returns:
-            _type_: _description_
-            FIXME: ^^^^^^
+            BlockClient: a client to interact with the created Sedaro Block
         """
         res = getattr(self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}')(
             body=self._create_class(**body),
-            **kwargs,
             path_params={'branchId': self._branch.id},
+            timeout=timeout
         )
         block_id = self._branch._process_block_crud_response(res)
 
@@ -137,7 +137,7 @@ class BlockClassClient:
             KeyError: if no corresponding `Block` exists.
 
         Returns:
-            Block: the corresponding `Block`
+            BlockClient: a client to interact with the corresponding Sedaro Block
         """
         if type(id) == int:
             id = str(id)
