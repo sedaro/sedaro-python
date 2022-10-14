@@ -54,6 +54,8 @@ Class Name | Input Type | Accessed Type | Description | Notes
 [AngularVelocitySensor](AngularVelocitySensor.md) | [**AngularVelocitySensor**](AngularVelocitySensor.md) | [**AngularVelocitySensor**](AngularVelocitySensor.md) |  | 
 [Cooler](Cooler.md) | [**Cooler**](Cooler.md) | [**Cooler**](Cooler.md) |  | 
 [Heater](Heater.md) | [**Heater**](Heater.md) | [**Heater**](Heater.md) |  | 
+[SphericalFuelTank](SphericalFuelTank.md) | [**SphericalFuelTank**](SphericalFuelTank.md) | [**SphericalFuelTank**](SphericalFuelTank.md) |  | 
+[SpherocylinderFuelTank](SpherocylinderFuelTank.md) | [**SpherocylinderFuelTank**](SpherocylinderFuelTank.md) | [**SpherocylinderFuelTank**](SpherocylinderFuelTank.md) |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

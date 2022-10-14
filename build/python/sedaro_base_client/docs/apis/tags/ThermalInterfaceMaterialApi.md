@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_thermal_interface_material**
 <a name="create_thermal_interface_material"></a>
-> AgentBlockCreateRes create_thermal_interface_material(branch_idthermal_interface_material_create)
+> VehicleBlockCreateRes create_thermal_interface_material(branch_idthermal_interface_material_create)
 
 Create Thermal Interface Material
 
@@ -20,9 +20,9 @@ Create Thermal Interface Material
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import thermal_interface_material_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.thermal_interface_material_create import ThermalInterfaceMaterialCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -110,7 +110,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_thermal_interface_material.ApiResponseFor422
@@ -134,7 +134,7 @@ No authorization required
 
 # **delete_thermal_interface_material**
 <a name="delete_thermal_interface_material"></a>
-> AgentBlockDeleteRes delete_thermal_interface_material(branch_idblock_id)
+> VehicleBlockDeleteRes delete_thermal_interface_material(branch_idblock_id)
 
 Delete Thermal Interface Material
 
@@ -143,8 +143,8 @@ Delete Thermal Interface Material
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import thermal_interface_material_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -221,7 +221,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_thermal_interface_material.ApiResponseFor422
@@ -245,7 +245,7 @@ No authorization required
 
 # **update_thermal_interface_material**
 <a name="update_thermal_interface_material"></a>
-> AgentBlockUpdateRes update_thermal_interface_material(branch_idblock_idthermal_interface_material_update)
+> VehicleBlockUpdateRes update_thermal_interface_material(branch_idblock_idthermal_interface_material_update)
 
 Update Thermal Interface Material
 
@@ -256,7 +256,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import thermal_interface_material_api
 from sedaro_base_client.model.thermal_interface_material_update import ThermalInterfaceMaterialUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -353,7 +353,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_thermal_interface_material.ApiResponseFor422

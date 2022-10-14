@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_surface**
 <a name="create_surface"></a>
-> AgentBlockCreateRes create_surface(branch_idsurface_create)
+> VehicleBlockCreateRes create_surface(branch_idsurface_create)
 
 Create Surface
 
@@ -20,9 +20,9 @@ Create Surface
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.surface_create import SurfaceCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -113,7 +113,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_surface.ApiResponseFor422
@@ -137,7 +137,7 @@ No authorization required
 
 # **delete_surface**
 <a name="delete_surface"></a>
-> AgentBlockDeleteRes delete_surface(branch_idblock_id)
+> VehicleBlockDeleteRes delete_surface(branch_idblock_id)
 
 Delete Surface
 
@@ -146,8 +146,8 @@ Delete Surface
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -224,7 +224,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_surface.ApiResponseFor422
@@ -248,7 +248,7 @@ No authorization required
 
 # **update_surface**
 <a name="update_surface"></a>
-> AgentBlockUpdateRes update_surface(branch_idblock_idsurface_update)
+> VehicleBlockUpdateRes update_surface(branch_idblock_idsurface_update)
 
 Update Surface
 
@@ -259,7 +259,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_api
 from sedaro_base_client.model.surface_update import SurfaceUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -358,7 +358,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_surface.ApiResponseFor422

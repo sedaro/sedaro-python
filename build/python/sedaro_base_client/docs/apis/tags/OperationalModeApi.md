@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_operational_mode**
 <a name="create_operational_mode"></a>
-> AgentBlockCreateRes create_operational_mode(branch_idoperational_mode_create)
+> VehicleBlockCreateRes create_operational_mode(branch_idoperational_mode_create)
 
 Create Operational Mode
 
@@ -20,8 +20,8 @@ Create Operational Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import operational_mode_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.operational_mode_create import OperationalModeCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -112,7 +112,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_operational_mode.ApiResponseFor422
@@ -136,7 +136,7 @@ No authorization required
 
 # **delete_operational_mode**
 <a name="delete_operational_mode"></a>
-> AgentBlockDeleteRes delete_operational_mode(branch_idblock_id)
+> VehicleBlockDeleteRes delete_operational_mode(branch_idblock_id)
 
 Delete Operational Mode
 
@@ -145,8 +145,8 @@ Delete Operational Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import operational_mode_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -223,7 +223,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_operational_mode.ApiResponseFor422
@@ -247,7 +247,7 @@ No authorization required
 
 # **update_operational_mode**
 <a name="update_operational_mode"></a>
-> AgentBlockUpdateRes update_operational_mode(branch_idblock_idoperational_mode_update)
+> VehicleBlockUpdateRes update_operational_mode(branch_idblock_idoperational_mode_update)
 
 Update Operational Mode
 
@@ -257,7 +257,7 @@ Update Operational Mode
 import sedaro_base_client
 from sedaro_base_client.apis.tags import operational_mode_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.operational_mode_update import OperationalModeUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -356,7 +356,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_operational_mode.ApiResponseFor422

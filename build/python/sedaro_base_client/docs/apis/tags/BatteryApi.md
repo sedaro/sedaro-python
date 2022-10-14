@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 # **update_battery**
 <a name="update_battery"></a>
-> AgentBlockUpdateRes update_battery(branch_idblock_idbattery_update)
+> VehicleBlockUpdateRes update_battery(branch_idblock_idbattery_update)
 
 Update Battery
 
@@ -19,7 +19,7 @@ Update Battery
 import sedaro_base_client
 from sedaro_base_client.apis.tags import battery_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.battery_update import BatteryUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -115,7 +115,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_battery.ApiResponseFor422

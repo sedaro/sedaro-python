@@ -66,11 +66,11 @@ class PostgresBranchVehicle(
             simulationRequired = schemas.BoolSchema
             user = schemas.DictSchema
             uuid = schemas.StrSchema
+            dataSchema = schemas.DictSchema
         
             @staticmethod
             def data() -> typing.Type['VehicleTemplate']:
                 return VehicleTemplate
-            dataSchema = schemas.DictSchema
             __annotations__ = {
                 "dateCreated": dateCreated,
                 "dateModified": dateModified,
@@ -85,8 +85,8 @@ class PostgresBranchVehicle(
                 "simulationRequired": simulationRequired,
                 "user": user,
                 "uuid": uuid,
-                "data": data,
                 "dataSchema": dataSchema,
+                "data": data,
             }
     
     shareable: MetaOapg.properties.shareable
@@ -145,15 +145,15 @@ class PostgresBranchVehicle(
     def __getitem__(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
+    def __getitem__(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
+    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "data", "dataSchema", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -198,15 +198,15 @@ class PostgresBranchVehicle(
     def get_item_oapg(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "data", "dataSchema", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", ], str]):
         return super().get_item_oapg(name)
     
 

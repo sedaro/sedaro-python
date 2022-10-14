@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 # **update_satellite**
 <a name="update_satellite"></a>
-> AgentBlockUpdateRes update_satellite(branch_idblock_idsatellite_update)
+> VehicleBlockUpdateRes update_satellite(branch_idblock_idsatellite_update)
 
 Update Satellite
 
@@ -19,7 +19,7 @@ Update Satellite
 import sedaro_base_client
 from sedaro_base_client.apis.tags import satellite_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.satellite_update import SatelliteUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -121,7 +121,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_satellite.ApiResponseFor422

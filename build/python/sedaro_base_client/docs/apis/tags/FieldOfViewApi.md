@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 # **create_circular_field_of_view**
 <a name="create_circular_field_of_view"></a>
-> AgentBlockCreateRes create_circular_field_of_view(branch_idcircular_field_of_view_create)
+> VehicleBlockCreateRes create_circular_field_of_view(branch_idcircular_field_of_view_create)
 
 Create Circular Field of View
 
@@ -23,9 +23,9 @@ Create Circular Field of View
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.circular_field_of_view_create import CircularFieldOfViewCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -111,7 +111,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_circular_field_of_view.ApiResponseFor422
@@ -135,7 +135,7 @@ No authorization required
 
 # **create_rectangular_field_of_view**
 <a name="create_rectangular_field_of_view"></a>
-> AgentBlockCreateRes create_rectangular_field_of_view(branch_idrectangular_field_of_view_create)
+> VehicleBlockCreateRes create_rectangular_field_of_view(branch_idrectangular_field_of_view_create)
 
 Create Rectangular Field of View
 
@@ -144,9 +144,9 @@ Create Rectangular Field of View
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.rectangular_field_of_view_create import RectangularFieldOfViewCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -234,7 +234,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_rectangular_field_of_view.ApiResponseFor422
@@ -258,7 +258,7 @@ No authorization required
 
 # **delete_circular_field_of_view**
 <a name="delete_circular_field_of_view"></a>
-> AgentBlockDeleteRes delete_circular_field_of_view(branch_idblock_id)
+> VehicleBlockDeleteRes delete_circular_field_of_view(branch_idblock_id)
 
 Delete Circular Field of View
 
@@ -267,8 +267,8 @@ Delete Circular Field of View
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -345,7 +345,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_circular_field_of_view.ApiResponseFor422
@@ -369,7 +369,7 @@ No authorization required
 
 # **delete_rectangular_field_of_view**
 <a name="delete_rectangular_field_of_view"></a>
-> AgentBlockDeleteRes delete_rectangular_field_of_view(branch_idblock_id)
+> VehicleBlockDeleteRes delete_rectangular_field_of_view(branch_idblock_id)
 
 Delete Rectangular Field of View
 
@@ -378,8 +378,8 @@ Delete Rectangular Field of View
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -456,7 +456,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_rectangular_field_of_view.ApiResponseFor422
@@ -480,7 +480,7 @@ No authorization required
 
 # **update_circular_field_of_view**
 <a name="update_circular_field_of_view"></a>
-> AgentBlockUpdateRes update_circular_field_of_view(branch_idblock_idcircular_field_of_view_update)
+> VehicleBlockUpdateRes update_circular_field_of_view(branch_idblock_idcircular_field_of_view_update)
 
 Update Circular Field of View
 
@@ -490,7 +490,7 @@ Update Circular Field of View
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.circular_field_of_view_update import CircularFieldOfViewUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -586,7 +586,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_circular_field_of_view.ApiResponseFor422
@@ -610,7 +610,7 @@ No authorization required
 
 # **update_rectangular_field_of_view**
 <a name="update_rectangular_field_of_view"></a>
-> AgentBlockUpdateRes update_rectangular_field_of_view(branch_idblock_idrectangular_field_of_view_update)
+> VehicleBlockUpdateRes update_rectangular_field_of_view(branch_idblock_idrectangular_field_of_view_update)
 
 Update Rectangular Field of View
 
@@ -620,7 +620,7 @@ Update Rectangular Field of View
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.rectangular_field_of_view_update import RectangularFieldOfViewUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -718,7 +718,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_rectangular_field_of_view.ApiResponseFor422

@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 # **create_actuator_load**
 <a name="create_actuator_load"></a>
-> AgentBlockCreateRes create_actuator_load(branch_idactuator_load_create)
+> VehicleBlockCreateRes create_actuator_load(branch_idactuator_load_create)
 
 Create Actuator Load
 
@@ -26,9 +26,9 @@ Create Actuator Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.actuator_load_create import ActuatorLoadCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -115,7 +115,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_actuator_load.ApiResponseFor422
@@ -139,7 +139,7 @@ No authorization required
 
 # **create_constant_load**
 <a name="create_constant_load"></a>
-> AgentBlockCreateRes create_constant_load(branch_idconstant_load_create)
+> VehicleBlockCreateRes create_constant_load(branch_idconstant_load_create)
 
 Create Constant Load
 
@@ -148,8 +148,8 @@ Create Constant Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.constant_load_create import ConstantLoadCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -241,7 +241,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_constant_load.ApiResponseFor422
@@ -265,7 +265,7 @@ No authorization required
 
 # **create_temperature_controller_load**
 <a name="create_temperature_controller_load"></a>
-> AgentBlockCreateRes create_temperature_controller_load(branch_idtemp_control_load_create)
+> VehicleBlockCreateRes create_temperature_controller_load(branch_idtemp_control_load_create)
 
 Create Temperature Controller Load
 
@@ -274,9 +274,9 @@ Create Temperature Controller Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.temp_control_load_create import TempControlLoadCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -363,7 +363,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_temperature_controller_load.ApiResponseFor422
@@ -387,7 +387,7 @@ No authorization required
 
 # **delete_actuator_load**
 <a name="delete_actuator_load"></a>
-> AgentBlockDeleteRes delete_actuator_load(branch_idblock_id)
+> VehicleBlockDeleteRes delete_actuator_load(branch_idblock_id)
 
 Delete Actuator Load
 
@@ -396,8 +396,8 @@ Delete Actuator Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -474,7 +474,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_actuator_load.ApiResponseFor422
@@ -498,7 +498,7 @@ No authorization required
 
 # **delete_constant_load**
 <a name="delete_constant_load"></a>
-> AgentBlockDeleteRes delete_constant_load(branch_idblock_id)
+> VehicleBlockDeleteRes delete_constant_load(branch_idblock_id)
 
 Delete Constant Load
 
@@ -507,8 +507,8 @@ Delete Constant Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -585,7 +585,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_constant_load.ApiResponseFor422
@@ -609,7 +609,7 @@ No authorization required
 
 # **delete_temperature_controller_load**
 <a name="delete_temperature_controller_load"></a>
-> AgentBlockDeleteRes delete_temperature_controller_load(branch_idblock_id)
+> VehicleBlockDeleteRes delete_temperature_controller_load(branch_idblock_id)
 
 Delete Temperature Controller Load
 
@@ -618,8 +618,8 @@ Delete Temperature Controller Load
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -696,7 +696,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_temperature_controller_load.ApiResponseFor422
@@ -720,7 +720,7 @@ No authorization required
 
 # **update_actuator_load**
 <a name="update_actuator_load"></a>
-> AgentBlockUpdateRes update_actuator_load(branch_idblock_idactuator_load_update)
+> VehicleBlockUpdateRes update_actuator_load(branch_idblock_idactuator_load_update)
 
 Update Actuator Load
 
@@ -731,7 +731,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
 from sedaro_base_client.model.actuator_load_update import ActuatorLoadUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -826,7 +826,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_actuator_load.ApiResponseFor422
@@ -850,7 +850,7 @@ No authorization required
 
 # **update_constant_load**
 <a name="update_constant_load"></a>
-> AgentBlockUpdateRes update_constant_load(branch_idblock_idconstant_load_update)
+> VehicleBlockUpdateRes update_constant_load(branch_idblock_idconstant_load_update)
 
 Update Constant Load
 
@@ -860,7 +860,7 @@ Update Constant Load
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.constant_load_update import ConstantLoadUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -960,7 +960,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_constant_load.ApiResponseFor422
@@ -984,7 +984,7 @@ No authorization required
 
 # **update_temperature_controller_load**
 <a name="update_temperature_controller_load"></a>
-> AgentBlockUpdateRes update_temperature_controller_load(branch_idblock_idtemp_control_load_update)
+> VehicleBlockUpdateRes update_temperature_controller_load(branch_idblock_idtemp_control_load_update)
 
 Update Temperature Controller Load
 
@@ -995,7 +995,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import load_api
 from sedaro_base_client.model.temp_control_load_update import TempControlLoadUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1090,7 +1090,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_temperature_controller_load.ApiResponseFor422

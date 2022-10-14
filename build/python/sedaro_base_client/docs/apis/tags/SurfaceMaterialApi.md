@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_surface_material**
 <a name="create_surface_material"></a>
-> AgentBlockCreateRes create_surface_material(branch_idsurface_material_create)
+> VehicleBlockCreateRes create_surface_material(branch_idsurface_material_create)
 
 Create Surface Material
 
@@ -20,8 +20,8 @@ Create Surface Material
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_material_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.surface_material_create import SurfaceMaterialCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -112,7 +112,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_surface_material.ApiResponseFor422
@@ -136,7 +136,7 @@ No authorization required
 
 # **delete_surface_material**
 <a name="delete_surface_material"></a>
-> AgentBlockDeleteRes delete_surface_material(branch_idblock_id)
+> VehicleBlockDeleteRes delete_surface_material(branch_idblock_id)
 
 Delete Surface Material
 
@@ -145,8 +145,8 @@ Delete Surface Material
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_material_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -223,7 +223,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_surface_material.ApiResponseFor422
@@ -247,7 +247,7 @@ No authorization required
 
 # **update_surface_material**
 <a name="update_surface_material"></a>
-> AgentBlockUpdateRes update_surface_material(branch_idblock_idsurface_material_update)
+> VehicleBlockUpdateRes update_surface_material(branch_idblock_idsurface_material_update)
 
 Update Surface Material
 
@@ -257,7 +257,7 @@ Update Surface Material
 import sedaro_base_client
 from sedaro_base_client.apis.tags import surface_material_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.surface_material_update import SurfaceMaterialUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -357,7 +357,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_surface_material.ApiResponseFor422

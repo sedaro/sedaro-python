@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 # **create_celestial_vector**
 <a name="create_celestial_vector"></a>
-> AgentBlockCreateRes create_celestial_vector(branch_idcelestial_vector_create)
+> VehicleBlockCreateRes create_celestial_vector(branch_idcelestial_vector_create)
 
 Create Celestial Vector
 
@@ -26,9 +26,9 @@ Create Celestial Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.celestial_vector_create import CelestialVectorCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -113,7 +113,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_celestial_vector.ApiResponseFor422
@@ -137,7 +137,7 @@ No authorization required
 
 # **create_local_vector**
 <a name="create_local_vector"></a>
-> AgentBlockCreateRes create_local_vector(branch_idlocal_vector_create)
+> VehicleBlockCreateRes create_local_vector(branch_idlocal_vector_create)
 
 Create Local Vector
 
@@ -146,9 +146,9 @@ Create Local Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.local_vector_create import LocalVectorCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -233,7 +233,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_local_vector.ApiResponseFor422
@@ -257,7 +257,7 @@ No authorization required
 
 # **create_target_vector**
 <a name="create_target_vector"></a>
-> AgentBlockCreateRes create_target_vector(branch_idtarget_vector_create)
+> VehicleBlockCreateRes create_target_vector(branch_idtarget_vector_create)
 
 Create Target Vector
 
@@ -266,8 +266,8 @@ Create Target Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.target_vector_create import TargetVectorCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -355,7 +355,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_target_vector.ApiResponseFor422
@@ -379,7 +379,7 @@ No authorization required
 
 # **delete_celestial_vector**
 <a name="delete_celestial_vector"></a>
-> AgentBlockDeleteRes delete_celestial_vector(branch_idblock_id)
+> VehicleBlockDeleteRes delete_celestial_vector(branch_idblock_id)
 
 Delete Celestial Vector
 
@@ -388,8 +388,8 @@ Delete Celestial Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -466,7 +466,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_celestial_vector.ApiResponseFor422
@@ -490,7 +490,7 @@ No authorization required
 
 # **delete_local_vector**
 <a name="delete_local_vector"></a>
-> AgentBlockDeleteRes delete_local_vector(branch_idblock_id)
+> VehicleBlockDeleteRes delete_local_vector(branch_idblock_id)
 
 Delete Local Vector
 
@@ -499,8 +499,8 @@ Delete Local Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -577,7 +577,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_local_vector.ApiResponseFor422
@@ -601,7 +601,7 @@ No authorization required
 
 # **delete_target_vector**
 <a name="delete_target_vector"></a>
-> AgentBlockDeleteRes delete_target_vector(branch_idblock_id)
+> VehicleBlockDeleteRes delete_target_vector(branch_idblock_id)
 
 Delete Target Vector
 
@@ -610,8 +610,8 @@ Delete Target Vector
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -688,7 +688,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_target_vector.ApiResponseFor422
@@ -712,7 +712,7 @@ No authorization required
 
 # **update_celestial_vector**
 <a name="update_celestial_vector"></a>
-> AgentBlockUpdateRes update_celestial_vector(branch_idblock_idcelestial_vector_update)
+> VehicleBlockUpdateRes update_celestial_vector(branch_idblock_idcelestial_vector_update)
 
 Update Celestial Vector
 
@@ -722,8 +722,8 @@ Update Celestial Vector
 import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.celestial_vector_update import CelestialVectorUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -817,7 +817,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_celestial_vector.ApiResponseFor422
@@ -841,7 +841,7 @@ No authorization required
 
 # **update_local_vector**
 <a name="update_local_vector"></a>
-> AgentBlockUpdateRes update_local_vector(branch_idblock_idlocal_vector_update)
+> VehicleBlockUpdateRes update_local_vector(branch_idblock_idlocal_vector_update)
 
 Update Local Vector
 
@@ -852,7 +852,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
 from sedaro_base_client.model.local_vector_update import LocalVectorUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -946,7 +946,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_local_vector.ApiResponseFor422
@@ -970,7 +970,7 @@ No authorization required
 
 # **update_target_vector**
 <a name="update_target_vector"></a>
-> AgentBlockUpdateRes update_target_vector(branch_idblock_idtarget_vector_update)
+> VehicleBlockUpdateRes update_target_vector(branch_idblock_idtarget_vector_update)
 
 Update Target Vector
 
@@ -981,7 +981,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import reference_vector_api
 from sedaro_base_client.model.target_vector_update import TargetVectorUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1077,7 +1077,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_target_vector.ApiResponseFor422

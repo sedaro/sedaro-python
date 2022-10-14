@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 # **create_ekf_algorithm**
 <a name="create_ekf_algorithm"></a>
-> AgentBlockCreateRes create_ekf_algorithm(branch_idekf_algorithm_create)
+> VehicleBlockCreateRes create_ekf_algorithm(branch_idekf_algorithm_create)
 
 Create EKF Algorithm
 
@@ -23,8 +23,8 @@ Create EKF Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.ekf_algorithm_create import EKFAlgorithmCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -48,11 +48,23 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ORBIT_DETERMINATION",
         algorithm_subtype="EKF",
+        position_solution=[
+            3.14
+        ],
+        velocity_solution=[
+            3.14
+        ],
         covariance=[
             [
                 3.14
             ]
         ],
+        position_covariance=[
+            [
+                3.14
+            ]
+        ],
+        velocity_covariance=[],
         position_sensors=[],
     )
     try:
@@ -117,7 +129,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_ekf_algorithm.ApiResponseFor422
@@ -141,7 +153,7 @@ No authorization required
 
 # **create_gps_algorithm**
 <a name="create_gps_algorithm"></a>
-> AgentBlockCreateRes create_gps_algorithm(branch_idgps_algorithm_create)
+> VehicleBlockCreateRes create_gps_algorithm(branch_idgps_algorithm_create)
 
 Create GPS Algorithm
 
@@ -150,9 +162,9 @@ Create GPS Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.gps_algorithm_create import GPSAlgorithmCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -175,6 +187,23 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ORBIT_DETERMINATION",
         algorithm_subtype="GPS",
+        position_solution=[
+            3.14
+        ],
+        velocity_solution=[
+            3.14
+        ],
+        covariance=[
+            [
+                3.14
+            ]
+        ],
+        position_covariance=[
+            [
+                3.14
+            ]
+        ],
+        velocity_covariance=[],
         position_sensors=[],
     )
     try:
@@ -239,7 +268,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_gps_algorithm.ApiResponseFor422
@@ -263,7 +292,7 @@ No authorization required
 
 # **delete_ekf_algorithm**
 <a name="delete_ekf_algorithm"></a>
-> AgentBlockDeleteRes delete_ekf_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_ekf_algorithm(branch_idblock_id)
 
 Delete EKF Algorithm
 
@@ -272,8 +301,8 @@ Delete EKF Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -350,7 +379,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_ekf_algorithm.ApiResponseFor422
@@ -374,7 +403,7 @@ No authorization required
 
 # **delete_gps_algorithm**
 <a name="delete_gps_algorithm"></a>
-> AgentBlockDeleteRes delete_gps_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_gps_algorithm(branch_idblock_id)
 
 Delete GPS Algorithm
 
@@ -383,8 +412,8 @@ Delete GPS Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -461,7 +490,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_gps_algorithm.ApiResponseFor422
@@ -485,7 +514,7 @@ No authorization required
 
 # **update_ekf_algorithm**
 <a name="update_ekf_algorithm"></a>
-> AgentBlockUpdateRes update_ekf_algorithm(branch_idblock_idekf_algorithm_update)
+> VehicleBlockUpdateRes update_ekf_algorithm(branch_idblock_idekf_algorithm_update)
 
 Update EKF Algorithm
 
@@ -496,7 +525,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
 from sedaro_base_client.model.ekf_algorithm_update import EKFAlgorithmUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -520,11 +549,23 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ORBIT_DETERMINATION",
         algorithm_subtype="EKF",
+        position_solution=[
+            3.14
+        ],
+        velocity_solution=[
+            3.14
+        ],
         covariance=[
             [
                 3.14
             ]
         ],
+        position_covariance=[
+            [
+                3.14
+            ]
+        ],
+        velocity_covariance=[],
         position_sensors=[],
     )
     try:
@@ -597,7 +638,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_ekf_algorithm.ApiResponseFor422
@@ -621,7 +662,7 @@ No authorization required
 
 # **update_gps_algorithm**
 <a name="update_gps_algorithm"></a>
-> AgentBlockUpdateRes update_gps_algorithm(branch_idblock_idgps_algorithm_update)
+> VehicleBlockUpdateRes update_gps_algorithm(branch_idblock_idgps_algorithm_update)
 
 Update GPS Algorithm
 
@@ -632,7 +673,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import orbit_determination_algorithm_api
 from sedaro_base_client.model.gps_algorithm_update import GPSAlgorithmUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -656,6 +697,23 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ORBIT_DETERMINATION",
         algorithm_subtype="GPS",
+        position_solution=[
+            3.14
+        ],
+        velocity_solution=[
+            3.14
+        ],
+        covariance=[
+            [
+                3.14
+            ]
+        ],
+        position_covariance=[
+            [
+                3.14
+            ]
+        ],
+        velocity_covariance=[],
         position_sensors=[],
     )
     try:
@@ -728,7 +786,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_gps_algorithm.ApiResponseFor422

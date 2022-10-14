@@ -13,8 +13,109 @@ Key | Input Type | Accessed Type | Description | Notes
 **name** | str,  | str,  |  | 
 **algorithmSubtype** | str,  | str,  |  | must be one of ["GPS", ] 
 **id** | str,  | str,  |  | [optional] 
+**[positionSolution](#positionSolution)** | list, tuple,  | tuple,  |  | [optional] 
+**[velocitySolution](#velocitySolution)** | list, tuple,  | tuple,  |  | [optional] 
+**[covariance](#covariance)** | list, tuple,  | tuple,  |  | [optional] 
+**[positionCovariance](#positionCovariance)** | list, tuple,  | tuple,  |  | [optional] 
+**[velocityCovariance](#velocityCovariance)** | list, tuple,  | tuple,  |  | [optional] 
 **[positionSensors](#positionSensors)** | list, tuple,  | tuple,  | Relationship to one or more &#x60;PositionSensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | [optional] 
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
+
+# positionSolution
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+
+# velocitySolution
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+
+# covariance
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+[items](#items) | list, tuple,  | tuple,  |  | 
+
+# items
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+
+# positionCovariance
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+[items](#items) | list, tuple,  | tuple,  |  | 
+
+# items
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+
+# velocityCovariance
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+[items](#items) | list, tuple,  | tuple,  |  | 
+
+# items
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
 
 # positionSensors
 

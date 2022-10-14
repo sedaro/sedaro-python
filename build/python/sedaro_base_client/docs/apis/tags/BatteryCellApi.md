@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_battery_cell**
 <a name="create_battery_cell"></a>
-> AgentBlockCreateRes create_battery_cell(branch_idbattery_cell_create)
+> VehicleBlockCreateRes create_battery_cell(branch_idbattery_cell_create)
 
 Create Battery Cell
 
@@ -20,9 +20,9 @@ Create Battery Cell
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import battery_cell_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.battery_cell_create import BatteryCellCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -117,7 +117,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_battery_cell.ApiResponseFor422
@@ -141,7 +141,7 @@ No authorization required
 
 # **delete_battery_cell**
 <a name="delete_battery_cell"></a>
-> AgentBlockDeleteRes delete_battery_cell(branch_idblock_id)
+> VehicleBlockDeleteRes delete_battery_cell(branch_idblock_id)
 
 Delete Battery Cell
 
@@ -150,8 +150,8 @@ Delete Battery Cell
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import battery_cell_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -228,7 +228,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_battery_cell.ApiResponseFor422
@@ -252,7 +252,7 @@ No authorization required
 
 # **update_battery_cell**
 <a name="update_battery_cell"></a>
-> AgentBlockUpdateRes update_battery_cell(branch_idblock_idbattery_cell_update)
+> VehicleBlockUpdateRes update_battery_cell(branch_idblock_idbattery_cell_update)
 
 Update Battery Cell
 
@@ -263,7 +263,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import battery_cell_api
 from sedaro_base_client.model.battery_cell_update import BatteryCellUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -366,7 +366,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_battery_cell.ApiResponseFor422

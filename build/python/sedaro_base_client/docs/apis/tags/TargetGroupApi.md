@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_target_group**
 <a name="create_target_group"></a>
-> AgentBlockCreateRes create_target_group(branch_idtarget_group_create)
+> VehicleBlockCreateRes create_target_group(branch_idtarget_group_create)
 
 Create Target Group
 
@@ -20,9 +20,9 @@ Create Target Group
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_group_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.target_group_create import TargetGroupCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -107,7 +107,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_target_group.ApiResponseFor422
@@ -131,7 +131,7 @@ No authorization required
 
 # **delete_target_group**
 <a name="delete_target_group"></a>
-> AgentBlockDeleteRes delete_target_group(branch_idblock_id)
+> VehicleBlockDeleteRes delete_target_group(branch_idblock_id)
 
 Delete Target Group
 
@@ -140,8 +140,8 @@ Delete Target Group
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_group_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -218,7 +218,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_target_group.ApiResponseFor422
@@ -242,7 +242,7 @@ No authorization required
 
 # **update_target_group**
 <a name="update_target_group"></a>
-> AgentBlockUpdateRes update_target_group(branch_idblock_idtarget_group_update)
+> VehicleBlockUpdateRes update_target_group(branch_idblock_idtarget_group_update)
 
 Update Target Group
 
@@ -253,7 +253,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import target_group_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.target_group_update import TargetGroupUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -346,7 +346,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_target_group.ApiResponseFor422

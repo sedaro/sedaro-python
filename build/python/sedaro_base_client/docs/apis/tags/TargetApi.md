@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 # **create_celestial_target**
 <a name="create_celestial_target"></a>
-> AgentBlockCreateRes create_celestial_target(branch_idcelestial_target_create)
+> VehicleBlockCreateRes create_celestial_target(branch_idcelestial_target_create)
 
 Create Celestial Target
 
@@ -26,8 +26,8 @@ Create Celestial Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.celestial_target_create import CelestialTargetCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -114,7 +114,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_celestial_target.ApiResponseFor422
@@ -138,7 +138,7 @@ No authorization required
 
 # **create_ground_target**
 <a name="create_ground_target"></a>
-> AgentBlockCreateRes create_ground_target(branch_idground_target_create)
+> VehicleBlockCreateRes create_ground_target(branch_idground_target_create)
 
 Create Ground Target
 
@@ -147,8 +147,8 @@ Create Ground Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.ground_target_create import GroundTargetCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -234,7 +234,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_ground_target.ApiResponseFor422
@@ -258,7 +258,7 @@ No authorization required
 
 # **create_space_target**
 <a name="create_space_target"></a>
-> AgentBlockCreateRes create_space_target(branch_idspace_target_create)
+> VehicleBlockCreateRes create_space_target(branch_idspace_target_create)
 
 Create Space Target
 
@@ -267,9 +267,9 @@ Create Space Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.space_target_create import SpaceTargetCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -354,7 +354,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_space_target.ApiResponseFor422
@@ -378,7 +378,7 @@ No authorization required
 
 # **delete_celestial_target**
 <a name="delete_celestial_target"></a>
-> AgentBlockDeleteRes delete_celestial_target(branch_idblock_id)
+> VehicleBlockDeleteRes delete_celestial_target(branch_idblock_id)
 
 Delete Celestial Target
 
@@ -387,8 +387,8 @@ Delete Celestial Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -465,7 +465,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_celestial_target.ApiResponseFor422
@@ -489,7 +489,7 @@ No authorization required
 
 # **delete_ground_target**
 <a name="delete_ground_target"></a>
-> AgentBlockDeleteRes delete_ground_target(branch_idblock_id)
+> VehicleBlockDeleteRes delete_ground_target(branch_idblock_id)
 
 Delete Ground Target
 
@@ -498,8 +498,8 @@ Delete Ground Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -576,7 +576,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_ground_target.ApiResponseFor422
@@ -600,7 +600,7 @@ No authorization required
 
 # **delete_space_target**
 <a name="delete_space_target"></a>
-> AgentBlockDeleteRes delete_space_target(branch_idblock_id)
+> VehicleBlockDeleteRes delete_space_target(branch_idblock_id)
 
 Delete Space Target
 
@@ -609,8 +609,8 @@ Delete Space Target
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -687,7 +687,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_space_target.ApiResponseFor422
@@ -711,7 +711,7 @@ No authorization required
 
 # **update_celestial_target**
 <a name="update_celestial_target"></a>
-> AgentBlockUpdateRes update_celestial_target(branch_idblock_idcelestial_target_update)
+> VehicleBlockUpdateRes update_celestial_target(branch_idblock_idcelestial_target_update)
 
 Update Celestial Target
 
@@ -722,7 +722,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
 from sedaro_base_client.model.celestial_target_update import CelestialTargetUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -816,7 +816,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_celestial_target.ApiResponseFor422
@@ -840,7 +840,7 @@ No authorization required
 
 # **update_ground_target**
 <a name="update_ground_target"></a>
-> AgentBlockUpdateRes update_ground_target(branch_idblock_idground_target_update)
+> VehicleBlockUpdateRes update_ground_target(branch_idblock_idground_target_update)
 
 Update Ground Target
 
@@ -851,7 +851,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
 from sedaro_base_client.model.ground_target_update import GroundTargetUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -944,7 +944,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_ground_target.ApiResponseFor422
@@ -968,7 +968,7 @@ No authorization required
 
 # **update_space_target**
 <a name="update_space_target"></a>
-> AgentBlockUpdateRes update_space_target(branch_idblock_idspace_target_update)
+> VehicleBlockUpdateRes update_space_target(branch_idblock_idspace_target_update)
 
 Update Space Target
 
@@ -979,7 +979,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import target_api
 from sedaro_base_client.model.space_target_update import SpaceTargetUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1072,7 +1072,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_space_target.ApiResponseFor422

@@ -26,7 +26,7 @@ import frozendict  # noqa: F401
 from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.fov_constraint_update import FOVConstraintUpdate
 
 # path params
@@ -74,7 +74,7 @@ request_body_fov_constraint_update = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = AgentBlockUpdateRes
+SchemaFor200ResponseBodyApplicationJson = VehicleBlockUpdateRes
 
 
 @dataclass

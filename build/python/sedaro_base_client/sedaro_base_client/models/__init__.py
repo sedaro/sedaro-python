@@ -17,9 +17,6 @@ from sedaro_base_client.model.actuator_load_create import ActuatorLoadCreate
 from sedaro_base_client.model.actuator_load_update import ActuatorLoadUpdate
 from sedaro_base_client.model.agent import Agent
 from sedaro_base_client.model.agent_bg import AgentBG
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
 from sedaro_base_client.model.algorithm_bg import AlgorithmBG
 from sedaro_base_client.model.angular_velocity_sensor import AngularVelocitySensor
 from sedaro_base_client.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
@@ -104,6 +101,8 @@ from sedaro_base_client.model.fov_constraint_create import FOVConstraintCreate
 from sedaro_base_client.model.fov_constraint_update import FOVConstraintUpdate
 from sedaro_base_client.model.field_of_view_bg import FieldOfViewBG
 from sedaro_base_client.model.fixed_surface import FixedSurface
+from sedaro_base_client.model.fuel_reservoir import FuelReservoir
+from sedaro_base_client.model.fuel_reservoir_bg import FuelReservoirBG
 from sedaro_base_client.model.fully_reg_det_topology import FullyRegDetTopology
 from sedaro_base_client.model.gps_algorithm import GPSAlgorithm
 from sedaro_base_client.model.gps_algorithm_create import GPSAlgorithmCreate
@@ -219,6 +218,8 @@ from sedaro_base_client.model.space_target import SpaceTarget
 from sedaro_base_client.model.space_target_create import SpaceTargetCreate
 from sedaro_base_client.model.space_target_update import SpaceTargetUpdate
 from sedaro_base_client.model.spherical_angles import SphericalAngles
+from sedaro_base_client.model.spherical_fuel_tank import SphericalFuelTank
+from sedaro_base_client.model.spherocylinder_fuel_tank import SpherocylinderFuelTank
 from sedaro_base_client.model.statuses import Statuses
 from sedaro_base_client.model.subsystem import Subsystem
 from sedaro_base_client.model.subsystem_bg import SubsystemBG
@@ -275,4 +276,7 @@ from sedaro_base_client.model.vector import Vector
 from sedaro_base_client.model.vector_sensor import VectorSensor
 from sedaro_base_client.model.vector_sensor_create import VectorSensorCreate
 from sedaro_base_client.model.vector_sensor_update import VectorSensorUpdate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.vehicle_template import VehicleTemplate

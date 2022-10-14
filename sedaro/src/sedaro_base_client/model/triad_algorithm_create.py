@@ -73,12 +73,60 @@ class TriadAlgorithmCreate(
             def algorithmSubtype() -> typing.Type['AttDetTypes']:
                 return AttDetTypes
             id = schemas.StrSchema
+            
+            
+            class attitudeSolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'attitudeSolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class angularVelocitySolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'angularVelocitySolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
                 "rate": rate,
                 "algorithmType": algorithmType,
                 "algorithmSubtype": algorithmSubtype,
                 "id": id,
+                "attitudeSolution": attitudeSolution,
+                "angularVelocitySolution": angularVelocitySolution,
             }
     
     algorithmType: MetaOapg.properties.algorithmType
@@ -102,9 +150,15 @@ class TriadAlgorithmCreate(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["attitudeSolution"]) -> MetaOapg.properties.attitudeSolution: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["angularVelocitySolution"]) -> MetaOapg.properties.angularVelocitySolution: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -125,9 +179,15 @@ class TriadAlgorithmCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["attitudeSolution"]) -> typing.Union[MetaOapg.properties.attitudeSolution, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["angularVelocitySolution"]) -> typing.Union[MetaOapg.properties.angularVelocitySolution, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -139,6 +199,8 @@ class TriadAlgorithmCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         algorithmSubtype: 'AttDetTypes',
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        attitudeSolution: typing.Union[MetaOapg.properties.attitudeSolution, list, tuple, schemas.Unset] = schemas.unset,
+        angularVelocitySolution: typing.Union[MetaOapg.properties.angularVelocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TriadAlgorithmCreate':
@@ -150,6 +212,8 @@ class TriadAlgorithmCreate(
             name=name,
             algorithmSubtype=algorithmSubtype,
             id=id,
+            attitudeSolution=attitudeSolution,
+            angularVelocitySolution=angularVelocitySolution,
             _configuration=_configuration,
             **kwargs,
         )

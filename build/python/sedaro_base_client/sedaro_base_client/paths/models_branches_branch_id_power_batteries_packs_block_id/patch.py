@@ -27,7 +27,7 @@ from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.battery_pack_update import BatteryPackUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 
 from . import path
 
@@ -76,7 +76,7 @@ request_body_battery_pack_update = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = AgentBlockUpdateRes
+SchemaFor200ResponseBodyApplicationJson = VehicleBlockUpdateRes
 
 
 @dataclass

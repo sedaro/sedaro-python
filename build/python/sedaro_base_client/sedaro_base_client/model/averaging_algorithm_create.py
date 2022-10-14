@@ -87,6 +87,52 @@ class AveragingAlgorithmCreate(
             id = schemas.StrSchema
             
             
+            class attitudeSolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'attitudeSolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class angularVelocitySolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'angularVelocitySolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class opticalAttitudeSensors(
                 schemas.ListSchema
             ):
@@ -137,6 +183,8 @@ class AveragingAlgorithmCreate(
                 "algorithmType": algorithmType,
                 "algorithmSubtype": algorithmSubtype,
                 "id": id,
+                "attitudeSolution": attitudeSolution,
+                "angularVelocitySolution": angularVelocitySolution,
                 "opticalAttitudeSensors": opticalAttitudeSensors,
                 "angularVelocitySensors": angularVelocitySensors,
             }
@@ -162,6 +210,12 @@ class AveragingAlgorithmCreate(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["attitudeSolution"]) -> MetaOapg.properties.attitudeSolution: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["angularVelocitySolution"]) -> MetaOapg.properties.angularVelocitySolution: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["opticalAttitudeSensors"]) -> MetaOapg.properties.opticalAttitudeSensors: ...
     
     @typing.overload
@@ -170,7 +224,7 @@ class AveragingAlgorithmCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -191,6 +245,12 @@ class AveragingAlgorithmCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["attitudeSolution"]) -> typing.Union[MetaOapg.properties.attitudeSolution, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["angularVelocitySolution"]) -> typing.Union[MetaOapg.properties.angularVelocitySolution, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["opticalAttitudeSensors"]) -> typing.Union[MetaOapg.properties.opticalAttitudeSensors, schemas.Unset]: ...
     
     @typing.overload
@@ -199,7 +259,7 @@ class AveragingAlgorithmCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -211,6 +271,8 @@ class AveragingAlgorithmCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        attitudeSolution: typing.Union[MetaOapg.properties.attitudeSolution, list, tuple, schemas.Unset] = schemas.unset,
+        angularVelocitySolution: typing.Union[MetaOapg.properties.angularVelocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         opticalAttitudeSensors: typing.Union[MetaOapg.properties.opticalAttitudeSensors, list, tuple, schemas.Unset] = schemas.unset,
         angularVelocitySensors: typing.Union[MetaOapg.properties.angularVelocitySensors, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -224,6 +286,8 @@ class AveragingAlgorithmCreate(
             name=name,
             algorithmSubtype=algorithmSubtype,
             id=id,
+            attitudeSolution=attitudeSolution,
+            angularVelocitySolution=angularVelocitySolution,
             opticalAttitudeSensors=opticalAttitudeSensors,
             angularVelocitySensors=angularVelocitySensors,
             _configuration=_configuration,

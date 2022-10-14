@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 # **create_direction_lock_pointing_mode**
 <a name="create_direction_lock_pointing_mode"></a>
-> AgentBlockCreateRes create_direction_lock_pointing_mode(branch_idlock_pointing_mode_create)
+> VehicleBlockCreateRes create_direction_lock_pointing_mode(branch_idlock_pointing_mode_create)
 
 Create Direction Lock Pointing Mode
 
@@ -26,9 +26,9 @@ Create Direction Lock Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.lock_pointing_mode_create import LockPointingModeCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -119,7 +119,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_direction_lock_pointing_mode.ApiResponseFor422
@@ -143,7 +143,7 @@ No authorization required
 
 # **create_max_secondary_alignment_pointing_mode**
 <a name="create_max_secondary_alignment_pointing_mode"></a>
-> AgentBlockCreateRes create_max_secondary_alignment_pointing_mode(branch_idmax_align_pointing_mode_create)
+> VehicleBlockCreateRes create_max_secondary_alignment_pointing_mode(branch_idmax_align_pointing_mode_create)
 
 Create Max Secondary Alignment Pointing Mode
 
@@ -152,8 +152,8 @@ Create Max Secondary Alignment Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.max_align_pointing_mode_create import MaxAlignPointingModeCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -246,7 +246,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_max_secondary_alignment_pointing_mode.ApiResponseFor422
@@ -270,7 +270,7 @@ No authorization required
 
 # **create_passive_pointing_mode**
 <a name="create_passive_pointing_mode"></a>
-> AgentBlockCreateRes create_passive_pointing_mode(branch_idpassive_pointing_mode_create)
+> VehicleBlockCreateRes create_passive_pointing_mode(branch_idpassive_pointing_mode_create)
 
 Create Passive Pointing Mode
 
@@ -279,9 +279,9 @@ Create Passive Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.passive_pointing_mode_create import PassivePointingModeCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -368,7 +368,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_passive_pointing_mode.ApiResponseFor422
@@ -392,7 +392,7 @@ No authorization required
 
 # **delete_direction_lock_pointing_mode**
 <a name="delete_direction_lock_pointing_mode"></a>
-> AgentBlockDeleteRes delete_direction_lock_pointing_mode(branch_idblock_id)
+> VehicleBlockDeleteRes delete_direction_lock_pointing_mode(branch_idblock_id)
 
 Delete Direction Lock Pointing Mode
 
@@ -401,8 +401,8 @@ Delete Direction Lock Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -479,7 +479,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_direction_lock_pointing_mode.ApiResponseFor422
@@ -503,7 +503,7 @@ No authorization required
 
 # **delete_max_secondary_alignment_pointing_mode**
 <a name="delete_max_secondary_alignment_pointing_mode"></a>
-> AgentBlockDeleteRes delete_max_secondary_alignment_pointing_mode(branch_idblock_id)
+> VehicleBlockDeleteRes delete_max_secondary_alignment_pointing_mode(branch_idblock_id)
 
 Delete Max Secondary Alignment Pointing Mode
 
@@ -512,8 +512,8 @@ Delete Max Secondary Alignment Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -590,7 +590,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_max_secondary_alignment_pointing_mode.ApiResponseFor422
@@ -614,7 +614,7 @@ No authorization required
 
 # **delete_passive_pointing_mode**
 <a name="delete_passive_pointing_mode"></a>
-> AgentBlockDeleteRes delete_passive_pointing_mode(branch_idblock_id)
+> VehicleBlockDeleteRes delete_passive_pointing_mode(branch_idblock_id)
 
 Delete Passive Pointing Mode
 
@@ -623,8 +623,8 @@ Delete Passive Pointing Mode
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -701,7 +701,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_passive_pointing_mode.ApiResponseFor422
@@ -725,7 +725,7 @@ No authorization required
 
 # **update_direction_lock_pointing_mode**
 <a name="update_direction_lock_pointing_mode"></a>
-> AgentBlockUpdateRes update_direction_lock_pointing_mode(branch_idblock_idlock_pointing_mode_update)
+> VehicleBlockUpdateRes update_direction_lock_pointing_mode(branch_idblock_idlock_pointing_mode_update)
 
 Update Direction Lock Pointing Mode
 
@@ -735,7 +735,7 @@ Update Direction Lock Pointing Mode
 import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.lock_pointing_mode_update import LockPointingModeUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -835,7 +835,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_direction_lock_pointing_mode.ApiResponseFor422
@@ -859,7 +859,7 @@ No authorization required
 
 # **update_max_secondary_alignment_pointing_mode**
 <a name="update_max_secondary_alignment_pointing_mode"></a>
-> AgentBlockUpdateRes update_max_secondary_alignment_pointing_mode(branch_idblock_idmax_align_pointing_mode_update)
+> VehicleBlockUpdateRes update_max_secondary_alignment_pointing_mode(branch_idblock_idmax_align_pointing_mode_update)
 
 Update Max Secondary Alignment Pointing Mode
 
@@ -870,7 +870,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
 from sedaro_base_client.model.max_align_pointing_mode_update import MaxAlignPointingModeUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -970,7 +970,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_max_secondary_alignment_pointing_mode.ApiResponseFor422
@@ -994,7 +994,7 @@ No authorization required
 
 # **update_passive_pointing_mode**
 <a name="update_passive_pointing_mode"></a>
-> AgentBlockUpdateRes update_passive_pointing_mode(branch_idblock_idpassive_pointing_mode_update)
+> VehicleBlockUpdateRes update_passive_pointing_mode(branch_idblock_idpassive_pointing_mode_update)
 
 Update Passive Pointing Mode
 
@@ -1005,7 +1005,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import pointing_mode_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.passive_pointing_mode_update import PassivePointingModeUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1100,7 +1100,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_passive_pointing_mode.ApiResponseFor422

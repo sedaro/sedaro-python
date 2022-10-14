@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_load_state**
 <a name="create_load_state"></a>
-> AgentBlockCreateRes create_load_state(branch_idload_state_create)
+> VehicleBlockCreateRes create_load_state(branch_idload_state_create)
 
 Create Load State
 
@@ -20,9 +20,9 @@ Create Load State
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_state_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.load_state_create import LoadStateCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -107,7 +107,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_load_state.ApiResponseFor422
@@ -131,7 +131,7 @@ No authorization required
 
 # **delete_load_state**
 <a name="delete_load_state"></a>
-> AgentBlockDeleteRes delete_load_state(branch_idblock_id)
+> VehicleBlockDeleteRes delete_load_state(branch_idblock_id)
 
 Delete Load State
 
@@ -140,8 +140,8 @@ Delete Load State
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import load_state_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -218,7 +218,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_load_state.ApiResponseFor422
@@ -242,7 +242,7 @@ No authorization required
 
 # **update_load_state**
 <a name="update_load_state"></a>
-> AgentBlockUpdateRes update_load_state(branch_idblock_idload_state_update)
+> VehicleBlockUpdateRes update_load_state(branch_idblock_idload_state_update)
 
 Update Load State
 
@@ -253,7 +253,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import load_state_api
 from sedaro_base_client.model.load_state_update import LoadStateUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -347,7 +347,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_load_state.ApiResponseFor422

@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 # **create_averaging_algorithm**
 <a name="create_averaging_algorithm"></a>
-> AgentBlockCreateRes create_averaging_algorithm(branch_idaveraging_algorithm_create)
+> VehicleBlockCreateRes create_averaging_algorithm(branch_idaveraging_algorithm_create)
 
 Create Averaging Algorithm
 
@@ -26,9 +26,9 @@ Create Averaging Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.averaging_algorithm_create import AveragingAlgorithmCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -51,6 +51,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype="AVERAGING",
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
         optical_attitude_sensors=[],
         angular_velocity_sensors=[],
     )
@@ -116,7 +122,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_averaging_algorithm.ApiResponseFor422
@@ -140,7 +146,7 @@ No authorization required
 
 # **create_mekf_algorithm**
 <a name="create_mekf_algorithm"></a>
-> AgentBlockCreateRes create_mekf_algorithm(branch_idmekf_algorithm_create)
+> VehicleBlockCreateRes create_mekf_algorithm(branch_idmekf_algorithm_create)
 
 Create MEKF Algorithm
 
@@ -149,9 +155,9 @@ Create MEKF Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.mekf_algorithm_create import MEKFAlgorithmCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -174,6 +180,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype="MEKF",
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
         covariance=None,
         optical_attitude_sensors=[],
         angular_velocity_sensors=[],
@@ -241,7 +253,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_mekf_algorithm.ApiResponseFor422
@@ -265,7 +277,7 @@ No authorization required
 
 # **create_triad_algorithm**
 <a name="create_triad_algorithm"></a>
-> AgentBlockCreateRes create_triad_algorithm(branch_idtriad_algorithm_create)
+> VehicleBlockCreateRes create_triad_algorithm(branch_idtriad_algorithm_create)
 
 Create Triad Algorithm
 
@@ -274,8 +286,8 @@ Create Triad Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.triad_algorithm_create import TriadAlgorithmCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -299,6 +311,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype=AttDetTypes("TRIAD"),
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
     )
     try:
         # Create Triad Algorithm
@@ -362,7 +380,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_triad_algorithm.ApiResponseFor422
@@ -386,7 +404,7 @@ No authorization required
 
 # **delete_averaging_algorithm**
 <a name="delete_averaging_algorithm"></a>
-> AgentBlockDeleteRes delete_averaging_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_averaging_algorithm(branch_idblock_id)
 
 Delete Averaging Algorithm
 
@@ -395,8 +413,8 @@ Delete Averaging Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -473,7 +491,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_averaging_algorithm.ApiResponseFor422
@@ -497,7 +515,7 @@ No authorization required
 
 # **delete_mekf_algorithm**
 <a name="delete_mekf_algorithm"></a>
-> AgentBlockDeleteRes delete_mekf_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_mekf_algorithm(branch_idblock_id)
 
 Delete MEKF Algorithm
 
@@ -506,8 +524,8 @@ Delete MEKF Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -584,7 +602,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_mekf_algorithm.ApiResponseFor422
@@ -608,7 +626,7 @@ No authorization required
 
 # **delete_triad_algorithm**
 <a name="delete_triad_algorithm"></a>
-> AgentBlockDeleteRes delete_triad_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_triad_algorithm(branch_idblock_id)
 
 Delete Triad Algorithm
 
@@ -617,8 +635,8 @@ Delete Triad Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -695,7 +713,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_triad_algorithm.ApiResponseFor422
@@ -719,7 +737,7 @@ No authorization required
 
 # **update_averaging_algorithm**
 <a name="update_averaging_algorithm"></a>
-> AgentBlockUpdateRes update_averaging_algorithm(branch_idblock_idaveraging_algorithm_update)
+> VehicleBlockUpdateRes update_averaging_algorithm(branch_idblock_idaveraging_algorithm_update)
 
 Update Averaging Algorithm
 
@@ -730,7 +748,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
 from sedaro_base_client.model.averaging_algorithm_update import AveragingAlgorithmUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -754,6 +772,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype="AVERAGING",
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
         optical_attitude_sensors=[],
         angular_velocity_sensors=[],
     )
@@ -827,7 +851,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_averaging_algorithm.ApiResponseFor422
@@ -851,7 +875,7 @@ No authorization required
 
 # **update_mekf_algorithm**
 <a name="update_mekf_algorithm"></a>
-> AgentBlockUpdateRes update_mekf_algorithm(branch_idblock_idmekf_algorithm_update)
+> VehicleBlockUpdateRes update_mekf_algorithm(branch_idblock_idmekf_algorithm_update)
 
 Update MEKF Algorithm
 
@@ -861,7 +885,7 @@ Update MEKF Algorithm
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.mekf_algorithm_update import MEKFAlgorithmUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -886,6 +910,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype="MEKF",
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
         covariance=None,
         optical_attitude_sensors=[],
         angular_velocity_sensors=[],
@@ -961,7 +991,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_mekf_algorithm.ApiResponseFor422
@@ -985,7 +1015,7 @@ No authorization required
 
 # **update_triad_algorithm**
 <a name="update_triad_algorithm"></a>
-> AgentBlockUpdateRes update_triad_algorithm(branch_idblock_idtriad_algorithm_update)
+> VehicleBlockUpdateRes update_triad_algorithm(branch_idblock_idtriad_algorithm_update)
 
 Update Triad Algorithm
 
@@ -995,7 +1025,7 @@ Update Triad Algorithm
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_determination_algorithm_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.triad_algorithm_update import TriadAlgorithmUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -1020,6 +1050,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         rate=3.14,
         algorithm_type="ATTITUDE_DETERMINATION",
         algorithm_subtype=AttDetTypes("TRIAD"),
+        attitude_solution=[
+            3.14
+        ],
+        angular_velocity_solution=[
+            3.14
+        ],
     )
     try:
         # Update Triad Algorithm
@@ -1091,7 +1127,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_triad_algorithm.ApiResponseFor422

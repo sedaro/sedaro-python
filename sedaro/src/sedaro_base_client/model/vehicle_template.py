@@ -408,6 +408,42 @@ class VehicleTemplate(
                     )
             
             
+            class FuelReservoir(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            FuelReservoirBG,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'FuelReservoir':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
             class Load(
                 schemas.ComposedSchema,
             ):
@@ -1040,6 +1076,7 @@ class VehicleTemplate(
                 "Condition": Condition,
                 "FieldOfView": FieldOfView,
                 "FOVConstraint": FOVConstraint,
+                "FuelReservoir": FuelReservoir,
                 "Load": Load,
                 "LoadState": LoadState,
                 "OperationalMode": OperationalMode,
@@ -1112,6 +1149,9 @@ class VehicleTemplate(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["FOVConstraint"]) -> MetaOapg.properties.FOVConstraint: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["FuelReservoir"]) -> MetaOapg.properties.FuelReservoir: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["Load"]) -> MetaOapg.properties.Load: ...
@@ -1188,7 +1228,7 @@ class VehicleTemplate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "FieldOfView", "FOVConstraint", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -1234,6 +1274,9 @@ class VehicleTemplate(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["FOVConstraint"]) -> typing.Union[MetaOapg.properties.FOVConstraint, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["FuelReservoir"]) -> typing.Union[MetaOapg.properties.FuelReservoir, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["Load"]) -> typing.Union[MetaOapg.properties.Load, schemas.Unset]: ...
@@ -1310,7 +1353,7 @@ class VehicleTemplate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "FieldOfView", "FOVConstraint", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -1331,6 +1374,7 @@ class VehicleTemplate(
         Condition: typing.Union[MetaOapg.properties.Condition, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         FieldOfView: typing.Union[MetaOapg.properties.FieldOfView, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         FOVConstraint: typing.Union[MetaOapg.properties.FOVConstraint, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        FuelReservoir: typing.Union[MetaOapg.properties.FuelReservoir, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         Load: typing.Union[MetaOapg.properties.Load, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         LoadState: typing.Union[MetaOapg.properties.LoadState, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         OperationalMode: typing.Union[MetaOapg.properties.OperationalMode, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -1375,6 +1419,7 @@ class VehicleTemplate(
             Condition=Condition,
             FieldOfView=FieldOfView,
             FOVConstraint=FOVConstraint,
+            FuelReservoir=FuelReservoir,
             Load=Load,
             LoadState=LoadState,
             OperationalMode=OperationalMode,
@@ -1413,6 +1458,7 @@ from sedaro_base_client.model.con_ops_bg import ConOpsBG
 from sedaro_base_client.model.condition_bg import ConditionBG
 from sedaro_base_client.model.field_of_view_bg import FieldOfViewBG
 from sedaro_base_client.model.fov_constraint_bg import FOVConstraintBG
+from sedaro_base_client.model.fuel_reservoir_bg import FuelReservoirBG
 from sedaro_base_client.model.load_bg import LoadBG
 from sedaro_base_client.model.load_state_bg import LoadStateBG
 from sedaro_base_client.model.operational_mode_bg import OperationalModeBG

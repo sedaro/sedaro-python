@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 
 from . import path
 
@@ -64,7 +64,7 @@ request_path_block_id = api_client.PathParameter(
     schema=BlockIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = AgentBlockDeleteRes
+SchemaFor200ResponseBodyApplicationJson = VehicleBlockDeleteRes
 
 
 @dataclass

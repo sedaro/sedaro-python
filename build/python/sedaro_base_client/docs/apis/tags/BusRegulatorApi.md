@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_bus_regulator**
 <a name="create_bus_regulator"></a>
-> AgentBlockCreateRes create_bus_regulator(branch_idbus_regulator_create)
+> VehicleBlockCreateRes create_bus_regulator(branch_idbus_regulator_create)
 
 Create Bus Regulator
 
@@ -20,9 +20,9 @@ Create Bus Regulator
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import bus_regulator_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.bus_regulator_create import BusRegulatorCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -111,7 +111,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_bus_regulator.ApiResponseFor422
@@ -135,7 +135,7 @@ No authorization required
 
 # **delete_bus_regulator**
 <a name="delete_bus_regulator"></a>
-> AgentBlockDeleteRes delete_bus_regulator(branch_idblock_id)
+> VehicleBlockDeleteRes delete_bus_regulator(branch_idblock_id)
 
 Delete Bus Regulator
 
@@ -144,8 +144,8 @@ Delete Bus Regulator
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import bus_regulator_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -222,7 +222,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_bus_regulator.ApiResponseFor422
@@ -246,7 +246,7 @@ No authorization required
 
 # **update_bus_regulator**
 <a name="update_bus_regulator"></a>
-> AgentBlockUpdateRes update_bus_regulator(branch_idblock_idbus_regulator_update)
+> VehicleBlockUpdateRes update_bus_regulator(branch_idblock_idbus_regulator_update)
 
 Update Bus Regulator
 
@@ -257,7 +257,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import bus_regulator_api
 from sedaro_base_client.model.bus_regulator_update import BusRegulatorUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -354,7 +354,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_bus_regulator.ApiResponseFor422

@@ -26,8 +26,8 @@ import frozendict  # noqa: F401
 from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.optical_attitude_sensor_update import OpticalAttitudeSensorUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
 
 # path params
 BranchIdSchema = schemas.IntSchema
@@ -74,7 +74,7 @@ request_body_optical_attitude_sensor_update = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = AgentBlockUpdateRes
+SchemaFor200ResponseBodyApplicationJson = VehicleBlockUpdateRes
 
 
 @dataclass

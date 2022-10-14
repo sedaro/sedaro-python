@@ -13,11 +13,37 @@ Key | Input Type | Accessed Type | Description | Notes
 **name** | str,  | str,  |  | 
 **algorithmSubtype** | str,  | str,  |  | must be one of ["MEKF", ] 
 **id** | str,  | str,  |  | [optional] 
+**[attitudeSolution](#attitudeSolution)** | list, tuple,  | tuple,  |  | [optional] 
+**[angularVelocitySolution](#angularVelocitySolution)** | list, tuple,  | tuple,  |  | [optional] 
 **covariance** | dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader,  | frozendict.frozendict, str, decimal.Decimal, BoolClass, NoneClass, tuple, bytes, FileIO |  | [optional] 
 **[opticalAttitudeSensors](#opticalAttitudeSensors)** | list, tuple,  | tuple,  | Relationship to one or more &#x60;OpticalAttitudeSensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | [optional] 
 **[angularVelocitySensors](#angularVelocitySensors)** | list, tuple,  | tuple,  | Relationship to one or more &#x60;AngularVelocitySensor&#x60; blocks. On delete: &#x60;RESTRICT&#x60; (prevent all referenced blocks from being deleted while relationship to this one exists). | [optional] 
 **satellite** | str,  | str,  | Relationship to zero or one &#x60;Satellite&#x60; blocks. Reverse key: &#x60;Satellite.algorithms&#x60;. On delete: &#x60;SET_NONE&#x60; (set relationship field to &#x60;None&#x60; when referenced block is deleted). | [optional] 
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
+
+# attitudeSolution
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
+
+# angularVelocitySolution
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | decimal.Decimal, int, float,  | decimal.Decimal,  |  | 
 
 # opticalAttitudeSensors
 

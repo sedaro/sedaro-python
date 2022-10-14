@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 # **create_cooler**
 <a name="create_cooler"></a>
-> AgentBlockCreateRes create_cooler(branch_idcooler_create)
+> VehicleBlockCreateRes create_cooler(branch_idcooler_create)
 
 Create Cooler
 
@@ -23,9 +23,9 @@ Create Cooler
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.cooler_create import CoolerCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -117,7 +117,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_cooler.ApiResponseFor422
@@ -141,7 +141,7 @@ No authorization required
 
 # **create_heater**
 <a name="create_heater"></a>
-> AgentBlockCreateRes create_heater(branch_idheater_create)
+> VehicleBlockCreateRes create_heater(branch_idheater_create)
 
 Create Heater
 
@@ -150,9 +150,9 @@ Create Heater
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.heater_create import HeaterCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -243,7 +243,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_heater.ApiResponseFor422
@@ -267,7 +267,7 @@ No authorization required
 
 # **delete_cooler**
 <a name="delete_cooler"></a>
-> AgentBlockDeleteRes delete_cooler(branch_idblock_id)
+> VehicleBlockDeleteRes delete_cooler(branch_idblock_id)
 
 Delete Cooler
 
@@ -276,8 +276,8 @@ Delete Cooler
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -354,7 +354,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_cooler.ApiResponseFor422
@@ -378,7 +378,7 @@ No authorization required
 
 # **delete_heater**
 <a name="delete_heater"></a>
-> AgentBlockDeleteRes delete_heater(branch_idblock_id)
+> VehicleBlockDeleteRes delete_heater(branch_idblock_id)
 
 Delete Heater
 
@@ -387,8 +387,8 @@ Delete Heater
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -465,7 +465,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_heater.ApiResponseFor422
@@ -489,7 +489,7 @@ No authorization required
 
 # **update_cooler**
 <a name="update_cooler"></a>
-> AgentBlockUpdateRes update_cooler(branch_idblock_idcooler_update)
+> VehicleBlockUpdateRes update_cooler(branch_idblock_idcooler_update)
 
 Update Cooler
 
@@ -500,7 +500,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
 from sedaro_base_client.model.cooler_update import CoolerUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -601,7 +601,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_cooler.ApiResponseFor422
@@ -625,7 +625,7 @@ No authorization required
 
 # **update_heater**
 <a name="update_heater"></a>
-> AgentBlockUpdateRes update_heater(branch_idblock_idheater_update)
+> VehicleBlockUpdateRes update_heater(branch_idblock_idheater_update)
 
 Update Heater
 
@@ -635,7 +635,7 @@ Update Heater
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.heater_update import HeaterUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -736,7 +736,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_heater.ApiResponseFor422

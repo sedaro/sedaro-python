@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_solar_array**
 <a name="create_solar_array"></a>
-> AgentBlockCreateRes create_solar_array(branch_idsolar_array_create)
+> VehicleBlockCreateRes create_solar_array(branch_idsolar_array_create)
 
 Create Solar Array
 
@@ -20,8 +20,8 @@ Create Solar Array
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import solar_array_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.solar_array_create import SolarArrayCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -106,7 +106,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_solar_array.ApiResponseFor422
@@ -130,7 +130,7 @@ No authorization required
 
 # **delete_solar_array**
 <a name="delete_solar_array"></a>
-> AgentBlockDeleteRes delete_solar_array(branch_idblock_id)
+> VehicleBlockDeleteRes delete_solar_array(branch_idblock_id)
 
 Delete Solar Array
 
@@ -139,8 +139,8 @@ Delete Solar Array
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import solar_array_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -217,7 +217,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_solar_array.ApiResponseFor422
@@ -241,7 +241,7 @@ No authorization required
 
 # **update_solar_array**
 <a name="update_solar_array"></a>
-> AgentBlockUpdateRes update_solar_array(branch_idblock_idsolar_array_update)
+> VehicleBlockUpdateRes update_solar_array(branch_idblock_idsolar_array_update)
 
 Update Solar Array
 
@@ -252,7 +252,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import solar_array_api
 from sedaro_base_client.model.solar_array_update import SolarArrayUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -345,7 +345,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_solar_array.ApiResponseFor422

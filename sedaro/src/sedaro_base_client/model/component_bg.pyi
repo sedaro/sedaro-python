@@ -87,6 +87,8 @@ class ComponentBG(
                                     AngularVelocitySensor,
                                     Cooler,
                                     Heater,
+                                    SphericalFuelTank,
+                                    SpherocylinderFuelTank,
                                 ]
                     
                     
@@ -196,6 +198,8 @@ from sedaro_base_client.model.reaction_wheel import ReactionWheel
 from sedaro_base_client.model.single_conv_hybrid_topology import SingleConvHybridTopology
 from sedaro_base_client.model.single_conv_mppt_topology import SingleConvMpptTopology
 from sedaro_base_client.model.solar_panel import SolarPanel
+from sedaro_base_client.model.spherical_fuel_tank import SphericalFuelTank
+from sedaro_base_client.model.spherocylinder_fuel_tank import SpherocylinderFuelTank
 from sedaro_base_client.model.topology import Topology
 from sedaro_base_client.model.two_conv_mppt_topology import TwoConvMpptTopology
 from sedaro_base_client.model.vector_sensor import VectorSensor

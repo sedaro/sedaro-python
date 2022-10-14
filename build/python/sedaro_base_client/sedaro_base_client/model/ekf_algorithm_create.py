@@ -87,6 +87,52 @@ class EKFAlgorithmCreate(
             id = schemas.StrSchema
             
             
+            class positionSolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'positionSolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class velocitySolution(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'velocitySolution':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class covariance(
                 schemas.ListSchema
             ):
@@ -134,6 +180,100 @@ class EKFAlgorithmCreate(
                     return super().__getitem__(i)
             
             
+            class positionCovariance(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    
+                    class items(
+                        schemas.ListSchema
+                    ):
+                    
+                    
+                        class MetaOapg:
+                            max_items = 3
+                            min_items = 3
+                            items = schemas.NumberSchema
+                    
+                        def __new__(
+                            cls,
+                            arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                            _configuration: typing.Optional[schemas.Configuration] = None,
+                        ) -> 'items':
+                            return super().__new__(
+                                cls,
+                                arg,
+                                _configuration=_configuration,
+                            )
+                    
+                        def __getitem__(self, i: int) -> MetaOapg.items:
+                            return super().__getitem__(i)
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, list, tuple, ]], typing.List[typing.Union[MetaOapg.items, list, tuple, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'positionCovariance':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class velocityCovariance(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    
+                    class items(
+                        schemas.ListSchema
+                    ):
+                    
+                    
+                        class MetaOapg:
+                            max_items = 3
+                            min_items = 3
+                            items = schemas.NumberSchema
+                    
+                        def __new__(
+                            cls,
+                            arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                            _configuration: typing.Optional[schemas.Configuration] = None,
+                        ) -> 'items':
+                            return super().__new__(
+                                cls,
+                                arg,
+                                _configuration=_configuration,
+                            )
+                    
+                        def __getitem__(self, i: int) -> MetaOapg.items:
+                            return super().__getitem__(i)
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, list, tuple, ]], typing.List[typing.Union[MetaOapg.items, list, tuple, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'velocityCovariance':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class positionSensors(
                 schemas.ListSchema
             ):
@@ -161,7 +301,11 @@ class EKFAlgorithmCreate(
                 "algorithmType": algorithmType,
                 "algorithmSubtype": algorithmSubtype,
                 "id": id,
+                "positionSolution": positionSolution,
+                "velocitySolution": velocitySolution,
                 "covariance": covariance,
+                "positionCovariance": positionCovariance,
+                "velocityCovariance": velocityCovariance,
                 "positionSensors": positionSensors,
             }
     
@@ -186,7 +330,19 @@ class EKFAlgorithmCreate(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["positionSolution"]) -> MetaOapg.properties.positionSolution: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["velocitySolution"]) -> MetaOapg.properties.velocitySolution: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["covariance"]) -> MetaOapg.properties.covariance: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["positionCovariance"]) -> MetaOapg.properties.positionCovariance: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["velocityCovariance"]) -> MetaOapg.properties.velocityCovariance: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["positionSensors"]) -> MetaOapg.properties.positionSensors: ...
@@ -194,7 +350,7 @@ class EKFAlgorithmCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "covariance", "positionSensors", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -215,7 +371,19 @@ class EKFAlgorithmCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["positionSolution"]) -> typing.Union[MetaOapg.properties.positionSolution, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["velocitySolution"]) -> typing.Union[MetaOapg.properties.velocitySolution, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["covariance"]) -> typing.Union[MetaOapg.properties.covariance, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["positionCovariance"]) -> typing.Union[MetaOapg.properties.positionCovariance, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["velocityCovariance"]) -> typing.Union[MetaOapg.properties.velocityCovariance, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["positionSensors"]) -> typing.Union[MetaOapg.properties.positionSensors, schemas.Unset]: ...
@@ -223,7 +391,7 @@ class EKFAlgorithmCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "covariance", "positionSensors", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -235,7 +403,11 @@ class EKFAlgorithmCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        positionSolution: typing.Union[MetaOapg.properties.positionSolution, list, tuple, schemas.Unset] = schemas.unset,
+        velocitySolution: typing.Union[MetaOapg.properties.velocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         covariance: typing.Union[MetaOapg.properties.covariance, list, tuple, schemas.Unset] = schemas.unset,
+        positionCovariance: typing.Union[MetaOapg.properties.positionCovariance, list, tuple, schemas.Unset] = schemas.unset,
+        velocityCovariance: typing.Union[MetaOapg.properties.velocityCovariance, list, tuple, schemas.Unset] = schemas.unset,
         positionSensors: typing.Union[MetaOapg.properties.positionSensors, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -248,7 +420,11 @@ class EKFAlgorithmCreate(
             name=name,
             algorithmSubtype=algorithmSubtype,
             id=id,
+            positionSolution=positionSolution,
+            velocitySolution=velocitySolution,
             covariance=covariance,
+            positionCovariance=positionCovariance,
+            velocityCovariance=velocityCovariance,
             positionSensors=positionSensors,
             _configuration=_configuration,
             **kwargs,

@@ -35,20 +35,13 @@ class ScenarioBlockDeleteRes(
 
     class MetaOapg:
         required = {
+            "blockIdToTypeMap",
             "action",
             "block",
             "branch",
         }
         
         class properties:
-        
-            @staticmethod
-            def block() -> typing.Type['GroupAndId']:
-                return GroupAndId
-        
-            @staticmethod
-            def branch() -> typing.Type['PostgresBranchScenario']:
-                return PostgresBranchScenario
             
             
             class action(
@@ -59,15 +52,57 @@ class ScenarioBlockDeleteRes(
                 @schemas.classproperty
                 def DELETE(cls):
                     return cls("DELETE")
+        
+            @staticmethod
+            def block() -> typing.Type['GroupAndId']:
+                return GroupAndId
+        
+            @staticmethod
+            def branch() -> typing.Type['PostgresBranchScenario']:
+                return PostgresBranchScenario
+            
+            
+            class blockIdToTypeMap(
+                schemas.DictSchema
+            ):
+            
+            
+                class MetaOapg:
+                    additional_properties = schemas.StrSchema
+                
+                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+                
+                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
+                ) -> 'blockIdToTypeMap':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             __annotations__ = {
+                "action": action,
                 "block": block,
                 "branch": branch,
-                "action": action,
+                "blockIdToTypeMap": blockIdToTypeMap,
             }
     
+    blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
     action: MetaOapg.properties.action
     block: 'GroupAndId'
     branch: 'PostgresBranchScenario'
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
@@ -76,15 +111,18 @@ class ScenarioBlockDeleteRes(
     def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchScenario': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
+    def __getitem__(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["block", "branch", "action", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
@@ -93,18 +131,19 @@ class ScenarioBlockDeleteRes(
     def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchScenario': ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["block", "branch", "action", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
+        blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
         branch: 'PostgresBranchScenario',
@@ -114,6 +153,7 @@ class ScenarioBlockDeleteRes(
         return super().__new__(
             cls,
             *args,
+            blockIdToTypeMap=blockIdToTypeMap,
             action=action,
             block=block,
             branch=branch,

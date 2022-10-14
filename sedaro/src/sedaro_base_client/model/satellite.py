@@ -131,6 +131,8 @@ class Satellite(
             
                 class MetaOapg:
                     max_length = 100
+            dynamicMass = schemas.NumberSchema
+            dynamicInertia = schemas.AnyTypeSchema
             
             
             class bodyFrameVectors(
@@ -409,6 +411,29 @@ class Satellite(
                     return super().__getitem__(i)
             
             
+            class fuelTanks(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'fuelTanks':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class DEFAULT_CAD_MODELS(
                 schemas.ListSchema
             ):
@@ -443,6 +468,8 @@ class Satellite(
                 "dragTorque": dragTorque,
                 "gravityGradientTorque": gravityGradientTorque,
                 "cadFileName": cadFileName,
+                "dynamicMass": dynamicMass,
+                "dynamicInertia": dynamicInertia,
                 "bodyFrameVectors": bodyFrameVectors,
                 "surfaces": surfaces,
                 "solarArrays": solarArrays,
@@ -455,6 +482,7 @@ class Satellite(
                 "reactionWheels": reactionWheels,
                 "magnetorquers": magnetorquers,
                 "algorithms": algorithms,
+                "fuelTanks": fuelTanks,
                 "DEFAULT_CAD_MODELS": DEFAULT_CAD_MODELS,
             }
     
@@ -500,6 +528,12 @@ class Satellite(
     def __getitem__(self, name: typing_extensions.Literal["cadFileName"]) -> MetaOapg.properties.cadFileName: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicMass"]) -> MetaOapg.properties.dynamicMass: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicInertia"]) -> MetaOapg.properties.dynamicInertia: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["bodyFrameVectors"]) -> MetaOapg.properties.bodyFrameVectors: ...
     
     @typing.overload
@@ -536,12 +570,15 @@ class Satellite(
     def __getitem__(self, name: typing_extensions.Literal["algorithms"]) -> MetaOapg.properties.algorithms: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fuelTanks"]) -> MetaOapg.properties.fuelTanks: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> MetaOapg.properties.DEFAULT_CAD_MODELS: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "DEFAULT_CAD_MODELS", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -583,6 +620,12 @@ class Satellite(
     def get_item_oapg(self, name: typing_extensions.Literal["cadFileName"]) -> typing.Union[MetaOapg.properties.cadFileName, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicMass"]) -> typing.Union[MetaOapg.properties.dynamicMass, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicInertia"]) -> typing.Union[MetaOapg.properties.dynamicInertia, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["bodyFrameVectors"]) -> typing.Union[MetaOapg.properties.bodyFrameVectors, schemas.Unset]: ...
     
     @typing.overload
@@ -619,12 +662,15 @@ class Satellite(
     def get_item_oapg(self, name: typing_extensions.Literal["algorithms"]) -> typing.Union[MetaOapg.properties.algorithms, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["fuelTanks"]) -> typing.Union[MetaOapg.properties.fuelTanks, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "DEFAULT_CAD_MODELS", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -643,6 +689,8 @@ class Satellite(
         dragTorque: typing.Union[MetaOapg.properties.dragTorque, list, tuple, schemas.Unset] = schemas.unset,
         gravityGradientTorque: typing.Union[MetaOapg.properties.gravityGradientTorque, list, tuple, schemas.Unset] = schemas.unset,
         cadFileName: typing.Union[MetaOapg.properties.cadFileName, str, schemas.Unset] = schemas.unset,
+        dynamicMass: typing.Union[MetaOapg.properties.dynamicMass, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        dynamicInertia: typing.Union[MetaOapg.properties.dynamicInertia, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         bodyFrameVectors: typing.Union[MetaOapg.properties.bodyFrameVectors, list, tuple, schemas.Unset] = schemas.unset,
         surfaces: typing.Union[MetaOapg.properties.surfaces, list, tuple, schemas.Unset] = schemas.unset,
         solarArrays: typing.Union[MetaOapg.properties.solarArrays, list, tuple, schemas.Unset] = schemas.unset,
@@ -655,6 +703,7 @@ class Satellite(
         reactionWheels: typing.Union[MetaOapg.properties.reactionWheels, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquers: typing.Union[MetaOapg.properties.magnetorquers, list, tuple, schemas.Unset] = schemas.unset,
         algorithms: typing.Union[MetaOapg.properties.algorithms, list, tuple, schemas.Unset] = schemas.unset,
+        fuelTanks: typing.Union[MetaOapg.properties.fuelTanks, list, tuple, schemas.Unset] = schemas.unset,
         DEFAULT_CAD_MODELS: typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -674,6 +723,8 @@ class Satellite(
             dragTorque=dragTorque,
             gravityGradientTorque=gravityGradientTorque,
             cadFileName=cadFileName,
+            dynamicMass=dynamicMass,
+            dynamicInertia=dynamicInertia,
             bodyFrameVectors=bodyFrameVectors,
             surfaces=surfaces,
             solarArrays=solarArrays,
@@ -686,6 +737,7 @@ class Satellite(
             reactionWheels=reactionWheels,
             magnetorquers=magnetorquers,
             algorithms=algorithms,
+            fuelTanks=fuelTanks,
             DEFAULT_CAD_MODELS=DEFAULT_CAD_MODELS,
             _configuration=_configuration,
             **kwargs,

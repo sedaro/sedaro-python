@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_temperature_controller_state**
 <a name="create_temperature_controller_state"></a>
-> AgentBlockCreateRes create_temperature_controller_state(branch_idtemp_controller_state_create)
+> VehicleBlockCreateRes create_temperature_controller_state(branch_idtemp_controller_state_create)
 
 Create Temperature Controller State
 
@@ -20,9 +20,9 @@ Create Temperature Controller State
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_state_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.temp_controller_state_create import TempControllerStateCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -108,7 +108,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_temperature_controller_state.ApiResponseFor422
@@ -132,7 +132,7 @@ No authorization required
 
 # **delete_temperature_controller_state**
 <a name="delete_temperature_controller_state"></a>
-> AgentBlockDeleteRes delete_temperature_controller_state(branch_idblock_id)
+> VehicleBlockDeleteRes delete_temperature_controller_state(branch_idblock_id)
 
 Delete Temperature Controller State
 
@@ -141,8 +141,8 @@ Delete Temperature Controller State
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_state_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -219,7 +219,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_temperature_controller_state.ApiResponseFor422
@@ -243,7 +243,7 @@ No authorization required
 
 # **update_temperature_controller_state**
 <a name="update_temperature_controller_state"></a>
-> AgentBlockUpdateRes update_temperature_controller_state(branch_idblock_idtemp_controller_state_update)
+> VehicleBlockUpdateRes update_temperature_controller_state(branch_idblock_idtemp_controller_state_update)
 
 Update Temperature Controller State
 
@@ -254,7 +254,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import temperature_controller_state_api
 from sedaro_base_client.model.temp_controller_state_update import TempControllerStateUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -349,7 +349,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_temperature_controller_state.ApiResponseFor422

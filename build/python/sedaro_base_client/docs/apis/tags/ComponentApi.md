@@ -39,7 +39,7 @@ Method | HTTP request | Description
 
 # **create_angular_velocity_sensor**
 <a name="create_angular_velocity_sensor"></a>
-> AgentBlockCreateRes create_angular_velocity_sensor(branch_idangular_velocity_sensor_create)
+> VehicleBlockCreateRes create_angular_velocity_sensor(branch_idangular_velocity_sensor_create)
 
 Create Angular Velocity Sensor
 
@@ -48,9 +48,9 @@ Create Angular Velocity Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -141,7 +141,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_angular_velocity_sensor.ApiResponseFor422
@@ -165,7 +165,7 @@ No authorization required
 
 # **create_battery_pack**
 <a name="create_battery_pack"></a>
-> AgentBlockCreateRes create_battery_pack(branch_idbattery_pack_create)
+> VehicleBlockCreateRes create_battery_pack(branch_idbattery_pack_create)
 
 Create Battery Pack
 
@@ -174,9 +174,9 @@ Create Battery Pack
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.battery_pack_create import BatteryPackCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -270,7 +270,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_battery_pack.ApiResponseFor422
@@ -294,7 +294,7 @@ No authorization required
 
 # **create_component**
 <a name="create_component"></a>
-> AgentBlockCreateRes create_component(branch_idcomponent_create)
+> VehicleBlockCreateRes create_component(branch_idcomponent_create)
 
 Create Component
 
@@ -303,9 +303,9 @@ Create Component
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.component_create import ComponentCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -395,7 +395,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_component.ApiResponseFor422
@@ -419,7 +419,7 @@ No authorization required
 
 # **create_direction_sensor**
 <a name="create_direction_sensor"></a>
-> AgentBlockCreateRes create_direction_sensor(branch_iddirection_sensor_create)
+> VehicleBlockCreateRes create_direction_sensor(branch_iddirection_sensor_create)
 
 Create Direction Sensor
 
@@ -428,8 +428,8 @@ Create Direction Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.direction_sensor_create import DirectionSensorCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -522,7 +522,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_direction_sensor.ApiResponseFor422
@@ -546,7 +546,7 @@ No authorization required
 
 # **create_magnetorquer**
 <a name="create_magnetorquer"></a>
-> AgentBlockCreateRes create_magnetorquer(branch_idmagnetorquer_create)
+> VehicleBlockCreateRes create_magnetorquer(branch_idmagnetorquer_create)
 
 Create Magnetorquer
 
@@ -555,8 +555,8 @@ Create Magnetorquer
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.magnetorquer_create import MagnetorquerCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -649,7 +649,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_magnetorquer.ApiResponseFor422
@@ -673,7 +673,7 @@ No authorization required
 
 # **create_optical_attitude_sensor**
 <a name="create_optical_attitude_sensor"></a>
-> AgentBlockCreateRes create_optical_attitude_sensor(branch_idoptical_attitude_sensor_create)
+> VehicleBlockCreateRes create_optical_attitude_sensor(branch_idoptical_attitude_sensor_create)
 
 Create Optical Attitude Sensor
 
@@ -682,9 +682,9 @@ Create Optical Attitude Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.optical_attitude_sensor_create import OpticalAttitudeSensorCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -776,7 +776,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_optical_attitude_sensor.ApiResponseFor422
@@ -800,7 +800,7 @@ No authorization required
 
 # **create_positionsensor**
 <a name="create_positionsensor"></a>
-> AgentBlockCreateRes create_positionsensor(branch_idposition_sensor_create)
+> VehicleBlockCreateRes create_positionsensor(branch_idposition_sensor_create)
 
 Create PositionSensor
 
@@ -809,9 +809,9 @@ Create PositionSensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.position_sensor_create import PositionSensorCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -902,7 +902,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_positionsensor.ApiResponseFor422
@@ -926,7 +926,7 @@ No authorization required
 
 # **create_reaction_wheel**
 <a name="create_reaction_wheel"></a>
-> AgentBlockCreateRes create_reaction_wheel(branch_idreaction_wheel_create)
+> VehicleBlockCreateRes create_reaction_wheel(branch_idreaction_wheel_create)
 
 Create Reaction Wheel
 
@@ -935,9 +935,9 @@ Create Reaction Wheel
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.reaction_wheel_create import ReactionWheelCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1031,7 +1031,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_reaction_wheel.ApiResponseFor422
@@ -1055,7 +1055,7 @@ No authorization required
 
 # **create_solar_panel**
 <a name="create_solar_panel"></a>
-> AgentBlockCreateRes create_solar_panel(branch_idsolar_panel_create)
+> VehicleBlockCreateRes create_solar_panel(branch_idsolar_panel_create)
 
 Create Solar Panel
 
@@ -1064,9 +1064,9 @@ Create Solar Panel
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.solar_panel_create import SolarPanelCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1161,7 +1161,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_solar_panel.ApiResponseFor422
@@ -1185,7 +1185,7 @@ No authorization required
 
 # **create_vector_sensor**
 <a name="create_vector_sensor"></a>
-> AgentBlockCreateRes create_vector_sensor(branch_idvector_sensor_create)
+> VehicleBlockCreateRes create_vector_sensor(branch_idvector_sensor_create)
 
 Create Vector Sensor
 
@@ -1194,9 +1194,9 @@ Create Vector Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.vector_sensor_create import VectorSensorCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1288,7 +1288,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_vector_sensor.ApiResponseFor422
@@ -1312,7 +1312,7 @@ No authorization required
 
 # **delete_angular_velocity_sensor**
 <a name="delete_angular_velocity_sensor"></a>
-> AgentBlockDeleteRes delete_angular_velocity_sensor(branch_idblock_id)
+> VehicleBlockDeleteRes delete_angular_velocity_sensor(branch_idblock_id)
 
 Delete Angular Velocity Sensor
 
@@ -1321,8 +1321,8 @@ Delete Angular Velocity Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1399,7 +1399,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_angular_velocity_sensor.ApiResponseFor422
@@ -1423,7 +1423,7 @@ No authorization required
 
 # **delete_battery_pack**
 <a name="delete_battery_pack"></a>
-> AgentBlockDeleteRes delete_battery_pack(branch_idblock_id)
+> VehicleBlockDeleteRes delete_battery_pack(branch_idblock_id)
 
 Delete Battery Pack
 
@@ -1432,8 +1432,8 @@ Delete Battery Pack
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1510,7 +1510,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_battery_pack.ApiResponseFor422
@@ -1534,7 +1534,7 @@ No authorization required
 
 # **delete_component**
 <a name="delete_component"></a>
-> AgentBlockDeleteRes delete_component(branch_idblock_id)
+> VehicleBlockDeleteRes delete_component(branch_idblock_id)
 
 Delete Component
 
@@ -1543,8 +1543,8 @@ Delete Component
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1621,7 +1621,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_component.ApiResponseFor422
@@ -1645,7 +1645,7 @@ No authorization required
 
 # **delete_direction_sensor**
 <a name="delete_direction_sensor"></a>
-> AgentBlockDeleteRes delete_direction_sensor(branch_idblock_id)
+> VehicleBlockDeleteRes delete_direction_sensor(branch_idblock_id)
 
 Delete Direction Sensor
 
@@ -1654,8 +1654,8 @@ Delete Direction Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1732,7 +1732,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_direction_sensor.ApiResponseFor422
@@ -1756,7 +1756,7 @@ No authorization required
 
 # **delete_magnetorquer**
 <a name="delete_magnetorquer"></a>
-> AgentBlockDeleteRes delete_magnetorquer(branch_idblock_id)
+> VehicleBlockDeleteRes delete_magnetorquer(branch_idblock_id)
 
 Delete Magnetorquer
 
@@ -1765,8 +1765,8 @@ Delete Magnetorquer
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1843,7 +1843,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_magnetorquer.ApiResponseFor422
@@ -1867,7 +1867,7 @@ No authorization required
 
 # **delete_optical_attitude_sensor**
 <a name="delete_optical_attitude_sensor"></a>
-> AgentBlockDeleteRes delete_optical_attitude_sensor(branch_idblock_id)
+> VehicleBlockDeleteRes delete_optical_attitude_sensor(branch_idblock_id)
 
 Delete Optical Attitude Sensor
 
@@ -1876,8 +1876,8 @@ Delete Optical Attitude Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1954,7 +1954,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_optical_attitude_sensor.ApiResponseFor422
@@ -1978,7 +1978,7 @@ No authorization required
 
 # **delete_positionsensor**
 <a name="delete_positionsensor"></a>
-> AgentBlockDeleteRes delete_positionsensor(branch_idblock_id)
+> VehicleBlockDeleteRes delete_positionsensor(branch_idblock_id)
 
 Delete PositionSensor
 
@@ -1987,8 +1987,8 @@ Delete PositionSensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2065,7 +2065,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_positionsensor.ApiResponseFor422
@@ -2089,7 +2089,7 @@ No authorization required
 
 # **delete_reaction_wheel**
 <a name="delete_reaction_wheel"></a>
-> AgentBlockDeleteRes delete_reaction_wheel(branch_idblock_id)
+> VehicleBlockDeleteRes delete_reaction_wheel(branch_idblock_id)
 
 Delete Reaction Wheel
 
@@ -2098,8 +2098,8 @@ Delete Reaction Wheel
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2176,7 +2176,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_reaction_wheel.ApiResponseFor422
@@ -2200,7 +2200,7 @@ No authorization required
 
 # **delete_solar_panel**
 <a name="delete_solar_panel"></a>
-> AgentBlockDeleteRes delete_solar_panel(branch_idblock_id)
+> VehicleBlockDeleteRes delete_solar_panel(branch_idblock_id)
 
 Delete Solar Panel
 
@@ -2209,8 +2209,8 @@ Delete Solar Panel
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2287,7 +2287,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_solar_panel.ApiResponseFor422
@@ -2311,7 +2311,7 @@ No authorization required
 
 # **delete_vector_sensor**
 <a name="delete_vector_sensor"></a>
-> AgentBlockDeleteRes delete_vector_sensor(branch_idblock_id)
+> VehicleBlockDeleteRes delete_vector_sensor(branch_idblock_id)
 
 Delete Vector Sensor
 
@@ -2320,8 +2320,8 @@ Delete Vector Sensor
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2398,7 +2398,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_vector_sensor.ApiResponseFor422
@@ -2422,7 +2422,7 @@ No authorization required
 
 # **update_angular_velocity_sensor**
 <a name="update_angular_velocity_sensor"></a>
-> AgentBlockUpdateRes update_angular_velocity_sensor(branch_idblock_idangular_velocity_sensor_update)
+> VehicleBlockUpdateRes update_angular_velocity_sensor(branch_idblock_idangular_velocity_sensor_update)
 
 Update Angular Velocity Sensor
 
@@ -2433,7 +2433,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2533,7 +2533,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_angular_velocity_sensor.ApiResponseFor422
@@ -2557,7 +2557,7 @@ No authorization required
 
 # **update_battery_pack**
 <a name="update_battery_pack"></a>
-> AgentBlockUpdateRes update_battery_pack(branch_idblock_idbattery_pack_update)
+> VehicleBlockUpdateRes update_battery_pack(branch_idblock_idbattery_pack_update)
 
 Update Battery Pack
 
@@ -2568,7 +2568,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.battery_pack_update import BatteryPackUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2669,7 +2669,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_battery_pack.ApiResponseFor422
@@ -2693,7 +2693,7 @@ No authorization required
 
 # **update_component**
 <a name="update_component"></a>
-> AgentBlockUpdateRes update_component(branch_idblock_idcomponent_update)
+> VehicleBlockUpdateRes update_component(branch_idblock_idcomponent_update)
 
 Update Component
 
@@ -2704,7 +2704,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.component_update import ComponentUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2802,7 +2802,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_component.ApiResponseFor422
@@ -2826,7 +2826,7 @@ No authorization required
 
 # **update_direction_sensor**
 <a name="update_direction_sensor"></a>
-> AgentBlockUpdateRes update_direction_sensor(branch_idblock_iddirection_sensor_update)
+> VehicleBlockUpdateRes update_direction_sensor(branch_idblock_iddirection_sensor_update)
 
 Update Direction Sensor
 
@@ -2836,7 +2836,7 @@ Update Direction Sensor
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.direction_sensor_update import DirectionSensorUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -2938,7 +2938,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_direction_sensor.ApiResponseFor422
@@ -2962,7 +2962,7 @@ No authorization required
 
 # **update_magnetorquer**
 <a name="update_magnetorquer"></a>
-> AgentBlockUpdateRes update_magnetorquer(branch_idblock_idmagnetorquer_update)
+> VehicleBlockUpdateRes update_magnetorquer(branch_idblock_idmagnetorquer_update)
 
 Update Magnetorquer
 
@@ -2973,7 +2973,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.magnetorquer_update import MagnetorquerUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3074,7 +3074,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_magnetorquer.ApiResponseFor422
@@ -3098,7 +3098,7 @@ No authorization required
 
 # **update_optical_attitude_sensor**
 <a name="update_optical_attitude_sensor"></a>
-> AgentBlockUpdateRes update_optical_attitude_sensor(branch_idblock_idoptical_attitude_sensor_update)
+> VehicleBlockUpdateRes update_optical_attitude_sensor(branch_idblock_idoptical_attitude_sensor_update)
 
 Update Optical Attitude Sensor
 
@@ -3108,8 +3108,8 @@ Update Optical Attitude Sensor
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.optical_attitude_sensor_update import OpticalAttitudeSensorUpdate
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3210,7 +3210,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_optical_attitude_sensor.ApiResponseFor422
@@ -3234,7 +3234,7 @@ No authorization required
 
 # **update_positionsensor**
 <a name="update_positionsensor"></a>
-> AgentBlockUpdateRes update_positionsensor(branch_idblock_idposition_sensor_update)
+> VehicleBlockUpdateRes update_positionsensor(branch_idblock_idposition_sensor_update)
 
 Update PositionSensor
 
@@ -3245,7 +3245,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.position_sensor_update import PositionSensorUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3345,7 +3345,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_positionsensor.ApiResponseFor422
@@ -3369,7 +3369,7 @@ No authorization required
 
 # **update_reaction_wheel**
 <a name="update_reaction_wheel"></a>
-> AgentBlockUpdateRes update_reaction_wheel(branch_idblock_idreaction_wheel_update)
+> VehicleBlockUpdateRes update_reaction_wheel(branch_idblock_idreaction_wheel_update)
 
 Update Reaction Wheel
 
@@ -3379,7 +3379,7 @@ Update Reaction Wheel
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.reaction_wheel_update import ReactionWheelUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -3483,7 +3483,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_reaction_wheel.ApiResponseFor422
@@ -3507,7 +3507,7 @@ No authorization required
 
 # **update_solar_panel**
 <a name="update_solar_panel"></a>
-> AgentBlockUpdateRes update_solar_panel(branch_idblock_idsolar_panel_update)
+> VehicleBlockUpdateRes update_solar_panel(branch_idblock_idsolar_panel_update)
 
 Update Solar Panel
 
@@ -3517,7 +3517,7 @@ Update Solar Panel
 import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.solar_panel_update import SolarPanelUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -3621,7 +3621,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_solar_panel.ApiResponseFor422
@@ -3645,7 +3645,7 @@ No authorization required
 
 # **update_topology**
 <a name="update_topology"></a>
-> AgentBlockUpdateRes update_topology(branch_idblock_idtopology_update)
+> VehicleBlockUpdateRes update_topology(branch_idblock_idtopology_update)
 
 Update Topology
 
@@ -3656,7 +3656,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.topology_update import TopologyUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3756,7 +3756,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_topology.ApiResponseFor422
@@ -3780,7 +3780,7 @@ No authorization required
 
 # **update_vector_sensor**
 <a name="update_vector_sensor"></a>
-> AgentBlockUpdateRes update_vector_sensor(branch_idblock_idvector_sensor_update)
+> VehicleBlockUpdateRes update_vector_sensor(branch_idblock_idvector_sensor_update)
 
 Update Vector Sensor
 
@@ -3791,7 +3791,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import component_api
 from sedaro_base_client.model.vector_sensor_update import VectorSensorUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -3892,7 +3892,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_vector_sensor.ApiResponseFor422

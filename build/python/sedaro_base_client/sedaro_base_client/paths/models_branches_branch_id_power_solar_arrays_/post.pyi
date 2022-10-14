@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.solar_array_create import SolarArrayCreate
 
 # path params
@@ -66,7 +66,7 @@ request_body_solar_array_create = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = AgentBlockCreateRes
+SchemaFor200ResponseBodyApplicationJson = VehicleBlockCreateRes
 
 
 @dataclass

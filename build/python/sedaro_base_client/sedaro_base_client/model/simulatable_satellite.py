@@ -131,6 +131,8 @@ class SimulatableSatellite(
             
                 class MetaOapg:
                     max_length = 100
+            dynamicMass = schemas.NumberSchema
+            dynamicInertia = schemas.AnyTypeSchema
             
             
             class bodyFrameVectors(
@@ -409,6 +411,29 @@ class SimulatableSatellite(
                     return super().__getitem__(i)
             
             
+            class fuelTanks(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'fuelTanks':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class DEFAULT_CAD_MODELS(
                 schemas.ListSchema
             ):
@@ -489,6 +514,8 @@ class SimulatableSatellite(
                 "dragTorque": dragTorque,
                 "gravityGradientTorque": gravityGradientTorque,
                 "cadFileName": cadFileName,
+                "dynamicMass": dynamicMass,
+                "dynamicInertia": dynamicInertia,
                 "bodyFrameVectors": bodyFrameVectors,
                 "surfaces": surfaces,
                 "solarArrays": solarArrays,
@@ -501,6 +528,7 @@ class SimulatableSatellite(
                 "reactionWheels": reactionWheels,
                 "magnetorquers": magnetorquers,
                 "algorithms": algorithms,
+                "fuelTanks": fuelTanks,
                 "DEFAULT_CAD_MODELS": DEFAULT_CAD_MODELS,
                 "commandedAltitude": commandedAltitude,
                 "commandedAngularRates": commandedAngularRates,
@@ -548,6 +576,12 @@ class SimulatableSatellite(
     def __getitem__(self, name: typing_extensions.Literal["cadFileName"]) -> MetaOapg.properties.cadFileName: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicMass"]) -> MetaOapg.properties.dynamicMass: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicInertia"]) -> MetaOapg.properties.dynamicInertia: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["bodyFrameVectors"]) -> MetaOapg.properties.bodyFrameVectors: ...
     
     @typing.overload
@@ -584,6 +618,9 @@ class SimulatableSatellite(
     def __getitem__(self, name: typing_extensions.Literal["algorithms"]) -> MetaOapg.properties.algorithms: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fuelTanks"]) -> MetaOapg.properties.fuelTanks: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> MetaOapg.properties.DEFAULT_CAD_MODELS: ...
     
     @typing.overload
@@ -595,7 +632,7 @@ class SimulatableSatellite(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -637,6 +674,12 @@ class SimulatableSatellite(
     def get_item_oapg(self, name: typing_extensions.Literal["cadFileName"]) -> typing.Union[MetaOapg.properties.cadFileName, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicMass"]) -> typing.Union[MetaOapg.properties.dynamicMass, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicInertia"]) -> typing.Union[MetaOapg.properties.dynamicInertia, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["bodyFrameVectors"]) -> typing.Union[MetaOapg.properties.bodyFrameVectors, schemas.Unset]: ...
     
     @typing.overload
@@ -673,6 +716,9 @@ class SimulatableSatellite(
     def get_item_oapg(self, name: typing_extensions.Literal["algorithms"]) -> typing.Union[MetaOapg.properties.algorithms, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["fuelTanks"]) -> typing.Union[MetaOapg.properties.fuelTanks, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, schemas.Unset]: ...
     
     @typing.overload
@@ -684,7 +730,7 @@ class SimulatableSatellite(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -703,6 +749,8 @@ class SimulatableSatellite(
         dragTorque: typing.Union[MetaOapg.properties.dragTorque, list, tuple, schemas.Unset] = schemas.unset,
         gravityGradientTorque: typing.Union[MetaOapg.properties.gravityGradientTorque, list, tuple, schemas.Unset] = schemas.unset,
         cadFileName: typing.Union[MetaOapg.properties.cadFileName, str, schemas.Unset] = schemas.unset,
+        dynamicMass: typing.Union[MetaOapg.properties.dynamicMass, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        dynamicInertia: typing.Union[MetaOapg.properties.dynamicInertia, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         bodyFrameVectors: typing.Union[MetaOapg.properties.bodyFrameVectors, list, tuple, schemas.Unset] = schemas.unset,
         surfaces: typing.Union[MetaOapg.properties.surfaces, list, tuple, schemas.Unset] = schemas.unset,
         solarArrays: typing.Union[MetaOapg.properties.solarArrays, list, tuple, schemas.Unset] = schemas.unset,
@@ -715,6 +763,7 @@ class SimulatableSatellite(
         reactionWheels: typing.Union[MetaOapg.properties.reactionWheels, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquers: typing.Union[MetaOapg.properties.magnetorquers, list, tuple, schemas.Unset] = schemas.unset,
         algorithms: typing.Union[MetaOapg.properties.algorithms, list, tuple, schemas.Unset] = schemas.unset,
+        fuelTanks: typing.Union[MetaOapg.properties.fuelTanks, list, tuple, schemas.Unset] = schemas.unset,
         DEFAULT_CAD_MODELS: typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, list, tuple, schemas.Unset] = schemas.unset,
         commandedAltitude: typing.Union[MetaOapg.properties.commandedAltitude, list, tuple, schemas.Unset] = schemas.unset,
         commandedAngularRates: typing.Union[MetaOapg.properties.commandedAngularRates, list, tuple, schemas.Unset] = schemas.unset,
@@ -736,6 +785,8 @@ class SimulatableSatellite(
             dragTorque=dragTorque,
             gravityGradientTorque=gravityGradientTorque,
             cadFileName=cadFileName,
+            dynamicMass=dynamicMass,
+            dynamicInertia=dynamicInertia,
             bodyFrameVectors=bodyFrameVectors,
             surfaces=surfaces,
             solarArrays=solarArrays,
@@ -748,6 +799,7 @@ class SimulatableSatellite(
             reactionWheels=reactionWheels,
             magnetorquers=magnetorquers,
             algorithms=algorithms,
+            fuelTanks=fuelTanks,
             DEFAULT_CAD_MODELS=DEFAULT_CAD_MODELS,
             commandedAltitude=commandedAltitude,
             commandedAngularRates=commandedAngularRates,

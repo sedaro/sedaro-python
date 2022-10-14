@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_sliding_mode3x3_algorithm**
 <a name="create_sliding_mode3x3_algorithm"></a>
-> AgentBlockCreateRes create_sliding_mode3x3_algorithm(branch_idsliding_mode_algorithm_create)
+> VehicleBlockCreateRes create_sliding_mode3x3_algorithm(branch_idsliding_mode_algorithm_create)
 
 Create Sliding Mode 3x3 Algorithm
 
@@ -20,8 +20,8 @@ Create Sliding Mode 3x3 Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_control_algorithm_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from sedaro_base_client.model.sliding_mode_algorithm_create import SlidingModeAlgorithmCreate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -46,6 +46,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         algorithm_type="ATTITUDE_CONTROL",
         algorithm_subtype="SLIDING_MODE",
         actuators=[],
+        reaction_wheel_commands=[
+            3.14
+        ],
+        magnetorquer_commands=[
+            3.14
+        ],
         gain_k=3.14,
         gain_g=3.14,
         gain_c=3.14,
@@ -113,7 +119,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_sliding_mode3x3_algorithm.ApiResponseFor422
@@ -137,7 +143,7 @@ No authorization required
 
 # **delete_sliding_mode3x3_algorithm**
 <a name="delete_sliding_mode3x3_algorithm"></a>
-> AgentBlockDeleteRes delete_sliding_mode3x3_algorithm(branch_idblock_id)
+> VehicleBlockDeleteRes delete_sliding_mode3x3_algorithm(branch_idblock_id)
 
 Delete Sliding Mode 3x3 Algorithm
 
@@ -146,8 +152,8 @@ Delete Sliding Mode 3x3 Algorithm
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_control_algorithm_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -224,7 +230,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_sliding_mode3x3_algorithm.ApiResponseFor422
@@ -248,7 +254,7 @@ No authorization required
 
 # **update_sliding_mode3x3_algorithm**
 <a name="update_sliding_mode3x3_algorithm"></a>
-> AgentBlockUpdateRes update_sliding_mode3x3_algorithm(branch_idblock_idsliding_mode_algorithm_update)
+> VehicleBlockUpdateRes update_sliding_mode3x3_algorithm(branch_idblock_idsliding_mode_algorithm_update)
 
 Update Sliding Mode 3x3 Algorithm
 
@@ -259,7 +265,7 @@ import sedaro_base_client
 from sedaro_base_client.apis.tags import attitude_control_algorithm_api
 from sedaro_base_client.model.sliding_mode_algorithm_update import SlidingModeAlgorithmUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -284,6 +290,12 @@ with sedaro_base_client.ApiClient(configuration) as api_client:
         algorithm_type="ATTITUDE_CONTROL",
         algorithm_subtype="SLIDING_MODE",
         actuators=[],
+        reaction_wheel_commands=[
+            3.14
+        ],
+        magnetorquer_commands=[
+            3.14
+        ],
         gain_k=3.14,
         gain_g=3.14,
         gain_c=3.14,
@@ -359,7 +371,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_sliding_mode3x3_algorithm.ApiResponseFor422

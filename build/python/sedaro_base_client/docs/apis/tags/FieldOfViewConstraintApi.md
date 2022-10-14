@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 # **create_field_of_view_constraint**
 <a name="create_field_of_view_constraint"></a>
-> AgentBlockCreateRes create_field_of_view_constraint(branch_idfov_constraint_create)
+> VehicleBlockCreateRes create_field_of_view_constraint(branch_idfov_constraint_create)
 
 Create Field of View Constraint
 
@@ -20,9 +20,9 @@ Create Field of View Constraint
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_constraint_api
-from sedaro_base_client.model.agent_block_create_res import AgentBlockCreateRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.fov_constraint_create import FOVConstraintCreate
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -109,7 +109,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockCreateRes**](../../models/AgentBlockCreateRes.md) |  | 
+[**VehicleBlockCreateRes**](../../models/VehicleBlockCreateRes.md) |  | 
 
 
 #### create_field_of_view_constraint.ApiResponseFor422
@@ -133,7 +133,7 @@ No authorization required
 
 # **delete_field_of_view_constraint**
 <a name="delete_field_of_view_constraint"></a>
-> AgentBlockDeleteRes delete_field_of_view_constraint(branch_idblock_id)
+> VehicleBlockDeleteRes delete_field_of_view_constraint(branch_idblock_id)
 
 Delete Field of View Constraint
 
@@ -142,8 +142,8 @@ Delete Field of View Constraint
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_constraint_api
-from sedaro_base_client.model.agent_block_delete_res import AgentBlockDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -220,7 +220,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockDeleteRes**](../../models/AgentBlockDeleteRes.md) |  | 
+[**VehicleBlockDeleteRes**](../../models/VehicleBlockDeleteRes.md) |  | 
 
 
 #### delete_field_of_view_constraint.ApiResponseFor422
@@ -244,7 +244,7 @@ No authorization required
 
 # **update_field_of_view_constraint**
 <a name="update_field_of_view_constraint"></a>
-> AgentBlockUpdateRes update_field_of_view_constraint(branch_idblock_idfov_constraint_update)
+> VehicleBlockUpdateRes update_field_of_view_constraint(branch_idblock_idfov_constraint_update)
 
 Update Field of View Constraint
 
@@ -254,7 +254,7 @@ Update Field of View Constraint
 import sedaro_base_client
 from sedaro_base_client.apis.tags import field_of_view_constraint_api
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.agent_block_update_res import AgentBlockUpdateRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.fov_constraint_update import FOVConstraintUpdate
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -351,7 +351,7 @@ headers | Unset | headers were not defined |
 # SchemaFor200ResponseBodyApplicationJson
 Type | Description  | Notes
 ------------- | ------------- | -------------
-[**AgentBlockUpdateRes**](../../models/AgentBlockUpdateRes.md) |  | 
+[**VehicleBlockUpdateRes**](../../models/VehicleBlockUpdateRes.md) |  | 
 
 
 #### update_field_of_view_constraint.ApiResponseFor422
