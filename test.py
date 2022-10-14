@@ -5,15 +5,15 @@ API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fH
 
 def test_get():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch = sedaro_client.get_branch(14)
-        print(f'\nres: {branch}\n')
+        branch_client = sedaro_client.get_branch(14)
+        print(f'\nres: {branch_client}\n')
         return
 
 
 def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch = sedaro_client.get_branch(14)
-        battery_cell = branch.BatteryCell.create({
+        branch_client = sedaro_client.get_branch(14)
+        battery_cell_client = branch_client.BatteryCell.create({
             'partNumber': '987654321',
             'manufacturer': 'Oh Yeah!!!!!!!!!',
             'esr': 1.0,
@@ -25,23 +25,24 @@ def test_create_update_and_delete_block():
             'topology': '11',
         })
 
-        assert battery_cell == branch.BatteryCell.get(battery_cell.id)
+        assert battery_cell_client == branch_client.BatteryCell.get(
+            battery_cell_client.id)
 
         new_part_number = "Let's gooo!!!!!!!!!!!!"
 
-        print(battery_cell)
+        # print(battery_cell_client)
 
-        battery_cell.update({'partNumber': new_part_number})
+        battery_cell_client.update({'partNumber': new_part_number})
 
-        assert branch.BatteryCell.get(
-            battery_cell.id).partNumber == battery_cell.partNumber == new_part_number
+        assert branch_client.BatteryCell.get(
+            battery_cell_client.id).partNumber == battery_cell_client.partNumber == new_part_number
 
-        print(battery_cell)
+        # print(battery_cell_client)
 
-        battery_cell.delete()
+        battery_cell_client.delete()
 
         try:
-            print(battery_cell)
+            print(battery_cell_client)
         except KeyError as e:
             assert str(e) == "'The referenced Sedaro Block no longer exists.'"
 
