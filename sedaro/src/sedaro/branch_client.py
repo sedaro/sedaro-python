@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Dict, Tuple
+import importlib
+from typing import TYPE_CHECKING, Dict
 from dataclasses import dataclass
+from pydash import snake_case
 
 from sedaro_base_client.api_client import ApiResponse
 from .block_class_client import BlockClassClient
 from .utils import parse_block_crud_response
-from .settings import CREATE, UPDATE, DELETE
+from .settings import CREATE, UPDATE, DELETE, BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
@@ -21,6 +23,11 @@ class BranchClient:
         return f'Branch(id: {self.id})'
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
+        block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
+        if importlib.util.find_spec(block_class_module) is None:
+            raise AttributeError(
+                f'Unable to find a Sedaro Block called: "{block_name}". Please check the name and try again.')
+
         return BlockClassClient(
             _block_name=block_name,
             _branch=self
