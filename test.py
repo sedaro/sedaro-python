@@ -52,19 +52,6 @@ if __name__ == "__main__":
     test_create_update_and_delete_block()
 
 
-# ModuleNotFoundError -> AttributeError
-
-# class Block:
-
-#     def create():
-#         '''asdfasdf'''
-#         pass
-
-# class Branch:
-
-#     def __getattr__(self, key) -> Block:
-#         pass
-
 # branch: Branch = sedaro_client.get_branch(14)
 
 # block = branch.Block.create(**kwargs)
