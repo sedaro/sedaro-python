@@ -52,8 +52,6 @@ if __name__ == "__main__":
     test_create_update_and_delete_block()
 
 
-# branch: Branch = sedaro_client.get_branch(14)
-
 # block = branch.Block.create(**kwargs)
 # block = branch.Block.get() # get from branch data already returned
 
