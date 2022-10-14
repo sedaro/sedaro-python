@@ -65,13 +65,13 @@ class BlockClient:
         return self._branch._sedaro_client
 
     def update(self, body: Dict, **kwargs) -> 'BlockClient':
-        """Update attributes of the `Block`
+        """Update attributes of the corresponding Sedaro Block
 
         Args:
             body (Dict): dictionary of attributes to update
 
         Returns:
-            Block: updated version of self (previous reference's data is also updated)
+            BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
         body = self.data | body
 
