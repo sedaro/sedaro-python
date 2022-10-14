@@ -17,14 +17,15 @@ class SedaroApiClient(ApiClient):
         )
 
     def get_branch(self, id: int) -> BranchClient:
-        """Gets a Sedaro Branch based on the give `id`. Must be accessible to this `SedaroApiClient` via the
-        `api_key`.
+        """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
+        be accessible to this `SedaroApiClient` via the `api_key`.
 
         Args:
             id (int): the id of the desired Sedaro Branch
 
         Returns:
-            Branch: A `Branch` object that has various helpful methods on it.
+            BranchClient: A `BranchClient` object used to interact with the data attached to the corresponding Sedaro
+            Branch.
         """
         # branches_api_instance = branches_api.BranchesApi(self)
         # res = branches_api_instance.get_branch(path_params={'branchId': id})
