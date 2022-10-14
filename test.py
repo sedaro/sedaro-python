@@ -13,17 +13,17 @@ def test_get():
 def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         branch_client = sedaro_client.get_branch(14)
-        battery_cell_client = branch_client.BatteryCell.create({
-            'partNumber': '987654321',
-            'manufacturer': 'Oh Yeah!!!!!!!!!',
-            'esr': 1.0,
-            'maxChargeCurrent': 100,
-            'maxDischargeCurrent': 100,
-            'minSoc': 1,
-            'capacity': 5000,
-            'curve': [[0, 1], [3, 5]],
-            'topology': '11',
-        })
+        battery_cell_client = branch_client.BatteryCell.create(
+            partNumber='987654321',
+            manufacturer='Oh Yeah!!!!!!!!!',
+            esr=1.0,
+            maxChargeCurrent=100,
+            maxDischargeCurrent=100,
+            minSoc=1,
+            capacity=5000,
+            curve=[[0, 1], [3, 5]],
+            topology='11',
+        )
 
         assert battery_cell_client == branch_client.BatteryCell.get(
             battery_cell_client.id)
