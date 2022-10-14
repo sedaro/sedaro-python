@@ -125,7 +125,8 @@ def run_generator(skip_intro=False):
         if language == PYTHON and how_to_proceed != DRY_RUN:
             shutil.copytree(
                 f'{CLIENT_DIR}/{PACKAGE_NAME}',
-                f'{SEDARO}/src/{PACKAGE_NAME}'
+                f'{SEDARO}/src/{PACKAGE_NAME}',
+                dirs_exist_ok=True
             )
             shutil.copyfile(
                 f'{CLIENT_DIR}/requirements.txt',
