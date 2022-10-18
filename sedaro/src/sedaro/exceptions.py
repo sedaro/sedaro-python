@@ -3,13 +3,9 @@ class SedaroException(Exception):
     pass
 
 
-class SedaroValueError(SedaroException):
+class SedaroNonexistantBlockError(SedaroException):
     pass
 
 
-class SedaroKeyError(SedaroException):
-    pass
-
-
-class SedaroTypeError(SedaroException):
+class SedaroNoBlockFoundError(SedaroException):
     pass
