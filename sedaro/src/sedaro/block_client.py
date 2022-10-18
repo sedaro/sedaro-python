@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Union, Tuple
 from dataclasses import dataclass
 from pydash import snake_case
 
@@ -65,21 +65,22 @@ class BlockClient:
         '''The `SedaroApiClient` this `Block` was accessed through'''
         return self._branch._sedaro_client
 
-    def update(self, body: Dict, **kwargs) -> 'BlockClient':
+    def update(self, timeout: Union[int, Tuple] = None, **attrs_to_update) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
 
         Args:
-            body (Dict): dictionary of attributes to update
+            timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
+            **attrs_to_update (Dict): all remaining kwargs form the `attrs_to_update` (attributes to update) on the Sedaro Block
 
         Returns:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
-        body = self.data | body
+        body = self.data | attrs_to_update
 
         res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._name)}')(
             body=self._block_class_client._update_class(**body),
-            **kwargs,
             path_params={'branchId': self._branch.id, "blockId": int(self.id)},
+            timeout=timeout
         )
         self._branch._process_block_crud_response(res)
         return self

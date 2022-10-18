@@ -32,7 +32,7 @@ def test_create_update_and_delete_block():
 
         # print(battery_cell_client)
 
-        battery_cell_client.update({'partNumber': new_part_number})
+        battery_cell_client.update(partNumber=new_part_number)
 
         assert branch_client.BatteryCell.get(
             battery_cell_client.id).partNumber == battery_cell_client.partNumber == new_part_number
