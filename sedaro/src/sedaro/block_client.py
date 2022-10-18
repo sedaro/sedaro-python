@@ -4,6 +4,7 @@ from pydash import snake_case
 
 from sedaro_base_client.api_client import Api
 from .settings import UPDATE, DELETE
+from .exceptions import NonexistantBlockError
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
@@ -24,7 +25,7 @@ class BlockClient:
                 # FIXME: figure out why we don't know when something is a string, it's this `DynamicSchema` class
                 v = f"'{v}'"
             attrs += f'\n   {k}={v}'
-        return f'\n{self._name}({attrs}\n)\n'
+        return f'\n{self._block_name}({attrs}\n)\n'
 
     def __getattr__(self, key) -> any:
         return self.data[key]
@@ -37,12 +38,14 @@ class BlockClient:
         except KeyError as e:
             # if it's KeyError of a string id (block doesn't exist), str(e) is like this: "'1234'"
             if str(e).replace("'", '').isdigit():
-                raise KeyError('The referenced Sedaro Block no longer exists.')
+                raise NonexistantBlockError(
+                    f'The referenced "{self._block_name}" (id: {self.id}) no longer exists.'
+                )
             raise e
 
     @property
-    def _name(self) -> str:
-        '''The name of the class associated with this `Block`'''
+    def _block_name(self) -> str:
+        '''The name of the Sedaro Block class associated with this `Block`'''
         return self._block_class_client._block_name
 
     @property
@@ -77,7 +80,7 @@ class BlockClient:
         """
         body = self.data | attrs_to_update
 
-        res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._name)}')(
+        res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')(
             body=self._block_class_client._update_class(**body),
             path_params={'branchId': self._branch.id, "blockId": int(self.id)},
             timeout=timeout
@@ -92,7 +95,7 @@ class BlockClient:
             str: `id` of the deleted `Block`
         """
         id = self.id
-        res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._name)}')(
+        res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
             path_params={'branchId': self._branch.id, "blockId": int(id)}
         )
         return self._branch._process_block_crud_response(res)
