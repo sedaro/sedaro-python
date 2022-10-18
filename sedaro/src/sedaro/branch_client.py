@@ -16,11 +16,11 @@ if TYPE_CHECKING:
 class BranchClient:
     id: int
     data: Dict
-    dataSchema: Dict
+    data_schema: Dict
     _sedaro_client: 'SedaroApiClient'
-    _blockIdToTypeMap: Dict[str, str]
+    _block_id_to_type_map: Dict[str, str]
     '''Dicationary mapping Sedaro Block ids to the class name of the Block'''
-    _blockClassToBlockGroupMap: Dict[str, str]
+    _block_class_to_block_group_map: Dict[str, str]
     '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
 
     def __str__(self):
@@ -66,6 +66,6 @@ class BranchClient:
         else:
             raise NotImplementedError(f'Unsupported action type: "{action}"')
 
-        self._blockIdToTypeMap = block_id_to_type_map
+        self._block_id_to_type_map = block_id_to_type_map
 
         return block_id

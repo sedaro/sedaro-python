@@ -36,8 +36,8 @@ class SedaroApiClient(ApiClient):
         return BranchClient(
             id=id,
             data=parsed_res['data'],
-            dataSchema=parsed_res['dataSchema'],
+            data_schema=parsed_res['dataSchema'],
             _sedaro_client=self,
-            _blockIdToTypeMap=parsed_res['blockIdToTypeMap'],
-            _blockClassToBlockGroupMap=parsed_res['blockClassToBlockGroupMap']
+            _block_id_to_type_map=parsed_res['blockIdToTypeMap'],
+            _block_class_to_block_group_map=parsed_res['blockClassToBlockGroupMap']
         )
