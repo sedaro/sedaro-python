@@ -26,7 +26,7 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
         response (ApiResponse): the response from CRUD-ing a Sedaro Block
 
     Returns:
-        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`
+        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`, `block_id_to_type_map`
     """
     body = response.body
     action = body['action']
@@ -37,4 +37,4 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
     block_data = dict(branch_data[block_group][block_id]) if action.casefold() != DELETE.casefold() \
         else None
 
-    return block_id, block_data, block_group, action
+    return block_id, block_data, block_group, action, body['blockIdToTypeMap']

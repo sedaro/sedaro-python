@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     _block_name: str
-    '''Name of the Sedaro Block this `BlockClassClient` is set up to interact with'''
+    '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
     _branch: 'BranchClient'
     '''The `Branch` this `BlockClassClient` is connected to'''
 
@@ -51,36 +51,39 @@ class BlockClassClient:
     @cached_property
     def _block_group(self) -> str:
         '''The name of the Sedaro `BlockGroup` this type of `Block` is stored in'''
-        PROPERTIES = 'properties'
-        REF = '$ref'
-        ANY_OF = 'anyOf'
-        ALL_OF = 'allOf'
+        return self._branch._blockClassToBlockGroupMap[self._block_name]
 
-        block_group_type = None
+        # Below can get block group if ever choose to not send blockClassToBlockGroupMap in response
+        # PROPERTIES = 'properties'
+        # REF = '$ref'
+        # ANY_OF = 'anyOf'
+        # ALL_OF = 'allOf'
 
-        # Traverse branch schema to figure out block group type, then traverse again to get matching block group
-        for k, v in self._branch.dataSchema['definitions'].items():
-            # filter through all block group types
-            if PROPERTIES in v and all(attr in v[PROPERTIES] for attr in ('name', 'collection', 'data')):
-                # TODO: `if k.endswith('BG')` <-- evalutes to same as ^^^ if we always follow this convention for naming
-                # block group classes. Would still like a safer way than either of these options though.
-                blockClassOrClasses: Dict = v[PROPERTIES]['data']['additionalProperties']
+        # block_group_type = None
 
-                blockTypes = [blockClassOrClasses[REF]] if REF in blockClassOrClasses \
-                    else [v[REF] for v in blockClassOrClasses[ANY_OF]]
+        # # Traverse branch schema to figure out block group type, then traverse again to get matching block group
+        # for k, v in self._branch.dataSchema['definitions'].items():
+        #     # filter through all block group types
+        #     if PROPERTIES in v and all(attr in v[PROPERTIES] for attr in ('name', 'collection', 'data')):
+        #         # TODO: `if k.endswith('BG')` <-- evalutes to same as ^^^ if we always follow this convention for naming
+        #         # block group classes. Would still like a safer way than either of these options though.
+        #         blockClassOrClasses: Dict = v[PROPERTIES]['data']['additionalProperties']
 
-                if any(bT.endswith(self._block_name) for bT in blockTypes):
-                    block_group_type = k
-                    break
+        #         blockTypes = [blockClassOrClasses[REF]] if REF in blockClassOrClasses \
+        #             else [v[REF] for v in blockClassOrClasses[ANY_OF]]
 
-        # check block group types (`bGT`) of all block groups to find which one matches `block_group_type`
-        for k, v in self._branch.dataSchema[PROPERTIES].items():
-            if ALL_OF in v and any(bGT[REF].endswith(block_group_type) for bGT in v[ALL_OF]):
-                return k
+        #         if any(bT.endswith(self._block_name) for bT in blockTypes):
+        #             block_group_type = k
+        #             break
+
+        # # check block group types (`bGT`) of all block groups to find which one matches `block_group_type`
+        # for k, v in self._branch.dataSchema[PROPERTIES].items():
+        #     if ALL_OF in v and any(bGT[REF].endswith(block_group_type) for bGT in v[ALL_OF]):
+        #         return k
 
         # this shouldn't ever happen:
-        raise ValueError(
-            f'Unable to find a block group containing the block name {self._block_name}')
+        # raise ValueError(
+        #     f'Unable to find a block group containing the block name {self._block_name}')
 
     def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']):
         """Gets the model class to used to validate the data to create or update a `Block`

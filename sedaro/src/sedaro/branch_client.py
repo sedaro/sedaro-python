@@ -18,6 +18,10 @@ class BranchClient:
     data: Dict
     dataSchema: Dict
     _sedaro_client: 'SedaroApiClient'
+    _blockIdToTypeMap: Dict[str, str]
+    '''Dicationary mapping Sedaro Block ids to the class name of the Block'''
+    _blockClassToBlockGroupMap: Dict[str, str]
+    '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
 
     def __str__(self):
         return f'Branch(id: {self.id})'
@@ -45,7 +49,7 @@ class BranchClient:
         Returns:
             str: `block_id`
         """
-        block_id, block_data, block_group, action = parse_block_crud_response(
+        block_id, block_data, block_group, action, block_id_to_type_map = parse_block_crud_response(
             block_crud_response
         )
         action = action.casefold()
@@ -61,5 +65,7 @@ class BranchClient:
 
         else:
             raise NotImplementedError(f'Unsupported action type: "{action}"')
+
+        self._blockIdToTypeMap = block_id_to_type_map
 
         return block_id
