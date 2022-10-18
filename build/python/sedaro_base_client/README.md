@@ -143,12 +143,13 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import time
 import sedaro_base_client
 from pprint import pprint
-from sedaro_base_client.apis.tags import agent_template_reference_api
+from sedaro_base_client.apis.tags import actuator_load_api
+from sedaro_base_client.model.actuator_load_create import ActuatorLoadCreate
+from sedaro_base_client.model.actuator_load_update import ActuatorLoadUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.scenario_block_create_res import ScenarioBlockCreateRes
-from sedaro_base_client.model.scenario_block_delete_res import ScenarioBlockDeleteRes
-from sedaro_base_client.model.scenario_block_update_res import ScenarioBlockUpdateRes
-from sedaro_base_client.model.template_ref import TemplateRef
+from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreateRes
+from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
+from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = sedaro_base_client.Configuration(
@@ -159,20 +160,23 @@ configuration = sedaro_base_client.Configuration(
 # Enter a context with an instance of the API client
 with sedaro_base_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = agent_template_reference_api.AgentTemplateReferenceApi(api_client)
+    api_instance = actuator_load_api.ActuatorLoadApi(api_client)
     branch_id = 1 # int | 
-template_ref = TemplateRef(
+actuator_load_create = ActuatorLoadCreate(
         id="id_example",
-        ref=1,
-        agents=[],
-    ) # TemplateRef | 
+        name="name_example",
+        eps_output_type=None,
+        bus_regulator="bus_regulator_example",
+        topology="topology_example",
+        load_state="load_state_example",
+    ) # ActuatorLoadCreate | 
 
     try:
-        # Create Agent Template Reference
-        api_response = api_instance.create_agent_template_reference(branch_idtemplate_ref)
+        # Create Actuator Load
+        api_response = api_instance.create_actuator_load(branch_idactuator_load_create)
         pprint(api_response)
     except sedaro_base_client.ApiException as e:
-        print("Exception when calling AgentTemplateReferenceApi->create_agent_template_reference: %s\n" % e)
+        print("Exception when calling ActuatorLoadApi->create_actuator_load: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -181,25 +185,25 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AgentTemplateReferenceApi* | [**create_agent_template_reference**](docs/apis/tags/AgentTemplateReferenceApi.md#create_agent_template_reference) | **post** /models/branches/{branchId}/template-refs/ | Create Agent Template Reference
-*AgentTemplateReferenceApi* | [**delete_agent_template_reference**](docs/apis/tags/AgentTemplateReferenceApi.md#delete_agent_template_reference) | **delete** /models/branches/{branchId}/template-refs/{blockId} | Delete Agent Template Reference
-*AgentTemplateReferenceApi* | [**update_agent_template_reference**](docs/apis/tags/AgentTemplateReferenceApi.md#update_agent_template_reference) | **patch** /models/branches/{branchId}/template-refs/{blockId} | Update Agent Template Reference
-*AttitudeControlAlgorithmApi* | [**create_sliding_mode3x3_algorithm**](docs/apis/tags/AttitudeControlAlgorithmApi.md#create_sliding_mode3x3_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/ | Create Sliding Mode 3x3 Algorithm
-*AttitudeControlAlgorithmApi* | [**delete_sliding_mode3x3_algorithm**](docs/apis/tags/AttitudeControlAlgorithmApi.md#delete_sliding_mode3x3_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/{blockId} | Delete Sliding Mode 3x3 Algorithm
-*AttitudeControlAlgorithmApi* | [**update_sliding_mode3x3_algorithm**](docs/apis/tags/AttitudeControlAlgorithmApi.md#update_sliding_mode3x3_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/{blockId} | Update Sliding Mode 3x3 Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**create_averaging_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#create_averaging_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/ | Create Averaging Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**create_mekf_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#create_mekf_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/ | Create MEKF Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**create_triad_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#create_triad_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/ | Create Triad Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**delete_averaging_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#delete_averaging_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/{blockId} | Delete Averaging Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**delete_mekf_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#delete_mekf_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/{blockId} | Delete MEKF Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**delete_triad_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#delete_triad_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/{blockId} | Delete Triad Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**update_averaging_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#update_averaging_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/{blockId} | Update Averaging Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**update_mekf_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#update_mekf_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/{blockId} | Update MEKF Algorithm
-*AttitudeDeterminationAlgorithmApi* | [**update_triad_algorithm**](docs/apis/tags/AttitudeDeterminationAlgorithmApi.md#update_triad_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/{blockId} | Update Triad Algorithm
+*ActuatorLoadApi* | [**create_actuator_load**](docs/apis/tags/ActuatorLoadApi.md#create_actuator_load) | **post** /models/branches/{branchId}/system/loads/actuator-loads/ | Create Actuator Load
+*ActuatorLoadApi* | [**delete_actuator_load**](docs/apis/tags/ActuatorLoadApi.md#delete_actuator_load) | **delete** /models/branches/{branchId}/system/loads/actuator-loads/{blockId} | Delete Actuator Load
+*ActuatorLoadApi* | [**update_actuator_load**](docs/apis/tags/ActuatorLoadApi.md#update_actuator_load) | **patch** /models/branches/{branchId}/system/loads/actuator-loads/{blockId} | Update Actuator Load
+*AgentApi* | [**create_simulated_agent**](docs/apis/tags/AgentApi.md#create_simulated_agent) | **post** /models/branches/{branchId}/agents/ | Create Simulated Agent
+*AgentApi* | [**delete_simulated_agent**](docs/apis/tags/AgentApi.md#delete_simulated_agent) | **delete** /models/branches/{branchId}/agents/{blockId} | Delete Simulated Agent
+*AgentApi* | [**update_simulated_agent**](docs/apis/tags/AgentApi.md#update_simulated_agent) | **patch** /models/branches/{branchId}/agents/{blockId} | Update Simulated Agent
+*AngularVelocitySensorApi* | [**create_angular_velocity_sensor**](docs/apis/tags/AngularVelocitySensorApi.md#create_angular_velocity_sensor) | **post** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/ | Create Angular Velocity Sensor
+*AngularVelocitySensorApi* | [**delete_angular_velocity_sensor**](docs/apis/tags/AngularVelocitySensorApi.md#delete_angular_velocity_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/{blockId} | Delete Angular Velocity Sensor
+*AngularVelocitySensorApi* | [**update_angular_velocity_sensor**](docs/apis/tags/AngularVelocitySensorApi.md#update_angular_velocity_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/{blockId} | Update Angular Velocity Sensor
+*AveragingAlgorithmApi* | [**create_averaging_algorithm**](docs/apis/tags/AveragingAlgorithmApi.md#create_averaging_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/ | Create Averaging Algorithm
+*AveragingAlgorithmApi* | [**delete_averaging_algorithm**](docs/apis/tags/AveragingAlgorithmApi.md#delete_averaging_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/{blockId} | Delete Averaging Algorithm
+*AveragingAlgorithmApi* | [**update_averaging_algorithm**](docs/apis/tags/AveragingAlgorithmApi.md#update_averaging_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/averaging/{blockId} | Update Averaging Algorithm
 *BatteryApi* | [**update_battery**](docs/apis/tags/BatteryApi.md#update_battery) | **patch** /models/branches/{branchId}/power/batteries/{blockId} | Update Battery
 *BatteryCellApi* | [**create_battery_cell**](docs/apis/tags/BatteryCellApi.md#create_battery_cell) | **post** /models/branches/{branchId}/power/batteries/cells/ | Create Battery Cell
 *BatteryCellApi* | [**delete_battery_cell**](docs/apis/tags/BatteryCellApi.md#delete_battery_cell) | **delete** /models/branches/{branchId}/power/batteries/cells/{blockId} | Delete Battery Cell
 *BatteryCellApi* | [**update_battery_cell**](docs/apis/tags/BatteryCellApi.md#update_battery_cell) | **patch** /models/branches/{branchId}/power/batteries/cells/{blockId} | Update Battery Cell
+*BatteryPackApi* | [**create_battery_pack**](docs/apis/tags/BatteryPackApi.md#create_battery_pack) | **post** /models/branches/{branchId}/power/batteries/packs/ | Create Battery Pack
+*BatteryPackApi* | [**delete_battery_pack**](docs/apis/tags/BatteryPackApi.md#delete_battery_pack) | **delete** /models/branches/{branchId}/power/batteries/packs/{blockId} | Delete Battery Pack
+*BatteryPackApi* | [**update_battery_pack**](docs/apis/tags/BatteryPackApi.md#update_battery_pack) | **patch** /models/branches/{branchId}/power/batteries/packs/{blockId} | Update Battery Pack
 *BodyFrameVectorApi* | [**create_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#create_body_frame_vector) | **post** /models/branches/{branchId}/system/geometry/body-frame-vectors/ | Create Body Frame Vector
 *BodyFrameVectorApi* | [**delete_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#delete_body_frame_vector) | **delete** /models/branches/{branchId}/system/geometry/body-frame-vectors/{blockId} | Delete Body Frame Vector
 *BodyFrameVectorApi* | [**update_body_frame_vector**](docs/apis/tags/BodyFrameVectorApi.md#update_body_frame_vector) | **patch** /models/branches/{branchId}/system/geometry/body-frame-vectors/{blockId} | Update Body Frame Vector
@@ -215,107 +219,106 @@ Class | Method | HTTP request | Description
 *BusRegulatorApi* | [**create_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#create_bus_regulator) | **post** /models/branches/{branchId}/power/eps/bus-regulators/ | Create Bus Regulator
 *BusRegulatorApi* | [**delete_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#delete_bus_regulator) | **delete** /models/branches/{branchId}/power/eps/bus-regulators/{blockId} | Delete Bus Regulator
 *BusRegulatorApi* | [**update_bus_regulator**](docs/apis/tags/BusRegulatorApi.md#update_bus_regulator) | **patch** /models/branches/{branchId}/power/eps/bus-regulators/{blockId} | Update Bus Regulator
-*ComponentApi* | [**create_angular_velocity_sensor**](docs/apis/tags/ComponentApi.md#create_angular_velocity_sensor) | **post** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/ | Create Angular Velocity Sensor
-*ComponentApi* | [**create_battery_pack**](docs/apis/tags/ComponentApi.md#create_battery_pack) | **post** /models/branches/{branchId}/power/batteries/packs/ | Create Battery Pack
+*CelestialTargetApi* | [**create_celestial_target**](docs/apis/tags/CelestialTargetApi.md#create_celestial_target) | **post** /models/branches/{branchId}/cdh/conops/celestial-targets/ | Create Celestial Target
+*CelestialTargetApi* | [**delete_celestial_target**](docs/apis/tags/CelestialTargetApi.md#delete_celestial_target) | **delete** /models/branches/{branchId}/cdh/conops/celestial-targets/{blockId} | Delete Celestial Target
+*CelestialTargetApi* | [**update_celestial_target**](docs/apis/tags/CelestialTargetApi.md#update_celestial_target) | **patch** /models/branches/{branchId}/cdh/conops/celestial-targets/{blockId} | Update Celestial Target
+*CelestialVectorApi* | [**create_celestial_vector**](docs/apis/tags/CelestialVectorApi.md#create_celestial_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/ | Create Celestial Vector
+*CelestialVectorApi* | [**delete_celestial_vector**](docs/apis/tags/CelestialVectorApi.md#delete_celestial_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/{blockId} | Delete Celestial Vector
+*CelestialVectorApi* | [**update_celestial_vector**](docs/apis/tags/CelestialVectorApi.md#update_celestial_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/{blockId} | Update Celestial Vector
+*CircularFieldOfViewApi* | [**create_circular_field_of_view**](docs/apis/tags/CircularFieldOfViewApi.md#create_circular_field_of_view) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/ | Create Circular Field of View
+*CircularFieldOfViewApi* | [**delete_circular_field_of_view**](docs/apis/tags/CircularFieldOfViewApi.md#delete_circular_field_of_view) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/{blockId} | Delete Circular Field of View
+*CircularFieldOfViewApi* | [**update_circular_field_of_view**](docs/apis/tags/CircularFieldOfViewApi.md#update_circular_field_of_view) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/{blockId} | Update Circular Field of View
+*ClockConfigApi* | [**create_simulation_clock_configuration**](docs/apis/tags/ClockConfigApi.md#create_simulation_clock_configuration) | **post** /models/branches/{branchId}/clock-configs/ | Create Simulation Clock Configuration
+*ClockConfigApi* | [**delete_simulation_clock_configuration**](docs/apis/tags/ClockConfigApi.md#delete_simulation_clock_configuration) | **delete** /models/branches/{branchId}/clock-configs/{blockId} | Delete Simulation Clock Configuration
+*ClockConfigApi* | [**update_simulation_clock_configuration**](docs/apis/tags/ClockConfigApi.md#update_simulation_clock_configuration) | **patch** /models/branches/{branchId}/clock-configs/{blockId} | Update Simulation Clock Configuration
 *ComponentApi* | [**create_component**](docs/apis/tags/ComponentApi.md#create_component) | **post** /models/branches/{branchId}/system/subsystems/components/ | Create Component
-*ComponentApi* | [**create_direction_sensor**](docs/apis/tags/ComponentApi.md#create_direction_sensor) | **post** /models/branches/{branchId}/gnc/sensors/direction-sensors/ | Create Direction Sensor
-*ComponentApi* | [**create_magnetorquer**](docs/apis/tags/ComponentApi.md#create_magnetorquer) | **post** /models/branches/{branchId}/gnc/actuators/magnetorquers/ | Create Magnetorquer
-*ComponentApi* | [**create_optical_attitude_sensor**](docs/apis/tags/ComponentApi.md#create_optical_attitude_sensor) | **post** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/ | Create Optical Attitude Sensor
-*ComponentApi* | [**create_positionsensor**](docs/apis/tags/ComponentApi.md#create_positionsensor) | **post** /models/branches/{branchId}/gnc/sensors/position-sensors/ | Create PositionSensor
-*ComponentApi* | [**create_reaction_wheel**](docs/apis/tags/ComponentApi.md#create_reaction_wheel) | **post** /models/branches/{branchId}/gnc/actuators/reaction-wheels/ | Create Reaction Wheel
-*ComponentApi* | [**create_solar_panel**](docs/apis/tags/ComponentApi.md#create_solar_panel) | **post** /models/branches/{branchId}/power/solar-arrays/panels/ | Create Solar Panel
-*ComponentApi* | [**create_vector_sensor**](docs/apis/tags/ComponentApi.md#create_vector_sensor) | **post** /models/branches/{branchId}/gnc/sensors/vector-sensors/ | Create Vector Sensor
-*ComponentApi* | [**delete_angular_velocity_sensor**](docs/apis/tags/ComponentApi.md#delete_angular_velocity_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/{blockId} | Delete Angular Velocity Sensor
-*ComponentApi* | [**delete_battery_pack**](docs/apis/tags/ComponentApi.md#delete_battery_pack) | **delete** /models/branches/{branchId}/power/batteries/packs/{blockId} | Delete Battery Pack
 *ComponentApi* | [**delete_component**](docs/apis/tags/ComponentApi.md#delete_component) | **delete** /models/branches/{branchId}/system/subsystems/components/{blockId} | Delete Component
-*ComponentApi* | [**delete_direction_sensor**](docs/apis/tags/ComponentApi.md#delete_direction_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/direction-sensors/{blockId} | Delete Direction Sensor
-*ComponentApi* | [**delete_magnetorquer**](docs/apis/tags/ComponentApi.md#delete_magnetorquer) | **delete** /models/branches/{branchId}/gnc/actuators/magnetorquers/{blockId} | Delete Magnetorquer
-*ComponentApi* | [**delete_optical_attitude_sensor**](docs/apis/tags/ComponentApi.md#delete_optical_attitude_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/{blockId} | Delete Optical Attitude Sensor
-*ComponentApi* | [**delete_positionsensor**](docs/apis/tags/ComponentApi.md#delete_positionsensor) | **delete** /models/branches/{branchId}/gnc/sensors/position-sensors/{blockId} | Delete PositionSensor
-*ComponentApi* | [**delete_reaction_wheel**](docs/apis/tags/ComponentApi.md#delete_reaction_wheel) | **delete** /models/branches/{branchId}/gnc/actuators/reaction-wheels/{blockId} | Delete Reaction Wheel
-*ComponentApi* | [**delete_solar_panel**](docs/apis/tags/ComponentApi.md#delete_solar_panel) | **delete** /models/branches/{branchId}/power/solar-arrays/panels/{blockId} | Delete Solar Panel
-*ComponentApi* | [**delete_vector_sensor**](docs/apis/tags/ComponentApi.md#delete_vector_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/vector-sensors/{blockId} | Delete Vector Sensor
-*ComponentApi* | [**update_angular_velocity_sensor**](docs/apis/tags/ComponentApi.md#update_angular_velocity_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/angular-velocity-sensors/{blockId} | Update Angular Velocity Sensor
-*ComponentApi* | [**update_battery_pack**](docs/apis/tags/ComponentApi.md#update_battery_pack) | **patch** /models/branches/{branchId}/power/batteries/packs/{blockId} | Update Battery Pack
 *ComponentApi* | [**update_component**](docs/apis/tags/ComponentApi.md#update_component) | **patch** /models/branches/{branchId}/system/subsystems/components/{blockId} | Update Component
-*ComponentApi* | [**update_direction_sensor**](docs/apis/tags/ComponentApi.md#update_direction_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/direction-sensors/{blockId} | Update Direction Sensor
-*ComponentApi* | [**update_magnetorquer**](docs/apis/tags/ComponentApi.md#update_magnetorquer) | **patch** /models/branches/{branchId}/gnc/actuators/magnetorquers/{blockId} | Update Magnetorquer
-*ComponentApi* | [**update_optical_attitude_sensor**](docs/apis/tags/ComponentApi.md#update_optical_attitude_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/{blockId} | Update Optical Attitude Sensor
-*ComponentApi* | [**update_positionsensor**](docs/apis/tags/ComponentApi.md#update_positionsensor) | **patch** /models/branches/{branchId}/gnc/sensors/position-sensors/{blockId} | Update PositionSensor
-*ComponentApi* | [**update_reaction_wheel**](docs/apis/tags/ComponentApi.md#update_reaction_wheel) | **patch** /models/branches/{branchId}/gnc/actuators/reaction-wheels/{blockId} | Update Reaction Wheel
-*ComponentApi* | [**update_solar_panel**](docs/apis/tags/ComponentApi.md#update_solar_panel) | **patch** /models/branches/{branchId}/power/solar-arrays/panels/{blockId} | Update Solar Panel
-*ComponentApi* | [**update_topology**](docs/apis/tags/ComponentApi.md#update_topology) | **patch** /models/branches/{branchId}/power/eps/topology/{blockId} | Update Topology
-*ComponentApi* | [**update_vector_sensor**](docs/apis/tags/ComponentApi.md#update_vector_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/vector-sensors/{blockId} | Update Vector Sensor
 *ConditionApi* | [**create_condition**](docs/apis/tags/ConditionApi.md#create_condition) | **post** /models/branches/{branchId}/cdh/conops/conditions/ | Create Condition
 *ConditionApi* | [**delete_condition**](docs/apis/tags/ConditionApi.md#delete_condition) | **delete** /models/branches/{branchId}/cdh/conops/conditions/{blockId} | Delete Condition
 *ConditionApi* | [**update_condition**](docs/apis/tags/ConditionApi.md#update_condition) | **patch** /models/branches/{branchId}/cdh/conops/conditions/{blockId} | Update Condition
+*ConstantLoadApi* | [**create_constant_load**](docs/apis/tags/ConstantLoadApi.md#create_constant_load) | **post** /models/branches/{branchId}/system/loads/ | Create Constant Load
+*ConstantLoadApi* | [**delete_constant_load**](docs/apis/tags/ConstantLoadApi.md#delete_constant_load) | **delete** /models/branches/{branchId}/system/loads/{blockId} | Delete Constant Load
+*ConstantLoadApi* | [**update_constant_load**](docs/apis/tags/ConstantLoadApi.md#update_constant_load) | **patch** /models/branches/{branchId}/system/loads/{blockId} | Update Constant Load
+*CoolerApi* | [**create_cooler**](docs/apis/tags/CoolerApi.md#create_cooler) | **post** /models/branches/{branchId}/thermal/temp-controllers/coolers/ | Create Cooler
+*CoolerApi* | [**delete_cooler**](docs/apis/tags/CoolerApi.md#delete_cooler) | **delete** /models/branches/{branchId}/thermal/temp-controllers/coolers/{blockId} | Delete Cooler
+*CoolerApi* | [**update_cooler**](docs/apis/tags/CoolerApi.md#update_cooler) | **patch** /models/branches/{branchId}/thermal/temp-controllers/coolers/{blockId} | Update Cooler
 *DataApi* | [**get_data**](docs/apis/tags/DataApi.md#get_data) | **get** /data/ | Query Data
-*FieldOfViewConstraintApi* | [**create_field_of_view_constraint**](docs/apis/tags/FieldOfViewConstraintApi.md#create_field_of_view_constraint) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/ | Create Field of View Constraint
-*FieldOfViewConstraintApi* | [**delete_field_of_view_constraint**](docs/apis/tags/FieldOfViewConstraintApi.md#delete_field_of_view_constraint) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/{blockId} | Delete Field of View Constraint
-*FieldOfViewConstraintApi* | [**update_field_of_view_constraint**](docs/apis/tags/FieldOfViewConstraintApi.md#update_field_of_view_constraint) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/{blockId} | Update Field of View Constraint
-*FieldOfViewApi* | [**create_circular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#create_circular_field_of_view) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/ | Create Circular Field of View
-*FieldOfViewApi* | [**create_rectangular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#create_rectangular_field_of_view) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/ | Create Rectangular Field of View
-*FieldOfViewApi* | [**delete_circular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#delete_circular_field_of_view) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/{blockId} | Delete Circular Field of View
-*FieldOfViewApi* | [**delete_rectangular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#delete_rectangular_field_of_view) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/{blockId} | Delete Rectangular Field of View
-*FieldOfViewApi* | [**update_circular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#update_circular_field_of_view) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/circ-fields-of-view/{blockId} | Update Circular Field of View
-*FieldOfViewApi* | [**update_rectangular_field_of_view**](docs/apis/tags/FieldOfViewApi.md#update_rectangular_field_of_view) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/{blockId} | Update Rectangular Field of View
+*DirectionSensorApi* | [**create_direction_sensor**](docs/apis/tags/DirectionSensorApi.md#create_direction_sensor) | **post** /models/branches/{branchId}/gnc/sensors/direction-sensors/ | Create Direction Sensor
+*DirectionSensorApi* | [**delete_direction_sensor**](docs/apis/tags/DirectionSensorApi.md#delete_direction_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/direction-sensors/{blockId} | Delete Direction Sensor
+*DirectionSensorApi* | [**update_direction_sensor**](docs/apis/tags/DirectionSensorApi.md#update_direction_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/direction-sensors/{blockId} | Update Direction Sensor
+*EKFAlgorithmApi* | [**create_ekf_algorithm**](docs/apis/tags/EKFAlgorithmApi.md#create_ekf_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/ | Create EKF Algorithm
+*EKFAlgorithmApi* | [**delete_ekf_algorithm**](docs/apis/tags/EKFAlgorithmApi.md#delete_ekf_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/{blockId} | Delete EKF Algorithm
+*EKFAlgorithmApi* | [**update_ekf_algorithm**](docs/apis/tags/EKFAlgorithmApi.md#update_ekf_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/{blockId} | Update EKF Algorithm
+*FOVConstraintApi* | [**create_field_of_view_constraint**](docs/apis/tags/FOVConstraintApi.md#create_field_of_view_constraint) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/ | Create Field of View Constraint
+*FOVConstraintApi* | [**delete_field_of_view_constraint**](docs/apis/tags/FOVConstraintApi.md#delete_field_of_view_constraint) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/{blockId} | Delete Field of View Constraint
+*FOVConstraintApi* | [**update_field_of_view_constraint**](docs/apis/tags/FOVConstraintApi.md#update_field_of_view_constraint) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/constraints/{blockId} | Update Field of View Constraint
+*GPSAlgorithmApi* | [**create_gps_algorithm**](docs/apis/tags/GPSAlgorithmApi.md#create_gps_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/ | Create GPS Algorithm
+*GPSAlgorithmApi* | [**delete_gps_algorithm**](docs/apis/tags/GPSAlgorithmApi.md#delete_gps_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/{blockId} | Delete GPS Algorithm
+*GPSAlgorithmApi* | [**update_gps_algorithm**](docs/apis/tags/GPSAlgorithmApi.md#update_gps_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/{blockId} | Update GPS Algorithm
+*GroundTargetApi* | [**create_ground_target**](docs/apis/tags/GroundTargetApi.md#create_ground_target) | **post** /models/branches/{branchId}/cdh/conops/ground-targets/ | Create Ground Target
+*GroundTargetApi* | [**delete_ground_target**](docs/apis/tags/GroundTargetApi.md#delete_ground_target) | **delete** /models/branches/{branchId}/cdh/conops/ground-targets/{blockId} | Delete Ground Target
+*GroundTargetApi* | [**update_ground_target**](docs/apis/tags/GroundTargetApi.md#update_ground_target) | **patch** /models/branches/{branchId}/cdh/conops/ground-targets/{blockId} | Update Ground Target
+*HeaterApi* | [**create_heater**](docs/apis/tags/HeaterApi.md#create_heater) | **post** /models/branches/{branchId}/thermal/temp-controllers/heaters/ | Create Heater
+*HeaterApi* | [**delete_heater**](docs/apis/tags/HeaterApi.md#delete_heater) | **delete** /models/branches/{branchId}/thermal/temp-controllers/heaters/{blockId} | Delete Heater
+*HeaterApi* | [**update_heater**](docs/apis/tags/HeaterApi.md#update_heater) | **patch** /models/branches/{branchId}/thermal/temp-controllers/heaters/{blockId} | Update Heater
 *JobsApi* | [**get_simulation_status**](docs/apis/tags/JobsApi.md#get_simulation_status) | **get** /simulation/branches/{branchId}/control/{jobId} | Get simulation status
 *JobsApi* | [**pause_resume_simulation**](docs/apis/tags/JobsApi.md#pause_resume_simulation) | **patch** /simulation/branches/{branchId}/control/{jobId} | [NOT FUNCTIONAL] Pause/resume running simulation
 *JobsApi* | [**start_simulation**](docs/apis/tags/JobsApi.md#start_simulation) | **post** /simulation/branches/{branchId}/control/ | Start a simulation
 *JobsApi* | [**terminate_simulation**](docs/apis/tags/JobsApi.md#terminate_simulation) | **delete** /simulation/branches/{branchId}/control/{jobId} | Terminate a running simulation
-*LoadApi* | [**create_actuator_load**](docs/apis/tags/LoadApi.md#create_actuator_load) | **post** /models/branches/{branchId}/system/loads/actuator-loads/ | Create Actuator Load
-*LoadApi* | [**create_constant_load**](docs/apis/tags/LoadApi.md#create_constant_load) | **post** /models/branches/{branchId}/system/loads/ | Create Constant Load
-*LoadApi* | [**create_temperature_controller_load**](docs/apis/tags/LoadApi.md#create_temperature_controller_load) | **post** /models/branches/{branchId}/system/loads/temp-control-loads/ | Create Temperature Controller Load
-*LoadApi* | [**delete_actuator_load**](docs/apis/tags/LoadApi.md#delete_actuator_load) | **delete** /models/branches/{branchId}/system/loads/actuator-loads/{blockId} | Delete Actuator Load
-*LoadApi* | [**delete_constant_load**](docs/apis/tags/LoadApi.md#delete_constant_load) | **delete** /models/branches/{branchId}/system/loads/{blockId} | Delete Constant Load
-*LoadApi* | [**delete_temperature_controller_load**](docs/apis/tags/LoadApi.md#delete_temperature_controller_load) | **delete** /models/branches/{branchId}/system/loads/temp-control-loads/{blockId} | Delete Temperature Controller Load
-*LoadApi* | [**update_actuator_load**](docs/apis/tags/LoadApi.md#update_actuator_load) | **patch** /models/branches/{branchId}/system/loads/actuator-loads/{blockId} | Update Actuator Load
-*LoadApi* | [**update_constant_load**](docs/apis/tags/LoadApi.md#update_constant_load) | **patch** /models/branches/{branchId}/system/loads/{blockId} | Update Constant Load
-*LoadApi* | [**update_temperature_controller_load**](docs/apis/tags/LoadApi.md#update_temperature_controller_load) | **patch** /models/branches/{branchId}/system/loads/temp-control-loads/{blockId} | Update Temperature Controller Load
 *LoadStateApi* | [**create_load_state**](docs/apis/tags/LoadStateApi.md#create_load_state) | **post** /models/branches/{branchId}/system/loads/states/ | Create Load State
 *LoadStateApi* | [**delete_load_state**](docs/apis/tags/LoadStateApi.md#delete_load_state) | **delete** /models/branches/{branchId}/system/loads/states/{blockId} | Delete Load State
 *LoadStateApi* | [**update_load_state**](docs/apis/tags/LoadStateApi.md#update_load_state) | **patch** /models/branches/{branchId}/system/loads/states/{blockId} | Update Load State
+*LocalVectorApi* | [**create_local_vector**](docs/apis/tags/LocalVectorApi.md#create_local_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/ | Create Local Vector
+*LocalVectorApi* | [**delete_local_vector**](docs/apis/tags/LocalVectorApi.md#delete_local_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/{blockId} | Delete Local Vector
+*LocalVectorApi* | [**update_local_vector**](docs/apis/tags/LocalVectorApi.md#update_local_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/{blockId} | Update Local Vector
+*LockPointingModeApi* | [**create_direction_lock_pointing_mode**](docs/apis/tags/LockPointingModeApi.md#create_direction_lock_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/lock/ | Create Direction Lock Pointing Mode
+*LockPointingModeApi* | [**delete_direction_lock_pointing_mode**](docs/apis/tags/LockPointingModeApi.md#delete_direction_lock_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/lock/{blockId} | Delete Direction Lock Pointing Mode
+*LockPointingModeApi* | [**update_direction_lock_pointing_mode**](docs/apis/tags/LockPointingModeApi.md#update_direction_lock_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/lock/{blockId} | Update Direction Lock Pointing Mode
+*MEKFAlgorithmApi* | [**create_mekf_algorithm**](docs/apis/tags/MEKFAlgorithmApi.md#create_mekf_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/ | Create MEKF Algorithm
+*MEKFAlgorithmApi* | [**delete_mekf_algorithm**](docs/apis/tags/MEKFAlgorithmApi.md#delete_mekf_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/{blockId} | Delete MEKF Algorithm
+*MEKFAlgorithmApi* | [**update_mekf_algorithm**](docs/apis/tags/MEKFAlgorithmApi.md#update_mekf_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/mekf/{blockId} | Update MEKF Algorithm
+*MagnetorquerApi* | [**create_magnetorquer**](docs/apis/tags/MagnetorquerApi.md#create_magnetorquer) | **post** /models/branches/{branchId}/gnc/actuators/magnetorquers/ | Create Magnetorquer
+*MagnetorquerApi* | [**delete_magnetorquer**](docs/apis/tags/MagnetorquerApi.md#delete_magnetorquer) | **delete** /models/branches/{branchId}/gnc/actuators/magnetorquers/{blockId} | Delete Magnetorquer
+*MagnetorquerApi* | [**update_magnetorquer**](docs/apis/tags/MagnetorquerApi.md#update_magnetorquer) | **patch** /models/branches/{branchId}/gnc/actuators/magnetorquers/{blockId} | Update Magnetorquer
+*MaxAlignPointingModeApi* | [**create_max_secondary_alignment_pointing_mode**](docs/apis/tags/MaxAlignPointingModeApi.md#create_max_secondary_alignment_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/ | Create Max Secondary Alignment Pointing Mode
+*MaxAlignPointingModeApi* | [**delete_max_secondary_alignment_pointing_mode**](docs/apis/tags/MaxAlignPointingModeApi.md#delete_max_secondary_alignment_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/{blockId} | Delete Max Secondary Alignment Pointing Mode
+*MaxAlignPointingModeApi* | [**update_max_secondary_alignment_pointing_mode**](docs/apis/tags/MaxAlignPointingModeApi.md#update_max_secondary_alignment_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/{blockId} | Update Max Secondary Alignment Pointing Mode
 *OperationalModeApi* | [**create_operational_mode**](docs/apis/tags/OperationalModeApi.md#create_operational_mode) | **post** /models/branches/{branchId}/cdh/conops/operational-modes/ | Create Operational Mode
 *OperationalModeApi* | [**delete_operational_mode**](docs/apis/tags/OperationalModeApi.md#delete_operational_mode) | **delete** /models/branches/{branchId}/cdh/conops/operational-modes/{blockId} | Delete Operational Mode
 *OperationalModeApi* | [**update_operational_mode**](docs/apis/tags/OperationalModeApi.md#update_operational_mode) | **patch** /models/branches/{branchId}/cdh/conops/operational-modes/{blockId} | Update Operational Mode
+*OpticalAttitudeSensorApi* | [**create_optical_attitude_sensor**](docs/apis/tags/OpticalAttitudeSensorApi.md#create_optical_attitude_sensor) | **post** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/ | Create Optical Attitude Sensor
+*OpticalAttitudeSensorApi* | [**delete_optical_attitude_sensor**](docs/apis/tags/OpticalAttitudeSensorApi.md#delete_optical_attitude_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/{blockId} | Delete Optical Attitude Sensor
+*OpticalAttitudeSensorApi* | [**update_optical_attitude_sensor**](docs/apis/tags/OpticalAttitudeSensorApi.md#update_optical_attitude_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/optical-attitude-sensors/{blockId} | Update Optical Attitude Sensor
 *OrbitApi* | [**update_orbit**](docs/apis/tags/OrbitApi.md#update_orbit) | **patch** /models/branches/{branchId}/gnc/orbits/{blockId} | Update Orbit
-*OrbitDeterminationAlgorithmApi* | [**create_ekf_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#create_ekf_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/ | Create EKF Algorithm
-*OrbitDeterminationAlgorithmApi* | [**create_gps_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#create_gps_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/ | Create GPS Algorithm
-*OrbitDeterminationAlgorithmApi* | [**delete_ekf_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#delete_ekf_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/{blockId} | Delete EKF Algorithm
-*OrbitDeterminationAlgorithmApi* | [**delete_gps_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#delete_gps_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/{blockId} | Delete GPS Algorithm
-*OrbitDeterminationAlgorithmApi* | [**update_ekf_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#update_ekf_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/orbit-determination/ekf/{blockId} | Update EKF Algorithm
-*OrbitDeterminationAlgorithmApi* | [**update_gps_algorithm**](docs/apis/tags/OrbitDeterminationAlgorithmApi.md#update_gps_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/orbit-determination/gps/{blockId} | Update GPS Algorithm
-*PointingModeApi* | [**create_direction_lock_pointing_mode**](docs/apis/tags/PointingModeApi.md#create_direction_lock_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/lock/ | Create Direction Lock Pointing Mode
-*PointingModeApi* | [**create_max_secondary_alignment_pointing_mode**](docs/apis/tags/PointingModeApi.md#create_max_secondary_alignment_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/ | Create Max Secondary Alignment Pointing Mode
-*PointingModeApi* | [**create_passive_pointing_mode**](docs/apis/tags/PointingModeApi.md#create_passive_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/passive/ | Create Passive Pointing Mode
-*PointingModeApi* | [**delete_direction_lock_pointing_mode**](docs/apis/tags/PointingModeApi.md#delete_direction_lock_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/lock/{blockId} | Delete Direction Lock Pointing Mode
-*PointingModeApi* | [**delete_max_secondary_alignment_pointing_mode**](docs/apis/tags/PointingModeApi.md#delete_max_secondary_alignment_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/{blockId} | Delete Max Secondary Alignment Pointing Mode
-*PointingModeApi* | [**delete_passive_pointing_mode**](docs/apis/tags/PointingModeApi.md#delete_passive_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/passive/{blockId} | Delete Passive Pointing Mode
-*PointingModeApi* | [**update_direction_lock_pointing_mode**](docs/apis/tags/PointingModeApi.md#update_direction_lock_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/lock/{blockId} | Update Direction Lock Pointing Mode
-*PointingModeApi* | [**update_max_secondary_alignment_pointing_mode**](docs/apis/tags/PointingModeApi.md#update_max_secondary_alignment_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/max-secondary-align/{blockId} | Update Max Secondary Alignment Pointing Mode
-*PointingModeApi* | [**update_passive_pointing_mode**](docs/apis/tags/PointingModeApi.md#update_passive_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/passive/{blockId} | Update Passive Pointing Mode
-*ReferenceVectorApi* | [**create_celestial_vector**](docs/apis/tags/ReferenceVectorApi.md#create_celestial_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/ | Create Celestial Vector
-*ReferenceVectorApi* | [**create_local_vector**](docs/apis/tags/ReferenceVectorApi.md#create_local_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/ | Create Local Vector
-*ReferenceVectorApi* | [**create_target_vector**](docs/apis/tags/ReferenceVectorApi.md#create_target_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/ | Create Target Vector
-*ReferenceVectorApi* | [**delete_celestial_vector**](docs/apis/tags/ReferenceVectorApi.md#delete_celestial_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/{blockId} | Delete Celestial Vector
-*ReferenceVectorApi* | [**delete_local_vector**](docs/apis/tags/ReferenceVectorApi.md#delete_local_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/{blockId} | Delete Local Vector
-*ReferenceVectorApi* | [**delete_target_vector**](docs/apis/tags/ReferenceVectorApi.md#delete_target_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/{blockId} | Delete Target Vector
-*ReferenceVectorApi* | [**update_celestial_vector**](docs/apis/tags/ReferenceVectorApi.md#update_celestial_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/celestial-vectors/{blockId} | Update Celestial Vector
-*ReferenceVectorApi* | [**update_local_vector**](docs/apis/tags/ReferenceVectorApi.md#update_local_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/local-vectors/{blockId} | Update Local Vector
-*ReferenceVectorApi* | [**update_target_vector**](docs/apis/tags/ReferenceVectorApi.md#update_target_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/{blockId} | Update Target Vector
+*PassivePointingModeApi* | [**create_passive_pointing_mode**](docs/apis/tags/PassivePointingModeApi.md#create_passive_pointing_mode) | **post** /models/branches/{branchId}/gnc/pointing-modes/passive/ | Create Passive Pointing Mode
+*PassivePointingModeApi* | [**delete_passive_pointing_mode**](docs/apis/tags/PassivePointingModeApi.md#delete_passive_pointing_mode) | **delete** /models/branches/{branchId}/gnc/pointing-modes/passive/{blockId} | Delete Passive Pointing Mode
+*PassivePointingModeApi* | [**update_passive_pointing_mode**](docs/apis/tags/PassivePointingModeApi.md#update_passive_pointing_mode) | **patch** /models/branches/{branchId}/gnc/pointing-modes/passive/{blockId} | Update Passive Pointing Mode
+*PositionSensorApi* | [**create_positionsensor**](docs/apis/tags/PositionSensorApi.md#create_positionsensor) | **post** /models/branches/{branchId}/gnc/sensors/position-sensors/ | Create PositionSensor
+*PositionSensorApi* | [**delete_positionsensor**](docs/apis/tags/PositionSensorApi.md#delete_positionsensor) | **delete** /models/branches/{branchId}/gnc/sensors/position-sensors/{blockId} | Delete PositionSensor
+*PositionSensorApi* | [**update_positionsensor**](docs/apis/tags/PositionSensorApi.md#update_positionsensor) | **patch** /models/branches/{branchId}/gnc/sensors/position-sensors/{blockId} | Update PositionSensor
+*ReactionWheelApi* | [**create_reaction_wheel**](docs/apis/tags/ReactionWheelApi.md#create_reaction_wheel) | **post** /models/branches/{branchId}/gnc/actuators/reaction-wheels/ | Create Reaction Wheel
+*ReactionWheelApi* | [**delete_reaction_wheel**](docs/apis/tags/ReactionWheelApi.md#delete_reaction_wheel) | **delete** /models/branches/{branchId}/gnc/actuators/reaction-wheels/{blockId} | Delete Reaction Wheel
+*ReactionWheelApi* | [**update_reaction_wheel**](docs/apis/tags/ReactionWheelApi.md#update_reaction_wheel) | **patch** /models/branches/{branchId}/gnc/actuators/reaction-wheels/{blockId} | Update Reaction Wheel
+*RectangularFieldOfViewApi* | [**create_rectangular_field_of_view**](docs/apis/tags/RectangularFieldOfViewApi.md#create_rectangular_field_of_view) | **post** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/ | Create Rectangular Field of View
+*RectangularFieldOfViewApi* | [**delete_rectangular_field_of_view**](docs/apis/tags/RectangularFieldOfViewApi.md#delete_rectangular_field_of_view) | **delete** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/{blockId} | Delete Rectangular Field of View
+*RectangularFieldOfViewApi* | [**update_rectangular_field_of_view**](docs/apis/tags/RectangularFieldOfViewApi.md#update_rectangular_field_of_view) | **patch** /models/branches/{branchId}/gnc/sensors/fields-of-view/rect-fields-of-view/{blockId} | Update Rectangular Field of View
 *SatelliteApi* | [**update_satellite**](docs/apis/tags/SatelliteApi.md#update_satellite) | **patch** /models/branches/{branchId}/system/satellite/{blockId} | Update Satellite
-*SimulatedAgentApi* | [**create_simulated_agent**](docs/apis/tags/SimulatedAgentApi.md#create_simulated_agent) | **post** /models/branches/{branchId}/agents/ | Create Simulated Agent
-*SimulatedAgentApi* | [**delete_simulated_agent**](docs/apis/tags/SimulatedAgentApi.md#delete_simulated_agent) | **delete** /models/branches/{branchId}/agents/{blockId} | Delete Simulated Agent
-*SimulatedAgentApi* | [**update_simulated_agent**](docs/apis/tags/SimulatedAgentApi.md#update_simulated_agent) | **patch** /models/branches/{branchId}/agents/{blockId} | Update Simulated Agent
-*SimulationClockConfigurationApi* | [**create_simulation_clock_configuration**](docs/apis/tags/SimulationClockConfigurationApi.md#create_simulation_clock_configuration) | **post** /models/branches/{branchId}/clock-configs/ | Create Simulation Clock Configuration
-*SimulationClockConfigurationApi* | [**delete_simulation_clock_configuration**](docs/apis/tags/SimulationClockConfigurationApi.md#delete_simulation_clock_configuration) | **delete** /models/branches/{branchId}/clock-configs/{blockId} | Delete Simulation Clock Configuration
-*SimulationClockConfigurationApi* | [**update_simulation_clock_configuration**](docs/apis/tags/SimulationClockConfigurationApi.md#update_simulation_clock_configuration) | **patch** /models/branches/{branchId}/clock-configs/{blockId} | Update Simulation Clock Configuration
+*SlidingModeAlgorithmApi* | [**create_sliding_mode3x3_algorithm**](docs/apis/tags/SlidingModeAlgorithmApi.md#create_sliding_mode3x3_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/ | Create Sliding Mode 3x3 Algorithm
+*SlidingModeAlgorithmApi* | [**delete_sliding_mode3x3_algorithm**](docs/apis/tags/SlidingModeAlgorithmApi.md#delete_sliding_mode3x3_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/{blockId} | Delete Sliding Mode 3x3 Algorithm
+*SlidingModeAlgorithmApi* | [**update_sliding_mode3x3_algorithm**](docs/apis/tags/SlidingModeAlgorithmApi.md#update_sliding_mode3x3_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-control/sliding-mode/{blockId} | Update Sliding Mode 3x3 Algorithm
 *SolarArrayApi* | [**create_solar_array**](docs/apis/tags/SolarArrayApi.md#create_solar_array) | **post** /models/branches/{branchId}/power/solar-arrays/ | Create Solar Array
 *SolarArrayApi* | [**delete_solar_array**](docs/apis/tags/SolarArrayApi.md#delete_solar_array) | **delete** /models/branches/{branchId}/power/solar-arrays/{blockId} | Delete Solar Array
 *SolarArrayApi* | [**update_solar_array**](docs/apis/tags/SolarArrayApi.md#update_solar_array) | **patch** /models/branches/{branchId}/power/solar-arrays/{blockId} | Update Solar Array
 *SolarCellApi* | [**create_solar_cell**](docs/apis/tags/SolarCellApi.md#create_solar_cell) | **post** /models/branches/{branchId}/power/solar-arrays/cells/ | Create Solar Cell
 *SolarCellApi* | [**delete_solar_cell**](docs/apis/tags/SolarCellApi.md#delete_solar_cell) | **delete** /models/branches/{branchId}/power/solar-arrays/cells/{blockId} | Delete Solar Cell
 *SolarCellApi* | [**update_solar_cell**](docs/apis/tags/SolarCellApi.md#update_solar_cell) | **patch** /models/branches/{branchId}/power/solar-arrays/cells/{blockId} | Update Solar Cell
+*SolarPanelApi* | [**create_solar_panel**](docs/apis/tags/SolarPanelApi.md#create_solar_panel) | **post** /models/branches/{branchId}/power/solar-arrays/panels/ | Create Solar Panel
+*SolarPanelApi* | [**delete_solar_panel**](docs/apis/tags/SolarPanelApi.md#delete_solar_panel) | **delete** /models/branches/{branchId}/power/solar-arrays/panels/{blockId} | Delete Solar Panel
+*SolarPanelApi* | [**update_solar_panel**](docs/apis/tags/SolarPanelApi.md#update_solar_panel) | **patch** /models/branches/{branchId}/power/solar-arrays/panels/{blockId} | Update Solar Panel
+*SpaceTargetApi* | [**create_space_target**](docs/apis/tags/SpaceTargetApi.md#create_space_target) | **post** /models/branches/{branchId}/cdh/conops/space-targets/ | Create Space Target
+*SpaceTargetApi* | [**delete_space_target**](docs/apis/tags/SpaceTargetApi.md#delete_space_target) | **delete** /models/branches/{branchId}/cdh/conops/space-targets/{blockId} | Delete Space Target
+*SpaceTargetApi* | [**update_space_target**](docs/apis/tags/SpaceTargetApi.md#update_space_target) | **patch** /models/branches/{branchId}/cdh/conops/space-targets/{blockId} | Update Space Target
 *SubsystemApi* | [**create_subsystem**](docs/apis/tags/SubsystemApi.md#create_subsystem) | **post** /models/branches/{branchId}/system/subsystems/ | Create Subsystem
 *SubsystemApi* | [**delete_subsystem**](docs/apis/tags/SubsystemApi.md#delete_subsystem) | **delete** /models/branches/{branchId}/system/subsystems/{blockId} | Delete Subsystem
 *SubsystemApi* | [**update_subsystem**](docs/apis/tags/SubsystemApi.md#update_subsystem) | **patch** /models/branches/{branchId}/system/subsystems/{blockId} | Update Subsystem
@@ -325,33 +328,34 @@ Class | Method | HTTP request | Description
 *SurfaceMaterialApi* | [**create_surface_material**](docs/apis/tags/SurfaceMaterialApi.md#create_surface_material) | **post** /models/branches/{branchId}/system/geometry/surfaces/materials/ | Create Surface Material
 *SurfaceMaterialApi* | [**delete_surface_material**](docs/apis/tags/SurfaceMaterialApi.md#delete_surface_material) | **delete** /models/branches/{branchId}/system/geometry/surfaces/materials/{blockId} | Delete Surface Material
 *SurfaceMaterialApi* | [**update_surface_material**](docs/apis/tags/SurfaceMaterialApi.md#update_surface_material) | **patch** /models/branches/{branchId}/system/geometry/surfaces/materials/{blockId} | Update Surface Material
-*TargetApi* | [**create_celestial_target**](docs/apis/tags/TargetApi.md#create_celestial_target) | **post** /models/branches/{branchId}/cdh/conops/celestial-targets/ | Create Celestial Target
-*TargetApi* | [**create_ground_target**](docs/apis/tags/TargetApi.md#create_ground_target) | **post** /models/branches/{branchId}/cdh/conops/ground-targets/ | Create Ground Target
-*TargetApi* | [**create_space_target**](docs/apis/tags/TargetApi.md#create_space_target) | **post** /models/branches/{branchId}/cdh/conops/space-targets/ | Create Space Target
-*TargetApi* | [**delete_celestial_target**](docs/apis/tags/TargetApi.md#delete_celestial_target) | **delete** /models/branches/{branchId}/cdh/conops/celestial-targets/{blockId} | Delete Celestial Target
-*TargetApi* | [**delete_ground_target**](docs/apis/tags/TargetApi.md#delete_ground_target) | **delete** /models/branches/{branchId}/cdh/conops/ground-targets/{blockId} | Delete Ground Target
-*TargetApi* | [**delete_space_target**](docs/apis/tags/TargetApi.md#delete_space_target) | **delete** /models/branches/{branchId}/cdh/conops/space-targets/{blockId} | Delete Space Target
-*TargetApi* | [**update_celestial_target**](docs/apis/tags/TargetApi.md#update_celestial_target) | **patch** /models/branches/{branchId}/cdh/conops/celestial-targets/{blockId} | Update Celestial Target
-*TargetApi* | [**update_ground_target**](docs/apis/tags/TargetApi.md#update_ground_target) | **patch** /models/branches/{branchId}/cdh/conops/ground-targets/{blockId} | Update Ground Target
-*TargetApi* | [**update_space_target**](docs/apis/tags/TargetApi.md#update_space_target) | **patch** /models/branches/{branchId}/cdh/conops/space-targets/{blockId} | Update Space Target
 *TargetGroupApi* | [**create_target_group**](docs/apis/tags/TargetGroupApi.md#create_target_group) | **post** /models/branches/{branchId}/cdh/conops/target-groups/ | Create Target Group
 *TargetGroupApi* | [**delete_target_group**](docs/apis/tags/TargetGroupApi.md#delete_target_group) | **delete** /models/branches/{branchId}/cdh/conops/target-groups/{blockId} | Delete Target Group
 *TargetGroupApi* | [**update_target_group**](docs/apis/tags/TargetGroupApi.md#update_target_group) | **patch** /models/branches/{branchId}/cdh/conops/target-groups/{blockId} | Update Target Group
-*TemperatureControllerApi* | [**create_cooler**](docs/apis/tags/TemperatureControllerApi.md#create_cooler) | **post** /models/branches/{branchId}/thermal/temp-controllers/coolers/ | Create Cooler
-*TemperatureControllerApi* | [**create_heater**](docs/apis/tags/TemperatureControllerApi.md#create_heater) | **post** /models/branches/{branchId}/thermal/temp-controllers/heaters/ | Create Heater
-*TemperatureControllerApi* | [**delete_cooler**](docs/apis/tags/TemperatureControllerApi.md#delete_cooler) | **delete** /models/branches/{branchId}/thermal/temp-controllers/coolers/{blockId} | Delete Cooler
-*TemperatureControllerApi* | [**delete_heater**](docs/apis/tags/TemperatureControllerApi.md#delete_heater) | **delete** /models/branches/{branchId}/thermal/temp-controllers/heaters/{blockId} | Delete Heater
-*TemperatureControllerApi* | [**update_cooler**](docs/apis/tags/TemperatureControllerApi.md#update_cooler) | **patch** /models/branches/{branchId}/thermal/temp-controllers/coolers/{blockId} | Update Cooler
-*TemperatureControllerApi* | [**update_heater**](docs/apis/tags/TemperatureControllerApi.md#update_heater) | **patch** /models/branches/{branchId}/thermal/temp-controllers/heaters/{blockId} | Update Heater
-*TemperatureControllerStateApi* | [**create_temperature_controller_state**](docs/apis/tags/TemperatureControllerStateApi.md#create_temperature_controller_state) | **post** /models/branches/{branchId}/thermal/temp-controllers/states/ | Create Temperature Controller State
-*TemperatureControllerStateApi* | [**delete_temperature_controller_state**](docs/apis/tags/TemperatureControllerStateApi.md#delete_temperature_controller_state) | **delete** /models/branches/{branchId}/thermal/temp-controllers/states/{blockId} | Delete Temperature Controller State
-*TemperatureControllerStateApi* | [**update_temperature_controller_state**](docs/apis/tags/TemperatureControllerStateApi.md#update_temperature_controller_state) | **patch** /models/branches/{branchId}/thermal/temp-controllers/states/{blockId} | Update Temperature Controller State
+*TargetVectorApi* | [**create_target_vector**](docs/apis/tags/TargetVectorApi.md#create_target_vector) | **post** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/ | Create Target Vector
+*TargetVectorApi* | [**delete_target_vector**](docs/apis/tags/TargetVectorApi.md#delete_target_vector) | **delete** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/{blockId} | Delete Target Vector
+*TargetVectorApi* | [**update_target_vector**](docs/apis/tags/TargetVectorApi.md#update_target_vector) | **patch** /models/branches/{branchId}/gnc/reference-vectors/target-vectors/{blockId} | Update Target Vector
+*TempControlLoadApi* | [**create_temperature_controller_load**](docs/apis/tags/TempControlLoadApi.md#create_temperature_controller_load) | **post** /models/branches/{branchId}/system/loads/temp-control-loads/ | Create Temperature Controller Load
+*TempControlLoadApi* | [**delete_temperature_controller_load**](docs/apis/tags/TempControlLoadApi.md#delete_temperature_controller_load) | **delete** /models/branches/{branchId}/system/loads/temp-control-loads/{blockId} | Delete Temperature Controller Load
+*TempControlLoadApi* | [**update_temperature_controller_load**](docs/apis/tags/TempControlLoadApi.md#update_temperature_controller_load) | **patch** /models/branches/{branchId}/system/loads/temp-control-loads/{blockId} | Update Temperature Controller Load
+*TempControllerStateApi* | [**create_temperature_controller_state**](docs/apis/tags/TempControllerStateApi.md#create_temperature_controller_state) | **post** /models/branches/{branchId}/thermal/temp-controllers/states/ | Create Temperature Controller State
+*TempControllerStateApi* | [**delete_temperature_controller_state**](docs/apis/tags/TempControllerStateApi.md#delete_temperature_controller_state) | **delete** /models/branches/{branchId}/thermal/temp-controllers/states/{blockId} | Delete Temperature Controller State
+*TempControllerStateApi* | [**update_temperature_controller_state**](docs/apis/tags/TempControllerStateApi.md#update_temperature_controller_state) | **patch** /models/branches/{branchId}/thermal/temp-controllers/states/{blockId} | Update Temperature Controller State
+*TemplateRefApi* | [**create_agent_template_reference**](docs/apis/tags/TemplateRefApi.md#create_agent_template_reference) | **post** /models/branches/{branchId}/template-refs/ | Create Agent Template Reference
+*TemplateRefApi* | [**delete_agent_template_reference**](docs/apis/tags/TemplateRefApi.md#delete_agent_template_reference) | **delete** /models/branches/{branchId}/template-refs/{blockId} | Delete Agent Template Reference
+*TemplateRefApi* | [**update_agent_template_reference**](docs/apis/tags/TemplateRefApi.md#update_agent_template_reference) | **patch** /models/branches/{branchId}/template-refs/{blockId} | Update Agent Template Reference
 *ThermalInterfaceApi* | [**create_thermal_interface**](docs/apis/tags/ThermalInterfaceApi.md#create_thermal_interface) | **post** /models/branches/{branchId}/thermal/thermal-interfaces/ | Create Thermal Interface
 *ThermalInterfaceApi* | [**delete_thermal_interface**](docs/apis/tags/ThermalInterfaceApi.md#delete_thermal_interface) | **delete** /models/branches/{branchId}/thermal/thermal-interfaces/{blockId} | Delete Thermal Interface
 *ThermalInterfaceApi* | [**update_thermal_interface**](docs/apis/tags/ThermalInterfaceApi.md#update_thermal_interface) | **patch** /models/branches/{branchId}/thermal/thermal-interfaces/{blockId} | Update Thermal Interface
 *ThermalInterfaceMaterialApi* | [**create_thermal_interface_material**](docs/apis/tags/ThermalInterfaceMaterialApi.md#create_thermal_interface_material) | **post** /models/branches/{branchId}/thermal/thermal-interface-materials/ | Create Thermal Interface Material
 *ThermalInterfaceMaterialApi* | [**delete_thermal_interface_material**](docs/apis/tags/ThermalInterfaceMaterialApi.md#delete_thermal_interface_material) | **delete** /models/branches/{branchId}/thermal/thermal-interface-materials/{blockId} | Delete Thermal Interface Material
 *ThermalInterfaceMaterialApi* | [**update_thermal_interface_material**](docs/apis/tags/ThermalInterfaceMaterialApi.md#update_thermal_interface_material) | **patch** /models/branches/{branchId}/thermal/thermal-interface-materials/{blockId} | Update Thermal Interface Material
+*TopologyApi* | [**update_topology**](docs/apis/tags/TopologyApi.md#update_topology) | **patch** /models/branches/{branchId}/power/eps/topology/{blockId} | Update Topology
+*TriadAlgorithmApi* | [**create_triad_algorithm**](docs/apis/tags/TriadAlgorithmApi.md#create_triad_algorithm) | **post** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/ | Create Triad Algorithm
+*TriadAlgorithmApi* | [**delete_triad_algorithm**](docs/apis/tags/TriadAlgorithmApi.md#delete_triad_algorithm) | **delete** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/{blockId} | Delete Triad Algorithm
+*TriadAlgorithmApi* | [**update_triad_algorithm**](docs/apis/tags/TriadAlgorithmApi.md#update_triad_algorithm) | **patch** /models/branches/{branchId}/gnc/algorithms/attitude-determination/triad/{blockId} | Update Triad Algorithm
+*VectorSensorApi* | [**create_vector_sensor**](docs/apis/tags/VectorSensorApi.md#create_vector_sensor) | **post** /models/branches/{branchId}/gnc/sensors/vector-sensors/ | Create Vector Sensor
+*VectorSensorApi* | [**delete_vector_sensor**](docs/apis/tags/VectorSensorApi.md#delete_vector_sensor) | **delete** /models/branches/{branchId}/gnc/sensors/vector-sensors/{blockId} | Delete Vector Sensor
+*VectorSensorApi* | [**update_vector_sensor**](docs/apis/tags/VectorSensorApi.md#update_vector_sensor) | **patch** /models/branches/{branchId}/gnc/sensors/vector-sensors/{blockId} | Update Vector Sensor
 
 ## Documentation For Models
 
@@ -519,8 +523,8 @@ Class | Method | HTTP request | Description
  - [PositionSensor](docs/models/PositionSensor.md)
  - [PositionSensorCreate](docs/models/PositionSensorCreate.md)
  - [PositionSensorUpdate](docs/models/PositionSensorUpdate.md)
- - [PostgresBranchScenario](docs/models/PostgresBranchScenario.md)
- - [PostgresBranchVehicle](docs/models/PostgresBranchVehicle.md)
+ - [PostgresBranchScenarioRes](docs/models/PostgresBranchScenarioRes.md)
+ - [PostgresBranchVehicleRes](docs/models/PostgresBranchVehicleRes.md)
  - [PowerLoad](docs/models/PowerLoad.md)
  - [QuasiRegDetTopology](docs/models/QuasiRegDetTopology.md)
  - [ReactionWheel](docs/models/ReactionWheel.md)
@@ -630,6 +634,29 @@ Class | Method | HTTP request | Description
  All endpoints do not require authorization.
 
 ## Author
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

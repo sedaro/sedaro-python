@@ -152,10 +152,10 @@ Creates a new branch based on and in the same repository as the branch associate
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import branches_api
-from sedaro_base_client.model.postgres_branch_vehicle import PostgresBranchVehicle
-from sedaro_base_client.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.branch_create import BranchCreate
+from sedaro_base_client.model.postgres_branch_scenario_res import PostgresBranchScenarioRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -246,8 +246,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
-[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
+[PostgresBranchVehicleRes]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) |  | 
+[PostgresBranchScenarioRes]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) |  | 
 
 #### create_branch.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -385,9 +385,9 @@ Retrieves the branch with the provided `id`.
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import branches_api
-from sedaro_base_client.model.postgres_branch_vehicle import PostgresBranchVehicle
-from sedaro_base_client.model.postgres_branch_scenario import PostgresBranchScenario
+from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.postgres_branch_scenario_res import PostgresBranchScenarioRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -463,8 +463,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
-[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
+[PostgresBranchVehicleRes]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) |  | 
+[PostgresBranchScenarioRes]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) |  | 
 
 #### get_branch.ApiResponseFor422
 Name | Type | Description  | Notes
@@ -865,10 +865,10 @@ Updates updateable fields on the branch with the provided `id`. Note: - `shareab
 ```python
 import sedaro_base_client
 from sedaro_base_client.apis.tags import branches_api
-from sedaro_base_client.model.postgres_branch_vehicle import PostgresBranchVehicle
-from sedaro_base_client.model.postgres_branch_scenario import PostgresBranchScenario
 from sedaro_base_client.model.branch_update import BranchUpdate
+from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.postgres_branch_scenario_res import PostgresBranchScenarioRes
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -961,8 +961,8 @@ dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal
 #### anyOf
 Class Name | Input Type | Accessed Type | Description | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-[PostgresBranchVehicle]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) | [**PostgresBranchVehicle**]({{complexTypePrefix}}PostgresBranchVehicle.md) |  | 
-[PostgresBranchScenario]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) | [**PostgresBranchScenario**]({{complexTypePrefix}}PostgresBranchScenario.md) |  | 
+[PostgresBranchVehicleRes]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) | [**PostgresBranchVehicleRes**]({{complexTypePrefix}}PostgresBranchVehicleRes.md) |  | 
+[PostgresBranchScenarioRes]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) | [**PostgresBranchScenarioRes**]({{complexTypePrefix}}PostgresBranchScenarioRes.md) |  | 
 
 #### update_branch.ApiResponseFor422
 Name | Type | Description  | Notes

@@ -39,6 +39,7 @@ class VehicleBlockCreateRes(
             "action",
             "block",
             "branch",
+            "blockClassToBlockGroupMap",
         }
         
         class properties:
@@ -64,8 +65,8 @@ class VehicleBlockCreateRes(
                 return GroupAndId
         
             @staticmethod
-            def branch() -> typing.Type['PostgresBranchVehicle']:
-                return PostgresBranchVehicle
+            def branch() -> typing.Type['PostgresBranchVehicleRes']:
+                return PostgresBranchVehicleRes
             
             
             class blockIdToTypeMap(
@@ -95,17 +96,48 @@ class VehicleBlockCreateRes(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            
+            
+            class blockClassToBlockGroupMap(
+                schemas.DictSchema
+            ):
+            
+            
+                class MetaOapg:
+                    additional_properties = schemas.StrSchema
+                
+                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+                
+                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
+                ) -> 'blockClassToBlockGroupMap':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             __annotations__ = {
                 "action": action,
                 "block": block,
                 "branch": branch,
                 "blockIdToTypeMap": blockIdToTypeMap,
+                "blockClassToBlockGroupMap": blockClassToBlockGroupMap,
             }
     
     blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
     action: MetaOapg.properties.action
     block: 'GroupAndId'
-    branch: 'PostgresBranchVehicle'
+    branch: 'PostgresBranchVehicleRes'
+    blockClassToBlockGroupMap: MetaOapg.properties.blockClassToBlockGroupMap
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
@@ -114,15 +146,18 @@ class VehicleBlockCreateRes(
     def __getitem__(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicle': ...
+    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -134,15 +169,18 @@ class VehicleBlockCreateRes(
     def get_item_oapg(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicle': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -152,7 +190,8 @@ class VehicleBlockCreateRes(
         blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
-        branch: 'PostgresBranchVehicle',
+        branch: 'PostgresBranchVehicleRes',
+        blockClassToBlockGroupMap: typing.Union[MetaOapg.properties.blockClassToBlockGroupMap, dict, frozendict.frozendict, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VehicleBlockCreateRes':
@@ -163,9 +202,10 @@ class VehicleBlockCreateRes(
             action=action,
             block=block,
             branch=branch,
+            blockClassToBlockGroupMap=blockClassToBlockGroupMap,
             _configuration=_configuration,
             **kwargs,
         )
 
 from sedaro_base_client.model.group_and_id import GroupAndId
-from sedaro_base_client.model.postgres_branch_vehicle import PostgresBranchVehicle
+from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes
