@@ -145,8 +145,11 @@ class BlockClassClient:
         if type(id) == int:
             id = str(id)
 
-        if id not in self._branch.data[self._block_group]:
+        if id not in self._branch._block_id_to_type_map:
+            raise KeyError(f'There is no Block with id {id} in this Branch.')
+
+        if self._branch._block_id_to_type_map[id] != self._block_name:
             raise KeyError(
-                f'There is no {self._block_name} in the {self._block_group} BlockGroup with id {id}.')
+                f'There is no {self._block_name} with id {id} in this Branch.')
 
         return BlockClient(id=id, _block_class_client=self)
