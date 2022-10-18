@@ -53,15 +53,6 @@ if __name__ == "__main__":
     print('\ndone\n')
 
 
-# block = branch.Block.create(**kwargs)
-# block = branch.Block.get() # get from branch data already returned
-
-# block.update(**kwargs)
-# block.delete()
-
-# batteryCell.partNumber # -> batteryCell['partNumber']
-
-
 # Future:
 # - Traversing: batteryCell.batteryPack.battery.satellite.update()
 # - All references update togetehr: batteryCellCopy = copy(batteryCell)
