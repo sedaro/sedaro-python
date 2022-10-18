@@ -50,6 +50,7 @@ def test_create_update_and_delete_block():
 if __name__ == "__main__":
     # test_get()
     test_create_update_and_delete_block()
+    print('\ndone\n')
 
 
 # block = branch.Block.create(**kwargs)
