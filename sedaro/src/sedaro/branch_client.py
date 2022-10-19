@@ -74,19 +74,22 @@ class BranchClient:
         # Loop through all blocks in all block groups
         # -- to deal with cascade deletes, and updates of blocks on other side of relationships
         for b_g in self._block_group_names:
-            for id_local, block_data_local in list(branch_data_local[b_g].items()):
+            b_g_incoming = branch_data_incoming[b_g]
+            b_g_local = branch_data_local[b_g]
+
+            for id_local, block_data_local in list(b_g_local.items()):
 
                 # Skip block that's already been handled above
                 if id_local == block_id:
                     continue
 
                 # Remove block if doesn't exist
-                if id_local not in branch_data_incoming[b_g]:
-                    del branch_data_local[b_g][id_local]
+                if id_local not in b_g_incoming:
+                    del b_g_local[id_local]
                     continue
 
                 # Update block if has changed
-                block_data_incoming = branch_data_incoming[b_g][id_local]
+                block_data_incoming = b_g_incoming[id_local]
                 if block_data_local != block_data_incoming:
 
                     # delete any keys from local not in incoming
@@ -96,5 +99,10 @@ class BranchClient:
 
                     # update all key/vals
                     block_data_local.update(block_data_incoming)
+
+            # Add any tangential "auto-created" blocks during the CRUD-ing of this block
+            new_ids = set(b_g_incoming) - set(b_g_local)
+            for new_id in new_ids:
+                block_data_local[new_id] = block_data_incoming[new_id]
 
         return block_id
