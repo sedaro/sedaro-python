@@ -36,15 +36,8 @@ class BlockClient:
     @property
     def data(self) -> Dict:
         '''The attributes of the corresponding Sedaro Block as a dictionary'''
-        try:
-            return self._branch.data[self._block_group][self.id]
-        except KeyError as e:
-            # if it's KeyError of a string id (block doesn't exist), str(e) is like this: "'1234'"
-            if str(e).replace("'", '').isdigit():
-                raise NonexistantBlockError(
-                    f'The referenced "{self._block_name}" (id: {self.id}) no longer exists.'
-                )
-            raise e
+        self.confirm_still_exists()
+        return self._branch.data[self._block_group][self.id]
 
     @property
     def _block_name(self) -> str:
@@ -71,6 +64,12 @@ class BlockClient:
         '''The `SedaroApiClient` this `Block` was accessed through'''
         return self._branch._sedaro_client
 
+    def confirm_still_exists(self):
+        if self.id not in self._branch.data[self._block_group]:
+            raise NonexistantBlockError(
+                f'The referenced "{self._block_name}" (id: {self.id}) no longer exists.'
+            )
+
     def update(self, timeout: Union[int, Tuple] = None, **attrs_to_update) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
 
@@ -81,11 +80,15 @@ class BlockClient:
         Returns:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
+        # NOTE: `self.data` calls `self.confirm_still_exists()`, so don't need to call here
         body = self.data | attrs_to_update
 
         res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')(
             body=self._block_class_client._update_class(**body),
-            path_params={'branchId': self._branch.id, "blockId": int(self.id)},
+            path_params={
+                'branchId': self._branch.id,
+                'blockId': int(self.id)
+            },
             timeout=timeout
         )
         self._branch._process_block_crud_response(res)
@@ -97,6 +100,8 @@ class BlockClient:
         Returns:
             str: `id` of the deleted `Block`
         """
+        self.confirm_still_exists()
+
         id = self.id
         res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
             path_params={'branchId': self._branch.id, "blockId": int(id)}
