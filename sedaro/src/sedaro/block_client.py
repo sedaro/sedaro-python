@@ -31,6 +31,9 @@ class BlockClient:
         return self.__str__()
 
     def __getattr__(self, key) -> any:
+        if key not in self.data:
+            raise KeyError(
+                f'There is no "{key}" attribute on "{self._block_name}"')
         return self.data[key]
 
     @property
