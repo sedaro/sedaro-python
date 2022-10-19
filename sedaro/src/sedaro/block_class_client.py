@@ -135,7 +135,7 @@ class BlockClassClient:
         return BlockClient(block_id, self)
 
     def get(self, id: Union[str, int]) -> BlockClient:
-        """Gets a `BlockClient` from of the type of this `BlockClassClient`.
+        """Gets a `BlockClient` associated with the Sedaro Block of the given `id`.
 
         Args:
             id (Union[str, int]): An integer or string version of the desired `Block` `id`.
