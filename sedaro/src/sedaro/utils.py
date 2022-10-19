@@ -20,13 +20,13 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
 
 
 def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, str]:
-    """Parses the response of CRUD-ing a Sedaro Block on a `Branch` into a dictionary.
+    """Parses the response of CRUD-ing a Sedaro Block on a `Branch` into a tuple.
 
     Args:
         response (ApiResponse): the response from CRUD-ing a Sedaro Block
 
     Returns:
-        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`, `block_id_to_type_map`
+        Dict: a tuple of: `block_id`, `block_data`, `block_group`, `action`, `branch_data`, `block_id_to_type_map`
     """
     body = response.body
     action = body['action']
@@ -37,4 +37,4 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
     block_data = dict(branch_data[block_group][block_id]) if action.casefold() != DELETE.casefold() \
         else None
 
-    return block_id, block_data, block_group, action, body['branch']['blockIdToTypeMap']
+    return block_id, block_data, block_group, action, branch_data, body['branch']['blockIdToTypeMap']
