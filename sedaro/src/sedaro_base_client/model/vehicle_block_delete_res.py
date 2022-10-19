@@ -35,11 +35,9 @@ class VehicleBlockDeleteRes(
 
     class MetaOapg:
         required = {
-            "blockIdToTypeMap",
             "action",
             "block",
             "branch",
-            "blockClassToBlockGroupMap",
         }
         
         class properties:
@@ -67,77 +65,15 @@ class VehicleBlockDeleteRes(
             @staticmethod
             def branch() -> typing.Type['PostgresBranchVehicleRes']:
                 return PostgresBranchVehicleRes
-            
-            
-            class blockIdToTypeMap(
-                schemas.DictSchema
-            ):
-            
-            
-                class MetaOapg:
-                    additional_properties = schemas.StrSchema
-                
-                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    # dict_instance[name] accessor
-                    return super().__getitem__(name)
-                
-                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    return super().get_item_oapg(name)
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
-                ) -> 'blockIdToTypeMap':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
-            class blockClassToBlockGroupMap(
-                schemas.DictSchema
-            ):
-            
-            
-                class MetaOapg:
-                    additional_properties = schemas.StrSchema
-                
-                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    # dict_instance[name] accessor
-                    return super().__getitem__(name)
-                
-                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    return super().get_item_oapg(name)
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
-                ) -> 'blockClassToBlockGroupMap':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
             __annotations__ = {
                 "action": action,
                 "block": block,
                 "branch": branch,
-                "blockIdToTypeMap": blockIdToTypeMap,
-                "blockClassToBlockGroupMap": blockClassToBlockGroupMap,
             }
     
-    blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
     action: MetaOapg.properties.action
     block: 'GroupAndId'
     branch: 'PostgresBranchVehicleRes'
-    blockClassToBlockGroupMap: MetaOapg.properties.blockClassToBlockGroupMap
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
@@ -149,15 +85,9 @@ class VehicleBlockDeleteRes(
     def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -172,37 +102,27 @@ class VehicleBlockDeleteRes(
     def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["action", "block", "branch", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
-        blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
         branch: 'PostgresBranchVehicleRes',
-        blockClassToBlockGroupMap: typing.Union[MetaOapg.properties.blockClassToBlockGroupMap, dict, frozendict.frozendict, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VehicleBlockDeleteRes':
         return super().__new__(
             cls,
             *args,
-            blockIdToTypeMap=blockIdToTypeMap,
             action=action,
             block=block,
             branch=branch,
-            blockClassToBlockGroupMap=blockClassToBlockGroupMap,
             _configuration=_configuration,
             **kwargs,
         )

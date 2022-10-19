@@ -9,6 +9,7 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  |  |
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **shareable** | bool,  | BoolClass,  |  | 
+**[blockGroupNames](#blockGroupNames)** | list, tuple,  | tuple,  |  | 
 **[dataSchema](#dataSchema)** | dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
 **simulationRequired** | bool,  | BoolClass,  |  | 
 **[blockIdToTypeMap](#blockIdToTypeMap)** | dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
@@ -71,6 +72,18 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  |  |
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **any_string_name** | str,  | str,  | any string name can be used but the value must be the correct type | [optional] 
+
+# blockGroupNames
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+items | str,  | str,  |  | 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

@@ -36,6 +36,7 @@ class PostgresBranchVehicleRes(
     class MetaOapg:
         required = {
             "shareable",
+            "blockGroupNames",
             "dataSchema",
             "simulationRequired",
             "blockIdToTypeMap",
@@ -131,6 +132,29 @@ class PostgresBranchVehicleRes(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            
+            
+            class blockGroupNames(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.StrSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'blockGroupNames':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
                 "dateCreated": dateCreated,
                 "dateModified": dateModified,
@@ -149,9 +173,11 @@ class PostgresBranchVehicleRes(
                 "data": data,
                 "blockIdToTypeMap": blockIdToTypeMap,
                 "blockClassToBlockGroupMap": blockClassToBlockGroupMap,
+                "blockGroupNames": blockGroupNames,
             }
     
     shareable: MetaOapg.properties.shareable
+    blockGroupNames: MetaOapg.properties.blockGroupNames
     dataSchema: MetaOapg.properties.dataSchema
     simulationRequired: MetaOapg.properties.simulationRequired
     blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
@@ -221,9 +247,12 @@ class PostgresBranchVehicleRes(
     def __getitem__(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["blockGroupNames"]) -> MetaOapg.properties.blockGroupNames: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -280,9 +309,12 @@ class PostgresBranchVehicleRes(
     def get_item_oapg(self, name: typing_extensions.Literal["blockClassToBlockGroupMap"]) -> MetaOapg.properties.blockClassToBlockGroupMap: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["blockGroupNames"]) -> MetaOapg.properties.blockGroupNames: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["dateCreated", "dateModified", "description", "id", "mission", "name", "numSimulations", "repository", "sharePwRqd", "shareable", "simulationRequired", "user", "uuid", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -290,6 +322,7 @@ class PostgresBranchVehicleRes(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         shareable: typing.Union[MetaOapg.properties.shareable, bool, ],
+        blockGroupNames: typing.Union[MetaOapg.properties.blockGroupNames, list, tuple, ],
         dataSchema: typing.Union[MetaOapg.properties.dataSchema, dict, frozendict.frozendict, ],
         simulationRequired: typing.Union[MetaOapg.properties.simulationRequired, bool, ],
         blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
@@ -313,6 +346,7 @@ class PostgresBranchVehicleRes(
             cls,
             *args,
             shareable=shareable,
+            blockGroupNames=blockGroupNames,
             dataSchema=dataSchema,
             simulationRequired=simulationRequired,
             blockIdToTypeMap=blockIdToTypeMap,
