@@ -35,10 +35,7 @@ class BranchClient:
             raise AttributeError(
                 f'Unable to find a Sedaro Block called: "{block_name}". Please check the name and try again.')
 
-        return BlockClassClient(
-            _block_name=pascal_case(block_name, strict=False),
-            _branch=self
-        )
+        return BlockClassClient(pascal_case(block_name, strict=False), self)
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
