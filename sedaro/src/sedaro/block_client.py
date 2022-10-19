@@ -27,6 +27,9 @@ class BlockClient:
             attrs += f'\n   {k}={v}'
         return f'\n{self._block_name}({attrs}\n)\n'
 
+    def __repr__(self):
+        return self.__str__()
+
     def __getattr__(self, key) -> any:
         return self.data[key]
 
