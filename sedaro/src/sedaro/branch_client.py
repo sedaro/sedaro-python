@@ -1,7 +1,7 @@
 import importlib
 from typing import TYPE_CHECKING, Dict
 from dataclasses import dataclass
-from pydash import snake_case
+from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
 from .block_class_client import BlockClassClient
@@ -24,7 +24,10 @@ class BranchClient:
     '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
 
     def __str__(self):
-        return f'Branch(id: {self.id})'
+        return f'BranchClient(id: {self.id})'
+
+    def __repr__(self):
+        return self.__str__()
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
         block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
@@ -33,7 +36,7 @@ class BranchClient:
                 f'Unable to find a Sedaro Block called: "{block_name}". Please check the name and try again.')
 
         return BlockClassClient(
-            _block_name=block_name,
+            _block_name=pascal_case(block_name, strict=False),
             _branch=self
         )
 
