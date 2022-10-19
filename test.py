@@ -51,9 +51,46 @@ def test_create_update_and_delete_block():
             assert msg == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 
 
+def test_update_rel_and_cascade_delete():
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch_client = sedaro_client.get_branch(14)
+
+        subsystem_client = branch_client.subsystem.create(
+            name='Temp Custom Subsystem',
+            satellite=branch_client.satellite.get_first().id
+        )
+
+        component_client = branch_client.component.create(
+            name='Temp custom component',
+            subsystem=subsystem_client.id
+        )
+
+        c_id = component_client.id
+        ss_id = subsystem_client.id
+
+        # make sure other side of relationship was also updated
+        assert component_client.id in subsystem_client.components
+
+        subsystem_client.delete()
+
+        try:
+            subsystem_client.delete()
+        except SedaroException as e:
+            msg = str(e)
+            assert msg == f'The referenced "Subsystem" (id: {ss_id}) no longer exists.'
+
+        # make sure component is also deleted when subsystem is deleted
+        try:
+            component_client.update(name='Trying to update name')
+        except SedaroException as e:
+            msg = str(e)
+            assert msg == f'The referenced "Component" (id: {c_id}) no longer exists.'
+
+
 if __name__ == "__main__":
     # test_get()
     test_create_update_and_delete_block()
+    test_update_rel_and_cascade_delete()
     print('\ndone\n')
 
 
