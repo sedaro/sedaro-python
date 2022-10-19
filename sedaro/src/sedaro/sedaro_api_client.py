@@ -39,5 +39,6 @@ class SedaroApiClient(ApiClient):
             data_schema=parsed_res['dataSchema'],
             _sedaro_client=self,
             _block_id_to_type_map=parsed_res['blockIdToTypeMap'],
-            _block_class_to_block_group_map=parsed_res['blockClassToBlockGroupMap']
+            _block_class_to_block_group_map=parsed_res['blockClassToBlockGroupMap'],
+            _block_group_names=parsed_res['blockGroupNames']
         )

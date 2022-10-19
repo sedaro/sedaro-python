@@ -1,5 +1,5 @@
 import importlib
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List
 from dataclasses import dataclass
 from pydash import snake_case, pascal_case
 
@@ -22,6 +22,7 @@ class BranchClient:
     '''Dicationary mapping Sedaro Block ids to the class name of the Block'''
     _block_class_to_block_group_map: Dict[str, str]
     '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
+    _block_group_names: List[str]
 
     def __str__(self):
         return f'BranchClient(id: {self.id})'
