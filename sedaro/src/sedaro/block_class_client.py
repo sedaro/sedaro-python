@@ -1,13 +1,14 @@
 from importlib import import_module
 from dataclasses import dataclass
 from sedaro_base_client.api_client import Api
-from typing import TYPE_CHECKING, Dict, Literal, Tuple, Union
+from typing import TYPE_CHECKING, Literal, Tuple, Union, List
 from pydash.strings import snake_case
 from functools import cached_property
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
 from .utils import get_snake_and_pascal_case
+from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
@@ -23,7 +24,10 @@ class BlockClassClient:
     '''The `Branch` this `BlockClassClient` is connected to'''
 
     def __str__(self) -> str:
-        return f'BlockClassClient(block_name={self._block_name}, branch={self._branch.id})'
+        return f'BlockClassClient({self._block_name}, branch={self._branch.id})'
+
+    def __repr__(self):
+        return self.__str__()
 
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
@@ -128,7 +132,7 @@ class BlockClassClient:
         )
         block_id = self._branch._process_block_crud_response(res)
 
-        return BlockClient(id=block_id, _block_class_client=self)
+        return BlockClient(block_id, self)
 
     def get(self, id: Union[str, int]) -> BlockClient:
         """Gets a `BlockClient` from of the type of this `BlockClassClient`.
@@ -152,4 +156,58 @@ class BlockClassClient:
             raise KeyError(
                 f'There is no {self._block_name} with id {id} in this Branch.')
 
-        return BlockClient(id=id, _block_class_client=self)
+        return BlockClient(id, self)
+
+    def get_all_ids(self) -> List[str]:
+        """Gets a `list` of `id`s corresponding to all Sedaro Blocks of the given type in this Branch. If there are no
+        corresponding Blocks, returns an empty `list`.
+
+        Returns:
+            List[str]: list of `id`s
+        """
+        return [
+            id for id in self._branch.data[self._block_group].keys() if self._branch._block_id_to_type_map[id] == self._block_name
+        ]
+
+    def get_all(self) -> List['BlockClient']:
+        """Gets a `list` of all `BlockClient` instances corresponding to all Sedaro Blocks of the given type in this
+        Branch. If there are no corresponding Blocks, returns an empty `list`.
+
+        Returns:
+            List['BlockClient']: a list of `BlockClient` instances corresponding to Sedaro Blocks in this Branch
+        """
+        return [BlockClient(id, self) for id in self.get_all_ids()]
+
+    def get_first(self):
+        """Returns a `BlockClient` associated with the least recently added (lowest `id`) Sedaro Block of the desired
+        type.
+
+        Raises:
+            NoBlockFoundError: if no Blocks of the desired type exist in this Branch
+
+        Returns:
+            BlockClient: a client to interact with the corresponding Sedaro Block
+        """
+        all_ids = self.get_all_ids()
+        if not len(all_ids):
+            raise NoBlockFoundError(
+                f'No "{self._block_name}" Blocks exist in this Branch.'
+            )
+        return BlockClient(sorted(all_ids, key=int)[0], self)
+
+    def get_last(self):
+        """Returns a `BlockClient` associated with the most recently added (highest `id`) Sedaro Block of the desired
+        type.
+
+        Raises:
+            NoBlockFoundError: if no Blocks of the desired type exist in this Branch
+
+        Returns:
+            BlockClient: a client to interact with the corresponding Sedaro Block
+        """
+        all_ids = self.get_all_ids()
+        if not len(all_ids):
+            raise NoBlockFoundError(
+                f'No "{self._block_name}" Blocks exist in this Branch.'
+            )
+        return BlockClient(sorted(all_ids, key=int)[-1], self)
