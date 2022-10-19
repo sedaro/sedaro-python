@@ -101,7 +101,7 @@ class BranchClient:
                     block_data_local.update(block_data_incoming)
 
             # Add any tangential "auto-created" blocks during the CRUD-ing of this block
-            new_ids = set(b_g_incoming) - set(b_g_local)
+            new_ids = set(b_g_incoming.keys()) - set(b_g_local.keys())
             for new_id in new_ids:
                 block_data_local[new_id] = block_data_incoming[new_id]
 
