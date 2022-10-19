@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Union, Tuple
+from typing import TYPE_CHECKING, Dict, Literal, Union, Tuple
 from dataclasses import dataclass
 from pydash import snake_case
 
@@ -134,7 +134,7 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
-    def is_rel_field(self, field: str) -> bool:
+    def is_rel_field(self, field: str) -> Union[str, Literal[False]]:
         """Checks if the given `field` is a relationship field on the associated Sedaro Block.
 
         Args:
@@ -142,10 +142,11 @@ class BlockClient:
 
         Raises:
             TypeError: if the value of `field` is not a string
+            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
 
         Returns:
-            bool: boolean indicating whether or not the given `field` is a relationship field on the associated Sedaro
-            Block
+            Union[str, Literal[False]]: `str` of the Block type the relationship field points to if `field` is a
+            relationship field, otherwise `False`
         """
         if type(field) is not str:
             raise TypeError(
@@ -158,12 +159,17 @@ class BlockClient:
 
         field_schema: dict = properties[field]
 
-        field_title = field_schema.get('title')
-        field_description = field_schema.get('description')
-        if None in (field_title, field_description):
+        title: str = field_schema.get('title')
+        description: str = field_schema.get('description')
+        # all rel fields have title and description
+        if None in (title, description):
             return False
 
-        return 'ID' in field_title and all(s in field_description for s in ['Relationship', 'block', 'On delete'])
+        # make sure is a rel field
+        if not 'ID' in title and all(s in description for s in ['Relationship', '`', 'block', 'On delete']):
+            return False
+
+        return description.split('`')[1]
 
 
 # Utils for this file only
