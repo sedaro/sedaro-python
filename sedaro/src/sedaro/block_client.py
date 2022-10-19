@@ -30,7 +30,18 @@ class BlockClient:
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, key) -> any:
+    def __getattr__(self, key: str) -> any:
+        """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block
+
+        Args:
+            key (str): attribute being keyed into
+
+        Raises:
+            KeyError: if the attribute doesn't exist on the refrenced Sedaro Block
+
+        Returns:
+            any: the value of the corresponding attribute on the referenced Sedaro Block
+        """
         if key not in self.data:
             raise KeyError(
                 f'There is no "{key}" attribute on "{self._block_name}"')
