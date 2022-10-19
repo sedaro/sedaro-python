@@ -36,7 +36,7 @@ class BlockClient:
     @property
     def data(self) -> Dict:
         '''The attributes of the corresponding Sedaro Block as a dictionary'''
-        self.confirm_still_exists()
+        self.enforce_still_exists()
         return self._branch.data[self._block_group][self.id]
 
     @property
@@ -64,8 +64,21 @@ class BlockClient:
         '''The `SedaroApiClient` this `Block` was accessed through'''
         return self._branch._sedaro_client
 
-    def confirm_still_exists(self):
-        if self.id not in self._branch.data[self._block_group]:
+    def check_still_exists(self) -> bool:
+        """Checks whether the Sedaro Block this `BlockClient` references still exists.
+
+        Returns:
+            bool: indication of whether or not the referenced Sedaro Block still exists
+        """
+        return self.id in self._branch.data[self._block_group]
+
+    def enforce_still_exists(self) -> None:
+        """Raises and error if the Sedaro Block this `BlockClient` references no longer exists.
+
+        Raises:
+            NonexistantBlockError: indication that the Block no longer exists.
+        """
+        if not self.check_still_exists():
             raise NonexistantBlockError(
                 f'The referenced "{self._block_name}" (id: {self.id}) no longer exists.'
             )
@@ -80,7 +93,7 @@ class BlockClient:
         Returns:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
-        # NOTE: `self.data` calls `self.confirm_still_exists()`, so don't need to call here
+        # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
         body = self.data | attrs_to_update
 
         res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')(
@@ -100,7 +113,7 @@ class BlockClient:
         Returns:
             str: `id` of the deleted `Block`
         """
-        self.confirm_still_exists()
+        self.enforce_still_exists()
 
         id = self.id
         res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
