@@ -1,4 +1,5 @@
 from sedaro import SedaroApiClient
+from sedaro.exceptions import SedaroException
 
 API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fHqzVikT2njA6xXNRTslw'
 
@@ -25,26 +26,29 @@ def test_create_update_and_delete_block():
             topology='11',
         )
 
+        bc_id = battery_cell_client.id
+
         assert battery_cell_client == branch_client.BatteryCell.get(
-            battery_cell_client.id)
+            bc_id)
 
         new_part_number = "Let's gooo!!!!!!!!!!!!"
 
-        # print(battery_cell_client)
+        print(battery_cell_client)
 
         battery_cell_client.update(partNumber=new_part_number)
 
         assert branch_client.BatteryCell.get(
-            battery_cell_client.id).partNumber == battery_cell_client.partNumber == new_part_number
+            bc_id).partNumber == battery_cell_client.partNumber == new_part_number
 
-        # print(battery_cell_client)
+        print(battery_cell_client)
 
         battery_cell_client.delete()
 
         try:
             print(battery_cell_client)
-        except KeyError as e:
-            assert str(e) == "'The referenced Sedaro Block no longer exists.'"
+        except SedaroException as e:
+            msg = str(e)
+            assert msg == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 
 
 if __name__ == "__main__":
