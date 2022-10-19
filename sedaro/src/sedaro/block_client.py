@@ -134,14 +134,26 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
-    def is_rel_field(self, field: str, skip_field_exists_check=False) -> bool:
+    def is_rel_field(self, field: str) -> bool:
+        """Checks if the given `field` is a relationship field on the associated Sedaro Block.
+
+        Args:
+            field (str): field to check
+
+        Raises:
+            TypeError: if the value of `field` is not a string
+
+        Returns:
+            bool: boolean indicating whether or not the given `field` is a relationship field on the associated Sedaro
+            Block
+        """
         if type(field) is not str:
             raise TypeError(
                 f'The value of the "{field}" argument must be a string, not a {type(field).__name__}')
 
         properties = self._branch.data_schema['definitions'][self._block_name]['properties']
 
-        if not skip_field_exists_check and field not in properties:
+        if field not in properties:
             raise make_key_error(field, self._block_name)
 
         field_schema: dict = properties[field]
