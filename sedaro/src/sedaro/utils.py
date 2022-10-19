@@ -37,4 +37,4 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
     block_data = dict(branch_data[block_group][block_id]) if action.casefold() != DELETE.casefold() \
         else None
 
-    return block_id, block_data, block_group, action, body['blockIdToTypeMap']
+    return block_id, block_data, block_group, action, body['branch']['blockIdToTypeMap']
