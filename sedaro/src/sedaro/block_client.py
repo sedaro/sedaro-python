@@ -134,7 +134,7 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
-    def is_rel_field(self, field: str) -> Union[str, Literal[False]]:
+    def check_rel_field(self, field: str) -> Union[str, Literal[False]]:
         """Checks if the given `field` is a relationship field on the associated Sedaro Block.
 
         Args:
