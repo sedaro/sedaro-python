@@ -50,23 +50,51 @@ class BranchClient:
         Returns:
             str: `block_id`
         """
-        block_id, block_data, block_group, action, block_id_to_type_map = parse_block_crud_response(
+        block_id, block_data, block_group, action, branch_data_incoming, block_id_to_type_map = parse_block_crud_response(
             block_crud_response
         )
-        action = action.casefold()
 
+        self._block_id_to_type_map = block_id_to_type_map
+        branch_data_local = self.data
+
+        # Handle CRUD-ed block
+        action = action.casefold()
         if action == CREATE.casefold():
-            self.data[block_group][block_id] = block_data
+            branch_data_local[block_group][block_id] = block_data
 
         elif action == UPDATE.casefold():
-            self.data[block_group][block_id].update(block_data)
+            branch_data_local[block_group][block_id].update(block_data)
 
         elif action == DELETE.casefold():
-            del self.data[block_group][block_id]
+            del branch_data_local[block_group][block_id]
 
         else:
             raise NotImplementedError(f'Unsupported action type: "{action}"')
 
-        self._block_id_to_type_map = block_id_to_type_map
+        # Loop through all blocks in all block groups
+        # -- to deal with cascade deletes, and updates of blocks on other side of relationships
+        for b_g in self._block_group_names:
+            for id_local, block_data_local in list(branch_data_local[b_g].items()):
+
+                # Skip block that's already been handled above
+                if id_local == block_id:
+                    continue
+
+                # Remove block if doesn't exist
+                if id_local not in branch_data_incoming[b_g]:
+                    del branch_data_local[b_g][id_local]
+                    continue
+
+                # Update block if has changed
+                block_data_incoming = branch_data_incoming[b_g][id_local]
+                if block_data_local != block_data_incoming:
+
+                    # delete any keys from local not in incoming
+                    for key in list(block_data_local.keys()):
+                        if key not in block_data_incoming:
+                            del block_data_local[key]
+
+                    # update all key/vals
+                    block_data_local.update(block_data_incoming)
 
         return block_id
