@@ -54,13 +54,13 @@ class BlockClient:
 
     @property
     def _block_name(self) -> str:
-        '''The name of the Sedaro Block class associated with this `Block`'''
-        return self._block_class_client._block_name
+        '''The name of the Sedaro Block class associated with this `BlockClient`'''
+        return self._branch._block_id_to_type_map[self.id]
 
     @property
     def _block_group(self) -> str:
-        '''The name of the Sedaro `BlockGroup` this type of `Block` is stored in'''
-        return self._block_class_client._block_group
+        '''The name of the Sedaro BlockGroup this type of `BlockClient`'s associated Sedaro Block is stored in'''
+        return self._branch._block_class_to_block_group_map[self._block_name]
 
     @property
     def _branch(self) -> 'BranchClient':
