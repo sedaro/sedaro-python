@@ -134,6 +134,25 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
+    def is_rel_field(self, field: str, skip_field_exists_check=False) -> bool:
+        if type(field) is not str:
+            raise TypeError(
+                f'The value of the "{field}" argument must be a string, not a {type(field).__name__}')
+
+        properties = self._branch.data_schema['definitions'][self._block_name]['properties']
+
+        if not skip_field_exists_check and field not in properties:
+            raise make_key_error(field, self._block_name)
+
+        field_schema: dict = properties[field]
+
+        field_title = field_schema.get('title')
+        field_description = field_schema.get('description')
+        if None in (field_title, field_description):
+            return False
+
+        return 'ID' in field_title and all(s in field_description for s in ['Relationship', 'block', 'On delete'])
+
 
 # Utils for this file only
 def make_key_error(field: str, block_name: str) -> str:
