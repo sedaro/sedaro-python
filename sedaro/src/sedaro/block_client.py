@@ -248,7 +248,7 @@ class BlockClient:
         return 'ID' in title and all(s in description for s in ['Relationship', '`', 'block', 'On delete'])
 
     def get_rel_field_type(self, field: str) -> str:
-        """Get the type of relationship of the field. Note, first call `is_rel_field` if you need to confirm `field` is
+        """Get the type of relationship of the field. Note: first call `is_rel_field` if you need to confirm `field` is
         a relationship field.
 
         Args:
