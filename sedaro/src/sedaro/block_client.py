@@ -94,7 +94,7 @@ class BlockClient:
 
     @property
     def data(self) -> Dict:
-        '''The attributes of the corresponding Sedaro Block as a dictionary'''
+        '''The properties of the corresponding Sedaro Block as a dictionary'''
         self.enforce_still_exists()
         return self._branch_client.data[self._block_group][self.id]
 
