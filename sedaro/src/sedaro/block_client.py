@@ -260,7 +260,7 @@ class BlockClient:
             NotImplementedError: if the relationship type is not able to be parsed from the field schema
 
         Returns:
-            str: a string representing the type of relationship field
+            str: a string indicating the type of relationship field
         """
         if not self.is_rel_field(field):
             raise TypeError(
