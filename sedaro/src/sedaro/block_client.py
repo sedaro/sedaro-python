@@ -181,8 +181,10 @@ class BlockClient:
 
         id = self.id
         res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
-            path_params={'branchId': self._branch_client.id,
-                         "blockId": int(id)}
+            path_params={
+                'branchId': self._branch_client.id,
+                "blockId": int(id)
+            }
         )
         return self._branch_client._process_block_crud_response(res)
 
