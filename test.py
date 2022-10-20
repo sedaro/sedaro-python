@@ -107,6 +107,9 @@ def test_traversing():
         assert branch_client.solarPanel.get_first(
         ) == solar_panel_client.cell.panels[0]
 
+        assert branch_client.solarPanel.get_first(
+        ) is not solar_panel_client.cell.panels[0]
+
 
 if __name__ == "__main__":
     test_get()
