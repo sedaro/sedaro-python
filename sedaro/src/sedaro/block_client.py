@@ -61,7 +61,12 @@ class BlockClient:
     @property
     def _block_name(self) -> str:
         '''The name of the Sedaro Block class associated with this `BlockClient`'''
-        return self._branch._block_id_to_type_map[self.id]
+        try:
+            # NOTE: can't use `check_still_exists` instead of try/except, b/c that method calls this one
+            return self._branch._block_id_to_type_map[self.id]
+        except KeyError:
+            # this won't be as specific, but allows to know at least the parent type even after a block was deleted
+            return self._block_class_client._block_name
 
     @property
     def _block_group(self) -> str:
