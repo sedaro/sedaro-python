@@ -29,7 +29,7 @@ class SedaroApiClient(ApiClient):
         """
         # branches_api_instance = branches_api.BranchesApi(self)
         # res = branches_api_instance.get_branch(path_params={'branchId': id})
-        # ^^^ FIXME... doesn't work b/c response model is wrong
+        # ^^^ TODO... doesn't work b/c that response model is wrong
 
         res = self.call_api(f'/models/branches/{id}', 'GET')
         parsed_res = parse_urllib_response(res)
