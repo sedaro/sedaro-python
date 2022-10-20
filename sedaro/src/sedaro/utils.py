@@ -43,7 +43,6 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
     return block_id, block_data, block_group, action, branch_data, body['branch']['blockIdToTypeMap']
 
 
-@cache
 def sanitize_and_enforce_id_in_branch(branch_client: 'BranchClient', id: Union[str, int]):
     """Makes sure `id` is of the right type and exists in the Sedaro Branch associated with the `BranchClient`
 

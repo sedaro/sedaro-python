@@ -1,4 +1,3 @@
-from functools import cache
 import importlib
 from typing import TYPE_CHECKING, Dict, List, Union
 from dataclasses import dataclass
@@ -39,10 +38,6 @@ class BranchClient:
                 f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.')
 
         return BlockClassClient(pascal_case(block_name, strict=False), self)
-
-    # needed for hashing in cache, such as in: `sanitize_and_enforce_id_in_branch` and `get_block_client`
-    def __hash__(self):
-        return hash(self.__class__.__name__ + str(self.id))
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
@@ -113,7 +108,6 @@ class BranchClient:
 
         return block_id
 
-    @cache
     def get_block_client(self, id: Union[str, int]):
         """Gets a `BlockClient` associated with the Sedaro Block of the given `id`.
 
