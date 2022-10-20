@@ -35,7 +35,7 @@ class BranchClient:
         block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
         if importlib.util.find_spec(block_class_module) is None:
             raise AttributeError(
-                f'Unable to find a Sedaro Block called: "{block_name}". Please check the name and try again.')
+                f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.')
 
         return BlockClassClient(pascal_case(block_name, strict=False), self)
 
