@@ -5,6 +5,7 @@ from sedaro.exceptions import SedaroException
 
 # TODO: remove this
 # NOTE: update the API_KYE and BRANCH_ID for things that work with your dev environment
+# NOTE: these are temporary for Zach's dev environment
 API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fHqzVikT2njA6xXNRTslw'
 BRANCH_ID = 14
 
@@ -101,7 +102,7 @@ def test_traversing():
         solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].thermal_interface_A[0].satellite.topology
 
         con_ops_client = branch_client.con_ops.get_first()
-        con_ops_client.targetGroups[0].targetAssociations.keys()
+        con_ops_client.targetGroups[0].targetAssociations
 
         assert branch_client.solarPanel.get_first(
         ) == solar_panel_client.cell.panels[0]
