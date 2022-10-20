@@ -1,19 +1,23 @@
+from random import randrange
+
 from sedaro import SedaroApiClient
 from sedaro.exceptions import SedaroException
 
+# TODO: remove this
+# NOTE: update the API_KYE and BRANCH_ID for things that work with your dev environment
 API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fHqzVikT2njA6xXNRTslw'
+BRANCH_ID = 14
 
 
 def test_get():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(14)
-        print(f'\nres: {branch_client}\n')
-        return
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
+        # print(f'\nres: {branch_client}\n')
 
 
 def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(14)
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
         battery_cell_client = branch_client.BatteryCell.create(
             partNumber='987654321',
             manufacturer='Oh Yeah!!!!!!!!!',
@@ -53,10 +57,10 @@ def test_create_update_and_delete_block():
 
 def test_update_rel_and_cascade_delete():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(14)
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
 
         subsystem_client = branch_client.subsystem.create(
-            name='Temp Custom Subsystem',
+            name='Temp Custom Subsystem ' + str(randrange(1, 100000)),
             satellite=branch_client.satellite.get_first().id
         )
 
@@ -69,7 +73,9 @@ def test_update_rel_and_cascade_delete():
         ss_id = subsystem_client.id
 
         # make sure other side of relationship was also updated
-        assert component_client.id in subsystem_client.components
+        assert component_client.id in [
+            c.id for c in subsystem_client.components
+        ]
 
         subsystem_client.delete()
 
@@ -87,20 +93,23 @@ def test_update_rel_and_cascade_delete():
             assert msg == f'The referenced "Component" (id: {c_id}) no longer exists.'
 
 
+def test_traversing():
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
+
+        solar_panel_client = branch_client.solarPanel.get_first()
+        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].thermal_interface_A[0].satellite.topology
+
+        con_ops_client = branch_client.con_ops.get_first()
+        con_ops_client.targetGroups[0].targetAssociations.keys()
+
+        assert branch_client.solarPanel.get_first(
+        ) == solar_panel_client.cell.panels[0]
+
+
 if __name__ == "__main__":
-    # test_get()
+    test_get()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
+    test_traversing()
     print('\ndone\n')
-
-
-# Future:
-# - Traversing: batteryCell.batteryPack.battery.satellite.update()
-# - All references update togetehr: batteryCellCopy = copy(batteryCell)
-# - Plotting methods on blocks
-# - refresh method on a block
-
-
-# import sedaro
-# from sedaro import SedaroApiClient
-# from sedaro_base_client import ApiClient
