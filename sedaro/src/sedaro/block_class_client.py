@@ -7,7 +7,7 @@ from functools import cached_property
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
-from .utils import get_snake_and_pascal_case
+from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch
 from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
@@ -138,23 +138,21 @@ class BlockClassClient:
         """Gets a `BlockClient` of the desired type associated with the Sedaro Block of the given `id`.
 
         Args:
-            id (Union[str, int]): An integer or string version of the desired `Block` `id`
+            id (Union[str, int]): `id` of the desired Sedaro Block
 
         Raises:
-            KeyError: if no corresponding `Block` exists of the desired type
+            TypeError: if the `id` is not an integer or an integer string
+            KeyError: if no corresponding Block exists of the desired type
 
         Returns:
             BlockClient: a client to interact with the corresponding Sedaro Block
         """
-        if type(id) == int:
-            id = str(id)
+        id = sanitize_and_enforce_id_in_branch(self._branch, id)
 
-        if id not in self._branch._block_id_to_type_map:
-            raise KeyError(f'There is no Block with id {id} in this Branch.')
-
+        # additionally make sure is the correct type for this block class client
         if self._branch._block_id_to_type_map[id] != self._block_name:
             raise KeyError(
-                f'There is no {self._block_name} with id {id} in this Branch.')
+                f'There is no "{self._block_name}" with id "{id}" in this Branch.')
 
         return BlockClient(id, self)
 
