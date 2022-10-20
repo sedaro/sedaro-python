@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Dict, Literal, Union, Tuple
+from functools import cache
+from typing import TYPE_CHECKING, Dict, Union, Tuple
 from dataclasses import dataclass
 from pydash import snake_case
 
@@ -50,7 +51,44 @@ class BlockClient:
         """
         if key not in self.data:
             raise make_key_error(key, self._block_name)
-        return self.data[key]
+
+        val = self.data[key]
+
+        if not self.is_rel_field(key):
+            return val
+
+        if val is None:
+            return None
+
+        if val in ([], {}):
+            return []
+
+        side_type = self.get_rel_field_type(key)
+        branch_client = self._branch
+
+        if side_type == MANY_SIDE:
+            return [branch_client.get_block_client(id) for id in val]
+
+        if side_type == MANY_SIDE_DATA:
+            return {branch_client.get_block_client(id): data for id, data in val.items()}
+
+        if side_type == ONE_SIDE:
+            return branch_client.get_block_client(val)
+
+        # TODO: wasn't able to use this, because the types are of sometimes of DynamicSchema and not the actual
+        # primitive types... Need to figure this out.
+        # if isinstance(val, list):
+        #     return [branch_client.get_block_client(id) for id in val]
+
+        # if isinstance(val, dict):
+        #     return {branch_client.get_block_client(id): data for id, data in val.items()}
+
+        # if isinstance(val, str):
+        #     return branch_client.get_block_client(val)
+
+        # raise NotImplementedError(
+        #     f'Unsupported relationship type on "{self._block_name}", attribute: "{key}".'
+        # )
 
     @property
     def data(self) -> Dict:
@@ -75,7 +113,7 @@ class BlockClient:
 
     @property
     def _branch(self) -> 'BranchClient':
-        '''The `Branch` this `Block` is connected to'''
+        '''The `BranchClient` this `Block` is connected to'''  # FIXME
         return self._block_class_client._branch
 
     @property
@@ -145,18 +183,19 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
-    def check_rel_field(self, field: str) -> bool:
-        """Checks if the given `field` is a relationship field on the associated Sedaro Block.
+    @cache
+    def get_field_schema(self, field: str) -> dict:
+        """Gets the field schema of for the corresponding attribute on the Sedaro Block.
 
         Args:
-            field (str): field to check
+            field (str): field to get the schema for
 
         Raises:
             TypeError: if the value of `field` is not a string
             KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
 
         Returns:
-            bool: indicating whether the `field` is a relationship field on the associated Sedaro Block
+            dict: the field schema
         """
         if type(field) is not str:
             raise TypeError(
@@ -167,7 +206,23 @@ class BlockClient:
         if field not in properties:
             raise make_key_error(field, self._block_name)
 
-        field_schema: dict = properties[field]
+        return properties[field]
+
+    @cache
+    def is_rel_field(self, field: str) -> bool:
+        """Checks if the given `field` is a relationship field on the associated Sedaro Block.
+
+        Args:
+            field (str): field to check
+
+        Raises:
+            TypeError: if the value of `field` is not a string
+            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
+
+        Returns:
+            bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
+        """
+        field_schema = self.get_field_schema(field)
 
         title: str = field_schema.get('title')
         description: str = field_schema.get('description')
@@ -178,7 +233,46 @@ class BlockClient:
         # all rel fields have these strings in title and description
         return 'ID' in title and all(s in description for s in ['Relationship', '`', 'block', 'On delete'])
 
+    def get_rel_field_type(self, field: str) -> str:
+        """Get the type of relationship of the field. Note, first call `is_rel_field` if you need to confirm `field` is
+        a relationship field.
 
-# Utils for this file only
+        Args:
+            field (str): the field to get the relationship type for
+
+        Raises:
+            TypeError: if the value of `field` is not a string or not a relationship field on this type of Sedaro Block
+            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
+            NotImplementedError: if the relationship type is not able to be parsed from the field schema
+
+        Returns:
+            str: a string representing the type of relationship field
+        """
+        if not self.is_rel_field(field):
+            raise TypeError(
+                f'The given field "{field}" is not a relationship field on "{self._block_name}".')
+
+        description: str = self.get_field_schema(field).get('description')
+
+        if 'with data to one or more' in description:
+            return MANY_SIDE_DATA
+
+        if 'to one or more' in description:
+            return MANY_SIDE
+
+        if any(s in description for s in ['to a', 'to zero or one']):
+            return ONE_SIDE
+
+        raise NotImplementedError(
+            f'Unsupported relationship type on "{self._block_name}", attribute: "{field}".'
+        )
+
+
+# ------ helper function and vars for this file only ------
+MANY_SIDE = 'many-side'
+MANY_SIDE_DATA = 'many-side-with-data'
+ONE_SIDE = 'one-side'
+
+
 def make_key_error(field: str, block_name: str) -> str:
     return KeyError(f'There is no "{field}" attribute on "{block_name}"')
