@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class BlockClassClient:
-    '''Class for interacting with all Blocks of this class type'''
+    '''Class for getting `BlockClient`s associated with Sedaro Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
     _branch_client: 'BranchClient'
