@@ -150,7 +150,7 @@ class BlockClassClient:
         """
         id = sanitize_and_enforce_id_in_branch(self._branch_client, id)
 
-        # additionally make sure is the correct type for this block class client
+        # in addition to checks in ^^^ also make sure is the correct type for this block class client
         if self._branch_client._block_id_to_type_map[id] != self._block_name:
             raise KeyError(
                 f'There is no "{self._block_name}" with id "{id}" in this Branch.')
