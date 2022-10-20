@@ -94,7 +94,7 @@ def test_update_rel_and_cascade_delete():
             assert msg == f'The referenced "Component" (id: {c_id}) no longer exists.'
 
 
-def test_traversing():
+def test_traversing_and_equality():
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
 
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     test_get()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
-    test_traversing()
+    test_traversing_and_equality()
     print('\ndone\n')
