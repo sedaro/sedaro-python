@@ -1,11 +1,12 @@
 import importlib
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Union
 from dataclasses import dataclass
 from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
 from .block_class_client import BlockClassClient
-from .utils import parse_block_crud_response
+from .block_client import BlockClient
+from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch
 from .settings import CREATE, UPDATE, DELETE, BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
@@ -109,3 +110,21 @@ class BranchClient:
                 block_data_local[new_id] = block_data_incoming[new_id]
 
         return block_id
+
+    def get_block_client(self, id: Union[str, int]):
+        """Gets a `BlockClient` associated with the Sedaro Block of the given `id`.
+
+        Args:
+            id (Union[str, int]): `id` of the desired Sedaro Block
+
+        Raises:
+            TypeError: if the `id` is not an integer or an integer string
+            KeyError: if no corresponding Block exists in the Branch
+
+        Returns:
+            BlockClient: a client to interact with the corresponding Sedaro Block
+        """
+        id = sanitize_and_enforce_id_in_branch(self, id)
+
+        b_c_c: BlockClassClient = getattr(self, self._block_id_to_type_map[id])
+        return BlockClient(id, b_c_c)
