@@ -135,13 +135,13 @@ class BlockClassClient:
         return BlockClient(block_id, self)
 
     def get(self, id: Union[str, int]) -> BlockClient:
-        """Gets a `BlockClient` associated with the Sedaro Block of the given `id`.
+        """Gets a `BlockClient` of the desired type associated with the Sedaro Block of the given `id`.
 
         Args:
-            id (Union[str, int]): An integer or string version of the desired `Block` `id`.
+            id (Union[str, int]): An integer or string version of the desired `Block` `id`
 
         Raises:
-            KeyError: if no corresponding `Block` exists.
+            KeyError: if no corresponding `Block` exists of the desired type
 
         Returns:
             BlockClient: a client to interact with the corresponding Sedaro Block
