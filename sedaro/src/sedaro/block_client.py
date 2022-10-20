@@ -183,6 +183,14 @@ class BlockClient:
         )
         return self._branch._process_block_crud_response(res)
 
+    def get_schema(self) -> dict:
+        """Gets the schema for the associated Sedaro Block
+
+        Returns:
+            dict: the associated Block's schema
+        """
+        return self._branch.data_schema['definitions'][self._block_name]
+
     @cache
     def get_field_schema(self, field: str) -> dict:
         """Gets the field schema of for the corresponding attribute on the Sedaro Block.
@@ -201,7 +209,7 @@ class BlockClient:
             raise TypeError(
                 f'The value of the "{field}" argument must be a string, not a {type(field).__name__}')
 
-        properties = self._branch.data_schema['definitions'][self._block_name]['properties']
+        properties = self.get_schema()['properties']
 
         if field not in properties:
             raise make_key_error(field, self._block_name)
