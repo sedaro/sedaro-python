@@ -23,7 +23,8 @@ class BlockClient:
         attrs = ''
         for k, v in self.data.items():
             if type(v) is str:
-                # FIXME: figure out why we don't know when something is a string, it's this `DynamicSchema` class
+                # TODO: this is often not True when it should be b/c so many values become the `DynamicSchema` class
+                # Figure out how to fix this
                 v = f"'{v}'"
             attrs += f'\n   {k}={v}'
         return f'\n{self._block_name}({attrs}\n)\n'
