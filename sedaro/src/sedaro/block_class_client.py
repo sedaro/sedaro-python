@@ -165,7 +165,8 @@ class BlockClassClient:
             List[str]: list of `id`s
         """
         return [
-            id for id in self._branch_client.data[self._block_group].keys() if self._branch_client._block_id_to_type_map[id] == self._block_name
+            id for id in self._branch_client.data[self._block_group].keys()
+            if self._branch_client._block_id_to_type_map[id] == self._block_name
         ]
 
     def get_all(self) -> List['BlockClient']:
