@@ -35,12 +35,12 @@ class BlockClassClient:
         return self._branch._sedaro_client
 
     @property
-    def _create_class(self) -> type:  # FIXME
+    def _create_class(self) -> type:  # TODO: better type hint
         '''The model class to instantiate with appropriate kwargs when creating a Sedaro Block'''
         return self._get_create_or_update_block_model(CREATE)
 
     @property
-    def _update_class(self) -> type:  # FIXME
+    def _update_class(self) -> type:  # TODO: better type hint
         '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
         return self._get_create_or_update_block_model(UPDATE)
 
@@ -89,7 +89,8 @@ class BlockClassClient:
         # raise ValueError(
         #     f'Unable to find a block group containing the block name {self._block_name}')
 
-    def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']):
+    # TODO: better type hint
+    def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']) -> type:
         """Gets the model class to used to validate the data to create or update a `Block`
 
         Args:
@@ -99,7 +100,7 @@ class BlockClassClient:
             ValueError: if you don't pass `'create'` or `'update'` for `create_or_update`
 
         Returns:
-            _type_: _description_ FIXME
+            type: the model used for validating # TODO: better type hint
         """
         create_or_update = create_or_update.lower()
         if create_or_update not in [CREATE, UPDATE]:
