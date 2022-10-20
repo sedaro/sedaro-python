@@ -38,6 +38,9 @@ class BranchClient:
 
         return BlockClassClient(pascal_case(block_name, strict=False), self)
 
+    def __hash__(self):
+        return hash(self.__class__.__name__ + str(self.id))
+
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
 
