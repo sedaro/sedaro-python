@@ -58,12 +58,13 @@ def sanitize_and_enforce_id_in_branch(branch_client: 'BranchClient', id: Union[s
     Returns:
         str: the integer string `id` of the Block
     """
-    if type(id) == int:
+    try:
+        og_id = id
         id = str(id)
-
-    if type(id) is not str or (type(id) is str and not id.isdigit()):
+        assert id.isdigit()
+    except:
         raise TypeError(
-            f'The "id" argument must be an integer or string of an integer, not "{type(id).__name__}".'
+            f'The "id" argument must be a string of an integer or able to be coerced to such, not a "{type(og_id).__name__}".'
         )
 
     if id not in branch_client._block_id_to_type_map:
