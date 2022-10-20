@@ -115,7 +115,7 @@ class BlockClient:
 
     @property
     def _branch_client(self) -> 'BranchClient':
-        '''The `BranchClient` this `Block` is connected to'''  # FIXME
+        '''The `BranchClient` this `BlockClient` is connected to'''  # FIXME
         return self._block_class_client._branch_client
 
     @property
@@ -125,7 +125,7 @@ class BlockClient:
 
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `Block` was accessed through'''
+        '''The `SedaroApiClient` this `BlockClient` was accessed through'''
         return self._branch_client._sedaro_client
 
     def check_still_exists(self) -> bool:
@@ -175,7 +175,7 @@ class BlockClient:
         """Deletes the associated Sedaro Block
 
         Returns:
-            str: `id` of the deleted `Block`
+            str: `id` of the deleted Sedaro Block
         """
         self.enforce_still_exists()
 

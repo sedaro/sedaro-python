@@ -54,7 +54,7 @@ class BlockClassClient:
 
     @cached_property
     def _block_group(self) -> str:
-        '''The name of the Sedaro Block Group this type of `Block` is stored in'''
+        '''The name of the Sedaro Block Group this type of Sedaro Block is stored in'''
         return self._branch_client._block_class_to_block_group_map[self._block_name]
 
         # Below can get block group if ever choose to not send blockClassToBlockGroupMap in response
@@ -91,7 +91,7 @@ class BlockClassClient:
 
     # TODO: better type hint
     def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']) -> type:
-        """Gets the model class to used to validate the data to create or update a `Block`
+        """Gets the model class to used to validate the data to create or update a Sedaro Block
 
         Args:
             create_or_update (Literal['create', 'update']): the action `'create'` or `'update'`
