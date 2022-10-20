@@ -152,7 +152,7 @@ class BlockClient:
 
         Args:
             timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
-            **attrs_to_update (Dict): all remaining kwargs form the `attrs_to_update` (attributes to update) on the Sedaro Block
+            **attrs_to_update (Dict): desired attributes to update on the Sedaro Block
 
         Returns:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
