@@ -268,6 +268,7 @@ class BlockClient:
 
         description: str = self.get_field_schema(field).get('description')
 
+        # NOTE: order of if statements matters
         if 'with data to one or more' in description:
             return MANY_SIDE_DATA
 
