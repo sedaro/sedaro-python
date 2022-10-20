@@ -1,5 +1,6 @@
 from sedaro_base_client import Configuration
 
 config = Configuration(
-    host='http://localhost:8000',  # FIXME
+    # TODO: update this to actual API, make ability to toggle to local host
+    host='http://localhost:8000',
 )
