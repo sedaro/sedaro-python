@@ -30,6 +30,12 @@ class BlockClient:
     def __repr__(self):
         return self.__str__()
 
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.id == other.id
+
+    def __hash__(self):
+        return hash(self.__class__.__name__ + self.id)
+
     def __getattr__(self, key: str) -> any:
         """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block
 
