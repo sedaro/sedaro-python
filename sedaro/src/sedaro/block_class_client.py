@@ -117,7 +117,7 @@ class BlockClassClient:
         )
 
     def create(self, timeout: Union[int, Tuple] = None, **body) -> BlockClient:
-        """Creates a Sedaro `Block` of the given type in the Sedaro database.
+        """Creates a Sedaro Block of the given type in the Sedaro database.
 
         Args:
             timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
