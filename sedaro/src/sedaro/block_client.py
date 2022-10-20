@@ -189,7 +189,7 @@ class BlockClient:
         return self._branch_client._process_block_crud_response(res)
 
     def get_schema(self) -> dict:
-        """Gets the schema for the associated Sedaro Block
+        """Gets the schema for the associated Sedaro Block type
 
         Returns:
             dict: the associated Block's schema
