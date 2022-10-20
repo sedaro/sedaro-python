@@ -1,4 +1,5 @@
 from random import randrange
+import time
 
 from sedaro import SedaroApiClient
 from sedaro.exceptions import SedaroException
@@ -113,7 +114,10 @@ def test_traversing_and_equality():
 
 if __name__ == "__main__":
     test_get()
+    # start timer after first get to make sure backend is ready to accept request
+    start_time = time.perf_counter()
+    print('\nstarting\n')
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality()
-    print('\ndone\n')
+    print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
