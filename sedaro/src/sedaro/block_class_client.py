@@ -20,11 +20,11 @@ class BlockClassClient:
     '''Class for interacting with all Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
-    _branch: 'BranchClient'
-    '''The `Branch` this `BlockClassClient` is connected to'''
+    _branch_client: 'BranchClient'
+    '''The `BranchClient` this `BlockClassClient` is connected to'''
 
     def __str__(self) -> str:
-        return f'BlockClassClient({self._block_name}, branch={self._branch.id})'
+        return f'BlockClassClient({self._block_name}, branch={self._branch_client.id})'
 
     def __repr__(self):
         return self.__str__()
@@ -32,7 +32,7 @@ class BlockClassClient:
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
         '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
-        return self._branch._sedaro_client
+        return self._branch_client._sedaro_client
 
     @property
     def _create_class(self) -> type:  # TODO: better type hint
@@ -55,7 +55,7 @@ class BlockClassClient:
     @cached_property
     def _block_group(self) -> str:
         '''The name of the Sedaro `BlockGroup` this type of `Block` is stored in'''
-        return self._branch._block_class_to_block_group_map[self._block_name]
+        return self._branch_client._block_class_to_block_group_map[self._block_name]
 
         # Below can get block group if ever choose to not send blockClassToBlockGroupMap in response
         # PROPERTIES = 'properties'
@@ -66,7 +66,7 @@ class BlockClassClient:
         # block_group_type = None
 
         # # Traverse branch schema to figure out block group type, then traverse again to get matching block group
-        # for k, v in self._branch.dataSchema['definitions'].items():
+        # for k, v in self._branch_client.dataSchema['definitions'].items():
         #     # filter through all block group types
         #     if PROPERTIES in v and all(attr in v[PROPERTIES] for attr in ('name', 'collection', 'data')):
         #         # TODO: `if k.endswith('BG')` <-- evalutes to same as ^^^ if we always follow this convention for naming
@@ -81,7 +81,7 @@ class BlockClassClient:
         #             break
 
         # # check block group types (`bGT`) of all block groups to find which one matches `block_group_type`
-        # for k, v in self._branch.dataSchema[PROPERTIES].items():
+        # for k, v in self._branch_client.dataSchema[PROPERTIES].items():
         #     if ALL_OF in v and any(bGT[REF].endswith(block_group_type) for bGT in v[ALL_OF]):
         #         return k
 
@@ -128,10 +128,10 @@ class BlockClassClient:
         """
         res = getattr(self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}')(
             body=self._create_class(**body),
-            path_params={'branchId': self._branch.id},
+            path_params={'branchId': self._branch_client.id},
             timeout=timeout
         )
-        block_id = self._branch._process_block_crud_response(res)
+        block_id = self._branch_client._process_block_crud_response(res)
 
         return BlockClient(block_id, self)
 
@@ -148,10 +148,10 @@ class BlockClassClient:
         Returns:
             BlockClient: a client to interact with the corresponding Sedaro Block
         """
-        id = sanitize_and_enforce_id_in_branch(self._branch, id)
+        id = sanitize_and_enforce_id_in_branch(self._branch_client, id)
 
         # additionally make sure is the correct type for this block class client
-        if self._branch._block_id_to_type_map[id] != self._block_name:
+        if self._branch_client._block_id_to_type_map[id] != self._block_name:
             raise KeyError(
                 f'There is no "{self._block_name}" with id "{id}" in this Branch.')
 
@@ -165,7 +165,7 @@ class BlockClassClient:
             List[str]: list of `id`s
         """
         return [
-            id for id in self._branch.data[self._block_group].keys() if self._branch._block_id_to_type_map[id] == self._block_name
+            id for id in self._branch_client.data[self._block_group].keys() if self._branch_client._block_id_to_type_map[id] == self._block_name
         ]
 
     def get_all(self) -> List['BlockClient']:

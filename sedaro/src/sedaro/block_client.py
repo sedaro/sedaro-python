@@ -65,7 +65,7 @@ class BlockClient:
             return []
 
         side_type = self.get_rel_field_type(key)
-        branch_client = self._branch
+        branch_client = self._branch_client
 
         if side_type == MANY_SIDE:
             return [branch_client.get_block_client(id) for id in val]
@@ -95,14 +95,14 @@ class BlockClient:
     def data(self) -> Dict:
         '''The attributes of the corresponding Sedaro Block as a dictionary'''
         self.enforce_still_exists()
-        return self._branch.data[self._block_group][self.id]
+        return self._branch_client.data[self._block_group][self.id]
 
     @property
     def _block_name(self) -> str:
         '''The name of the Sedaro Block class associated with this `BlockClient`'''
         try:
             # NOTE: can't use `check_still_exists` instead of try/except, b/c that method calls this one
-            return self._branch._block_id_to_type_map[self.id]
+            return self._branch_client._block_id_to_type_map[self.id]
         except KeyError:
             # this won't be as specific, but allows to know at least the parent type even after a block was deleted
             return self._block_class_client._block_name
@@ -110,12 +110,12 @@ class BlockClient:
     @property
     def _block_group(self) -> str:
         '''The name of the Sedaro BlockGroup this type of `BlockClient`'s associated Sedaro Block is stored in'''
-        return self._branch._block_class_to_block_group_map[self._block_name]
+        return self._branch_client._block_class_to_block_group_map[self._block_name]
 
     @property
-    def _branch(self) -> 'BranchClient':
+    def _branch_client(self) -> 'BranchClient':
         '''The `BranchClient` this `Block` is connected to'''  # FIXME
-        return self._block_class_client._branch
+        return self._block_class_client._branch_client
 
     @property
     def _block_openapi_instance(self) -> Api:
@@ -125,7 +125,7 @@ class BlockClient:
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
         '''The `SedaroApiClient` this `Block` was accessed through'''
-        return self._branch._sedaro_client
+        return self._branch_client._sedaro_client
 
     def check_still_exists(self) -> bool:
         """Checks whether the Sedaro Block this `BlockClient` references still exists.
@@ -133,7 +133,7 @@ class BlockClient:
         Returns:
             bool: indication of whether or not the referenced Sedaro Block still exists
         """
-        return self.id in self._branch.data[self._block_group]
+        return self.id in self._branch_client.data[self._block_group]
 
     def enforce_still_exists(self) -> None:
         """Raises and error if the Sedaro Block this `BlockClient` references no longer exists.
@@ -162,12 +162,12 @@ class BlockClient:
         res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')(
             body=self._block_class_client._update_class(**body),
             path_params={
-                'branchId': self._branch.id,
+                'branchId': self._branch_client.id,
                 'blockId': int(self.id)
             },
             timeout=timeout
         )
-        self._branch._process_block_crud_response(res)
+        self._branch_client._process_block_crud_response(res)
         return self
 
     def delete(self) -> str:
@@ -180,9 +180,10 @@ class BlockClient:
 
         id = self.id
         res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
-            path_params={'branchId': self._branch.id, "blockId": int(id)}
+            path_params={'branchId': self._branch_client.id,
+                         "blockId": int(id)}
         )
-        return self._branch._process_block_crud_response(res)
+        return self._branch_client._process_block_crud_response(res)
 
     def get_schema(self) -> dict:
         """Gets the schema for the associated Sedaro Block
@@ -190,7 +191,7 @@ class BlockClient:
         Returns:
             dict: the associated Block's schema
         """
-        return self._branch.data_schema['definitions'][self._block_name]
+        return self._branch_client.data_schema['definitions'][self._block_name]
 
     @cache
     def get_field_schema(self, field: str) -> dict:
