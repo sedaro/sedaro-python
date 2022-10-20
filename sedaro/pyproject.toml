@@ -13,8 +13,8 @@ readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License", # FIXME
-    "Operating System :: OS Independent", # FIXME
+    "License :: OSI Approved :: MIT License", # TODO
+    "Operating System :: OS Independent", # TODO
     "Topic :: Software Development",
 ]
 dynamic = ["dependencies"]
@@ -23,5 +23,5 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
 
 [project.urls]
-"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
-"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # FIXME
+"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # TODO
+"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # TODO

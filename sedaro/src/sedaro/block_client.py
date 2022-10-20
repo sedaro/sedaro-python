@@ -115,7 +115,7 @@ class BlockClient:
 
     @property
     def _branch_client(self) -> 'BranchClient':
-        '''The `BranchClient` this `BlockClient` is connected to'''  # FIXME
+        '''The `BranchClient` this `BlockClient` is connected to'''
         return self._block_class_client._branch_client
 
     @property
