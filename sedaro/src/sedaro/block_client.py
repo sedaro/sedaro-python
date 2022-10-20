@@ -160,7 +160,7 @@ class BlockClient:
 
         title: str = field_schema.get('title')
         description: str = field_schema.get('description')
-        # all rel fields have title and description
+        # all rel fields have a title and description
         if None in (title, description):
             return False
 
