@@ -39,7 +39,8 @@ class BlockClient:
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block
+        """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block. Additionally, makes
+        it so dotting into relationship fields returns `BlockClient`s corresponding to the related Sedaro Blocks.
 
         Args:
             key (str): attribute being keyed into
@@ -76,7 +77,7 @@ class BlockClient:
         if side_type == ONE_SIDE:
             return branch_client.get_block_client(val)
 
-        # TODO: wasn't able to use this, because the types are of sometimes of DynamicSchema and not the actual
+        # TODO: wasn't able to use this below, because the types are sometimes of DynamicSchema and not the actual
         # primitive types... Need to figure this out.
         # if isinstance(val, list):
         #     return [branch_client.get_block_client(id) for id in val]
