@@ -33,7 +33,7 @@ def parse_block_crud_response(response: ApiResponse) -> Tuple[str, dict, str, st
     """
     body = response.body
     action = body['action']
-    block_id = body['block']['id']
+    block_id = str(body['block']['id'])
     block_group = body['block']['group']
     branch_data = body['branch']['data']
 
