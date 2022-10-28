@@ -51,7 +51,7 @@ def test_create_update_and_delete_block():
         battery_cell_client.delete()
 
         try:
-            print(battery_cell_client)
+            battery_cell_client.update(partNumber="123456789")
         except SedaroException as e:
             msg = str(e)
             assert msg == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
