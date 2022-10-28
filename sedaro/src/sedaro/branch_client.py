@@ -125,3 +125,5 @@ class BranchClient:
 
         b_c_c: BlockClassClient = getattr(self, self._block_id_to_type_map[id])
         return BlockClient(id, b_c_c)
+
+# TODO: add a method for just sending any request with a URL.
