@@ -25,6 +25,8 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 2. Use the client to instantiate a `BranchClient`.
 
 ```py
+...
+
 with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     branch_client = sedaro_client.get_branch(BRANCH_ID)
 ```
@@ -32,7 +34,8 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 3. Use the `BranchClient` to access and utilize `BlockClassClient`s.
 
 ```py
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+...
+
     branch_client = sedaro_client.get_branch(BRANCH_ID)
 
     branch_client.BatteryCell
