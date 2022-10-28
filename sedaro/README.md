@@ -10,7 +10,7 @@ pip install sedaro
 
 ## Use
 
-1. Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API within the scope of that context manager.
+1. Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager.
 
    ```py
    from sedaro import SedaroApiClient
