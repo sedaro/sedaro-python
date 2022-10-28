@@ -169,6 +169,8 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 ```
 
-## Docstrings
+## Further information
 
 See docstrings on classes and their methods for further instructions and explanations.
+
+See our API specification for names of Sedaro blocks and all of their fields.
