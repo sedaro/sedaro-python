@@ -129,3 +129,39 @@ pip install sedaro
 
    solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
    ```
+
+## Full Example
+
+```py
+from sedaro import SedaroApiClient
+from sedaro.exceptions import SedaroException
+
+API_KEY = 'my_api_key_generated_by_sedaro_satellite'
+BRANCH_ID = 1
+
+with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    branch_client = sedaro_client.get_branch(BRANCH_ID)
+
+    battery_cell_client = branch_client.BatteryCell.create(
+        partNumber='987654321',
+        manufacturer='ACME Corporation',
+        esr=1.0,
+        maxChargeCurrent=100,
+        maxDischargeCurrent=100,
+        minSoc=1,
+        capacity=5000,
+        curve=[[0, 1], [3, 5]],
+        topology='11',
+    )
+
+    bc_id = battery_cell_client.id
+
+    battery_cell_client.update(partNumber="123456789")
+
+    battery_cell_client.delete()
+
+    try:
+        battery_cell_client.update(partNumber="987654321")
+    except SedaroException as e:
+        assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
+```
