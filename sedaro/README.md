@@ -38,13 +38,13 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
     branch_client = sedaro_client.get_branch(BRANCH_ID)
 
-    branch_client.BatteryCell
-
     branch_client.Target
 
     branch_client.Subsystem
 
     tranch_client.Component
+
+    branch_client.BatteryCell
 
     # ...etc.
 
