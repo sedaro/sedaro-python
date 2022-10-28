@@ -100,7 +100,8 @@ pip install sedaro
    ```py
    ...
    # Printing a `BlockClient` will show you the corresponding Sedaro block's data:
-   print(subsystem_client)
+       print(subsystem_client)
+
    >>> Subsystem(
    >>>   id=27
    >>>   name=One subsystem to find them
@@ -112,10 +113,12 @@ pip install sedaro
 
    ```py
    # Keying into any property existing on the corresponding Sedaro block, will return that properties value.
-   subsystem_client.name
+       subsystem_client.name
+
    >>> 'And in the darkness to bind them'
    # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
-   subsystem.satellite
+       subsystem.satellite
+
    >>> Satellite(
    >>>   id=5
    >>>   mass=1000
@@ -125,9 +128,9 @@ pip install sedaro
 
    ```py
    # This allows for traversing all the blocks in the branch via relationship fields:
-   solar_panel_client = branch_client.solarPanel.get_first()
+       solar_panel_client = branch_client.solarPanel.get_first()
 
-   solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
+       solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
    ```
 
 ## Full Example
@@ -165,3 +168,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     except SedaroException as e:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 ```
+
+## Docstrings
+
+See docstrings on classes and their methods for further instructions and explanations.
