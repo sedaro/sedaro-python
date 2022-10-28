@@ -173,4 +173,4 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
 See docstrings on classes and their methods for further instructions and explanations.
 
-See our [API specification](https://sedaro.github.io/openapi/) for names of Sedaro blocks and all of their fields.
+See our [OpenAPI Specification](https://sedaro.github.io/openapi/) for names of Sedaro blocks and all of their fields.
