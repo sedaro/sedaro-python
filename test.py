@@ -121,7 +121,12 @@ def test_different_block():
             satellite='5'
         )
 
-        subsystem_client.update(name='One subsystem to find them')
+        subsystem_client_2 = subsystem_client.update(
+            name='One subsystem to find them')
+
+        subsystem_client_3 = branch_client.subsystem.get(subsystem_client.id)
+
+        assert subsystem_client == subsystem_client_2 == subsystem_client_3
 
         subsystem_client.delete()
 
