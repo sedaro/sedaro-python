@@ -99,7 +99,7 @@ pip install sedaro
 
    ```py
    ...
-   # Printing a `BlockClient` will show you the corresponding Sedaro blocks data:
+   # Printing a `BlockClient` will show you the corresponding Sedaro block's data:
    print(subsystem_client)
    >>> Subsystem(
    >>>   id=27
@@ -114,7 +114,7 @@ pip install sedaro
    # Keying into any property existing on the corresponding Sedaro block, will return that properties value.
    subsystem_client.name
    >>> 'And in the darkness to bind them'
-   # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s) if it's a many-side relationship field.
+   # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
    subsystem.satellite
    >>> Satellite(
    >>>   id=5
@@ -126,5 +126,6 @@ pip install sedaro
    ```py
    # This allows for traversing all the blocks in the branch via relationship fields:
    solar_panel_client = branch_client.solarPanel.get_first()
-   solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].thermal_interface_A[0].satellite.topology
+
+   solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
    ```
