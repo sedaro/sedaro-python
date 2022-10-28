@@ -112,6 +112,20 @@ def test_traversing_and_equality():
         ) is not solar_panel_client.cell.panels[0]
 
 
+def test_different_block():
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
+
+        subsystem_client = branch_client.subsystem.create(
+            name='One subsystem to rule them all',
+            satellite='5'
+        )
+
+        subsystem_client.update(name='One subsystem to find them')
+
+        subsystem_client.delete()
+
+
 if __name__ == "__main__":
     test_get()
     # start timer after first get to make sure backend is ready to accept request
@@ -120,4 +134,5 @@ if __name__ == "__main__":
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality()
+    test_different_block()
     print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
