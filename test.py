@@ -28,7 +28,7 @@ def test_create_update_and_delete_block():
             maxDischargeCurrent=100,
             minSoc=0.2,
             capacity=500,
-            curve=[[0, 1], [3, 5]],
+            curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
             topology='11',
         )
 

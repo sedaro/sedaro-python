@@ -162,8 +162,8 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         maxDischargeCurrent=100,
         minSoc=0.2,
         capacity=500,
-        curve=[[0, 1], [3, 5]],
-        topology='11',
+        curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
+        topology='5',
     )
 
     bc_id = battery_cell_client.id
