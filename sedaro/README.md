@@ -156,12 +156,12 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
     battery_cell_client = branch_client.BatteryCell.create(
         partNumber='987654321',
-        manufacturer='ACME Corporation',
-        esr=1.0,
-        maxChargeCurrent=100,
+        manufacturer='Sedaro Corporation',
+        esr=0.01,
+        maxChargeCurrent=15,
         maxDischargeCurrent=100,
-        minSoc=1,
-        capacity=5000,
+        minSoc=0.2,
+        capacity=500,
         curve=[[0, 1], [3, 5]],
         topology='11',
     )
@@ -189,3 +189,13 @@ The Sedaro client is a wrapper around the Swagger generated OpenAPI client. When
 ```py
 from sedaro_base_client import ...
 ```
+
+### Community, Support, Discussion
+
+If you have any issues using the package or any suggestions, please start by reaching out:
+
+1. Open an [issue](TODO)
+2. Join the Sedaro Community Slack
+3. Email us at support@sedarotech.com
+
+- Please note that while emails are always welcome, we prefer the first two options as this allows for others to benefit from the discourse in the threads. That said, if the matter is specific to your use case or sensitive in nature, don't hesitate to shoot us an email instead.
