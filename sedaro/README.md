@@ -2,6 +2,8 @@
 
 A python client for interacting with the Sedaro Satellite API using intuitive classes and methods.
 
+This client is intended to be used alongside our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block.
+
 ## Install
 
 ```bash
