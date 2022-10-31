@@ -56,55 +56,7 @@ class BranchClient:
         )
 
         self._block_id_to_type_map = block_id_to_type_map
-        branch_data_local = self.data
-
-        # Handle CRUD-ed block
-        action = action.casefold()
-        if action == CREATE.casefold():
-            branch_data_local[block_group][block_id] = block_data
-
-        elif action == UPDATE.casefold():
-            branch_data_local[block_group][block_id].update(block_data)
-
-        elif action == DELETE.casefold():
-            del branch_data_local[block_group][block_id]
-
-        else:
-            raise NotImplementedError(f'Unsupported action type: "{action}"')
-
-        # Loop through all blocks in all block groups
-        # -- to deal with cascade deletes, and updates of blocks on other side of relationships
-        for b_g in self._block_group_names:
-            b_g_incoming = branch_data_incoming[b_g]
-            b_g_local = branch_data_local[b_g]
-
-            for id_local, block_data_local in list(b_g_local.items()):
-
-                # Skip block that's already been handled above
-                if id_local == block_id:
-                    continue
-
-                # Remove block if doesn't exist
-                if id_local not in b_g_incoming:
-                    del b_g_local[id_local]
-                    continue
-
-                # Update block if has changed
-                block_data_incoming = b_g_incoming[id_local]
-                if block_data_local != block_data_incoming:
-
-                    # delete any keys from local not in incoming
-                    for key in list(block_data_local.keys()):
-                        if key not in block_data_incoming:
-                            del block_data_local[key]
-
-                    # update all key/vals
-                    block_data_local.update(block_data_incoming)
-
-            # Add any tangential "auto-created" blocks during the CRUD-ing of this block
-            new_ids = set(b_g_incoming.keys()) - set(b_g_local.keys())
-            for new_id in new_ids:
-                block_data_local[new_id] = block_data_incoming[new_id]
+        self.data = branch_data_incoming
 
         return block_id
 
