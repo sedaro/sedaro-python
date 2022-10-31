@@ -198,7 +198,7 @@ class BlockClient:
 
     @cache
     def get_field_schema(self, field: str) -> dict:
-        """Gets the field schema of for the corresponding attribute on the Sedaro Block.
+        """Gets the field schema of the corresponding attribute on the Sedaro Block.
 
         Args:
             field (str): field to get the schema for
