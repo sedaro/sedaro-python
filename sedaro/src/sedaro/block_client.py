@@ -57,14 +57,8 @@ class BlockClient:
 
         val = self.data[key]
 
-        if not self.is_rel_field(key):
+        if not self.is_rel_field(key) or val in (None, [], {}):
             return val
-
-        if val is None:
-            return None
-
-        if val in ([], {}):
-            return []
 
         side_type = self.get_rel_field_type(key)
         branch_client = self._branch_client
