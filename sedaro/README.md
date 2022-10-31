@@ -44,11 +44,18 @@ pip install sedaro
 
        tranch_client.Component
 
-       branch_client.BatteryCell
-
        branch_client.Subsystem
 
        # ...etc.
+
+   ```
+
+   ```py
+      # Accessing `BlockClassClient`s is case agnostic -- you can use any form of the Sedaro Block name that can be parsed into a snake case version.
+
+      branch_client.BatteryCell
+      branch_client.batteryCell
+      branch_client.battery_cell
 
    ```
 
