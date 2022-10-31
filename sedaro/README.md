@@ -137,7 +137,7 @@ pip install sedaro
 
 ```py
 from sedaro import SedaroApiClient
-from sedaro.exceptions import SedaroException
+from sedaro.exceptions import NonexistantBlockError
 
 API_KEY = 'my_api_key_generated_by_sedaro_satellite'
 BRANCH_ID = 1
@@ -165,7 +165,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
     try:
         battery_cell_client.update(partNumber="987654321")
-    except SedaroException as e:
+    except NonexistantBlockError as e:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 ```
 
