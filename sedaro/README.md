@@ -84,7 +84,7 @@ pip install sedaro
 
    ```py
    ...
-   # A `BlockClient` will always be equal to and in sync with any other `BlockClient` referencing the same Sedaro block:
+   # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro block:
        subsystem_client = branch_client.subsystem.create(
            name='Structure',
            satellite='5'
