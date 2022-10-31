@@ -20,7 +20,7 @@ class BranchClient:
     data_schema: Dict
     _sedaro_client: 'SedaroApiClient'
     _block_id_to_type_map: Dict[str, str]
-    '''Dicationary mapping Sedaro Block ids to the class name of the Block'''
+    '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
     _block_class_to_block_group_map: Dict[str, str]
     '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
     _block_group_names: List[str]
