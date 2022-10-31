@@ -36,6 +36,7 @@ class BlockClient:
         return isinstance(other, self.__class__) and self.id == other.id
 
     def __hash__(self):
+        # allows for a BlockClient to be used as a key in a dictionary
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
