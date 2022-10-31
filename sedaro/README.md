@@ -10,12 +10,12 @@ pip install sedaro
 
 ## Use
 
-1. Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager.
+1. Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the [Sedaro Satellite Management Console](https://staging.satellite.sedaro.com/#/account).
 
    ```py
    from sedaro import SedaroApiClient
 
-   API_KEY = 'my_api_key_generated_by_sedaro_satellite'
+   API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
    BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
 
    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
