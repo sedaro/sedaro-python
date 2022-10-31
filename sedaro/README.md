@@ -57,8 +57,8 @@ pip install sedaro
    ```py
    ...
        branch_client.subsystem.create(
-           name='One subsystem to rule them all',
-           satellite='5'
+           name='Structure',
+           satellite='5'  # The ID of the related Satellite Block
        )
 
        branch_client.subsystem.get('5')
@@ -73,11 +73,11 @@ pip install sedaro
    ```py
    ...
        subsystem_client = branch_client.subsystem.create(
-           name='One subsystem to rule them all',
+           name='Structure',
            satellite='5'
        )
 
-       subsystem_client.update(name='One subsystem to find them')
+       subsystem_client.update(name='Structure 2.0')
 
        subsystem_client.delete()
    ```
@@ -86,12 +86,12 @@ pip install sedaro
    ...
    # A `BlockClient` will always be equal to and in sync with any other `BlockClient` referencing the same Sedaro block:
        subsystem_client = branch_client.subsystem.create(
-           name='One subsystem to bring them all',
+           name='Structure',
            satellite='5'
        )
 
        subsystem_client_2 = subsystem_client.update(
-        name='And in the darkness to bind them'
+        name='Structure 2.0'
        )
 
        subsystem_client_3 = branch_client.subsystem.get(subsystem_client.id)
