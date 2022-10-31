@@ -83,9 +83,9 @@ class BlockClient:
         # if isinstance(val, str):
         #     return branch_client.get_block_client(val)
 
-        # raise NotImplementedError(
-        #     f'Unsupported relationship type on "{self._block_name}", attribute: "{key}".'
-        # )
+        raise NotImplementedError(
+            f'Unsupported relationship type on "{self._block_name}", attribute: "{key}".'
+        )
 
     @property
     def data(self) -> Dict:
