@@ -121,7 +121,8 @@ class BlockClassClient:
 
         Args:
             timeout (Union[int, Tuple], optional): the timeout used by the REST client. Defaults to `None`.
-            **body (any): all remaining kwargs are used to form the `body` dictionary
+            **body (any): all remaining kwargs will form the `body` dictionary and should correspond with required and
+            optional fields on the Sedaro Block.
 
         Returns:
             BlockClient: a client to interact with the created Sedaro Block
