@@ -2,7 +2,7 @@ from random import randrange
 import time
 
 from sedaro import SedaroApiClient
-from sedaro.exceptions import SedaroException
+from sedaro.exceptions import NonexistantBlockError
 
 # TODO: remove this
 # NOTE: update the API_KYE and BRANCH_ID for things that work with your dev environment
@@ -52,7 +52,7 @@ def test_create_update_and_delete_block():
 
         try:
             battery_cell_client.update(partNumber="123456789")
-        except SedaroException as e:
+        except NonexistantBlockError as e:
             msg = str(e)
             assert msg == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 
@@ -83,14 +83,14 @@ def test_update_rel_and_cascade_delete():
 
         try:
             subsystem_client.delete()
-        except SedaroException as e:
+        except NonexistantBlockError as e:
             msg = str(e)
             assert msg == f'The referenced "Subsystem" (id: {ss_id}) no longer exists.'
 
         # make sure component is also deleted when subsystem is deleted
         try:
             component_client.update(name='Trying to update name')
-        except SedaroException as e:
+        except NonexistantBlockError as e:
             msg = str(e)
             assert msg == f'The referenced "Component" (id: {c_id}) no longer exists.'
 
