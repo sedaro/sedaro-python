@@ -33,7 +33,7 @@ pip install sedaro
        branch_client = sedaro_client.get_branch(BRANCH_ID)
    ```
 
-3. Use the `BranchClient` to access and utilize `BlockClassClient`s.
+3. Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
 
    ```py
    ...
