@@ -23,5 +23,5 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
 
 [project.urls]
-"Homepage" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # TODO
-"Bug Tracker" = "https://gitlab.sedaro.com/sedaro-satellite/clients" # TODO
+"Homepage" = "https://github.com/sedaro/sedaro-python"
+"Bug Tracker" = "https://github.com/sedaro/sedaro-python/issues"
