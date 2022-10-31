@@ -53,7 +53,7 @@ class BlockClient:
             any: the value of the corresponding attribute on the referenced Sedaro Block
         """
         if key not in self.data:
-            raise make_key_error(key, self._block_name)
+            raise make_attr_error(key, self._block_name)
 
         val = self.data[key]
 
@@ -212,7 +212,7 @@ class BlockClient:
         properties = self.get_schema()['properties']
 
         if field not in properties:
-            raise make_key_error(field, self._block_name)
+            raise make_attr_error(field, self._block_name)
 
         return properties[field]
 
@@ -284,5 +284,5 @@ MANY_SIDE_DATA = 'many-side-with-data'
 ONE_SIDE = 'one-side'
 
 
-def make_key_error(field: str, block_name: str) -> str:
-    return KeyError(f'There is no "{field}" attribute on "{block_name}"')
+def make_attr_error(field: str, block_name: str) -> str:
+    return AttributeError(f'There is no "{field}" attribute on "{block_name}"')
