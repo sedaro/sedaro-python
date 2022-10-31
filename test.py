@@ -12,13 +12,13 @@ BRANCH_ID = 14
 
 
 def test_get():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host='http://localhost:8000') as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
         # print(f'\nres: {branch_client}\n')
 
 
 def test_create_update_and_delete_block():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host='http://localhost:8000') as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
         battery_cell_client = branch_client.BatteryCell.create(
             partNumber='987654321',
@@ -58,7 +58,7 @@ def test_create_update_and_delete_block():
 
 
 def test_update_rel_and_cascade_delete():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host='http://localhost:8000') as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
 
         subsystem_client = branch_client.subsystem.create(
@@ -96,7 +96,7 @@ def test_update_rel_and_cascade_delete():
 
 
 def test_traversing_and_equality():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host='http://localhost:8000') as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
 
         solar_panel_client = branch_client.solarPanel.get_first()
@@ -113,7 +113,7 @@ def test_traversing_and_equality():
 
 
 def test_different_block():
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host='http://localhost:8000') as sedaro_client:
         branch_client = sedaro_client.get_branch(BRANCH_ID)
 
         subsystem_client = branch_client.subsystem.create(

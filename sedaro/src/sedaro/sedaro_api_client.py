@@ -1,15 +1,15 @@
+from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 # from sedaro_base_client.apis.tags import branches_api
 
-from .configuration import config
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
 
 
 class SedaroApiClient(ApiClient):
-    def __init__(self, api_key, *args, **kwargs):
+    def __init__(self, api_key, host='https://staging.api.sedaro.com', *args, **kwargs):
         return super().__init__(
-            configuration=config,
+            configuration=Configuration(host=host),
             *args,
             **kwargs,
             header_name='X_API_KEY',
