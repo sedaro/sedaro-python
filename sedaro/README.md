@@ -65,10 +65,10 @@ pip install sedaro
    ...
        branch_client.subsystem.create(
            name='Structure',
-           satellite='5'  # The ID of the related Satellite Block
+           satellite='3'  # The ID of the related Satellite Block
        )
 
-       branch_client.subsystem.get('5')
+       branch_client.subsystem.get(blockId) # ID of desired subsystem
        branch_client.subsystem.get_all()
        branch_client.subsystem.get_first()
        branch_client.subsystem.get_last()
@@ -81,7 +81,7 @@ pip install sedaro
    ...
        subsystem_client = branch_client.subsystem.create(
            name='Structure',
-           satellite='5'
+           satellite='3'
        )
 
        subsystem_client.update(name='Structure 2.0')
@@ -94,7 +94,7 @@ pip install sedaro
    # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
        subsystem_client = branch_client.subsystem.create(
            name='Structure',
-           satellite='5'
+           satellite='3'
        )
 
        subsystem_client_2 = subsystem_client.update(
@@ -115,7 +115,7 @@ pip install sedaro
    >>>   id=27
    >>>   name=One subsystem to find them
    >>>   category=CUSTOM
-   >>>   satellite=5
+   >>>   satellite=3
    >>>   components=()
    >>> )
    ```
@@ -129,7 +129,7 @@ pip install sedaro
        subsystem.satellite
 
    >>> Satellite(
-   >>>   id=5
+   >>>   id=3
    >>>   mass=1000
    >>>   ...etc
    >>> )
