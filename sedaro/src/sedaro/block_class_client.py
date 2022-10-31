@@ -120,7 +120,7 @@ class BlockClassClient:
         """Creates a Sedaro Block of the given type in the corresponding Branch.
 
         Args:
-            timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
+            timeout (Union[int, Tuple], optional): the timeout used by the REST client. Defaults to `None`.
             **body (any): all remaining kwargs for the `body`
 
         Returns:

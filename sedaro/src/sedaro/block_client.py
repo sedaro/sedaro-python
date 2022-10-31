@@ -151,7 +151,7 @@ class BlockClient:
         """Update attributes of the corresponding Sedaro Block
 
         Args:
-            timeout (Union[int, Tuple], optional): the timeout used by the rest client. Defaults to `None`.
+            timeout (Union[int, Tuple], optional): the timeout used by the REST client. Defaults to `None`.
             **attrs_to_update (Dict): desired attributes to update on the Sedaro Block
 
         Returns:
