@@ -5,7 +5,7 @@ from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 
 # TODO: remove this
-# NOTE: update the API_KYE and BRANCH_ID for things that work with your dev environment
+# NOTE: update the API_KEY and BRANCH_ID for things that work with your dev environment
 # NOTE: these are temporary for Zach's dev environment
 API_KEY = '2.6YnJx9FECI0_tweCHBVoDw1NpkqXpX0g2SbivoWk1js8tIigEcAFo9ebQ2pzSqpO-fHqzVikT2njA6xXNRTslw'
 BRANCH_ID = 14
