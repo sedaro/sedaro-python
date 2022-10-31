@@ -22,12 +22,12 @@ def test_create_update_and_delete_block():
         branch_client = sedaro_client.get_branch(BRANCH_ID)
         battery_cell_client = branch_client.BatteryCell.create(
             partNumber='987654321',
-            manufacturer='Oh Yeah!!!!!!!!!',
-            esr=1.0,
-            maxChargeCurrent=100,
+            manufacturer='Sedaro Corporation',
+            esr=0.01,
+            maxChargeCurrent=15,
             maxDischargeCurrent=100,
-            minSoc=1,
-            capacity=5000,
+            minSoc=0.2,
+            capacity=500,
             curve=[[0, 1], [3, 5]],
             topology='11',
         )
