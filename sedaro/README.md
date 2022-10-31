@@ -91,7 +91,7 @@ pip install sedaro
 
    ```py
    ...
-   # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro block:
+   # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
        subsystem_client = branch_client.subsystem.create(
            name='Structure',
            satellite='5'
@@ -108,7 +108,7 @@ pip install sedaro
 
    ```py
    ...
-   # Printing a `BlockClient` will show you the corresponding Sedaro block's data:
+   # Printing a `BlockClient` will show you the corresponding Sedaro Block's data:
        print(subsystem_client)
 
    >>> Subsystem(
@@ -121,7 +121,7 @@ pip install sedaro
    ```
 
    ```py
-   # Keying into any property existing on the corresponding Sedaro block, will return that properties value.
+   # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
        subsystem_client.name
 
    >>> 'And in the darkness to bind them'
@@ -136,7 +136,7 @@ pip install sedaro
    ```
 
    ```py
-   # This allows for traversing all the blocks in the branch via relationship fields:
+   # This allows for traversing all the Blocks in the branch via relationship fields:
        solar_panel_client = branch_client.solarPanel.get_first()
 
        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
