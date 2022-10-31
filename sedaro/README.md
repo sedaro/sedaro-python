@@ -136,7 +136,7 @@ pip install sedaro
    ```
 
    ```py
-   # This allows for traversing all the Blocks in the branch via relationship fields:
+   # This allows for traversing Blocks in the model via relationship fields:
        solar_panel_client = branch_client.solarPanel.get_first()
 
        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
