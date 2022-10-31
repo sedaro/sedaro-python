@@ -190,7 +190,7 @@ The Sedaro client is a wrapper around the Swagger generated OpenAPI client. When
 from sedaro_base_client import ...
 ```
 
-### Community, Support, Discussion
+## Community, Support, Discussion
 
 If you have any issues using the package or any suggestions, please start by reaching out:
 
