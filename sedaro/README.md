@@ -194,8 +194,8 @@ from sedaro_base_client import ...
 
 If you have any issues using the package or any suggestions, please start by reaching out:
 
-1. Open an [issue](TODO)
-2. Join the Sedaro Community Slack
+1. Open an [issue](https://github.com/sedaro/sedaro-python/issues)
+2. Join the Sedaro Community Slack (coming soon!)
 3. Email us at support@sedarotech.com
 
-- Please note that while emails are always welcome, we prefer the first two options as this allows for others to benefit from the discourse in the threads. That said, if the matter is specific to your use case or sensitive in nature, don't hesitate to shoot us an email instead.
+Please note that while emails are always welcome, we prefer the first two options as this allows for others to benefit from the discourse in the threads. That said, if the matter is specific to your use case or sensitive in nature, don't hesitate to shoot us an email instead.
