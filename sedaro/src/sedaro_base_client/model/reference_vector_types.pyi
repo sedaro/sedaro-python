@@ -46,3 +46,7 @@ class ReferenceVectorTypes(
     @schemas.classproperty
     def TARGET(cls):
         return cls("TARGET")
+    
+    @schemas.classproperty
+    def TARGET_GROUP(cls):
+        return cls("TARGET_GROUP")

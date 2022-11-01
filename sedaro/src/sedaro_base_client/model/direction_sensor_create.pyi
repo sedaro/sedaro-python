@@ -70,7 +70,6 @@ class DirectionSensorCreate(
                 schemas.NumberSchema
             ):
                 pass
-            temperature = schemas.NumberSchema
             fieldOfView = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -82,7 +81,6 @@ class DirectionSensorCreate(
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "temperature": temperature,
                 "fieldOfView": fieldOfView,
             }
     
@@ -118,15 +116,12 @@ class DirectionSensorCreate(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "fieldOfView", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "fieldOfView", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -159,15 +154,12 @@ class DirectionSensorCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "fieldOfView", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "fieldOfView", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -183,7 +175,6 @@ class DirectionSensorCreate(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -200,7 +191,6 @@ class DirectionSensorCreate(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            temperature=temperature,
             fieldOfView=fieldOfView,
             _configuration=_configuration,
             **kwargs,

@@ -62,6 +62,29 @@ class ConOps(
                     return super().__getitem__(i)
             
             
+            class groupConditions(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'groupConditions':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class targets(
                 schemas.ListSchema
             ):
@@ -203,6 +226,7 @@ class ConOps(
             __annotations__ = {
                 "id": id,
                 "conditions": conditions,
+                "groupConditions": groupConditions,
                 "targets": targets,
                 "targetGroups": targetGroups,
                 "operationalModes": operationalModes,
@@ -218,6 +242,9 @@ class ConOps(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["conditions"]) -> MetaOapg.properties.conditions: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["groupConditions"]) -> MetaOapg.properties.groupConditions: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targets"]) -> MetaOapg.properties.targets: ...
@@ -246,7 +273,7 @@ class ConOps(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "conditions", "targets", "targetGroups", "operationalModes", "pointingModes", "activeOpMode", "attitude", "attitudeSolution", "angularVelocitySolution", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "conditions", "groupConditions", "targets", "targetGroups", "operationalModes", "pointingModes", "activeOpMode", "attitude", "attitudeSolution", "angularVelocitySolution", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -256,6 +283,9 @@ class ConOps(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["conditions"]) -> typing.Union[MetaOapg.properties.conditions, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["groupConditions"]) -> typing.Union[MetaOapg.properties.groupConditions, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targets"]) -> typing.Union[MetaOapg.properties.targets, schemas.Unset]: ...
@@ -284,7 +314,7 @@ class ConOps(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "conditions", "targets", "targetGroups", "operationalModes", "pointingModes", "activeOpMode", "attitude", "attitudeSolution", "angularVelocitySolution", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "conditions", "groupConditions", "targets", "targetGroups", "operationalModes", "pointingModes", "activeOpMode", "attitude", "attitudeSolution", "angularVelocitySolution", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -293,6 +323,7 @@ class ConOps(
         *args: typing.Union[dict, frozendict.frozendict, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         conditions: typing.Union[MetaOapg.properties.conditions, list, tuple, schemas.Unset] = schemas.unset,
+        groupConditions: typing.Union[MetaOapg.properties.groupConditions, list, tuple, schemas.Unset] = schemas.unset,
         targets: typing.Union[MetaOapg.properties.targets, list, tuple, schemas.Unset] = schemas.unset,
         targetGroups: typing.Union[MetaOapg.properties.targetGroups, list, tuple, schemas.Unset] = schemas.unset,
         operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
@@ -309,6 +340,7 @@ class ConOps(
             *args,
             id=id,
             conditions=conditions,
+            groupConditions=groupConditions,
             targets=targets,
             targetGroups=targetGroups,
             operationalModes=operationalModes,

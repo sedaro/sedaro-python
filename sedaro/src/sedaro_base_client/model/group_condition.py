@@ -36,6 +36,7 @@ class GroupCondition(
     class MetaOapg:
         required = {
             "paramACategory",
+            "targetGroupA",
             "paramBCategory",
             "name",
             "relationship",
@@ -178,6 +179,7 @@ class GroupCondition(
                         **kwargs,
                     )
             conOps = schemas.StrSchema
+            targetGroupA = schemas.StrSchema
             id = schemas.StrSchema
             
             
@@ -218,7 +220,6 @@ class GroupCondition(
             scalar = schemas.NumberSchema
             targetA = schemas.StrSchema
             targetB = schemas.StrSchema
-            targetGroupA = schemas.StrSchema
             
             
             class operationalModes(
@@ -242,6 +243,109 @@ class GroupCondition(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            compliance = schemas.BoolSchema
+            
+            
+            class groupRoller(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            GroupRollers,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'groupRoller':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class countRelationship(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            ConditionRelationship,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'countRelationship':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            countValue = schemas.IntSchema
+            
+            
+            class targetCompliance(
+                schemas.DictSchema
+            ):
+            
+            
+                class MetaOapg:
+                    additional_properties = schemas.BoolSchema
+                
+                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+                
+                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[MetaOapg.additional_properties, bool, ],
+                ) -> 'targetCompliance':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             __annotations__ = {
                 "name": name,
                 "relationship": relationship,
@@ -249,16 +353,22 @@ class GroupCondition(
                 "paramBCategory": paramBCategory,
                 "paramA": paramA,
                 "conOps": conOps,
+                "targetGroupA": targetGroupA,
                 "id": id,
                 "paramB": paramB,
                 "scalar": scalar,
                 "targetA": targetA,
                 "targetB": targetB,
-                "targetGroupA": targetGroupA,
                 "operationalModes": operationalModes,
+                "compliance": compliance,
+                "groupRoller": groupRoller,
+                "countRelationship": countRelationship,
+                "countValue": countValue,
+                "targetCompliance": targetCompliance,
             }
     
     paramACategory: MetaOapg.properties.paramACategory
+    targetGroupA: MetaOapg.properties.targetGroupA
     paramBCategory: MetaOapg.properties.paramBCategory
     name: MetaOapg.properties.name
     relationship: MetaOapg.properties.relationship
@@ -284,6 +394,9 @@ class GroupCondition(
     def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["targetGroupA"]) -> MetaOapg.properties.targetGroupA: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
@@ -299,15 +412,27 @@ class GroupCondition(
     def __getitem__(self, name: typing_extensions.Literal["targetB"]) -> MetaOapg.properties.targetB: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroupA"]) -> MetaOapg.properties.targetGroupA: ...
+    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
+    def __getitem__(self, name: typing_extensions.Literal["compliance"]) -> MetaOapg.properties.compliance: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["groupRoller"]) -> MetaOapg.properties.groupRoller: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["countRelationship"]) -> MetaOapg.properties.countRelationship: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["countValue"]) -> MetaOapg.properties.countValue: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["targetCompliance"]) -> MetaOapg.properties.targetCompliance: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", "operationalModes", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "targetGroupA", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -331,6 +456,9 @@ class GroupCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupA"]) -> MetaOapg.properties.targetGroupA: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
@@ -346,15 +474,27 @@ class GroupCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["targetB"]) -> typing.Union[MetaOapg.properties.targetB, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupA"]) -> typing.Union[MetaOapg.properties.targetGroupA, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["compliance"]) -> typing.Union[MetaOapg.properties.compliance, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["groupRoller"]) -> typing.Union[MetaOapg.properties.groupRoller, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["countRelationship"]) -> typing.Union[MetaOapg.properties.countRelationship, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["countValue"]) -> typing.Union[MetaOapg.properties.countValue, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["targetCompliance"]) -> typing.Union[MetaOapg.properties.targetCompliance, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", "operationalModes", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "targetGroupA", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -362,6 +502,7 @@ class GroupCondition(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         paramACategory: typing.Union[MetaOapg.properties.paramACategory, str, ],
+        targetGroupA: typing.Union[MetaOapg.properties.targetGroupA, str, ],
         paramBCategory: typing.Union[MetaOapg.properties.paramBCategory, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         relationship: typing.Union[MetaOapg.properties.relationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
@@ -372,8 +513,12 @@ class GroupCondition(
         scalar: typing.Union[MetaOapg.properties.scalar, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
         targetB: typing.Union[MetaOapg.properties.targetB, str, schemas.Unset] = schemas.unset,
-        targetGroupA: typing.Union[MetaOapg.properties.targetGroupA, str, schemas.Unset] = schemas.unset,
         operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
+        compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
+        groupRoller: typing.Union[MetaOapg.properties.groupRoller, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        countRelationship: typing.Union[MetaOapg.properties.countRelationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        countValue: typing.Union[MetaOapg.properties.countValue, decimal.Decimal, int, schemas.Unset] = schemas.unset,
+        targetCompliance: typing.Union[MetaOapg.properties.targetCompliance, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'GroupCondition':
@@ -381,6 +526,7 @@ class GroupCondition(
             cls,
             *args,
             paramACategory=paramACategory,
+            targetGroupA=targetGroupA,
             paramBCategory=paramBCategory,
             name=name,
             relationship=relationship,
@@ -391,12 +537,17 @@ class GroupCondition(
             scalar=scalar,
             targetA=targetA,
             targetB=targetB,
-            targetGroupA=targetGroupA,
             operationalModes=operationalModes,
+            compliance=compliance,
+            groupRoller=groupRoller,
+            countRelationship=countRelationship,
+            countValue=countValue,
+            targetCompliance=targetCompliance,
             _configuration=_configuration,
             **kwargs,
         )
 
 from sedaro_base_client.model.condition_relationship import ConditionRelationship
+from sedaro_base_client.model.group_rollers import GroupRollers
 from sedaro_base_client.model.parameter_b_categories import ParameterBCategories
 from sedaro_base_client.model.parameters import Parameters

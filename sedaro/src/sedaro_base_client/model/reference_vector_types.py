@@ -41,6 +41,7 @@ class ReferenceVectorTypes(
             "CELESTIAL": "CELESTIAL",
             "LOCAL": "LOCAL",
             "TARGET": "TARGET",
+            "TARGET_GROUP": "TARGET_GROUP",
         }
     
     @schemas.classproperty
@@ -54,3 +55,7 @@ class ReferenceVectorTypes(
     @schemas.classproperty
     def TARGET(cls):
         return cls("TARGET")
+    
+    @schemas.classproperty
+    def TARGET_GROUP(cls):
+        return cls("TARGET_GROUP")

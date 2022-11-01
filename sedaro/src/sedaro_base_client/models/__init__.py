@@ -21,6 +21,7 @@ from sedaro_base_client.model.algorithm_bg import AlgorithmBG
 from sedaro_base_client.model.angular_velocity_sensor import AngularVelocitySensor
 from sedaro_base_client.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
 from sedaro_base_client.model.angular_velocity_sensor_update import AngularVelocitySensorUpdate
+from sedaro_base_client.model.anti_sun_tracking_surface import AntiSunTrackingSurface
 from sedaro_base_client.model.att_det_types import AttDetTypes
 from sedaro_base_client.model.averaging_algorithm import AveragingAlgorithm
 from sedaro_base_client.model.averaging_algorithm_create import AveragingAlgorithmCreate
@@ -44,9 +45,9 @@ from sedaro_base_client.model.branch_create import BranchCreate
 from sedaro_base_client.model.branch_delete_res import BranchDeleteRes
 from sedaro_base_client.model.branch_merge import BranchMerge
 from sedaro_base_client.model.branch_merge_conflicts_res import BranchMergeConflictsRes
-from sedaro_base_client.model.branch_scenario_template_res import BranchScenarioTemplateRes
+from sedaro_base_client.model.branch_scenario_res import BranchScenarioRes
 from sedaro_base_client.model.branch_update import BranchUpdate
-from sedaro_base_client.model.branch_vehicle_template_res import BranchVehicleTemplateRes
+from sedaro_base_client.model.branch_vehicle_res import BranchVehicleRes
 from sedaro_base_client.model.branch_verify_password import BranchVerifyPassword
 from sedaro_base_client.model.bus_regulator import BusRegulator
 from sedaro_base_client.model.bus_regulator_bg import BusRegulatorBG
@@ -112,6 +113,7 @@ from sedaro_base_client.model.ground_target_create import GroundTargetCreate
 from sedaro_base_client.model.ground_target_update import GroundTargetUpdate
 from sedaro_base_client.model.group_and_id import GroupAndId
 from sedaro_base_client.model.group_condition import GroupCondition
+from sedaro_base_client.model.group_rollers import GroupRollers
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.heater import Heater
 from sedaro_base_client.model.heater_create import HeaterCreate
@@ -175,8 +177,6 @@ from sedaro_base_client.model.polynomial_ephemeris_body import PolynomialEphemer
 from sedaro_base_client.model.position_sensor import PositionSensor
 from sedaro_base_client.model.position_sensor_create import PositionSensorCreate
 from sedaro_base_client.model.position_sensor_update import PositionSensorUpdate
-from sedaro_base_client.model.postgres_branch_scenario_res import PostgresBranchScenarioRes
-from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes
 from sedaro_base_client.model.power_load import PowerLoad
 from sedaro_base_client.model.quasi_reg_det_topology import QuasiRegDetTopology
 from sedaro_base_client.model.reaction_wheel import ReactionWheel
@@ -189,6 +189,8 @@ from sedaro_base_client.model.reference_vector import ReferenceVector
 from sedaro_base_client.model.reference_vector_bg import ReferenceVectorBG
 from sedaro_base_client.model.reference_vector_types import ReferenceVectorTypes
 from sedaro_base_client.model.resistance_load import ResistanceLoad
+from sedaro_base_client.model.same_target_condition_grouping import SameTargetConditionGrouping
+from sedaro_base_client.model.same_target_condition_grouping_bg import SameTargetConditionGroupingBG
 from sedaro_base_client.model.satellite import Satellite
 from sedaro_base_client.model.satellite_bg import SatelliteBG
 from sedaro_base_client.model.satellite_update import SatelliteUpdate
@@ -238,7 +240,7 @@ from sedaro_base_client.model.target_group import TargetGroup
 from sedaro_base_client.model.target_group_bg import TargetGroupBG
 from sedaro_base_client.model.target_group_create import TargetGroupCreate
 from sedaro_base_client.model.target_group_update import TargetGroupUpdate
-from sedaro_base_client.model.target_pointing_directions import TargetPointingDirections
+from sedaro_base_client.model.target_group_vector import TargetGroupVector
 from sedaro_base_client.model.target_vector import TargetVector
 from sedaro_base_client.model.target_vector_create import TargetVectorCreate
 from sedaro_base_client.model.target_vector_update import TargetVectorUpdate

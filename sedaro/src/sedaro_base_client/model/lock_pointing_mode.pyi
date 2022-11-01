@@ -39,7 +39,6 @@ class LockPointingMode(
             "lockBodyFrameVector",
             "name",
             "pointingModeType",
-            "lockVector",
             "acAlgorithm",
             "conOps",
         }
@@ -62,13 +61,10 @@ class LockPointingMode(
                 def LOCK(cls):
                     return cls("LOCK")
             conOps = schemas.StrSchema
-            lockVector = schemas.StrSchema
             lockBodyFrameVector = schemas.StrSchema
             acAlgorithm = schemas.StrSchema
             spinRate = schemas.NumberSchema
             id = schemas.StrSchema
-            odAlgorithm = schemas.StrSchema
-            adAlgorithm = schemas.StrSchema
             
             
             class operationalModes(
@@ -92,25 +88,79 @@ class LockPointingMode(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            odAlgorithm = schemas.StrSchema
+            adAlgorithm = schemas.StrSchema
+            
+            
+            class reactionWheelCommands(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'reactionWheelCommands':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class magnetorquerCommands(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'magnetorquerCommands':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            lockVector = schemas.StrSchema
+            commandedAttitude = schemas.AnyTypeSchema
+            commandedAngularRates = schemas.AnyTypeSchema
             __annotations__ = {
                 "name": name,
                 "pointingModeType": pointingModeType,
                 "conOps": conOps,
-                "lockVector": lockVector,
                 "lockBodyFrameVector": lockBodyFrameVector,
                 "acAlgorithm": acAlgorithm,
                 "spinRate": spinRate,
                 "id": id,
+                "operationalModes": operationalModes,
                 "odAlgorithm": odAlgorithm,
                 "adAlgorithm": adAlgorithm,
-                "operationalModes": operationalModes,
+                "reactionWheelCommands": reactionWheelCommands,
+                "magnetorquerCommands": magnetorquerCommands,
+                "lockVector": lockVector,
+                "commandedAttitude": commandedAttitude,
+                "commandedAngularRates": commandedAngularRates,
             }
     
     spinRate: MetaOapg.properties.spinRate
     lockBodyFrameVector: MetaOapg.properties.lockBodyFrameVector
     name: MetaOapg.properties.name
     pointingModeType: MetaOapg.properties.pointingModeType
-    lockVector: MetaOapg.properties.lockVector
     acAlgorithm: MetaOapg.properties.acAlgorithm
     conOps: MetaOapg.properties.conOps
     
@@ -122,9 +172,6 @@ class LockPointingMode(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["lockBodyFrameVector"]) -> MetaOapg.properties.lockBodyFrameVector: ...
@@ -139,18 +186,33 @@ class LockPointingMode(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["odAlgorithm"]) -> MetaOapg.properties.odAlgorithm: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["adAlgorithm"]) -> MetaOapg.properties.adAlgorithm: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
+    def __getitem__(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> MetaOapg.properties.reactionWheelCommands: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> MetaOapg.properties.magnetorquerCommands: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["commandedAttitude"]) -> MetaOapg.properties.commandedAttitude: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["commandedAngularRates"]) -> MetaOapg.properties.commandedAngularRates: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockVector", "lockBodyFrameVector", "acAlgorithm", "spinRate", "id", "odAlgorithm", "adAlgorithm", "operationalModes", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockBodyFrameVector", "acAlgorithm", "spinRate", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "reactionWheelCommands", "magnetorquerCommands", "lockVector", "commandedAttitude", "commandedAngularRates", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -165,9 +227,6 @@ class LockPointingMode(
     def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["lockBodyFrameVector"]) -> MetaOapg.properties.lockBodyFrameVector: ...
     
     @typing.overload
@@ -180,18 +239,33 @@ class LockPointingMode(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["odAlgorithm"]) -> typing.Union[MetaOapg.properties.odAlgorithm, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["adAlgorithm"]) -> typing.Union[MetaOapg.properties.adAlgorithm, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> typing.Union[MetaOapg.properties.reactionWheelCommands, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> typing.Union[MetaOapg.properties.magnetorquerCommands, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["lockVector"]) -> typing.Union[MetaOapg.properties.lockVector, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["commandedAttitude"]) -> typing.Union[MetaOapg.properties.commandedAttitude, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["commandedAngularRates"]) -> typing.Union[MetaOapg.properties.commandedAngularRates, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockVector", "lockBodyFrameVector", "acAlgorithm", "spinRate", "id", "odAlgorithm", "adAlgorithm", "operationalModes", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockBodyFrameVector", "acAlgorithm", "spinRate", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "reactionWheelCommands", "magnetorquerCommands", "lockVector", "commandedAttitude", "commandedAngularRates", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -202,13 +276,17 @@ class LockPointingMode(
         lockBodyFrameVector: typing.Union[MetaOapg.properties.lockBodyFrameVector, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, str, ],
-        lockVector: typing.Union[MetaOapg.properties.lockVector, str, ],
         acAlgorithm: typing.Union[MetaOapg.properties.acAlgorithm, str, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         odAlgorithm: typing.Union[MetaOapg.properties.odAlgorithm, str, schemas.Unset] = schemas.unset,
         adAlgorithm: typing.Union[MetaOapg.properties.adAlgorithm, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
+        reactionWheelCommands: typing.Union[MetaOapg.properties.reactionWheelCommands, list, tuple, schemas.Unset] = schemas.unset,
+        magnetorquerCommands: typing.Union[MetaOapg.properties.magnetorquerCommands, list, tuple, schemas.Unset] = schemas.unset,
+        lockVector: typing.Union[MetaOapg.properties.lockVector, str, schemas.Unset] = schemas.unset,
+        commandedAttitude: typing.Union[MetaOapg.properties.commandedAttitude, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        commandedAngularRates: typing.Union[MetaOapg.properties.commandedAngularRates, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'LockPointingMode':
@@ -219,13 +297,17 @@ class LockPointingMode(
             lockBodyFrameVector=lockBodyFrameVector,
             name=name,
             pointingModeType=pointingModeType,
-            lockVector=lockVector,
             acAlgorithm=acAlgorithm,
             conOps=conOps,
             id=id,
+            operationalModes=operationalModes,
             odAlgorithm=odAlgorithm,
             adAlgorithm=adAlgorithm,
-            operationalModes=operationalModes,
+            reactionWheelCommands=reactionWheelCommands,
+            magnetorquerCommands=magnetorquerCommands,
+            lockVector=lockVector,
+            commandedAttitude=commandedAttitude,
+            commandedAngularRates=commandedAngularRates,
             _configuration=_configuration,
             **kwargs,
         )

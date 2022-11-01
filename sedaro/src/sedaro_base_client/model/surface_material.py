@@ -35,11 +35,9 @@ class SurfaceMaterial(
 
     class MetaOapg:
         required = {
-            "hotTempRating",
             "diffuseSolarReflectivity",
             "specularSolarReflectivity",
             "solarAbsorptivity",
-            "coldTempRating",
             "irEmissivity",
         }
         
@@ -84,8 +82,6 @@ class SurfaceMaterial(
                 class MetaOapg:
                     inclusive_maximum = 1.0
                     inclusive_minimum = 0.0
-            hotTempRating = schemas.NumberSchema
-            coldTempRating = schemas.NumberSchema
             id = schemas.StrSchema
             
             
@@ -105,6 +101,24 @@ class SurfaceMaterial(
             
                 class MetaOapg:
                     max_length = 32
+            
+            
+            class hotTempRating(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
+            
+            
+            class coldTempRating(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
             
             
             class surfaces(
@@ -133,19 +147,17 @@ class SurfaceMaterial(
                 "solarAbsorptivity": solarAbsorptivity,
                 "diffuseSolarReflectivity": diffuseSolarReflectivity,
                 "specularSolarReflectivity": specularSolarReflectivity,
-                "hotTempRating": hotTempRating,
-                "coldTempRating": coldTempRating,
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
+                "hotTempRating": hotTempRating,
+                "coldTempRating": coldTempRating,
                 "surfaces": surfaces,
             }
     
-    hotTempRating: MetaOapg.properties.hotTempRating
     diffuseSolarReflectivity: MetaOapg.properties.diffuseSolarReflectivity
     specularSolarReflectivity: MetaOapg.properties.specularSolarReflectivity
     solarAbsorptivity: MetaOapg.properties.solarAbsorptivity
-    coldTempRating: MetaOapg.properties.coldTempRating
     irEmissivity: MetaOapg.properties.irEmissivity
     
     @typing.overload
@@ -161,12 +173,6 @@ class SurfaceMaterial(
     def __getitem__(self, name: typing_extensions.Literal["specularSolarReflectivity"]) -> MetaOapg.properties.specularSolarReflectivity: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["hotTempRating"]) -> MetaOapg.properties.hotTempRating: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["coldTempRating"]) -> MetaOapg.properties.coldTempRating: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
@@ -176,12 +182,18 @@ class SurfaceMaterial(
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["hotTempRating"]) -> MetaOapg.properties.hotTempRating: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["coldTempRating"]) -> MetaOapg.properties.coldTempRating: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["surfaces"]) -> MetaOapg.properties.surfaces: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "hotTempRating", "coldTempRating", "id", "partNumber", "manufacturer", "surfaces", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "surfaces", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -199,12 +211,6 @@ class SurfaceMaterial(
     def get_item_oapg(self, name: typing_extensions.Literal["specularSolarReflectivity"]) -> MetaOapg.properties.specularSolarReflectivity: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["hotTempRating"]) -> MetaOapg.properties.hotTempRating: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["coldTempRating"]) -> MetaOapg.properties.coldTempRating: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
@@ -214,27 +220,33 @@ class SurfaceMaterial(
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["hotTempRating"]) -> typing.Union[MetaOapg.properties.hotTempRating, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["coldTempRating"]) -> typing.Union[MetaOapg.properties.coldTempRating, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["surfaces"]) -> typing.Union[MetaOapg.properties.surfaces, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "hotTempRating", "coldTempRating", "id", "partNumber", "manufacturer", "surfaces", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "surfaces", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
-        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, ],
         diffuseSolarReflectivity: typing.Union[MetaOapg.properties.diffuseSolarReflectivity, decimal.Decimal, int, float, ],
         specularSolarReflectivity: typing.Union[MetaOapg.properties.specularSolarReflectivity, decimal.Decimal, int, float, ],
         solarAbsorptivity: typing.Union[MetaOapg.properties.solarAbsorptivity, decimal.Decimal, int, float, ],
-        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, ],
         irEmissivity: typing.Union[MetaOapg.properties.irEmissivity, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
+        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         surfaces: typing.Union[MetaOapg.properties.surfaces, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -242,15 +254,15 @@ class SurfaceMaterial(
         return super().__new__(
             cls,
             *args,
-            hotTempRating=hotTempRating,
             diffuseSolarReflectivity=diffuseSolarReflectivity,
             specularSolarReflectivity=specularSolarReflectivity,
             solarAbsorptivity=solarAbsorptivity,
-            coldTempRating=coldTempRating,
             irEmissivity=irEmissivity,
             id=id,
             partNumber=partNumber,
             manufacturer=manufacturer,
+            hotTempRating=hotTempRating,
+            coldTempRating=coldTempRating,
             surfaces=surfaces,
             _configuration=_configuration,
             **kwargs,

@@ -72,6 +72,7 @@ class ReferenceVectorBG(
                                     CelestialVector,
                                     LocalVector,
                                     TargetVector,
+                                    TargetGroupVector,
                                     ReferenceVector,
                                 ]
                     
@@ -170,4 +171,5 @@ from sedaro_base_client.model.celestial_vector import CelestialVector
 from sedaro_base_client.model.collection import Collection
 from sedaro_base_client.model.local_vector import LocalVector
 from sedaro_base_client.model.reference_vector import ReferenceVector
+from sedaro_base_client.model.target_group_vector import TargetGroupVector
 from sedaro_base_client.model.target_vector import TargetVector

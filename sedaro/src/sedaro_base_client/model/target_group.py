@@ -91,7 +91,7 @@ class TargetGroup(
             targetAssociations = schemas.DictSchema
             
             
-            class targetVectors(
+            class targets(
                 schemas.ListSchema
             ):
             
@@ -103,7 +103,7 @@ class TargetGroup(
                     cls,
                     arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'targetVectors':
+                ) -> 'targets':
                     return super().__new__(
                         cls,
                         arg,
@@ -114,7 +114,7 @@ class TargetGroup(
                     return super().__getitem__(i)
             
             
-            class groupConditions_A(
+            class targetGroupVectors(
                 schemas.ListSchema
             ):
             
@@ -126,7 +126,7 @@ class TargetGroup(
                     cls,
                     arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'groupConditions_A':
+                ) -> 'targetGroupVectors':
                     return super().__new__(
                         cls,
                         arg,
@@ -137,7 +137,7 @@ class TargetGroup(
                     return super().__getitem__(i)
             
             
-            class groupPointingModes_A(
+            class groupConditions(
                 schemas.ListSchema
             ):
             
@@ -149,7 +149,7 @@ class TargetGroup(
                     cls,
                     arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'groupPointingModes_A':
+                ) -> 'groupConditions':
                     return super().__new__(
                         cls,
                         arg,
@@ -158,39 +158,17 @@ class TargetGroup(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
-            class groupPointingModes_B(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'groupPointingModes_B':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
+            activeTarget = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "targetType": targetType,
                 "conOps": conOps,
                 "id": id,
                 "targetAssociations": targetAssociations,
-                "targetVectors": targetVectors,
-                "groupConditions_A": groupConditions_A,
-                "groupPointingModes_A": groupPointingModes_A,
-                "groupPointingModes_B": groupPointingModes_B,
+                "targets": targets,
+                "targetGroupVectors": targetGroupVectors,
+                "groupConditions": groupConditions,
+                "activeTarget": activeTarget,
             }
     
     name: MetaOapg.properties.name
@@ -213,21 +191,21 @@ class TargetGroup(
     def __getitem__(self, name: typing_extensions.Literal["targetAssociations"]) -> MetaOapg.properties.targetAssociations: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetVectors"]) -> MetaOapg.properties.targetVectors: ...
+    def __getitem__(self, name: typing_extensions.Literal["targets"]) -> MetaOapg.properties.targets: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["groupConditions_A"]) -> MetaOapg.properties.groupConditions_A: ...
+    def __getitem__(self, name: typing_extensions.Literal["targetGroupVectors"]) -> MetaOapg.properties.targetGroupVectors: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["groupPointingModes_A"]) -> MetaOapg.properties.groupPointingModes_A: ...
+    def __getitem__(self, name: typing_extensions.Literal["groupConditions"]) -> MetaOapg.properties.groupConditions: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["groupPointingModes_B"]) -> MetaOapg.properties.groupPointingModes_B: ...
+    def __getitem__(self, name: typing_extensions.Literal["activeTarget"]) -> MetaOapg.properties.activeTarget: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "targetType", "conOps", "id", "targetAssociations", "targetVectors", "groupConditions_A", "groupPointingModes_A", "groupPointingModes_B", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "targetType", "conOps", "id", "targetAssociations", "targets", "targetGroupVectors", "groupConditions", "activeTarget", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -248,21 +226,21 @@ class TargetGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["targetAssociations"]) -> typing.Union[MetaOapg.properties.targetAssociations, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetVectors"]) -> typing.Union[MetaOapg.properties.targetVectors, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["targets"]) -> typing.Union[MetaOapg.properties.targets, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["groupConditions_A"]) -> typing.Union[MetaOapg.properties.groupConditions_A, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupVectors"]) -> typing.Union[MetaOapg.properties.targetGroupVectors, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["groupPointingModes_A"]) -> typing.Union[MetaOapg.properties.groupPointingModes_A, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["groupConditions"]) -> typing.Union[MetaOapg.properties.groupConditions, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["groupPointingModes_B"]) -> typing.Union[MetaOapg.properties.groupPointingModes_B, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["activeTarget"]) -> typing.Union[MetaOapg.properties.activeTarget, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "targetType", "conOps", "id", "targetAssociations", "targetVectors", "groupConditions_A", "groupPointingModes_A", "groupPointingModes_B", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "targetType", "conOps", "id", "targetAssociations", "targets", "targetGroupVectors", "groupConditions", "activeTarget", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -274,10 +252,10 @@ class TargetGroup(
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         targetAssociations: typing.Union[MetaOapg.properties.targetAssociations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
-        targetVectors: typing.Union[MetaOapg.properties.targetVectors, list, tuple, schemas.Unset] = schemas.unset,
-        groupConditions_A: typing.Union[MetaOapg.properties.groupConditions_A, list, tuple, schemas.Unset] = schemas.unset,
-        groupPointingModes_A: typing.Union[MetaOapg.properties.groupPointingModes_A, list, tuple, schemas.Unset] = schemas.unset,
-        groupPointingModes_B: typing.Union[MetaOapg.properties.groupPointingModes_B, list, tuple, schemas.Unset] = schemas.unset,
+        targets: typing.Union[MetaOapg.properties.targets, list, tuple, schemas.Unset] = schemas.unset,
+        targetGroupVectors: typing.Union[MetaOapg.properties.targetGroupVectors, list, tuple, schemas.Unset] = schemas.unset,
+        groupConditions: typing.Union[MetaOapg.properties.groupConditions, list, tuple, schemas.Unset] = schemas.unset,
+        activeTarget: typing.Union[MetaOapg.properties.activeTarget, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TargetGroup':
@@ -289,10 +267,10 @@ class TargetGroup(
             conOps=conOps,
             id=id,
             targetAssociations=targetAssociations,
-            targetVectors=targetVectors,
-            groupConditions_A=groupConditions_A,
-            groupPointingModes_A=groupPointingModes_A,
-            groupPointingModes_B=groupPointingModes_B,
+            targets=targets,
+            targetGroupVectors=targetGroupVectors,
+            groupConditions=groupConditions,
+            activeTarget=activeTarget,
             _configuration=_configuration,
             **kwargs,
         )

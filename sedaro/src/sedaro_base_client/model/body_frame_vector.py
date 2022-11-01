@@ -193,16 +193,6 @@ class BodyFrameVector(
                 class MetaOapg:
                     inclusive_maximum = 360.0
                     inclusive_minimum = 0.0
-            
-            
-            class ramAngle(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
             __annotations__ = {
                 "name": name,
                 "definitionType": definitionType,
@@ -214,7 +204,6 @@ class BodyFrameVector(
                 "actuators": actuators,
                 "geocenterAngle": geocenterAngle,
                 "heliocenterAngle": heliocenterAngle,
-                "ramAngle": ramAngle,
             }
     
     name: MetaOapg.properties.name
@@ -253,12 +242,9 @@ class BodyFrameVector(
     def __getitem__(self, name: typing_extensions.Literal["heliocenterAngle"]) -> MetaOapg.properties.heliocenterAngle: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["ramAngle"]) -> MetaOapg.properties.ramAngle: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", "unitVector", "surfaces", "actuators", "geocenterAngle", "heliocenterAngle", "ramAngle", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", "unitVector", "surfaces", "actuators", "geocenterAngle", "heliocenterAngle", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -294,12 +280,9 @@ class BodyFrameVector(
     def get_item_oapg(self, name: typing_extensions.Literal["heliocenterAngle"]) -> typing.Union[MetaOapg.properties.heliocenterAngle, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["ramAngle"]) -> typing.Union[MetaOapg.properties.ramAngle, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", "unitVector", "surfaces", "actuators", "geocenterAngle", "heliocenterAngle", "ramAngle", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", "unitVector", "surfaces", "actuators", "geocenterAngle", "heliocenterAngle", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -316,7 +299,6 @@ class BodyFrameVector(
         actuators: typing.Union[MetaOapg.properties.actuators, list, tuple, schemas.Unset] = schemas.unset,
         geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         heliocenterAngle: typing.Union[MetaOapg.properties.heliocenterAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        ramAngle: typing.Union[MetaOapg.properties.ramAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BodyFrameVector':
@@ -333,7 +315,6 @@ class BodyFrameVector(
             actuators=actuators,
             geocenterAngle=geocenterAngle,
             heliocenterAngle=heliocenterAngle,
-            ramAngle=ramAngle,
             _configuration=_configuration,
             **kwargs,
         )

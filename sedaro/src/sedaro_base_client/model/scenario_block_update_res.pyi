@@ -57,8 +57,8 @@ class ScenarioBlockUpdateRes(
                 return GroupAndId
         
             @staticmethod
-            def branch() -> typing.Type['PostgresBranchScenarioRes']:
-                return PostgresBranchScenarioRes
+            def branch() -> typing.Type['BranchScenarioRes']:
+                return BranchScenarioRes
             __annotations__ = {
                 "action": action,
                 "block": block,
@@ -67,7 +67,7 @@ class ScenarioBlockUpdateRes(
     
     action: MetaOapg.properties.action
     block: 'GroupAndId'
-    branch: 'PostgresBranchScenarioRes'
+    branch: 'BranchScenarioRes'
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
@@ -76,7 +76,7 @@ class ScenarioBlockUpdateRes(
     def __getitem__(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchScenarioRes': ...
+    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'BranchScenarioRes': ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
@@ -93,7 +93,7 @@ class ScenarioBlockUpdateRes(
     def get_item_oapg(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchScenarioRes': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'BranchScenarioRes': ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
@@ -107,7 +107,7 @@ class ScenarioBlockUpdateRes(
         *args: typing.Union[dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
-        branch: 'PostgresBranchScenarioRes',
+        branch: 'BranchScenarioRes',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ScenarioBlockUpdateRes':
@@ -121,5 +121,5 @@ class ScenarioBlockUpdateRes(
             **kwargs,
         )
 
+from sedaro_base_client.model.branch_scenario_res import BranchScenarioRes
 from sedaro_base_client.model.group_and_id import GroupAndId
-from sedaro_base_client.model.postgres_branch_scenario_res import PostgresBranchScenarioRes

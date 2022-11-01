@@ -113,6 +113,29 @@ class OperationalModeCreate(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class sameTargetConditionGroupings(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'sameTargetConditionGroupings':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
                 "priority": priority,
@@ -123,6 +146,7 @@ class OperationalModeCreate(
                 "maxOccurrenceDuration": maxOccurrenceDuration,
                 "minTimeBetweenOccurrences": minTimeBetweenOccurrences,
                 "conditions": conditions,
+                "sameTargetConditionGroupings": sameTargetConditionGroupings,
             }
     
     pointingMode: MetaOapg.properties.pointingMode
@@ -158,9 +182,12 @@ class OperationalModeCreate(
     def __getitem__(self, name: typing_extensions.Literal["conditions"]) -> MetaOapg.properties.conditions: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["sameTargetConditionGroupings"]) -> MetaOapg.properties.sameTargetConditionGroupings: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "priority", "pointingMode", "conOps", "id", "minOccurrenceDuration", "maxOccurrenceDuration", "minTimeBetweenOccurrences", "conditions", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "priority", "pointingMode", "conOps", "id", "minOccurrenceDuration", "maxOccurrenceDuration", "minTimeBetweenOccurrences", "conditions", "sameTargetConditionGroupings", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -193,9 +220,12 @@ class OperationalModeCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["conditions"]) -> typing.Union[MetaOapg.properties.conditions, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["sameTargetConditionGroupings"]) -> typing.Union[MetaOapg.properties.sameTargetConditionGroupings, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "priority", "pointingMode", "conOps", "id", "minOccurrenceDuration", "maxOccurrenceDuration", "minTimeBetweenOccurrences", "conditions", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "priority", "pointingMode", "conOps", "id", "minOccurrenceDuration", "maxOccurrenceDuration", "minTimeBetweenOccurrences", "conditions", "sameTargetConditionGroupings", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -211,6 +241,7 @@ class OperationalModeCreate(
         maxOccurrenceDuration: typing.Union[MetaOapg.properties.maxOccurrenceDuration, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         minTimeBetweenOccurrences: typing.Union[MetaOapg.properties.minTimeBetweenOccurrences, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         conditions: typing.Union[MetaOapg.properties.conditions, list, tuple, schemas.Unset] = schemas.unset,
+        sameTargetConditionGroupings: typing.Union[MetaOapg.properties.sameTargetConditionGroupings, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'OperationalModeCreate':
@@ -226,6 +257,7 @@ class OperationalModeCreate(
             maxOccurrenceDuration=maxOccurrenceDuration,
             minTimeBetweenOccurrences=minTimeBetweenOccurrences,
             conditions=conditions,
+            sameTargetConditionGroupings=sameTargetConditionGroupings,
             _configuration=_configuration,
             **kwargs,
         )

@@ -212,6 +212,75 @@ class SunTrackingSurface(
             coldMargin = schemas.NumberSchema
             
             
+            class refVector1(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'refVector1':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class refVector2(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'refVector2':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class sunProjection(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'sunProjection':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class articulationAngle(
                 schemas.NumberSchema
             ):
@@ -243,6 +312,9 @@ class SunTrackingSurface(
                 "temperature": temperature,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
+                "refVector1": refVector1,
+                "refVector2": refVector2,
+                "sunProjection": sunProjection,
                 "articulationAngle": articulationAngle,
             }
     
@@ -333,12 +405,21 @@ class SunTrackingSurface(
     def __getitem__(self, name: typing_extensions.Literal["coldMargin"]) -> MetaOapg.properties.coldMargin: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["refVector1"]) -> MetaOapg.properties.refVector1: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["refVector2"]) -> MetaOapg.properties.refVector2: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["sunProjection"]) -> MetaOapg.properties.sunProjection: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["articulationAngle"]) -> MetaOapg.properties.articulationAngle: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", "articulationAngle", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", "refVector1", "refVector2", "sunProjection", "articulationAngle", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -422,12 +503,21 @@ class SunTrackingSurface(
     def get_item_oapg(self, name: typing_extensions.Literal["coldMargin"]) -> typing.Union[MetaOapg.properties.coldMargin, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["refVector1"]) -> typing.Union[MetaOapg.properties.refVector1, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["refVector2"]) -> typing.Union[MetaOapg.properties.refVector2, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["sunProjection"]) -> typing.Union[MetaOapg.properties.sunProjection, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["articulationAngle"]) -> typing.Union[MetaOapg.properties.articulationAngle, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", "articulationAngle", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", "refVector1", "refVector2", "sunProjection", "articulationAngle", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -460,6 +550,9 @@ class SunTrackingSurface(
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        refVector1: typing.Union[MetaOapg.properties.refVector1, list, tuple, schemas.Unset] = schemas.unset,
+        refVector2: typing.Union[MetaOapg.properties.refVector2, list, tuple, schemas.Unset] = schemas.unset,
+        sunProjection: typing.Union[MetaOapg.properties.sunProjection, list, tuple, schemas.Unset] = schemas.unset,
         articulationAngle: typing.Union[MetaOapg.properties.articulationAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -493,6 +586,9 @@ class SunTrackingSurface(
             temperature=temperature,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
+            refVector1=refVector1,
+            refVector2=refVector2,
+            sunProjection=sunProjection,
             articulationAngle=articulationAngle,
             _configuration=_configuration,
             **kwargs,

@@ -411,6 +411,29 @@ class Satellite(
                     return super().__getitem__(i)
             
             
+            class targets(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'targets':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class fuelTanks(
                 schemas.ListSchema
             ):
@@ -482,6 +505,7 @@ class Satellite(
                 "reactionWheels": reactionWheels,
                 "magnetorquers": magnetorquers,
                 "algorithms": algorithms,
+                "targets": targets,
                 "fuelTanks": fuelTanks,
                 "DEFAULT_CAD_MODELS": DEFAULT_CAD_MODELS,
             }
@@ -570,6 +594,9 @@ class Satellite(
     def __getitem__(self, name: typing_extensions.Literal["algorithms"]) -> MetaOapg.properties.algorithms: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["targets"]) -> MetaOapg.properties.targets: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["fuelTanks"]) -> MetaOapg.properties.fuelTanks: ...
     
     @typing.overload
@@ -578,7 +605,7 @@ class Satellite(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -662,6 +689,9 @@ class Satellite(
     def get_item_oapg(self, name: typing_extensions.Literal["algorithms"]) -> typing.Union[MetaOapg.properties.algorithms, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["targets"]) -> typing.Union[MetaOapg.properties.targets, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fuelTanks"]) -> typing.Union[MetaOapg.properties.fuelTanks, schemas.Unset]: ...
     
     @typing.overload
@@ -670,7 +700,7 @@ class Satellite(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "DEFAULT_CAD_MODELS", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -703,6 +733,7 @@ class Satellite(
         reactionWheels: typing.Union[MetaOapg.properties.reactionWheels, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquers: typing.Union[MetaOapg.properties.magnetorquers, list, tuple, schemas.Unset] = schemas.unset,
         algorithms: typing.Union[MetaOapg.properties.algorithms, list, tuple, schemas.Unset] = schemas.unset,
+        targets: typing.Union[MetaOapg.properties.targets, list, tuple, schemas.Unset] = schemas.unset,
         fuelTanks: typing.Union[MetaOapg.properties.fuelTanks, list, tuple, schemas.Unset] = schemas.unset,
         DEFAULT_CAD_MODELS: typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -737,6 +768,7 @@ class Satellite(
             reactionWheels=reactionWheels,
             magnetorquers=magnetorquers,
             algorithms=algorithms,
+            targets=targets,
             fuelTanks=fuelTanks,
             DEFAULT_CAD_MODELS=DEFAULT_CAD_MODELS,
             _configuration=_configuration,

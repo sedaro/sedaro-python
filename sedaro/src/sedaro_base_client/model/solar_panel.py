@@ -114,7 +114,6 @@ class SolarPanel(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            temperature = schemas.NumberSchema
             
             
             class componentType(
@@ -272,6 +271,15 @@ class SolarPanel(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class temperature(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
             array = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -287,7 +295,6 @@ class SolarPanel(
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "temperature": temperature,
                 "componentType": componentType,
                 "cotsTemplate": cotsTemplate,
                 "loadStates": loadStates,
@@ -298,6 +305,7 @@ class SolarPanel(
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
+                "temperature": temperature,
                 "array": array,
             }
     
@@ -349,9 +357,6 @@ class SolarPanel(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
     
     @typing.overload
@@ -382,12 +387,15 @@ class SolarPanel(
     def __getitem__(self, name: typing_extensions.Literal["tempControllers"]) -> MetaOapg.properties.tempControllers: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["array"]) -> MetaOapg.properties.array: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "array", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -432,9 +440,6 @@ class SolarPanel(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["componentType"]) -> typing.Union[MetaOapg.properties.componentType, schemas.Unset]: ...
     
     @typing.overload
@@ -465,12 +470,15 @@ class SolarPanel(
     def get_item_oapg(self, name: typing_extensions.Literal["tempControllers"]) -> typing.Union[MetaOapg.properties.tempControllers, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["array"]) -> typing.Union[MetaOapg.properties.array, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "array", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -490,7 +498,6 @@ class SolarPanel(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         componentType: typing.Union[MetaOapg.properties.componentType, str, schemas.Unset] = schemas.unset,
         cotsTemplate: typing.Union[MetaOapg.properties.cotsTemplate, str, schemas.Unset] = schemas.unset,
         loadStates: typing.Union[MetaOapg.properties.loadStates, list, tuple, schemas.Unset] = schemas.unset,
@@ -501,6 +508,7 @@ class SolarPanel(
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
+        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         array: typing.Union[MetaOapg.properties.array, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -521,7 +529,6 @@ class SolarPanel(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            temperature=temperature,
             componentType=componentType,
             cotsTemplate=cotsTemplate,
             loadStates=loadStates,
@@ -532,6 +539,7 @@ class SolarPanel(
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
+            temperature=temperature,
             array=array,
             _configuration=_configuration,
             **kwargs,

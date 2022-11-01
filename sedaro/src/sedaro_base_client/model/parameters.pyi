@@ -92,5 +92,9 @@ class Parameters(
         return cls("LOCAL_SIDEREAL_TIME")
     
     @schemas.classproperty
+    def BATTERY_SOC(cls):
+        return cls("BATTERY_SOC")
+    
+    @schemas.classproperty
     def EMPTY(cls):
         return cls("")

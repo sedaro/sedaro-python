@@ -50,14 +50,78 @@ class ThermalInterfaceCreate(
             ):
                 pass
             area = schemas.NumberSchema
-        
-            @staticmethod
-            def sideA() -> typing.Type['SideCategories']:
-                return SideCategories
-        
-            @staticmethod
-            def sideB() -> typing.Type['SideCategories']:
-                return SideCategories
+            
+            
+            class sideA(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            SideCategories,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'sideA':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class sideB(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            SideCategories,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'sideB':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             material = schemas.StrSchema
             componentA = schemas.StrSchema
             componentB = schemas.StrSchema
@@ -82,8 +146,8 @@ class ThermalInterfaceCreate(
     area: MetaOapg.properties.area
     material: MetaOapg.properties.material
     name: MetaOapg.properties.name
-    sideB: 'SideCategories'
-    sideA: 'SideCategories'
+    sideB: MetaOapg.properties.sideB
+    sideA: MetaOapg.properties.sideA
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -92,10 +156,10 @@ class ThermalInterfaceCreate(
     def __getitem__(self, name: typing_extensions.Literal["area"]) -> MetaOapg.properties.area: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["sideA"]) -> 'SideCategories': ...
+    def __getitem__(self, name: typing_extensions.Literal["sideA"]) -> MetaOapg.properties.sideA: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["sideB"]) -> 'SideCategories': ...
+    def __getitem__(self, name: typing_extensions.Literal["sideB"]) -> MetaOapg.properties.sideB: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["material"]) -> MetaOapg.properties.material: ...
@@ -133,10 +197,10 @@ class ThermalInterfaceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["area"]) -> MetaOapg.properties.area: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["sideA"]) -> 'SideCategories': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["sideA"]) -> MetaOapg.properties.sideA: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["sideB"]) -> 'SideCategories': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["sideB"]) -> MetaOapg.properties.sideB: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["material"]) -> MetaOapg.properties.material: ...
@@ -172,8 +236,8 @@ class ThermalInterfaceCreate(
         area: typing.Union[MetaOapg.properties.area, decimal.Decimal, int, float, ],
         material: typing.Union[MetaOapg.properties.material, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        sideB: 'SideCategories',
-        sideA: 'SideCategories',
+        sideB: typing.Union[MetaOapg.properties.sideB, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        sideA: typing.Union[MetaOapg.properties.sideA, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         componentA: typing.Union[MetaOapg.properties.componentA, str, schemas.Unset] = schemas.unset,
         componentB: typing.Union[MetaOapg.properties.componentB, str, schemas.Unset] = schemas.unset,
         surfaceA: typing.Union[MetaOapg.properties.surfaceA, str, schemas.Unset] = schemas.unset,

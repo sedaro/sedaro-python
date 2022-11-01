@@ -37,12 +37,9 @@ class MaxAlignPointingModeCreate(
         required = {
             "lockBodyFrameVector",
             "name",
-            "maxAlignVector",
             "pointingModeType",
-            "lockVector",
             "acAlgorithm",
             "conOps",
-            "maxAlignBodyFrameVector",
         }
         
         class properties:
@@ -63,36 +60,57 @@ class MaxAlignPointingModeCreate(
                 def MAX_SECONDARY_ALIGN(cls):
                     return cls("MAX_SECONDARY_ALIGN")
             conOps = schemas.StrSchema
-            lockVector = schemas.StrSchema
             lockBodyFrameVector = schemas.StrSchema
             acAlgorithm = schemas.StrSchema
-            maxAlignVector = schemas.StrSchema
-            maxAlignBodyFrameVector = schemas.StrSchema
             id = schemas.StrSchema
+            
+            
+            class operationalModes(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'operationalModes':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             odAlgorithm = schemas.StrSchema
             adAlgorithm = schemas.StrSchema
+            lockVector = schemas.StrSchema
+            maxAlignBodyFrameVector = schemas.StrSchema
+            maxAlignVector = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "pointingModeType": pointingModeType,
                 "conOps": conOps,
-                "lockVector": lockVector,
                 "lockBodyFrameVector": lockBodyFrameVector,
                 "acAlgorithm": acAlgorithm,
-                "maxAlignVector": maxAlignVector,
-                "maxAlignBodyFrameVector": maxAlignBodyFrameVector,
                 "id": id,
+                "operationalModes": operationalModes,
                 "odAlgorithm": odAlgorithm,
                 "adAlgorithm": adAlgorithm,
+                "lockVector": lockVector,
+                "maxAlignBodyFrameVector": maxAlignBodyFrameVector,
+                "maxAlignVector": maxAlignVector,
             }
     
     lockBodyFrameVector: MetaOapg.properties.lockBodyFrameVector
     name: MetaOapg.properties.name
-    maxAlignVector: MetaOapg.properties.maxAlignVector
     pointingModeType: MetaOapg.properties.pointingModeType
-    lockVector: MetaOapg.properties.lockVector
     acAlgorithm: MetaOapg.properties.acAlgorithm
     conOps: MetaOapg.properties.conOps
-    maxAlignBodyFrameVector: MetaOapg.properties.maxAlignBodyFrameVector
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -104,22 +122,16 @@ class MaxAlignPointingModeCreate(
     def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["lockBodyFrameVector"]) -> MetaOapg.properties.lockBodyFrameVector: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["acAlgorithm"]) -> MetaOapg.properties.acAlgorithm: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["maxAlignVector"]) -> MetaOapg.properties.maxAlignVector: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["maxAlignBodyFrameVector"]) -> MetaOapg.properties.maxAlignBodyFrameVector: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["odAlgorithm"]) -> MetaOapg.properties.odAlgorithm: ...
@@ -128,9 +140,18 @@ class MaxAlignPointingModeCreate(
     def __getitem__(self, name: typing_extensions.Literal["adAlgorithm"]) -> MetaOapg.properties.adAlgorithm: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxAlignBodyFrameVector"]) -> MetaOapg.properties.maxAlignBodyFrameVector: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxAlignVector"]) -> MetaOapg.properties.maxAlignVector: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockVector", "lockBodyFrameVector", "acAlgorithm", "maxAlignVector", "maxAlignBodyFrameVector", "id", "odAlgorithm", "adAlgorithm", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockBodyFrameVector", "acAlgorithm", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "lockVector", "maxAlignBodyFrameVector", "maxAlignVector", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -145,22 +166,16 @@ class MaxAlignPointingModeCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lockVector"]) -> MetaOapg.properties.lockVector: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["lockBodyFrameVector"]) -> MetaOapg.properties.lockBodyFrameVector: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["acAlgorithm"]) -> MetaOapg.properties.acAlgorithm: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["maxAlignVector"]) -> MetaOapg.properties.maxAlignVector: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["maxAlignBodyFrameVector"]) -> MetaOapg.properties.maxAlignBodyFrameVector: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["odAlgorithm"]) -> typing.Union[MetaOapg.properties.odAlgorithm, schemas.Unset]: ...
@@ -169,9 +184,18 @@ class MaxAlignPointingModeCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["adAlgorithm"]) -> typing.Union[MetaOapg.properties.adAlgorithm, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["lockVector"]) -> typing.Union[MetaOapg.properties.lockVector, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxAlignBodyFrameVector"]) -> typing.Union[MetaOapg.properties.maxAlignBodyFrameVector, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxAlignVector"]) -> typing.Union[MetaOapg.properties.maxAlignVector, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockVector", "lockBodyFrameVector", "acAlgorithm", "maxAlignVector", "maxAlignBodyFrameVector", "id", "odAlgorithm", "adAlgorithm", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "lockBodyFrameVector", "acAlgorithm", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "lockVector", "maxAlignBodyFrameVector", "maxAlignVector", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -180,15 +204,16 @@ class MaxAlignPointingModeCreate(
         *args: typing.Union[dict, frozendict.frozendict, ],
         lockBodyFrameVector: typing.Union[MetaOapg.properties.lockBodyFrameVector, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        maxAlignVector: typing.Union[MetaOapg.properties.maxAlignVector, str, ],
         pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, str, ],
-        lockVector: typing.Union[MetaOapg.properties.lockVector, str, ],
         acAlgorithm: typing.Union[MetaOapg.properties.acAlgorithm, str, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
-        maxAlignBodyFrameVector: typing.Union[MetaOapg.properties.maxAlignBodyFrameVector, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         odAlgorithm: typing.Union[MetaOapg.properties.odAlgorithm, str, schemas.Unset] = schemas.unset,
         adAlgorithm: typing.Union[MetaOapg.properties.adAlgorithm, str, schemas.Unset] = schemas.unset,
+        lockVector: typing.Union[MetaOapg.properties.lockVector, str, schemas.Unset] = schemas.unset,
+        maxAlignBodyFrameVector: typing.Union[MetaOapg.properties.maxAlignBodyFrameVector, str, schemas.Unset] = schemas.unset,
+        maxAlignVector: typing.Union[MetaOapg.properties.maxAlignVector, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'MaxAlignPointingModeCreate':
@@ -197,15 +222,16 @@ class MaxAlignPointingModeCreate(
             *args,
             lockBodyFrameVector=lockBodyFrameVector,
             name=name,
-            maxAlignVector=maxAlignVector,
             pointingModeType=pointingModeType,
-            lockVector=lockVector,
             acAlgorithm=acAlgorithm,
             conOps=conOps,
-            maxAlignBodyFrameVector=maxAlignBodyFrameVector,
             id=id,
+            operationalModes=operationalModes,
             odAlgorithm=odAlgorithm,
             adAlgorithm=adAlgorithm,
+            lockVector=lockVector,
+            maxAlignBodyFrameVector=maxAlignBodyFrameVector,
+            maxAlignVector=maxAlignVector,
             _configuration=_configuration,
             **kwargs,
         )

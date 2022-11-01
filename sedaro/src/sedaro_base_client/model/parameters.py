@@ -52,6 +52,7 @@ class Parameters(
             "SAT_AZ": "SAT_AZ",
             "SAT_EL": "SAT_EL",
             "LOCAL_SIDEREAL_TIME": "LOCAL_SIDEREAL_TIME",
+            "BATTERY_SOC": "BATTERY_SOC",
             "": "EMPTY",
         }
     
@@ -110,6 +111,10 @@ class Parameters(
     @schemas.classproperty
     def LOCAL_SIDEREAL_TIME(cls):
         return cls("LOCAL_SIDEREAL_TIME")
+    
+    @schemas.classproperty
+    def BATTERY_SOC(cls):
+        return cls("BATTERY_SOC")
     
     @schemas.classproperty
     def EMPTY(cls):

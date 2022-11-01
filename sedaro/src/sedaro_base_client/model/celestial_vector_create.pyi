@@ -57,10 +57,42 @@ class CelestialVectorCreate(
                 @schemas.classproperty
                 def CELESTIAL(cls):
                     return cls("CELESTIAL")
-        
-            @staticmethod
-            def celestialPointingDirection() -> typing.Type['CelestialPointingDirections']:
-                return CelestialPointingDirections
+            
+            
+            class celestialPointingDirection(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            CelestialPointingDirections,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'celestialPointingDirection':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             id = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -71,7 +103,7 @@ class CelestialVectorCreate(
     
     vectorType: MetaOapg.properties.vectorType
     name: MetaOapg.properties.name
-    celestialPointingDirection: 'CelestialPointingDirections'
+    celestialPointingDirection: MetaOapg.properties.celestialPointingDirection
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -80,7 +112,7 @@ class CelestialVectorCreate(
     def __getitem__(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> 'CelestialPointingDirections': ...
+    def __getitem__(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> MetaOapg.properties.celestialPointingDirection: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -100,7 +132,7 @@ class CelestialVectorCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> 'CelestialPointingDirections': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> MetaOapg.properties.celestialPointingDirection: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -117,7 +149,7 @@ class CelestialVectorCreate(
         *args: typing.Union[dict, frozendict.frozendict, ],
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        celestialPointingDirection: 'CelestialPointingDirections',
+        celestialPointingDirection: typing.Union[MetaOapg.properties.celestialPointingDirection, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],

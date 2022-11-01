@@ -71,6 +71,7 @@ class SurfaceBG(
                                 return [
                                     FixedSurface,
                                     SunTrackingSurface,
+                                    AntiSunTrackingSurface,
                                 ]
                     
                     
@@ -164,6 +165,7 @@ class SurfaceBG(
             **kwargs,
         )
 
+from sedaro_base_client.model.anti_sun_tracking_surface import AntiSunTrackingSurface
 from sedaro_base_client.model.collection import Collection
 from sedaro_base_client.model.fixed_surface import FixedSurface
 from sedaro_base_client.model.sun_tracking_surface import SunTrackingSurface

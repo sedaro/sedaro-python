@@ -57,8 +57,8 @@ class VehicleBlockCreateRes(
                 return GroupAndId
         
             @staticmethod
-            def branch() -> typing.Type['PostgresBranchVehicleRes']:
-                return PostgresBranchVehicleRes
+            def branch() -> typing.Type['BranchVehicleRes']:
+                return BranchVehicleRes
             __annotations__ = {
                 "action": action,
                 "block": block,
@@ -67,7 +67,7 @@ class VehicleBlockCreateRes(
     
     action: MetaOapg.properties.action
     block: 'GroupAndId'
-    branch: 'PostgresBranchVehicleRes'
+    branch: 'BranchVehicleRes'
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["action"]) -> MetaOapg.properties.action: ...
@@ -76,7 +76,7 @@ class VehicleBlockCreateRes(
     def __getitem__(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
+    def __getitem__(self, name: typing_extensions.Literal["branch"]) -> 'BranchVehicleRes': ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
@@ -93,7 +93,7 @@ class VehicleBlockCreateRes(
     def get_item_oapg(self, name: typing_extensions.Literal["block"]) -> 'GroupAndId': ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'PostgresBranchVehicleRes': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["branch"]) -> 'BranchVehicleRes': ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
@@ -107,7 +107,7 @@ class VehicleBlockCreateRes(
         *args: typing.Union[dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
-        branch: 'PostgresBranchVehicleRes',
+        branch: 'BranchVehicleRes',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VehicleBlockCreateRes':
@@ -121,5 +121,5 @@ class VehicleBlockCreateRes(
             **kwargs,
         )
 
+from sedaro_base_client.model.branch_vehicle_res import BranchVehicleRes
 from sedaro_base_client.model.group_and_id import GroupAndId
-from sedaro_base_client.model.postgres_branch_vehicle_res import PostgresBranchVehicleRes

@@ -83,7 +83,6 @@ class Heater(
                 schemas.NumberSchema
             ):
                 pass
-            temperature = schemas.NumberSchema
             
             
             class cotsTemplate(
@@ -219,6 +218,12 @@ class Heater(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class temperature(
+                schemas.NumberSchema
+            ):
+                pass
             powerConsumed = schemas.NumberSchema
             regHeatFlowRate = schemas.NumberSchema
             commandedTemperature = schemas.NumberSchema
@@ -257,7 +262,6 @@ class Heater(
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "temperature": temperature,
                 "cotsTemplate": cotsTemplate,
                 "loadStates": loadStates,
                 "satellite": satellite,
@@ -267,6 +271,7 @@ class Heater(
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
+                "temperature": temperature,
                 "powerConsumed": powerConsumed,
                 "regHeatFlowRate": regHeatFlowRate,
                 "commandedTemperature": commandedTemperature,
@@ -313,9 +318,6 @@ class Heater(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cotsTemplate"]) -> MetaOapg.properties.cotsTemplate: ...
     
     @typing.overload
@@ -343,6 +345,9 @@ class Heater(
     def __getitem__(self, name: typing_extensions.Literal["tempControllers"]) -> MetaOapg.properties.tempControllers: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
     
     @typing.overload
@@ -357,7 +362,7 @@ class Heater(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -396,9 +401,6 @@ class Heater(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cotsTemplate"]) -> typing.Union[MetaOapg.properties.cotsTemplate, schemas.Unset]: ...
     
     @typing.overload
@@ -426,6 +428,9 @@ class Heater(
     def get_item_oapg(self, name: typing_extensions.Literal["tempControllers"]) -> typing.Union[MetaOapg.properties.tempControllers, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
     
     @typing.overload
@@ -440,7 +445,7 @@ class Heater(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -458,7 +463,6 @@ class Heater(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         cotsTemplate: typing.Union[MetaOapg.properties.cotsTemplate, str, schemas.Unset] = schemas.unset,
         loadStates: typing.Union[MetaOapg.properties.loadStates, list, tuple, schemas.Unset] = schemas.unset,
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
@@ -468,6 +472,7 @@ class Heater(
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
+        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         regHeatFlowRate: typing.Union[MetaOapg.properties.regHeatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         commandedTemperature: typing.Union[MetaOapg.properties.commandedTemperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -489,7 +494,6 @@ class Heater(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            temperature=temperature,
             cotsTemplate=cotsTemplate,
             loadStates=loadStates,
             satellite=satellite,
@@ -499,6 +503,7 @@ class Heater(
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
+            temperature=temperature,
             powerConsumed=powerConsumed,
             regHeatFlowRate=regHeatFlowRate,
             commandedTemperature=commandedTemperature,

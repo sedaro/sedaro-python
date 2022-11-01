@@ -236,7 +236,6 @@ class ConditionUpdate(
             scalar = schemas.NumberSchema
             targetA = schemas.StrSchema
             targetB = schemas.StrSchema
-            targetGroupA = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "relationship": relationship,
@@ -248,7 +247,6 @@ class ConditionUpdate(
                 "scalar": scalar,
                 "targetA": targetA,
                 "targetB": targetB,
-                "targetGroupA": targetGroupA,
             }
     
     paramACategory: MetaOapg.properties.paramACategory
@@ -288,12 +286,9 @@ class ConditionUpdate(
     def __getitem__(self, name: typing_extensions.Literal["targetB"]) -> MetaOapg.properties.targetB: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroupA"]) -> MetaOapg.properties.targetGroupA: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "id", "paramB", "scalar", "targetA", "targetB", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -329,12 +324,9 @@ class ConditionUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["targetB"]) -> typing.Union[MetaOapg.properties.targetB, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupA"]) -> typing.Union[MetaOapg.properties.targetGroupA, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "id", "paramB", "scalar", "targetA", "targetB", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -351,7 +343,6 @@ class ConditionUpdate(
         scalar: typing.Union[MetaOapg.properties.scalar, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
         targetB: typing.Union[MetaOapg.properties.targetB, str, schemas.Unset] = schemas.unset,
-        targetGroupA: typing.Union[MetaOapg.properties.targetGroupA, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ConditionUpdate':
@@ -368,7 +359,6 @@ class ConditionUpdate(
             scalar=scalar,
             targetA=targetA,
             targetB=targetB,
-            targetGroupA=targetGroupA,
             _configuration=_configuration,
             **kwargs,
         )

@@ -37,7 +37,7 @@ class TargetVectorUpdate(
         required = {
             "vectorType",
             "name",
-            "targetPointingDirection",
+            "referenceTarget",
         }
         
         class properties:
@@ -57,25 +57,18 @@ class TargetVectorUpdate(
                 @schemas.classproperty
                 def TARGET(cls):
                     return cls("TARGET")
-        
-            @staticmethod
-            def targetPointingDirection() -> typing.Type['TargetPointingDirections']:
-                return TargetPointingDirections
+            referenceTarget = schemas.StrSchema
             id = schemas.StrSchema
-            target = schemas.StrSchema
-            targetGroup = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "vectorType": vectorType,
-                "targetPointingDirection": targetPointingDirection,
+                "referenceTarget": referenceTarget,
                 "id": id,
-                "target": target,
-                "targetGroup": targetGroup,
             }
     
     vectorType: MetaOapg.properties.vectorType
     name: MetaOapg.properties.name
-    targetPointingDirection: 'TargetPointingDirections'
+    referenceTarget: MetaOapg.properties.referenceTarget
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -84,21 +77,15 @@ class TargetVectorUpdate(
     def __getitem__(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetPointingDirection"]) -> 'TargetPointingDirections': ...
+    def __getitem__(self, name: typing_extensions.Literal["referenceTarget"]) -> MetaOapg.properties.referenceTarget: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["target"]) -> MetaOapg.properties.target: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroup"]) -> MetaOapg.properties.targetGroup: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "targetPointingDirection", "id", "target", "targetGroup", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "referenceTarget", "id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -110,21 +97,15 @@ class TargetVectorUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetPointingDirection"]) -> 'TargetPointingDirections': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["referenceTarget"]) -> MetaOapg.properties.referenceTarget: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["target"]) -> typing.Union[MetaOapg.properties.target, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroup"]) -> typing.Union[MetaOapg.properties.targetGroup, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "targetPointingDirection", "id", "target", "targetGroup", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "referenceTarget", "id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -133,10 +114,8 @@ class TargetVectorUpdate(
         *args: typing.Union[dict, frozendict.frozendict, ],
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        targetPointingDirection: 'TargetPointingDirections',
+        referenceTarget: typing.Union[MetaOapg.properties.referenceTarget, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        target: typing.Union[MetaOapg.properties.target, str, schemas.Unset] = schemas.unset,
-        targetGroup: typing.Union[MetaOapg.properties.targetGroup, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TargetVectorUpdate':
@@ -145,12 +124,8 @@ class TargetVectorUpdate(
             *args,
             vectorType=vectorType,
             name=name,
-            targetPointingDirection=targetPointingDirection,
+            referenceTarget=referenceTarget,
             id=id,
-            target=target,
-            targetGroup=targetGroup,
             _configuration=_configuration,
             **kwargs,
         )
-
-from sedaro_base_client.model.target_pointing_directions import TargetPointingDirections

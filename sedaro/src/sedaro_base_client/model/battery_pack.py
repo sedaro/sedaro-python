@@ -104,7 +104,6 @@ class BatteryPack(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            temperature = schemas.NumberSchema
             
             
             class componentType(
@@ -262,6 +261,15 @@ class BatteryPack(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class temperature(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
             __annotations__ = {
                 "name": name,
                 "subsystem": subsystem,
@@ -275,7 +283,6 @@ class BatteryPack(
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "temperature": temperature,
                 "componentType": componentType,
                 "cotsTemplate": cotsTemplate,
                 "loadStates": loadStates,
@@ -286,6 +293,7 @@ class BatteryPack(
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
+                "temperature": temperature,
             }
     
     numSeries: MetaOapg.properties.numSeries
@@ -332,9 +340,6 @@ class BatteryPack(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
     
     @typing.overload
@@ -365,9 +370,12 @@ class BatteryPack(
     def __getitem__(self, name: typing_extensions.Literal["tempControllers"]) -> MetaOapg.properties.tempControllers: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -409,9 +417,6 @@ class BatteryPack(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["componentType"]) -> typing.Union[MetaOapg.properties.componentType, schemas.Unset]: ...
     
     @typing.overload
@@ -442,9 +447,12 @@ class BatteryPack(
     def get_item_oapg(self, name: typing_extensions.Literal["tempControllers"]) -> typing.Union[MetaOapg.properties.tempControllers, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -463,7 +471,6 @@ class BatteryPack(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         componentType: typing.Union[MetaOapg.properties.componentType, str, schemas.Unset] = schemas.unset,
         cotsTemplate: typing.Union[MetaOapg.properties.cotsTemplate, str, schemas.Unset] = schemas.unset,
         loadStates: typing.Union[MetaOapg.properties.loadStates, list, tuple, schemas.Unset] = schemas.unset,
@@ -474,6 +481,7 @@ class BatteryPack(
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
+        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BatteryPack':
@@ -492,7 +500,6 @@ class BatteryPack(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            temperature=temperature,
             componentType=componentType,
             cotsTemplate=cotsTemplate,
             loadStates=loadStates,
@@ -503,6 +510,7 @@ class BatteryPack(
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
+            temperature=temperature,
             _configuration=_configuration,
             **kwargs,
         )

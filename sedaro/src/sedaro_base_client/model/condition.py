@@ -238,7 +238,6 @@ class Condition(
             scalar = schemas.NumberSchema
             targetA = schemas.StrSchema
             targetB = schemas.StrSchema
-            targetGroupA = schemas.StrSchema
             
             
             class operationalModes(
@@ -262,6 +261,7 @@ class Condition(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            compliance = schemas.BoolSchema
             __annotations__ = {
                 "name": name,
                 "relationship": relationship,
@@ -274,8 +274,8 @@ class Condition(
                 "scalar": scalar,
                 "targetA": targetA,
                 "targetB": targetB,
-                "targetGroupA": targetGroupA,
                 "operationalModes": operationalModes,
+                "compliance": compliance,
             }
     
     paramACategory: MetaOapg.properties.paramACategory
@@ -319,15 +319,15 @@ class Condition(
     def __getitem__(self, name: typing_extensions.Literal["targetB"]) -> MetaOapg.properties.targetB: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroupA"]) -> MetaOapg.properties.targetGroupA: ...
+    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
+    def __getitem__(self, name: typing_extensions.Literal["compliance"]) -> MetaOapg.properties.compliance: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", "operationalModes", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -366,15 +366,15 @@ class Condition(
     def get_item_oapg(self, name: typing_extensions.Literal["targetB"]) -> typing.Union[MetaOapg.properties.targetB, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupA"]) -> typing.Union[MetaOapg.properties.targetGroupA, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["compliance"]) -> typing.Union[MetaOapg.properties.compliance, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "targetGroupA", "operationalModes", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -392,8 +392,8 @@ class Condition(
         scalar: typing.Union[MetaOapg.properties.scalar, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
         targetB: typing.Union[MetaOapg.properties.targetB, str, schemas.Unset] = schemas.unset,
-        targetGroupA: typing.Union[MetaOapg.properties.targetGroupA, str, schemas.Unset] = schemas.unset,
         operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
+        compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Condition':
@@ -411,8 +411,8 @@ class Condition(
             scalar=scalar,
             targetA=targetA,
             targetB=targetB,
-            targetGroupA=targetGroupA,
             operationalModes=operationalModes,
+            compliance=compliance,
             _configuration=_configuration,
             **kwargs,
         )

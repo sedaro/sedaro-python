@@ -42,3 +42,7 @@ class MotionTypes(
     @schemas.classproperty
     def SUN_TRACKING(cls):
         return cls("SUN_TRACKING")
+    
+    @schemas.classproperty
+    def ANTI_SUN_TRACKING(cls):
+        return cls("ANTI_SUN_TRACKING")

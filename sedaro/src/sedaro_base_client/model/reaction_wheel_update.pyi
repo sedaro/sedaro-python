@@ -96,7 +96,6 @@ class ReactionWheelUpdate(
                 schemas.NumberSchema
             ):
                 pass
-            temperature = schemas.NumberSchema
             __annotations__ = {
                 "name": name,
                 "bodyFrameVector": bodyFrameVector,
@@ -110,7 +109,6 @@ class ReactionWheelUpdate(
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "temperature": temperature,
             }
     
     bodyFrameVector: MetaOapg.properties.bodyFrameVector
@@ -157,12 +155,9 @@ class ReactionWheelUpdate(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -204,12 +199,9 @@ class ReactionWheelUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "temperature", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -228,7 +220,6 @@ class ReactionWheelUpdate(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ReactionWheelUpdate':
@@ -247,7 +238,6 @@ class ReactionWheelUpdate(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            temperature=temperature,
             _configuration=_configuration,
             **kwargs,
         )
