@@ -1,4 +1,1 @@
 pydash >= 5.1.1
-typing-extensions >= 4.3.0
-# added ^^^ typing-extensions b/c generated base client tries to "import from typing_extensions" (convention in
-# older version of python), and should now be an "import from typing". This is a workaround.
