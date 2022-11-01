@@ -12,9 +12,9 @@ description = "A python client to interact with the Sedaro Satellite API."
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License", # TODO
-    "Operating System :: OS Independent", # TODO
+    "Programming Language :: Python :: 3.7",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
     "Topic :: Software Development",
 ]
 dynamic = ["dependencies"]
