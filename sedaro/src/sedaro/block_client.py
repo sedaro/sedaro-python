@@ -47,7 +47,7 @@ class BlockClient:
             key (str): attribute being keyed into
 
         Raises:
-            KeyError: if the attribute doesn't exist on the refrenced Sedaro Block
+            AttributeError: if the attribute doesn't exist on the refrenced Sedaro Block
 
         Returns:
             any: the value of the corresponding attribute on the referenced Sedaro Block
@@ -200,7 +200,7 @@ class BlockClient:
 
         Raises:
             TypeError: if the value of `field` is not a string
-            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
+            AttributeError: if the value of `field` does not correspond to any field on the associated Sedaro Block
 
         Returns:
             dict: the field schema
