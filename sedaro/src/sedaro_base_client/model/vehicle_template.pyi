@@ -1097,6 +1097,37 @@ class VehicleTemplate(
             positionCovariance = schemas.AnyTypeSchema
             velocitySolution = schemas.AnyTypeSchema
             velocityCovariance = schemas.AnyTypeSchema
+            beta = schemas.NumberSchema
+            
+            
+            class orbitalElements(
+                schemas.DictSchema
+            ):
+            
+            
+                class MetaOapg:
+                    additional_properties = schemas.NumberSchema
+                
+                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+                
+                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[MetaOapg.additional_properties, decimal.Decimal, int, float, ],
+                ) -> 'orbitalElements':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            shadow = schemas.BoolSchema
             __annotations__ = {
                 "latestId": latestId,
                 "conOps": conOps,
@@ -1138,6 +1169,9 @@ class VehicleTemplate(
                 "positionCovariance": positionCovariance,
                 "velocitySolution": velocitySolution,
                 "velocityCovariance": velocityCovariance,
+                "beta": beta,
+                "orbitalElements": orbitalElements,
+                "shadow": shadow,
             }
     
     latestId: MetaOapg.properties.latestId
@@ -1266,9 +1300,18 @@ class VehicleTemplate(
     def __getitem__(self, name: typing_extensions.Literal["velocityCovariance"]) -> MetaOapg.properties.velocityCovariance: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["beta"]) -> MetaOapg.properties.beta: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["orbitalElements"]) -> MetaOapg.properties.orbitalElements: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["shadow"]) -> MetaOapg.properties.shadow: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -1394,9 +1437,18 @@ class VehicleTemplate(
     def get_item_oapg(self, name: typing_extensions.Literal["velocityCovariance"]) -> typing.Union[MetaOapg.properties.velocityCovariance, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["beta"]) -> typing.Union[MetaOapg.properties.beta, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["orbitalElements"]) -> typing.Union[MetaOapg.properties.orbitalElements, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["shadow"]) -> typing.Union[MetaOapg.properties.shadow, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -1443,6 +1495,9 @@ class VehicleTemplate(
         positionCovariance: typing.Union[MetaOapg.properties.positionCovariance, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         velocitySolution: typing.Union[MetaOapg.properties.velocitySolution, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         velocityCovariance: typing.Union[MetaOapg.properties.velocityCovariance, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        beta: typing.Union[MetaOapg.properties.beta, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        orbitalElements: typing.Union[MetaOapg.properties.orbitalElements, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
+        shadow: typing.Union[MetaOapg.properties.shadow, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VehicleTemplate':
@@ -1489,6 +1544,9 @@ class VehicleTemplate(
             positionCovariance=positionCovariance,
             velocitySolution=velocitySolution,
             velocityCovariance=velocityCovariance,
+            beta=beta,
+            orbitalElements=orbitalElements,
+            shadow=shadow,
             _configuration=_configuration,
             **kwargs,
         )

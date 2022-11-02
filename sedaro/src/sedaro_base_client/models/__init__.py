@@ -88,6 +88,7 @@ from sedaro_base_client.model.constant_resistance import ConstantResistance
 from sedaro_base_client.model.cooler import Cooler
 from sedaro_base_client.model.cooler_create import CoolerCreate
 from sedaro_base_client.model.cooler_update import CoolerUpdate
+from sedaro_base_client.model.data_set import DataSet
 from sedaro_base_client.model.deleted_entity import DeletedEntity
 from sedaro_base_client.model.direction_sensor import DirectionSensor
 from sedaro_base_client.model.direction_sensor_create import DirectionSensorCreate
@@ -129,8 +130,6 @@ from sedaro_base_client.model.isdp_orbital_elements import ISDPOrbitalElements
 from sedaro_base_client.model.isdp_tle import ISDPTle
 from sedaro_base_client.model.initial_state_def_type import InitialStateDefType
 from sedaro_base_client.model.input_types import InputTypes
-from sedaro_base_client.model.job import Job
-from sedaro_base_client.model.job_get import JobGet
 from sedaro_base_client.model.load_bg import LoadBG
 from sedaro_base_client.model.load_state import LoadState
 from sedaro_base_client.model.load_state_bg import LoadStateBG
@@ -178,6 +177,7 @@ from sedaro_base_client.model.position_sensor import PositionSensor
 from sedaro_base_client.model.position_sensor_create import PositionSensorCreate
 from sedaro_base_client.model.position_sensor_update import PositionSensorUpdate
 from sedaro_base_client.model.power_load import PowerLoad
+from sedaro_base_client.model.progress import Progress
 from sedaro_base_client.model.quasi_reg_det_topology import QuasiRegDetTopology
 from sedaro_base_client.model.reaction_wheel import ReactionWheel
 from sedaro_base_client.model.reaction_wheel_create import ReactionWheelCreate
@@ -200,6 +200,7 @@ from sedaro_base_client.model.scenario_block_update_res import ScenarioBlockUpda
 from sedaro_base_client.model.scenario_template import ScenarioTemplate
 from sedaro_base_client.model.side_categories import SideCategories
 from sedaro_base_client.model.simulatable_satellite import SimulatableSatellite
+from sedaro_base_client.model.simulation_job import SimulationJob
 from sedaro_base_client.model.single_conv_hybrid_topology import SingleConvHybridTopology
 from sedaro_base_client.model.single_conv_mppt_topology import SingleConvMpptTopology
 from sedaro_base_client.model.sliding_mode_algorithm import SlidingModeAlgorithm

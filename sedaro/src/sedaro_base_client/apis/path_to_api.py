@@ -107,8 +107,8 @@ from sedaro_base_client.apis.paths.models_branches_branch_id_clock_configs_ impo
 from sedaro_base_client.apis.paths.models_branches_branch_id_clock_configs_block_id import ModelsBranchesBranchIdClockConfigsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_template_refs_ import ModelsBranchesBranchIdTemplateRefs
 from sedaro_base_client.apis.paths.models_branches_branch_id_template_refs_block_id import ModelsBranchesBranchIdTemplateRefsBlockId
-from sedaro_base_client.apis.paths.simulation_branches_branch_id_control_ import SimulationBranchesBranchIdControl
-from sedaro_base_client.apis.paths.simulation_branches_branch_id_control_job_id import SimulationBranchesBranchIdControlJobId
+from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_ import SimulationsBranchesBranchIdControl
+from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_job_id import SimulationsBranchesBranchIdControlJobId
 from sedaro_base_client.apis.paths.data_ import Data
 from sedaro_base_client.apis.paths.models_branches_branch_id import ModelsBranchesBranchId
 from sedaro_base_client.apis.paths.models_branches_branch_idshare_auth_ import ModelsBranchesBranchIdshareAuth
@@ -226,8 +226,8 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_BLOCK_ID: ModelsBranchesBranchIdClockConfigsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_: ModelsBranchesBranchIdTemplateRefs,
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_BLOCK_ID: ModelsBranchesBranchIdTemplateRefsBlockId,
-        PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_: SimulationBranchesBranchIdControl,
-        PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationBranchesBranchIdControlJobId,
+        PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
+        PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
@@ -346,8 +346,8 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_BLOCK_ID: ModelsBranchesBranchIdClockConfigsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_: ModelsBranchesBranchIdTemplateRefs,
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_BLOCK_ID: ModelsBranchesBranchIdTemplateRefsBlockId,
-        PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_: SimulationBranchesBranchIdControl,
-        PathValues.SIMULATION_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationBranchesBranchIdControlJobId,
+        PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
+        PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,

@@ -25,28 +25,33 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.data_set import DataSet
+from sedaro_base_client.model.job import Job
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
-from . import path
-
 # Query params
-IdSchema = schemas.IntSchema
-StartSchema = schemas.NumberSchema
-StopSchema = schemas.NumberSchema
-BinWidthSchema = schemas.NumberSchema
+
+
+class ActionSchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def PAUSE(cls):
+        return cls("PAUSE")
+    
+    @schemas.classproperty
+    def RESUME(cls):
+        return cls("RESUME")
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'id': typing.Union[IdSchema, decimal.Decimal, int, ],
+        'action': typing.Union[ActionSchema, str, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'start': typing.Union[StartSchema, decimal.Decimal, int, float, ],
-        'stop': typing.Union[StopSchema, decimal.Decimal, int, float, ],
-        'binWidth': typing.Union[BinWidthSchema, decimal.Decimal, int, float, ],
     },
     total=False
 )
@@ -56,32 +61,48 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_id = api_client.QueryParameter(
-    name="id",
+request_query_action = api_client.QueryParameter(
+    name="action",
     style=api_client.ParameterStyle.FORM,
-    schema=IdSchema,
+    schema=ActionSchema,
     required=True,
     explode=True,
 )
-request_query_start = api_client.QueryParameter(
-    name="start",
-    style=api_client.ParameterStyle.FORM,
-    schema=StartSchema,
-    explode=True,
+# Path params
+BranchIdSchema = schemas.IntSchema
+JobIdSchema = schemas.IntSchema
+RequestRequiredPathParams = typing_extensions.TypedDict(
+    'RequestRequiredPathParams',
+    {
+        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
+        'jobId': typing.Union[JobIdSchema, decimal.Decimal, int, ],
+    }
 )
-request_query_stop = api_client.QueryParameter(
-    name="stop",
-    style=api_client.ParameterStyle.FORM,
-    schema=StopSchema,
-    explode=True,
+RequestOptionalPathParams = typing_extensions.TypedDict(
+    'RequestOptionalPathParams',
+    {
+    },
+    total=False
 )
-request_query_bin_width = api_client.QueryParameter(
-    name="binWidth",
-    style=api_client.ParameterStyle.FORM,
-    schema=BinWidthSchema,
-    explode=True,
+
+
+class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
+    pass
+
+
+request_path_branch_id = api_client.PathParameter(
+    name="branchId",
+    style=api_client.ParameterStyle.SIMPLE,
+    schema=BranchIdSchema,
+    required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = DataSet
+request_path_job_id = api_client.PathParameter(
+    name="jobId",
+    style=api_client.ParameterStyle.SIMPLE,
+    schema=JobIdSchema,
+    required=True,
+)
+SchemaFor200ResponseBodyApplicationJson = Job
 
 
 @dataclass
@@ -119,10 +140,6 @@ _response_for_422 = api_client.OpenApiResponse(
             schema=SchemaFor422ResponseBodyApplicationJson),
     },
 )
-_status_code_to_response = {
-    '200': _response_for_200,
-    '422': _response_for_422,
-}
 _all_accept_content_types = (
     'application/json',
 )
@@ -130,9 +147,10 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_data_oapg(
+    def _pause_resume_simulation_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -142,19 +160,21 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_data_oapg(
+    def _pause_resume_simulation_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_data_oapg(
+    def _pause_resume_simulation_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -164,29 +184,42 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_data_oapg(
+    def _pause_resume_simulation_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Query Data
+        [NOT FUNCTIONAL] Pause/resume running simulation
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
+        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
+
+        _path_params = {}
+        for parameter in (
+            request_path_branch_id,
+            request_path_job_id,
+        ):
+            parameter_data = path_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            serialized_data = parameter.serialize(parameter_data)
+            _path_params.update(serialized_data)
+
+        for k, v in _path_params.items():
+            used_path = used_path.replace('{%s}' % k, v)
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_id,
-            request_query_start,
-            request_query_stop,
-            request_query_bin_width,
+            request_query_action,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -205,7 +238,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='patch'.upper(),
             headers=_headers,
             stream=stream,
             timeout=timeout,
@@ -226,13 +259,14 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetData(BaseApi):
+class PauseResumeSimulation(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_data(
+    def pause_resume_simulation(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -242,19 +276,21 @@ class GetData(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_data(
+    def pause_resume_simulation(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_data(
+    def pause_resume_simulation(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -264,16 +300,18 @@ class GetData(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_data(
+    def pause_resume_simulation(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_data_oapg(
+        return self._pause_resume_simulation_oapg(
             query_params=query_params,
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -281,13 +319,14 @@ class GetData(BaseApi):
         )
 
 
-class ApiForget(BaseApi):
+class ApiForpatch(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def patch(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -297,19 +336,21 @@ class ApiForget(BaseApi):
     ]: ...
 
     @typing.overload
-    def get(
+    def patch(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get(
+    def patch(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -319,16 +360,18 @@ class ApiForget(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get(
+    def patch(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_data_oapg(
+        return self._pause_resume_simulation_oapg(
             query_params=query_params,
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

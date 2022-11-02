@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
 from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch
@@ -13,17 +14,18 @@ if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
 
 
-@dataclass
 class BranchClient:
-    id: int
-    data: Dict
-    data_schema: Dict
-    _sedaro_client: 'SedaroApiClient'
-    _block_id_to_type_map: Dict[str, str]
-    '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
-    _block_class_to_block_group_map: Dict[str, str]
-    '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
-    _block_group_names: List[str]
+
+    def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, client: 'SedaroApiClient'):
+        for k, v in body.items():
+            setattr(self, k, v)
+        self.data_schema: Dict = body.dataSchema
+        self._sedaro_client = client
+        self._block_id_to_type_map: Dict[str, str] = body.blockIdToTypeMap
+        '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
+        self._block_class_to_block_group_map: Dict[str, str] = body.blockClassToBlockGroupMap
+        '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
+        self._block_group_names: List[str] = body.blockGroupNames
 
     def __str__(self):
         return f'BranchClient(id: {self.id})'
@@ -32,6 +34,9 @@ class BranchClient:
         return self.__str__()
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
+        if block_name not in self._block_class_to_block_group_map:
+            raise AttributeError(f'Attribute `{block_name}` does not exist on {self}')
+            # FIXME: Remove case flexibility from docs, etc.
         block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
         if importlib.util.find_spec(block_class_module) is None:
             raise AttributeError(
