@@ -36,15 +36,16 @@ class SimulationJob(
     class MetaOapg:
         required = {
             "dataId",
-            "progress",
             "bedRef",
             "startTime",
             "stopTime",
+            "id",
             "simulatedAgents",
             "status",
         }
         
         class properties:
+            id = schemas.IntSchema
             
             
             class status(
@@ -87,42 +88,6 @@ class SimulationJob(
             stopTime = schemas.NumberSchema
             
             
-            class progress(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def all_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            Progress,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'progress':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
             class simulatedAgents(
                 schemas.DictSchema
             ):
@@ -151,24 +116,29 @@ class SimulationJob(
                         **kwargs,
                     )
             realTime = schemas.BoolSchema
+            progress = schemas.DictSchema
             __annotations__ = {
+                "id": id,
                 "status": status,
                 "bedRef": bedRef,
                 "dataId": dataId,
                 "startTime": startTime,
                 "stopTime": stopTime,
-                "progress": progress,
                 "simulatedAgents": simulatedAgents,
                 "realTime": realTime,
+                "progress": progress,
             }
     
     dataId: MetaOapg.properties.dataId
-    progress: MetaOapg.properties.progress
     bedRef: MetaOapg.properties.bedRef
     startTime: MetaOapg.properties.startTime
     stopTime: MetaOapg.properties.stopTime
+    id: MetaOapg.properties.id
     simulatedAgents: MetaOapg.properties.simulatedAgents
     status: MetaOapg.properties.status
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
@@ -186,21 +156,24 @@ class SimulationJob(
     def __getitem__(self, name: typing_extensions.Literal["stopTime"]) -> MetaOapg.properties.stopTime: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["progress"]) -> MetaOapg.properties.progress: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["simulatedAgents"]) -> MetaOapg.properties.simulatedAgents: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["realTime"]) -> MetaOapg.properties.realTime: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["progress"]) -> MetaOapg.properties.progress: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["status", "bedRef", "dataId", "startTime", "stopTime", "progress", "simulatedAgents", "realTime", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataId", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
@@ -218,18 +191,18 @@ class SimulationJob(
     def get_item_oapg(self, name: typing_extensions.Literal["stopTime"]) -> MetaOapg.properties.stopTime: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["progress"]) -> MetaOapg.properties.progress: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["simulatedAgents"]) -> MetaOapg.properties.simulatedAgents: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["realTime"]) -> typing.Union[MetaOapg.properties.realTime, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["progress"]) -> typing.Union[MetaOapg.properties.progress, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["status", "bedRef", "dataId", "startTime", "stopTime", "progress", "simulatedAgents", "realTime", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataId", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -237,13 +210,14 @@ class SimulationJob(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         dataId: typing.Union[MetaOapg.properties.dataId, decimal.Decimal, int, ],
-        progress: typing.Union[MetaOapg.properties.progress, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         bedRef: typing.Union[MetaOapg.properties.bedRef, str, ],
         startTime: typing.Union[MetaOapg.properties.startTime, decimal.Decimal, int, float, ],
         stopTime: typing.Union[MetaOapg.properties.stopTime, decimal.Decimal, int, float, ],
+        id: typing.Union[MetaOapg.properties.id, decimal.Decimal, int, ],
         simulatedAgents: typing.Union[MetaOapg.properties.simulatedAgents, dict, frozendict.frozendict, ],
         status: typing.Union[MetaOapg.properties.status, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         realTime: typing.Union[MetaOapg.properties.realTime, bool, schemas.Unset] = schemas.unset,
+        progress: typing.Union[MetaOapg.properties.progress, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SimulationJob':
@@ -251,16 +225,16 @@ class SimulationJob(
             cls,
             *args,
             dataId=dataId,
-            progress=progress,
             bedRef=bedRef,
             startTime=startTime,
             stopTime=stopTime,
+            id=id,
             simulatedAgents=simulatedAgents,
             status=status,
             realTime=realTime,
+            progress=progress,
             _configuration=_configuration,
             **kwargs,
         )
 
-from sedaro_base_client.model.progress import Progress
 from sedaro_base_client.model.statuses import Statuses

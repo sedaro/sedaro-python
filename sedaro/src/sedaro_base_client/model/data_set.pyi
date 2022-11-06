@@ -35,44 +35,23 @@ class DataSet(
 
     class MetaOapg:
         required = {
+            "meta",
             "series",
         }
         
         class properties:
-            
-            
-            class series(
-                schemas.DictSchema
-            ):
-            
-            
-                class MetaOapg:
-                    additional_properties = schemas.DictSchema
-                
-                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    # dict_instance[name] accessor
-                    return super().__getitem__(name)
-                
-                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    return super().get_item_oapg(name)
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[MetaOapg.additional_properties, dict, frozendict.frozendict, ],
-                ) -> 'series':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
+            meta = schemas.DictSchema
+            series = schemas.DictSchema
             __annotations__ = {
+                "meta": meta,
                 "series": series,
             }
     
+    meta: MetaOapg.properties.meta
     series: MetaOapg.properties.series
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["meta"]) -> MetaOapg.properties.meta: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["series"]) -> MetaOapg.properties.series: ...
@@ -80,10 +59,13 @@ class DataSet(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["series", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["meta", "series", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["meta"]) -> MetaOapg.properties.meta: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["series"]) -> MetaOapg.properties.series: ...
@@ -91,13 +73,14 @@ class DataSet(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["series", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["meta", "series", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
+        meta: typing.Union[MetaOapg.properties.meta, dict, frozendict.frozendict, ],
         series: typing.Union[MetaOapg.properties.series, dict, frozendict.frozendict, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -105,6 +88,7 @@ class DataSet(
         return super().__new__(
             cls,
             *args,
+            meta=meta,
             series=series,
             _configuration=_configuration,
             **kwargs,

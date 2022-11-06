@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.data_set import DataSet
+from sedaro_base_client.model.data_service_response import DataServiceResponse
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -81,7 +81,7 @@ request_query_bin_width = api_client.QueryParameter(
     schema=BinWidthSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = DataSet
+SchemaFor200ResponseBodyApplicationJson = DataServiceResponse
 
 
 @dataclass

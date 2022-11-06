@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.simulation_job import SimulationJob
+from sedaro_base_client.model.message_res import MessageRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -62,7 +62,7 @@ request_path_job_id = api_client.PathParameter(
     schema=JobIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = SimulationJob
+SchemaFor200ResponseBodyApplicationJson = MessageRes
 
 
 @dataclass

@@ -2,6 +2,7 @@ from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
+from .utils import parse_urllib_response
 from .branch_client import BranchClient
 
 
@@ -29,3 +30,12 @@ class SedaroApiClient(ApiClient):
         branches_api_instance = branches_api.BranchesApi(self)
         res = branches_api_instance.get_branch(path_params={'branchId': id})
         return BranchClient(res.body, self) 
+    
+    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None):
+        """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
+        url = f'/data/?id={id}'
+        if start is not None: url += f'&start={start}'
+        if stop is not None: url += f'&stop={stop}'
+        if binWidth is not None: url += f'&binWidth={binWidth}'
+        response = self.call_api(url, 'GET')
+        return parse_urllib_response(response)

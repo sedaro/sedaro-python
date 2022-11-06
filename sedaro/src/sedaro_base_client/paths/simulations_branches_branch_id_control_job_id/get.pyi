@@ -62,32 +62,7 @@ request_path_job_id = api_client.PathParameter(
     schema=JobIdSchema,
     required=True,
 )
-
-
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.ListSchema
-):
-
-
-    class MetaOapg:
-        
-        @staticmethod
-        def items() -> typing.Type['SimulationJob']:
-            return SimulationJob
-
-    def __new__(
-        cls,
-        arg: typing.Union[typing.Tuple['SimulationJob'], typing.List['SimulationJob']],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> 'SimulationJob':
-        return super().__getitem__(i)
+SchemaFor200ResponseBodyApplicationJson = SimulationJob
 
 
 @dataclass
