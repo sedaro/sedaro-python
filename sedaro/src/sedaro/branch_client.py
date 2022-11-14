@@ -19,14 +19,14 @@ class BranchClient:
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, client: 'SedaroApiClient'):
         for k, v in body.items():
             setattr(self, k, v)
-        self.data_schema: Dict = body.dataSchema
+        self.data_schema: Dict = body['dataSchema']
         self._sedaro_client = client
-        self._block_id_to_type_map: Dict[str, str] = body.blockIdToTypeMap
+        self._block_id_to_type_map: Dict[str, str] = body['blockIdToTypeMap']
         '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
         self._block_class_to_block_group_map: Dict[str,
-                                                   str] = body.blockClassToBlockGroupMap
+                                                   str] = body['blockClassToBlockGroupMap']
         '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
-        self._block_group_names: List[str] = body.blockGroupNames
+        self._block_group_names: List[str] = body['blockGroupNames']
 
     def __str__(self):
         return f'BranchClient(id: {self.id})'
