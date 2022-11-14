@@ -37,7 +37,6 @@ class Cooler(
         required = {
             "componentType",
             "controlledComponent",
-            "efficiency",
             "name",
             "subsystem",
             "onRegHeatFlowRate",
@@ -63,12 +62,6 @@ class Cooler(
                     return cls("COOLER")
             onRegHeatFlowRate = schemas.NumberSchema
             controlledComponent = schemas.StrSchema
-            
-            
-            class efficiency(
-                schemas.NumberSchema
-            ):
-                pass
             id = schemas.StrSchema
             
             
@@ -166,6 +159,7 @@ class Cooler(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -231,8 +225,12 @@ class Cooler(
                 schemas.NumberSchema
             ):
                 pass
-            powerConsumed = schemas.NumberSchema
-            regHeatFlowRate = schemas.NumberSchema
+            
+            
+            class regHeatFlowRate(
+                schemas.NumberSchema
+            ):
+                pass
             commandedTemperature = schemas.NumberSchema
             
             
@@ -257,6 +255,12 @@ class Cooler(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class efficiency(
+                schemas.NumberSchema
+            ):
+                pass
             sinkHeatFlowRate = schemas.NumberSchema
             
             
@@ -310,7 +314,6 @@ class Cooler(
                 "componentType": componentType,
                 "onRegHeatFlowRate": onRegHeatFlowRate,
                 "controlledComponent": controlledComponent,
-                "efficiency": efficiency,
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
@@ -322,15 +325,16 @@ class Cooler(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
-                "powerConsumed": powerConsumed,
                 "regHeatFlowRate": regHeatFlowRate,
                 "commandedTemperature": commandedTemperature,
                 "tempControllerStates": tempControllerStates,
+                "efficiency": efficiency,
                 "sinkHeatFlowRate": sinkHeatFlowRate,
                 "thermal_interface_cooler_A": thermal_interface_cooler_A,
                 "thermal_interface_cooler_B": thermal_interface_cooler_B,
@@ -338,7 +342,6 @@ class Cooler(
     
     componentType: MetaOapg.properties.componentType
     controlledComponent: MetaOapg.properties.controlledComponent
-    efficiency: MetaOapg.properties.efficiency
     name: MetaOapg.properties.name
     subsystem: MetaOapg.properties.subsystem
     onRegHeatFlowRate: MetaOapg.properties.onRegHeatFlowRate
@@ -357,9 +360,6 @@ class Cooler(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["controlledComponent"]) -> MetaOapg.properties.controlledComponent: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -395,6 +395,9 @@ class Cooler(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -410,9 +413,6 @@ class Cooler(
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["regHeatFlowRate"]) -> MetaOapg.properties.regHeatFlowRate: ...
     
     @typing.overload
@@ -420,6 +420,9 @@ class Cooler(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tempControllerStates"]) -> MetaOapg.properties.tempControllerStates: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sinkHeatFlowRate"]) -> MetaOapg.properties.sinkHeatFlowRate: ...
@@ -433,7 +436,7 @@ class Cooler(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", "sinkHeatFlowRate", "thermal_interface_cooler_A", "thermal_interface_cooler_B", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", "efficiency", "sinkHeatFlowRate", "thermal_interface_cooler_A", "thermal_interface_cooler_B", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -452,9 +455,6 @@ class Cooler(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["controlledComponent"]) -> MetaOapg.properties.controlledComponent: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -490,6 +490,9 @@ class Cooler(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -505,9 +508,6 @@ class Cooler(
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["regHeatFlowRate"]) -> typing.Union[MetaOapg.properties.regHeatFlowRate, schemas.Unset]: ...
     
     @typing.overload
@@ -515,6 +515,9 @@ class Cooler(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tempControllerStates"]) -> typing.Union[MetaOapg.properties.tempControllerStates, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["efficiency"]) -> typing.Union[MetaOapg.properties.efficiency, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sinkHeatFlowRate"]) -> typing.Union[MetaOapg.properties.sinkHeatFlowRate, schemas.Unset]: ...
@@ -528,7 +531,7 @@ class Cooler(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", "sinkHeatFlowRate", "thermal_interface_cooler_A", "thermal_interface_cooler_B", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "regHeatFlowRate", "commandedTemperature", "tempControllerStates", "efficiency", "sinkHeatFlowRate", "thermal_interface_cooler_A", "thermal_interface_cooler_B", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -537,7 +540,6 @@ class Cooler(
         *args: typing.Union[dict, frozendict.frozendict, ],
         componentType: typing.Union[MetaOapg.properties.componentType, str, ],
         controlledComponent: typing.Union[MetaOapg.properties.controlledComponent, str, ],
-        efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         subsystem: typing.Union[MetaOapg.properties.subsystem, str, ],
         onRegHeatFlowRate: typing.Union[MetaOapg.properties.onRegHeatFlowRate, decimal.Decimal, int, float, ],
@@ -552,15 +554,16 @@ class Cooler(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         regHeatFlowRate: typing.Union[MetaOapg.properties.regHeatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         commandedTemperature: typing.Union[MetaOapg.properties.commandedTemperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllerStates: typing.Union[MetaOapg.properties.tempControllerStates, list, tuple, schemas.Unset] = schemas.unset,
+        efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         sinkHeatFlowRate: typing.Union[MetaOapg.properties.sinkHeatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermal_interface_cooler_A: typing.Union[MetaOapg.properties.thermal_interface_cooler_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_cooler_B: typing.Union[MetaOapg.properties.thermal_interface_cooler_B, list, tuple, schemas.Unset] = schemas.unset,
@@ -572,7 +575,6 @@ class Cooler(
             *args,
             componentType=componentType,
             controlledComponent=controlledComponent,
-            efficiency=efficiency,
             name=name,
             subsystem=subsystem,
             onRegHeatFlowRate=onRegHeatFlowRate,
@@ -587,15 +589,16 @@ class Cooler(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
-            powerConsumed=powerConsumed,
             regHeatFlowRate=regHeatFlowRate,
             commandedTemperature=commandedTemperature,
             tempControllerStates=tempControllerStates,
+            efficiency=efficiency,
             sinkHeatFlowRate=sinkHeatFlowRate,
             thermal_interface_cooler_A=thermal_interface_cooler_A,
             thermal_interface_cooler_B=thermal_interface_cooler_B,

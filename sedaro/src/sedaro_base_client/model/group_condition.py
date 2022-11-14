@@ -40,7 +40,6 @@ class GroupCondition(
             "paramBCategory",
             "name",
             "relationship",
-            "paramA",
             "conOps",
         }
         
@@ -142,6 +141,9 @@ class GroupCondition(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            conOps = schemas.StrSchema
+            targetGroupA = schemas.StrSchema
+            id = schemas.StrSchema
             
             
             class paramA(
@@ -178,9 +180,6 @@ class GroupCondition(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            conOps = schemas.StrSchema
-            targetGroupA = schemas.StrSchema
-            id = schemas.StrSchema
             
             
             class paramB(
@@ -351,10 +350,10 @@ class GroupCondition(
                 "relationship": relationship,
                 "paramACategory": paramACategory,
                 "paramBCategory": paramBCategory,
-                "paramA": paramA,
                 "conOps": conOps,
                 "targetGroupA": targetGroupA,
                 "id": id,
+                "paramA": paramA,
                 "paramB": paramB,
                 "scalar": scalar,
                 "targetA": targetA,
@@ -372,7 +371,6 @@ class GroupCondition(
     paramBCategory: MetaOapg.properties.paramBCategory
     name: MetaOapg.properties.name
     relationship: MetaOapg.properties.relationship
-    paramA: MetaOapg.properties.paramA
     conOps: MetaOapg.properties.conOps
     
     @typing.overload
@@ -388,9 +386,6 @@ class GroupCondition(
     def __getitem__(self, name: typing_extensions.Literal["paramBCategory"]) -> MetaOapg.properties.paramBCategory: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["paramA"]) -> MetaOapg.properties.paramA: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
@@ -398,6 +393,9 @@ class GroupCondition(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["paramA"]) -> MetaOapg.properties.paramA: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["paramB"]) -> MetaOapg.properties.paramB: ...
@@ -432,7 +430,7 @@ class GroupCondition(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "targetGroupA", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "conOps", "targetGroupA", "id", "paramA", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -450,9 +448,6 @@ class GroupCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["paramBCategory"]) -> MetaOapg.properties.paramBCategory: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["paramA"]) -> MetaOapg.properties.paramA: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
     
     @typing.overload
@@ -460,6 +455,9 @@ class GroupCondition(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["paramA"]) -> typing.Union[MetaOapg.properties.paramA, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["paramB"]) -> typing.Union[MetaOapg.properties.paramB, schemas.Unset]: ...
@@ -494,7 +492,7 @@ class GroupCondition(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "paramA", "conOps", "targetGroupA", "id", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "relationship", "paramACategory", "paramBCategory", "conOps", "targetGroupA", "id", "paramA", "paramB", "scalar", "targetA", "targetB", "operationalModes", "compliance", "groupRoller", "countRelationship", "countValue", "targetCompliance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -506,9 +504,9 @@ class GroupCondition(
         paramBCategory: typing.Union[MetaOapg.properties.paramBCategory, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         relationship: typing.Union[MetaOapg.properties.relationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        paramA: typing.Union[MetaOapg.properties.paramA, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        paramA: typing.Union[MetaOapg.properties.paramA, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         paramB: typing.Union[MetaOapg.properties.paramB, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         scalar: typing.Union[MetaOapg.properties.scalar, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
@@ -530,9 +528,9 @@ class GroupCondition(
             paramBCategory=paramBCategory,
             name=name,
             relationship=relationship,
-            paramA=paramA,
             conOps=conOps,
             id=id,
+            paramA=paramA,
             paramB=paramB,
             scalar=scalar,
             targetA=targetA,

@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
+from sedaro_base_client.model.clock_config_create import ClockConfigCreate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.clock_config import ClockConfig
 from sedaro_base_client.model.scenario_block_create_res import ScenarioBlockCreateRes
 
 # Path params
@@ -56,10 +56,10 @@ request_path_branch_id = api_client.PathParameter(
     required=True,
 )
 # body param
-SchemaForRequestBodyApplicationJson = ClockConfig
+SchemaForRequestBodyApplicationJson = ClockConfigCreate
 
 
-request_body_clock_config = api_client.RequestBody(
+request_body_clock_config_create = api_client.RequestBody(
     content={
         'application/json': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
@@ -111,7 +111,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _create_simulation_clock_configuration_oapg(
+    def _create_clock_config_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _create_simulation_clock_configuration_oapg(
+    def _create_clock_config_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -140,7 +140,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _create_simulation_clock_configuration_oapg(
+    def _create_clock_config_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -152,7 +152,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _create_simulation_clock_configuration_oapg(
+    def _create_clock_config_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -166,7 +166,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _create_simulation_clock_configuration_oapg(
+    def _create_clock_config_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -209,7 +209,7 @@ class BaseApi(api_client.Api):
                 'The required body parameter has an invalid value of: unset. Set a valid value instead')
         _fields = None
         _body = None
-        serialized_data = request_body_clock_config.serialize(body, content_type)
+        serialized_data = request_body_clock_config_create.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -240,11 +240,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class CreateSimulationClockConfiguration(BaseApi):
+class CreateClockConfig(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def create_simulation_clock_configuration(
+    def create_clock_config(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -258,7 +258,7 @@ class CreateSimulationClockConfiguration(BaseApi):
     ]: ...
 
     @typing.overload
-    def create_simulation_clock_configuration(
+    def create_clock_config(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -273,7 +273,7 @@ class CreateSimulationClockConfiguration(BaseApi):
 
 
     @typing.overload
-    def create_simulation_clock_configuration(
+    def create_clock_config(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -285,7 +285,7 @@ class CreateSimulationClockConfiguration(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def create_simulation_clock_configuration(
+    def create_clock_config(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -299,7 +299,7 @@ class CreateSimulationClockConfiguration(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def create_simulation_clock_configuration(
+    def create_clock_config(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -309,7 +309,7 @@ class CreateSimulationClockConfiguration(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_simulation_clock_configuration_oapg(
+        return self._create_clock_config_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,
@@ -389,7 +389,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_simulation_clock_configuration_oapg(
+        return self._create_clock_config_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,

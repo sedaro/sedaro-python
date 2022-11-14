@@ -119,7 +119,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _update_positionsensor_oapg(
+    def _update_position_sensor_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -133,7 +133,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _update_positionsensor_oapg(
+    def _update_position_sensor_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -148,7 +148,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _update_positionsensor_oapg(
+    def _update_position_sensor_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -160,7 +160,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _update_positionsensor_oapg(
+    def _update_position_sensor_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -174,7 +174,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _update_positionsensor_oapg(
+    def _update_position_sensor_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -185,7 +185,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Update PositionSensor
+        Update Position Sensor
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -249,11 +249,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class UpdatePositionsensor(BaseApi):
+class UpdatePositionSensor(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def update_positionsensor(
+    def update_position_sensor(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -267,7 +267,7 @@ class UpdatePositionsensor(BaseApi):
     ]: ...
 
     @typing.overload
-    def update_positionsensor(
+    def update_position_sensor(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -282,7 +282,7 @@ class UpdatePositionsensor(BaseApi):
 
 
     @typing.overload
-    def update_positionsensor(
+    def update_position_sensor(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -294,7 +294,7 @@ class UpdatePositionsensor(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def update_positionsensor(
+    def update_position_sensor(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -308,7 +308,7 @@ class UpdatePositionsensor(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def update_positionsensor(
+    def update_position_sensor(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -318,7 +318,7 @@ class UpdatePositionsensor(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._update_positionsensor_oapg(
+        return self._update_position_sensor_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,
@@ -398,7 +398,7 @@ class ApiForpatch(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._update_positionsensor_oapg(
+        return self._update_position_sensor_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,

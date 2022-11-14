@@ -457,6 +457,213 @@ class SimulatableSatellite(
                     return super().__getitem__(i)
             
             
+            class groundTargets(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'groundTargets':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class spaceTargets(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'spaceTargets':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class celestialTargets(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'celestialTargets':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class directionSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'directionSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class positionSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'positionSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class opticalAttitudeSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'opticalAttitudeSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class angularVelocitySensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'angularVelocitySensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class vectorSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'vectorSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class sensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'sensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
             class DEFAULT_CAD_MODELS(
                 schemas.ListSchema
             ):
@@ -501,29 +708,7 @@ class SimulatableSatellite(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
-            class commandedAngularRates(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'commandedAngularRates':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
+            commandedAngularRates = schemas.AnyTypeSchema
             __annotations__ = {
                 "cadKey": cadKey,
                 "cadSignedUrl": cadSignedUrl,
@@ -553,6 +738,15 @@ class SimulatableSatellite(
                 "algorithms": algorithms,
                 "targets": targets,
                 "fuelTanks": fuelTanks,
+                "groundTargets": groundTargets,
+                "spaceTargets": spaceTargets,
+                "celestialTargets": celestialTargets,
+                "directionSensors": directionSensors,
+                "positionSensors": positionSensors,
+                "opticalAttitudeSensors": opticalAttitudeSensors,
+                "angularVelocitySensors": angularVelocitySensors,
+                "vectorSensors": vectorSensors,
+                "sensors": sensors,
                 "DEFAULT_CAD_MODELS": DEFAULT_CAD_MODELS,
                 "commandedAltitude": commandedAltitude,
                 "commandedAngularRates": commandedAngularRates,
@@ -648,6 +842,33 @@ class SimulatableSatellite(
     def __getitem__(self, name: typing_extensions.Literal["fuelTanks"]) -> MetaOapg.properties.fuelTanks: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["groundTargets"]) -> MetaOapg.properties.groundTargets: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["spaceTargets"]) -> MetaOapg.properties.spaceTargets: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["celestialTargets"]) -> MetaOapg.properties.celestialTargets: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["directionSensors"]) -> MetaOapg.properties.directionSensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["positionSensors"]) -> MetaOapg.properties.positionSensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["opticalAttitudeSensors"]) -> MetaOapg.properties.opticalAttitudeSensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["angularVelocitySensors"]) -> MetaOapg.properties.angularVelocitySensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["vectorSensors"]) -> MetaOapg.properties.vectorSensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["sensors"]) -> MetaOapg.properties.sensors: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> MetaOapg.properties.DEFAULT_CAD_MODELS: ...
     
     @typing.overload
@@ -659,7 +880,7 @@ class SimulatableSatellite(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "groundTargets", "spaceTargets", "celestialTargets", "directionSensors", "positionSensors", "opticalAttitudeSensors", "angularVelocitySensors", "vectorSensors", "sensors", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -749,6 +970,33 @@ class SimulatableSatellite(
     def get_item_oapg(self, name: typing_extensions.Literal["fuelTanks"]) -> typing.Union[MetaOapg.properties.fuelTanks, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["groundTargets"]) -> typing.Union[MetaOapg.properties.groundTargets, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["spaceTargets"]) -> typing.Union[MetaOapg.properties.spaceTargets, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["celestialTargets"]) -> typing.Union[MetaOapg.properties.celestialTargets, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["directionSensors"]) -> typing.Union[MetaOapg.properties.directionSensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["positionSensors"]) -> typing.Union[MetaOapg.properties.positionSensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["opticalAttitudeSensors"]) -> typing.Union[MetaOapg.properties.opticalAttitudeSensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["angularVelocitySensors"]) -> typing.Union[MetaOapg.properties.angularVelocitySensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["vectorSensors"]) -> typing.Union[MetaOapg.properties.vectorSensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["sensors"]) -> typing.Union[MetaOapg.properties.sensors, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["DEFAULT_CAD_MODELS"]) -> typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, schemas.Unset]: ...
     
     @typing.overload
@@ -760,7 +1008,7 @@ class SimulatableSatellite(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cadKey", "cadSignedUrl", "cadScaleFactor", "topology", "id", "mass", "inertia", "earthshineIrradiance", "albedo", "dragTorque", "gravityGradientTorque", "cadFileName", "dynamicMass", "dynamicInertia", "bodyFrameVectors", "surfaces", "solarArrays", "subsystems", "referenceVectors", "components", "interfaces", "coolers", "heaters", "reactionWheels", "magnetorquers", "algorithms", "targets", "fuelTanks", "groundTargets", "spaceTargets", "celestialTargets", "directionSensors", "positionSensors", "opticalAttitudeSensors", "angularVelocitySensors", "vectorSensors", "sensors", "DEFAULT_CAD_MODELS", "commandedAltitude", "commandedAngularRates", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -795,9 +1043,18 @@ class SimulatableSatellite(
         algorithms: typing.Union[MetaOapg.properties.algorithms, list, tuple, schemas.Unset] = schemas.unset,
         targets: typing.Union[MetaOapg.properties.targets, list, tuple, schemas.Unset] = schemas.unset,
         fuelTanks: typing.Union[MetaOapg.properties.fuelTanks, list, tuple, schemas.Unset] = schemas.unset,
+        groundTargets: typing.Union[MetaOapg.properties.groundTargets, list, tuple, schemas.Unset] = schemas.unset,
+        spaceTargets: typing.Union[MetaOapg.properties.spaceTargets, list, tuple, schemas.Unset] = schemas.unset,
+        celestialTargets: typing.Union[MetaOapg.properties.celestialTargets, list, tuple, schemas.Unset] = schemas.unset,
+        directionSensors: typing.Union[MetaOapg.properties.directionSensors, list, tuple, schemas.Unset] = schemas.unset,
+        positionSensors: typing.Union[MetaOapg.properties.positionSensors, list, tuple, schemas.Unset] = schemas.unset,
+        opticalAttitudeSensors: typing.Union[MetaOapg.properties.opticalAttitudeSensors, list, tuple, schemas.Unset] = schemas.unset,
+        angularVelocitySensors: typing.Union[MetaOapg.properties.angularVelocitySensors, list, tuple, schemas.Unset] = schemas.unset,
+        vectorSensors: typing.Union[MetaOapg.properties.vectorSensors, list, tuple, schemas.Unset] = schemas.unset,
+        sensors: typing.Union[MetaOapg.properties.sensors, list, tuple, schemas.Unset] = schemas.unset,
         DEFAULT_CAD_MODELS: typing.Union[MetaOapg.properties.DEFAULT_CAD_MODELS, list, tuple, schemas.Unset] = schemas.unset,
         commandedAltitude: typing.Union[MetaOapg.properties.commandedAltitude, list, tuple, schemas.Unset] = schemas.unset,
-        commandedAngularRates: typing.Union[MetaOapg.properties.commandedAngularRates, list, tuple, schemas.Unset] = schemas.unset,
+        commandedAngularRates: typing.Union[MetaOapg.properties.commandedAngularRates, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SimulatableSatellite':
@@ -832,6 +1089,15 @@ class SimulatableSatellite(
             algorithms=algorithms,
             targets=targets,
             fuelTanks=fuelTanks,
+            groundTargets=groundTargets,
+            spaceTargets=spaceTargets,
+            celestialTargets=celestialTargets,
+            directionSensors=directionSensors,
+            positionSensors=positionSensors,
+            opticalAttitudeSensors=opticalAttitudeSensors,
+            angularVelocitySensors=angularVelocitySensors,
+            vectorSensors=vectorSensors,
+            sensors=sensors,
             DEFAULT_CAD_MODELS=DEFAULT_CAD_MODELS,
             commandedAltitude=commandedAltitude,
             commandedAngularRates=commandedAngularRates,

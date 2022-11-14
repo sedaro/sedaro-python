@@ -72,5 +72,5 @@ class GroupRollers(
         return cls("NOTALL")
     
     @schemas.classproperty
-    def EMPTY(cls):
-        return cls("")
+    def NONE(cls):
+        return cls(None)

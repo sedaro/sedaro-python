@@ -125,7 +125,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _update_temperature_controller_state_oapg(
+    def _update_temp_controller_state_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -139,7 +139,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _update_temperature_controller_state_oapg(
+    def _update_temp_controller_state_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -154,7 +154,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _update_temperature_controller_state_oapg(
+    def _update_temp_controller_state_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -166,7 +166,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _update_temperature_controller_state_oapg(
+    def _update_temp_controller_state_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -180,7 +180,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _update_temperature_controller_state_oapg(
+    def _update_temp_controller_state_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -255,11 +255,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class UpdateTemperatureControllerState(BaseApi):
+class UpdateTempControllerState(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def update_temperature_controller_state(
+    def update_temp_controller_state(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -273,7 +273,7 @@ class UpdateTemperatureControllerState(BaseApi):
     ]: ...
 
     @typing.overload
-    def update_temperature_controller_state(
+    def update_temp_controller_state(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -288,7 +288,7 @@ class UpdateTemperatureControllerState(BaseApi):
 
 
     @typing.overload
-    def update_temperature_controller_state(
+    def update_temp_controller_state(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -300,7 +300,7 @@ class UpdateTemperatureControllerState(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def update_temperature_controller_state(
+    def update_temp_controller_state(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -314,7 +314,7 @@ class UpdateTemperatureControllerState(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def update_temperature_controller_state(
+    def update_temp_controller_state(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -324,7 +324,7 @@ class UpdateTemperatureControllerState(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._update_temperature_controller_state_oapg(
+        return self._update_temp_controller_state_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,
@@ -404,7 +404,7 @@ class ApiForpatch(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._update_temperature_controller_state_oapg(
+        return self._update_temp_controller_state_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,

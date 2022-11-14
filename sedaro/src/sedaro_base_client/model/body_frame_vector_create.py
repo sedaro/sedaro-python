@@ -37,7 +37,6 @@ class BodyFrameVectorCreate(
         required = {
             "name",
             "definitionParams",
-            "satellite",
             "definitionType",
         }
         
@@ -124,19 +123,16 @@ class BodyFrameVectorCreate(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            satellite = schemas.StrSchema
             id = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "definitionType": definitionType,
                 "definitionParams": definitionParams,
-                "satellite": satellite,
                 "id": id,
             }
     
     name: MetaOapg.properties.name
     definitionParams: MetaOapg.properties.definitionParams
-    satellite: MetaOapg.properties.satellite
     definitionType: MetaOapg.properties.definitionType
     
     @typing.overload
@@ -149,15 +145,12 @@ class BodyFrameVectorCreate(
     def __getitem__(self, name: typing_extensions.Literal["definitionParams"]) -> MetaOapg.properties.definitionParams: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -172,15 +165,12 @@ class BodyFrameVectorCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["definitionParams"]) -> MetaOapg.properties.definitionParams: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "satellite", "id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "definitionType", "definitionParams", "id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -189,7 +179,6 @@ class BodyFrameVectorCreate(
         *args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         definitionParams: typing.Union[MetaOapg.properties.definitionParams, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         definitionType: typing.Union[MetaOapg.properties.definitionType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -200,7 +189,6 @@ class BodyFrameVectorCreate(
             *args,
             name=name,
             definitionParams=definitionParams,
-            satellite=satellite,
             definitionType=definitionType,
             id=id,
             _configuration=_configuration,

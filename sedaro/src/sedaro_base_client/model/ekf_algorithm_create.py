@@ -85,6 +85,7 @@ class EKFAlgorithmCreate(
                 def EKF(cls):
                     return cls("EKF")
             id = schemas.StrSchema
+            satellite = schemas.StrSchema
             
             
             class positionSolution(
@@ -301,6 +302,7 @@ class EKFAlgorithmCreate(
                 "algorithmType": algorithmType,
                 "algorithmSubtype": algorithmSubtype,
                 "id": id,
+                "satellite": satellite,
                 "positionSolution": positionSolution,
                 "velocitySolution": velocitySolution,
                 "covariance": covariance,
@@ -330,6 +332,9 @@ class EKFAlgorithmCreate(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["positionSolution"]) -> MetaOapg.properties.positionSolution: ...
     
     @typing.overload
@@ -350,7 +355,7 @@ class EKFAlgorithmCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "satellite", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -369,6 +374,9 @@ class EKFAlgorithmCreate(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["positionSolution"]) -> typing.Union[MetaOapg.properties.positionSolution, schemas.Unset]: ...
@@ -391,7 +399,7 @@ class EKFAlgorithmCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "satellite", "positionSolution", "velocitySolution", "covariance", "positionCovariance", "velocityCovariance", "positionSensors", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -403,6 +411,7 @@ class EKFAlgorithmCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         positionSolution: typing.Union[MetaOapg.properties.positionSolution, list, tuple, schemas.Unset] = schemas.unset,
         velocitySolution: typing.Union[MetaOapg.properties.velocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         covariance: typing.Union[MetaOapg.properties.covariance, list, tuple, schemas.Unset] = schemas.unset,
@@ -420,6 +429,7 @@ class EKFAlgorithmCreate(
             name=name,
             algorithmSubtype=algorithmSubtype,
             id=id,
+            satellite=satellite,
             positionSolution=positionSolution,
             velocitySolution=velocitySolution,
             covariance=covariance,

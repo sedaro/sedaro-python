@@ -50,36 +50,27 @@ pip install sedaro
 
    ```
 
-   ```py
-      # Accessing `BlockClassClient`s is case agnostic -- you can use any form of the Sedaro Block name that can be parsed into a snake case version.
-
-      branch_client.BatteryCell
-      branch_client.batteryCell
-      branch_client.battery_cell
-
-   ```
-
 4. A `BlockClassClient` has several methods:
 
    ```py
    ...
-       branch_client.subsystem.create(
+       branch_client.Subsystem.create(
            name='Structure',
            satellite='3'  # The ID of the related Satellite Block
        )
 
-       branch_client.subsystem.get(blockId) # ID of desired subsystem
-       branch_client.subsystem.get_all()
-       branch_client.subsystem.get_first()
-       branch_client.subsystem.get_last()
-       branch_client.subsystem.get_all_ids()
+       branch_client.Subsystem.get(blockId) # ID of desired Subsystem
+       branch_client.Subsystem.get_all()
+       branch_client.Subsystem.get_first()
+       branch_client.Subsystem.get_last()
+       branch_client.Subsystem.get_all_ids()
    ```
 
 5. Most `BlockClassClient` methods return a `BlockClient` which has several methods and properties.
 
    ```py
    ...
-       subsystem_client = branch_client.subsystem.create(
+       subsystem_client = branch_client.Subsystem.create(
            name='Structure',
            satellite='3'
        )
@@ -92,7 +83,7 @@ pip install sedaro
    ```py
    ...
    # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
-       subsystem_client = branch_client.subsystem.create(
+       subsystem_client = branch_client.Subsystem.create(
            name='Structure',
            satellite='3'
        )
@@ -101,7 +92,7 @@ pip install sedaro
         name='Structure 2.0'
        )
 
-       subsystem_client_3 = branch_client.subsystem.get(subsystem_client.id)
+       subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
 
        assert subsystem_client == subsystem_client_2 == subsystem_client_3
    ```
@@ -137,7 +128,7 @@ pip install sedaro
 
    ```py
    # This allows for traversing Blocks in the model via relationship fields:
-       solar_panel_client = branch_client.solarPanel.get_first()
+       solar_panel_client = branch_client.SolarPanel.get_first()
 
        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
    ```

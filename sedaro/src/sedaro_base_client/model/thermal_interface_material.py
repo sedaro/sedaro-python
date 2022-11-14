@@ -75,29 +75,6 @@ class ThermalInterfaceMaterial(
             
                 class MetaOapg:
                     max_length = 32
-            
-            
-            class thermalInterface(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'thermalInterface':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             __annotations__ = {
                 "resistivity": resistivity,
                 "thickness": thickness,
@@ -107,7 +84,6 @@ class ThermalInterfaceMaterial(
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
-                "thermalInterface": thermalInterface,
             }
     
     hotTempRating: MetaOapg.properties.hotTempRating
@@ -141,12 +117,9 @@ class ThermalInterfaceMaterial(
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["thermalInterface"]) -> MetaOapg.properties.thermalInterface: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["resistivity", "thickness", "hotTempRating", "coldTempRating", "name", "id", "partNumber", "manufacturer", "thermalInterface", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["resistivity", "thickness", "hotTempRating", "coldTempRating", "name", "id", "partNumber", "manufacturer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -176,12 +149,9 @@ class ThermalInterfaceMaterial(
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["thermalInterface"]) -> typing.Union[MetaOapg.properties.thermalInterface, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["resistivity", "thickness", "hotTempRating", "coldTempRating", "name", "id", "partNumber", "manufacturer", "thermalInterface", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["resistivity", "thickness", "hotTempRating", "coldTempRating", "name", "id", "partNumber", "manufacturer", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -196,7 +166,6 @@ class ThermalInterfaceMaterial(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        thermalInterface: typing.Union[MetaOapg.properties.thermalInterface, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ThermalInterfaceMaterial':
@@ -211,7 +180,6 @@ class ThermalInterfaceMaterial(
             id=id,
             partNumber=partNumber,
             manufacturer=manufacturer,
-            thermalInterface=thermalInterface,
             _configuration=_configuration,
             **kwargs,
         )

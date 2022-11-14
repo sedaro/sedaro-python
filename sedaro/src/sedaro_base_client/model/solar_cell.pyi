@@ -88,29 +88,6 @@ class SolarCell(
                 schemas.StrSchema
             ):
                 pass
-            
-            
-            class panels(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'panels':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             __annotations__ = {
                 "openCircuitVoltage": openCircuitVoltage,
                 "shortCircuitCurrent": shortCircuitCurrent,
@@ -121,7 +98,6 @@ class SolarCell(
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
-                "panels": panels,
             }
     
     maxPowerCurrent: MetaOapg.properties.maxPowerCurrent
@@ -159,12 +135,9 @@ class SolarCell(
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["panels"]) -> MetaOapg.properties.panels: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["openCircuitVoltage", "shortCircuitCurrent", "maxPowerVoltage", "maxPowerCurrent", "numJunctions", "topology", "id", "partNumber", "manufacturer", "panels", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["openCircuitVoltage", "shortCircuitCurrent", "maxPowerVoltage", "maxPowerCurrent", "numJunctions", "topology", "id", "partNumber", "manufacturer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -197,12 +170,9 @@ class SolarCell(
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["panels"]) -> typing.Union[MetaOapg.properties.panels, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["openCircuitVoltage", "shortCircuitCurrent", "maxPowerVoltage", "maxPowerCurrent", "numJunctions", "topology", "id", "partNumber", "manufacturer", "panels", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["openCircuitVoltage", "shortCircuitCurrent", "maxPowerVoltage", "maxPowerCurrent", "numJunctions", "topology", "id", "partNumber", "manufacturer", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -218,7 +188,6 @@ class SolarCell(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        panels: typing.Union[MetaOapg.properties.panels, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SolarCell':
@@ -234,7 +203,6 @@ class SolarCell(
             id=id,
             partNumber=partNumber,
             manufacturer=manufacturer,
-            panels=panels,
             _configuration=_configuration,
             **kwargs,
         )

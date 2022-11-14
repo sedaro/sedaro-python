@@ -25,6 +25,7 @@ from sedaro_base_client.apis.tags.ekf_algorithm_api import EKFAlgorithmApi
 from sedaro_base_client.apis.tags.fov_constraint_api import FOVConstraintApi
 from sedaro_base_client.apis.tags.gps_algorithm_api import GPSAlgorithmApi
 from sedaro_base_client.apis.tags.ground_target_api import GroundTargetApi
+from sedaro_base_client.apis.tags.group_condition_api import GroupConditionApi
 from sedaro_base_client.apis.tags.heater_api import HeaterApi
 from sedaro_base_client.apis.tags.jobs_api import JobsApi
 from sedaro_base_client.apis.tags.load_state_api import LoadStateApi
@@ -50,10 +51,10 @@ from sedaro_base_client.apis.tags.subsystem_api import SubsystemApi
 from sedaro_base_client.apis.tags.surface_api import SurfaceApi
 from sedaro_base_client.apis.tags.surface_material_api import SurfaceMaterialApi
 from sedaro_base_client.apis.tags.target_group_api import TargetGroupApi
+from sedaro_base_client.apis.tags.target_group_vector_api import TargetGroupVectorApi
 from sedaro_base_client.apis.tags.target_vector_api import TargetVectorApi
 from sedaro_base_client.apis.tags.temp_control_load_api import TempControlLoadApi
 from sedaro_base_client.apis.tags.temp_controller_state_api import TempControllerStateApi
-from sedaro_base_client.apis.tags.template_ref_api import TemplateRefApi
 from sedaro_base_client.apis.tags.thermal_interface_api import ThermalInterfaceApi
 from sedaro_base_client.apis.tags.thermal_interface_material_api import ThermalInterfaceMaterialApi
 from sedaro_base_client.apis.tags.topology_api import TopologyApi
@@ -87,6 +88,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
         TagValues.GPS_ALGORITHM: GPSAlgorithmApi,
         TagValues.GROUND_TARGET: GroundTargetApi,
+        TagValues.GROUP_CONDITION: GroupConditionApi,
         TagValues.HEATER: HeaterApi,
         TagValues.JOBS: JobsApi,
         TagValues.LOAD_STATE: LoadStateApi,
@@ -112,10 +114,10 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.SURFACE: SurfaceApi,
         TagValues.SURFACE_MATERIAL: SurfaceMaterialApi,
         TagValues.TARGET_GROUP: TargetGroupApi,
+        TagValues.TARGET_GROUP_VECTOR: TargetGroupVectorApi,
         TagValues.TARGET_VECTOR: TargetVectorApi,
         TagValues.TEMP_CONTROL_LOAD: TempControlLoadApi,
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
-        TagValues.TEMPLATE_REF: TemplateRefApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
         TagValues.TOPOLOGY: TopologyApi,
@@ -150,6 +152,7 @@ tag_to_api = TagToApi(
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
         TagValues.GPS_ALGORITHM: GPSAlgorithmApi,
         TagValues.GROUND_TARGET: GroundTargetApi,
+        TagValues.GROUP_CONDITION: GroupConditionApi,
         TagValues.HEATER: HeaterApi,
         TagValues.JOBS: JobsApi,
         TagValues.LOAD_STATE: LoadStateApi,
@@ -175,10 +178,10 @@ tag_to_api = TagToApi(
         TagValues.SURFACE: SurfaceApi,
         TagValues.SURFACE_MATERIAL: SurfaceMaterialApi,
         TagValues.TARGET_GROUP: TargetGroupApi,
+        TagValues.TARGET_GROUP_VECTOR: TargetGroupVectorApi,
         TagValues.TARGET_VECTOR: TargetVectorApi,
         TagValues.TEMP_CONTROL_LOAD: TempControlLoadApi,
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
-        TagValues.TEMPLATE_REF: TemplateRefApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
         TagValues.TOPOLOGY: TopologyApi,

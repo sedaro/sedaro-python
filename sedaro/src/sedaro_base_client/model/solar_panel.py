@@ -209,6 +209,7 @@ class SolarPanel(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -281,6 +282,21 @@ class SolarPanel(
                 class MetaOapg:
                     inclusive_minimum = 0.0
             array = schemas.StrSchema
+            idealMaxPowerVoltage = schemas.NumberSchema
+            idealMaxPowerCurrent = schemas.NumberSchema
+            idealOpenCircuitVoltage = schemas.NumberSchema
+            idealShortCircuitCurrent = schemas.NumberSchema
+            equivSeriesResistance = schemas.NumberSchema
+            equivShuntResistance = schemas.NumberSchema
+            equivDarkCurrent = schemas.NumberSchema
+            equivLightCurrent = schemas.NumberSchema
+            current = schemas.NumberSchema
+            voltage = schemas.NumberSchema
+            maxPower = schemas.NumberSchema
+            maxPowerVoltage = schemas.NumberSchema
+            maxPowerCurrent = schemas.NumberSchema
+            openCircuitVoltage = schemas.NumberSchema
+            power = schemas.NumberSchema
             __annotations__ = {
                 "name": name,
                 "subsystem": subsystem,
@@ -301,12 +317,28 @@ class SolarPanel(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
                 "array": array,
+                "idealMaxPowerVoltage": idealMaxPowerVoltage,
+                "idealMaxPowerCurrent": idealMaxPowerCurrent,
+                "idealOpenCircuitVoltage": idealOpenCircuitVoltage,
+                "idealShortCircuitCurrent": idealShortCircuitCurrent,
+                "equivSeriesResistance": equivSeriesResistance,
+                "equivShuntResistance": equivShuntResistance,
+                "equivDarkCurrent": equivDarkCurrent,
+                "equivLightCurrent": equivLightCurrent,
+                "current": current,
+                "voltage": voltage,
+                "maxPower": maxPower,
+                "maxPowerVoltage": maxPowerVoltage,
+                "maxPowerCurrent": maxPowerCurrent,
+                "openCircuitVoltage": openCircuitVoltage,
+                "power": power,
             }
     
     numSeries: MetaOapg.properties.numSeries
@@ -375,6 +407,9 @@ class SolarPanel(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -393,9 +428,54 @@ class SolarPanel(
     def __getitem__(self, name: typing_extensions.Literal["array"]) -> MetaOapg.properties.array: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealMaxPowerVoltage"]) -> MetaOapg.properties.idealMaxPowerVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealMaxPowerCurrent"]) -> MetaOapg.properties.idealMaxPowerCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealOpenCircuitVoltage"]) -> MetaOapg.properties.idealOpenCircuitVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealShortCircuitCurrent"]) -> MetaOapg.properties.idealShortCircuitCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["equivSeriesResistance"]) -> MetaOapg.properties.equivSeriesResistance: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["equivShuntResistance"]) -> MetaOapg.properties.equivShuntResistance: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["equivDarkCurrent"]) -> MetaOapg.properties.equivDarkCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["equivLightCurrent"]) -> MetaOapg.properties.equivLightCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["current"]) -> MetaOapg.properties.current: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["voltage"]) -> MetaOapg.properties.voltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPower"]) -> MetaOapg.properties.maxPower: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPowerVoltage"]) -> MetaOapg.properties.maxPowerVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPowerCurrent"]) -> MetaOapg.properties.maxPowerCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["openCircuitVoltage"]) -> MetaOapg.properties.openCircuitVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["power"]) -> MetaOapg.properties.power: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", "idealMaxPowerVoltage", "idealMaxPowerCurrent", "idealOpenCircuitVoltage", "idealShortCircuitCurrent", "equivSeriesResistance", "equivShuntResistance", "equivDarkCurrent", "equivLightCurrent", "current", "voltage", "maxPower", "maxPowerVoltage", "maxPowerCurrent", "openCircuitVoltage", "power", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -458,6 +538,9 @@ class SolarPanel(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -476,9 +559,54 @@ class SolarPanel(
     def get_item_oapg(self, name: typing_extensions.Literal["array"]) -> typing.Union[MetaOapg.properties.array, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealMaxPowerVoltage"]) -> typing.Union[MetaOapg.properties.idealMaxPowerVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealMaxPowerCurrent"]) -> typing.Union[MetaOapg.properties.idealMaxPowerCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealOpenCircuitVoltage"]) -> typing.Union[MetaOapg.properties.idealOpenCircuitVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealShortCircuitCurrent"]) -> typing.Union[MetaOapg.properties.idealShortCircuitCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["equivSeriesResistance"]) -> typing.Union[MetaOapg.properties.equivSeriesResistance, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["equivShuntResistance"]) -> typing.Union[MetaOapg.properties.equivShuntResistance, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["equivDarkCurrent"]) -> typing.Union[MetaOapg.properties.equivDarkCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["equivLightCurrent"]) -> typing.Union[MetaOapg.properties.equivLightCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["current"]) -> typing.Union[MetaOapg.properties.current, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["voltage"]) -> typing.Union[MetaOapg.properties.voltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPower"]) -> typing.Union[MetaOapg.properties.maxPower, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPowerVoltage"]) -> typing.Union[MetaOapg.properties.maxPowerVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPowerCurrent"]) -> typing.Union[MetaOapg.properties.maxPowerCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["openCircuitVoltage"]) -> typing.Union[MetaOapg.properties.openCircuitVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["power"]) -> typing.Union[MetaOapg.properties.power, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "blockingDiodeDrop", "cell", "surface", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "array", "idealMaxPowerVoltage", "idealMaxPowerCurrent", "idealOpenCircuitVoltage", "idealShortCircuitCurrent", "equivSeriesResistance", "equivShuntResistance", "equivDarkCurrent", "equivLightCurrent", "current", "voltage", "maxPower", "maxPowerVoltage", "maxPowerCurrent", "openCircuitVoltage", "power", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -504,12 +632,28 @@ class SolarPanel(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         array: typing.Union[MetaOapg.properties.array, str, schemas.Unset] = schemas.unset,
+        idealMaxPowerVoltage: typing.Union[MetaOapg.properties.idealMaxPowerVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        idealMaxPowerCurrent: typing.Union[MetaOapg.properties.idealMaxPowerCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        idealOpenCircuitVoltage: typing.Union[MetaOapg.properties.idealOpenCircuitVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        idealShortCircuitCurrent: typing.Union[MetaOapg.properties.idealShortCircuitCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        equivSeriesResistance: typing.Union[MetaOapg.properties.equivSeriesResistance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        equivShuntResistance: typing.Union[MetaOapg.properties.equivShuntResistance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        equivDarkCurrent: typing.Union[MetaOapg.properties.equivDarkCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        equivLightCurrent: typing.Union[MetaOapg.properties.equivLightCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        current: typing.Union[MetaOapg.properties.current, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        voltage: typing.Union[MetaOapg.properties.voltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPower: typing.Union[MetaOapg.properties.maxPower, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPowerVoltage: typing.Union[MetaOapg.properties.maxPowerVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPowerCurrent: typing.Union[MetaOapg.properties.maxPowerCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        openCircuitVoltage: typing.Union[MetaOapg.properties.openCircuitVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        power: typing.Union[MetaOapg.properties.power, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SolarPanel':
@@ -535,12 +679,28 @@ class SolarPanel(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
             array=array,
+            idealMaxPowerVoltage=idealMaxPowerVoltage,
+            idealMaxPowerCurrent=idealMaxPowerCurrent,
+            idealOpenCircuitVoltage=idealOpenCircuitVoltage,
+            idealShortCircuitCurrent=idealShortCircuitCurrent,
+            equivSeriesResistance=equivSeriesResistance,
+            equivShuntResistance=equivShuntResistance,
+            equivDarkCurrent=equivDarkCurrent,
+            equivLightCurrent=equivLightCurrent,
+            current=current,
+            voltage=voltage,
+            maxPower=maxPower,
+            maxPowerVoltage=maxPowerVoltage,
+            maxPowerCurrent=maxPowerCurrent,
+            openCircuitVoltage=openCircuitVoltage,
+            power=power,
             _configuration=_configuration,
             **kwargs,
         )

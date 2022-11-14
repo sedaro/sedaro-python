@@ -53,7 +53,7 @@ class Parameters(
             "SAT_EL": "SAT_EL",
             "LOCAL_SIDEREAL_TIME": "LOCAL_SIDEREAL_TIME",
             "BATTERY_SOC": "BATTERY_SOC",
-            "": "EMPTY",
+            schemas.NoneClass.NONE: "NONE",
         }
     
     @schemas.classproperty
@@ -117,5 +117,5 @@ class Parameters(
         return cls("BATTERY_SOC")
     
     @schemas.classproperty
-    def EMPTY(cls):
-        return cls("")
+    def NONE(cls):
+        return cls(None)

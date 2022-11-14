@@ -25,6 +25,7 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
+from sedaro_base_client.model.data_service_response import DataServiceResponse
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -38,13 +39,13 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
         'id': typing.Union[IdSchema, decimal.Decimal, int, ],
-        'start': typing.Union[StartSchema, decimal.Decimal, int, float, ],
-        'stop': typing.Union[StopSchema, decimal.Decimal, int, float, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
+        'start': typing.Union[StartSchema, decimal.Decimal, int, float, ],
+        'stop': typing.Union[StopSchema, decimal.Decimal, int, float, ],
         'binWidth': typing.Union[BinWidthSchema, decimal.Decimal, int, float, ],
     },
     total=False
@@ -66,14 +67,12 @@ request_query_start = api_client.QueryParameter(
     name="start",
     style=api_client.ParameterStyle.FORM,
     schema=StartSchema,
-    required=True,
     explode=True,
 )
 request_query_stop = api_client.QueryParameter(
     name="stop",
     style=api_client.ParameterStyle.FORM,
     schema=StopSchema,
-    required=True,
     explode=True,
 )
 request_query_bin_width = api_client.QueryParameter(
@@ -82,7 +81,7 @@ request_query_bin_width = api_client.QueryParameter(
     schema=BinWidthSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = DataServiceResponse
 
 
 @dataclass

@@ -50,37 +50,10 @@ class Agent(
                     max_length = 32
             id = schemas.StrSchema
             peripheral = schemas.BoolSchema
-            
-            
-            class targetMapping(
-                schemas.DictSchema
-            ):
-            
-            
-                class MetaOapg:
-                    additional_properties = schemas.IntSchema
-                
-                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    # dict_instance[name] accessor
-                    return super().__getitem__(name)
-                
-                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
-                    return super().get_item_oapg(name)
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[MetaOapg.additional_properties, decimal.Decimal, int, ],
-                ) -> 'targetMapping':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
+            targetMapping = schemas.DictSchema
             differentiatingState = schemas.DictSchema
-            templateRef = schemas.StrSchema
+            templateRef = schemas.IntSchema
+            orbit = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "id": id,
@@ -88,6 +61,7 @@ class Agent(
                 "targetMapping": targetMapping,
                 "differentiatingState": differentiatingState,
                 "templateRef": templateRef,
+                "orbit": orbit,
             }
     
     name: MetaOapg.properties.name
@@ -111,9 +85,12 @@ class Agent(
     def __getitem__(self, name: typing_extensions.Literal["templateRef"]) -> MetaOapg.properties.templateRef: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["orbit"]) -> MetaOapg.properties.orbit: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "peripheral", "targetMapping", "differentiatingState", "templateRef", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "peripheral", "targetMapping", "differentiatingState", "templateRef", "orbit", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -137,9 +114,12 @@ class Agent(
     def get_item_oapg(self, name: typing_extensions.Literal["templateRef"]) -> typing.Union[MetaOapg.properties.templateRef, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["orbit"]) -> typing.Union[MetaOapg.properties.orbit, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "peripheral", "targetMapping", "differentiatingState", "templateRef", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "peripheral", "targetMapping", "differentiatingState", "templateRef", "orbit", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -151,7 +131,8 @@ class Agent(
         peripheral: typing.Union[MetaOapg.properties.peripheral, bool, schemas.Unset] = schemas.unset,
         targetMapping: typing.Union[MetaOapg.properties.targetMapping, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         differentiatingState: typing.Union[MetaOapg.properties.differentiatingState, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
-        templateRef: typing.Union[MetaOapg.properties.templateRef, str, schemas.Unset] = schemas.unset,
+        templateRef: typing.Union[MetaOapg.properties.templateRef, decimal.Decimal, int, schemas.Unset] = schemas.unset,
+        orbit: typing.Union[MetaOapg.properties.orbit, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Agent':
@@ -164,6 +145,7 @@ class Agent(
             targetMapping=targetMapping,
             differentiatingState=differentiatingState,
             templateRef=templateRef,
+            orbit=orbit,
             _configuration=_configuration,
             **kwargs,
         )

@@ -64,6 +64,10 @@ class Categories(
         return cls("PROP")
     
     @schemas.classproperty
+    def STRUCTURE(cls):
+        return cls("STRUCTURE")
+    
+    @schemas.classproperty
     def PAYLOAD(cls):
         return cls("PAYLOAD")
     
