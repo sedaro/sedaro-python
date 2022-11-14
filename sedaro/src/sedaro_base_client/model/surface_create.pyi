@@ -40,7 +40,6 @@ class SurfaceCreate(
             "surfaceCentroid",
             "motionType",
             "name",
-            "satellite",
             "surfaceMaterial",
         }
         
@@ -113,8 +112,8 @@ class SurfaceCreate(
                     return super().__getitem__(i)
             bodyFrameVector = schemas.StrSchema
             surfaceMaterial = schemas.StrSchema
-            satellite = schemas.StrSchema
             id = schemas.StrSchema
+            satellite = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "motionType": motionType,
@@ -122,8 +121,8 @@ class SurfaceCreate(
                 "surfaceCentroid": surfaceCentroid,
                 "bodyFrameVector": bodyFrameVector,
                 "surfaceMaterial": surfaceMaterial,
-                "satellite": satellite,
                 "id": id,
+                "satellite": satellite,
             }
     
     area: MetaOapg.properties.area
@@ -131,7 +130,6 @@ class SurfaceCreate(
     surfaceCentroid: MetaOapg.properties.surfaceCentroid
     motionType: MetaOapg.properties.motionType
     name: MetaOapg.properties.name
-    satellite: MetaOapg.properties.satellite
     surfaceMaterial: MetaOapg.properties.surfaceMaterial
     
     @typing.overload
@@ -153,15 +151,15 @@ class SurfaceCreate(
     def __getitem__(self, name: typing_extensions.Literal["surfaceMaterial"]) -> MetaOapg.properties.surfaceMaterial: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "id", "satellite", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -185,15 +183,15 @@ class SurfaceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["surfaceMaterial"]) -> MetaOapg.properties.surfaceMaterial: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "id", "satellite", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -205,9 +203,9 @@ class SurfaceCreate(
         surfaceCentroid: typing.Union[MetaOapg.properties.surfaceCentroid, list, tuple, ],
         motionType: typing.Union[MetaOapg.properties.motionType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         surfaceMaterial: typing.Union[MetaOapg.properties.surfaceMaterial, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SurfaceCreate':
@@ -219,9 +217,9 @@ class SurfaceCreate(
             surfaceCentroid=surfaceCentroid,
             motionType=motionType,
             name=name,
-            satellite=satellite,
             surfaceMaterial=surfaceMaterial,
             id=id,
+            satellite=satellite,
             _configuration=_configuration,
             **kwargs,
         )

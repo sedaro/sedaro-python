@@ -199,6 +199,7 @@ class BatteryPack(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -270,6 +271,22 @@ class BatteryPack(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
+            curve = schemas.AnyTypeSchema
+            idealMaxChargeCurrent = schemas.NumberSchema
+            idealMaxDischargeCurrent = schemas.NumberSchema
+            
+            
+            class minSoc(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_maximum = 1.0
+                    inclusive_minimum = 0.0
+            esr = schemas.NumberSchema
+            capacity = schemas.NumberSchema
+            current = schemas.NumberSchema
             __annotations__ = {
                 "name": name,
                 "subsystem": subsystem,
@@ -289,11 +306,19 @@ class BatteryPack(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
+                "curve": curve,
+                "idealMaxChargeCurrent": idealMaxChargeCurrent,
+                "idealMaxDischargeCurrent": idealMaxDischargeCurrent,
+                "minSoc": minSoc,
+                "esr": esr,
+                "capacity": capacity,
+                "current": current,
             }
     
     numSeries: MetaOapg.properties.numSeries
@@ -358,6 +383,9 @@ class BatteryPack(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -373,9 +401,30 @@ class BatteryPack(
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["curve"]) -> MetaOapg.properties.curve: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealMaxChargeCurrent"]) -> MetaOapg.properties.idealMaxChargeCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealMaxDischargeCurrent"]) -> MetaOapg.properties.idealMaxDischargeCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["minSoc"]) -> MetaOapg.properties.minSoc: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["esr"]) -> MetaOapg.properties.esr: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["capacity"]) -> MetaOapg.properties.capacity: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["current"]) -> MetaOapg.properties.current: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "curve", "idealMaxChargeCurrent", "idealMaxDischargeCurrent", "minSoc", "esr", "capacity", "current", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -435,6 +484,9 @@ class BatteryPack(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -450,9 +502,30 @@ class BatteryPack(
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["curve"]) -> typing.Union[MetaOapg.properties.curve, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealMaxChargeCurrent"]) -> typing.Union[MetaOapg.properties.idealMaxChargeCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealMaxDischargeCurrent"]) -> typing.Union[MetaOapg.properties.idealMaxDischargeCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["minSoc"]) -> typing.Union[MetaOapg.properties.minSoc, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["esr"]) -> typing.Union[MetaOapg.properties.esr, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["capacity"]) -> typing.Union[MetaOapg.properties.capacity, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["current"]) -> typing.Union[MetaOapg.properties.current, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "numSeries", "numParallel", "cell", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "componentType", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "curve", "idealMaxChargeCurrent", "idealMaxDischargeCurrent", "minSoc", "esr", "capacity", "current", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -477,11 +550,19 @@ class BatteryPack(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        curve: typing.Union[MetaOapg.properties.curve, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        idealMaxChargeCurrent: typing.Union[MetaOapg.properties.idealMaxChargeCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        idealMaxDischargeCurrent: typing.Union[MetaOapg.properties.idealMaxDischargeCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        minSoc: typing.Union[MetaOapg.properties.minSoc, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        esr: typing.Union[MetaOapg.properties.esr, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        capacity: typing.Union[MetaOapg.properties.capacity, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        current: typing.Union[MetaOapg.properties.current, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BatteryPack':
@@ -506,11 +587,19 @@ class BatteryPack(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
+            curve=curve,
+            idealMaxChargeCurrent=idealMaxChargeCurrent,
+            idealMaxDischargeCurrent=idealMaxDischargeCurrent,
+            minSoc=minSoc,
+            esr=esr,
+            capacity=capacity,
+            current=current,
             _configuration=_configuration,
             **kwargs,
         )

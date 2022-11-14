@@ -93,9 +93,9 @@ class Orbit(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
+                            ISDPEci,
                             ISDPOrbitalElements,
                             ISDPTle,
-                            ISDPEci,
                             IROIss,
                             IROGeostat,
                             IROGeostatTransfer,

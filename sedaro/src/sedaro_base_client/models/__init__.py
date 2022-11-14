@@ -17,6 +17,8 @@ from sedaro_base_client.model.actuator_load_create import ActuatorLoadCreate
 from sedaro_base_client.model.actuator_load_update import ActuatorLoadUpdate
 from sedaro_base_client.model.agent import Agent
 from sedaro_base_client.model.agent_bg import AgentBG
+from sedaro_base_client.model.agent_create import AgentCreate
+from sedaro_base_client.model.agent_update import AgentUpdate
 from sedaro_base_client.model.algorithm_bg import AlgorithmBG
 from sedaro_base_client.model.angular_velocity_sensor import AngularVelocitySensor
 from sedaro_base_client.model.angular_velocity_sensor_create import AngularVelocitySensorCreate
@@ -66,6 +68,8 @@ from sedaro_base_client.model.circular_field_of_view_create import CircularField
 from sedaro_base_client.model.circular_field_of_view_update import CircularFieldOfViewUpdate
 from sedaro_base_client.model.clock_config import ClockConfig
 from sedaro_base_client.model.clock_config_bg import ClockConfigBG
+from sedaro_base_client.model.clock_config_create import ClockConfigCreate
+from sedaro_base_client.model.clock_config_update import ClockConfigUpdate
 from sedaro_base_client.model.collection import Collection
 from sedaro_base_client.model.component import Component
 from sedaro_base_client.model.component_bg import ComponentBG
@@ -115,6 +119,8 @@ from sedaro_base_client.model.ground_target_create import GroundTargetCreate
 from sedaro_base_client.model.ground_target_update import GroundTargetUpdate
 from sedaro_base_client.model.group_and_id import GroupAndId
 from sedaro_base_client.model.group_condition import GroupCondition
+from sedaro_base_client.model.group_condition_create import GroupConditionCreate
+from sedaro_base_client.model.group_condition_update import GroupConditionUpdate
 from sedaro_base_client.model.group_rollers import GroupRollers
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.heater import Heater
@@ -163,6 +169,7 @@ from sedaro_base_client.model.optical_attitude_sensor_create import OpticalAttit
 from sedaro_base_client.model.optical_attitude_sensor_update import OpticalAttitudeSensorUpdate
 from sedaro_base_client.model.orbit import Orbit
 from sedaro_base_client.model.orbit_bg import OrbitBG
+from sedaro_base_client.model.orbit_create import OrbitCreate
 from sedaro_base_client.model.orbit_update import OrbitUpdate
 from sedaro_base_client.model.parameter_a_categories import ParameterACategories
 from sedaro_base_client.model.parameter_b_categories import ParameterBCategories
@@ -242,6 +249,8 @@ from sedaro_base_client.model.target_group_bg import TargetGroupBG
 from sedaro_base_client.model.target_group_create import TargetGroupCreate
 from sedaro_base_client.model.target_group_update import TargetGroupUpdate
 from sedaro_base_client.model.target_group_vector import TargetGroupVector
+from sedaro_base_client.model.target_group_vector_create import TargetGroupVectorCreate
+from sedaro_base_client.model.target_group_vector_update import TargetGroupVectorUpdate
 from sedaro_base_client.model.target_vector import TargetVector
 from sedaro_base_client.model.target_vector_create import TargetVectorCreate
 from sedaro_base_client.model.target_vector_update import TargetVectorUpdate
@@ -251,8 +260,6 @@ from sedaro_base_client.model.temp_controller_state import TempControllerState
 from sedaro_base_client.model.temp_controller_state_bg import TempControllerStateBG
 from sedaro_base_client.model.temp_controller_state_create import TempControllerStateCreate
 from sedaro_base_client.model.temp_controller_state_update import TempControllerStateUpdate
-from sedaro_base_client.model.template_ref import TemplateRef
-from sedaro_base_client.model.template_ref_bg import TemplateRefBG
 from sedaro_base_client.model.thermal_interface import ThermalInterface
 from sedaro_base_client.model.thermal_interface_bg import ThermalInterfaceBG
 from sedaro_base_client.model.thermal_interface_create import ThermalInterfaceCreate

@@ -36,7 +36,6 @@ class VehicleTemplate(
     class MetaOapg:
         required = {
             "latestId",
-            "missionOrbit",
             "satellite",
             "conOps",
         }
@@ -44,7 +43,6 @@ class VehicleTemplate(
         class properties:
             latestId = schemas.StrSchema
             conOps = schemas.StrSchema
-            missionOrbit = schemas.StrSchema
             satellite = schemas.StrSchema
             
             
@@ -1090,6 +1088,7 @@ class VehicleTemplate(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            missionOrbit = schemas.StrSchema
             position = schemas.AnyTypeSchema
             velocity = schemas.AnyTypeSchema
             torque = schemas.AnyTypeSchema
@@ -1131,7 +1130,6 @@ class VehicleTemplate(
             __annotations__ = {
                 "latestId": latestId,
                 "conOps": conOps,
-                "missionOrbit": missionOrbit,
                 "satellite": satellite,
                 "Algorithm": Algorithm,
                 "Battery": Battery,
@@ -1162,6 +1160,7 @@ class VehicleTemplate(
                 "TempControllerState": TempControllerState,
                 "ThermalInterface": ThermalInterface,
                 "ThermalInterfaceMaterial": ThermalInterfaceMaterial,
+                "missionOrbit": missionOrbit,
                 "position": position,
                 "velocity": velocity,
                 "torque": torque,
@@ -1175,7 +1174,6 @@ class VehicleTemplate(
             }
     
     latestId: MetaOapg.properties.latestId
-    missionOrbit: MetaOapg.properties.missionOrbit
     satellite: MetaOapg.properties.satellite
     conOps: MetaOapg.properties.conOps
     
@@ -1184,9 +1182,6 @@ class VehicleTemplate(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["missionOrbit"]) -> MetaOapg.properties.missionOrbit: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
@@ -1279,6 +1274,9 @@ class VehicleTemplate(
     def __getitem__(self, name: typing_extensions.Literal["ThermalInterfaceMaterial"]) -> MetaOapg.properties.ThermalInterfaceMaterial: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["missionOrbit"]) -> MetaOapg.properties.missionOrbit: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["position"]) -> MetaOapg.properties.position: ...
     
     @typing.overload
@@ -1311,7 +1309,7 @@ class VehicleTemplate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "missionOrbit", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -1321,9 +1319,6 @@ class VehicleTemplate(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["missionOrbit"]) -> MetaOapg.properties.missionOrbit: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
@@ -1416,6 +1411,9 @@ class VehicleTemplate(
     def get_item_oapg(self, name: typing_extensions.Literal["ThermalInterfaceMaterial"]) -> typing.Union[MetaOapg.properties.ThermalInterfaceMaterial, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["missionOrbit"]) -> typing.Union[MetaOapg.properties.missionOrbit, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["position"]) -> typing.Union[MetaOapg.properties.position, schemas.Unset]: ...
     
     @typing.overload
@@ -1448,7 +1446,7 @@ class VehicleTemplate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "missionOrbit", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "conOps", "satellite", "Algorithm", "Battery", "BatteryCell", "BodyFrameVector", "BusRegulator", "Component", "ConOps", "Condition", "SameTargetConditionGrouping", "FieldOfView", "FOVConstraint", "FuelReservoir", "Load", "LoadState", "OperationalMode", "Orbit", "PointingMode", "ReferenceVector", "Satellite", "SolarArray", "SolarCell", "Subsystem", "Surface", "SurfaceMaterial", "TargetGroup", "Target", "TempControllerState", "ThermalInterface", "ThermalInterfaceMaterial", "missionOrbit", "position", "velocity", "torque", "positionSolution", "positionCovariance", "velocitySolution", "velocityCovariance", "beta", "orbitalElements", "shadow", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -1456,7 +1454,6 @@ class VehicleTemplate(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         latestId: typing.Union[MetaOapg.properties.latestId, str, ],
-        missionOrbit: typing.Union[MetaOapg.properties.missionOrbit, str, ],
         satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         Algorithm: typing.Union[MetaOapg.properties.Algorithm, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -1488,6 +1485,7 @@ class VehicleTemplate(
         TempControllerState: typing.Union[MetaOapg.properties.TempControllerState, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         ThermalInterface: typing.Union[MetaOapg.properties.ThermalInterface, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         ThermalInterfaceMaterial: typing.Union[MetaOapg.properties.ThermalInterfaceMaterial, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        missionOrbit: typing.Union[MetaOapg.properties.missionOrbit, str, schemas.Unset] = schemas.unset,
         position: typing.Union[MetaOapg.properties.position, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         velocity: typing.Union[MetaOapg.properties.velocity, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         torque: typing.Union[MetaOapg.properties.torque, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -1505,7 +1503,6 @@ class VehicleTemplate(
             cls,
             *args,
             latestId=latestId,
-            missionOrbit=missionOrbit,
             satellite=satellite,
             conOps=conOps,
             Algorithm=Algorithm,
@@ -1537,6 +1534,7 @@ class VehicleTemplate(
             TempControllerState=TempControllerState,
             ThermalInterface=ThermalInterface,
             ThermalInterfaceMaterial=ThermalInterfaceMaterial,
+            missionOrbit=missionOrbit,
             position=position,
             velocity=velocity,
             torque=torque,

@@ -70,6 +70,7 @@ class AveragingAlgorithm(
                 def AVERAGING(cls):
                     return cls("AVERAGING")
             id = schemas.StrSchema
+            satellite = schemas.StrSchema
             
             
             class attitudeSolution(
@@ -168,6 +169,7 @@ class AveragingAlgorithm(
                 "algorithmType": algorithmType,
                 "algorithmSubtype": algorithmSubtype,
                 "id": id,
+                "satellite": satellite,
                 "attitudeSolution": attitudeSolution,
                 "angularVelocitySolution": angularVelocitySolution,
                 "opticalAttitudeSensors": opticalAttitudeSensors,
@@ -195,6 +197,9 @@ class AveragingAlgorithm(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attitudeSolution"]) -> MetaOapg.properties.attitudeSolution: ...
     
     @typing.overload
@@ -209,7 +214,7 @@ class AveragingAlgorithm(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "satellite", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -230,6 +235,9 @@ class AveragingAlgorithm(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attitudeSolution"]) -> typing.Union[MetaOapg.properties.attitudeSolution, schemas.Unset]: ...
     
     @typing.overload
@@ -244,7 +252,7 @@ class AveragingAlgorithm(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "rate", "algorithmType", "algorithmSubtype", "id", "satellite", "attitudeSolution", "angularVelocitySolution", "opticalAttitudeSensors", "angularVelocitySensors", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -256,6 +264,7 @@ class AveragingAlgorithm(
         name: typing.Union[MetaOapg.properties.name, str, ],
         algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         attitudeSolution: typing.Union[MetaOapg.properties.attitudeSolution, list, tuple, schemas.Unset] = schemas.unset,
         angularVelocitySolution: typing.Union[MetaOapg.properties.angularVelocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         opticalAttitudeSensors: typing.Union[MetaOapg.properties.opticalAttitudeSensors, list, tuple, schemas.Unset] = schemas.unset,
@@ -271,6 +280,7 @@ class AveragingAlgorithm(
             name=name,
             algorithmSubtype=algorithmSubtype,
             id=id,
+            satellite=satellite,
             attitudeSolution=attitudeSolution,
             angularVelocitySolution=angularVelocitySolution,
             opticalAttitudeSensors=opticalAttitudeSensors,

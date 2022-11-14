@@ -41,15 +41,7 @@ class LocalVectorCreate(
         }
         
         class properties:
-            
-            
-            class name(
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    max_length = 32
+            name = schemas.StrSchema
             
             
             class vectorType(

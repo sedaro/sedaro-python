@@ -108,6 +108,8 @@ class LoadState(
                 schemas.NumberSchema
             ):
                 pass
+            powerConsumed = schemas.NumberSchema
+            powerDissipation = schemas.NumberSchema
             __annotations__ = {
                 "name": name,
                 "efficiency": efficiency,
@@ -117,6 +119,8 @@ class LoadState(
                 "loads": loads,
                 "isActive": isActive,
                 "timeSinceActive": timeSinceActive,
+                "powerConsumed": powerConsumed,
+                "powerDissipation": powerDissipation,
             }
     
     component: MetaOapg.properties.component
@@ -148,9 +152,15 @@ class LoadState(
     def __getitem__(self, name: typing_extensions.Literal["timeSinceActive"]) -> MetaOapg.properties.timeSinceActive: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerDissipation"]) -> MetaOapg.properties.powerDissipation: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "efficiency", "component", "id", "operationalModes", "loads", "isActive", "timeSinceActive", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "efficiency", "component", "id", "operationalModes", "loads", "isActive", "timeSinceActive", "powerConsumed", "powerDissipation", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -180,9 +190,15 @@ class LoadState(
     def get_item_oapg(self, name: typing_extensions.Literal["timeSinceActive"]) -> typing.Union[MetaOapg.properties.timeSinceActive, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerDissipation"]) -> typing.Union[MetaOapg.properties.powerDissipation, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "efficiency", "component", "id", "operationalModes", "loads", "isActive", "timeSinceActive", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "efficiency", "component", "id", "operationalModes", "loads", "isActive", "timeSinceActive", "powerConsumed", "powerDissipation", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -197,6 +213,8 @@ class LoadState(
         loads: typing.Union[MetaOapg.properties.loads, list, tuple, schemas.Unset] = schemas.unset,
         isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         timeSinceActive: typing.Union[MetaOapg.properties.timeSinceActive, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        powerDissipation: typing.Union[MetaOapg.properties.powerDissipation, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'LoadState':
@@ -211,6 +229,8 @@ class LoadState(
             loads=loads,
             isActive=isActive,
             timeSinceActive=timeSinceActive,
+            powerConsumed=powerConsumed,
+            powerDissipation=powerDissipation,
             _configuration=_configuration,
             **kwargs,
         )

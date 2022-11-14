@@ -47,7 +47,7 @@ class GroupRollers(
             "NOTANY": "NOTANY",
             "ALL": "ALL",
             "NOTALL": "NOTALL",
-            "": "EMPTY",
+            schemas.NoneClass.NONE: "NONE",
         }
     
     @schemas.classproperty
@@ -87,5 +87,5 @@ class GroupRollers(
         return cls("NOTALL")
     
     @schemas.classproperty
-    def EMPTY(cls):
-        return cls("")
+    def NONE(cls):
+        return cls(None)

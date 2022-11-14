@@ -41,12 +41,7 @@ class LocalVectorUpdate(
         }
         
         class properties:
-            
-            
-            class name(
-                schemas.StrSchema
-            ):
-                pass
+            name = schemas.StrSchema
             
             
             class vectorType(

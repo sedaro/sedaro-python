@@ -108,7 +108,6 @@ class BusRegulator(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             topology = schemas.StrSchema
             id = schemas.StrSchema
             inRegulator = schemas.StrSchema

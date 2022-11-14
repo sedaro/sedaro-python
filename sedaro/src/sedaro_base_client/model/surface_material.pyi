@@ -91,29 +91,6 @@ class SurfaceMaterial(
                 schemas.NumberSchema
             ):
                 pass
-            
-            
-            class surfaces(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'surfaces':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             __annotations__ = {
                 "irEmissivity": irEmissivity,
                 "solarAbsorptivity": solarAbsorptivity,
@@ -124,7 +101,6 @@ class SurfaceMaterial(
                 "manufacturer": manufacturer,
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
-                "surfaces": surfaces,
             }
     
     diffuseSolarReflectivity: MetaOapg.properties.diffuseSolarReflectivity
@@ -160,12 +136,9 @@ class SurfaceMaterial(
     def __getitem__(self, name: typing_extensions.Literal["coldTempRating"]) -> MetaOapg.properties.coldTempRating: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["surfaces"]) -> MetaOapg.properties.surfaces: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "surfaces", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -198,12 +171,9 @@ class SurfaceMaterial(
     def get_item_oapg(self, name: typing_extensions.Literal["coldTempRating"]) -> typing.Union[MetaOapg.properties.coldTempRating, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["surfaces"]) -> typing.Union[MetaOapg.properties.surfaces, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "surfaces", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["irEmissivity", "solarAbsorptivity", "diffuseSolarReflectivity", "specularSolarReflectivity", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -219,7 +189,6 @@ class SurfaceMaterial(
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        surfaces: typing.Union[MetaOapg.properties.surfaces, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SurfaceMaterial':
@@ -235,7 +204,6 @@ class SurfaceMaterial(
             manufacturer=manufacturer,
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
-            surfaces=surfaces,
             _configuration=_configuration,
             **kwargs,
         )

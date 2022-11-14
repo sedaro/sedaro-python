@@ -90,6 +90,8 @@ class ActuatorLoad(
             id = schemas.StrSchema
             busRegulator = schemas.StrSchema
             topology = schemas.StrSchema
+            powerConsumed = schemas.NumberSchema
+            isActive = schemas.BoolSchema
             __annotations__ = {
                 "name": name,
                 "epsOutputType": epsOutputType,
@@ -97,6 +99,8 @@ class ActuatorLoad(
                 "id": id,
                 "busRegulator": busRegulator,
                 "topology": topology,
+                "powerConsumed": powerConsumed,
+                "isActive": isActive,
             }
     
     loadState: MetaOapg.properties.loadState
@@ -122,9 +126,15 @@ class ActuatorLoad(
     def __getitem__(self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["isActive"]) -> MetaOapg.properties.isActive: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "id", "busRegulator", "topology", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "id", "busRegulator", "topology", "powerConsumed", "isActive", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -148,9 +158,15 @@ class ActuatorLoad(
     def get_item_oapg(self, name: typing_extensions.Literal["topology"]) -> typing.Union[MetaOapg.properties.topology, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["isActive"]) -> typing.Union[MetaOapg.properties.isActive, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "id", "busRegulator", "topology", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "id", "busRegulator", "topology", "powerConsumed", "isActive", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -163,6 +179,8 @@ class ActuatorLoad(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         busRegulator: typing.Union[MetaOapg.properties.busRegulator, str, schemas.Unset] = schemas.unset,
         topology: typing.Union[MetaOapg.properties.topology, str, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ActuatorLoad':
@@ -175,6 +193,8 @@ class ActuatorLoad(
             id=id,
             busRegulator=busRegulator,
             topology=topology,
+            powerConsumed=powerConsumed,
+            isActive=isActive,
             _configuration=_configuration,
             **kwargs,
         )

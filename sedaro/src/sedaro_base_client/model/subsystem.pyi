@@ -36,7 +36,6 @@ class Subsystem(
     class MetaOapg:
         required = {
             "name",
-            "satellite",
         }
         
         class properties:
@@ -46,8 +45,8 @@ class Subsystem(
                 schemas.StrSchema
             ):
                 pass
-            satellite = schemas.StrSchema
             id = schemas.StrSchema
+            satellite = schemas.StrSchema
             
             
             class category(
@@ -109,23 +108,22 @@ class Subsystem(
                     return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
-                "satellite": satellite,
                 "id": id,
+                "satellite": satellite,
                 "category": category,
                 "components": components,
             }
     
     name: MetaOapg.properties.name
-    satellite: MetaOapg.properties.satellite
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["category"]) -> MetaOapg.properties.category: ...
@@ -136,7 +134,7 @@ class Subsystem(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "satellite", "id", "category", "components", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "satellite", "category", "components", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -145,10 +143,10 @@ class Subsystem(
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["category"]) -> typing.Union[MetaOapg.properties.category, schemas.Unset]: ...
@@ -159,7 +157,7 @@ class Subsystem(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "satellite", "id", "category", "components", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "satellite", "category", "components", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -167,8 +165,8 @@ class Subsystem(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         category: typing.Union[MetaOapg.properties.category, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         components: typing.Union[MetaOapg.properties.components, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -178,8 +176,8 @@ class Subsystem(
             cls,
             *args,
             name=name,
-            satellite=satellite,
             id=id,
+            satellite=satellite,
             category=category,
             components=components,
             _configuration=_configuration,

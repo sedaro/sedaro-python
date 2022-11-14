@@ -36,7 +36,6 @@ class CoolerCreate(
     class MetaOapg:
         required = {
             "controlledComponent",
-            "efficiency",
             "name",
             "onRegHeatFlowRate",
         }
@@ -50,12 +49,6 @@ class CoolerCreate(
                 pass
             onRegHeatFlowRate = schemas.NumberSchema
             controlledComponent = schemas.StrSchema
-            
-            
-            class efficiency(
-                schemas.NumberSchema
-            ):
-                pass
             id = schemas.StrSchema
             
             
@@ -77,21 +70,26 @@ class CoolerCreate(
                 schemas.NumberSchema
             ):
                 pass
+            
+            
+            class efficiency(
+                schemas.NumberSchema
+            ):
+                pass
             __annotations__ = {
                 "name": name,
                 "onRegHeatFlowRate": onRegHeatFlowRate,
                 "controlledComponent": controlledComponent,
-                "efficiency": efficiency,
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
+                "efficiency": efficiency,
             }
     
     controlledComponent: MetaOapg.properties.controlledComponent
-    efficiency: MetaOapg.properties.efficiency
     name: MetaOapg.properties.name
     onRegHeatFlowRate: MetaOapg.properties.onRegHeatFlowRate
     
@@ -103,9 +101,6 @@ class CoolerCreate(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["controlledComponent"]) -> MetaOapg.properties.controlledComponent: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -126,9 +121,12 @@ class CoolerCreate(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "onRegHeatFlowRate", "controlledComponent", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "efficiency", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -141,9 +139,6 @@ class CoolerCreate(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["controlledComponent"]) -> MetaOapg.properties.controlledComponent: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["efficiency"]) -> MetaOapg.properties.efficiency: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -164,9 +159,12 @@ class CoolerCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["efficiency"]) -> typing.Union[MetaOapg.properties.efficiency, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "onRegHeatFlowRate", "controlledComponent", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "onRegHeatFlowRate", "controlledComponent", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "efficiency", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -174,7 +172,6 @@ class CoolerCreate(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         controlledComponent: typing.Union[MetaOapg.properties.controlledComponent, str, ],
-        efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         onRegHeatFlowRate: typing.Union[MetaOapg.properties.onRegHeatFlowRate, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -183,6 +180,7 @@ class CoolerCreate(
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'CoolerCreate':
@@ -190,7 +188,6 @@ class CoolerCreate(
             cls,
             *args,
             controlledComponent=controlledComponent,
-            efficiency=efficiency,
             name=name,
             onRegHeatFlowRate=onRegHeatFlowRate,
             id=id,
@@ -199,6 +196,7 @@ class CoolerCreate(
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
+            efficiency=efficiency,
             _configuration=_configuration,
             **kwargs,
         )

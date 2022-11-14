@@ -42,42 +42,6 @@ class ScenarioTemplate(
             latestId = schemas.StrSchema
             
             
-            class TemplateRef(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def all_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            TemplateRefBG,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'TemplateRef':
-                    return super().__new__(
-                        cls,
-                        *args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
             class Agent(
                 schemas.ComposedSchema,
             ):
@@ -148,37 +112,49 @@ class ScenarioTemplate(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            clockConfig = schemas.StrSchema
             
             
-            class agents(
-                schemas.ListSchema
+            class Orbit(
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    items = schemas.AnyTypeSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            OrbitBG,
+                        ]
+            
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'agents':
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'Orbit':
                     return super().__new__(
                         cls,
-                        arg,
+                        *args,
                         _configuration=_configuration,
+                        **kwargs,
                     )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
+            clockConfig = schemas.StrSchema
             __annotations__ = {
                 "latestId": latestId,
-                "TemplateRef": TemplateRef,
                 "Agent": Agent,
                 "ClockConfig": ClockConfig,
+                "Orbit": Orbit,
                 "clockConfig": clockConfig,
-                "agents": agents,
             }
     
     latestId: MetaOapg.properties.latestId
@@ -187,24 +163,21 @@ class ScenarioTemplate(
     def __getitem__(self, name: typing_extensions.Literal["latestId"]) -> MetaOapg.properties.latestId: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["TemplateRef"]) -> MetaOapg.properties.TemplateRef: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["Agent"]) -> MetaOapg.properties.Agent: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["ClockConfig"]) -> MetaOapg.properties.ClockConfig: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["clockConfig"]) -> MetaOapg.properties.clockConfig: ...
+    def __getitem__(self, name: typing_extensions.Literal["Orbit"]) -> MetaOapg.properties.Orbit: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["agents"]) -> MetaOapg.properties.agents: ...
+    def __getitem__(self, name: typing_extensions.Literal["clockConfig"]) -> MetaOapg.properties.clockConfig: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "TemplateRef", "Agent", "ClockConfig", "clockConfig", "agents", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["latestId", "Agent", "ClockConfig", "Orbit", "clockConfig", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -213,24 +186,21 @@ class ScenarioTemplate(
     def get_item_oapg(self, name: typing_extensions.Literal["latestId"]) -> MetaOapg.properties.latestId: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["TemplateRef"]) -> typing.Union[MetaOapg.properties.TemplateRef, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["Agent"]) -> typing.Union[MetaOapg.properties.Agent, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["ClockConfig"]) -> typing.Union[MetaOapg.properties.ClockConfig, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["clockConfig"]) -> typing.Union[MetaOapg.properties.clockConfig, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["Orbit"]) -> typing.Union[MetaOapg.properties.Orbit, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["agents"]) -> typing.Union[MetaOapg.properties.agents, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["clockConfig"]) -> typing.Union[MetaOapg.properties.clockConfig, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "TemplateRef", "Agent", "ClockConfig", "clockConfig", "agents", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["latestId", "Agent", "ClockConfig", "Orbit", "clockConfig", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -238,11 +208,10 @@ class ScenarioTemplate(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         latestId: typing.Union[MetaOapg.properties.latestId, str, ],
-        TemplateRef: typing.Union[MetaOapg.properties.TemplateRef, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         Agent: typing.Union[MetaOapg.properties.Agent, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         ClockConfig: typing.Union[MetaOapg.properties.ClockConfig, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        Orbit: typing.Union[MetaOapg.properties.Orbit, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         clockConfig: typing.Union[MetaOapg.properties.clockConfig, str, schemas.Unset] = schemas.unset,
-        agents: typing.Union[MetaOapg.properties.agents, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ScenarioTemplate':
@@ -250,15 +219,14 @@ class ScenarioTemplate(
             cls,
             *args,
             latestId=latestId,
-            TemplateRef=TemplateRef,
             Agent=Agent,
             ClockConfig=ClockConfig,
+            Orbit=Orbit,
             clockConfig=clockConfig,
-            agents=agents,
             _configuration=_configuration,
             **kwargs,
         )
 
 from sedaro_base_client.model.agent_bg import AgentBG
 from sedaro_base_client.model.clock_config_bg import ClockConfigBG
-from sedaro_base_client.model.template_ref_bg import TemplateRefBG
+from sedaro_base_client.model.orbit_bg import OrbitBG

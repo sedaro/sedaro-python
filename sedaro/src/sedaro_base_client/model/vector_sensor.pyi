@@ -60,7 +60,12 @@ class VectorSensor(
                 @schemas.classproperty
                 def VECTOR_SENSOR(cls):
                     return cls("VECTOR_SENSOR")
-            oneSigmaPerAxisError = schemas.NumberSchema
+            
+            
+            class oneSigmaPerAxisError(
+                schemas.NumberSchema
+            ):
+                pass
             referenceVector = schemas.StrSchema
             id = schemas.StrSchema
             
@@ -159,6 +164,7 @@ class VectorSensor(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -227,29 +233,6 @@ class VectorSensor(
             fieldOfView = schemas.StrSchema
             
             
-            class truth(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'truth':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
             class measurement(
                 schemas.ListSchema
             ):
@@ -263,29 +246,6 @@ class VectorSensor(
                     arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'measurement':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class triadAlgorithms(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'triadAlgorithms':
                     return super().__new__(
                         cls,
                         arg,
@@ -311,15 +271,14 @@ class VectorSensor(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
                 "fieldOfView": fieldOfView,
-                "truth": truth,
                 "measurement": measurement,
-                "triadAlgorithms": triadAlgorithms,
             }
     
     componentType: MetaOapg.properties.componentType
@@ -377,6 +336,9 @@ class VectorSensor(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -395,18 +357,12 @@ class VectorSensor(
     def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["truth"]) -> MetaOapg.properties.truth: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["measurement"]) -> MetaOapg.properties.measurement: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["triadAlgorithms"]) -> MetaOapg.properties.triadAlgorithms: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaPerAxisError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "truth", "measurement", "triadAlgorithms", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaPerAxisError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "measurement", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -460,6 +416,9 @@ class VectorSensor(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -478,18 +437,12 @@ class VectorSensor(
     def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["truth"]) -> typing.Union[MetaOapg.properties.truth, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["measurement"]) -> typing.Union[MetaOapg.properties.measurement, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["triadAlgorithms"]) -> typing.Union[MetaOapg.properties.triadAlgorithms, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaPerAxisError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "truth", "measurement", "triadAlgorithms", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaPerAxisError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "measurement", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -512,15 +465,14 @@ class VectorSensor(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
-        truth: typing.Union[MetaOapg.properties.truth, list, tuple, schemas.Unset] = schemas.unset,
         measurement: typing.Union[MetaOapg.properties.measurement, list, tuple, schemas.Unset] = schemas.unset,
-        triadAlgorithms: typing.Union[MetaOapg.properties.triadAlgorithms, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VectorSensor':
@@ -543,15 +495,14 @@ class VectorSensor(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
             fieldOfView=fieldOfView,
-            truth=truth,
             measurement=measurement,
-            triadAlgorithms=triadAlgorithms,
             _configuration=_configuration,
             **kwargs,
         )

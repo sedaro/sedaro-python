@@ -24,6 +24,8 @@ from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_operatio
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_operational_modes_block_id import ModelsBranchesBranchIdCdhConopsOperationalModesBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_conditions_ import ModelsBranchesBranchIdCdhConopsConditions
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_conditions_block_id import ModelsBranchesBranchIdCdhConopsConditionsBlockId
+from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_group_conditions_ import ModelsBranchesBranchIdCdhConopsGroupConditions
+from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_group_conditions_block_id import ModelsBranchesBranchIdCdhConopsGroupConditionsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_space_targets_ import ModelsBranchesBranchIdCdhConopsSpaceTargets
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_space_targets_block_id import ModelsBranchesBranchIdCdhConopsSpaceTargetsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_cdh_conops_celestial_targets_ import ModelsBranchesBranchIdCdhConopsCelestialTargets
@@ -56,7 +58,6 @@ from sedaro_base_client.apis.paths.models_branches_branch_id_thermal_thermal_int
 from sedaro_base_client.apis.paths.models_branches_branch_id_thermal_thermal_interfaces_block_id import ModelsBranchesBranchIdThermalThermalInterfacesBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_thermal_thermal_interface_materials_ import ModelsBranchesBranchIdThermalThermalInterfaceMaterials
 from sedaro_base_client.apis.paths.models_branches_branch_id_thermal_thermal_interface_materials_block_id import ModelsBranchesBranchIdThermalThermalInterfaceMaterialsBlockId
-from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_orbits_block_id import ModelsBranchesBranchIdGncOrbitsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_pointing_modes_passive_ import ModelsBranchesBranchIdGncPointingModesPassive
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_pointing_modes_passive_block_id import ModelsBranchesBranchIdGncPointingModesPassiveBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_pointing_modes_lock_ import ModelsBranchesBranchIdGncPointingModesLock
@@ -69,6 +70,8 @@ from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vecto
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vectors_celestial_vectors_block_id import ModelsBranchesBranchIdGncReferenceVectorsCelestialVectorsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vectors_target_vectors_ import ModelsBranchesBranchIdGncReferenceVectorsTargetVectors
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vectors_target_vectors_block_id import ModelsBranchesBranchIdGncReferenceVectorsTargetVectorsBlockId
+from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vectors_target_group_vectors_ import ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectors
+from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_reference_vectors_target_group_vectors_block_id import ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectorsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_sensors_direction_sensors_ import ModelsBranchesBranchIdGncSensorsDirectionSensors
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_sensors_direction_sensors_block_id import ModelsBranchesBranchIdGncSensorsDirectionSensorsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_gnc_sensors_vector_sensors_ import ModelsBranchesBranchIdGncSensorsVectorSensors
@@ -105,8 +108,8 @@ from sedaro_base_client.apis.paths.models_branches_branch_id_agents_ import Mode
 from sedaro_base_client.apis.paths.models_branches_branch_id_agents_block_id import ModelsBranchesBranchIdAgentsBlockId
 from sedaro_base_client.apis.paths.models_branches_branch_id_clock_configs_ import ModelsBranchesBranchIdClockConfigs
 from sedaro_base_client.apis.paths.models_branches_branch_id_clock_configs_block_id import ModelsBranchesBranchIdClockConfigsBlockId
-from sedaro_base_client.apis.paths.models_branches_branch_id_template_refs_ import ModelsBranchesBranchIdTemplateRefs
-from sedaro_base_client.apis.paths.models_branches_branch_id_template_refs_block_id import ModelsBranchesBranchIdTemplateRefsBlockId
+from sedaro_base_client.apis.paths.models_branches_branch_id_orbits_ import ModelsBranchesBranchIdOrbits
+from sedaro_base_client.apis.paths.models_branches_branch_id_orbits_block_id import ModelsBranchesBranchIdOrbitsBlockId
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_ import SimulationsBranchesBranchIdControl
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_job_id import SimulationsBranchesBranchIdControlJobId
 from sedaro_base_client.apis.paths.data_ import Data
@@ -143,6 +146,8 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_OPERATIONALMODES_BLOCK_ID: ModelsBranchesBranchIdCdhConopsOperationalModesBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CONDITIONS_: ModelsBranchesBranchIdCdhConopsConditions,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CONDITIONS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsConditionsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_GROUPCONDITIONS_: ModelsBranchesBranchIdCdhConopsGroupConditions,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_GROUPCONDITIONS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsGroupConditionsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_SPACETARGETS_: ModelsBranchesBranchIdCdhConopsSpaceTargets,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_SPACETARGETS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsSpaceTargetsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CELESTIALTARGETS_: ModelsBranchesBranchIdCdhConopsCelestialTargets,
@@ -175,7 +180,6 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACES_BLOCK_ID: ModelsBranchesBranchIdThermalThermalInterfacesBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACEMATERIALS_: ModelsBranchesBranchIdThermalThermalInterfaceMaterials,
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACEMATERIALS_BLOCK_ID: ModelsBranchesBranchIdThermalThermalInterfaceMaterialsBlockId,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_ORBITS_BLOCK_ID: ModelsBranchesBranchIdGncOrbitsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_PASSIVE_: ModelsBranchesBranchIdGncPointingModesPassive,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_PASSIVE_BLOCK_ID: ModelsBranchesBranchIdGncPointingModesPassiveBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_LOCK_: ModelsBranchesBranchIdGncPointingModesLock,
@@ -188,6 +192,8 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_CELESTIALVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsCelestialVectorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETVECTORS_: ModelsBranchesBranchIdGncReferenceVectorsTargetVectors,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsTargetVectorsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETGROUPVECTORS_: ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectors,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETGROUPVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_DIRECTIONSENSORS_: ModelsBranchesBranchIdGncSensorsDirectionSensors,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_DIRECTIONSENSORS_BLOCK_ID: ModelsBranchesBranchIdGncSensorsDirectionSensorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_VECTORSENSORS_: ModelsBranchesBranchIdGncSensorsVectorSensors,
@@ -224,8 +230,8 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_AGENTS_BLOCK_ID: ModelsBranchesBranchIdAgentsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_: ModelsBranchesBranchIdClockConfigs,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_BLOCK_ID: ModelsBranchesBranchIdClockConfigsBlockId,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_: ModelsBranchesBranchIdTemplateRefs,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_BLOCK_ID: ModelsBranchesBranchIdTemplateRefsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_ORBITS_: ModelsBranchesBranchIdOrbits,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_ORBITS_BLOCK_ID: ModelsBranchesBranchIdOrbitsBlockId,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,
@@ -263,6 +269,8 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_OPERATIONALMODES_BLOCK_ID: ModelsBranchesBranchIdCdhConopsOperationalModesBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CONDITIONS_: ModelsBranchesBranchIdCdhConopsConditions,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CONDITIONS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsConditionsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_GROUPCONDITIONS_: ModelsBranchesBranchIdCdhConopsGroupConditions,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_GROUPCONDITIONS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsGroupConditionsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_SPACETARGETS_: ModelsBranchesBranchIdCdhConopsSpaceTargets,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_SPACETARGETS_BLOCK_ID: ModelsBranchesBranchIdCdhConopsSpaceTargetsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CDH_CONOPS_CELESTIALTARGETS_: ModelsBranchesBranchIdCdhConopsCelestialTargets,
@@ -295,7 +303,6 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACES_BLOCK_ID: ModelsBranchesBranchIdThermalThermalInterfacesBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACEMATERIALS_: ModelsBranchesBranchIdThermalThermalInterfaceMaterials,
         PathValues.MODELS_BRANCHES_BRANCH_ID_THERMAL_THERMALINTERFACEMATERIALS_BLOCK_ID: ModelsBranchesBranchIdThermalThermalInterfaceMaterialsBlockId,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_ORBITS_BLOCK_ID: ModelsBranchesBranchIdGncOrbitsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_PASSIVE_: ModelsBranchesBranchIdGncPointingModesPassive,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_PASSIVE_BLOCK_ID: ModelsBranchesBranchIdGncPointingModesPassiveBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_POINTINGMODES_LOCK_: ModelsBranchesBranchIdGncPointingModesLock,
@@ -308,6 +315,8 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_CELESTIALVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsCelestialVectorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETVECTORS_: ModelsBranchesBranchIdGncReferenceVectorsTargetVectors,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsTargetVectorsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETGROUPVECTORS_: ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectors,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_REFERENCEVECTORS_TARGETGROUPVECTORS_BLOCK_ID: ModelsBranchesBranchIdGncReferenceVectorsTargetGroupVectorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_DIRECTIONSENSORS_: ModelsBranchesBranchIdGncSensorsDirectionSensors,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_DIRECTIONSENSORS_BLOCK_ID: ModelsBranchesBranchIdGncSensorsDirectionSensorsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_GNC_SENSORS_VECTORSENSORS_: ModelsBranchesBranchIdGncSensorsVectorSensors,
@@ -344,8 +353,8 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_AGENTS_BLOCK_ID: ModelsBranchesBranchIdAgentsBlockId,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_: ModelsBranchesBranchIdClockConfigs,
         PathValues.MODELS_BRANCHES_BRANCH_ID_CLOCKCONFIGS_BLOCK_ID: ModelsBranchesBranchIdClockConfigsBlockId,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_: ModelsBranchesBranchIdTemplateRefs,
-        PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATEREFS_BLOCK_ID: ModelsBranchesBranchIdTemplateRefsBlockId,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_ORBITS_: ModelsBranchesBranchIdOrbits,
+        PathValues.MODELS_BRANCHES_BRANCH_ID_ORBITS_BLOCK_ID: ModelsBranchesBranchIdOrbitsBlockId,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
         PathValues.DATA_: Data,

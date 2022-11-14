@@ -38,19 +38,10 @@ class CelestialVector(
             "vectorType",
             "name",
             "celestialPointingDirection",
-            "satellite",
         }
         
         class properties:
-            
-            
-            class name(
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    max_length = 32
+            name = schemas.StrSchema
             
             
             class vectorType(
@@ -67,7 +58,6 @@ class CelestialVector(
                 @schemas.classproperty
                 def CELESTIAL(cls):
                     return cls("CELESTIAL")
-            satellite = schemas.StrSchema
             
             
             class celestialPointingDirection(
@@ -151,29 +141,98 @@ class CelestialVector(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            eclipsed = schemas.BoolSchema
+            
+            
+            class FOVConstraints(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'FOVConstraints':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class directionSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'directionSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            
+            
+            class vectorSensors(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'vectorSensors':
+                    return super().__new__(
+                        cls,
+                        arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
                 "vectorType": vectorType,
-                "satellite": satellite,
                 "celestialPointingDirection": celestialPointingDirection,
                 "id": id,
                 "truth": truth,
                 "estimate": estimate,
+                "eclipsed": eclipsed,
+                "FOVConstraints": FOVConstraints,
+                "directionSensors": directionSensors,
+                "vectorSensors": vectorSensors,
             }
     
     vectorType: MetaOapg.properties.vectorType
     name: MetaOapg.properties.name
     celestialPointingDirection: MetaOapg.properties.celestialPointingDirection
-    satellite: MetaOapg.properties.satellite
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> MetaOapg.properties.celestialPointingDirection: ...
@@ -188,9 +247,21 @@ class CelestialVector(
     def __getitem__(self, name: typing_extensions.Literal["estimate"]) -> MetaOapg.properties.estimate: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["eclipsed"]) -> MetaOapg.properties.eclipsed: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["FOVConstraints"]) -> MetaOapg.properties.FOVConstraints: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["directionSensors"]) -> MetaOapg.properties.directionSensors: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["vectorSensors"]) -> MetaOapg.properties.vectorSensors: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "satellite", "celestialPointingDirection", "id", "truth", "estimate", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "celestialPointingDirection", "id", "truth", "estimate", "eclipsed", "FOVConstraints", "directionSensors", "vectorSensors", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -200,9 +271,6 @@ class CelestialVector(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["celestialPointingDirection"]) -> MetaOapg.properties.celestialPointingDirection: ...
@@ -217,9 +285,21 @@ class CelestialVector(
     def get_item_oapg(self, name: typing_extensions.Literal["estimate"]) -> typing.Union[MetaOapg.properties.estimate, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["eclipsed"]) -> typing.Union[MetaOapg.properties.eclipsed, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["FOVConstraints"]) -> typing.Union[MetaOapg.properties.FOVConstraints, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["directionSensors"]) -> typing.Union[MetaOapg.properties.directionSensors, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["vectorSensors"]) -> typing.Union[MetaOapg.properties.vectorSensors, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "satellite", "celestialPointingDirection", "id", "truth", "estimate", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "vectorType", "celestialPointingDirection", "id", "truth", "estimate", "eclipsed", "FOVConstraints", "directionSensors", "vectorSensors", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -229,10 +309,13 @@ class CelestialVector(
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         celestialPointingDirection: typing.Union[MetaOapg.properties.celestialPointingDirection, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         truth: typing.Union[MetaOapg.properties.truth, list, tuple, schemas.Unset] = schemas.unset,
         estimate: typing.Union[MetaOapg.properties.estimate, list, tuple, schemas.Unset] = schemas.unset,
+        eclipsed: typing.Union[MetaOapg.properties.eclipsed, bool, schemas.Unset] = schemas.unset,
+        FOVConstraints: typing.Union[MetaOapg.properties.FOVConstraints, list, tuple, schemas.Unset] = schemas.unset,
+        directionSensors: typing.Union[MetaOapg.properties.directionSensors, list, tuple, schemas.Unset] = schemas.unset,
+        vectorSensors: typing.Union[MetaOapg.properties.vectorSensors, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'CelestialVector':
@@ -242,10 +325,13 @@ class CelestialVector(
             vectorType=vectorType,
             name=name,
             celestialPointingDirection=celestialPointingDirection,
-            satellite=satellite,
             id=id,
             truth=truth,
             estimate=estimate,
+            eclipsed=eclipsed,
+            FOVConstraints=FOVConstraints,
+            directionSensors=directionSensors,
+            vectorSensors=vectorSensors,
             _configuration=_configuration,
             **kwargs,
         )
