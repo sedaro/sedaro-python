@@ -23,7 +23,8 @@ class BranchClient:
         self._sedaro_client = client
         self._block_id_to_type_map: Dict[str, str] = body.blockIdToTypeMap
         '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
-        self._block_class_to_block_group_map: Dict[str, str] = body.blockClassToBlockGroupMap
+        self._block_class_to_block_group_map: Dict[str,
+                                                   str] = body.blockClassToBlockGroupMap
         '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
         self._block_group_names: List[str] = body.blockGroupNames
 
@@ -35,8 +36,8 @@ class BranchClient:
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
         if block_name not in self._block_class_to_block_group_map:
-            raise AttributeError(f'Attribute `{block_name}` does not exist on {self}')
-            # FIXME: Remove case flexibility from docs, etc.
+            raise AttributeError(
+                f'Attribute `{block_name}` does not exist on {self}')
         block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
         if importlib.util.find_spec(block_class_module) is None:
             raise AttributeError(
