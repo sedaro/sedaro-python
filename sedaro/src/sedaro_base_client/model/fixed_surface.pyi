@@ -40,7 +40,6 @@ class FixedSurface(
             "surfaceCentroid",
             "motionType",
             "name",
-            "satellite",
             "surfaceMaterial",
         }
         
@@ -87,8 +86,8 @@ class FixedSurface(
                     return super().__getitem__(i)
             bodyFrameVector = schemas.StrSchema
             surfaceMaterial = schemas.StrSchema
-            satellite = schemas.StrSchema
             id = schemas.StrSchema
+            satellite = schemas.StrSchema
             
             
             class panels(
@@ -158,8 +157,8 @@ class FixedSurface(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            heliocenterAngle = schemas.NumberSchema
-            geocenterAngle = schemas.NumberSchema
+            heliocenterAngle = schemas.AnyTypeSchema
+            geocenterAngle = schemas.AnyTypeSchema
             
             
             class earthAlbedoViewFactor(
@@ -217,8 +216,8 @@ class FixedSurface(
                 "surfaceCentroid": surfaceCentroid,
                 "bodyFrameVector": bodyFrameVector,
                 "surfaceMaterial": surfaceMaterial,
-                "satellite": satellite,
                 "id": id,
+                "satellite": satellite,
                 "panels": panels,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
@@ -244,7 +243,6 @@ class FixedSurface(
     surfaceCentroid: MetaOapg.properties.surfaceCentroid
     motionType: MetaOapg.properties.motionType
     name: MetaOapg.properties.name
-    satellite: MetaOapg.properties.satellite
     surfaceMaterial: MetaOapg.properties.surfaceMaterial
     
     @typing.overload
@@ -266,10 +264,10 @@ class FixedSurface(
     def __getitem__(self, name: typing_extensions.Literal["surfaceMaterial"]) -> MetaOapg.properties.surfaceMaterial: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["panels"]) -> MetaOapg.properties.panels: ...
@@ -328,7 +326,7 @@ class FixedSurface(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "id", "satellite", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -352,10 +350,10 @@ class FixedSurface(
     def get_item_oapg(self, name: typing_extensions.Literal["surfaceMaterial"]) -> MetaOapg.properties.surfaceMaterial: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["panels"]) -> typing.Union[MetaOapg.properties.panels, schemas.Unset]: ...
@@ -414,7 +412,7 @@ class FixedSurface(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "satellite", "id", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "motionType", "area", "surfaceCentroid", "bodyFrameVector", "surfaceMaterial", "id", "satellite", "panels", "thermal_interface_A", "thermal_interface_B", "heliocenterAngle", "geocenterAngle", "earthAlbedoViewFactor", "earthIrViewFactor", "solarViewFactor", "surfaceNormalVector", "sat2Sun", "earthIrHeatFlowRate", "earthAlbedoHeatFlowRate", "solarHeatFlowRate", "spaceHeatFlowRate", "heatFlowRate", "temperature", "hotMargin", "coldMargin", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -426,14 +424,14 @@ class FixedSurface(
         surfaceCentroid: typing.Union[MetaOapg.properties.surfaceCentroid, list, tuple, ],
         motionType: typing.Union[MetaOapg.properties.motionType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        satellite: typing.Union[MetaOapg.properties.satellite, str, ],
         surfaceMaterial: typing.Union[MetaOapg.properties.surfaceMaterial, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         panels: typing.Union[MetaOapg.properties.panels, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
-        heliocenterAngle: typing.Union[MetaOapg.properties.heliocenterAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        heliocenterAngle: typing.Union[MetaOapg.properties.heliocenterAngle, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         earthAlbedoViewFactor: typing.Union[MetaOapg.properties.earthAlbedoViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         earthIrViewFactor: typing.Union[MetaOapg.properties.earthIrViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         solarViewFactor: typing.Union[MetaOapg.properties.solarViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -458,9 +456,9 @@ class FixedSurface(
             surfaceCentroid=surfaceCentroid,
             motionType=motionType,
             name=name,
-            satellite=satellite,
             surfaceMaterial=surfaceMaterial,
             id=id,
+            satellite=satellite,
             panels=panels,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,

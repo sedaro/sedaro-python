@@ -36,6 +36,7 @@ class OpticalAttitudeSensor(
     class MetaOapg:
         required = {
             "componentType",
+            "fieldOfView",
             "name",
             "subsystem",
             "oneSigmaBoresightAxisError",
@@ -69,8 +70,25 @@ class OpticalAttitudeSensor(
                 @schemas.classproperty
                 def OPTICAL_ATTITUDE_SENSOR(cls):
                     return cls("OPTICAL_ATTITUDE_SENSOR")
-            oneSigmaCrossAxisError = schemas.NumberSchema
-            oneSigmaBoresightAxisError = schemas.NumberSchema
+            fieldOfView = schemas.StrSchema
+            
+            
+            class oneSigmaCrossAxisError(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
+            
+            
+            class oneSigmaBoresightAxisError(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_minimum = 0.0
             id = schemas.StrSchema
             
             
@@ -180,6 +198,7 @@ class OpticalAttitudeSensor(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -251,7 +270,6 @@ class OpticalAttitudeSensor(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            fieldOfView = schemas.StrSchema
             
             
             class measurement(
@@ -279,6 +297,7 @@ class OpticalAttitudeSensor(
                 "name": name,
                 "subsystem": subsystem,
                 "componentType": componentType,
+                "fieldOfView": fieldOfView,
                 "oneSigmaCrossAxisError": oneSigmaCrossAxisError,
                 "oneSigmaBoresightAxisError": oneSigmaBoresightAxisError,
                 "id": id,
@@ -292,16 +311,17 @@ class OpticalAttitudeSensor(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
-                "fieldOfView": fieldOfView,
                 "measurement": measurement,
             }
     
     componentType: MetaOapg.properties.componentType
+    fieldOfView: MetaOapg.properties.fieldOfView
     name: MetaOapg.properties.name
     subsystem: MetaOapg.properties.subsystem
     oneSigmaBoresightAxisError: MetaOapg.properties.oneSigmaBoresightAxisError
@@ -315,6 +335,9 @@ class OpticalAttitudeSensor(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["oneSigmaCrossAxisError"]) -> MetaOapg.properties.oneSigmaCrossAxisError: ...
@@ -356,6 +379,9 @@ class OpticalAttitudeSensor(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -371,15 +397,12 @@ class OpticalAttitudeSensor(
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["measurement"]) -> MetaOapg.properties.measurement: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaCrossAxisError", "oneSigmaBoresightAxisError", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "measurement", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "fieldOfView", "oneSigmaCrossAxisError", "oneSigmaBoresightAxisError", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "measurement", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -392,6 +415,9 @@ class OpticalAttitudeSensor(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["oneSigmaCrossAxisError"]) -> MetaOapg.properties.oneSigmaCrossAxisError: ...
@@ -433,6 +459,9 @@ class OpticalAttitudeSensor(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -448,15 +477,12 @@ class OpticalAttitudeSensor(
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["measurement"]) -> typing.Union[MetaOapg.properties.measurement, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "oneSigmaCrossAxisError", "oneSigmaBoresightAxisError", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "fieldOfView", "measurement", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "fieldOfView", "oneSigmaCrossAxisError", "oneSigmaBoresightAxisError", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "measurement", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -464,6 +490,7 @@ class OpticalAttitudeSensor(
         cls,
         *args: typing.Union[dict, frozendict.frozendict, ],
         componentType: typing.Union[MetaOapg.properties.componentType, str, ],
+        fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         subsystem: typing.Union[MetaOapg.properties.subsystem, str, ],
         oneSigmaBoresightAxisError: typing.Union[MetaOapg.properties.oneSigmaBoresightAxisError, decimal.Decimal, int, float, ],
@@ -479,12 +506,12 @@ class OpticalAttitudeSensor(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
         measurement: typing.Union[MetaOapg.properties.measurement, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -493,6 +520,7 @@ class OpticalAttitudeSensor(
             cls,
             *args,
             componentType=componentType,
+            fieldOfView=fieldOfView,
             name=name,
             subsystem=subsystem,
             oneSigmaBoresightAxisError=oneSigmaBoresightAxisError,
@@ -508,12 +536,12 @@ class OpticalAttitudeSensor(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
-            fieldOfView=fieldOfView,
             measurement=measurement,
             _configuration=_configuration,
             **kwargs,

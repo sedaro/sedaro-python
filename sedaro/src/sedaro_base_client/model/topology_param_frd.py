@@ -52,7 +52,6 @@ class TopologyParamFRD(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             
             
             class outputPowerRating(
@@ -80,7 +79,6 @@ class TopologyParamFRD(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             
             
             class drivenControllerBusVoltage(

@@ -107,7 +107,6 @@ class BusRegulatorUpdate(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             id = schemas.StrSchema
             inRegulator = schemas.StrSchema
             __annotations__ = {

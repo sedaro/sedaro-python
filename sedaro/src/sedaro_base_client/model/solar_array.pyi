@@ -71,11 +71,36 @@ class SolarArray(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            idealOpenCircuitVoltage = schemas.NumberSchema
+            idealShortCircuitCurrent = schemas.NumberSchema
+            current = schemas.NumberSchema
+            voltage = schemas.NumberSchema
+            maxPower = schemas.NumberSchema
+            maxPowerVoltage = schemas.NumberSchema
+            maxPowerCurrent = schemas.NumberSchema
+            openCircuitVoltage = schemas.NumberSchema
+            power = schemas.NumberSchema
+            
+            
+            class utilization(
+                schemas.NumberSchema
+            ):
+                pass
             __annotations__ = {
                 "name": name,
                 "topology": topology,
                 "id": id,
                 "panels": panels,
+                "idealOpenCircuitVoltage": idealOpenCircuitVoltage,
+                "idealShortCircuitCurrent": idealShortCircuitCurrent,
+                "current": current,
+                "voltage": voltage,
+                "maxPower": maxPower,
+                "maxPowerVoltage": maxPowerVoltage,
+                "maxPowerCurrent": maxPowerCurrent,
+                "openCircuitVoltage": openCircuitVoltage,
+                "power": power,
+                "utilization": utilization,
             }
     
     topology: MetaOapg.properties.topology
@@ -94,9 +119,39 @@ class SolarArray(
     def __getitem__(self, name: typing_extensions.Literal["panels"]) -> MetaOapg.properties.panels: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealOpenCircuitVoltage"]) -> MetaOapg.properties.idealOpenCircuitVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idealShortCircuitCurrent"]) -> MetaOapg.properties.idealShortCircuitCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["current"]) -> MetaOapg.properties.current: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["voltage"]) -> MetaOapg.properties.voltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPower"]) -> MetaOapg.properties.maxPower: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPowerVoltage"]) -> MetaOapg.properties.maxPowerVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxPowerCurrent"]) -> MetaOapg.properties.maxPowerCurrent: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["openCircuitVoltage"]) -> MetaOapg.properties.openCircuitVoltage: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["power"]) -> MetaOapg.properties.power: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["utilization"]) -> MetaOapg.properties.utilization: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "topology", "id", "panels", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "topology", "id", "panels", "idealOpenCircuitVoltage", "idealShortCircuitCurrent", "current", "voltage", "maxPower", "maxPowerVoltage", "maxPowerCurrent", "openCircuitVoltage", "power", "utilization", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -114,9 +169,39 @@ class SolarArray(
     def get_item_oapg(self, name: typing_extensions.Literal["panels"]) -> typing.Union[MetaOapg.properties.panels, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealOpenCircuitVoltage"]) -> typing.Union[MetaOapg.properties.idealOpenCircuitVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idealShortCircuitCurrent"]) -> typing.Union[MetaOapg.properties.idealShortCircuitCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["current"]) -> typing.Union[MetaOapg.properties.current, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["voltage"]) -> typing.Union[MetaOapg.properties.voltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPower"]) -> typing.Union[MetaOapg.properties.maxPower, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPowerVoltage"]) -> typing.Union[MetaOapg.properties.maxPowerVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxPowerCurrent"]) -> typing.Union[MetaOapg.properties.maxPowerCurrent, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["openCircuitVoltage"]) -> typing.Union[MetaOapg.properties.openCircuitVoltage, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["power"]) -> typing.Union[MetaOapg.properties.power, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["utilization"]) -> typing.Union[MetaOapg.properties.utilization, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "topology", "id", "panels", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "topology", "id", "panels", "idealOpenCircuitVoltage", "idealShortCircuitCurrent", "current", "voltage", "maxPower", "maxPowerVoltage", "maxPowerCurrent", "openCircuitVoltage", "power", "utilization", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -127,6 +212,16 @@ class SolarArray(
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         panels: typing.Union[MetaOapg.properties.panels, list, tuple, schemas.Unset] = schemas.unset,
+        idealOpenCircuitVoltage: typing.Union[MetaOapg.properties.idealOpenCircuitVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        idealShortCircuitCurrent: typing.Union[MetaOapg.properties.idealShortCircuitCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        current: typing.Union[MetaOapg.properties.current, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        voltage: typing.Union[MetaOapg.properties.voltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPower: typing.Union[MetaOapg.properties.maxPower, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPowerVoltage: typing.Union[MetaOapg.properties.maxPowerVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxPowerCurrent: typing.Union[MetaOapg.properties.maxPowerCurrent, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        openCircuitVoltage: typing.Union[MetaOapg.properties.openCircuitVoltage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        power: typing.Union[MetaOapg.properties.power, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        utilization: typing.Union[MetaOapg.properties.utilization, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SolarArray':
@@ -137,6 +232,16 @@ class SolarArray(
             name=name,
             id=id,
             panels=panels,
+            idealOpenCircuitVoltage=idealOpenCircuitVoltage,
+            idealShortCircuitCurrent=idealShortCircuitCurrent,
+            current=current,
+            voltage=voltage,
+            maxPower=maxPower,
+            maxPowerVoltage=maxPowerVoltage,
+            maxPowerCurrent=maxPowerCurrent,
+            openCircuitVoltage=openCircuitVoltage,
+            power=power,
+            utilization=utilization,
             _configuration=_configuration,
             **kwargs,
         )

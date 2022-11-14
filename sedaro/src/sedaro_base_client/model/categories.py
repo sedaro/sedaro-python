@@ -45,6 +45,7 @@ class Categories(
             "NAVIGATION": "NAVIGATION",
             "THERMAL": "THERMAL",
             "PROP": "PROP",
+            "STRUCTURE": "STRUCTURE",
             "PAYLOAD": "PAYLOAD",
             "CUSTOM": "CUSTOM",
         }
@@ -76,6 +77,10 @@ class Categories(
     @schemas.classproperty
     def PROP(cls):
         return cls("PROP")
+    
+    @schemas.classproperty
+    def STRUCTURE(cls):
+        return cls("STRUCTURE")
     
     @schemas.classproperty
     def PAYLOAD(cls):

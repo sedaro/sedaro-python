@@ -47,8 +47,14 @@ class DirectionSensorCreate(
                 schemas.StrSchema
             ):
                 pass
-            oneSigmaAngleError = schemas.NumberSchema
+            
+            
+            class oneSigmaAngleError(
+                schemas.NumberSchema
+            ):
+                pass
             referenceVector = schemas.StrSchema
+            fieldOfView = schemas.StrSchema
             id = schemas.StrSchema
             
             
@@ -70,18 +76,17 @@ class DirectionSensorCreate(
                 schemas.NumberSchema
             ):
                 pass
-            fieldOfView = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "oneSigmaAngleError": oneSigmaAngleError,
                 "referenceVector": referenceVector,
+                "fieldOfView": fieldOfView,
                 "id": id,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
                 "hotTempRating": hotTempRating,
                 "coldTempRating": coldTempRating,
                 "thermalCapacitance": thermalCapacitance,
-                "fieldOfView": fieldOfView,
             }
     
     name: MetaOapg.properties.name
@@ -96,6 +101,9 @@ class DirectionSensorCreate(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["referenceVector"]) -> MetaOapg.properties.referenceVector: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -116,12 +124,9 @@ class DirectionSensorCreate(
     def __getitem__(self, name: typing_extensions.Literal["thermalCapacitance"]) -> MetaOapg.properties.thermalCapacitance: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "fieldOfView", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "fieldOfView", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -134,6 +139,9 @@ class DirectionSensorCreate(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["referenceVector"]) -> MetaOapg.properties.referenceVector: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -154,12 +162,9 @@ class DirectionSensorCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["thermalCapacitance"]) -> typing.Union[MetaOapg.properties.thermalCapacitance, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "fieldOfView", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "oneSigmaAngleError", "referenceVector", "fieldOfView", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -169,13 +174,13 @@ class DirectionSensorCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         referenceVector: typing.Union[MetaOapg.properties.referenceVector, str, ],
         oneSigmaAngleError: typing.Union[MetaOapg.properties.oneSigmaAngleError, decimal.Decimal, int, float, ],
+        fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'DirectionSensorCreate':
@@ -185,13 +190,13 @@ class DirectionSensorCreate(
             name=name,
             referenceVector=referenceVector,
             oneSigmaAngleError=oneSigmaAngleError,
+            fieldOfView=fieldOfView,
             id=id,
             partNumber=partNumber,
             manufacturer=manufacturer,
             hotTempRating=hotTempRating,
             coldTempRating=coldTempRating,
             thermalCapacitance=thermalCapacitance,
-            fieldOfView=fieldOfView,
             _configuration=_configuration,
             **kwargs,
         )

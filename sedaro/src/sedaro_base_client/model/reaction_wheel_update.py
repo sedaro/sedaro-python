@@ -90,7 +90,6 @@ class ReactionWheelUpdate(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             id = schemas.StrSchema
             
             

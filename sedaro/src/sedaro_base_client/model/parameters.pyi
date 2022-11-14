@@ -96,5 +96,5 @@ class Parameters(
         return cls("BATTERY_SOC")
     
     @schemas.classproperty
-    def EMPTY(cls):
-        return cls("")
+    def NONE(cls):
+        return cls(None)

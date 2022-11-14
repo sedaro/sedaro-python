@@ -45,6 +45,7 @@ class BranchVehicleRes(
             "dateModified",
             "repository",
             "uuid",
+            "mission",
             "dateCreated",
             "name",
             "numSimulations",
@@ -67,8 +68,123 @@ class BranchVehicleRes(
             dateCreated = schemas.DateTimeSchema
             dateModified = schemas.DateTimeSchema
             simulationRequired = schemas.BoolSchema
-            repository = schemas.DictSchema
-            user = schemas.DictSchema
+            
+            
+            class repository(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.IntSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'repository':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class mission(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.IntSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'mission':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class user(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.IntSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'user':
+                    return super().__new__(
+                        cls,
+                        *args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             uuid = schemas.UUIDSchema
             shareable = schemas.BoolSchema
             sharePwRqd = schemas.BoolSchema
@@ -175,6 +291,7 @@ class BranchVehicleRes(
                 "dateModified": dateModified,
                 "simulationRequired": simulationRequired,
                 "repository": repository,
+                "mission": mission,
                 "user": user,
                 "uuid": uuid,
                 "shareable": shareable,
@@ -198,6 +315,7 @@ class BranchVehicleRes(
     dateModified: MetaOapg.properties.dateModified
     repository: MetaOapg.properties.repository
     uuid: MetaOapg.properties.uuid
+    mission: MetaOapg.properties.mission
     dateCreated: MetaOapg.properties.dateCreated
     name: MetaOapg.properties.name
     numSimulations: MetaOapg.properties.numSimulations
@@ -222,6 +340,9 @@ class BranchVehicleRes(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["repository"]) -> MetaOapg.properties.repository: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["mission"]) -> MetaOapg.properties.mission: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
@@ -259,7 +380,7 @@ class BranchVehicleRes(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "simulationRequired", "repository", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", "description", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "simulationRequired", "repository", "mission", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", "description", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -281,6 +402,9 @@ class BranchVehicleRes(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["repository"]) -> MetaOapg.properties.repository: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["mission"]) -> MetaOapg.properties.mission: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
@@ -318,7 +442,7 @@ class BranchVehicleRes(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "simulationRequired", "repository", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", "description", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "simulationRequired", "repository", "mission", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "blockIdToTypeMap", "blockClassToBlockGroupMap", "blockGroupNames", "description", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -333,13 +457,14 @@ class BranchVehicleRes(
         data: 'VehicleTemplate',
         sharePwRqd: typing.Union[MetaOapg.properties.sharePwRqd, bool, ],
         dateModified: typing.Union[MetaOapg.properties.dateModified, str, datetime, ],
-        repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, ],
+        repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         uuid: typing.Union[MetaOapg.properties.uuid, str, uuid.UUID, ],
+        mission: typing.Union[MetaOapg.properties.mission, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         dateCreated: typing.Union[MetaOapg.properties.dateCreated, str, datetime, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         numSimulations: typing.Union[MetaOapg.properties.numSimulations, decimal.Decimal, int, ],
         id: typing.Union[MetaOapg.properties.id, decimal.Decimal, int, ],
-        user: typing.Union[MetaOapg.properties.user, dict, frozendict.frozendict, ],
+        user: typing.Union[MetaOapg.properties.user, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         blockClassToBlockGroupMap: typing.Union[MetaOapg.properties.blockClassToBlockGroupMap, dict, frozendict.frozendict, ],
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -358,6 +483,7 @@ class BranchVehicleRes(
             dateModified=dateModified,
             repository=repository,
             uuid=uuid,
+            mission=mission,
             dateCreated=dateCreated,
             name=name,
             numSimulations=numSimulations,

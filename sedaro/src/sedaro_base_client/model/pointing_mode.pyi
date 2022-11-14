@@ -85,6 +85,8 @@ class PointingMode(
                     )
             conOps = schemas.StrSchema
             id = schemas.StrSchema
+            odAlgorithm = schemas.StrSchema
+            adAlgorithm = schemas.StrSchema
             
             
             class operationalModes(
@@ -108,8 +110,6 @@ class PointingMode(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            odAlgorithm = schemas.StrSchema
-            adAlgorithm = schemas.StrSchema
             
             
             class reactionWheelCommands(
@@ -156,16 +156,20 @@ class PointingMode(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            commandedAttitude = schemas.AnyTypeSchema
+            commandedAngularRates = schemas.AnyTypeSchema
             __annotations__ = {
                 "name": name,
                 "pointingModeType": pointingModeType,
                 "conOps": conOps,
                 "id": id,
-                "operationalModes": operationalModes,
                 "odAlgorithm": odAlgorithm,
                 "adAlgorithm": adAlgorithm,
+                "operationalModes": operationalModes,
                 "reactionWheelCommands": reactionWheelCommands,
                 "magnetorquerCommands": magnetorquerCommands,
+                "commandedAttitude": commandedAttitude,
+                "commandedAngularRates": commandedAngularRates,
             }
     
     name: MetaOapg.properties.name
@@ -185,13 +189,13 @@ class PointingMode(
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["odAlgorithm"]) -> MetaOapg.properties.odAlgorithm: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["adAlgorithm"]) -> MetaOapg.properties.adAlgorithm: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> MetaOapg.properties.reactionWheelCommands: ...
@@ -200,9 +204,15 @@ class PointingMode(
     def __getitem__(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> MetaOapg.properties.magnetorquerCommands: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["commandedAttitude"]) -> MetaOapg.properties.commandedAttitude: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["commandedAngularRates"]) -> MetaOapg.properties.commandedAngularRates: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "reactionWheelCommands", "magnetorquerCommands", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "id", "odAlgorithm", "adAlgorithm", "operationalModes", "reactionWheelCommands", "magnetorquerCommands", "commandedAttitude", "commandedAngularRates", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -220,13 +230,13 @@ class PointingMode(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["odAlgorithm"]) -> typing.Union[MetaOapg.properties.odAlgorithm, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["adAlgorithm"]) -> typing.Union[MetaOapg.properties.adAlgorithm, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> typing.Union[MetaOapg.properties.reactionWheelCommands, schemas.Unset]: ...
@@ -235,9 +245,15 @@ class PointingMode(
     def get_item_oapg(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> typing.Union[MetaOapg.properties.magnetorquerCommands, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["commandedAttitude"]) -> typing.Union[MetaOapg.properties.commandedAttitude, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["commandedAngularRates"]) -> typing.Union[MetaOapg.properties.commandedAngularRates, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "id", "operationalModes", "odAlgorithm", "adAlgorithm", "reactionWheelCommands", "magnetorquerCommands", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "pointingModeType", "conOps", "id", "odAlgorithm", "adAlgorithm", "operationalModes", "reactionWheelCommands", "magnetorquerCommands", "commandedAttitude", "commandedAngularRates", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -248,11 +264,13 @@ class PointingMode(
         pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         odAlgorithm: typing.Union[MetaOapg.properties.odAlgorithm, str, schemas.Unset] = schemas.unset,
         adAlgorithm: typing.Union[MetaOapg.properties.adAlgorithm, str, schemas.Unset] = schemas.unset,
+        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         reactionWheelCommands: typing.Union[MetaOapg.properties.reactionWheelCommands, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquerCommands: typing.Union[MetaOapg.properties.magnetorquerCommands, list, tuple, schemas.Unset] = schemas.unset,
+        commandedAttitude: typing.Union[MetaOapg.properties.commandedAttitude, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        commandedAngularRates: typing.Union[MetaOapg.properties.commandedAngularRates, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'PointingMode':
@@ -263,11 +281,13 @@ class PointingMode(
             pointingModeType=pointingModeType,
             conOps=conOps,
             id=id,
-            operationalModes=operationalModes,
             odAlgorithm=odAlgorithm,
             adAlgorithm=adAlgorithm,
+            operationalModes=operationalModes,
             reactionWheelCommands=reactionWheelCommands,
             magnetorquerCommands=magnetorquerCommands,
+            commandedAttitude=commandedAttitude,
+            commandedAngularRates=commandedAngularRates,
             _configuration=_configuration,
             **kwargs,
         )

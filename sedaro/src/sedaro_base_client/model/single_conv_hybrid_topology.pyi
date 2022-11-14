@@ -168,6 +168,7 @@ class SingleConvHybridTopology(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -388,6 +389,8 @@ class SingleConvHybridTopology(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            availableSolarRootPower = schemas.NumberSchema
+            solarRootPower = schemas.NumberSchema
             __annotations__ = {
                 "name": name,
                 "subsystem": subsystem,
@@ -405,6 +408,7 @@ class SingleConvHybridTopology(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
@@ -416,6 +420,8 @@ class SingleConvHybridTopology(
                 "busRegulators": busRegulators,
                 "solarArrays": solarArrays,
                 "solarCells": solarCells,
+                "availableSolarRootPower": availableSolarRootPower,
+                "solarRootPower": solarRootPower,
             }
     
     componentType: MetaOapg.properties.componentType
@@ -473,6 +479,9 @@ class SingleConvHybridTopology(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -506,9 +515,15 @@ class SingleConvHybridTopology(
     def __getitem__(self, name: typing_extensions.Literal["solarCells"]) -> MetaOapg.properties.solarCells: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["availableSolarRootPower"]) -> MetaOapg.properties.availableSolarRootPower: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["solarRootPower"]) -> MetaOapg.properties.solarRootPower: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "topologyType", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "topologyParams", "loads", "batteryCells", "busRegulators", "solarArrays", "solarCells", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "topologyType", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "topologyParams", "loads", "batteryCells", "busRegulators", "solarArrays", "solarCells", "availableSolarRootPower", "solarRootPower", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -562,6 +577,9 @@ class SingleConvHybridTopology(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -595,9 +613,15 @@ class SingleConvHybridTopology(
     def get_item_oapg(self, name: typing_extensions.Literal["solarCells"]) -> typing.Union[MetaOapg.properties.solarCells, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["availableSolarRootPower"]) -> typing.Union[MetaOapg.properties.availableSolarRootPower, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["solarRootPower"]) -> typing.Union[MetaOapg.properties.solarRootPower, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "topologyType", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "topologyParams", "loads", "batteryCells", "busRegulators", "solarArrays", "solarCells", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "topologyType", "battery", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "topologyParams", "loads", "batteryCells", "busRegulators", "solarArrays", "solarCells", "availableSolarRootPower", "solarRootPower", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -620,6 +644,7 @@ class SingleConvHybridTopology(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -631,6 +656,8 @@ class SingleConvHybridTopology(
         busRegulators: typing.Union[MetaOapg.properties.busRegulators, list, tuple, schemas.Unset] = schemas.unset,
         solarArrays: typing.Union[MetaOapg.properties.solarArrays, list, tuple, schemas.Unset] = schemas.unset,
         solarCells: typing.Union[MetaOapg.properties.solarCells, list, tuple, schemas.Unset] = schemas.unset,
+        availableSolarRootPower: typing.Union[MetaOapg.properties.availableSolarRootPower, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        solarRootPower: typing.Union[MetaOapg.properties.solarRootPower, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SingleConvHybridTopology':
@@ -653,6 +680,7 @@ class SingleConvHybridTopology(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
@@ -664,6 +692,8 @@ class SingleConvHybridTopology(
             busRegulators=busRegulators,
             solarArrays=solarArrays,
             solarCells=solarCells,
+            availableSolarRootPower=availableSolarRootPower,
+            solarRootPower=solarRootPower,
             _configuration=_configuration,
             **kwargs,
         )

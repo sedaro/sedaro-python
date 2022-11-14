@@ -103,6 +103,8 @@ class ResistanceLoad(
             id = schemas.StrSchema
             busRegulator = schemas.StrSchema
             topology = schemas.StrSchema
+            powerConsumed = schemas.NumberSchema
+            isActive = schemas.BoolSchema
             dutyCyclePeriod = schemas.NumberSchema
             
             
@@ -119,6 +121,8 @@ class ResistanceLoad(
                 "id": id,
                 "busRegulator": busRegulator,
                 "topology": topology,
+                "powerConsumed": powerConsumed,
+                "isActive": isActive,
                 "dutyCyclePeriod": dutyCyclePeriod,
                 "dutyCyclePercentage": dutyCyclePercentage,
             }
@@ -154,6 +158,12 @@ class ResistanceLoad(
     def __getitem__(self, name: typing_extensions.Literal["topology"]) -> MetaOapg.properties.topology: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["isActive"]) -> MetaOapg.properties.isActive: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dutyCyclePeriod"]) -> MetaOapg.properties.dutyCyclePeriod: ...
     
     @typing.overload
@@ -162,7 +172,7 @@ class ResistanceLoad(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "loadDefType", "loadDefParams", "id", "busRegulator", "topology", "dutyCyclePeriod", "dutyCyclePercentage", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "loadDefType", "loadDefParams", "id", "busRegulator", "topology", "powerConsumed", "isActive", "dutyCyclePeriod", "dutyCyclePercentage", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -192,6 +202,12 @@ class ResistanceLoad(
     def get_item_oapg(self, name: typing_extensions.Literal["topology"]) -> typing.Union[MetaOapg.properties.topology, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["isActive"]) -> typing.Union[MetaOapg.properties.isActive, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dutyCyclePeriod"]) -> typing.Union[MetaOapg.properties.dutyCyclePeriod, schemas.Unset]: ...
     
     @typing.overload
@@ -200,7 +216,7 @@ class ResistanceLoad(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "loadDefType", "loadDefParams", "id", "busRegulator", "topology", "dutyCyclePeriod", "dutyCyclePercentage", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "epsOutputType", "loadState", "loadDefType", "loadDefParams", "id", "busRegulator", "topology", "powerConsumed", "isActive", "dutyCyclePeriod", "dutyCyclePercentage", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -215,6 +231,8 @@ class ResistanceLoad(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         busRegulator: typing.Union[MetaOapg.properties.busRegulator, str, schemas.Unset] = schemas.unset,
         topology: typing.Union[MetaOapg.properties.topology, str, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         dutyCyclePeriod: typing.Union[MetaOapg.properties.dutyCyclePeriod, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dutyCyclePercentage: typing.Union[MetaOapg.properties.dutyCyclePercentage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -231,6 +249,8 @@ class ResistanceLoad(
             id=id,
             busRegulator=busRegulator,
             topology=topology,
+            powerConsumed=powerConsumed,
+            isActive=isActive,
             dutyCyclePeriod=dutyCyclePeriod,
             dutyCyclePercentage=dutyCyclePercentage,
             _configuration=_configuration,

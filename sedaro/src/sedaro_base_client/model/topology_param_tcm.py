@@ -52,7 +52,6 @@ class TopologyParamTCM(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             
             
             class outputPowerRating(
@@ -89,7 +88,6 @@ class TopologyParamTCM(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             __annotations__ = {
                 "bcrEfficiency": bcrEfficiency,
                 "outputPowerRating": outputPowerRating,

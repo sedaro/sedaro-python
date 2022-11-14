@@ -109,7 +109,6 @@ class ReactionWheel(
             
                 class MetaOapg:
                     inclusive_maximum = 1.0
-                    inclusive_minimum = 0.0
             id = schemas.StrSchema
             
             
@@ -219,6 +218,7 @@ class ReactionWheel(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            powerConsumed = schemas.NumberSchema
             
             
             class dissipations(
@@ -290,7 +290,6 @@ class ReactionWheel(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            powerConsumed = schemas.NumberSchema
             torque = schemas.AnyTypeSchema
             
             
@@ -340,12 +339,12 @@ class ReactionWheel(
                 "satellite": satellite,
                 "thermal_interface_A": thermal_interface_A,
                 "thermal_interface_B": thermal_interface_B,
+                "powerConsumed": powerConsumed,
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
                 "tempControllers": tempControllers,
                 "temperature": temperature,
-                "powerConsumed": powerConsumed,
                 "torque": torque,
                 "maxTorque": maxTorque,
                 "commandedTorqueMagnitude": commandedTorqueMagnitude,
@@ -422,6 +421,9 @@ class ReactionWheel(
     def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dissipations"]) -> MetaOapg.properties.dissipations: ...
     
     @typing.overload
@@ -435,9 +437,6 @@ class ReactionWheel(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["powerConsumed"]) -> MetaOapg.properties.powerConsumed: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["torque"]) -> MetaOapg.properties.torque: ...
@@ -463,7 +462,7 @@ class ReactionWheel(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "torque", "maxTorque", "commandedTorqueMagnitude", "momentum", "speed", "torqueMargin", "momentumMargin", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "torque", "maxTorque", "commandedTorqueMagnitude", "momentum", "speed", "torqueMargin", "momentumMargin", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -526,6 +525,9 @@ class ReactionWheel(
     def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dissipations"]) -> typing.Union[MetaOapg.properties.dissipations, schemas.Unset]: ...
     
     @typing.overload
@@ -539,9 +541,6 @@ class ReactionWheel(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["powerConsumed"]) -> typing.Union[MetaOapg.properties.powerConsumed, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["torque"]) -> typing.Union[MetaOapg.properties.torque, schemas.Unset]: ...
@@ -567,7 +566,7 @@ class ReactionWheel(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "powerConsumed", "torque", "maxTorque", "commandedTorqueMagnitude", "momentum", "speed", "torqueMargin", "momentumMargin", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "subsystem", "componentType", "bodyFrameVector", "inertia", "ratedMomentum", "ratedTorque", "efficiency", "id", "partNumber", "manufacturer", "hotTempRating", "coldTempRating", "thermalCapacitance", "cotsTemplate", "loadStates", "satellite", "thermal_interface_A", "thermal_interface_B", "powerConsumed", "dissipations", "hotMargin", "coldMargin", "tempControllers", "temperature", "torque", "maxTorque", "commandedTorqueMagnitude", "momentum", "speed", "torqueMargin", "momentumMargin", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -593,12 +592,12 @@ class ReactionWheel(
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
         thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
+        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
         temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         torque: typing.Union[MetaOapg.properties.torque, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         maxTorque: typing.Union[MetaOapg.properties.maxTorque, list, tuple, schemas.Unset] = schemas.unset,
         commandedTorqueMagnitude: typing.Union[MetaOapg.properties.commandedTorqueMagnitude, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -631,12 +630,12 @@ class ReactionWheel(
             satellite=satellite,
             thermal_interface_A=thermal_interface_A,
             thermal_interface_B=thermal_interface_B,
+            powerConsumed=powerConsumed,
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
             tempControllers=tempControllers,
             temperature=temperature,
-            powerConsumed=powerConsumed,
             torque=torque,
             maxTorque=maxTorque,
             commandedTorqueMagnitude=commandedTorqueMagnitude,

@@ -113,7 +113,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _delete_max_secondary_alignment_pointing_mode_oapg(
+    def _delete_max_align_pointing_mode_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _delete_max_secondary_alignment_pointing_mode_oapg(
+    def _delete_max_align_pointing_mode_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -135,7 +135,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _delete_max_secondary_alignment_pointing_mode_oapg(
+    def _delete_max_align_pointing_mode_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -147,7 +147,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _delete_max_secondary_alignment_pointing_mode_oapg(
+    def _delete_max_align_pointing_mode_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -207,11 +207,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class DeleteMaxSecondaryAlignmentPointingMode(BaseApi):
+class DeleteMaxAlignPointingMode(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_max_secondary_alignment_pointing_mode(
+    def delete_max_align_pointing_mode(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -223,7 +223,7 @@ class DeleteMaxSecondaryAlignmentPointingMode(BaseApi):
     ]: ...
 
     @typing.overload
-    def delete_max_secondary_alignment_pointing_mode(
+    def delete_max_align_pointing_mode(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -233,7 +233,7 @@ class DeleteMaxSecondaryAlignmentPointingMode(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def delete_max_secondary_alignment_pointing_mode(
+    def delete_max_align_pointing_mode(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -245,7 +245,7 @@ class DeleteMaxSecondaryAlignmentPointingMode(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def delete_max_secondary_alignment_pointing_mode(
+    def delete_max_align_pointing_mode(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -253,7 +253,7 @@ class DeleteMaxSecondaryAlignmentPointingMode(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_max_secondary_alignment_pointing_mode_oapg(
+        return self._delete_max_align_pointing_mode_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -308,7 +308,7 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_max_secondary_alignment_pointing_mode_oapg(
+        return self._delete_max_align_pointing_mode_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,

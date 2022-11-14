@@ -1,6 +1,7 @@
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
-# from sedaro_base_client.apis.tags import branches_api
+from sedaro_base_client.apis.tags import branches_api
+from sedaro_base_client.exceptions import ApiException
 
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
@@ -27,18 +28,25 @@ class SedaroApiClient(ApiClient):
             BranchClient: A `BranchClient` object used to interact with the data attached to the corresponding Sedaro
             Branch.
         """
-        # branches_api_instance = branches_api.BranchesApi(self)
-        # res = branches_api_instance.get_branch(path_params={'branchId': id})
-        # ^^^ TODO... doesn't work b/c that response model is wrong
+        branches_api_instance = branches_api.BranchesApi(self)
+        res = branches_api_instance.get_branch(path_params={'branchId': id})
+        return BranchClient(res.body, self)
 
-        res = self.call_api(f'/models/branches/{id}', 'GET')
-        parsed_res = parse_urllib_response(res)
-        return BranchClient(
-            id=id,
-            data=parsed_res['data'],
-            data_schema=parsed_res['dataSchema'],
-            _sedaro_client=self,
-            _block_id_to_type_map=parsed_res['blockIdToTypeMap'],
-            _block_class_to_block_group_map=parsed_res['blockClassToBlockGroupMap'],
-            _block_group_names=parsed_res['blockGroupNames']
-        )
+    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None):
+        """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
+        url = f'/data/?id={id}'
+        if start is not None:
+            url += f'&start={start}'
+        if stop is not None:
+            url += f'&stop={stop}'
+        if binWidth is not None:
+            url += f'&binWidth={binWidth}'
+        response = self.call_api(url, 'GET')
+        try:
+            _response = parse_urllib_response(response)
+            if response.status != 200:
+                raise Exception()
+        except:
+            reason = _response['error']['message'] if 'error' in _response else 'An unknown error occurred.'
+            raise ApiException(status=response.status, reason=reason)
+        return _response

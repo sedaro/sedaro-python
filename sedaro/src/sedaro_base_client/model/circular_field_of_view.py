@@ -76,7 +76,7 @@ class CircularFieldOfView(
             
             
                 class MetaOapg:
-                    inclusive_maximum = 3.141592653589793
+                    inclusive_maximum = 180.0
                     inclusive_minimum = 0.0
             id = schemas.StrSchema
             

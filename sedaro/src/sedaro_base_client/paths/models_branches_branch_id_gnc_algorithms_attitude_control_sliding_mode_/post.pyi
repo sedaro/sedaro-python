@@ -111,7 +111,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _create_sliding_mode3x3_algorithm_oapg(
+    def _create_sliding_mode_algorithm_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _create_sliding_mode3x3_algorithm_oapg(
+    def _create_sliding_mode_algorithm_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -140,7 +140,7 @@ class BaseApi(api_client.Api):
 
 
     @typing.overload
-    def _create_sliding_mode3x3_algorithm_oapg(
+    def _create_sliding_mode_algorithm_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -152,7 +152,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _create_sliding_mode3x3_algorithm_oapg(
+    def _create_sliding_mode_algorithm_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -166,7 +166,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _create_sliding_mode3x3_algorithm_oapg(
+    def _create_sliding_mode_algorithm_oapg(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -240,11 +240,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class CreateSlidingMode3x3Algorithm(BaseApi):
+class CreateSlidingModeAlgorithm(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def create_sliding_mode3x3_algorithm(
+    def create_sliding_mode_algorithm(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
@@ -258,7 +258,7 @@ class CreateSlidingMode3x3Algorithm(BaseApi):
     ]: ...
 
     @typing.overload
-    def create_sliding_mode3x3_algorithm(
+    def create_sliding_mode_algorithm(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -273,7 +273,7 @@ class CreateSlidingMode3x3Algorithm(BaseApi):
 
 
     @typing.overload
-    def create_sliding_mode3x3_algorithm(
+    def create_sliding_mode_algorithm(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
@@ -285,7 +285,7 @@ class CreateSlidingMode3x3Algorithm(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def create_sliding_mode3x3_algorithm(
+    def create_sliding_mode_algorithm(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
@@ -299,7 +299,7 @@ class CreateSlidingMode3x3Algorithm(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def create_sliding_mode3x3_algorithm(
+    def create_sliding_mode_algorithm(
         self,
         body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
@@ -309,7 +309,7 @@ class CreateSlidingMode3x3Algorithm(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_sliding_mode3x3_algorithm_oapg(
+        return self._create_sliding_mode_algorithm_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,
@@ -389,7 +389,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_sliding_mode3x3_algorithm_oapg(
+        return self._create_sliding_mode_algorithm_oapg(
             body=body,
             path_params=path_params,
             content_type=content_type,

@@ -167,29 +167,6 @@ class BatteryCell(
             
                 class MetaOapg:
                     max_length = 32
-            
-            
-            class packs(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'packs':
-                    return super().__new__(
-                        cls,
-                        arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             __annotations__ = {
                 "partNumber": partNumber,
                 "esr": esr,
@@ -201,7 +178,6 @@ class BatteryCell(
                 "topology": topology,
                 "id": id,
                 "manufacturer": manufacturer,
-                "packs": packs,
             }
     
     curve: MetaOapg.properties.curve
@@ -244,12 +220,9 @@ class BatteryCell(
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["packs"]) -> MetaOapg.properties.packs: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", "packs", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -285,12 +258,9 @@ class BatteryCell(
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["packs"]) -> typing.Union[MetaOapg.properties.packs, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", "packs", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["partNumber", "esr", "maxChargeCurrent", "maxDischargeCurrent", "minSoc", "curve", "capacity", "topology", "id", "manufacturer", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -307,7 +277,6 @@ class BatteryCell(
         capacity: typing.Union[MetaOapg.properties.capacity, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        packs: typing.Union[MetaOapg.properties.packs, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BatteryCell':
@@ -324,7 +293,6 @@ class BatteryCell(
             capacity=capacity,
             id=id,
             manufacturer=manufacturer,
-            packs=packs,
             _configuration=_configuration,
             **kwargs,
         )
