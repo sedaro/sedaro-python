@@ -12,126 +12,203 @@ pip install sedaro
 
 ## Use
 
-1. Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the [Sedaro Satellite Management Console](https://staging.satellite.sedaro.com/#/account).
+1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the [Sedaro Satellite Management Console](https://staging.satellite.sedaro.com/#/account).
 
-   ```py
-   from sedaro import SedaroApiClient
+    ```py
+    from sedaro import SedaroApiClient
 
-   API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
-   BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
+    API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
+    BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
 
-   with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-       ...
-   ```
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        ...
+    ```
 
-2. Use the client to instantiate a `BranchClient`.
+2.  Use the client to instantiate a `BranchClient`.
 
-   ```py
-   ...
+    ```py
+    ...
 
-   with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-       branch_client = sedaro_client.get_branch(BRANCH_ID)
-   ```
+    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
+    ```
 
-3. Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
+3.  Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
 
-   ```py
-   ...
+    ```py
+    ...
 
-       branch_client = sedaro_client.get_branch(BRANCH_ID)
+        branch_client = sedaro_client.get_branch(BRANCH_ID)
 
-       branch_client.Target
+        branch_client.Target
 
-       tranch_client.Component
+        tranch_client.Component
 
-       branch_client.Subsystem
+        branch_client.Subsystem
 
-       # ...etc.
+        # ...etc.
 
-   ```
+    ```
 
-4. A `BlockClassClient` has several methods:
+    - Valid `BlockClassClient`s for an Agent Template Branch are as follows:
 
-   ```py
-   ...
-       branch_client.Subsystem.create(
-           name='Structure',
-           satellite='3'  # The ID of the related Satellite Block
-       )
+      - TriadAlgorithm
+      - AveragingAlgorithm
+      - MEKFAlgorithm
+      - EKFAlgorithm
+      - GPSAlgorithm
+      - SlidingModeAlgorithm
+      - Battery
+      - BatteryCell
+      - BodyFrameVector
+      - BusRegulator
+      - Component
+      - BatteryPack
+      - SolarPanel
+      - QuasiRegDetTopology
+      - FullyRegDetTopology
+      - SingleConvHybridTopology
+      - TwoConvMpptTopology
+      - SingleConvMpptTopology
+      - Topology
+      - ReactionWheel
+      - Magnetorquer
+      - DirectionSensor
+      - OpticalAttitudeSensor
+      - VectorSensor
+      - PositionSensor
+      - AngularVelocitySensor
+      - Cooler
+      - Heater
+      - SphericalFuelTank
+      - SpherocylinderFuelTank
+      - ConOps
+      - GroupCondition
+      - Condition
+      - SameTargetConditionGrouping
+      - ResistanceLoad
+      - PowerLoad
+      - ActuatorLoad
+      - LoadState
+      - CircularFieldOfView
+      - RectangularFieldOfView
+      - FOVConstraint
+      - FuelReservoir
+      - OperationalMode
+      - PassivePointingMode
+      - LockPointingMode
+      - MaxAlignPointingMode
+      - PointingMode
+      - ActivePointingMode
+      - CelestialVector
+      - LocalVector
+      - TargetVector
+      - TargetGroupVector
+      - ReferenceVector
+      - Satellite
+      - SimulatableSatellite
+      - SolarArray
+      - SolarCell
+      - Subsystem
+      - FixedSurface
+      - SunTrackingSurface
+      - AntiSunTrackingSurface
+      - SurfaceMaterial
+      - TargetGroup
+      - SpaceTarget
+      - GroundTarget
+      - CelestialTarget
+      - TempControllerState
+      - ThermalInterface
+      - ThermalInterfaceMateria
 
-       branch_client.Subsystem.get(blockId) # ID of desired Subsystem
-       branch_client.Subsystem.get_all()
-       branch_client.Subsystem.get_first()
-       branch_client.Subsystem.get_last()
-       branch_client.Subsystem.get_all_ids()
-   ```
+    - Valid `BlockClassClient`s for an Scenario Branch are as follows:
+      - Agent
+      - ClockConfig
+      - Orbit
 
-5. Most `BlockClassClient` methods return a `BlockClient` which has several methods and properties.
+4.  A `BlockClassClient` has several methods:
 
-   ```py
-   ...
-       subsystem_client = branch_client.Subsystem.create(
-           name='Structure',
-           satellite='3'
-       )
+    ```py
+    ...
+        branch_client.Subsystem.create(
+            name='Structure',
+            satellite='3'  # The ID of the related Satellite Block
+        )
 
-       subsystem_client.update(name='Structure 2.0')
+        branch_client.Subsystem.get(blockId) # ID of desired Subsystem
+        branch_client.Subsystem.get_all()
+        branch_client.Subsystem.get_first()
+        branch_client.Subsystem.get_last()
+        branch_client.Subsystem.get_all_ids()
+    ```
 
-       subsystem_client.delete()
-   ```
+5.  Most `BlockClassClient` methods return a `BlockClient` which has several methods and properties.
 
-   ```py
-   ...
-   # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
-       subsystem_client = branch_client.Subsystem.create(
-           name='Structure',
-           satellite='3'
-       )
+    ```py
+    ...
+        subsystem_client = branch_client.Subsystem.create(
+            name='Structure',
+            satellite='3'
+        )
 
-       subsystem_client_2 = subsystem_client.update(
-        name='Structure 2.0'
-       )
+        subsystem_client.update(name='Structure 2.0')
 
-       subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
+        subsystem_client.delete()
+    ```
 
-       assert subsystem_client == subsystem_client_2 == subsystem_client_3
-   ```
+    ```py
+    ...
+    # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
+        subsystem_client = branch_client.Subsystem.create(
+            name='Structure',
+            satellite='3'
+        )
 
-   ```py
-   ...
-   # Printing a `BlockClient` will show you the corresponding Sedaro Block's data:
-       print(subsystem_client)
+        subsystem_client_2 = subsystem_client.update(
+         name='Structure 2.0'
+        )
 
-   >>> Subsystem(
-   >>>   id=27
-   >>>   name=Structure 2.0
-   >>>   category=CUSTOM
-   >>>   satellite=3
-   >>>   components=()
-   >>> )
-   ```
+        subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
 
-   ```py
-   # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
-       subsystem_client.name
+        assert subsystem_client == subsystem_client_2 == subsystem_client_3
+    ```
 
-   >>> 'Structure 2.0'
-   # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
-       subsystem.satellite
+    ```py
+    ...
+    # Printing a `BlockClient` will show you the corresponding Sedaro Block's data:
+        print(subsystem_client)
 
-   >>> Satellite(
-   >>>   id=3
-   >>>   mass=1000
-   >>>   ...etc
-   >>> )
-   ```
+    >>> Subsystem(
+    >>>   id=27
+    >>>   name=Structure 2.0
+    >>>   category=CUSTOM
+    >>>   satellite=3
+    >>>   components=()
+    >>> )
+    ```
 
-   ```py
-   # This allows for traversing Blocks in the model via relationship fields:
-       solar_panel_client = branch_client.SolarPanel.get_first()
+    ```py
+    # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
+        subsystem_client.name
 
-       solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
-   ```
+    >>> 'Structure 2.0'
+    # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
+        subsystem.satellite
+
+    >>> Satellite(
+    >>>   id=3
+    >>>   mass=1000
+    >>>   ...etc
+    >>> )
+    ```
+
+    ```py
+    # This allows for traversing Blocks in the model via relationship fields:
+        solar_panel_client = branch_client.SolarPanel.get_first()
+
+        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
+    ```
 
 ## Full Example
 
