@@ -29,7 +29,7 @@ class BranchClient:
         self._block_group_names: List[str] = body['blockGroupNames']
 
     def __str__(self):
-        return f'BranchClient(id: {self.id})'
+        return f'BranchClient(id: {self.id}, name: "{self.name}")'
 
     def __repr__(self):
         return self.__str__()
