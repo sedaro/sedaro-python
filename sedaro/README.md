@@ -104,7 +104,7 @@ pip install sedaro
 
    >>> Subsystem(
    >>>   id=27
-   >>>   name=One subsystem to find them
+   >>>   name=Structure 2.0
    >>>   category=CUSTOM
    >>>   satellite=3
    >>>   components=()
@@ -115,7 +115,7 @@ pip install sedaro
    # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
        subsystem_client.name
 
-   >>> 'And in the darkness to bind them'
+   >>> 'Structure 2.0'
    # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
        subsystem.satellite
 
