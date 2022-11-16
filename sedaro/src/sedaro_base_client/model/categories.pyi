@@ -40,8 +40,8 @@ class Categories(
         return cls("POWER")
     
     @schemas.classproperty
-    def CCDH(cls):
-        return cls("CCDH")
+    def CDH(cls):
+        return cls("CDH")
     
     @schemas.classproperty
     def COMMS(cls):
