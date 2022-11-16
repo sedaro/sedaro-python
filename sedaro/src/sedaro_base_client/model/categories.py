@@ -39,7 +39,7 @@ class Categories(
     class MetaOapg:
         enum_value_to_name = {
             "POWER": "POWER",
-            "CCDH": "CCDH",
+            "CDH": "CDH",
             "COMMS": "COMMS",
             "ATTITUDE": "ATTITUDE",
             "NAVIGATION": "NAVIGATION",
@@ -55,8 +55,8 @@ class Categories(
         return cls("POWER")
     
     @schemas.classproperty
-    def CCDH(cls):
-        return cls("CCDH")
+    def CDH(cls):
+        return cls("CDH")
     
     @schemas.classproperty
     def COMMS(cls):
