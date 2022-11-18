@@ -274,9 +274,9 @@ def test_run_simulation():
 
 
 if __name__ == "__main__":
-    # start timer after first get to make sure backend is ready to accept request
     test_get()
 
+    # start timer after first get to make sure backend is ready to accept request
     start_time = time.perf_counter()
     print('\nRunning client tests and starting timer')
     test_create_update_and_delete_block()
