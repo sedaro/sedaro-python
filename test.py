@@ -232,14 +232,61 @@ def test_block_class_client_options():
             )
 
 
+def test_run_simulation():
+    from sedaro_base_client.apis.tags import jobs_api
+
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
+        print('\nTesting running simulation from client...\n')
+        scenario_client = sedaro_client.get_branch(WILDFIRE_SCENARIO_ID)
+
+        # Start simulation
+        jobs_api_client = jobs_api.JobsApi(sedaro_client)
+        response = jobs_api_client.start_simulation(
+            path_params={'branchId': scenario_client.id})
+
+        # Get status #1
+        response = jobs_api_client.get_simulations(
+            path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
+        )
+        job = response.body[0]
+        print(job['status'], '-', round(
+            job['progress']['percentComplete'], 2), '%')
+        time.sleep(5)
+
+        # Get status #2
+        response = jobs_api_client.get_simulations(
+            path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
+        )
+        job = response.body[0]
+        print('')
+        print(job['status'], '-', round(
+            job['progress']['percentComplete'], 2), '%')
+        time.sleep(5)
+
+        # Terminate
+        print('\nTerminating...')
+        response = jobs_api_client.terminate_simulation(
+            path_params={'branchId': scenario_client.id, 'jobId': job.id}
+        )
+        print('')
+        print(response.body['message'])
+        print('\nDone!\n')
+
+
 if __name__ == "__main__":
     # start timer after first get to make sure backend is ready to accept request
-    start_time = time.perf_counter()
-    print('\nstarting\n')
     test_get()
+
+    start_time = time.perf_counter()
+    print('\nRunning client tests and starting timer')
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality()
     test_different_block()
     test_block_class_client_options()
-    print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
+    print(
+        f'\nFinished tests in {round(time.perf_counter() - start_time, 2)} seconds'
+    )
+
+    # test simulation outside of timer above
+    test_run_simulation()
