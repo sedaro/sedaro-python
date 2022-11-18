@@ -11,8 +11,8 @@ HOST = 'http://localhost:80'
 # NOTE: update the API_KEY and WILDFIRE_A_T_ID for things that work with your dev environment
 # NOTE: these are temporary for Zach's dev environment
 API_KEY = '1.-RjK0kE34B5z-V7BqBVdhSMLgHq9UTGB7iIZYTpoDGfZpn2cQPWE9kz_G9LapUshx7inFFTmN_xNMS5YnGMW-w'
-WILDFIRE_A_T_ID = 55
-WILDFIRE_SCENARIO_ID = 57
+WILDFIRE_A_T_ID = 53
+WILDFIRE_SCENARIO_ID = 55
 
 
 def test_get():
@@ -34,13 +34,12 @@ def test_create_update_and_delete_block():
             minSoc=0.2,
             capacity=500,
             curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
-            topology='11',
+            topology='10',
         )
 
         bc_id = battery_cell_client.id
 
-        assert battery_cell_client == branch_client.BatteryCell.get(
-            bc_id)
+        assert battery_cell_client == branch_client.BatteryCell.get(bc_id)
 
         new_part_number = "Let's gooo!!!!!!!!!!!!"
 
@@ -232,9 +231,9 @@ if __name__ == "__main__":
     start_time = time.perf_counter()
     print('\nstarting\n')
     test_get()
-    # test_create_update_and_delete_block()
+    test_create_update_and_delete_block()
     # test_update_rel_and_cascade_delete()
     # test_traversing_and_equality()
     # test_different_block()
-    # test_block_class_client_options()
+    test_block_class_client_options()
     print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
