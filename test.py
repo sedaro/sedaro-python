@@ -4,6 +4,7 @@ import time
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 from sedaro.block_class_client import BlockClassClient
+from sedaro.block_client import BlockClient
 from sedaro.branch_client import BranchClient
 
 HOST = 'http://localhost:80'
@@ -65,12 +66,12 @@ def test_update_rel_and_cascade_delete():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
-        subsystem_client = branch_client.subsystem.create(
+        subsystem_client = branch_client.Subsystem.create(
             name='Temp Custom Subsystem ' + str(randrange(1, 100000)),
-            satellite=branch_client.satellite.get_first().id
+            satellite=branch_client.Satellite.get_first().id
         )
 
-        component_client = branch_client.component.create(
+        component_client = branch_client.Component.create(
             name='Temp custom component',
             subsystem=subsystem_client.id
         )
@@ -103,24 +104,29 @@ def test_traversing_and_equality():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
-        solar_panel_client = branch_client.solarPanel.get_first()
-        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].thermal_interface_A[0].satellite.topology
+        solar_panel_client = branch_client.SolarPanel.get_first()
 
-        con_ops_client = branch_client.con_ops.get_first()
-        con_ops_client.targetGroups[0].targetAssociations
+        assert isinstance(
+            solar_panel_client.cell.topology.subsystem.satellite.components[
+                0].thermal_interface_A[0].satellite.topology,
+            BlockClient
+        )
 
-        assert branch_client.solarPanel.get_first(
-        ) == solar_panel_client.cell.panels[0]
+        con_ops_client = branch_client.ConOps.get_first()
+        assert isinstance(
+            list(con_ops_client.targetGroups[0].targetAssociations.keys())[0],
+            BlockClient
+        )
 
-        assert branch_client.solarPanel.get_first(
-        ) is not solar_panel_client.cell.panels[0]
+        assert solar_panel_client == branch_client.SolarPanel.get_first()
+        assert solar_panel_client is not branch_client.SolarPanel.get_first()
 
 
 def test_different_block():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
-        subsystem_client = branch_client.subsystem.create(
+        subsystem_client = branch_client.Subsystem.create(
             name='One subsystem to rule them all',
             satellite='5'
         )
@@ -128,7 +134,7 @@ def test_different_block():
         subsystem_client_2 = subsystem_client.update(
             name='One subsystem to find them')
 
-        subsystem_client_3 = branch_client.subsystem.get(subsystem_client.id)
+        subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
 
         assert subsystem_client == subsystem_client_2 == subsystem_client_3
 
@@ -232,8 +238,8 @@ if __name__ == "__main__":
     print('\nstarting\n')
     test_get()
     test_create_update_and_delete_block()
-    # test_update_rel_and_cascade_delete()
-    # test_traversing_and_equality()
-    # test_different_block()
+    test_update_rel_and_cascade_delete()
+    test_traversing_and_equality()
+    test_different_block()
     test_block_class_client_options()
     print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
