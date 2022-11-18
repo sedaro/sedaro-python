@@ -4,25 +4,27 @@ import time
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 from sedaro.block_class_client import BlockClassClient
+from sedaro.branch_client import BranchClient
 
-# TODO: remove this
-# NOTE: update the API_KEY and VEHICLE_BRANCH_ID for things that work with your dev environment
-# NOTE: these are temporary for Zach's dev environment
-API_KEY = '1.R-HbCdAx7o4tgOT6OUWFC4p6cTwfOdMJbwy0PUzz2A29628BcdAE_PVE8NBqpL6bSdsuKEG6mg6n57cttQIuuQ'
 HOST = 'http://localhost:80'
-VEHICLE_BRANCH_ID = 4
-SCENARIO_BRANCH_ID = 6
+# TODO: remove this
+# NOTE: update the API_KEY and WILDFIRE_A_T_ID for things that work with your dev environment
+# NOTE: these are temporary for Zach's dev environment
+API_KEY = '1.-RjK0kE34B5z-V7BqBVdhSMLgHq9UTGB7iIZYTpoDGfZpn2cQPWE9kz_G9LapUshx7inFFTmN_xNMS5YnGMW-w'
+WILDFIRE_A_T_ID = 55
+WILDFIRE_SCENARIO_ID = 57
 
 
 def test_get():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
         # print(f'\nres: {branch_client}\n')
+        assert isinstance(branch_client, BranchClient)
 
 
 def test_create_update_and_delete_block():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
         battery_cell_client = branch_client.BatteryCell.create(
             partNumber='987654321',
             manufacturer='Sedaro Corporation',
@@ -62,7 +64,7 @@ def test_create_update_and_delete_block():
 
 def test_update_rel_and_cascade_delete():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
         subsystem_client = branch_client.subsystem.create(
             name='Temp Custom Subsystem ' + str(randrange(1, 100000)),
@@ -100,7 +102,7 @@ def test_update_rel_and_cascade_delete():
 
 def test_traversing_and_equality():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
         solar_panel_client = branch_client.solarPanel.get_first()
         solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].thermal_interface_A[0].satellite.topology
@@ -117,7 +119,7 @@ def test_traversing_and_equality():
 
 def test_different_block():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
         subsystem_client = branch_client.subsystem.create(
             name='One subsystem to rule them all',
@@ -213,12 +215,12 @@ def test_block_class_client_options():
         'Orbit',
     ]
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        vehicle_branch_client = sedaro_client.get_branch(VEHICLE_BRANCH_ID)
+        vehicle_branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
         for block in agent_template_blocks:
             assert isinstance(
                 getattr(vehicle_branch_client, block), BlockClassClient
             )
-        scenario_branch_client = sedaro_client.get_branch(SCENARIO_BRANCH_ID)
+        scenario_branch_client = sedaro_client.get_branch(WILDFIRE_SCENARIO_ID)
         for block in scenario_blocks:
             assert isinstance(
                 getattr(scenario_branch_client, block), BlockClassClient
@@ -226,13 +228,13 @@ def test_block_class_client_options():
 
 
 if __name__ == "__main__":
-    test_get()
     # start timer after first get to make sure backend is ready to accept request
     start_time = time.perf_counter()
     print('\nstarting\n')
+    test_get()
     # test_create_update_and_delete_block()
     # test_update_rel_and_cascade_delete()
     # test_traversing_and_equality()
     # test_different_block()
-    test_block_class_client_options()
+    # test_block_class_client_options()
     print(f'\ndone in {round(time.perf_counter() - start_time, 2)} seconds\n')
