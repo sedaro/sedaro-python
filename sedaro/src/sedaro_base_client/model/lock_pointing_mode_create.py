@@ -50,7 +50,7 @@ class LockPointingModeCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class pointingModeType(
@@ -162,7 +162,7 @@ class LockPointingModeCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         lockBodyFrameVector: typing.Union[MetaOapg.properties.lockBodyFrameVector, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, str, ],
@@ -177,7 +177,7 @@ class LockPointingModeCreate(
     ) -> 'LockPointingModeCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             lockBodyFrameVector=lockBodyFrameVector,
             name=name,
             pointingModeType=pointingModeType,

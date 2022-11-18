@@ -88,14 +88,14 @@ class TopologyParamSCM(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bcrEfficiency: typing.Union[MetaOapg.properties.bcrEfficiency, decimal.Decimal, int, float, ],
         outputPowerRating: typing.Union[MetaOapg.properties.outputPowerRating, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'TopologyParamSCM':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bcrEfficiency=bcrEfficiency,
             outputPowerRating=outputPowerRating,
             _configuration=_configuration,

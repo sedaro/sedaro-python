@@ -55,7 +55,7 @@ class ThermalInterfaceMaterial(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             id = schemas.StrSchema
             
             
@@ -157,7 +157,7 @@ class ThermalInterfaceMaterial(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, ],
         thickness: typing.Union[MetaOapg.properties.thickness, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -171,7 +171,7 @@ class ThermalInterfaceMaterial(
     ) -> 'ThermalInterfaceMaterial':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             hotTempRating=hotTempRating,
             thickness=thickness,
             name=name,

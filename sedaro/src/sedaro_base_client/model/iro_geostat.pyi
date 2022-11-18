@@ -93,7 +93,7 @@ class IROGeostat(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         lon: typing.Union[MetaOapg.properties.lon, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -101,7 +101,7 @@ class IROGeostat(
     ) -> 'IROGeostat':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             lon=lon,
             _configuration=_configuration,

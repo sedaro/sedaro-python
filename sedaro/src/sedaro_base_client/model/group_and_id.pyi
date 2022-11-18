@@ -79,7 +79,7 @@ class GroupAndId(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         id: typing.Union[MetaOapg.properties.id, str, ],
         group: typing.Union[MetaOapg.properties.group, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -87,7 +87,7 @@ class GroupAndId(
     ) -> 'GroupAndId':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             id=id,
             group=group,
             _configuration=_configuration,

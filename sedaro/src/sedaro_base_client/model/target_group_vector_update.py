@@ -112,7 +112,7 @@ class TargetGroupVectorUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         targetGroup: typing.Union[MetaOapg.properties.targetGroup, str, ],
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -122,7 +122,7 @@ class TargetGroupVectorUpdate(
     ) -> 'TargetGroupVectorUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             targetGroup=targetGroup,
             vectorType=vectorType,
             name=name,

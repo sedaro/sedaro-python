@@ -66,7 +66,7 @@ class IROIss(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class nu(
@@ -76,7 +76,7 @@ class IROIss(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             __annotations__ = {
                 "initialRefOrbit": initialRefOrbit,
                 "raan": raan,
@@ -122,7 +122,7 @@ class IROIss(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         nu: typing.Union[MetaOapg.properties.nu, decimal.Decimal, int, float, ],
         raan: typing.Union[MetaOapg.properties.raan, decimal.Decimal, int, float, ],
@@ -131,7 +131,7 @@ class IROIss(
     ) -> 'IROIss':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             nu=nu,
             raan=raan,

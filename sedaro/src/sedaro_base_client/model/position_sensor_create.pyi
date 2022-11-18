@@ -152,7 +152,7 @@ class PositionSensorCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         oneSigmaDistanceError: typing.Union[MetaOapg.properties.oneSigmaDistanceError, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -166,7 +166,7 @@ class PositionSensorCreate(
     ) -> 'PositionSensorCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             oneSigmaDistanceError=oneSigmaDistanceError,
             name=name,
             id=id,

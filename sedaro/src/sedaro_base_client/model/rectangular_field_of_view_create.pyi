@@ -151,7 +151,7 @@ class RectangularFieldOfViewCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         widthHalfAngle: typing.Union[MetaOapg.properties.widthHalfAngle, decimal.Decimal, int, float, ],
         boresightBodyFrameVector: typing.Union[MetaOapg.properties.boresightBodyFrameVector, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -164,7 +164,7 @@ class RectangularFieldOfViewCreate(
     ) -> 'RectangularFieldOfViewCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             widthHalfAngle=widthHalfAngle,
             boresightBodyFrameVector=boresightBodyFrameVector,
             name=name,

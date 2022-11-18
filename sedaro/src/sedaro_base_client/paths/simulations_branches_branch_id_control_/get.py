@@ -112,12 +112,12 @@ class SchemaFor200ResponseBodyApplicationJson(
 
     def __new__(
         cls,
-        arg: typing.Union[typing.Tuple['SimulationJob'], typing.List['SimulationJob']],
+        _arg: typing.Union[typing.Tuple['SimulationJob'], typing.List['SimulationJob']],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
         return super().__new__(
             cls,
-            arg,
+            _arg,
             _configuration=_configuration,
         )
 

@@ -47,7 +47,7 @@ class SubsystemCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             id = schemas.StrSchema
             satellite = schemas.StrSchema
             __annotations__ = {
@@ -93,7 +93,7 @@ class SubsystemCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
@@ -102,7 +102,7 @@ class SubsystemCreate(
     ) -> 'SubsystemCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             id=id,
             satellite=satellite,

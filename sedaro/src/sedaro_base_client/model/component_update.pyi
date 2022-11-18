@@ -137,7 +137,7 @@ class ComponentUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
@@ -150,7 +150,7 @@ class ComponentUpdate(
     ) -> 'ComponentUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             id=id,
             partNumber=partNumber,

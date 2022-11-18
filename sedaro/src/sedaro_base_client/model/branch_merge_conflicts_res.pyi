@@ -54,12 +54,12 @@ class BranchMergeConflictsRes(
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple['ConflictsObj'], typing.List['ConflictsObj']],
+                    _arg: typing.Union[typing.Tuple['ConflictsObj'], typing.List['ConflictsObj']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'conflicts':
                     return super().__new__(
                         cls,
-                        arg,
+                        _arg,
                         _configuration=_configuration,
                     )
             
@@ -94,14 +94,14 @@ class BranchMergeConflictsRes(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         conflicts: typing.Union[MetaOapg.properties.conflicts, list, tuple, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BranchMergeConflictsRes':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             conflicts=conflicts,
             _configuration=_configuration,
             **kwargs,

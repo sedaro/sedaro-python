@@ -52,7 +52,7 @@ class ReactionWheelCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             bodyFrameVector = schemas.StrSchema
             
             
@@ -247,7 +247,7 @@ class ReactionWheelCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, ],
         efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, ],
         inertia: typing.Union[MetaOapg.properties.inertia, decimal.Decimal, int, float, ],
@@ -267,7 +267,7 @@ class ReactionWheelCreate(
     ) -> 'ReactionWheelCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bodyFrameVector=bodyFrameVector,
             efficiency=efficiency,
             inertia=inertia,

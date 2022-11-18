@@ -40,6 +40,7 @@ class PolynomialEphemerisBody(
         enum_value_to_name = {
             "SUN": "SUN",
             "MOON": "MOON",
+            "EARTH": "EARTH",
         }
     
     @schemas.classproperty
@@ -49,3 +50,7 @@ class PolynomialEphemerisBody(
     @schemas.classproperty
     def MOON(cls):
         return cls("MOON")
+    
+    @schemas.classproperty
+    def EARTH(cls):
+        return cls("EARTH")

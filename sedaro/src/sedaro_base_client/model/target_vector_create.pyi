@@ -106,7 +106,7 @@ class TargetVectorCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         referenceTarget: typing.Union[MetaOapg.properties.referenceTarget, str, ],
@@ -116,7 +116,7 @@ class TargetVectorCreate(
     ) -> 'TargetVectorCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             vectorType=vectorType,
             name=name,
             referenceTarget=referenceTarget,

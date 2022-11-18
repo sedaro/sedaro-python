@@ -223,7 +223,7 @@ class ReactionWheelUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, ],
         efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, ],
         inertia: typing.Union[MetaOapg.properties.inertia, decimal.Decimal, int, float, ],
@@ -243,7 +243,7 @@ class ReactionWheelUpdate(
     ) -> 'ReactionWheelUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bodyFrameVector=bodyFrameVector,
             efficiency=efficiency,
             inertia=inertia,

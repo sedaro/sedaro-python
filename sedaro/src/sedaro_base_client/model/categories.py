@@ -41,12 +41,9 @@ class Categories(
             "POWER": "POWER",
             "CDH": "CDH",
             "COMMS": "COMMS",
-            "ATTITUDE": "ATTITUDE",
-            "NAVIGATION": "NAVIGATION",
+            "GNC": "GNC",
             "THERMAL": "THERMAL",
-            "PROP": "PROP",
             "STRUCTURE": "STRUCTURE",
-            "PAYLOAD": "PAYLOAD",
             "CUSTOM": "CUSTOM",
         }
     
@@ -63,28 +60,16 @@ class Categories(
         return cls("COMMS")
     
     @schemas.classproperty
-    def ATTITUDE(cls):
-        return cls("ATTITUDE")
-    
-    @schemas.classproperty
-    def NAVIGATION(cls):
-        return cls("NAVIGATION")
+    def GNC(cls):
+        return cls("GNC")
     
     @schemas.classproperty
     def THERMAL(cls):
         return cls("THERMAL")
     
     @schemas.classproperty
-    def PROP(cls):
-        return cls("PROP")
-    
-    @schemas.classproperty
     def STRUCTURE(cls):
         return cls("STRUCTURE")
-    
-    @schemas.classproperty
-    def PAYLOAD(cls):
-        return cls("PAYLOAD")
     
     @schemas.classproperty
     def CUSTOM(cls):

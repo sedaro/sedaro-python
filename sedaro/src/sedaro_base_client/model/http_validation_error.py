@@ -51,12 +51,12 @@ class HTTPValidationError(
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple['ValidationError'], typing.List['ValidationError']],
+                    _arg: typing.Union[typing.Tuple['ValidationError'], typing.List['ValidationError']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'detail':
                     return super().__new__(
                         cls,
-                        arg,
+                        _arg,
                         _configuration=_configuration,
                     )
             
@@ -89,14 +89,14 @@ class HTTPValidationError(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         detail: typing.Union[MetaOapg.properties.detail, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'HTTPValidationError':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             detail=detail,
             _configuration=_configuration,
             **kwargs,

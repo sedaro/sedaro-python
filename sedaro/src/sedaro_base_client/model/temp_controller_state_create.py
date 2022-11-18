@@ -49,7 +49,7 @@ class TempControllerStateCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             constantTemperature = schemas.NumberSchema
             tempController = schemas.StrSchema
             id = schemas.StrSchema
@@ -65,12 +65,12 @@ class TempControllerStateCreate(
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'operationalModes':
                     return super().__new__(
                         cls,
-                        arg,
+                        _arg,
                         _configuration=_configuration,
                     )
             
@@ -135,7 +135,7 @@ class TempControllerStateCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         constantTemperature: typing.Union[MetaOapg.properties.constantTemperature, decimal.Decimal, int, float, ],
         tempController: typing.Union[MetaOapg.properties.tempController, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -146,7 +146,7 @@ class TempControllerStateCreate(
     ) -> 'TempControllerStateCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             constantTemperature=constantTemperature,
             tempController=tempController,
             name=name,

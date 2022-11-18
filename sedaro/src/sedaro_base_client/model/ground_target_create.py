@@ -48,7 +48,7 @@ class GroundTargetCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             conOps = schemas.StrSchema
             id = schemas.StrSchema
             
@@ -118,7 +118,7 @@ class GroundTargetCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -128,7 +128,7 @@ class GroundTargetCreate(
     ) -> 'GroundTargetCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             conOps=conOps,
             id=id,

@@ -127,7 +127,7 @@ class TopologyParamQRD(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bcrEfficiency: typing.Union[MetaOapg.properties.bcrEfficiency, decimal.Decimal, int, float, ],
         chargeDiodeDrop: typing.Union[MetaOapg.properties.chargeDiodeDrop, decimal.Decimal, int, float, ],
         chargeControllerBusVoltage: typing.Union[MetaOapg.properties.chargeControllerBusVoltage, decimal.Decimal, int, float, ],
@@ -137,7 +137,7 @@ class TopologyParamQRD(
     ) -> 'TopologyParamQRD':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bcrEfficiency=bcrEfficiency,
             chargeDiodeDrop=chargeDiodeDrop,
             chargeControllerBusVoltage=chargeControllerBusVoltage,

@@ -74,14 +74,14 @@ class ConstantPower(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         power: typing.Union[MetaOapg.properties.power, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ConstantPower':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             power=power,
             _configuration=_configuration,
             **kwargs,

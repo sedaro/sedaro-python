@@ -81,7 +81,7 @@ class ISDPOrbitalElements(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class om(
@@ -91,7 +91,7 @@ class ISDPOrbitalElements(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class nu(
@@ -101,7 +101,7 @@ class ISDPOrbitalElements(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             __annotations__ = {
                 "a": a,
                 "e": e,
@@ -171,7 +171,7 @@ class ISDPOrbitalElements(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         a: typing.Union[MetaOapg.properties.a, decimal.Decimal, int, float, ],
         e: typing.Union[MetaOapg.properties.e, decimal.Decimal, int, float, ],
         nu: typing.Union[MetaOapg.properties.nu, decimal.Decimal, int, float, ],
@@ -183,7 +183,7 @@ class ISDPOrbitalElements(
     ) -> 'ISDPOrbitalElements':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             a=a,
             e=e,
             nu=nu,

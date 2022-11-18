@@ -63,13 +63,13 @@ class SubsystemBG(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[dict, frozendict.frozendict, ],
+                    *_args: typing.Union[dict, frozendict.frozendict, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: 'Subsystem',
                 ) -> 'data':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
@@ -114,7 +114,7 @@ class SubsystemBG(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
         collection: typing.Union['Collection', schemas.Unset] = schemas.unset,
         data: typing.Union[MetaOapg.properties.data, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
@@ -123,7 +123,7 @@ class SubsystemBG(
     ) -> 'SubsystemBG':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             collection=collection,
             data=data,

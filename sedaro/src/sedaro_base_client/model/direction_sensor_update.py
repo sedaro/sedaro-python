@@ -49,7 +49,7 @@ class DirectionSensorUpdate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class oneSigmaAngleError(
@@ -185,7 +185,7 @@ class DirectionSensorUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         referenceVector: typing.Union[MetaOapg.properties.referenceVector, str, ],
         oneSigmaAngleError: typing.Union[MetaOapg.properties.oneSigmaAngleError, decimal.Decimal, int, float, ],
@@ -201,7 +201,7 @@ class DirectionSensorUpdate(
     ) -> 'DirectionSensorUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             referenceVector=referenceVector,
             oneSigmaAngleError=oneSigmaAngleError,

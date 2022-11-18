@@ -133,7 +133,7 @@ class ThermalInterfaceMaterialUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, ],
         thickness: typing.Union[MetaOapg.properties.thickness, decimal.Decimal, int, float, ],
         coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, ],
@@ -146,7 +146,7 @@ class ThermalInterfaceMaterialUpdate(
     ) -> 'ThermalInterfaceMaterialUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             hotTempRating=hotTempRating,
             thickness=thickness,
             coldTempRating=coldTempRating,

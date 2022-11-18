@@ -42,3 +42,7 @@ class PolynomialEphemerisBody(
     @schemas.classproperty
     def MOON(cls):
         return cls("MOON")
+    
+    @schemas.classproperty
+    def EARTH(cls):
+        return cls("EARTH")

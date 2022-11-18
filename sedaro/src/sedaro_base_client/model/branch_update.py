@@ -113,7 +113,7 @@ class BranchUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
         shareable: typing.Union[MetaOapg.properties.shareable, bool, schemas.Unset] = schemas.unset,
@@ -123,7 +123,7 @@ class BranchUpdate(
     ) -> 'BranchUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             description=description,
             shareable=shareable,

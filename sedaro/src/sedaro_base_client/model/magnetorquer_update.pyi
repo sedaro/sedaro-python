@@ -188,7 +188,7 @@ class MagnetorquerUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, ],
         ratedMagneticMoment: typing.Union[MetaOapg.properties.ratedMagneticMoment, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -206,7 +206,7 @@ class MagnetorquerUpdate(
     ) -> 'MagnetorquerUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bodyFrameVector=bodyFrameVector,
             ratedMagneticMoment=ratedMagneticMoment,
             name=name,

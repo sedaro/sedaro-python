@@ -49,7 +49,7 @@ class SphericalAngles(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class phi(
@@ -59,7 +59,7 @@ class SphericalAngles(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             __annotations__ = {
                 "theta": theta,
                 "phi": phi,
@@ -97,7 +97,7 @@ class SphericalAngles(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         phi: typing.Union[MetaOapg.properties.phi, decimal.Decimal, int, float, ],
         theta: typing.Union[MetaOapg.properties.theta, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -105,7 +105,7 @@ class SphericalAngles(
     ) -> 'SphericalAngles':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             phi=phi,
             theta=theta,
             _configuration=_configuration,

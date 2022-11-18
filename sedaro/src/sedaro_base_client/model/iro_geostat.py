@@ -65,7 +65,7 @@ class IROGeostat(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             __annotations__ = {
                 "initialRefOrbit": initialRefOrbit,
                 "lon": lon,
@@ -103,7 +103,7 @@ class IROGeostat(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         lon: typing.Union[MetaOapg.properties.lon, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -111,7 +111,7 @@ class IROGeostat(
     ) -> 'IROGeostat':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             lon=lon,
             _configuration=_configuration,

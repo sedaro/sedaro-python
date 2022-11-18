@@ -189,7 +189,7 @@ class SolarCellUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         maxPowerCurrent: typing.Union[MetaOapg.properties.maxPowerCurrent, decimal.Decimal, int, float, ],
         shortCircuitCurrent: typing.Union[MetaOapg.properties.shortCircuitCurrent, decimal.Decimal, int, float, ],
         numJunctions: typing.Union[MetaOapg.properties.numJunctions, decimal.Decimal, int, ],
@@ -203,7 +203,7 @@ class SolarCellUpdate(
     ) -> 'SolarCellUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             maxPowerCurrent=maxPowerCurrent,
             shortCircuitCurrent=shortCircuitCurrent,
             numJunctions=numJunctions,

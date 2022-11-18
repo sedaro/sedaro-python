@@ -47,7 +47,7 @@ class TargetGroupUpdate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             id = schemas.StrSchema
             targetAssociations = schemas.DictSchema
             __annotations__ = {
@@ -93,7 +93,7 @@ class TargetGroupUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         targetAssociations: typing.Union[MetaOapg.properties.targetAssociations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
@@ -102,7 +102,7 @@ class TargetGroupUpdate(
     ) -> 'TargetGroupUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             id=id,
             targetAssociations=targetAssociations,

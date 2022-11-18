@@ -48,7 +48,7 @@ class SolarArrayCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             topology = schemas.StrSchema
             id = schemas.StrSchema
             __annotations__ = {
@@ -95,7 +95,7 @@ class SolarArrayCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         topology: typing.Union[MetaOapg.properties.topology, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -104,7 +104,7 @@ class SolarArrayCreate(
     ) -> 'SolarArrayCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             topology=topology,
             name=name,
             id=id,
