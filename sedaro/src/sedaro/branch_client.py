@@ -35,13 +35,12 @@ class BranchClient:
         return self.__str__()
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
-        if block_name not in self._block_class_to_block_group_map:
-            raise AttributeError(
-                f'Attribute `{block_name}` does not exist on {self}')
         block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
-        if importlib.util.find_spec(block_class_module) is None:
+        if block_name not in self._block_class_to_block_group_map \
+                or importlib.util.find_spec(block_class_module) is None:
             raise AttributeError(
-                f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.')
+                f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.'
+            )
 
         return BlockClassClient(pascal_case(block_name, strict=False), self)
 
