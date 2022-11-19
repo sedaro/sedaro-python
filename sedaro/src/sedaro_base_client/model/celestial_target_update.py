@@ -48,7 +48,7 @@ class CelestialTargetUpdate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class polynomialEphemerisBody(
@@ -75,13 +75,13 @@ class CelestialTargetUpdate(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
                 ) -> 'polynomialEphemerisBody':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
@@ -153,7 +153,7 @@ class CelestialTargetUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         polynomialEphemerisBody: typing.Union[MetaOapg.properties.polynomialEphemerisBody, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -163,7 +163,7 @@ class CelestialTargetUpdate(
     ) -> 'CelestialTargetUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             polynomialEphemerisBody=polynomialEphemerisBody,
             id=id,

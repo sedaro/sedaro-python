@@ -67,7 +67,7 @@ class IROGeostatTransfer(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class nu(
@@ -77,7 +77,7 @@ class IROGeostatTransfer(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class altPerigee(
@@ -140,7 +140,7 @@ class IROGeostatTransfer(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         nu: typing.Union[MetaOapg.properties.nu, decimal.Decimal, int, float, ],
         altPerigee: typing.Union[MetaOapg.properties.altPerigee, decimal.Decimal, int, float, ],
@@ -150,7 +150,7 @@ class IROGeostatTransfer(
     ) -> 'IROGeostatTransfer':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             nu=nu,
             altPerigee=altPerigee,

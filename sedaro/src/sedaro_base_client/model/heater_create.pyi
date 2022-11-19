@@ -173,7 +173,7 @@ class HeaterCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         controlledComponent: typing.Union[MetaOapg.properties.controlledComponent, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         onRegHeatFlowRate: typing.Union[MetaOapg.properties.onRegHeatFlowRate, decimal.Decimal, int, float, ],
@@ -190,7 +190,7 @@ class HeaterCreate(
     ) -> 'HeaterCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             controlledComponent=controlledComponent,
             name=name,
             onRegHeatFlowRate=onRegHeatFlowRate,

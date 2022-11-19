@@ -147,7 +147,7 @@ class ComponentCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         subsystem: typing.Union[MetaOapg.properties.subsystem, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -161,7 +161,7 @@ class ComponentCreate(
     ) -> 'ComponentCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             subsystem=subsystem,
             id=id,

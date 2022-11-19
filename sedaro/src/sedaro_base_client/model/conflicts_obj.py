@@ -89,7 +89,7 @@ class ConflictsObj(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         incoming: typing.Union[MetaOapg.properties.incoming, dict, frozendict.frozendict, ],
         current: typing.Union[MetaOapg.properties.current, dict, frozendict.frozendict, ],
         block: typing.Union[MetaOapg.properties.block, str, ],
@@ -98,7 +98,7 @@ class ConflictsObj(
     ) -> 'ConflictsObj':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             incoming=incoming,
             current=current,
             block=block,

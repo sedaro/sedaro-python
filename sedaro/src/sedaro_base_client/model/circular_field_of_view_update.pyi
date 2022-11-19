@@ -126,7 +126,7 @@ class CircularFieldOfViewUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         boresightBodyFrameVector: typing.Union[MetaOapg.properties.boresightBodyFrameVector, str, ],
         halfAngle: typing.Union[MetaOapg.properties.halfAngle, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -137,7 +137,7 @@ class CircularFieldOfViewUpdate(
     ) -> 'CircularFieldOfViewUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             boresightBodyFrameVector=boresightBodyFrameVector,
             halfAngle=halfAngle,
             name=name,

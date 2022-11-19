@@ -51,7 +51,7 @@ class ResistanceLoad(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class epsOutputType(
@@ -78,13 +78,13 @@ class ResistanceLoad(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
                 ) -> 'epsOutputType':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
@@ -235,7 +235,7 @@ class ResistanceLoad(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         loadDefParams: 'ConstantResistance',
         loadState: typing.Union[MetaOapg.properties.loadState, str, ],
         loadDefType: typing.Union[MetaOapg.properties.loadDefType, str, ],
@@ -253,7 +253,7 @@ class ResistanceLoad(
     ) -> 'ResistanceLoad':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             loadDefParams=loadDefParams,
             loadState=loadState,
             loadDefType=loadDefType,

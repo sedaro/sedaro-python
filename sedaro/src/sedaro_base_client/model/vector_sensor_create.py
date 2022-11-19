@@ -49,7 +49,7 @@ class VectorSensorCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class oneSigmaPerAxisError(
@@ -185,7 +185,7 @@ class VectorSensorCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         oneSigmaPerAxisError: typing.Union[MetaOapg.properties.oneSigmaPerAxisError, decimal.Decimal, int, float, ],
         referenceVector: typing.Union[MetaOapg.properties.referenceVector, str, ],
@@ -201,7 +201,7 @@ class VectorSensorCreate(
     ) -> 'VectorSensorCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             oneSigmaPerAxisError=oneSigmaPerAxisError,
             referenceVector=referenceVector,

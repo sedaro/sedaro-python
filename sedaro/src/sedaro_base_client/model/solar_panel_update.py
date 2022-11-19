@@ -52,7 +52,7 @@ class SolarPanelUpdate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             
             
             class numSeries(
@@ -223,7 +223,7 @@ class SolarPanelUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         numSeries: typing.Union[MetaOapg.properties.numSeries, decimal.Decimal, int, ],
         surface: typing.Union[MetaOapg.properties.surface, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -241,7 +241,7 @@ class SolarPanelUpdate(
     ) -> 'SolarPanelUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             numSeries=numSeries,
             surface=surface,
             name=name,

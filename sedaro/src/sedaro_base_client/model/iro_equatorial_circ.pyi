@@ -108,7 +108,7 @@ class IROEquatorialCirc(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         nu: typing.Union[MetaOapg.properties.nu, decimal.Decimal, int, float, ],
         alt: typing.Union[MetaOapg.properties.alt, decimal.Decimal, int, float, ],
@@ -117,7 +117,7 @@ class IROEquatorialCirc(
     ) -> 'IROEquatorialCirc':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             nu=nu,
             alt=alt,

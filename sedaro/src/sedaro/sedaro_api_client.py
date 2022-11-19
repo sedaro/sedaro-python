@@ -8,7 +8,7 @@ from .branch_client import BranchClient
 
 
 class SedaroApiClient(ApiClient):
-    def __init__(self, api_key, host='https://staging.api.sedaro.com', *args, **kwargs):
+    def __init__(self, api_key, host='https://api.sedaro.com', *args, **kwargs):
         return super().__init__(
             configuration=Configuration(host=host),
             *args,

@@ -104,7 +104,7 @@ class ScenarioBlockUpdateRes(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         action: typing.Union[MetaOapg.properties.action, str, ],
         block: 'GroupAndId',
         branch: 'BranchScenarioRes',
@@ -113,7 +113,7 @@ class ScenarioBlockUpdateRes(
     ) -> 'ScenarioBlockUpdateRes':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             action=action,
             block=block,
             branch=branch,

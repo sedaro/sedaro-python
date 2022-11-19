@@ -142,7 +142,7 @@ class TopologyParamFRD(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         drivenControllerBusVoltage: typing.Union[MetaOapg.properties.drivenControllerBusVoltage, decimal.Decimal, int, float, ],
         bcrEfficiency: typing.Union[MetaOapg.properties.bcrEfficiency, decimal.Decimal, int, float, ],
         chargeDiodeDrop: typing.Union[MetaOapg.properties.chargeDiodeDrop, decimal.Decimal, int, float, ],
@@ -152,7 +152,7 @@ class TopologyParamFRD(
     ) -> 'TopologyParamFRD':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             drivenControllerBusVoltage=drivenControllerBusVoltage,
             bcrEfficiency=bcrEfficiency,
             chargeDiodeDrop=chargeDiodeDrop,

@@ -127,7 +127,7 @@ class PassivePointingModeCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, str, ],
         conOps: typing.Union[MetaOapg.properties.conOps, str, ],
@@ -139,7 +139,7 @@ class PassivePointingModeCreate(
     ) -> 'PassivePointingModeCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             pointingModeType=pointingModeType,
             conOps=conOps,

@@ -107,7 +107,7 @@ class LoadStateCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         component: typing.Union[MetaOapg.properties.component, str, ],
         efficiency: typing.Union[MetaOapg.properties.efficiency, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -117,7 +117,7 @@ class LoadStateCreate(
     ) -> 'LoadStateCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             component=component,
             efficiency=efficiency,
             name=name,

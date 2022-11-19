@@ -95,7 +95,7 @@ class ClockConfig(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         startTime: typing.Union[MetaOapg.properties.startTime, decimal.Decimal, int, float, ],
         stopTime: typing.Union[MetaOapg.properties.stopTime, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -105,7 +105,7 @@ class ClockConfig(
     ) -> 'ClockConfig':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             startTime=startTime,
             stopTime=stopTime,
             id=id,

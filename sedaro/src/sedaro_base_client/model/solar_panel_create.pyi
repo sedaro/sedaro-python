@@ -212,7 +212,7 @@ class SolarPanelCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         numSeries: typing.Union[MetaOapg.properties.numSeries, decimal.Decimal, int, ],
         surface: typing.Union[MetaOapg.properties.surface, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -231,7 +231,7 @@ class SolarPanelCreate(
     ) -> 'SolarPanelCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             numSeries=numSeries,
             surface=surface,
             name=name,

@@ -178,7 +178,7 @@ class SolarCell(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         maxPowerCurrent: typing.Union[MetaOapg.properties.maxPowerCurrent, decimal.Decimal, int, float, ],
         topology: typing.Union[MetaOapg.properties.topology, str, ],
         shortCircuitCurrent: typing.Union[MetaOapg.properties.shortCircuitCurrent, decimal.Decimal, int, float, ],
@@ -193,7 +193,7 @@ class SolarCell(
     ) -> 'SolarCell':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             maxPowerCurrent=maxPowerCurrent,
             topology=topology,
             shortCircuitCurrent=shortCircuitCurrent,

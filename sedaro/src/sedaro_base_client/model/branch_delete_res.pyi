@@ -56,12 +56,12 @@ class BranchDeleteRes(
             
                 def __new__(
                     cls,
-                    arg: typing.Union[typing.Tuple['DeletedEntity'], typing.List['DeletedEntity']],
+                    _arg: typing.Union[typing.Tuple['DeletedEntity'], typing.List['DeletedEntity']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'deletedEntities':
                     return super().__new__(
                         cls,
-                        arg,
+                        _arg,
                         _configuration=_configuration,
                     )
             
@@ -104,7 +104,7 @@ class BranchDeleteRes(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         message: typing.Union[MetaOapg.properties.message, str, ],
         deletedEntities: typing.Union[MetaOapg.properties.deletedEntities, list, tuple, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -112,7 +112,7 @@ class BranchDeleteRes(
     ) -> 'BranchDeleteRes':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             message=message,
             deletedEntities=deletedEntities,
             _configuration=_configuration,

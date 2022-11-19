@@ -109,7 +109,7 @@ class SurfaceMaterialCreate(
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -273.15
             
             
             class coldTempRating(
@@ -118,7 +118,7 @@ class SurfaceMaterialCreate(
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -273.15
             __annotations__ = {
                 "irEmissivity": irEmissivity,
                 "solarAbsorptivity": solarAbsorptivity,
@@ -207,7 +207,7 @@ class SurfaceMaterialCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         diffuseSolarReflectivity: typing.Union[MetaOapg.properties.diffuseSolarReflectivity, decimal.Decimal, int, float, ],
         specularSolarReflectivity: typing.Union[MetaOapg.properties.specularSolarReflectivity, decimal.Decimal, int, float, ],
         solarAbsorptivity: typing.Union[MetaOapg.properties.solarAbsorptivity, decimal.Decimal, int, float, ],
@@ -222,7 +222,7 @@ class SurfaceMaterialCreate(
     ) -> 'SurfaceMaterialCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             diffuseSolarReflectivity=diffuseSolarReflectivity,
             specularSolarReflectivity=specularSolarReflectivity,
             solarAbsorptivity=solarAbsorptivity,

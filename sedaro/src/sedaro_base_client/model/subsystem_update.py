@@ -47,7 +47,7 @@ class SubsystemUpdate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             id = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -85,7 +85,7 @@ class SubsystemUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -93,7 +93,7 @@ class SubsystemUpdate(
     ) -> 'SubsystemUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             id=id,
             _configuration=_configuration,

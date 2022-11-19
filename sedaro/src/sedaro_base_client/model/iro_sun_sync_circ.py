@@ -68,7 +68,7 @@ class IROSunSyncCirc(
             
                 class MetaOapg:
                     inclusive_maximum = 360.0
-                    inclusive_minimum = 0.0
+                    inclusive_minimum = -360.0
             
             
             class alt(
@@ -131,7 +131,7 @@ class IROSunSyncCirc(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         initialRefOrbit: typing.Union[MetaOapg.properties.initialRefOrbit, str, ],
         nu: typing.Union[MetaOapg.properties.nu, decimal.Decimal, int, float, ],
         alt: typing.Union[MetaOapg.properties.alt, decimal.Decimal, int, float, ],
@@ -141,7 +141,7 @@ class IROSunSyncCirc(
     ) -> 'IROSunSyncCirc':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             initialRefOrbit=initialRefOrbit,
             nu=nu,
             alt=alt,

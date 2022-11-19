@@ -82,7 +82,7 @@ class SubsystemUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -90,7 +90,7 @@ class SubsystemUpdate(
     ) -> 'SubsystemUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             id=id,
             _configuration=_configuration,

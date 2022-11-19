@@ -79,7 +79,7 @@ class DeletedEntity(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         model: typing.Union[MetaOapg.properties.model, str, ],
         id: typing.Union[MetaOapg.properties.id, decimal.Decimal, int, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -87,7 +87,7 @@ class DeletedEntity(
     ) -> 'DeletedEntity':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             model=model,
             id=id,
             _configuration=_configuration,

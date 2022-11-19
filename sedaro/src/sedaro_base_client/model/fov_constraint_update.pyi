@@ -122,7 +122,7 @@ class FOVConstraintUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         keepout: typing.Union[MetaOapg.properties.keepout, bool, ],
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -134,7 +134,7 @@ class FOVConstraintUpdate(
     ) -> 'FOVConstraintUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             keepout=keepout,
             fieldOfView=fieldOfView,
             name=name,

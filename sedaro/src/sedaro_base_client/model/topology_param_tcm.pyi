@@ -127,7 +127,7 @@ class TopologyParamTCM(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         pptEfficiency: typing.Union[MetaOapg.properties.pptEfficiency, decimal.Decimal, int, float, ],
         bcrEfficiency: typing.Union[MetaOapg.properties.bcrEfficiency, decimal.Decimal, int, float, ],
         chargeControllerBusVoltage: typing.Union[MetaOapg.properties.chargeControllerBusVoltage, decimal.Decimal, int, float, ],
@@ -137,7 +137,7 @@ class TopologyParamTCM(
     ) -> 'TopologyParamTCM':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             pptEfficiency=pptEfficiency,
             bcrEfficiency=bcrEfficiency,
             chargeControllerBusVoltage=chargeControllerBusVoltage,

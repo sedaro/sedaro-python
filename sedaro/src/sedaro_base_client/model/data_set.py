@@ -79,7 +79,7 @@ class DataSet(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         meta: typing.Union[MetaOapg.properties.meta, dict, frozendict.frozendict, ],
         series: typing.Union[MetaOapg.properties.series, dict, frozendict.frozendict, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -87,7 +87,7 @@ class DataSet(
     ) -> 'DataSet':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             meta=meta,
             series=series,
             _configuration=_configuration,

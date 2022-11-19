@@ -84,13 +84,13 @@ class LocalVectorCreate(
             
                 def __new__(
                     cls,
-                    *args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
                 ) -> 'localPointingDirection':
                     return super().__new__(
                         cls,
-                        *args,
+                        *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
@@ -147,7 +147,7 @@ class LocalVectorCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         localPointingDirection: typing.Union[MetaOapg.properties.localPointingDirection, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
@@ -157,7 +157,7 @@ class LocalVectorCreate(
     ) -> 'LocalVectorCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             vectorType=vectorType,
             name=name,
             localPointingDirection=localPointingDirection,

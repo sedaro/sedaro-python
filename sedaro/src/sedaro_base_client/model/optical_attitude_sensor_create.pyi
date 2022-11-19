@@ -177,7 +177,7 @@ class OpticalAttitudeSensorCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         oneSigmaBoresightAxisError: typing.Union[MetaOapg.properties.oneSigmaBoresightAxisError, decimal.Decimal, int, float, ],
@@ -193,7 +193,7 @@ class OpticalAttitudeSensorCreate(
     ) -> 'OpticalAttitudeSensorCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             fieldOfView=fieldOfView,
             name=name,
             oneSigmaBoresightAxisError=oneSigmaBoresightAxisError,

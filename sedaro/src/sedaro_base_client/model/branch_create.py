@@ -93,7 +93,7 @@ class BranchCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -101,7 +101,7 @@ class BranchCreate(
     ) -> 'BranchCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             name=name,
             description=description,
             _configuration=_configuration,

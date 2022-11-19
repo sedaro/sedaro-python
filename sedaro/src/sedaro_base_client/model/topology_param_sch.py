@@ -106,7 +106,7 @@ class TopologyParamSCH(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bcrEfficiency: typing.Union[MetaOapg.properties.bcrEfficiency, decimal.Decimal, int, float, ],
         bypassBlockingDiodeDrop: typing.Union[MetaOapg.properties.bypassBlockingDiodeDrop, decimal.Decimal, int, float, ],
         outputPowerRating: typing.Union[MetaOapg.properties.outputPowerRating, decimal.Decimal, int, float, ],
@@ -114,7 +114,7 @@ class TopologyParamSCH(
     ) -> 'TopologyParamSCH':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bcrEfficiency=bcrEfficiency,
             bypassBlockingDiodeDrop=bypassBlockingDiodeDrop,
             outputPowerRating=outputPowerRating,

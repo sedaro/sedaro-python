@@ -177,7 +177,7 @@ class BatteryPackUpdate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         numSeries: typing.Union[MetaOapg.properties.numSeries, decimal.Decimal, int, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         numParallel: typing.Union[MetaOapg.properties.numParallel, decimal.Decimal, int, ],
@@ -193,7 +193,7 @@ class BatteryPackUpdate(
     ) -> 'BatteryPackUpdate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             numSeries=numSeries,
             name=name,
             numParallel=numParallel,

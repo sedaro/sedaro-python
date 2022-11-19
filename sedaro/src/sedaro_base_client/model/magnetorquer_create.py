@@ -50,7 +50,7 @@ class MagnetorquerCreate(
             
             
                 class MetaOapg:
-                    max_length = 32
+                    max_length = 100
             bodyFrameVector = schemas.StrSchema
             
             
@@ -203,7 +203,7 @@ class MagnetorquerCreate(
 
     def __new__(
         cls,
-        *args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[dict, frozendict.frozendict, ],
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, ],
         ratedMagneticMoment: typing.Union[MetaOapg.properties.ratedMagneticMoment, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
@@ -221,7 +221,7 @@ class MagnetorquerCreate(
     ) -> 'MagnetorquerCreate':
         return super().__new__(
             cls,
-            *args,
+            *_args,
             bodyFrameVector=bodyFrameVector,
             ratedMagneticMoment=ratedMagneticMoment,
             name=name,
