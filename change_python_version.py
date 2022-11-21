@@ -1,8 +1,14 @@
 import os
+import shutil
+import subprocess
 
 QUIT = "q"
 SWITCH = "s"
+OPTIONS_MAIN = [QUIT, SWITCH]
+VENV = '.venv'
 
+def get_cur_python_version():
+    return os.popen("python3 -V").read().split("Python")[1][1:]
 
 def delete_current_python_virtual_environment():
     print('')
@@ -12,7 +18,18 @@ def switch_current_python_virtual_environment():
     new_version = input(
         '\nWhich python version would you like to switch to?\n~ '
     )
-    print(new_version)
+
+    if os.path.isdir(VENV):
+        shutil.rmtree(VENV)
+
+    try:
+        subprocess.check_output(f"pyenv local {new_version}", shell=True)
+        os.system('python3 -m venv ./.venv')
+        os.system('source .venv/bin/activate')
+        print(f'\nVirtual environment created and activated with Python {get_cur_python_version()}')
+    except:
+        switch_current_python_virtual_environment()
+
 
 
 def sedaro_client_python_version_manager():
@@ -22,27 +39,28 @@ def sedaro_client_python_version_manager():
     print('\nCurrent python environment:')
     os.system('pip -V')
 
-    cur_version = os.popen("python3 -V").read().split("Python")[1][1:]
-    print('\nCurrent python version:')
-    print(cur_version)
+    print(f'\nCurrent python version: {get_cur_python_version()}')
 
-    choice = ''
-    while choice not in [QUIT, SWITCH]:
-        print('Options:')
+    how_proceed = ''
+    while how_proceed not in OPTIONS_MAIN:
+        print('\nOptions:')
         print(
             f'  - "{QUIT}"   Quit'
         )
         print(
-            f'  - "{SWITCH}"   Switch to a new python virtual environment (will delete current one if exists)'
+            f'  - "{SWITCH}"   Switch to a new python virtual environment (deletes current one if exists)'
         )
 
-        choice = input('~ ')
+        how_proceed = input('~ ')
 
-    if choice == QUIT:
+        if how_proceed not in OPTIONS_MAIN:
+            print(f'\nInvalid option: "{how_proceed}"')
+
+    if how_proceed == QUIT:
         print('\nClosing manager\n')
         return
 
-    if choice == SWITCH:
+    if how_proceed == SWITCH:
         switch_current_python_virtual_environment()
 
 
