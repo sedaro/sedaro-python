@@ -5,7 +5,7 @@ See below for some helpful notes
 ## To run tests:
 
 ```zsh
-python3 test.py
+python3 tests
 ```
 
 ## To run client generator:
