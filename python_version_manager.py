@@ -1,7 +1,5 @@
 import os
 import shutil
-import subprocess
-import time
 
 QUIT = "q"
 SWITCH = "s"
