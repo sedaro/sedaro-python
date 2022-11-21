@@ -245,23 +245,24 @@ def test_run_simulation():
 
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         print('\nTesting running simulation from client...\n')
-        scenario_client = sedaro_client.get_branch(WILDFIRE_SCENARIO_ID)
+
+        # Instantiate jobs client
+        jobs_api_client = jobs_api.JobsApi(sedaro_client)
 
         # Start simulation
-        jobs_api_client = jobs_api.JobsApi(sedaro_client)
         jobs_api_client.start_simulation(
-            path_params={'branchId': scenario_client.id})
+            path_params={'branchId': WILDFIRE_SCENARIO_ID})
 
         # Get status #1
         response = jobs_api_client.get_simulations(
-            path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
+            path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
         )
         _check_job_status(response.body[0])
         time.sleep(5)
 
         # Get status #2
         response = jobs_api_client.get_simulations(
-            path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
+            path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
         )
         _check_job_status(response.body[0])
         time.sleep(2)
@@ -270,7 +271,7 @@ def test_run_simulation():
         print('\nTerminating...')
         response = jobs_api_client.terminate_simulation(
             path_params={
-                'branchId': scenario_client.id,
+                'branchId': WILDFIRE_SCENARIO_ID,
                 'jobId': response.body[0]['id']
             }
         )
