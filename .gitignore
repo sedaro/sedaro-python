@@ -4,3 +4,4 @@ __pycache__
 .temp_dir_*
 .vscode
 build/
+.python-version
