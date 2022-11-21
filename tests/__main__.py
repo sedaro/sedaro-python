@@ -13,10 +13,13 @@ def run_tests():
     ]:
         print(f'\n### "{file.__name__}" -- running tests')
         start_time = time.perf_counter()
+
         file.run_tests()
+
         print(
             f'\n### "{file.__name__}" -- done in {round(time.perf_counter() - start_time, 2)} seconds'
         )
+
     print('\n### Done!')
 
 
