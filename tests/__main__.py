@@ -1,6 +1,6 @@
 import time
 
-##### IMPORT AND ADD TESTS HERE ##############################
+############ IMPORT AND ADD TESTS HERE ############
 import block_class_client_options
 import block_crud_tests
 import simulation_tests
@@ -10,7 +10,7 @@ test_imports = [
     block_crud_tests,
     simulation_tests
 ]
-##############################################################
+###################################################
 
 
 def run_tests():
