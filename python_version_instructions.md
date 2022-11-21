@@ -1,5 +1,7 @@
 # To test with different python versions:
 
+## Prerequisites
+
 Have `pyenv` installed:
 
 ```zsh
@@ -12,13 +14,23 @@ Install the python version you want to use if it isn't already installed:
 pyenv install <version>
 ```
 
+## Option #1 (custom script)
+
+Use the custom python version manager designed for use in this directory. You will be prompted on how to proceed.
+
+```
+python3 python_version_manager.py
+```
+
+## Option #2 (manual)
+
 Select version for current directory (this will update the `.python-version` file):
 
 ```
 pyenv local <version>
 ```
 
-Create and activate virtual environment (first delete `.venv` directory if already exists):
+Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
 
 ```
 python3 -m venv ./.venv
