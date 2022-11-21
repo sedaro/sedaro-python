@@ -266,7 +266,7 @@ def test_run_simulation():
         # Terminate
         print('\nTerminating...')
         response = jobs_api_client.terminate_simulation(
-            path_params={'branchId': scenario_client.id, 'jobId': job.id}
+            path_params={'branchId': scenario_client.id, 'jobId': job['id']}
         )
         print('')
         print(response.body['message'])
@@ -278,14 +278,14 @@ if __name__ == "__main__":
 
     # start timer after first get to make sure backend is ready to accept request
     start_time = time.perf_counter()
-    print('\nRunning client tests and starting timer')
+    print('\nRunning Block CRUD tests and starting timer')
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality()
     test_different_block()
     test_block_class_client_options()
     print(
-        f'\nFinished tests in {round(time.perf_counter() - start_time, 2)} seconds'
+        f'\nFinished Block CRUD tests in {round(time.perf_counter() - start_time, 2)} seconds'
     )
 
     # test simulation outside of timer above
