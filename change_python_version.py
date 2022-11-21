@@ -4,15 +4,12 @@ import subprocess
 
 QUIT = "q"
 SWITCH = "s"
-OPTIONS_MAIN = [QUIT, SWITCH]
+RUN_TESTS = 't'
+OPTIONS_MAIN = [QUIT, SWITCH, RUN_TESTS]
 VENV = '.venv'
 
 def get_cur_python_version():
     return os.popen("python3 -V").read().split("Python")[1][1:]
-
-def delete_current_python_virtual_environment():
-    print('')
-
 
 def switch_current_python_virtual_environment():
     new_version = input(
@@ -50,6 +47,9 @@ def sedaro_client_python_version_manager():
         print(
             f'  - "{SWITCH}"   Switch to a new python virtual environment (deletes current one if exists)'
         )
+        print(
+            f'  - "{RUN_TESTS}"   Run tests in python 3.7 - 3.10'
+        )
 
         how_proceed = input('~ ')
 
@@ -62,7 +62,11 @@ def sedaro_client_python_version_manager():
 
     if how_proceed == SWITCH:
         switch_current_python_virtual_environment()
+        return
 
+    if how_proceed == RUN_TESTS:
+        print('run tests!!')
+        return
 
 if __name__ == '__main__':
     sedaro_client_python_version_manager()
