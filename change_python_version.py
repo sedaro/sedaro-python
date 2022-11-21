@@ -19,15 +19,27 @@ def sedaro_client_python_version_manager():
     print('\nCurrent python version:')
     print(cur_version)
 
-    print('\nOptions:')
-    print(f' - "{QUIT}"   Quit')
-    print(f' - "{SWITCH}"   Switch to a new python virtual environment (will delete current one if exists)')
+    choice = ''
 
-    choice = input('\n~ ')
+    while choice not in [QUIT, SWITCH]:
+        print('\nOptions:')
+        print(
+            f'  - "{QUIT}"   Quit'
+        )
+        print(
+            f'  - "{SWITCH}"   Switch to a new python virtual environment (will delete current one if exists)'
+        )
+
+        choice = input('~ ')
 
     if choice == QUIT:
         print('\nClosing manager\n')
         return
+
+    if choice == SWITCH:
+        new_version = input(
+            '\nWhich python version would you like to switch to?\n~ ')
+        print(new_version, cur_version)
 
 
 if __name__ == '__main__':
