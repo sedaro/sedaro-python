@@ -13,10 +13,12 @@ OPTIONS_MAIN = [QUIT, SWITCH]
 VENV = '.venv'
 PYTHON_VERSIONS = ['3.7', '3.8', '3.9', '3.10']
 
+
 def get_cur_python_version():
     return os.popen("python3 -V").read().split("Python")[1][1:]
 
-def switch_current_python_virtual_environment(new_version = None, run_tests=False):
+
+def switch_current_python_virtual_environment(new_version=None, run_tests=False):
     if new_version is None:
         print('\nAvailable python versions:')
         os.system('pyenv versions')
@@ -28,14 +30,18 @@ def switch_current_python_virtual_environment(new_version = None, run_tests=Fals
     if os.path.isdir(VENV):
         shutil.rmtree(VENV)
 
-    print(f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro...\n')
+    print(
+        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro...\n'
+    )
 
     try:
         command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install -e sedaro'
         if run_tests:
             command += ' && python3 test.py'
         os.system(command)
-        print(f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed')
+        print(
+            f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed'
+        )
 
     except Exception as e:
         print('')
@@ -44,6 +50,7 @@ def switch_current_python_virtual_environment(new_version = None, run_tests=Fals
         print('='*50)
         print('')
         switch_current_python_virtual_environment()
+
 
 def sedaro_client_python_version_manager():
 
@@ -90,6 +97,7 @@ def sedaro_client_python_version_manager():
             print(f'\n🛰️  Finished running tests for version {version}')
         print(f'\n🛰️  Finished running tests for versions {PYTHON_VERSIONS}')
         return
+
 
 if __name__ == '__main__':
     sedaro_client_python_version_manager()
