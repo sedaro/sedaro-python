@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 from typing import TYPE_CHECKING, Dict, Union, Tuple
 from dataclasses import dataclass
 from pydash import snake_case
@@ -36,7 +36,7 @@ class BlockClient:
         return isinstance(other, self.__class__) and self.id == other.id
 
     def __hash__(self):
-        # allows a BlockClient to be a key in a dict and @cache wrapper to work on methods on this class
+        # allows a BlockClient to be a key in a dict and @lru_cache wrapper to work on methods on this class
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
@@ -191,7 +191,7 @@ class BlockClient:
         """
         return self._branch_client.data_schema['definitions'][self._block_name]
 
-    @cache
+    @lru_cache(maxsize=None)
     def get_field_schema(self, field: str) -> dict:
         """Gets the field schema of the corresponding attribute on the Sedaro Block.
 
@@ -216,7 +216,7 @@ class BlockClient:
 
         return properties[field]
 
-    @cache
+    @lru_cache(maxsize=None)
     def is_rel_field(self, field: str) -> bool:
         """Checks if the given `field` is a relationship field on the associated Sedaro Block.
 

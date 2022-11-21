@@ -1,9 +1,10 @@
 from importlib import import_module
 from dataclasses import dataclass
 from sedaro_base_client.api_client import Api
-from typing import TYPE_CHECKING, Literal, Tuple, Union, List
+from typing import TYPE_CHECKING, Tuple, Union, List
+from typing_extensions import Literal
 from pydash.strings import snake_case
-from functools import cached_property
+# from functools import cached_property # doesn't work python 3.7
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
@@ -29,6 +30,9 @@ class BlockClassClient:
     def __repr__(self):
         return self.__str__()
 
+    def __hash__(self):
+        return hash(f'{self.__class__.__name__}-{self._block_name}-{self._branch_client.id}')
+
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
         '''The `SedaroApiClient` this `BlockClassClient` was accessed through'''
@@ -52,7 +56,8 @@ class BlockClassClient:
             f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')
         return getattr(block_api_module, f'{block_pascal}Api')(self._sedaro_client)
 
-    @cached_property
+    # @cached_property
+    @property
     def _block_group(self) -> str:
         '''The name of the Sedaro Block Group this type of Sedaro Block is stored in'''
         return self._branch_client._block_class_to_block_group_map[self._block_name]

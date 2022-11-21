@@ -10,7 +10,7 @@ This client is intended to be used alongside our redocs [OpenAPI Specification](
 pip install sedaro
 ```
 
-## Use
+## Use: Block CRUD
 
 1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Satellite Management Console.
 
@@ -18,7 +18,7 @@ pip install sedaro
     from sedaro import SedaroApiClient
 
     API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
-    BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
+    AGENT_TEMPLATE_BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
 
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         ...
@@ -39,7 +39,7 @@ pip install sedaro
     ...
 
     with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(BRANCH_ID)
+        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
     ```
 
 3.  Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
@@ -47,7 +47,7 @@ pip install sedaro
     ```py
     ...
 
-        branch_client = sedaro_client.get_branch(BRANCH_ID)
+        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
 
         branch_client.Target
 
@@ -219,17 +219,17 @@ pip install sedaro
         solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
     ```
 
-## Full Example
+### Full Example
 
 ```py
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 
 API_KEY = 'my_api_key_generated_by_sedaro_satellite'
-BRANCH_ID = 1
+AGENT_TEMPLATE_BRANCH_ID = 1
 
 with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-    branch_client = sedaro_client.get_branch(BRANCH_ID)
+    branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
 
     battery_cell_client = branch_client.BatteryCell.create(
         partNumber='987654321',
@@ -253,6 +253,40 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         battery_cell_client.update(partNumber="987654321")
     except NonexistantBlockError as e:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
+```
+
+## Use: Simulation
+
+```py
+...
+from sedaro_base_client.apis.tags import jobs_api
+
+SCENARIO_BRANCH_ID = 2
+
+with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+
+    # Instantiate jobs client
+    jobs_api_client = jobs_api.JobsApi(sedaro_client)
+
+    # Start simulation
+    jobs_api_client.start_simulation(
+        path_params={'branchId': SCENARIO_BRANCH_ID}
+    )
+
+    # Get status & percentage complete
+    response = jobs_api_client.get_simulations(
+        path_params={'branchId': SCENARIO_BRANCH_ID}, query_params={'latest': ''}
+    )
+    job = response.body[0]
+    assert job['status'] == 'RUNNING'
+    print(job['progress']['percentComplete'])
+
+    # Terminate simulation
+    response = jobs_api_client.terminate_simulation(
+        path_params={'branchId': SCENARIO_BRANCH_ID, 'jobId': job['id']}
+    )
+    assert response.body['message'] == 'Successfully terminated simulation.'
+
 ```
 
 ## Further information
