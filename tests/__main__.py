@@ -15,18 +15,18 @@ test_imports = [
 
 def run_tests():
     num_tests = len(test_imports)
-    for i, t in enumerate(test_imports):
+    for i, imported_test_file in enumerate(test_imports):
 
-        cur_t_num = f'{i + 1}/{num_tests}'
+        intro = f'### Test {i + 1}/{num_tests}: "{imported_test_file.__name__}" --'
 
-        print(f'\n### Test {cur_t_num}: "{t.__name__}" -- running...')
+        print(f'\n{intro} running...')
+
         start_time = time.perf_counter()
+        imported_test_file.run_tests()
+        total_time = round(time.perf_counter() - start_time, 2)
 
-        t.run_tests()
+        print(f'{intro} done in {total_time} seconds')
 
-        print(
-            f'\n### Test {cur_t_num}: "{t.__name__}" -- done in {round(time.perf_counter() - start_time, 2)} seconds'
-        )
         time.sleep(.5)
 
     print('\n### Done!')

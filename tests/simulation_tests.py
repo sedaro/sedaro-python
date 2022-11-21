@@ -20,21 +20,21 @@ def _test_run_simulation():
         # Start simulation
         jobs_api_client.start_simulation(
             path_params={'branchId': WILDFIRE_SCENARIO_ID})
-        print('\n- Started simulation')
+        print('- Started simulation')
 
         # Get status #1
         response = jobs_api_client.get_simulations(
             path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
         )
         _check_job_status(response.body[0])
-        time.sleep(5)
+        time.sleep(3)
 
         # Get status #2
         response = jobs_api_client.get_simulations(
             path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
         )
         _check_job_status(response.body[0])
-        time.sleep(2)
+        time.sleep(3)
 
         # Terminate
         print('- Terminating...')
