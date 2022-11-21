@@ -1,5 +1,6 @@
 from random import randrange
 import time
+import platform
 
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
@@ -273,9 +274,9 @@ def test_run_simulation():
         print('\nDone!\n')
 
 
-if __name__ == "__main__":
+def run_tests():
+    print(f'\nPython version running for tests: {platform.python_version()}')
     test_get()
-
     # start timer after first get to make sure backend is ready to accept request
     start_time = time.perf_counter()
     print('\nRunning Block CRUD tests and starting timer')
@@ -290,3 +291,6 @@ if __name__ == "__main__":
 
     # test simulation outside of timer above
     test_run_simulation()
+
+if __name__ == "__main__":
+    run_tests()
