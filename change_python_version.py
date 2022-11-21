@@ -8,9 +8,16 @@ def delete_current_python_virtual_environment():
     print('')
 
 
+def switch_current_python_virtual_environamtn(cur_version):
+    new_version = input(
+        '\nWhich python version would you like to switch to?\n~ '
+    )
+    print(new_version, cur_version)
+
+
 def sedaro_client_python_version_manager():
 
-    print('\n---------< Sedero Client python version manager >---------')
+    print('\n---------< Sedero Client - python version manager >---------')
 
     print('\nCurrent python environment:')
     os.system('pip -V')
@@ -20,9 +27,8 @@ def sedaro_client_python_version_manager():
     print(cur_version)
 
     choice = ''
-
     while choice not in [QUIT, SWITCH]:
-        print('\nOptions:')
+        print('Options:')
         print(
             f'  - "{QUIT}"   Quit'
         )
@@ -37,9 +43,7 @@ def sedaro_client_python_version_manager():
         return
 
     if choice == SWITCH:
-        new_version = input(
-            '\nWhich python version would you like to switch to?\n~ ')
-        print(new_version, cur_version)
+        switch_current_python_virtual_environamtn(cur_version)
 
 
 if __name__ == '__main__':
