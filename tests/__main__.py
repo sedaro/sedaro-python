@@ -22,15 +22,19 @@ def run_tests():
 
         intro = f'### Test {i + 1}/{num_tests}: "{imported_test_file.__name__}" --'
 
+        # print and start timer
         print(f'\n{intro} running...')
-
         start_time = time.perf_counter()
-        imported_test_file.run_tests()
-        total_time = round(time.perf_counter() - start_time, 2)
 
+        # run tests
+        imported_test_file.run_tests()
+
+        # end timer and print
+        total_time = round(time.perf_counter() - start_time, 2)
         print(f'{intro} done in {total_time} seconds')
 
-        time.sleep(.5)
+        # delay so prints are easier to follow
+        time.sleep(0.5)
 
     print('\n### Done!')
 
