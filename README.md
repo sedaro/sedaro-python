@@ -14,7 +14,7 @@ python3 tests
 python3 client_generator
 ```
 
-## To switch python versions:
+## To switch python version in this directory's virtual environment:
 
 Have `pyenv` installed:
 
