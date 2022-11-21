@@ -45,7 +45,7 @@ Note: see section ".zshrc or .bashrc" for potential necessary updates to those f
 - Use the custom python version manager designed for use in this directory. You will be prompted on how to proceed.
 
   ```zsh
-  python3 python_version_manager.py
+  python3 python_version_manager
   ```
 
 ### Option #2 (manual)
