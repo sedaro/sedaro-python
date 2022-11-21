@@ -37,7 +37,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False)
     try:
         command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install -e sedaro'
         if run_tests:
-            command += ' && python3 test.py'
+            command += ' && python3 tests'
         os.system(command)
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed'
