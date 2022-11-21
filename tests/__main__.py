@@ -16,6 +16,7 @@ test_imports = [
 
 
 def run_tests():
+    '''Runs all tests from `test_imports` with name, progress, and time `print`s throughout.'''
     num_tests = len(test_imports)
     for i, imported_test_file in enumerate(test_imports):
 
