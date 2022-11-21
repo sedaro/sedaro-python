@@ -2,6 +2,18 @@
 
 See below for some helpful notes
 
+## To run tests:
+
+```zsh
+python3 test.py
+```
+
+## To run client generator:
+
+```zsh
+python3 client_generator
+```
+
 ## To switch python versions:
 
 Have `pyenv` installed:
