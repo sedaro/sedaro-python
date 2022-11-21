@@ -8,11 +8,11 @@ def delete_current_python_virtual_environment():
     print('')
 
 
-def switch_current_python_virtual_environamtn(cur_version):
+def switch_current_python_virtual_environment():
     new_version = input(
         '\nWhich python version would you like to switch to?\n~ '
     )
-    print(new_version, cur_version)
+    print(new_version)
 
 
 def sedaro_client_python_version_manager():
@@ -43,7 +43,7 @@ def sedaro_client_python_version_manager():
         return
 
     if choice == SWITCH:
-        switch_current_python_virtual_environamtn(cur_version)
+        switch_current_python_virtual_environment()
 
 
 if __name__ == '__main__':
