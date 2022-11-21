@@ -15,8 +15,9 @@ def sedaro_client_python_version_manager():
     print('\nCurrent python environment:')
     os.system('pip -V')
 
+    cur_version = os.popen("python3 -V").read().split("Python")[1][1:]
     print('\nCurrent python version:')
-    os.system('python3 -V')
+    print(cur_version)
 
     print('\nOptions:')
     print(f' - "{QUIT}"   Quit')
