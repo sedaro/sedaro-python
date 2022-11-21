@@ -27,8 +27,6 @@ def switch_current_python_virtual_environment():
     except:
         switch_current_python_virtual_environment()
 
-
-
 def sedaro_client_python_version_manager():
 
     print('\n---------< Sedero Client - python version manager >---------')
