@@ -10,7 +10,7 @@ This client is intended to be used alongside our redocs [OpenAPI Specification](
 pip install sedaro
 ```
 
-## Use
+## Use: Block CRUD
 
 1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Satellite Management Console.
 
@@ -219,7 +219,7 @@ pip install sedaro
         solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
     ```
 
-## Full Example
+### Full Example
 
 ```py
 from sedaro import SedaroApiClient
