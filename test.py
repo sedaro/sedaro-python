@@ -12,9 +12,9 @@ HOST = 'http://localhost:80'
 # TODO: remove this
 # NOTE: update the API_KEY and WILDFIRE_A_T_ID for things that work with your dev environment
 # NOTE: these are temporary for Zach's dev environment
-API_KEY = '1.-RjK0kE34B5z-V7BqBVdhSMLgHq9UTGB7iIZYTpoDGfZpn2cQPWE9kz_G9LapUshx7inFFTmN_xNMS5YnGMW-w'
-WILDFIRE_A_T_ID = 53
-WILDFIRE_SCENARIO_ID = 55
+API_KEY = '1.jd8KABYSWWJ_VQ8dzW_78whf47VLhuHCn8X1n7PcGjK50zezvGSTE9vGWJEgVj5Xvo_FwOBGfITjrOJ5GDuwFQ'
+WILDFIRE_A_T_ID = 59
+WILDFIRE_SCENARIO_ID = 61
 
 
 def test_get():
@@ -233,6 +233,13 @@ def test_block_class_client_options():
             )
 
 
+def _check_job_status(job):
+    print('')
+    assert job['status'] == 'RUNNING'
+    print(job['status'], '-', round(
+        job['progress']['percentComplete'], 2), '%')
+
+
 def test_run_simulation():
     from sedaro_base_client.apis.tags import jobs_api
 
@@ -242,35 +249,34 @@ def test_run_simulation():
 
         # Start simulation
         jobs_api_client = jobs_api.JobsApi(sedaro_client)
-        response = jobs_api_client.start_simulation(
+        jobs_api_client.start_simulation(
             path_params={'branchId': scenario_client.id})
 
         # Get status #1
         response = jobs_api_client.get_simulations(
             path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
         )
-        job = response.body[0]
-        print(job['status'], '-', round(
-            job['progress']['percentComplete'], 2), '%')
+        _check_job_status(response.body[0])
         time.sleep(5)
 
         # Get status #2
         response = jobs_api_client.get_simulations(
             path_params={'branchId': scenario_client.id}, query_params={'latest': ''}
         )
-        job = response.body[0]
-        print('')
-        print(job['status'], '-', round(
-            job['progress']['percentComplete'], 2), '%')
-        time.sleep(5)
+        _check_job_status(response.body[0])
+        time.sleep(2)
 
         # Terminate
         print('\nTerminating...')
         response = jobs_api_client.terminate_simulation(
-            path_params={'branchId': scenario_client.id, 'jobId': job['id']}
+            path_params={
+                'branchId': scenario_client.id,
+                'jobId': response.body[0]['id']
+            }
         )
         print('')
         print(response.body['message'])
+        assert response.body['message'] == 'Successfully terminated simulation.'
         print('\nDone!\n')
 
 
@@ -291,6 +297,7 @@ def run_tests():
 
     # test simulation outside of timer above
     test_run_simulation()
+
 
 if __name__ == "__main__":
     run_tests()
