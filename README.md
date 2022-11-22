@@ -54,7 +54,7 @@ Note: see section ".zshrc or .bashrc" for potential necessary updates to those f
 
 ### Option #2 (manual)
 
-- Select version for current directory (this will update the `.python-version` file):
+- Select version for current directory (this will create/update the `.python-version` file):
 
   ```zsh
   pyenv local <version>
