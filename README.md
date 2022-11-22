@@ -65,6 +65,12 @@ python3 -m venv ./.venv
 source .venv/bin/activate
 ```
 
+Install sedaro python client:
+
+```
+pip install -e sedaro
+```
+
 ## .zshrc or .bashrc
 
 You may need to add the following to your `.zshrc` or `.bashrc` file. See S.O. answer [here](https://stackoverflow.com/a/71364553/16448566).
