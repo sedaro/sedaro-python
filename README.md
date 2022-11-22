@@ -91,7 +91,7 @@ eval "$(pyenv virtualenv-init -)"
 
 ## To run client generator:
 
-Note: this is designed for Sedaro internal use.
+Note: this is designed and set up for Sedaro dev's use.
 
 ```zsh
 python3 client_generator
