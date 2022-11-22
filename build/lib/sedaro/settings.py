@@ -1,0 +1,5 @@
+PACKAGE_NAME = 'sedaro'
+BASE_PACKAGE_NAME = 'sedaro_base_client'
+CREATE = 'create'
+UPDATE = 'update'
+DELETE = 'delete'

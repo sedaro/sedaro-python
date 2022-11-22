@@ -1,7 +1,1 @@
-__pycache__
-.DS_Store
-.venv
-.temp_dir_*
-.vscode
-build/
-.python-version
+*.egg-info
