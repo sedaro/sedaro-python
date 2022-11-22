@@ -18,14 +18,6 @@ Run:
 python3 tests
 ```
 
-## To run client generator:
-
-Note: this is designed for Sedaro internal use.
-
-```zsh
-python3 client_generator
-```
-
 ## To switch python version in this directory's virtual environment:
 
 Have `pyenv` installed:
@@ -81,7 +73,7 @@ Note: see section ".zshrc or .bashrc" for potential necessary updates to those f
   pip install -e sedaro
   ```
 
-## .zshrc or .bashrc
+### .zshrc or .bashrc
 
 You may need to add the following to your `.zshrc` or `.bashrc` file. See S.O. answer [here](https://stackoverflow.com/a/71364553/16448566).
 
@@ -95,4 +87,12 @@ plugin=(
 eval "$(pyenv init -)"
 eval "$(command pyenv init --path)"
 eval "$(pyenv virtualenv-init -)"
+```
+
+## To run client generator:
+
+Note: this is designed for Sedaro internal use.
+
+```zsh
+python3 client_generator
 ```
