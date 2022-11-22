@@ -1,4 +1,4 @@
-# Sedaro Clients
+# Sedaro Python Client
 
 See below for some helpful notes
 
