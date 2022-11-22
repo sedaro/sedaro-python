@@ -1,10 +1,16 @@
 # Sedaro Python Client
 
-See below for some helpful notes
+This is the repository that houses the [Sedaro Python Client](sedaro/README.md) (see directory `sedaro`). Other files and directories in this repository help with development and maintenance of the [Sedaro Python Client](sedaro/README.md). See below for some helpful notes regarding those other files and directories.
 
 ## To run tests:
 
-Make sure `sedaro-app` container is running. Update the variables in `tests/config.py` to reflect an API key for a `user` in your dev environment and branch ID's that correspond to that user. Then run:
+For Sedaro devs testing in the local development environment: make sure `sedaro-app` container is running.
+
+Update the variables in `tests/config.py` to reflect an API key for a `user` in your dev environment and branch ID's that correspond to that user. Then run:
+
+For non-Sedaro devs testing in the live environment: update the `HOST` variable in `tests/config.py` to `'https://api.sedaro.com'`.
+
+For non-Sedaro devs testing in a dedicated Sedaro instance: update the `HOST` variable in `tests/config.py` to the url of your Sedaro server.
 
 ```zsh
 python3 tests
