@@ -4,6 +4,8 @@ See below for some helpful notes
 
 ## To run tests:
 
+Make sure `sedaro-app` container is running. Update the variables in `tests/config.py` to reflect an API key for a `user` in your dev environment and branch ID's that correspond to that user. Then run:
+
 ```zsh
 python3 tests
 ```
