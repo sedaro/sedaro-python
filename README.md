@@ -1,312 +1,88 @@
-# Sedaro Python Client (Beta)
+# Sedaro Clients
 
-A python client for interacting with the Sedaro Satellite API using intuitive classes and methods.
+See below for some helpful notes
 
-This client is intended to be used alongside our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block.
+## To run tests:
 
-## Install
+Make sure `sedaro-app` container is running. Update the variables in `tests/config.py` to reflect an API key for a `user` in your dev environment and branch ID's that correspond to that user. Then run:
 
-```bash
-pip install sedaro
+```zsh
+python3 tests
 ```
 
-## Use: Block CRUD
+## To run client generator:
 
-1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Satellite Management Console.
-
-    ```py
-    from sedaro import SedaroApiClient
-
-    API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
-    AGENT_TEMPLATE_BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
-
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        ...
-    ```
-
-    ```py
-    # If using a dedicated enterprise Sedaro instance, overwrite the default `host` kwarg.
-    ...
-    HOST = 'url-to-my-sedaro-server-instance.com'
-
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        ...
-    ```
-
-2.  Use the client to instantiate a `BranchClient`.
-
-    ```py
-    ...
-
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-    ```
-
-3.  Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
-
-    ```py
-    ...
-
-        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-
-        branch_client.Target
-
-        tranch_client.Component
-
-        branch_client.Subsystem
-
-        # ...etc.
-
-    ```
-
-    - Valid `BlockClassClient`s for an Agent Template Branch are as follows:
-
-      - TriadAlgorithm
-      - AveragingAlgorithm
-      - MEKFAlgorithm
-      - EKFAlgorithm
-      - GPSAlgorithm
-      - SlidingModeAlgorithm
-      - Battery
-      - BatteryCell
-      - BodyFrameVector
-      - BusRegulator
-      - Component
-      - BatteryPack
-      - SolarPanel
-      - QuasiRegDetTopology
-      - FullyRegDetTopology
-      - SingleConvHybridTopology
-      - TwoConvMpptTopology
-      - SingleConvMpptTopology
-      - Topology
-      - ReactionWheel
-      - Magnetorquer
-      - DirectionSensor
-      - OpticalAttitudeSensor
-      - VectorSensor
-      - PositionSensor
-      - AngularVelocitySensor
-      - Cooler
-      - Heater
-      - SphericalFuelTank
-      - SpherocylinderFuelTank
-      - ConOps
-      - GroupCondition
-      - Condition
-      - SameTargetConditionGrouping
-      - ResistanceLoad
-      - PowerLoad
-      - ActuatorLoad
-      - LoadState
-      - CircularFieldOfView
-      - RectangularFieldOfView
-      - FOVConstraint
-      - FuelReservoir
-      - OperationalMode
-      - PassivePointingMode
-      - LockPointingMode
-      - MaxAlignPointingMode
-      - PointingMode
-      - ActivePointingMode
-      - CelestialVector
-      - LocalVector
-      - TargetVector
-      - TargetGroupVector
-      - ReferenceVector
-      - Satellite
-      - SimulatableSatellite
-      - SolarArray
-      - SolarCell
-      - Subsystem
-      - FixedSurface
-      - SunTrackingSurface
-      - AntiSunTrackingSurface
-      - SurfaceMaterial
-      - TargetGroup
-      - SpaceTarget
-      - GroundTarget
-      - CelestialTarget
-      - TempControllerState
-      - ThermalInterface
-      - ThermalInterfaceMateria
-
-    - Valid `BlockClassClient`s for an Scenario Branch are as follows:
-      - Agent
-      - ClockConfig
-      - Orbit
-
-4.  A `BlockClassClient` has several methods:
-
-    ```py
-    ...
-        branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'  # The ID of the related Satellite Block
-        )
-
-        branch_client.Subsystem.get(blockId) # ID of desired Subsystem
-        branch_client.Subsystem.get_all()
-        branch_client.Subsystem.get_first()
-        branch_client.Subsystem.get_last()
-        branch_client.Subsystem.get_all_ids()
-    ```
-
-5.  Most `BlockClassClient` methods return a `BlockClient` which has several methods and properties.
-
-    ```py
-    ...
-        subsystem_client = branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'
-        )
-
-        subsystem_client.update(name='Structure 2.0')
-
-        subsystem_client.delete()
-    ```
-
-    ```py
-    ...
-    # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
-        subsystem_client = branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'
-        )
-
-        subsystem_client_2 = subsystem_client.update(
-         name='Structure 2.0'
-        )
-
-        subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
-
-        assert subsystem_client == subsystem_client_2 == subsystem_client_3
-    ```
-
-    ```py
-    ...
-    # Printing a `BlockClient` will show you the corresponding Sedaro Block's data:
-        print(subsystem_client)
-
-    >>> Subsystem(
-    >>>   id=27
-    >>>   name=Structure 2.0
-    >>>   category=CUSTOM
-    >>>   satellite=3
-    >>>   components=()
-    >>> )
-    ```
-
-    ```py
-    # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
-        subsystem_client.name
-
-    >>> 'Structure 2.0'
-    # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
-        subsystem.satellite
-
-    >>> Satellite(
-    >>>   id=3
-    >>>   mass=1000
-    >>>   ...etc
-    >>> )
-    ```
-
-    ```py
-    # This allows for traversing Blocks in the model via relationship fields:
-        solar_panel_client = branch_client.SolarPanel.get_first()
-
-        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
-    ```
-
-### Full Example
-
-```py
-from sedaro import SedaroApiClient
-from sedaro.exceptions import NonexistantBlockError
-
-API_KEY = 'my_api_key_generated_by_sedaro_satellite'
-AGENT_TEMPLATE_BRANCH_ID = 1
-
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-    branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-
-    battery_cell_client = branch_client.BatteryCell.create(
-        partNumber='987654321',
-        manufacturer='Sedaro Corporation',
-        esr=0.01,
-        maxChargeCurrent=15,
-        maxDischargeCurrent=100,
-        minSoc=0.2,
-        capacity=500,
-        curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
-        topology='5',
-    )
-
-    bc_id = battery_cell_client.id
-
-    battery_cell_client.update(partNumber="123456789")
-
-    battery_cell_client.delete()
-
-    try:
-        battery_cell_client.update(partNumber="987654321")
-    except NonexistantBlockError as e:
-        assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
+```zsh
+python3 client_generator
 ```
 
-## Use: Simulation
+## To switch python version in this directory's virtual environment:
 
-```py
-...
-from sedaro_base_client.apis.tags import jobs_api
+Have `pyenv` installed:
 
-SCENARIO_BRANCH_ID = 2
-
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-
-    # Instantiate jobs client
-    jobs_api_client = jobs_api.JobsApi(sedaro_client)
-
-    # Start simulation
-    jobs_api_client.start_simulation(
-        path_params={'branchId': SCENARIO_BRANCH_ID}
-    )
-
-    # Get status & percentage complete
-    response = jobs_api_client.get_simulations(
-        path_params={'branchId': SCENARIO_BRANCH_ID}, query_params={'latest': ''}
-    )
-    job = response.body[0]
-    assert job['status'] == 'RUNNING'
-    print(job['progress']['percentComplete'])
-
-    # Terminate simulation
-    response = jobs_api_client.terminate_simulation(
-        path_params={'branchId': SCENARIO_BRANCH_ID, 'jobId': job['id']}
-    )
-    assert response.body['message'] == 'Successfully terminated simulation.'
-
+```zsh
+brew install pyenv
 ```
 
-## Further information
+Install the python version you want to use if it isn't already installed:
 
-See docstrings on classes and their methods for further instructions and explanations.
-
-## Sedaro Base Client
-
-The Sedaro client is a wrapper around the Swagger generated OpenAPI client. When this package is installed, the auto-generated, lower-loevel clients and methods are also available under `sedaro_base_client`.
-
-```py
-from sedaro_base_client import ...
+```zsh
+pyenv install <version>
 ```
 
-## Community, Support, Discussion
+Other helpful commands
 
-If you have any issues using the package or any suggestions, please start by reaching out:
+```zsh
+# List available python versions:
+pyenv versions
 
-1. Open an issue on [GitHub](https://github.com/sedaro/sedaro-python/issues)
-2. Join the Sedaro Community [Slack](https://join.slack.com/t/sedaro-community/shared_invite/zt-1jps4i711-mXy88AZQ9AV7YcEXr8x7Ow)
-3. Email us at support@sedarotech.com
+# Check curent python version:
+python3 -V
+```
 
-Please note that while emails are always welcome, we prefer the first two options as this allows for others to benefit from the discourse in the threads. That said, if the matter is specific to your use case or sensitive in nature, don't hesitate to shoot us an email instead.
+Note: see section ".zshrc or .bashrc" for potential necessary updates to those files.
+
+### Option #1 (custom script)
+
+- Use the custom python version manager designed for use in this directory. You will be prompted on how to proceed.
+
+  ```zsh
+  python3 python_version_manager
+  ```
+
+### Option #2 (manual)
+
+- Select version for current directory (this will update the `.python-version` file):
+
+  ```zsh
+  pyenv local <version>
+  ```
+
+- Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
+
+  ```zsh
+  python3 -m venv ./.venv
+  source .venv/bin/activate
+  ```
+
+- Install sedaro python client:
+
+  ```
+  pip install -e sedaro
+  ```
+
+## .zshrc or .bashrc
+
+You may need to add the following to your `.zshrc` or `.bashrc` file. See S.O. answer [here](https://stackoverflow.com/a/71364553/16448566).
+
+```zsh
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+plugin=(
+  pyenv
+)
+eval "$(pyenv init -)"
+eval "$(command pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
+```
