@@ -58,18 +58,18 @@ Note: see section ".zshrc or .bashrc" for potential necessary updates to those f
   pyenv local <version>
   ```
 
-Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
+- Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
 
-```zsh
-python3 -m venv ./.venv
-source .venv/bin/activate
-```
+  ```zsh
+  python3 -m venv ./.venv
+  source .venv/bin/activate
+  ```
 
-Install sedaro python client:
+- Install sedaro python client:
 
-```
-pip install -e sedaro
-```
+  ```
+  pip install -e sedaro
+  ```
 
 ## .zshrc or .bashrc
 
