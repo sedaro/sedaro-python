@@ -49,7 +49,7 @@ def test_block_class_client_options():
         'FOVConstraint',
         'FuelReservoir',
         'OperationalMode',
-        # 'Orbit',  # TODO -- this is a valid option, but it shouldn't be -- see model/templates.py
+        # 'Orbit',  # TODO -- this is a temporarily valid option, but it shouldn't be (so don't show to users in readme) -- see model/templates.py
         'PassivePointingMode',
         'LockPointingMode',
         'MaxAlignPointingMode',
