@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 class SimClient:
-    """A client to interact with the Sedaro API jobs (simulation) routes"""
+    """A client to interact with the Sedaro API simulation (jobs) routes"""
     branch_id: int
     _base_jobs_api_client: jobs_api.JobsApi
 
@@ -17,7 +17,7 @@ class SimClient:
 
         Args:
             sedaro_api_client (`SedaroApiClient`): the `SedaroApiClient`
-            branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its jobs/simulations.
+            branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations/jobs.
         """
         self._base_jobs_api_client = jobs_api.JobsApi(sedaro_api_client)
         self.branch_Id = branch_id
