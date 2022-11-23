@@ -17,7 +17,7 @@ class SimClient:
 
         Args:
             sedaro_api_client (`SedaroApiClient`): the `SedaroApiClient`
-            branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations/jobs.
+            branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs).
         """
         self._base_jobs_api_client = jobs_api.JobsApi(sedaro_api_client)
         self.branch_Id = branch_id
@@ -26,18 +26,18 @@ class SimClient:
         """Starts simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated with.
 
         Returns:
-            ApiResponse: response from the start simulation/job request
+            ApiResponse: response from the start simulation (job) request
         """
         return self._base_jobs_api_client.start_simulation(
             path_params={'branchId': self.branch_Id}
         )
 
     def get_latest(self) -> ApiResponse:
-        """Gets the latest running simulation/job corresponding to the Sedaro Scenario Branch id that this `SimClient`
+        """Gets the latest running simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient`
         was instantiated with.
 
         Returns:
-            ApiResponse: response from the get simulation/job request
+            ApiResponse: response from the get simulation (job) request
         """
         return self._base_jobs_api_client.get_simulations(
             path_params={'branchId': self.branch_Id},
@@ -57,10 +57,10 @@ class SimClient:
         ```
 
         Args:
-            job_id (`int`): id of the simulation/job to termiante.
+            job_id (`int`): id of the simulation (job) to termiante.
 
         Returns:
-            ApiResponse: response from the termiante simulation/job request
+            ApiResponse: response from the termiante simulation (job) request
         """
         return self._base_jobs_api_client.terminate_simulation(
             path_params={
