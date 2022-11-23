@@ -258,9 +258,6 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 ## Use: Simulation
 
 ```py
-...
-from sedaro_base_client.apis.tags import jobs_api
-
 SCENARIO_BRANCH_ID = 2
 
 with SedaroApiClient(api_key=API_KEY) as sedaro_client:
