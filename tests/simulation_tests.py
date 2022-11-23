@@ -26,12 +26,13 @@ def _test_run_simulation():
 
         # Get status #2
         response = sim_client.get_latest()
-        _check_job_status(response.body[0])
+        job = response.body[0]
+        _check_job_status(job)
         time.sleep(3)
 
         # Terminate
         print('- Terminating...')
-        response = sim_client.terminate(response.body[0]['id'])
+        response = sim_client.terminate(job['id'])
         print('-', response.body['message'])
         assert response.body['message'] == 'Successfully terminated simulation.'
 
