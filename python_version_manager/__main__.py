@@ -34,7 +34,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     )
 
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate'
+        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip'
         if install_pypi_sedaro:
             command += ' && pip install sedaro'
         else:
