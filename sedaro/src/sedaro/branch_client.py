@@ -1,6 +1,5 @@
 import importlib
 from typing import TYPE_CHECKING, Dict, List, Union
-from dataclasses import dataclass
 from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
@@ -8,7 +7,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200R
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
 from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch
-from .settings import CREATE, UPDATE, DELETE, BASE_PACKAGE_NAME
+from .settings import BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
