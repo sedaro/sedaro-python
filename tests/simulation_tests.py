@@ -11,39 +11,27 @@ def _check_job_status(job):
 
 
 def _test_run_simulation():
-    from sedaro_base_client.apis.tags import jobs_api
-
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        # Instantiate jobs client
-        jobs_api_client = jobs_api.JobsApi(sedaro_client)
+        # Instantiate job client
+        jobs_api_client = sedaro_client.get_job_api(WILDFIRE_SCENARIO_ID)
 
         # Start simulation
-        jobs_api_client.start_simulation(
-            path_params={'branchId': WILDFIRE_SCENARIO_ID})
+        jobs_api_client.start_simulation()
         print('- Started simulation')
 
         # Get status #1
-        response = jobs_api_client.get_simulations(
-            path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
-        )
+        response = jobs_api_client.get_latest_simulation()
         _check_job_status(response.body[0])
         time.sleep(3)
 
         # Get status #2
-        response = jobs_api_client.get_simulations(
-            path_params={'branchId': WILDFIRE_SCENARIO_ID}, query_params={'latest': ''}
-        )
+        response = jobs_api_client.get_latest_simulation()
         _check_job_status(response.body[0])
         time.sleep(3)
 
         # Terminate
         print('- Terminating...')
-        response = jobs_api_client.terminate_simulation(
-            path_params={
-                'branchId': WILDFIRE_SCENARIO_ID,
-                'jobId': response.body[0]['id']
-            }
-        )
+        response = jobs_api_client.terminate_simulation(response.body[0]['id'])
         print('-', response.body['message'])
         assert response.body['message'] == 'Successfully terminated simulation.'
 
