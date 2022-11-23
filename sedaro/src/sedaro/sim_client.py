@@ -48,6 +48,14 @@ class SimClient:
         """Terminate simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated
         with and the passed in `job_id`.
 
+        Note: the `job_id` of the "latest" running simulation can be retrieved via:
+
+        ```py
+            res = sim_client.get_latest()
+            job_id = res.body[0]['id']
+            sim_client.terminate(job_id)
+        ```
+
         Args:
             job_id (`int`): id of the simulation/job to termiante.
 
