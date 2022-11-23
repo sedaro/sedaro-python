@@ -3,9 +3,10 @@ import shutil
 
 QUIT = "q"
 SWITCH = "s"
+SWITCH_PYPI = "sp"
 RUN_TESTS = 't'
-OPTIONS_MAIN = [QUIT, SWITCH]
-# OPTIONS_MAIN = [QUIT, SWITCH, RUN_TESTS]
+OPTIONS_MAIN = [QUIT, SWITCH, SWITCH_PYPI]
+# OPTIONS_MAIN = [QUIT, SWITCH, SWITCH_PYPI, RUN_TESTS]
 # TODO: python version wasn't switching in tests, so disabled RUN_TESTS for now
 # Add that option back in and test it then follow the print outputs to see if works
 VENV = '.venv'
@@ -16,7 +17,7 @@ def get_cur_python_version():
     return os.popen("python3 -V").read().split("Python")[1][1:]
 
 
-def switch_current_python_virtual_environment(new_version=None, run_tests=False):
+def switch_current_python_virtual_environment(new_version=None, run_tests=False, install_pypi_sedaro=False):
     if new_version is None:
         print('\nAvailable python versions:')
         os.system('pyenv versions')
@@ -33,7 +34,11 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False)
     )
 
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install -e sedaro'
+        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate'
+        if install_pypi_sedaro:
+            command += ' && pip install sedaro'
+        else:
+            command += ' && pip install -e sedaro'
         if run_tests:
             command += ' && python3 tests'
         os.system(command)
@@ -65,15 +70,19 @@ def sedaro_client_python_version_manager():
         print('Options:')
         if QUIT in OPTIONS_MAIN:
             print(
-                f'  - "{QUIT}"   Quit'
+                f'  - "{QUIT}"    Quit'
             )
         if SWITCH in OPTIONS_MAIN:
             print(
-                f'  - "{SWITCH}"   Switch to a new python virtual environment (deletes current one if exists)'
+                f'  - "{SWITCH}"    Switch python version in venv (deletes current venv if exists) and install sedaro from local sedaro directory'
+            )
+        if SWITCH_PYPI in OPTIONS_MAIN:
+            print(
+                f'  - "{SWITCH_PYPI}"   Switch python version in venv (deletes current venv if exists) and install sedaro from pypi'
             )
         if RUN_TESTS in OPTIONS_MAIN:
             print(
-                f'  - "{RUN_TESTS}"   Run tests in python versions {PYTHON_VERSIONS}'
+                f'  - "{RUN_TESTS}"    Run tests in python versions {PYTHON_VERSIONS}'
             )
 
         how_proceed = input('~ ')
@@ -87,6 +96,10 @@ def sedaro_client_python_version_manager():
 
     if how_proceed == SWITCH:
         switch_current_python_virtual_environment()
+        return
+
+    if how_proceed == SWITCH_PYPI:
+        switch_current_python_virtual_environment(install_pypi_sedaro=True)
         return
 
     if how_proceed == RUN_TESTS:
