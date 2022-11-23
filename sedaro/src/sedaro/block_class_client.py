@@ -105,7 +105,7 @@ class BlockClassClient:
             ValueError: if you don't pass `'create'` or `'update'` for `create_or_update`
 
         Returns:
-            type: the model used for validating # TODO: better type hint
+            type: the model used for validating
         """
         create_or_update = create_or_update.lower()
         if create_or_update not in [CREATE, UPDATE]:
