@@ -5,7 +5,7 @@ from sedaro_base_client.apis.tags import branches_api
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
 from .exceptions import SedaroApiException
-from .jobs_client import JobsClient
+from .job_client import JobClient
 
 
 class SedaroApiClient(ApiClient):
@@ -54,10 +54,13 @@ class SedaroApiClient(ApiClient):
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
-    def get_jobs_api(self: int):
-        """Gets a Sedaro JobsClient
+    def get_job_api(self, branch_id: int):
+        """Gets a Sedaro JobClient
+
+        Args:
+            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations/jobs
 
         Returns:
-            JobsClient: a Sedaro JobsClient
+            JobClient: a Sedaro JobClient
         """
-        return JobsClient(self)
+        return JobClient(self, branch_id)
