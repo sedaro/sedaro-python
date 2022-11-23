@@ -1,10 +1,10 @@
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
-from sedaro_base_client.exceptions import ApiException
 
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
+from .exceptions import SedaroApiException
 
 
 class SedaroApiClient(ApiClient):
@@ -48,5 +48,5 @@ class SedaroApiClient(ApiClient):
                 raise Exception()
         except:
             reason = _response['error']['message'] if 'error' in _response else 'An unknown error occurred.'
-            raise ApiException(status=response.status, reason=reason)
+            raise SedaroApiException(status=response.status, reason=reason)
         return _response
