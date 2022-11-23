@@ -12,6 +12,7 @@ from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch
 from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
+    from sedaro_base_client import schemas
     from .sedaro_api_client import SedaroApiClient
     from .branch_client import BranchClient
 
@@ -39,12 +40,12 @@ class BlockClassClient:
         return self._branch_client._sedaro_client
 
     @property
-    def _create_class(self) -> type:  # TODO: better type hint
+    def _create_class(self) -> 'schemas.DictSchema':
         '''The model class to instantiate with appropriate kwargs when creating a Sedaro Block'''
         return self._get_create_or_update_block_model(CREATE)
 
     @property
-    def _update_class(self) -> type:  # TODO: better type hint
+    def _update_class(self) -> 'schemas.DictSchema':
         '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
         return self._get_create_or_update_block_model(UPDATE)
 
@@ -94,8 +95,7 @@ class BlockClassClient:
         # raise ValueError(
         #     f'Unable to find a block group containing the block name {self._block_name}')
 
-    # TODO: better type hint
-    def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']) -> type:
+    def _get_create_or_update_block_model(self, create_or_update: Literal['create', 'update']) -> 'schemas.DictSchema':
         """Gets the model class to used to validate the data to create or update a Sedaro Block
 
         Args:
