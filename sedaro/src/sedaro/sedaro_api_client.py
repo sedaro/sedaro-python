@@ -58,7 +58,7 @@ class SedaroApiClient(ApiClient):
         """Creates and returns a Sedaro SimClient
 
         Args:
-            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations/jobs
+            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs)
 
         Returns:
             SimClient: a Sedaro SimClient
