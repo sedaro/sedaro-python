@@ -7,9 +7,7 @@ RUN_TESTS = 't'
 OPTIONS_MAIN = [QUIT, SWITCH]
 # OPTIONS_MAIN = [QUIT, SWITCH, RUN_TESTS]
 # TODO: python version wasn't switching in tests, so disabled RUN_TESTS for now
-# Add that option back in and test it then follow the print outputs
-# You'll notice the tests are running in the same python version each time, even though
-# new environments have been made and activated
+# Add that option back in and test it then follow the print outputs to see if works
 VENV = '.venv'
 PYTHON_VERSIONS = ['3.7', '3.8', '3.9', '3.10']
 
