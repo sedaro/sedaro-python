@@ -8,7 +8,7 @@ If you are generating a client based on the dev open api spec, make sure the ope
 
 In the directory containing this directory run:
 
-- `$ python client_generator.py` or `$ python3 client_generator.py`
+- `$ python3 client_generator`
 
 You will be prompted on how to proceed.
 
