@@ -1,6 +1,6 @@
 # Sedaro Python Client
 
-This is the repository that houses the [Sedaro Python Client](sedaro/README.md) (stored in directory `sedaro/`). Other files and directories in this repository help with development and maintenance of the [Sedaro Python Client](sedaro/README.md). See below for some helpful notes regarding those other files and directories.
+This is the repository that houses the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro) (stored in directory `sedaro/`). Other files and directories in this repository help with development and maintenance of the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro). See below for some helpful notes regarding those other files and directories.
 
 ## To run tests:
 

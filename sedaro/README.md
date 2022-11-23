@@ -258,33 +258,26 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 ## Use: Simulation
 
 ```py
-...
-from sedaro_base_client.apis.tags import jobs_api
-
 SCENARIO_BRANCH_ID = 2
 
 with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
-    # Instantiate jobs client
-    jobs_api_client = jobs_api.JobsApi(sedaro_client)
+    # Instantiate sim client
+    sim_client = sedaro_client.get_sim_client(SCENARIO_BRANCH_ID)
 
     # Start simulation
-    jobs_api_client.start_simulation(
-        path_params={'branchId': SCENARIO_BRANCH_ID}
-    )
+    sim_client.start()
 
-    # Get status & percentage complete
-    response = jobs_api_client.get_simulations(
-        path_params={'branchId': SCENARIO_BRANCH_ID}, query_params={'latest': ''}
-    )
+    # Get simulation
+    response = sim_client.get_latest()
+
+    # Check status & percentage complete
     job = response.body[0]
     assert job['status'] == 'RUNNING'
     print(job['progress']['percentComplete'])
 
     # Terminate simulation
-    response = jobs_api_client.terminate_simulation(
-        path_params={'branchId': SCENARIO_BRANCH_ID, 'jobId': job['id']}
-    )
+    response = sim_client.terminate(job['id'])
     assert response.body['message'] == 'Successfully terminated simulation.'
 
 ```

@@ -1,4 +1,5 @@
 import time
+import platform
 
 ############## IMPORT AND ADD TEST FILES HERE ##############
 # All imports are expected to have a `run_tests` function
@@ -17,6 +18,10 @@ imported_test_files = [
 
 def run_tests():
     '''Runs all tests from `imported_test_files` with name, progress, and time `print`s throughout.'''
+    print(f'\n### Running tests with Python {platform.python_version()}')
+    # delay so prints are easier to follow
+    time.sleep(0.5)
+
     for i, test_file in enumerate(imported_test_files):
 
         intro = f'### Test {i + 1}/{len(imported_test_files)}: "{test_file.__name__}" --'

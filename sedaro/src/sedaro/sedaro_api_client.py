@@ -1,13 +1,16 @@
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
-from sedaro_base_client.exceptions import ApiException
 
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
+from .exceptions import SedaroApiException
+from .sim_client import SimClient
 
 
 class SedaroApiClient(ApiClient):
+    """A client to interact with the Sedaro API"""
+
     def __init__(self, api_key, host='https://api.sedaro.com', *args, **kwargs):
         return super().__init__(
             configuration=Configuration(host=host),
@@ -48,5 +51,16 @@ class SedaroApiClient(ApiClient):
                 raise Exception()
         except:
             reason = _response['error']['message'] if 'error' in _response else 'An unknown error occurred.'
-            raise ApiException(status=response.status, reason=reason)
+            raise SedaroApiException(status=response.status, reason=reason)
         return _response
+
+    def get_sim_client(self, branch_id: int):
+        """Creates and returns a Sedaro SimClient
+
+        Args:
+            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs)
+
+        Returns:
+            SimClient: a Sedaro SimClient
+        """
+        return SimClient(self, branch_id)
