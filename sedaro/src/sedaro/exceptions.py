@@ -2,7 +2,7 @@ from sedaro_base_client.exceptions import ApiException
 
 
 class SedaroApiException(ApiException):
-    """Base exception for all exceptions raised in the Sedaro Python Client"""
+    """Base exception for exceptions raised by the Sedaro Python Client"""
     pass
 
 
