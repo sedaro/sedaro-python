@@ -5,9 +5,12 @@ from sedaro_base_client.apis.tags import branches_api
 from .utils import parse_urllib_response
 from .branch_client import BranchClient
 from .exceptions import SedaroApiException
+from .jobs_client import JobsClient
 
 
 class SedaroApiClient(ApiClient):
+    """A client to interact with the Sedaro API"""
+
     def __init__(self, api_key, host='https://api.sedaro.com', *args, **kwargs):
         return super().__init__(
             configuration=Configuration(host=host),
@@ -50,3 +53,11 @@ class SedaroApiClient(ApiClient):
             reason = _response['error']['message'] if 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
+
+    def get_jobs_api(self: int):
+        """Gets a Sedaro JobsClient
+
+        Returns:
+            JobsClient: a Sedaro JobsClient
+        """
+        return JobsClient(self)
