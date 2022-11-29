@@ -17,10 +17,22 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Software Development",
 ]
-dynamic = ["dependencies"]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
+# dynamic = ["dependencies"]
+
+# [tool.setuptools.dynamic]
+# dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
+
+dependencies = [
+    "certifi >= 14.5.14",
+    "frozendict ~= 2.3.4",
+    "python-dateutil ~= 2.7.0",
+    "setuptools >= 21.0.0",
+    "typing_extensions ~= 4.3.0",
+    "urllib3 ~= 1.26.7",
+    "pydash >= 5.1.1",
+]
+
 
 [project.urls]
 "Homepage" = "https://github.com/sedaro/sedaro-python"
