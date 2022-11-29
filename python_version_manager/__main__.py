@@ -9,7 +9,7 @@ RUN_TESTS = 't'
 
 PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
 
-SWITCH_INSTR = 'Switch python version in venv, install sedaro from: '
+SWITCH_INSTR = 'Switch python version, install sedaro from: '
 
 OPTIONS_MAIN = {
     QUIT: 'Quit',
@@ -44,7 +44,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     )
 
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip'
+        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install -U autopep8'
         if pypi_sedaro:
             command += ' && pip install sedaro'
         elif test_pypi_sedaro:
@@ -80,7 +80,7 @@ def sedaro_client_python_version_manager():
     how_proceed = ''
     while how_proceed not in OPTIONS_MAIN:
         print('Options:')
-        print('  (note, "Switch" options delete current venv)')
+        print('  (note, "Switch" options deletes/recreates venv)')
         for k, v in OPTIONS_MAIN.items():
             command = f'  - "{k}"'
             for _ in range(8 - len(k)):
