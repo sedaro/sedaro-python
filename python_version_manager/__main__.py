@@ -48,6 +48,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         if pypi_sedaro:
             command += ' && pip install sedaro'
         elif test_pypi_sedaro:
+            # see S.O. answer for context on command below: https://stackoverflow.com/a/59495166/16448566
             command += ' pip install --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
             command += ' && pip install -e sedaro'
