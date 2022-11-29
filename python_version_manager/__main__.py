@@ -2,22 +2,32 @@ import os
 import shutil
 
 QUIT = "q"
-SWITCH = "s"
+SWITCH = "sl"
 SWITCH_PYPI = "sp"
+SWITCH_PYPI_TEST = "st"
 RUN_TESTS = 't'
-OPTIONS_MAIN = [QUIT, SWITCH, SWITCH_PYPI]
-# OPTIONS_MAIN = [QUIT, SWITCH, SWITCH_PYPI, RUN_TESTS]
+
+PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
+
+SWITCH_INSTR = 'Switch python version in venv, install sedaro from: '
+
+OPTIONS_MAIN = {
+    QUIT: 'Quit',
+    SWITCH: f'{SWITCH_INSTR}local sedaro directory',
+    SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
+    SWITCH_PYPI_TEST: f'{SWITCH_INSTR}test.pypi',
+    # RUN_TESTS: f'Run tests in python versions {PY_VERSIONS_TESTS}'
+}
 # TODO: python version wasn't switching in tests, so disabled RUN_TESTS for now
 # Add that option back in and test it then follow the print outputs to see if works
 VENV = '.venv'
-PYTHON_VERSIONS = ['3.7', '3.8', '3.9', '3.10']
 
 
 def get_cur_python_version():
     return os.popen("python3 -V").read().split("Python")[1][1:]
 
 
-def switch_current_python_virtual_environment(new_version=None, run_tests=False, install_pypi_sedaro=False):
+def switch_current_python_virtual_environment(new_version=None, run_tests=False, pypi_sedaro=False, test_pypi_sedaro=False):
     if new_version is None:
         print('\nAvailable python versions:')
         os.system('pyenv versions')
@@ -35,8 +45,10 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
 
     try:
         command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip'
-        if install_pypi_sedaro:
+        if pypi_sedaro:
             command += ' && pip install sedaro'
+        elif test_pypi_sedaro:
+            command += ' pip install --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
             command += ' && pip install -e sedaro'
         if run_tests:
@@ -68,22 +80,12 @@ def sedaro_client_python_version_manager():
     how_proceed = ''
     while how_proceed not in OPTIONS_MAIN:
         print('Options:')
-        if QUIT in OPTIONS_MAIN:
-            print(
-                f'  - "{QUIT}"    Quit'
-            )
-        if SWITCH in OPTIONS_MAIN:
-            print(
-                f'  - "{SWITCH}"    Switch python version in venv (deletes current venv if exists) and install sedaro from local sedaro directory'
-            )
-        if SWITCH_PYPI in OPTIONS_MAIN:
-            print(
-                f'  - "{SWITCH_PYPI}"   Switch python version in venv (deletes current venv if exists) and install sedaro from pypi'
-            )
-        if RUN_TESTS in OPTIONS_MAIN:
-            print(
-                f'  - "{RUN_TESTS}"    Run tests in python versions {PYTHON_VERSIONS}'
-            )
+        print('  (note, "Switch" options delete current venv)')
+        for k, v in OPTIONS_MAIN.items():
+            command = f'  - "{k}"'
+            for _ in range(8 - len(k)):
+                command += ' '
+            print(command + v)
 
         how_proceed = input('~ ')
 
@@ -92,22 +94,23 @@ def sedaro_client_python_version_manager():
 
     if how_proceed == QUIT:
         print('\nClosing manager\n')
-        return
 
-    if how_proceed == SWITCH:
+    elif how_proceed == SWITCH:
         switch_current_python_virtual_environment()
-        return
 
-    if how_proceed == SWITCH_PYPI:
-        switch_current_python_virtual_environment(install_pypi_sedaro=True)
-        return
+    elif how_proceed == SWITCH_PYPI:
+        switch_current_python_virtual_environment(pypi_sedaro=True)
 
-    if how_proceed == RUN_TESTS:
-        for version in PYTHON_VERSIONS:
+    elif how_proceed == SWITCH_PYPI_TEST:
+        switch_current_python_virtual_environment(test_pypi_sedaro=True)
+
+    elif how_proceed == RUN_TESTS:
+        for version in PY_VERSIONS_TESTS:
             switch_current_python_virtual_environment(version, run_tests=True)
             print(f'\n🛰️  Finished running tests for version {version}')
-        print(f'\n🛰️  Finished running tests for versions {PYTHON_VERSIONS}')
-        return
+        print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
+
+    return
 
 
 if __name__ == '__main__':
