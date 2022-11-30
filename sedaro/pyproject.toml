@@ -22,7 +22,8 @@ classifiers = [
 
 # [tool.setuptools.dynamic]
 # dependencies = {file = ["requirements.txt", "requirements-base-client.txt"]}
-# NOTE: Make sure dependencies vvv includes everything from ^^^
+# NOTE: Make sure dependencies (below) includes everything from ^^^ (requirements files)
+# Dependencies weren't being installed when downloading package, so explicitly defined them.
 dependencies = [
     "certifi >= 14.5.14",
     "frozendict ~= 2.3.4",
