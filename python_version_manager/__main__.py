@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 QUIT = "q"
 SWITCH = "sl"
@@ -16,7 +17,7 @@ OPTIONS_MAIN = {
     SWITCH: f'{SWITCH_INSTR}local sedaro directory',
     SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
     SWITCH_PYPI_TEST: f'{SWITCH_INSTR}test.pypi',
-    # RUN_TESTS: f'Run tests in python versions {PY_VERSIONS_TESTS}'
+    RUN_TESTS: f'Run tests in python versions {PY_VERSIONS_TESTS}'
 }
 # TODO: python version wasn't switching in tests, so disabled RUN_TESTS for now
 # Add that option back in and test it then follow the print outputs to see if works
@@ -39,9 +40,14 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     if os.path.isdir(VENV):
         shutil.rmtree(VENV)
 
-    print(
-        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro...\n'
-    )
+    print_msg = f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro'
+    if pypi_sedaro:
+        print_msg += ' from pypi'
+    elif test_pypi_sedaro:
+        print_msg += ' from test.pypi'
+    else:
+        print_msg += ' from local sedaro directory'
+    print(print_msg + '...\n')
 
     try:
         command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install -U autopep8'
@@ -52,12 +58,12 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
             command += ' pip install --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
             command += ' && pip install -e sedaro'
-        if run_tests:
-            command += ' && python3 tests'
         os.system(command)
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed'
         )
+        if run_tests:
+            os.system('python3 tests')
 
     except Exception as e:
         print('')
@@ -112,6 +118,8 @@ def sedaro_client_python_version_manager():
                 run_tests=True
             )
             print(f'\n🛰️  Finished running tests for version {version}')
+            # short pause needed here to make sure next venv is created and used properly
+            time.sleep(1)
         print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
 
     return
