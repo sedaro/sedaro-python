@@ -21,12 +21,15 @@ Inside `sedaro-python/`:
 
 ## Publish to test.pypi
 
+- Do everything under "Build"
 - `$ python3 -m twine upload --repository testpypi dist/\*`
   - requires username and password
 - Use `python_version_manager` to install sedaro from **test.pypi** and run tests using **live server** in python 3.7 - 3.10
 
 ## Publish to pypi:
 
+- Open pull request. After merged, switch to main branch with new changes pulled in
+- Do everything under "Build"
 - `$ python -m twine upload dist/\*`
   - requires username and password
 - Use `python_version_manager` to install sedaro from **pypi** and run tests using **live server** in python 3.7 - 3.10
