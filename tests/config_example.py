@@ -1,4 +1,4 @@
-HOST = 'http://localhost:80'
+HOST = 'https://api.sedaro.com'
 
 API_KEY = 'your api key here'
 WILDFIRE_A_T_ID = 0  # Wildfire agent template branch id
