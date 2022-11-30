@@ -5,12 +5,9 @@ This is the repository that houses the [Sedaro Python Client](https://github.com
 ## To run tests:
 
 - For Sedaro devs testing in the local development environment: make sure `sedaro-app` container is running.
-
-- For non-Sedaro devs testing in the live environment: update the `HOST` variable in `tests/config.py` to `'https://api.sedaro.com'`.
-
-- For non-Sedaro devs testing in a dedicated Sedaro instance: update the `HOST` variable in `tests/config.py` to the url of your Sedaro server.
-
-- For everyone: update the remaining variables in `tests/config.py` to reflect an API key for a `user` in your environment and for branch ID's that correspond to that user.
+- Create a `tests/config.py` file based on the `tests/config_example.py` file:
+  - For Sedaro devs testing in the live environment: update the `HOST` variable to `'http://localhost:80'`.
+  - For non-Sedaro devs testing in a dedicated Sedaro instance: update the `HOST` to the url of your Sedaro server.
 
 Run:
 
