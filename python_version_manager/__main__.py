@@ -3,24 +3,28 @@ import shutil
 import time
 
 QUIT = "q"
-SWITCH = "sl"
-SWITCH_PYPI = "sp"
+SWITCH_LOCAL = "sl"
+TESTS_LOCAL = 'tl'
 SWITCH_PYPI_TEST = "st"
-RUN_TESTS = 't'
+TESTS_PYPI_TEST = 'tt'
+SWITCH_PYPI = "sp"
+TESTS_PYPI = 'tp'
 
 PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
 
 SWITCH_INSTR = 'Switch python version, install sedaro from: '
+TEST_INSTR = f'Run tests in python versions {PY_VERSIONS_TESTS} using sedaro from: '
 
 OPTIONS_MAIN = {
     QUIT: 'Quit',
-    SWITCH: f'{SWITCH_INSTR}local sedaro directory',
-    SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
+    SWITCH_LOCAL: f'{SWITCH_INSTR}local sedaro directory',
+    TESTS_LOCAL: f'{TEST_INSTR}local sedaro directory',
     SWITCH_PYPI_TEST: f'{SWITCH_INSTR}test.pypi',
-    RUN_TESTS: f'Run tests in python versions {PY_VERSIONS_TESTS}'
+    TESTS_PYPI_TEST: f'{TEST_INSTR}test.pypi',
+    SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
+    TESTS_PYPI: f'{TEST_INSTR}pypi',
 }
-# TODO: python version wasn't switching in tests, so disabled RUN_TESTS for now
-# Add that option back in and test it then follow the print outputs to see if works
+
 VENV = '.venv'
 
 
@@ -42,12 +46,15 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
 
     print_msg = f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro'
     if pypi_sedaro:
-        print_msg += ' from pypi'
+        print_msg_end = 'from pypi'
     elif test_pypi_sedaro:
-        print_msg += ' from test.pypi'
+        print_msg_end = 'from test.pypi'
     else:
-        print_msg += ' from local sedaro directory'
-    print(print_msg + '...\n')
+        print_msg_end = 'from local sedaro directory'
+
+    print(
+        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...\n'
+    )
 
     try:
         command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install -U autopep8'
@@ -60,7 +67,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
             command += ' && pip install -e sedaro'
         os.system(command)
         print(
-            f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed'
+            f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
         )
         if run_tests:
             os.system('python3 tests')
@@ -99,27 +106,30 @@ def sedaro_client_python_version_manager():
         if how_proceed not in OPTIONS_MAIN:
             print(f'\nInvalid option: "{how_proceed}"\n')
 
+    kwargs = {}
+
     if how_proceed == QUIT:
         print('\nClosing manager\n')
+    elif how_proceed in [SWITCH_PYPI, TESTS_PYPI]:
+        kwargs['pypi_sedaro'] = True
+    elif how_proceed in [SWITCH_PYPI_TEST, TESTS_PYPI_TEST]:
+        kwargs['test_pypi_sedaro'] = True
 
-    elif how_proceed == SWITCH:
-        switch_current_python_virtual_environment()
+    # just switch or switch and run tests
+    if how_proceed in [SWITCH_LOCAL, SWITCH_PYPI, SWITCH_PYPI_TEST]:
+        switch_current_python_virtual_environment(**kwargs)
 
-    elif how_proceed == SWITCH_PYPI:
-        switch_current_python_virtual_environment(pypi_sedaro=True)
-
-    elif how_proceed == SWITCH_PYPI_TEST:
-        switch_current_python_virtual_environment(test_pypi_sedaro=True)
-
-    elif how_proceed == RUN_TESTS:
+    elif how_proceed in [TESTS_LOCAL, TESTS_PYPI, TESTS_PYPI_TEST]:
         for version in PY_VERSIONS_TESTS:
             switch_current_python_virtual_environment(
                 new_version=version,
-                run_tests=True
+                run_tests=True,
+                **kwargs
             )
             print(f'\n🛰️  Finished running tests for version {version}')
             # short pause needed here to make sure next venv is created and used properly
             time.sleep(1)
+
         print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
 
     return
