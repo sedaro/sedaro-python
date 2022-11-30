@@ -2,12 +2,12 @@ import os
 import shutil
 import time
 
-QUIT = "q"
-SWITCH_LOCAL = "sl"
+QUIT = 'q'
+SWITCH_LOCAL = 'sl'
 TESTS_LOCAL = 'tl'
-SWITCH_PYPI_TEST = "st"
+SWITCH_PYPI_TEST = 'st'
 TESTS_PYPI_TEST = 'tt'
-SWITCH_PYPI = "sp"
+SWITCH_PYPI = 'sp'
 TESTS_PYPI = 'tp'
 
 PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
@@ -29,7 +29,7 @@ VENV = '.venv'
 
 
 def get_cur_python_version():
-    return os.popen("python3 -V").read().split("Python")[1][1:]
+    return os.popen('python3 -V').read().split('Python')[1][1:]
 
 
 def switch_current_python_virtual_environment(new_version=None, run_tests=False, pypi_sedaro=False, test_pypi_sedaro=False):
