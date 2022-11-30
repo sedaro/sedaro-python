@@ -3,7 +3,7 @@ import tempfile
 import shutil
 import json
 import urllib.request
-from urllib.error import URLError
+import urllib.error
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
@@ -108,7 +108,7 @@ def run_generator(skip_intro=False):
         try:
             urllib.request.urlretrieve(
                 DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
-        except URLError:
+        except urllib.error.URLError:
             print(
                 f'\nError retrieving spec. Please ensure it is available at: "{DOWNLOAD_SPEC_FROM}".\n'
             )
