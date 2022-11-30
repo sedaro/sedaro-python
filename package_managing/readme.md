@@ -21,9 +21,11 @@ Inside `sedaro-python/`:
 ## Publish to test.pypi
 
 - `$ python3 -m twine upload --repository testpypi dist/\*`
+  - requires username and password
 - Use `python_version_manager` to install sedaro from test.pypi and run tests using **live server** in python 3.7 - 3.10
 
 ## Publish to pypi:
 
 - `$ python -m twine upload dist/\*`
+  - requires username and password
 - Use `python_version_manager` to install sedaro from pypi and run tests using **live server** in python 3.7 - 3.10
