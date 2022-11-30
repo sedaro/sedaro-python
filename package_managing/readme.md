@@ -17,7 +17,7 @@ Inside `sedaro-python/`:
 - `$ rm -rf .venv && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install --upgrade setuptools build twine`
 - `$ cd sedaro`
 - `$ rm -rf dist && python3 -m build`
-- If doesn’t create `.tar.gz` and `.whl`, wait a minute. Can re-run ^^^ if needed.
+- If doesn’t create `.tar.gz` and `.whl` in `sedaro/dist/`, wait a minute. Reload vs-code if doesn't show up.
 
 ## Publish to test.pypi
 
