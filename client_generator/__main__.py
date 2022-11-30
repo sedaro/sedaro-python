@@ -1,8 +1,9 @@
 import os
-import urllib.request
 import tempfile
 import shutil
 import json
+import urllib.request
+import urllib.error
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
@@ -104,7 +105,14 @@ def run_generator(skip_intro=False):
             os.system(f'rm -r {CLIENT_DIR}')
 
         TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
-        urllib.request.urlretrieve(DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
+        try:
+            urllib.request.urlretrieve(
+                DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
+        except urllib.error.URLError:
+            print(
+                f'\nError retrieving spec. Please ensure it is available at: "{DOWNLOAD_SPEC_FROM}".\n'
+            )
+            return
 
         # ----- generate client -----
         cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
