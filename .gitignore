@@ -7,4 +7,4 @@ build/
 .python-version
 keys/
 dist/
-my_config.py
+config.py
