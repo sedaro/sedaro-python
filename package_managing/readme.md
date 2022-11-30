@@ -4,6 +4,7 @@
 
 - Ensure on most up-to-date `sedaro-app` branch and openapi container is running (check spec at `http://localhost:8081/redoc`)
 - Use client generator to make sure `sedaro_base_client` is up to date (options > "python" > "mu")
+  - Make sure dependencies in `sedaro/src/pyproject.toml` are up to date (should include everything in `requirements.txt` and `requirements-base-client.txt`)
 - Ensure `BlockClassClient` options are up-to-date in `tests/block_class_client_options.py` and in `sedaro/readme.md`
 - Use `python_version_manager` to install local sedaro package and run tests using **dev server** in python 3.7 - 3.10
 - Sync release `version` in `sedaro/src/pyproject.toml` file with Sedaro site release version
