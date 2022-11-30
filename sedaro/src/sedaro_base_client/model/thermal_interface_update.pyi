@@ -35,21 +35,13 @@ class ThermalInterfaceUpdate(
 
     class MetaOapg:
         required = {
-            "area",
-            "material",
             "name",
             "sideB",
             "sideA",
         }
         
         class properties:
-            
-            
-            class name(
-                schemas.StrSchema
-            ):
-                pass
-            area = schemas.NumberSchema
+            name = schemas.StrSchema
             
             
             class sideA(
@@ -122,6 +114,7 @@ class ThermalInterfaceUpdate(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            area = schemas.NumberSchema
             material = schemas.StrSchema
             componentA = schemas.StrSchema
             componentB = schemas.StrSchema
@@ -131,9 +124,9 @@ class ThermalInterfaceUpdate(
             coolerB = schemas.StrSchema
             __annotations__ = {
                 "name": name,
-                "area": area,
                 "sideA": sideA,
                 "sideB": sideB,
+                "area": area,
                 "material": material,
                 "componentA": componentA,
                 "componentB": componentB,
@@ -143,8 +136,6 @@ class ThermalInterfaceUpdate(
                 "coolerB": coolerB,
             }
     
-    area: MetaOapg.properties.area
-    material: MetaOapg.properties.material
     name: MetaOapg.properties.name
     sideB: MetaOapg.properties.sideB
     sideA: MetaOapg.properties.sideA
@@ -153,13 +144,13 @@ class ThermalInterfaceUpdate(
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["area"]) -> MetaOapg.properties.area: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sideA"]) -> MetaOapg.properties.sideA: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sideB"]) -> MetaOapg.properties.sideB: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["area"]) -> MetaOapg.properties.area: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["material"]) -> MetaOapg.properties.material: ...
@@ -185,7 +176,7 @@ class ThermalInterfaceUpdate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "area", "sideA", "sideB", "material", "componentA", "componentB", "surfaceA", "surfaceB", "coolerA", "coolerB", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "sideA", "sideB", "area", "material", "componentA", "componentB", "surfaceA", "surfaceB", "coolerA", "coolerB", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -194,16 +185,16 @@ class ThermalInterfaceUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["area"]) -> MetaOapg.properties.area: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sideA"]) -> MetaOapg.properties.sideA: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sideB"]) -> MetaOapg.properties.sideB: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["material"]) -> MetaOapg.properties.material: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["area"]) -> typing.Union[MetaOapg.properties.area, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["material"]) -> typing.Union[MetaOapg.properties.material, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["componentA"]) -> typing.Union[MetaOapg.properties.componentA, schemas.Unset]: ...
@@ -226,18 +217,18 @@ class ThermalInterfaceUpdate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "area", "sideA", "sideB", "material", "componentA", "componentB", "surfaceA", "surfaceB", "coolerA", "coolerB", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "sideA", "sideB", "area", "material", "componentA", "componentB", "surfaceA", "surfaceB", "coolerA", "coolerB", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        area: typing.Union[MetaOapg.properties.area, decimal.Decimal, int, float, ],
-        material: typing.Union[MetaOapg.properties.material, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         sideB: typing.Union[MetaOapg.properties.sideB, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         sideA: typing.Union[MetaOapg.properties.sideA, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        area: typing.Union[MetaOapg.properties.area, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        material: typing.Union[MetaOapg.properties.material, str, schemas.Unset] = schemas.unset,
         componentA: typing.Union[MetaOapg.properties.componentA, str, schemas.Unset] = schemas.unset,
         componentB: typing.Union[MetaOapg.properties.componentB, str, schemas.Unset] = schemas.unset,
         surfaceA: typing.Union[MetaOapg.properties.surfaceA, str, schemas.Unset] = schemas.unset,
@@ -250,11 +241,11 @@ class ThermalInterfaceUpdate(
         return super().__new__(
             cls,
             *_args,
-            area=area,
-            material=material,
             name=name,
             sideB=sideB,
             sideA=sideA,
+            area=area,
+            material=material,
             componentA=componentA,
             componentB=componentB,
             surfaceA=surfaceA,
