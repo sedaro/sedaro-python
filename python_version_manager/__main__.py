@@ -107,7 +107,10 @@ def sedaro_client_python_version_manager():
 
     elif how_proceed == RUN_TESTS:
         for version in PY_VERSIONS_TESTS:
-            switch_current_python_virtual_environment(version, run_tests=True)
+            switch_current_python_virtual_environment(
+                new_version=version,
+                run_tests=True
+            )
             print(f'\n🛰️  Finished running tests for version {version}')
         print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
 
