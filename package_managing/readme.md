@@ -6,7 +6,7 @@
 - Use client generator to make sure `sedaro_base_client` is up to date (options > "python" > "mu")
   - Make sure dependencies in `sedaro/src/pyproject.toml` are up to date (should include everything in `requirements.txt` and `requirements-base-client.txt`)
 - Ensure `BlockClassClient` options are up-to-date in `tests/block_class_client_options.py` and in `sedaro/readme.md`
-- Use `python_version_manager` to install local sedaro package and run tests using **dev server** in python 3.7 - 3.10
+- Use `python_version_manager` to install **local sedaro** package and run tests using **dev server** in python 3.7 - 3.10
 - Sync release `version` in `sedaro/src/pyproject.toml` file with Sedaro site release version
 
 ## Build
@@ -23,10 +23,10 @@ Inside `sedaro-python/`:
 
 - `$ python3 -m twine upload --repository testpypi dist/\*`
   - requires username and password
-- Use `python_version_manager` to install sedaro from test.pypi and run tests using **live server** in python 3.7 - 3.10
+- Use `python_version_manager` to install sedaro from **test.pypi** and run tests using **live server** in python 3.7 - 3.10
 
 ## Publish to pypi:
 
 - `$ python -m twine upload dist/\*`
   - requires username and password
-- Use `python_version_manager` to install sedaro from pypi and run tests using **live server** in python 3.7 - 3.10
+- Use `python_version_manager` to install sedaro from **pypi** and run tests using **live server** in python 3.7 - 3.10
