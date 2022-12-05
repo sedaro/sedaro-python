@@ -114,7 +114,7 @@ def test_traversing_and_equality():
         assert solar_panel_client is not branch_client.SolarPanel.get_first()
 
 
-def test_different_block():
+def test_block_client_equality():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
 
@@ -138,4 +138,4 @@ def run_tests():
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality()
-    test_different_block()
+    test_block_client_equality()
