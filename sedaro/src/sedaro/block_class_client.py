@@ -22,6 +22,8 @@ class BlockClassClient:
     '''Class for getting `BlockClient`s associated with Sedaro Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
+    _block_openapi_instance: Api
+    '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
     _branch_client: 'BranchClient'
     '''The `BranchClient` this `BlockClassClient` is connected to'''
 
@@ -48,14 +50,6 @@ class BlockClassClient:
     def _update_class(self) -> 'schemas.DictSchema':
         '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
         return self._get_create_or_update_block_model(UPDATE)
-
-    @property
-    def _block_openapi_instance(self) -> Api:
-        '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
-        block_snake, block_pascal = get_snake_and_pascal_case(self._block_name)
-        block_api_module = import_module(
-            f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')
-        return getattr(block_api_module, f'{block_pascal}Api')(self._sedaro_client)
 
     # @cached_property
     @property
@@ -132,7 +126,15 @@ class BlockClassClient:
         Returns:
             BlockClient: a client to interact with the created Sedaro Block
         """
-        res = getattr(self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}')(
+        try:
+            create_method = getattr(
+                self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}'
+            )
+        except AttributeError:
+            raise AttributeError(
+                f'There is no create method on a "{self._block_name}" {self.__class__.__name__} because this type of Sedaro Block is not createable.')
+
+        res = create_method(
             body=self._create_class(**body),
             path_params={'branchId': self._branch_client.id},
             timeout=timeout
