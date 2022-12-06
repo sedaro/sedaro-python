@@ -1,5 +1,6 @@
 import time
 import platform
+from config import HOST
 
 ############## IMPORT AND ADD TEST FILES HERE ##############
 # All imports are expected to have a `run_tests` function
@@ -18,7 +19,9 @@ imported_test_files = [
 
 def run_tests():
     '''Runs all tests from `imported_test_files` with name, progress, and time `print`s throughout.'''
-    print(f'\n### Running tests with Python {platform.python_version()}')
+    print(f'\n### Test Info:')
+    print(f'### - Running in Python: {platform.python_version()}')
+    print(f'### - Running with server: {HOST}')
     # delay so prints are easier to follow
     time.sleep(0.5)
 
