@@ -1,12 +1,12 @@
 import importlib
+import inspect
 from typing import TYPE_CHECKING, Dict, List, Union
-from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
-from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch
+from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch, get_snake_and_pascal_case, import_if_exists
 from .settings import BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
@@ -34,14 +34,25 @@ class BranchClient:
         return self.__str__()
 
     def __getattr__(self, block_name: str) -> BlockClassClient:
-        block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
-        if block_name not in self._block_class_to_block_group_map \
-                or importlib.util.find_spec(block_class_module) is None:
+        block_snake, block_pascal = get_snake_and_pascal_case(block_name)
+
+        # check if is a valid option for creating a BlockClassClient & get respective api module file
+        # Note: have to do `lower` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
+        if block_name.lower() not in set(b.lower() for b in self._block_class_to_block_group_map) \
+                or ((block_api_module := import_if_exists(f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')) is None):
             raise AttributeError(
-                f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.'
+                f'Unable to create a "BlockClassClient" called: "{block_name}". Please check the name and try again.'
             )
 
-        return BlockClassClient(pascal_case(block_name, strict=False), self)
+        # get api class from file
+        def filter_desired_api_class_from_file(kls):
+            return inspect.isclass(kls) and kls.__module__ == block_api_module.__name__
+        block_api_class = inspect.getmembers(
+            block_api_module,
+            filter_desired_api_class_from_file
+        )[0][1]
+
+        return BlockClassClient(block_pascal, block_api_class(self._sedaro_client), self)
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
