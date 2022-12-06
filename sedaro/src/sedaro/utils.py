@@ -1,4 +1,5 @@
 import json
+import importlib
 from functools import lru_cache
 from pydash.strings import snake_case, pascal_case
 from urllib3.response import HTTPResponse
@@ -70,3 +71,17 @@ def sanitize_and_enforce_id_in_branch(branch_client: 'BranchClient', id: Union[s
         raise KeyError(f'There is no Block with id "{id}" in this Branch.')
 
     return id
+
+
+def import_if_exists(local_path: str):
+    """Returns import if exists, otherwise `None`
+
+    Args:
+        path (str): path to desired import
+
+    Returns:
+        import or `None`
+    """
+    if importlib.util.find_spec(local_path) is None:
+        return None
+    return importlib.import_module(local_path)
