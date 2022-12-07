@@ -94,6 +94,13 @@ def test_block_class_client_options():
                     # print any other erros that happen
                     print(block, type(e), str(e))
 
+        for bad_block in ['try_me', 'and_me', 'no_wayYou_will_CatchMe!!!!!!']:
+            try:
+                bcc = getattr(branch_client, bad_block)
+            except AttributeError as e:
+                expected_err = f'Unable to create a "BlockClassClient" from string: "{bad_block}". Please check the name and try again.'
+                assert str(e) == expected_err
+
 
 def run_tests():
     test_block_class_client_options()
