@@ -293,6 +293,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
         f'/models/branches/{WILDFIRE_A_T_ID}',
         'GET'
     )
+
     # create a celestial target in a branch
     sedaro_client.send_request(
         f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
