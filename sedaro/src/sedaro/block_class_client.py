@@ -8,7 +8,7 @@ from pydash.strings import snake_case
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
-from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch
+from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch, get_class_from_module
 from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
@@ -110,9 +110,9 @@ class BlockClassClient:
 
         crud_module_path = f'{BASE_PACKAGE_NAME}.model.{block_snake}'
 
-        return getattr(
+        return get_class_from_module(
             import_module(f'{crud_module_path}_{create_or_update}'),
-            f'{block_pascal}{create_or_update.capitalize()}'
+            target_class=f'{block_pascal}{create_or_update.capitalize()}'
         )
 
     def create(self, timeout: Union[int, Tuple] = None, **body) -> BlockClient:
