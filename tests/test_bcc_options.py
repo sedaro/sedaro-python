@@ -19,6 +19,7 @@ def test_block_class_client_options():
         'CircularFieldOfView',
         'Component',
         'Condition',
+        'ConOps',  # no associated API, added this one manually
         'ConstantLoad',
         'Cooler',
         'DirectionSensor',
@@ -73,7 +74,7 @@ def test_block_class_client_options():
                 assert isinstance(bcc, BlockClassClient)
 
                 # these blocks can't be "created"
-                if any(string in block for string in ['Topology', 'Satellite']) or block == 'Battery':
+                if any(string in block for string in ['Topology', 'Satellite', 'ConOps']) or block == 'Battery':
                     try:
                         getattr(bcc, 'create')()
                     except AttributeError as e:
