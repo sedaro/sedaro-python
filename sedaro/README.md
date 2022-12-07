@@ -282,6 +282,29 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
 ```
 
+## Use: Send Requests
+
+Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
+
+```py
+with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    # get a branch
+    sedaro_client.send_request(
+        f'/models/branches/{WILDFIRE_A_T_ID}',
+        'GET'
+    )
+    # create a celestial target in a branch
+    sedaro_client.send_request(
+        f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
+        'POST',
+        body={
+            'name': 'Sun',
+            'polynomialEphemerisBody': 'SUN',
+            'conOps': 2
+        }
+    )
+```
+
 ## Further information
 
 See docstrings on classes and their methods for further instructions and explanations.
