@@ -10,7 +10,7 @@ def _check_job_status(job):
         job['progress']['percentComplete'], 2), '%')
 
 
-def _test_run_simulation():
+def test_run_simulation():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         # Instantiate job client
         sim_client = sedaro_client.get_sim_client(WILDFIRE_SCENARIO_ID)
@@ -38,4 +38,4 @@ def _test_run_simulation():
 
 
 def run_tests():
-    _test_run_simulation()
+    test_run_simulation()
