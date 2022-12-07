@@ -6,7 +6,7 @@ An interactive tool for building clients for Sedaro Satellite based on our OpenA
 
 If you are generating a client based on the dev open api spec, make sure the open api docker container is running. If you want to make it based on the live spec, upload the `DOWNLOAD_SPEC_FROM` accordingly variable in `__main__.py`.
 
-In the directory containing this directory run:
+Make sure current python version is >=3.8. In the directory containing this directory run:
 
 - `$ python3 client_generator`
 

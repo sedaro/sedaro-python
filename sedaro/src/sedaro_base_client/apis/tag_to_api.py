@@ -3,7 +3,6 @@ import typing_extensions
 from sedaro_base_client.apis.tags import TagValues
 from sedaro_base_client.apis.tags.branches_api import BranchesApi
 from sedaro_base_client.apis.tags.data_api import DataApi
-from sedaro_base_client.apis.tags.actuator_load_api import ActuatorLoadApi
 from sedaro_base_client.apis.tags.agent_api import AgentApi
 from sedaro_base_client.apis.tags.angular_velocity_sensor_api import AngularVelocitySensorApi
 from sedaro_base_client.apis.tags.averaging_algorithm_api import AveragingAlgorithmApi
@@ -37,6 +36,7 @@ from sedaro_base_client.apis.tags.max_align_pointing_mode_api import MaxAlignPoi
 from sedaro_base_client.apis.tags.operational_mode_api import OperationalModeApi
 from sedaro_base_client.apis.tags.optical_attitude_sensor_api import OpticalAttitudeSensorApi
 from sedaro_base_client.apis.tags.orbit_api import OrbitApi
+from sedaro_base_client.apis.tags.pid_algorithm_api import PIDAlgorithmApi
 from sedaro_base_client.apis.tags.passive_pointing_mode_api import PassivePointingModeApi
 from sedaro_base_client.apis.tags.position_sensor_api import PositionSensorApi
 from sedaro_base_client.apis.tags.reaction_wheel_api import ReactionWheelApi
@@ -53,7 +53,6 @@ from sedaro_base_client.apis.tags.surface_material_api import SurfaceMaterialApi
 from sedaro_base_client.apis.tags.target_group_api import TargetGroupApi
 from sedaro_base_client.apis.tags.target_group_vector_api import TargetGroupVectorApi
 from sedaro_base_client.apis.tags.target_vector_api import TargetVectorApi
-from sedaro_base_client.apis.tags.temp_control_load_api import TempControlLoadApi
 from sedaro_base_client.apis.tags.temp_controller_state_api import TempControllerStateApi
 from sedaro_base_client.apis.tags.thermal_interface_api import ThermalInterfaceApi
 from sedaro_base_client.apis.tags.thermal_interface_material_api import ThermalInterfaceMaterialApi
@@ -66,7 +65,6 @@ TagToApi = typing_extensions.TypedDict(
     {
         TagValues.BRANCHES: BranchesApi,
         TagValues.DATA: DataApi,
-        TagValues.ACTUATOR_LOAD: ActuatorLoadApi,
         TagValues.AGENT: AgentApi,
         TagValues.ANGULAR_VELOCITY_SENSOR: AngularVelocitySensorApi,
         TagValues.AVERAGING_ALGORITHM: AveragingAlgorithmApi,
@@ -100,6 +98,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.OPERATIONAL_MODE: OperationalModeApi,
         TagValues.OPTICAL_ATTITUDE_SENSOR: OpticalAttitudeSensorApi,
         TagValues.ORBIT: OrbitApi,
+        TagValues.PID_ALGORITHM: PIDAlgorithmApi,
         TagValues.PASSIVE_POINTING_MODE: PassivePointingModeApi,
         TagValues.POSITION_SENSOR: PositionSensorApi,
         TagValues.REACTION_WHEEL: ReactionWheelApi,
@@ -116,7 +115,6 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.TARGET_GROUP: TargetGroupApi,
         TagValues.TARGET_GROUP_VECTOR: TargetGroupVectorApi,
         TagValues.TARGET_VECTOR: TargetVectorApi,
-        TagValues.TEMP_CONTROL_LOAD: TempControlLoadApi,
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
@@ -130,7 +128,6 @@ tag_to_api = TagToApi(
     {
         TagValues.BRANCHES: BranchesApi,
         TagValues.DATA: DataApi,
-        TagValues.ACTUATOR_LOAD: ActuatorLoadApi,
         TagValues.AGENT: AgentApi,
         TagValues.ANGULAR_VELOCITY_SENSOR: AngularVelocitySensorApi,
         TagValues.AVERAGING_ALGORITHM: AveragingAlgorithmApi,
@@ -164,6 +161,7 @@ tag_to_api = TagToApi(
         TagValues.OPERATIONAL_MODE: OperationalModeApi,
         TagValues.OPTICAL_ATTITUDE_SENSOR: OpticalAttitudeSensorApi,
         TagValues.ORBIT: OrbitApi,
+        TagValues.PID_ALGORITHM: PIDAlgorithmApi,
         TagValues.PASSIVE_POINTING_MODE: PassivePointingModeApi,
         TagValues.POSITION_SENSOR: PositionSensorApi,
         TagValues.REACTION_WHEEL: ReactionWheelApi,
@@ -180,7 +178,6 @@ tag_to_api = TagToApi(
         TagValues.TARGET_GROUP: TargetGroupApi,
         TagValues.TARGET_GROUP_VECTOR: TargetGroupVectorApi,
         TagValues.TARGET_VECTOR: TargetVectorApi,
-        TagValues.TEMP_CONTROL_LOAD: TempControlLoadApi,
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
