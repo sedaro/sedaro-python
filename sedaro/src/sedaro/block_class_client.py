@@ -22,8 +22,11 @@ class BlockClassClient:
     '''Class for getting `BlockClient`s associated with Sedaro Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
-    _block_openapi_instance: Api
-    '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
+    _block_openapi_instance: Union[Api, None]
+    '''
+    The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks. This
+    property should be `None` for some limited Sedaro `Block` options (such as ConOps) that have no associated API.
+    '''
     _branch_client: 'BranchClient'
     '''The `BranchClient` this `BlockClassClient` is connected to'''
 
@@ -127,6 +130,8 @@ class BlockClassClient:
             BlockClient: a client to interact with the created Sedaro Block
         """
         try:
+            if self._block_openapi_instance is None:
+                raise AttributeError
             create_method = getattr(
                 self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}'
             )
