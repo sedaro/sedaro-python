@@ -42,6 +42,11 @@ class BranchClient:
     def __getattr__(self, block_type: str) -> BlockClassClient:
         block_snake, block_pascal = get_snake_and_pascal_case(block_type)
 
+        # Valid block class client options that don't have an associated api (won't have a create method)
+        bcc_options_without_api = {'ConOps'}
+        if block_type in bcc_options_without_api:
+            return BlockClassClient(block_pascal, None, self)
+
         # check if is a valid option for creating a BlockClassClient & get respective api module file
         # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
         if block_type.casefold() not in set(b.casefold() for b in self._block_class_to_block_group_map) \
