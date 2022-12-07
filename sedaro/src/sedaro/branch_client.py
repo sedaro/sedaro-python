@@ -96,11 +96,16 @@ class BranchClient:
         """
         id = sanitize_and_enforce_id_in_branch(self, id)
 
-        block_group = self._block_class_to_block_group_map[
-            self._block_id_to_type_map[id]
-        ]
-
-        b_c_c: BlockClassClient = getattr(self, block_group)
+        # first try with block_type, then try with block_group
+        block_type = self._block_id_to_type_map[id]
+        try:
+            b_c_c: BlockClassClient = getattr(self, block_type)
+        except AttributeError as e:
+            block_group = self._block_class_to_block_group_map[block_type]
+            try:
+                b_c_c = BlockClassClient = getattr(self, block_group)
+            except AttributeError:
+                raise e
         return BlockClient(id, b_c_c)
 
 # TODO: add a method for just sending any request with a URL.
