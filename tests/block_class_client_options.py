@@ -6,76 +6,58 @@ from config import HOST, API_KEY, WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID
 
 def test_block_class_client_options():
     agent_template_blocks = [
-        'TriadAlgorithm',
+        'ActuatorLoad',
+        'AngularVelocitySensor',
         'AveragingAlgorithm',
-        'MEKFAlgorithm',
-        'EKFAlgorithm',
-        'GPSAlgorithm',
-        'SlidingModeAlgorithm',
         'Battery',
         'BatteryCell',
+        'BatteryPack',
         'BodyFrameVector',
         'BusRegulator',
-        'Component',
-        'BatteryPack',
-        'SolarPanel',
-        'QuasiRegDetTopology',
-        'FullyRegDetTopology',
-        'SingleConvHybridTopology',
-        'TwoConvMpptTopology',
-        'SingleConvMpptTopology',
-        'Topology',
-        'ReactionWheel',
-        'Magnetorquer',
-        'DirectionSensor',
-        'OpticalAttitudeSensor',
-        'VectorSensor',
-        'PositionSensor',
-        'AngularVelocitySensor',
-        'Cooler',
-        'Heater',
-        'SphericalFuelTank',
-        'SpherocylinderFuelTank',
-        'ConOps',
-        'GroupCondition',
-        'Condition',
-        'SameTargetConditionGrouping',
-        'ResistanceLoad',
-        'PowerLoad',
-        'ActuatorLoad',
-        'LoadState',
-        'CircularFieldOfView',
-        'RectangularFieldOfView',
-        'FOVConstraint',
-        'FuelReservoir',
-        'OperationalMode',
-        # 'Orbit',  # TODO -- this is a temporarily valid option, but it shouldn't be (so don't show to users in readme) -- see model/templates.py
-        'PassivePointingMode',
-        'LockPointingMode',
-        'MaxAlignPointingMode',
-        'PointingMode',
-        'ActivePointingMode',
+        'CelestialTarget',
         'CelestialVector',
+        'CircularFieldOfView',
+        'Component',
+        'Condition',
+        'ConstantLoad',
+        'Cooler',
+        'DirectionSensor',
+        'EkfAlgorithm',
+        'FovConstraint',
+        'GpsAlgorithm',
+        'GroundTarget',
+        'GroupCondition',
+        'Heater',
+        'LoadState',
         'LocalVector',
-        'TargetVector',
-        'TargetGroupVector',
-        'ReferenceVector',
+        'LockPointingMode',
+        'Magnetorquer',
+        'MaxAlignPointingMode',
+        'MekfAlgorithm',
+        'OperationalMode',
+        'OpticalAttitudeSensor',
+        'PassivePointingMode',
+        'PositionSensor',
+        'ReactionWheel',
+        'RectangularFieldOfView',
         'Satellite',
-        'SimulatableSatellite',
+        'SlidingModeAlgorithm',
         'SolarArray',
         'SolarCell',
+        'SolarPanel',
+        'SpaceTarget',
         'Subsystem',
-        'FixedSurface',
-        'SunTrackingSurface',
-        'AntiSunTrackingSurface',
+        'Surface',
         'SurfaceMaterial',
         'TargetGroup',
-        'SpaceTarget',
-        'GroundTarget',
-        'CelestialTarget',
+        'TargetGroupVector',
+        'TargetVector',
         'TempControllerState',
         'ThermalInterface',
-        'ThermalInterfaceMaterial'
+        'ThermalInterfaceMaterial',
+        'Topology',
+        'TriadAlgorithm',
+        'VectorSensor',
     ]
     scenario_blocks = [
         'Agent',
@@ -83,16 +65,33 @@ def test_block_class_client_options():
         'Orbit',
     ]
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
-        vehicle_branch_client = sedaro_client.get_branch(WILDFIRE_A_T_ID)
-        for block in agent_template_blocks:
-            assert isinstance(
-                getattr(vehicle_branch_client, block), BlockClassClient
-            )
-        scenario_branch_client = sedaro_client.get_branch(WILDFIRE_SCENARIO_ID)
-        for block in scenario_blocks:
-            assert isinstance(
-                getattr(scenario_branch_client, block), BlockClassClient
-            )
+        for branch_id, blocks in [[WILDFIRE_A_T_ID, agent_template_blocks], [WILDFIRE_SCENARIO_ID, scenario_blocks]]:
+            branch_client = sedaro_client.get_branch(branch_id)
+
+            for block in blocks:
+                bcc = getattr(branch_client, block)
+                assert isinstance(bcc, BlockClassClient)
+
+                # these blocks can't be "created"
+                if any(string in block for string in ['Topology', 'Satellite']) or block == 'Battery':
+                    try:
+                        getattr(bcc, 'create')()
+                    except AttributeError as e:
+                        err_msg = str(e)
+                        assert err_msg == f'There is no create method on a "{block}" BlockClassClient because this type of Sedaro Block is not createable.'
+                    continue
+
+                try:
+                    getattr(bcc, 'create')()
+                except TypeError as e:
+                    # make sure create property exists, can be called, and raises error when called empty
+                    if not (all(
+                        s in str(e) for s in {'__new__() missing', 'required keyword-only argument'}
+                    ) or str(e) == 'No input given. args or kwargs must be given.'):
+                        print(block, type(e), str(e))
+                except Exception as e:
+                    # print any other erros that happen
+                    print(block, type(e), str(e))
 
 
 def run_tests():
