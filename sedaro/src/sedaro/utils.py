@@ -74,7 +74,7 @@ def sanitize_and_enforce_id_in_branch(branch_client: 'BranchClient', id: Union[s
 
 
 def import_if_exists(local_path: str):
-    """Returns import if exists, otherwise `None`
+    """Returns local import if exists, otherwise `None`
 
     Args:
         path (str): path to desired import
