@@ -6,7 +6,13 @@ from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
-from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch, get_snake_and_pascal_case, import_if_exists
+from .utils import (
+    parse_block_crud_response,
+    sanitize_and_enforce_id_in_branch,
+    get_snake_and_pascal_case,
+    import_if_exists,
+    get_class_from_module
+)
 from .settings import BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
@@ -37,20 +43,14 @@ class BranchClient:
         block_snake, block_pascal = get_snake_and_pascal_case(block_name)
 
         # check if is a valid option for creating a BlockClassClient & get respective api module file
-        # Note: have to do `lower` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
-        if block_name.lower() not in set(b.lower() for b in self._block_class_to_block_group_map) \
+        # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
+        if block_name.casefold() not in set(b.casefold() for b in self._block_class_to_block_group_map) \
                 or ((block_api_module := import_if_exists(f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')) is None):
             raise AttributeError(
                 f'Unable to create a "BlockClassClient" called: "{block_name}". Please check the name and try again.'
             )
 
-        # get api class from file
-        def filter_desired_api_class_from_file(kls):
-            return inspect.isclass(kls) and kls.__module__ == block_api_module.__name__
-        block_api_class = inspect.getmembers(
-            block_api_module,
-            filter_desired_api_class_from_file
-        )[0][1]
+        block_api_class = get_class_from_module(block_api_module)
 
         return BlockClassClient(block_pascal, block_api_class(self._sedaro_client), self)
 
