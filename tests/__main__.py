@@ -7,11 +7,13 @@ from config import HOST
 
 import test_bcc_options
 import test_block_crud
+import test_raw_requests
 import test_simulation
 
 imported_test_files = [
     test_bcc_options,
     test_block_crud,
+    test_raw_requests,
     test_simulation
 ]
 ############################################################
