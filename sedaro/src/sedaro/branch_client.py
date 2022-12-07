@@ -39,15 +39,15 @@ class BranchClient:
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_name: str) -> BlockClassClient:
-        block_snake, block_pascal = get_snake_and_pascal_case(block_name)
+    def __getattr__(self, block_type: str) -> BlockClassClient:
+        block_snake, block_pascal = get_snake_and_pascal_case(block_type)
 
         # check if is a valid option for creating a BlockClassClient & get respective api module file
         # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
-        if block_name.casefold() not in set(b.casefold() for b in self._block_class_to_block_group_map) \
+        if block_type.casefold() not in set(b.casefold() for b in self._block_class_to_block_group_map) \
                 or ((block_api_module := import_if_exists(f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')) is None):
             raise AttributeError(
-                f'Unable to create a "BlockClassClient" called: "{block_name}". Please check the name and try again.'
+                f'Unable to create a "BlockClassClient" called: "{block_type}". Please check the name and try again.'
             )
 
         block_api_class = get_class_from_module(block_api_module)
