@@ -5,12 +5,12 @@ from config import HOST
 ############## IMPORT AND ADD TEST FILES HERE ##############
 # All imports are expected to have a `run_tests` function
 
-import block_class_client_options
+import test_bcc_options
 import block_crud_tests
 import simulation_tests
 
 imported_test_files = [
-    block_class_client_options,
+    test_bcc_options,
     block_crud_tests,
     simulation_tests
 ]
