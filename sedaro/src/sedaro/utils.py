@@ -1,9 +1,11 @@
 import json
 import importlib
+import inspect
 from functools import lru_cache
 from pydash.strings import snake_case, pascal_case
 from urllib3.response import HTTPResponse
 from typing import Dict, Tuple, Union, TYPE_CHECKING
+from types import ModuleType
 
 from sedaro_base_client.api_client import ApiResponse
 from .settings import DELETE
@@ -85,3 +87,40 @@ def import_if_exists(local_path: str):
     if importlib.util.find_spec(local_path) is None:
         return None
     return importlib.import_module(local_path)
+
+
+def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
+    """Gets a class from the passed in module.
+
+    Args:
+        module (ModuleType): _description_
+        target_class (str, optional): _description_. Defaults to None.
+
+    Raises:
+        AttributeError: if no class is found to return
+
+    Returns:
+        type: If `target_class` not provided, returns first class defined in the module. If `target_class`
+        is provided, returns class matching with a matching name (case-insensitive).
+    """
+
+    def filter_desired_class_from_file(kls):
+        if not inspect.isclass(kls):
+            return False
+        if target_class is not None:
+            return kls.__name__.casefold() == target_class.casefold()
+        return kls.__module__ == module.__name__
+
+    filtered_classes = inspect.getmembers(
+        module,
+        filter_desired_class_from_file
+    )
+
+    if not len(filtered_classes):
+        if target_class is not None:
+            err_msg = f'Module "{module.__name__}" has not attribute "{target_class}".'
+        else:
+            err_msg = f'There is no class defined in the module "{module.__name__}" to import.'
+        raise AttributeError(err_msg)
+
+    return filtered_classes[0][1]
