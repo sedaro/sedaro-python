@@ -1,3 +1,6 @@
+import json
+from typing import Optional, Dict
+
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
@@ -64,3 +67,26 @@ class SedaroApiClient(ApiClient):
             SimClient: a Sedaro SimClient
         """
         return SimClient(self, branch_id)
+
+    def send_request(self, resource_path: str, method: str, body: Optional[Dict] = None):
+        """Send a request to the Sedaro server
+
+        Args:
+            resource_path (str): url path (everything after the host) for desired route
+            method (str): HTTP method ('GET', 'POST', 'DELETE'...etc)
+            body (Optional[Union[str, bytes]], optional): Body of the request. Defaults to None.
+
+        Returns:
+            Dict: dictionary from the response body
+        """
+        headers = {}
+        if body is not None:
+            body = json.dumps(body)
+            headers['Content-Type'] = 'application/json'
+        res = self.call_api(
+            resource_path,
+            method.upper(),
+            headers=headers,
+            body=body
+        )
+        return parse_urllib_response(res)
