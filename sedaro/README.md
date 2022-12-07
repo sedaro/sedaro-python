@@ -61,75 +61,58 @@ pip install sedaro
 
     - Valid `BlockClassClient`s for an Agent Template Branch are as follows:
 
-      - TriadAlgorithm
+      - AngularVelocitySensor
       - AveragingAlgorithm
-      - MEKFAlgorithm
-      - EKFAlgorithm
-      - GPSAlgorithm
-      - SlidingModeAlgorithm
       - Battery
       - BatteryCell
+      - BatteryPack
       - BodyFrameVector
       - BusRegulator
-      - Component
-      - BatteryPack
-      - SolarPanel
-      - QuasiRegDetTopology
-      - FullyRegDetTopology
-      - SingleConvHybridTopology
-      - TwoConvMpptTopology
-      - SingleConvMpptTopology
-      - Topology
-      - ReactionWheel
-      - Magnetorquer
-      - DirectionSensor
-      - OpticalAttitudeSensor
-      - VectorSensor
-      - PositionSensor
-      - AngularVelocitySensor
-      - Cooler
-      - Heater
-      - SphericalFuelTank
-      - SpherocylinderFuelTank
-      - ConOps
-      - GroupCondition
-      - Condition
-      - SameTargetConditionGrouping
-      - ResistanceLoad
-      - PowerLoad
-      - ActuatorLoad
-      - LoadState
-      - CircularFieldOfView
-      - RectangularFieldOfView
-      - FOVConstraint
-      - FuelReservoir
-      - OperationalMode
-      - PassivePointingMode
-      - LockPointingMode
-      - MaxAlignPointingMode
-      - PointingMode
-      - ActivePointingMode
+      - CelestialTarget
       - CelestialVector
+      - CircularFieldOfView
+      - Component
+      - Condition
+      - ConOps
+      - ConstantLoad
+      - Cooler
+      - DirectionSensor
+      - EkfAlgorithm
+      - FovConstraint
+      - GpsAlgorithm
+      - GroundTarget
+      - GroupCondition
+      - Heater
+      - LoadState
       - LocalVector
-      - TargetVector
-      - TargetGroupVector
-      - ReferenceVector
+      - LockPointingMode
+      - Magnetorquer
+      - MaxAlignPointingMode
+      - MekfAlgorithm
+      - OperationalMode
+      - OpticalAttitudeSensor
+      - PassivePointingMode
+      - PositionSensor
+      - ReactionWheel
+      - RectangularFieldOfView
       - Satellite
-      - SimulatableSatellite
+      - SlidingModeAlgorithm
       - SolarArray
       - SolarCell
+      - SolarPanel
+      - SpaceTarget
       - Subsystem
-      - FixedSurface
-      - SunTrackingSurface
-      - AntiSunTrackingSurface
+      - Surface
       - SurfaceMaterial
       - TargetGroup
-      - SpaceTarget
-      - GroundTarget
-      - CelestialTarget
+      - TargetGroupVector
+      - TargetVector
       - TempControllerState
       - ThermalInterface
-      - ThermalInterfaceMateria
+      - ThermalInterfaceMaterial
+      - Topology
+      - TriadAlgorithm
+      - VectorSensor
 
     - Valid `BlockClassClient`s for an Scenario Branch are as follows:
       - Agent
