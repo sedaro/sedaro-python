@@ -92,7 +92,7 @@ def test_block_class_client_options():
                 #     # print any other erros that happen
                 #     print(block, type(e), str(e))
 
-        for bad_block in ['try_me', 'and_me', 'no_wayYou_will_CatchMe!!!!!!']:
+        for bad_block in ['try_me', 'and_me', 'NO_wayYou_will_CatchMe!!!!!!']:
             try:
                 bcc = getattr(branch_client, bad_block)
             except AttributeError as e:
