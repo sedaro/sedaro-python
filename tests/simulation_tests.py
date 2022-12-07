@@ -22,13 +22,13 @@ def _test_run_simulation():
         # Get status #1
         response = sim_client.get_latest()
         _check_job_status(response.body[0])
-        time.sleep(3)
+        time.sleep(1)
 
         # Get status #2
         response = sim_client.get_latest()
         job = response.body[0]
         _check_job_status(job)
-        time.sleep(3)
+        time.sleep(1)
 
         # Terminate
         print('- Terminating...')
