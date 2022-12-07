@@ -6,7 +6,6 @@ from config import HOST, API_KEY, WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID
 
 def test_block_class_client_options():
     agent_template_blocks = [
-        'ActuatorLoad',
         'AngularVelocitySensor',
         'AveragingAlgorithm',
         'Battery',
