@@ -6,13 +6,13 @@ from config import HOST
 # All imports are expected to have a `run_tests` function
 
 import test_bcc_options
-import block_crud_tests
-import simulation_tests
+import test_block_crud
+import test_simulation
 
 imported_test_files = [
     test_bcc_options,
-    block_crud_tests,
-    simulation_tests
+    test_block_crud,
+    test_simulation
 ]
 ############################################################
 
