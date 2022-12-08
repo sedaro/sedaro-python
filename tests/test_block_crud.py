@@ -110,6 +110,11 @@ def test_traversing_and_equality():
             BlockClient
         )
 
+        assert isinstance(
+            branch_client.SolarPanel.get_first().surface,
+            BlockClient
+        )
+
         assert solar_panel_client == branch_client.SolarPanel.get_first()
         assert solar_panel_client is not branch_client.SolarPanel.get_first()
 
