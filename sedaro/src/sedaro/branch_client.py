@@ -1,12 +1,16 @@
-import importlib
 from typing import TYPE_CHECKING, Dict, List, Union
-from pydash import snake_case, pascal_case
 
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
-from .utils import parse_block_crud_response, sanitize_and_enforce_id_in_branch
+from .utils import (
+    parse_block_crud_response,
+    sanitize_and_enforce_id_in_branch,
+    get_snake_and_pascal_case,
+    import_if_exists,
+    get_class_from_module
+)
 from .settings import BASE_PACKAGE_NAME
 
 if TYPE_CHECKING:
@@ -22,8 +26,10 @@ class BranchClient:
         self._sedaro_client = client
         self._block_id_to_type_map: Dict[str, str] = body['blockIdToTypeMap']
         '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
-        self._block_class_to_block_group_map: Dict[str,
-                                                   str] = body['blockClassToBlockGroupMap']
+        self._block_class_to_block_group_map: Dict[str, str] = body['blockClassToBlockGroupMap'] \
+            | {'ConstantLoad': 'Load', 'Surface': 'Surface'}
+        # TODO: these blocks ^^^ added in manually, b/c they aren't explicitly in the BG's but are valid block class
+        # clients; may be able to refactor this later
         '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
         self._block_group_names: List[str] = body['blockGroupNames']
 
@@ -33,15 +39,31 @@ class BranchClient:
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_name: str) -> BlockClassClient:
-        block_class_module = f'{BASE_PACKAGE_NAME}.model.{snake_case(block_name)}'
-        if block_name not in self._block_class_to_block_group_map \
-                or importlib.util.find_spec(block_class_module) is None:
+    def __getattr__(self, block_type: str) -> BlockClassClient:
+        block_snake, block_pascal = get_snake_and_pascal_case(block_type)
+
+        # Valid block class client options that don't have an associated api (won't have a create method)
+        bcc_options_without_api = {'ConOps'}
+        if block_type in bcc_options_without_api:
+            return BlockClassClient(block_pascal, None, self)
+
+        # check if is a valid option for creating a BlockClassClient & get respective api module file
+        block_api_module = import_if_exists(
+            f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api'
+        )
+
+        # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
+        block_options = set(
+            b.casefold() for b in self._block_class_to_block_group_map
+        )
+        if block_type.casefold() not in block_options or block_api_module is None:
             raise AttributeError(
-                f'Unable to find a Sedaro Block called: "{block_name}" in order to create an associated "BlockClassClient". Please check the name and try again.'
+                f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
             )
 
-        return BlockClassClient(pascal_case(block_name, strict=False), self)
+        block_api_class = get_class_from_module(block_api_module)
+
+        return BlockClassClient(block_pascal, block_api_class(self._sedaro_client), self)
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
@@ -79,7 +101,14 @@ class BranchClient:
         """
         id = sanitize_and_enforce_id_in_branch(self, id)
 
-        b_c_c: BlockClassClient = getattr(self, self._block_id_to_type_map[id])
+        # first try with block_type, then try with block_group
+        block_type = self._block_id_to_type_map[id]
+        try:
+            b_c_c: BlockClassClient = getattr(self, block_type)
+        except AttributeError as e:
+            block_group = self._block_class_to_block_group_map[block_type]
+            try:
+                b_c_c = BlockClassClient = getattr(self, block_group)
+            except AttributeError:
+                raise e
         return BlockClient(id, b_c_c)
-
-# TODO: add a method for just sending any request with a URL.

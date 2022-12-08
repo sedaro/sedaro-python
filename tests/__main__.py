@@ -1,24 +1,29 @@
 import time
 import platform
+from config import HOST
 
 ############## IMPORT AND ADD TEST FILES HERE ##############
 # All imports are expected to have a `run_tests` function
 
-import block_class_client_options
-import block_crud_tests
-import simulation_tests
+import test_bcc_options
+import test_block_crud
+import test_raw_requests
+import test_simulation
 
 imported_test_files = [
-    block_class_client_options,
-    block_crud_tests,
-    simulation_tests
+    test_bcc_options,
+    test_block_crud,
+    test_raw_requests,
+    test_simulation
 ]
 ############################################################
 
 
 def run_tests():
     '''Runs all tests from `imported_test_files` with name, progress, and time `print`s throughout.'''
-    print(f'\n### Running tests with Python {platform.python_version()}')
+    print(f'\n### Test Info:')
+    print(f'### - Running in Python: {platform.python_version()}')
+    print(f'### - Running with server: {HOST}')
     # delay so prints are easier to follow
     time.sleep(0.5)
 

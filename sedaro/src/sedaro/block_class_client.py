@@ -8,7 +8,7 @@ from pydash.strings import snake_case
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
-from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch
+from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch, get_class_from_module
 from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
@@ -22,6 +22,11 @@ class BlockClassClient:
     '''Class for getting `BlockClient`s associated with Sedaro Blocks of this class type'''
     _block_name: str
     '''Name of the Sedaro Block class this `BlockClassClient` is set up to interact with'''
+    _block_openapi_instance: Union[Api, None]
+    '''
+    The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks. This
+    property should be `None` for some limited Sedaro `Block` options (such as ConOps) that have no associated API.
+    '''
     _branch_client: 'BranchClient'
     '''The `BranchClient` this `BlockClassClient` is connected to'''
 
@@ -48,14 +53,6 @@ class BlockClassClient:
     def _update_class(self) -> 'schemas.DictSchema':
         '''The model class to instantiate with appropriate kwargs when updating a Sedaro Block'''
         return self._get_create_or_update_block_model(UPDATE)
-
-    @property
-    def _block_openapi_instance(self) -> Api:
-        '''The api instance instantiated with the appropriate `SedaroApiClient` to interact with when CRUDing Blocks'''
-        block_snake, block_pascal = get_snake_and_pascal_case(self._block_name)
-        block_api_module = import_module(
-            f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api')
-        return getattr(block_api_module, f'{block_pascal}Api')(self._sedaro_client)
 
     # @cached_property
     @property
@@ -116,9 +113,9 @@ class BlockClassClient:
 
         crud_module_path = f'{BASE_PACKAGE_NAME}.model.{block_snake}'
 
-        return getattr(
+        return get_class_from_module(
             import_module(f'{crud_module_path}_{create_or_update}'),
-            f'{block_pascal}{create_or_update.capitalize()}'
+            target_class=f'{block_pascal}{create_or_update.capitalize()}'
         )
 
     def create(self, timeout: Union[int, Tuple] = None, **body) -> BlockClient:
@@ -132,7 +129,17 @@ class BlockClassClient:
         Returns:
             BlockClient: a client to interact with the created Sedaro Block
         """
-        res = getattr(self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}')(
+        try:
+            if self._block_openapi_instance is None:
+                raise AttributeError
+            create_method = getattr(
+                self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}'
+            )
+        except AttributeError:
+            raise AttributeError(
+                f'There is no create method on a "{self._block_name}" {self.__class__.__name__} because this type of Sedaro Block is not createable.')
+
+        res = create_method(
             body=self._create_class(**body),
             path_params={'branchId': self._branch_client.id},
             timeout=timeout

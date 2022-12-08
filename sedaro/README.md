@@ -61,75 +61,59 @@ pip install sedaro
 
     - Valid `BlockClassClient`s for an Agent Template Branch are as follows:
 
-      - TriadAlgorithm
+      - AngularVelocitySensor
       - AveragingAlgorithm
-      - MEKFAlgorithm
-      - EKFAlgorithm
-      - GPSAlgorithm
-      - SlidingModeAlgorithm
       - Battery
       - BatteryCell
+      - BatteryPack
       - BodyFrameVector
       - BusRegulator
-      - Component
-      - BatteryPack
-      - SolarPanel
-      - QuasiRegDetTopology
-      - FullyRegDetTopology
-      - SingleConvHybridTopology
-      - TwoConvMpptTopology
-      - SingleConvMpptTopology
-      - Topology
-      - ReactionWheel
-      - Magnetorquer
-      - DirectionSensor
-      - OpticalAttitudeSensor
-      - VectorSensor
-      - PositionSensor
-      - AngularVelocitySensor
-      - Cooler
-      - Heater
-      - SphericalFuelTank
-      - SpherocylinderFuelTank
-      - ConOps
-      - GroupCondition
-      - Condition
-      - SameTargetConditionGrouping
-      - ResistanceLoad
-      - PowerLoad
-      - ActuatorLoad
-      - LoadState
-      - CircularFieldOfView
-      - RectangularFieldOfView
-      - FOVConstraint
-      - FuelReservoir
-      - OperationalMode
-      - PassivePointingMode
-      - LockPointingMode
-      - MaxAlignPointingMode
-      - PointingMode
-      - ActivePointingMode
+      - CelestialTarget
       - CelestialVector
+      - CircularFieldOfView
+      - Component
+      - Condition
+      - ConOps
+      - ConstantLoad
+      - Cooler
+      - DirectionSensor
+      - EkfAlgorithm
+      - FovConstraint
+      - GpsAlgorithm
+      - GroundTarget
+      - GroupCondition
+      - Heater
+      - LoadState
       - LocalVector
-      - TargetVector
-      - TargetGroupVector
-      - ReferenceVector
+      - LockPointingMode
+      - Magnetorquer
+      - MaxAlignPointingMode
+      - MekfAlgorithm
+      - OperationalMode
+      - OpticalAttitudeSensor
+      - PassivePointingMode
+      - PidAlgorithm
+      - PositionSensor
+      - ReactionWheel
+      - RectangularFieldOfView
       - Satellite
-      - SimulatableSatellite
+      - SlidingModeAlgorithm
       - SolarArray
       - SolarCell
+      - SolarPanel
+      - SpaceTarget
       - Subsystem
-      - FixedSurface
-      - SunTrackingSurface
-      - AntiSunTrackingSurface
+      - Surface
       - SurfaceMaterial
       - TargetGroup
-      - SpaceTarget
-      - GroundTarget
-      - CelestialTarget
+      - TargetGroupVector
+      - TargetVector
       - TempControllerState
       - ThermalInterface
-      - ThermalInterfaceMateria
+      - ThermalInterfaceMaterial
+      - Topology
+      - TriadAlgorithm
+      - VectorSensor
 
     - Valid `BlockClassClient`s for an Scenario Branch are as follows:
       - Agent
@@ -280,6 +264,30 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     response = sim_client.terminate(job['id'])
     assert response.body['message'] == 'Successfully terminated simulation.'
 
+```
+
+## Use: Send Requests
+
+Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
+
+```py
+with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    # get a branch
+    sedaro_client.send_request(
+        f'/models/branches/{WILDFIRE_A_T_ID}',
+        'GET'
+    )
+
+    # create a celestial target in a branch
+    sedaro_client.send_request(
+        f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
+        'POST',
+        body={
+            'name': 'Sun',
+            'polynomialEphemerisBody': 'SUN',
+            'conOps': 2
+        }
+    )
 ```
 
 ## Further information

@@ -16,13 +16,13 @@ SWITCH_INSTR = 'Switch python version, install sedaro from: '
 TEST_INSTR = f'Run tests in python versions {PY_VERSIONS_TESTS} using sedaro from: '
 
 OPTIONS_MAIN = {
-    QUIT: 'Quit',
-    SWITCH_LOCAL: f'{SWITCH_INSTR}local sedaro directory',
-    TESTS_LOCAL: f'{TEST_INSTR}local sedaro directory',
-    SWITCH_PYPI_TEST: f'{SWITCH_INSTR}test.pypi',
-    TESTS_PYPI_TEST: f'{TEST_INSTR}test.pypi',
-    SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
-    TESTS_PYPI: f'{TEST_INSTR}pypi',
+    QUIT: ('quit', ''),
+    SWITCH_LOCAL: ('switch local', f'{SWITCH_INSTR}local sedaro directory'),
+    TESTS_LOCAL: ('test local', f'{TEST_INSTR}local sedaro directory'),
+    SWITCH_PYPI_TEST: ('switch test.pypi', f'{SWITCH_INSTR}test.pypi'),
+    TESTS_PYPI_TEST: ('test test.pypi', f'{TEST_INSTR}test.pypi'),
+    SWITCH_PYPI: ('switch pypi', f'{SWITCH_INSTR}pypi'),
+    TESTS_PYPI: ('test pypi', f'{TEST_INSTR}pypi'),
 }
 
 VENV = '.venv'
@@ -44,7 +44,6 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     if os.path.isdir(VENV):
         shutil.rmtree(VENV)
 
-    print_msg = f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro'
     if pypi_sedaro:
         print_msg_end = 'from pypi'
     elif test_pypi_sedaro:
@@ -53,22 +52,32 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         print_msg_end = 'from local sedaro directory'
 
     print(
-        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...\n'
+        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...'
     )
 
+    PIP_INSTALL = 'pip install'
+    if run_tests:
+        # Don't show whole pip output ("quiet" flag) when running tests
+        PIP_INSTALL += ' -q'
+    else:
+        # Print empty line before pip output when it's not "quiet"
+        print('')
+
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install -U autopep8'
+        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8'
         if pypi_sedaro:
-            command += ' && pip install sedaro'
+            command += f' && {PIP_INSTALL} sedaro'
         elif test_pypi_sedaro:
             # see S.O. answer for context on command below: https://stackoverflow.com/a/59495166/16448566
-            command += ' pip install --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
+            command += f' {PIP_INSTALL} --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
-            command += ' && pip install -e sedaro'
+            command += f' && {PIP_INSTALL} -e sedaro'
         os.system(command)
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
         )
+
+        time.sleep(0.5)
         if run_tests:
             os.system('python3 tests')
 
@@ -96,10 +105,13 @@ def sedaro_client_python_version_manager():
         print('Options:')
         print('  (note, "Switch" options deletes/recreates venv)')
         for k, v in OPTIONS_MAIN.items():
+            stands_for, description = v
             command = f'  - "{k}"'
-            for _ in range(8 - len(k)):
-                command += ' '
-            print(command + v)
+            command += ' ' * (12 - len(command))
+            command += stands_for
+            command += ' ' * (33 - len(command))
+            command += description
+            print(command)
 
         how_proceed = input('~ ')
 
@@ -126,11 +138,13 @@ def sedaro_client_python_version_manager():
                 run_tests=True,
                 **kwargs
             )
-            print(f'\n🛰️  Finished running tests for version {version}')
+            print(f'\n🛰️  Finished running tests for python version {version}')
             # short pause needed here to make sure next venv is created and used properly
             time.sleep(1)
 
-        print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
+        print(
+            f'\n🛰️  Finished running tests for python versions {PY_VERSIONS_TESTS}'
+        )
 
     return
 

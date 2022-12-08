@@ -8,7 +8,6 @@ import enum
 class TagValues(str, enum.Enum):
     BRANCHES = "Branches"
     DATA = "Data"
-    ACTUATOR_LOAD = "Actuator Load"
     AGENT = "Agent"
     ANGULAR_VELOCITY_SENSOR = "Angular Velocity Sensor"
     AVERAGING_ALGORITHM = "Averaging Algorithm"
@@ -42,6 +41,7 @@ class TagValues(str, enum.Enum):
     OPERATIONAL_MODE = "Operational Mode"
     OPTICAL_ATTITUDE_SENSOR = "Optical Attitude Sensor"
     ORBIT = "Orbit"
+    PID_ALGORITHM = "PID Algorithm"
     PASSIVE_POINTING_MODE = "Passive Pointing Mode"
     POSITION_SENSOR = "Position Sensor"
     REACTION_WHEEL = "Reaction Wheel"
@@ -58,7 +58,6 @@ class TagValues(str, enum.Enum):
     TARGET_GROUP = "Target Group"
     TARGET_GROUP_VECTOR = "Target Group Vector"
     TARGET_VECTOR = "Target Vector"
-    TEMP_CONTROL_LOAD = "Temp Control Load"
     TEMP_CONTROLLER_STATE = "Temp Controller State"
     THERMAL_INTERFACE = "Thermal Interface"
     THERMAL_INTERFACE_MATERIAL = "Thermal Interface Material"
