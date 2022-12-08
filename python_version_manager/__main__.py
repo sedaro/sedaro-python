@@ -131,11 +131,13 @@ def sedaro_client_python_version_manager():
                 run_tests=True,
                 **kwargs
             )
-            print(f'\n🛰️  Finished running tests for version {version}')
+            print(f'\n🛰️  Finished running tests for python version {version}')
             # short pause needed here to make sure next venv is created and used properly
             time.sleep(1)
 
-        print(f'\n🛰️  Finished running tests for versions {PY_VERSIONS_TESTS}')
+        print(
+            f'\n🛰️  Finished running tests for python versions {PY_VERSIONS_TESTS}'
+        )
 
     return
 
