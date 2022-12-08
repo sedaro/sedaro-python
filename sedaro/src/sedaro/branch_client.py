@@ -26,8 +26,10 @@ class BranchClient:
         self._sedaro_client = client
         self._block_id_to_type_map: Dict[str, str] = body['blockIdToTypeMap']
         '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
-        self._block_class_to_block_group_map: Dict[str,
-                                                   str] = body['blockClassToBlockGroupMap']
+        self._block_class_to_block_group_map: Dict[str, str] = body['blockClassToBlockGroupMap'] \
+            | {'ConstantLoad': 'Load', 'Surface': 'Surface'}
+        # TODO: these blocks ^^^ added in manually, b/c they aren't explicitly in the BG's but are valid block class
+        # clients; may be able to refactor this later
         '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
         self._block_group_names: List[str] = body['blockGroupNames']
 
@@ -51,10 +53,9 @@ class BranchClient:
         )
 
         # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
-        block_options = set(b.casefold() for b in self._block_class_to_block_group_map) | \
-            {'ConstantLoad'.casefold(), 'Surface'.casefold()}
-        # Note: these blocks ^^^ added in manually, b/c aren't in the BG's but are valid block class clients
-
+        block_options = set(
+            b.casefold() for b in self._block_class_to_block_group_map
+        )
         if block_type.casefold() not in block_options or block_api_module is None:
             raise AttributeError(
                 f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
