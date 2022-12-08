@@ -290,6 +290,8 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     )
 ```
 
+Note that requests sent this way to CRUD blocks won't automatically update already instantiated `BranchClient`s or `BlockClient`s.
+
 ## Further information
 
 See docstrings on classes and their methods for further instructions and explanations.
