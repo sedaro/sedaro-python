@@ -26,7 +26,6 @@ OPTIONS_MAIN = {
 }
 
 VENV = '.venv'
-PIP_INSTALL = 'pip install'
 
 
 def get_cur_python_version():
@@ -56,9 +55,10 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...'
     )
 
+    PIP_INSTALL = 'pip install'
     if run_tests:
         # Don't show whole pip output ("quiet" flag) when running tests
-        PIP_INSTALL = PIP_INSTALL + ' -q'
+        PIP_INSTALL += ' -q'
     else:
         # Print empty line before pip output when it's not "quiet"
         print('')
@@ -76,6 +76,8 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
         )
+
+        time.sleep(0.5)
         if run_tests:
             os.system('python3 tests')
 
