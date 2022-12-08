@@ -129,7 +129,7 @@ pip install sedaro
             satellite='3'  # The ID of the related Satellite Block
         )
 
-        branch_client.Subsystem.get(blockId) # ID of desired Subsystem
+        branch_client.Subsystem.get(block_id) # ID of desired Subsystem
         branch_client.Subsystem.get_all()
         branch_client.Subsystem.get_first()
         branch_client.Subsystem.get_last()
