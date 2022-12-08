@@ -109,6 +109,7 @@ def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
             return False
         if target_class is not None:
             return kls.__name__.casefold() == target_class.casefold()
+        # if not searching for specific class name, return all that are defined in this module
         return kls.__module__ == module.__name__
 
     filtered_classes = inspect.getmembers(
