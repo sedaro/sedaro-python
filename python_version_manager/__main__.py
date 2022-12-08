@@ -26,6 +26,7 @@ OPTIONS_MAIN = {
 }
 
 VENV = '.venv'
+PIP_INSTALL = 'pip install'
 
 
 def get_cur_python_version():
@@ -44,7 +45,6 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     if os.path.isdir(VENV):
         shutil.rmtree(VENV)
 
-    print_msg = f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro'
     if pypi_sedaro:
         print_msg_end = 'from pypi'
     elif test_pypi_sedaro:
@@ -53,18 +53,25 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         print_msg_end = 'from local sedaro directory'
 
     print(
-        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...\n'
+        f'\n🛰️  Creating virtual environment for Python {new_version} and installing sedaro {print_msg_end}...'
     )
 
+    if run_tests:
+        # Don't show whole pip output ("quiet" flag) when running tests
+        PIP_INSTALL = PIP_INSTALL + ' -q'
+    else:
+        # Print empty line before pip output when it's not "quiet"
+        print('')
+
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install -U autopep8'
+        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8'
         if pypi_sedaro:
-            command += ' && pip install sedaro'
+            command += f' && {PIP_INSTALL} sedaro'
         elif test_pypi_sedaro:
             # see S.O. answer for context on command below: https://stackoverflow.com/a/59495166/16448566
-            command += ' pip install --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
+            command += f' {PIP_INSTALL} --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
-            command += ' && pip install -e sedaro'
+            command += f' && {PIP_INSTALL} -e sedaro'
         os.system(command)
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
