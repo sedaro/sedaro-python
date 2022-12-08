@@ -17,7 +17,7 @@ def test_raw_get_branch():
             assert string in keys
 
 
-def test_CRUD_block():
+def test_raw_request_CRUD_blocks():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         res = sedaro_client.send_request(
             f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
@@ -40,4 +40,4 @@ def test_CRUD_block():
 
 def run_tests():
     test_raw_get_branch()
-    test_CRUD_block()
+    test_raw_request_CRUD_blocks()
