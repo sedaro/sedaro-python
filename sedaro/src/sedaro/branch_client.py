@@ -49,9 +49,13 @@ class BranchClient:
         block_api_module = import_if_exists(
             f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api'
         )
+
         # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
-        if block_type.casefold() not in set(b.casefold() for b in self._block_class_to_block_group_map) \
-                or block_api_module is None:
+        block_options = set(b.casefold() for b in self._block_class_to_block_group_map) | \
+            {'ConstantLoad'.casefold(), 'Surface'.casefold()}
+        # Note: these blocks ^^^ added in manually aren't in the BG's, but are valid block class clients
+
+        if block_type.casefold() not in block_options or block_api_module is None:
             raise AttributeError(
                 f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
             )
