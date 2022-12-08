@@ -107,11 +107,9 @@ def sedaro_client_python_version_manager():
         for k, v in OPTIONS_MAIN.items():
             stands_for, description = v
             command = f'  - "{k}"'
-            for _ in range(7 - len(k)):
-                command += ' '
+            command += ' ' * (12 - len(command))
             command += stands_for
-            for _ in range(33 - len(command)):
-                command += ' '
+            command += ' ' * (33 - len(command))
             command += description
             print(command)
 
