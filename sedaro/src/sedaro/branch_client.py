@@ -112,5 +112,3 @@ class BranchClient:
             except AttributeError:
                 raise e
         return BlockClient(id, b_c_c)
-
-# TODO: add a method for just sending any request with a URL.
