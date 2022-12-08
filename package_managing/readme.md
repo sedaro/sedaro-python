@@ -15,22 +15,26 @@
 Inside `sedaro-python/`:
 
 - Deactivate current python environment (`$ deactivate`)
-- `$ rm -rf .venv && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install --upgrade setuptools build twine`
-- `$ cd sedaro`
-- `$ rm -rf dist && python3 -m build`
+- Delete and create new virtual environment and install needed dependencies:
+  - `$ rm -rf .venv && python3 -m venv ./.venv && source .venv/bin/activate && pip install --upgrade pip && pip install --upgrade setuptools build twine`
+- Build:
+  - `$ cd sedaro`
+  - `$ rm -rf dist && python3 -m build`
 - If doesn’t create `.tar.gz` and `.whl` in `sedaro/dist/`, wait a minute. Reload vs-code if doesn't show up.
 
 ## Publish to test.pypi
 
-- Do everything under "Build"
-- `$ python3 -m twine upload --repository testpypi dist/\*`
-  - requires username and password
+- Do everything under "Build" above
+- In `sedaro/`:
+  - `$ python3 -m twine upload --repository testpypi dist/\*`
+  - enter username and password
 - Use `python_version_manager` to install sedaro from **test.pypi** and run tests using **live server** in python 3.7 - 3.10
 
 ## Publish to pypi:
 
 - Open pull request. After merged, switch to main branch with new changes pulled in
-- Do everything under "Build"
-- `$ python -m twine upload dist/\*`
-  - requires username and password
+- Do everything under "Build" above
+- In `sedaro/`:
+  - `$ python -m twine upload dist/\*`
+  - enter username and password
 - Use `python_version_manager` to install sedaro from **pypi** and run tests using **live server** in python 3.7 - 3.10
