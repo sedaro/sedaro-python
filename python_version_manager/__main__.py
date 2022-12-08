@@ -16,13 +16,13 @@ SWITCH_INSTR = 'Switch python version, install sedaro from: '
 TEST_INSTR = f'Run tests in python versions {PY_VERSIONS_TESTS} using sedaro from: '
 
 OPTIONS_MAIN = {
-    QUIT: 'Quit',
-    SWITCH_LOCAL: f'{SWITCH_INSTR}local sedaro directory',
-    TESTS_LOCAL: f'{TEST_INSTR}local sedaro directory',
-    SWITCH_PYPI_TEST: f'{SWITCH_INSTR}test.pypi',
-    TESTS_PYPI_TEST: f'{TEST_INSTR}test.pypi',
-    SWITCH_PYPI: f'{SWITCH_INSTR}pypi',
-    TESTS_PYPI: f'{TEST_INSTR}pypi',
+    QUIT: ('quit', ''),
+    SWITCH_LOCAL: ('switch local', f'{SWITCH_INSTR}local sedaro directory'),
+    TESTS_LOCAL: ('test local', f'{TEST_INSTR}local sedaro directory'),
+    SWITCH_PYPI_TEST: ('switch test.pypi', f'{SWITCH_INSTR}test.pypi'),
+    TESTS_PYPI_TEST: ('test test.pypi', f'{TEST_INSTR}test.pypi'),
+    SWITCH_PYPI: ('switch pypi', f'{SWITCH_INSTR}pypi'),
+    TESTS_PYPI: ('test pypi', f'{TEST_INSTR}pypi'),
 }
 
 VENV = '.venv'
@@ -96,10 +96,15 @@ def sedaro_client_python_version_manager():
         print('Options:')
         print('  (note, "Switch" options deletes/recreates venv)')
         for k, v in OPTIONS_MAIN.items():
+            stands_for, description = v
             command = f'  - "{k}"'
-            for _ in range(8 - len(k)):
+            for _ in range(7 - len(k)):
                 command += ' '
-            print(command + v)
+            command += stands_for
+            for _ in range(33 - len(command)):
+                command += ' '
+            command += description
+            print(command)
 
         how_proceed = input('~ ')
 
