@@ -82,7 +82,6 @@ from sedaro_base_client.model.condition_relationship import ConditionRelationshi
 from sedaro_base_client.model.condition_update import ConditionUpdate
 from sedaro_base_client.model.configuration_types import ConfigurationTypes
 from sedaro_base_client.model.conflicts_obj import ConflictsObj
-from sedaro_base_client.model.constant_load import ConstantLoad
 from sedaro_base_client.model.constant_load_create import ConstantLoadCreate
 from sedaro_base_client.model.constant_load_definition_types import ConstantLoadDefinitionTypes
 from sedaro_base_client.model.constant_load_update import ConstantLoadUpdate
@@ -251,7 +250,6 @@ from sedaro_base_client.model.subsystem_bg import SubsystemBG
 from sedaro_base_client.model.subsystem_create import SubsystemCreate
 from sedaro_base_client.model.subsystem_update import SubsystemUpdate
 from sedaro_base_client.model.sun_tracking_surface import SunTrackingSurface
-from sedaro_base_client.model.surface import Surface
 from sedaro_base_client.model.surface_bg import SurfaceBG
 from sedaro_base_client.model.surface_create import SurfaceCreate
 from sedaro_base_client.model.surface_material import SurfaceMaterial
