@@ -93,15 +93,15 @@ def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
     """Gets a class from the passed in module.
 
     Args:
-        module (ModuleType): _description_
-        target_class (str, optional): _description_. Defaults to None.
+        module (ModuleType): python module (file)
+        target_class (str, optional): name of the class to search for. Defaults to None.
 
     Raises:
         AttributeError: if no class is found to return
 
     Returns:
         type: If `target_class` not provided, returns first class defined in the module. If `target_class`
-        is provided, returns class matching with a matching name (case-insensitive).
+        is provided, returns class with a matching name (case-insensitive).
     """
 
     def filter_desired_class_from_file(kls):
