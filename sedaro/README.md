@@ -51,7 +51,7 @@ pip install sedaro
 
         branch_client.Target
 
-        tranch_client.Component
+        branch_client.Component
 
         branch_client.Subsystem
 
