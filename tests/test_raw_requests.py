@@ -1,6 +1,7 @@
+from random import randrange
+
 from sedaro import SedaroApiClient
 from sedaro.utils import parse_urllib_response
-
 
 from config import HOST, API_KEY, WILDFIRE_A_T_ID
 
@@ -22,7 +23,7 @@ def test_CRUD_block():
             f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
             'POST',
             body={
-                'name': 'Sun',
+                'name': 'Sun ' + str(randrange(1, 100000)),
                 'polynomialEphemerisBody': 'SUN',
                 'conOps': 2
             }
