@@ -274,13 +274,13 @@ Use built-in method to send customized requests to the host. See [OpenAPI Specif
 with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     # get a branch
     sedaro_client.send_request(
-        f'/models/branches/{WILDFIRE_A_T_ID}',
+        f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}',
         'GET'
     )
 
     # create a celestial target in a branch
     sedaro_client.send_request(
-        f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
+        f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}/cdh/conops/celestial-targets/',
         'POST',
         body={
             'name': 'Sun',
