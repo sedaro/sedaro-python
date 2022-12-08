@@ -53,7 +53,7 @@ class BranchClient:
         # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
         block_options = set(b.casefold() for b in self._block_class_to_block_group_map) | \
             {'ConstantLoad'.casefold(), 'Surface'.casefold()}
-        # Note: these blocks ^^^ added in manually aren't in the BG's, but are valid block class clients
+        # Note: these blocks ^^^ added in manually, b/c aren't in the BG's but are valid block class clients
 
         if block_type.casefold() not in block_options or block_api_module is None:
             raise AttributeError(
