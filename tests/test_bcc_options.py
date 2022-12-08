@@ -37,6 +37,7 @@ def test_block_class_client_options():
         'OperationalMode',
         'OpticalAttitudeSensor',
         'PassivePointingMode',
+        'PidAlgorithm',
         'PositionSensor',
         'ReactionWheel',
         'RectangularFieldOfView',

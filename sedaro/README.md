@@ -92,6 +92,7 @@ pip install sedaro
       - OperationalMode
       - OpticalAttitudeSensor
       - PassivePointingMode
+      - PidAlgorithm
       - PositionSensor
       - ReactionWheel
       - RectangularFieldOfView
