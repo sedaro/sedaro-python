@@ -290,7 +290,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     )
 ```
 
-Note that requests sent this way to CRUD blocks won't automatically update already instantiated `BranchClient`s or `BlockClient`s.
+Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `BranchClient`s or `BlockClient`s.
 
 ## Further information
 
