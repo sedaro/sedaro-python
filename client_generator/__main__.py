@@ -49,7 +49,7 @@ def run_generator(skip_intro=False):
         PROJECT_NAME = f'{SEDARO}_base_client'
         PACKAGE_NAME = f'{SEDARO}_base_client'
 
-    CLIENT_DIR_BUILD = f'build/{language}/{PROJECT_NAME}'
+    BASE_CLIENT_BUILD_DIR = f'build/{language}/{PROJECT_NAME}'
 
     # --------- check if client exists and if want to overwrite ---------
     how_to_proceed = None
@@ -57,7 +57,7 @@ def run_generator(skip_intro=False):
         GENERATE_NEW, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, REGENERATE
     )
 
-    if not os.path.isdir(CLIENT_DIR_BUILD):
+    if not os.path.isdir(BASE_CLIENT_BUILD_DIR):
         how_to_proceed = GENERATE_NEW
 
     while how_to_proceed not in proceed_options:
@@ -102,7 +102,7 @@ def run_generator(skip_intro=False):
         # ----- remove client if already exists -----
         if how_to_proceed == REGENERATE:
             # ----- delete old client dir -----
-            os.system(f'rm -r {CLIENT_DIR_BUILD}')
+            os.system(f'rm -r {BASE_CLIENT_BUILD_DIR}')
 
         TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
         try:
@@ -118,7 +118,7 @@ def run_generator(skip_intro=False):
         cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
                 -i /local{TEMP_SPEC_LOCATION[1:]} \
                 -g {language} \
-                -o /local/{CLIENT_DIR_BUILD}'
+                -o /local/{BASE_CLIENT_BUILD_DIR}'
 
         # ----- exta options -----
         if config_dict is not None:
@@ -131,13 +131,17 @@ def run_generator(skip_intro=False):
         os.system(cmd)
 
         if language == PYTHON and how_to_proceed != DRY_RUN:
+            PYTHON_BASE_CLIENT_DEST = f'{SEDARO}/src/{PACKAGE_NAME}'
+
+            if os.path.isdir(PYTHON_BASE_CLIENT_DEST):
+                shutil.rmtree(PYTHON_BASE_CLIENT_DEST)
+
             shutil.copytree(
-                f'{CLIENT_DIR_BUILD}/{PACKAGE_NAME}',
-                f'{SEDARO}/src/{PACKAGE_NAME}',
-                dirs_exist_ok=True
+                f'{BASE_CLIENT_BUILD_DIR}/{PACKAGE_NAME}',
+                PYTHON_BASE_CLIENT_DEST,
             )
             shutil.copyfile(
-                f'{CLIENT_DIR_BUILD}/requirements.txt',
+                f'{BASE_CLIENT_BUILD_DIR}/requirements.txt',
                 f'{SEDARO}/requirements-base-client.txt'
             )
 
