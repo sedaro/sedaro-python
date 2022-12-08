@@ -130,7 +130,7 @@ def run_generator(skip_intro=False):
 
         os.system(cmd)
 
-        if language == PYTHON and how_to_proceed in {MINIMAL_UPDATE, REGENERATE}:
+        if language == PYTHON and how_to_proceed in {MINIMAL_UPDATE, REGENERATE, GENERATE_NEW}:
             PYTHON_BASE_CLIENT_DEST = f'{SEDARO}/src/{PACKAGE_NAME}'
 
             if os.path.isdir(PYTHON_BASE_CLIENT_DEST):
