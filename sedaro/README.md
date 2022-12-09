@@ -49,7 +49,7 @@ pip install sedaro
 
         branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
 
-        branch_client.Target
+        branch_client.BatteryCell
 
         branch_client.Component
 
