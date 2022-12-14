@@ -81,6 +81,7 @@ pip install sedaro
       - DirectionSensor
       - EkfAlgorithm
       - FovConstraint
+      - FuelReservoir
       - GpsAlgorithm
       - GroundTarget
       - GroupCondition
@@ -104,6 +105,9 @@ pip install sedaro
       - SolarCell
       - SolarPanel
       - SpaceTarget
+      - SphericalFuelTank
+      - SpherocylinderFuelTank
+      - StaticThrustControlAlgorithm
       - Subsystem
       - Surface
       - SurfaceMaterial
@@ -113,6 +117,7 @@ pip install sedaro
       - TempControllerState
       - ThermalInterface
       - ThermalInterfaceMaterial
+      - Thruster
       - Topology
       - TriadAlgorithm
       - VectorSensor
