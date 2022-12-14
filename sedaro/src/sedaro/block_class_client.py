@@ -191,6 +191,25 @@ class BlockClassClient:
         """
         return [BlockClient(id, self) for id in self.get_all_ids()]
 
+    # def get_where(self, **property_values) -> List['BlockClient']:
+    #     """TODO: not working yet properly due to properties that have become `DynamicSchema`... comparisons too often
+    #     return False when they shouldn't
+
+    #     Gets a filtered `list` of all `BlockClient` instances corresponding to all Sedaro Blocks of the given type in
+    #     this Branch. Blocks are filtered by property/values passed as kwargs. If there are no corresponding Blocks,
+    #     returns an empty `list`.
+
+    #     **property_values:
+    #         any: keys to check for given values on the Sedaro Blocks
+
+    #     Returns:
+    #         List['BlockClient']: a filtered list of `BlockClient` instances corresponding to Sedaro Blocks in this
+    #         Branch
+    #     """
+    #     return [
+    #         b_c for b_c in self.get_all() if all(getattr(b_c, k) == v for k, v in property_values.items())
+    #     ]
+
     def get_first(self):
         """Returns a `BlockClient` associated with the least recently added (lowest `id`) Sedaro Block of the desired
         type.

@@ -22,6 +22,7 @@ from sedaro_base_client.apis.tags.cooler_api import CoolerApi
 from sedaro_base_client.apis.tags.direction_sensor_api import DirectionSensorApi
 from sedaro_base_client.apis.tags.ekf_algorithm_api import EKFAlgorithmApi
 from sedaro_base_client.apis.tags.fov_constraint_api import FOVConstraintApi
+from sedaro_base_client.apis.tags.fuel_reservoir_api import FuelReservoirApi
 from sedaro_base_client.apis.tags.gps_algorithm_api import GPSAlgorithmApi
 from sedaro_base_client.apis.tags.ground_target_api import GroundTargetApi
 from sedaro_base_client.apis.tags.group_condition_api import GroupConditionApi
@@ -47,6 +48,9 @@ from sedaro_base_client.apis.tags.solar_array_api import SolarArrayApi
 from sedaro_base_client.apis.tags.solar_cell_api import SolarCellApi
 from sedaro_base_client.apis.tags.solar_panel_api import SolarPanelApi
 from sedaro_base_client.apis.tags.space_target_api import SpaceTargetApi
+from sedaro_base_client.apis.tags.spherical_fuel_tank_api import SphericalFuelTankApi
+from sedaro_base_client.apis.tags.spherocylinder_fuel_tank_api import SpherocylinderFuelTankApi
+from sedaro_base_client.apis.tags.static_thrust_control_algorithm_api import StaticThrustControlAlgorithmApi
 from sedaro_base_client.apis.tags.subsystem_api import SubsystemApi
 from sedaro_base_client.apis.tags.surface_api import SurfaceApi
 from sedaro_base_client.apis.tags.surface_material_api import SurfaceMaterialApi
@@ -56,6 +60,7 @@ from sedaro_base_client.apis.tags.target_vector_api import TargetVectorApi
 from sedaro_base_client.apis.tags.temp_controller_state_api import TempControllerStateApi
 from sedaro_base_client.apis.tags.thermal_interface_api import ThermalInterfaceApi
 from sedaro_base_client.apis.tags.thermal_interface_material_api import ThermalInterfaceMaterialApi
+from sedaro_base_client.apis.tags.thruster_api import ThrusterApi
 from sedaro_base_client.apis.tags.topology_api import TopologyApi
 from sedaro_base_client.apis.tags.triad_algorithm_api import TriadAlgorithmApi
 from sedaro_base_client.apis.tags.vector_sensor_api import VectorSensorApi
@@ -84,6 +89,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.DIRECTION_SENSOR: DirectionSensorApi,
         TagValues.EKF_ALGORITHM: EKFAlgorithmApi,
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
+        TagValues.FUEL_RESERVOIR: FuelReservoirApi,
         TagValues.GPS_ALGORITHM: GPSAlgorithmApi,
         TagValues.GROUND_TARGET: GroundTargetApi,
         TagValues.GROUP_CONDITION: GroupConditionApi,
@@ -109,6 +115,9 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.SOLAR_CELL: SolarCellApi,
         TagValues.SOLAR_PANEL: SolarPanelApi,
         TagValues.SPACE_TARGET: SpaceTargetApi,
+        TagValues.SPHERICAL_FUEL_TANK: SphericalFuelTankApi,
+        TagValues.SPHEROCYLINDER_FUEL_TANK: SpherocylinderFuelTankApi,
+        TagValues.STATIC_THRUST_CONTROL_ALGORITHM: StaticThrustControlAlgorithmApi,
         TagValues.SUBSYSTEM: SubsystemApi,
         TagValues.SURFACE: SurfaceApi,
         TagValues.SURFACE_MATERIAL: SurfaceMaterialApi,
@@ -118,6 +127,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
+        TagValues.THRUSTER: ThrusterApi,
         TagValues.TOPOLOGY: TopologyApi,
         TagValues.TRIAD_ALGORITHM: TriadAlgorithmApi,
         TagValues.VECTOR_SENSOR: VectorSensorApi,
@@ -147,6 +157,7 @@ tag_to_api = TagToApi(
         TagValues.DIRECTION_SENSOR: DirectionSensorApi,
         TagValues.EKF_ALGORITHM: EKFAlgorithmApi,
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
+        TagValues.FUEL_RESERVOIR: FuelReservoirApi,
         TagValues.GPS_ALGORITHM: GPSAlgorithmApi,
         TagValues.GROUND_TARGET: GroundTargetApi,
         TagValues.GROUP_CONDITION: GroupConditionApi,
@@ -172,6 +183,9 @@ tag_to_api = TagToApi(
         TagValues.SOLAR_CELL: SolarCellApi,
         TagValues.SOLAR_PANEL: SolarPanelApi,
         TagValues.SPACE_TARGET: SpaceTargetApi,
+        TagValues.SPHERICAL_FUEL_TANK: SphericalFuelTankApi,
+        TagValues.SPHEROCYLINDER_FUEL_TANK: SpherocylinderFuelTankApi,
+        TagValues.STATIC_THRUST_CONTROL_ALGORITHM: StaticThrustControlAlgorithmApi,
         TagValues.SUBSYSTEM: SubsystemApi,
         TagValues.SURFACE: SurfaceApi,
         TagValues.SURFACE_MATERIAL: SurfaceMaterialApi,
@@ -181,6 +195,7 @@ tag_to_api = TagToApi(
         TagValues.TEMP_CONTROLLER_STATE: TempControllerStateApi,
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
+        TagValues.THRUSTER: ThrusterApi,
         TagValues.TOPOLOGY: TopologyApi,
         TagValues.TRIAD_ALGORITHM: TriadAlgorithmApi,
         TagValues.VECTOR_SENSOR: VectorSensorApi,
