@@ -30,6 +30,9 @@ class DirectionSensorUpdate(
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
+
+    Class to be used internally and inherited only by `Collection` and `Block`. Adds helper methods that help with
+relationship fields.
     """
 
 
