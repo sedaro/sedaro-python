@@ -192,8 +192,8 @@ class BranchScenarioRes(
             dataSchema = schemas.DictSchema
         
             @staticmethod
-            def data() -> typing.Type['ScenarioTemplate']:
-                return ScenarioTemplate
+            def data() -> typing.Type['ScenarioTemplateForRes']:
+                return ScenarioTemplateForRes
             
             
             class blockIdToTypeMap(
@@ -310,7 +310,7 @@ class BranchScenarioRes(
     dataSchema: MetaOapg.properties.dataSchema
     simulationRequired: MetaOapg.properties.simulationRequired
     blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
-    data: 'ScenarioTemplate'
+    data: 'ScenarioTemplateForRes'
     sharePwRqd: MetaOapg.properties.sharePwRqd
     dateModified: MetaOapg.properties.dateModified
     repository: MetaOapg.properties.repository
@@ -363,7 +363,7 @@ class BranchScenarioRes(
     def __getitem__(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'ScenarioTemplate': ...
+    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'ScenarioTemplateForRes': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
@@ -425,7 +425,7 @@ class BranchScenarioRes(
     def get_item_oapg(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'ScenarioTemplate': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'ScenarioTemplateForRes': ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
@@ -454,7 +454,7 @@ class BranchScenarioRes(
         dataSchema: typing.Union[MetaOapg.properties.dataSchema, dict, frozendict.frozendict, ],
         simulationRequired: typing.Union[MetaOapg.properties.simulationRequired, bool, ],
         blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
-        data: 'ScenarioTemplate',
+        data: 'ScenarioTemplateForRes',
         sharePwRqd: typing.Union[MetaOapg.properties.sharePwRqd, bool, ],
         dateModified: typing.Union[MetaOapg.properties.dateModified, str, datetime, ],
         repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
@@ -495,4 +495,4 @@ class BranchScenarioRes(
             **kwargs,
         )
 
-from sedaro_base_client.model.scenario_template import ScenarioTemplate
+from sedaro_base_client.model.scenario_template_for_res import ScenarioTemplateForRes

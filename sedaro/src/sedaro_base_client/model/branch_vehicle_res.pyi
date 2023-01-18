@@ -189,8 +189,8 @@ class BranchVehicleRes(
             dataSchema = schemas.DictSchema
         
             @staticmethod
-            def data() -> typing.Type['VehicleTemplate']:
-                return VehicleTemplate
+            def data() -> typing.Type['VehicleTemplateForRes']:
+                return VehicleTemplateForRes
             
             
             class blockIdToTypeMap(
@@ -304,7 +304,7 @@ class BranchVehicleRes(
     dataSchema: MetaOapg.properties.dataSchema
     simulationRequired: MetaOapg.properties.simulationRequired
     blockIdToTypeMap: MetaOapg.properties.blockIdToTypeMap
-    data: 'VehicleTemplate'
+    data: 'VehicleTemplateForRes'
     sharePwRqd: MetaOapg.properties.sharePwRqd
     dateModified: MetaOapg.properties.dateModified
     repository: MetaOapg.properties.repository
@@ -357,7 +357,7 @@ class BranchVehicleRes(
     def __getitem__(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
+    def __getitem__(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplateForRes': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
@@ -419,7 +419,7 @@ class BranchVehicleRes(
     def get_item_oapg(self, name: typing_extensions.Literal["dataSchema"]) -> MetaOapg.properties.dataSchema: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplate': ...
+    def get_item_oapg(self, name: typing_extensions.Literal["data"]) -> 'VehicleTemplateForRes': ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["blockIdToTypeMap"]) -> MetaOapg.properties.blockIdToTypeMap: ...
@@ -448,7 +448,7 @@ class BranchVehicleRes(
         dataSchema: typing.Union[MetaOapg.properties.dataSchema, dict, frozendict.frozendict, ],
         simulationRequired: typing.Union[MetaOapg.properties.simulationRequired, bool, ],
         blockIdToTypeMap: typing.Union[MetaOapg.properties.blockIdToTypeMap, dict, frozendict.frozendict, ],
-        data: 'VehicleTemplate',
+        data: 'VehicleTemplateForRes',
         sharePwRqd: typing.Union[MetaOapg.properties.sharePwRqd, bool, ],
         dateModified: typing.Union[MetaOapg.properties.dateModified, str, datetime, ],
         repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
@@ -489,4 +489,4 @@ class BranchVehicleRes(
             **kwargs,
         )
 
-from sedaro_base_client.model.vehicle_template import VehicleTemplate
+from sedaro_base_client.model.vehicle_template_for_res import VehicleTemplateForRes
