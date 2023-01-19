@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sedaro"
-version = "3.3.6"
+version = "3.3.7"
 authors = [
   { name="Sedaro", email="support@sedarotech.com" },
 ]
