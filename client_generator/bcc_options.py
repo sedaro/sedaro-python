@@ -15,6 +15,12 @@ def get_block_class_client_options():
 
         print(option)
 
+    print('\nNote:')
+    print('- All of the options should be listed above, but some of them may not have all letters in the correct case.')
+    print('- They should correspond to `Block` names as defined in satellite-app (ex. "GpsAlgorithm" should be "GPSAlgorithm").')
+    print('- Please confirm case.')
+    print('')
+
 
 if __name__ == '__main__':
     get_block_class_client_options()
