@@ -1,5 +1,6 @@
 from sedaro import SedaroApiClient
 from sedaro.block_class_client import BlockClassClient
+from sedaro.block_client import BlockClient
 
 from config import HOST, API_KEY, WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID
 
@@ -22,10 +23,10 @@ def test_block_class_client_options():
         'ConstantLoad',
         'Cooler',
         'DirectionSensor',
-        'EkfAlgorithm',
-        'FovConstraint',
+        'EKFAlgorithm',
+        'FOVConstraint',
         'FuelReservoir',
-        'GpsAlgorithm',
+        'GPSAlgorithm',
         'GroundTarget',
         'GroupCondition',
         'Heater',
@@ -34,11 +35,11 @@ def test_block_class_client_options():
         'LockPointingMode',
         'Magnetorquer',
         'MaxAlignPointingMode',
-        'MekfAlgorithm',
+        'MEKFAlgorithm',
         'OperationalMode',
         'OpticalAttitudeSensor',
         'PassivePointingMode',
-        'PidAlgorithm',
+        'PIDAlgorithm',
         'PositionSensor',
         'ReactionWheel',
         'RectangularFieldOfView',
@@ -78,7 +79,7 @@ def test_block_class_client_options():
                 bcc = getattr(branch_client, block)
                 assert isinstance(bcc, BlockClassClient)
 
-                # these blocks can't be "created"
+                # CHECK: these blocks can't be "created"
                 if any(string in block for string in ['Topology', 'Satellite', 'ConOps']) or block == 'Battery':
                     try:
                         getattr(bcc, 'create')()
@@ -87,7 +88,7 @@ def test_block_class_client_options():
                         assert err_msg == f'There is no create method on a "{block}" BlockClassClient because this type of Sedaro Block is not createable.'
                     continue
 
-                # for all others, make sure create() exists, can be called, and raises error when called empty
+                # CHECK: for all others, make sure create() exists, can be called, and raises error when called empty
                 try:
                     getattr(bcc, 'create')()
                 except TypeError as e:
@@ -97,6 +98,12 @@ def test_block_class_client_options():
                 # except Exception as e:
                 #     # print any other erros that happen
                 #     print(block, type(e), str(e))
+
+                # CHECK: can use get_all method
+                all_blocks_of_type = getattr(bcc, 'get_all')()
+                assert type(all_blocks_of_type) == list
+                if len(all_blocks_of_type):
+                    assert isinstance(all_blocks_of_type[0], BlockClient)
 
         for bad_block in ['try_me', 'and_me', 'NO_wayYou_will_CatchMe!!!!!!']:
             try:

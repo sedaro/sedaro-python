@@ -79,10 +79,10 @@ pip install sedaro
       - ConstantLoad
       - Cooler
       - DirectionSensor
-      - EkfAlgorithm
-      - FovConstraint
+      - EKFAlgorithm
+      - FOVConstraint
       - FuelReservoir
-      - GpsAlgorithm
+      - GPSAlgorithm
       - GroundTarget
       - GroupCondition
       - Heater
@@ -91,11 +91,11 @@ pip install sedaro
       - LockPointingMode
       - Magnetorquer
       - MaxAlignPointingMode
-      - MekfAlgorithm
+      - MEKFAlgorithm
       - OperationalMode
       - OpticalAttitudeSensor
       - PassivePointingMode
-      - PidAlgorithm
+      - PIDAlgorithm
       - PositionSensor
       - ReactionWheel
       - RectangularFieldOfView
