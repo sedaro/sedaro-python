@@ -220,6 +220,7 @@ from sedaro_base_client.model.scenario_block_create_res import ScenarioBlockCrea
 from sedaro_base_client.model.scenario_block_delete_res import ScenarioBlockDeleteRes
 from sedaro_base_client.model.scenario_block_update_res import ScenarioBlockUpdateRes
 from sedaro_base_client.model.scenario_template import ScenarioTemplate
+from sedaro_base_client.model.scenario_template_for_res import ScenarioTemplateForRes
 from sedaro_base_client.model.side_categories import SideCategories
 from sedaro_base_client.model.simulatable_satellite import SimulatableSatellite
 from sedaro_base_client.model.simulation_job import SimulationJob
@@ -313,3 +314,4 @@ from sedaro_base_client.model.vehicle_block_create_res import VehicleBlockCreate
 from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 from sedaro_base_client.model.vehicle_block_update_res import VehicleBlockUpdateRes
 from sedaro_base_client.model.vehicle_template import VehicleTemplate
+from sedaro_base_client.model.vehicle_template_for_res import VehicleTemplateForRes

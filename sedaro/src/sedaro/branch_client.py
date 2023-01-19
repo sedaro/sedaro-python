@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Dict, List, Union
+from pydash.strings import snake_case
 
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
@@ -7,12 +8,10 @@ from .block_client import BlockClient
 from .utils import (
     parse_block_crud_response,
     sanitize_and_enforce_id_in_branch,
-    get_snake_and_pascal_case,
     import_if_exists,
     get_class_from_module
 )
 from .settings import BASE_PACKAGE_NAME
-
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
 
@@ -40,30 +39,29 @@ class BranchClient:
         return self.__str__()
 
     def __getattr__(self, block_type: str) -> BlockClassClient:
-        block_snake, block_pascal = get_snake_and_pascal_case(block_type)
 
         # Valid block class client options that don't have an associated api (won't have a create method)
         bcc_options_without_api = {'ConOps'}
         if block_type in bcc_options_without_api:
-            return BlockClassClient(block_pascal, None, self)
+            return BlockClassClient(block_type, None, self)
 
         # check if is a valid option for creating a BlockClassClient & get respective api module file
+        cant_create_err_msg = f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
+
+        # -- check block type
+        if block_type not in self._block_class_to_block_group_map is None:
+            raise AttributeError(cant_create_err_msg)
+
+        # -- check module exists
         block_api_module = import_if_exists(
-            f'{BASE_PACKAGE_NAME}.apis.tags.{block_snake}_api'
+            f'{BASE_PACKAGE_NAME}.apis.tags.{snake_case(block_type)}_api'
         )
+        if block_api_module is None:
+            raise AttributeError(cant_create_err_msg)
 
-        # Note: use `casefold` due to things like `GpsAlgorithm` vs `GPSAlgorithm`
-        block_options = set(
-            b.casefold() for b in self._block_class_to_block_group_map
-        )
-        if block_type.casefold() not in block_options or block_api_module is None:
-            raise AttributeError(
-                f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
-            )
-
+        # instantiate BCC
         block_api_class = get_class_from_module(block_api_module)
-
-        return BlockClassClient(block_pascal, block_api_class(self._sedaro_client), self)
+        return BlockClassClient(block_type, block_api_class(self._sedaro_client), self)
 
     def _process_block_crud_response(self, block_crud_response: ApiResponse) -> str:
         """Updates the local `Branch` data according to the CRUD action completed
