@@ -305,7 +305,7 @@ See docstrings on classes and their methods for further instructions and explana
 
 ## Sedaro Base Client
 
-The Sedaro client is a wrapper around the Swagger generated OpenAPI client. When this package is installed, the auto-generated, lower-loevel clients and methods are also available under `sedaro_base_client`.
+The Sedaro client is a wrapper around the Swagger generated OpenAPI client. When this package is installed, the auto-generated, lower-level clients and methods are also available under `sedaro_base_client`.
 
 ```py
 from sedaro_base_client import ...
