@@ -6,9 +6,12 @@ from pydash.strings import snake_case, pascal_case
 from urllib3.response import HTTPResponse
 from typing import Dict, Tuple, Union, TYPE_CHECKING
 from types import ModuleType
+import sys
+from dataclasses import dataclass
 
 from sedaro_base_client.api_client import ApiResponse
 from .settings import DELETE
+from .exceptions import SedaroApiException
 
 if TYPE_CHECKING:
     from .branch_client import BranchClient
@@ -125,3 +128,33 @@ def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
         raise AttributeError(err_msg)
 
     return filtered_classes[0][1]
+
+
+@dataclass
+class Wrap:
+    body: dict
+
+
+def temp_crud(sedaro_client, http_method):
+    def outer(old_client_method):
+        def wrapper(body=None, path_params=None, timeout=None):
+            resource_path = getattr(
+                sys.modules[old_client_method.__module__], 'path').value
+            for k, v in path_params.items():
+                resource_path = resource_path.replace('{%s}' % k, str(v))
+            response = sedaro_client.call_api(
+                resource_path=resource_path,
+                method=http_method,
+                body=json.dumps(body),
+                timeout=timeout,
+                headers={'Content-Type': 'application/json'}
+            )
+            parsed_response = parse_urllib_response(response)
+            if response.status != 200:
+                reason = parsed_response['error']['message'] if 'error' in parsed_response else 'An unknown error occurred.'
+                raise SedaroApiException(
+                    status=response.status, reason=reason)
+
+            return Wrap(body=parsed_response)
+        return wrapper
+    return outer
