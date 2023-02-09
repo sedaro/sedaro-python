@@ -8,7 +8,7 @@ from pydash.strings import snake_case
 
 from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
 from .block_client import BlockClient
-from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch, get_class_from_module
+from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch, get_class_from_module, temp_crud
 from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
@@ -129,18 +129,20 @@ class BlockClassClient:
         Returns:
             BlockClient: a client to interact with the created Sedaro Block
         """
+
         try:
             if self._block_openapi_instance is None:
                 raise AttributeError
-            create_method = getattr(
+            create_method = temp_crud(self._sedaro_client, 'POST')(getattr(
                 self._block_openapi_instance, f'{CREATE}_{snake_case(self._block_name)}'
-            )
+            ))
         except AttributeError:
             raise AttributeError(
                 f'There is no create method on a "{self._block_name}" {self.__class__.__name__} because this type of Sedaro Block is not createable.')
 
         res = create_method(
-            body=self._create_class(**body),
+            # body=self._create_class(**body), # TODO: temp_crud
+            body=body,
             path_params={'branchId': self._branch_client.id},
             timeout=timeout
         )

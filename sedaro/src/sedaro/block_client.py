@@ -6,6 +6,7 @@ from pydash import snake_case
 from sedaro_base_client.api_client import Api
 from .settings import UPDATE, DELETE
 from .exceptions import NonexistantBlockError
+from .utils import temp_crud
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
@@ -153,10 +154,12 @@ class BlockClient:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
-        body = self.data | attrs_to_update
+        body = {**self.data, **attrs_to_update}
 
-        res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')(
-            body=self._block_class_client._update_class(**body),
+        # res = getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}')( # TODO: temp_crud
+        res = temp_crud(self._sedaro_client, 'PATCH')(getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}'))(
+            # body=self._block_class_client._update_class(**body), # TODO: temp_crud
+            body=body,
             path_params={
                 'branchId': self._branch_client.id,
                 'blockId': int(self.id)
@@ -175,7 +178,8 @@ class BlockClient:
         self.enforce_still_exists()
 
         id = self.id
-        res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')(
+        # res = getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}')( # TODO: temp_crud
+        res = temp_crud(self._sedaro_client, 'DELETE')(getattr(self._block_openapi_instance, f'{DELETE}_{snake_case(self._block_name)}'))(
             path_params={
                 'branchId': self._branch_client.id,
                 "blockId": int(id)

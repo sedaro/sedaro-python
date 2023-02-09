@@ -88,13 +88,14 @@ def test_block_class_client_options():
                         assert err_msg == f'There is no create method on a "{block}" BlockClassClient because this type of Sedaro Block is not createable.'
                     continue
 
+                # TODO: temp_crud
                 # CHECK: for all others, make sure create() exists, can be called, and raises error when called empty
-                try:
-                    getattr(bcc, 'create')()
-                except TypeError as e:
-                    assert (all(
-                        s in str(e) for s in {'__new__() missing', 'required keyword-only argument'}
-                    ) or str(e) == 'No input given. args or kwargs must be given.')
+                # try:
+                #     getattr(bcc, 'create')()
+                # except TypeError as e:
+                #     assert (all(
+                #         s in str(e) for s in {'__new__() missing', 'required keyword-only argument'}
+                #     ) or str(e) == 'No input given. args or kwargs must be given.')
                 # except Exception as e:
                 #     # print any other erros that happen
                 #     print(block, type(e), str(e))
