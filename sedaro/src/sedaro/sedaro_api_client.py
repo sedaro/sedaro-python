@@ -36,6 +36,8 @@ class SedaroApiClient(ApiClient):
             Branch.
         """
         branches_api_instance = branches_api.BranchesApi(self)
+        # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
+        # return BranchClient(res.body, self)
         res = branches_api_instance.get_branch(
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         body = res.body
