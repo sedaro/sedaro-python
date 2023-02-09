@@ -157,7 +157,7 @@ class BlockClient:
         body = {**self.data, **attrs_to_update}
 
         res = temp_crud(self._sedaro_client, 'PATCH')(getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}'))(
-            # body=self._block_class_client._update_class(**body), # temp_crud
+            # body=self._block_class_client._update_class(**body), # TODO: temp_crud
             body=body,
             path_params={
                 'branchId': self._branch_client.id,
