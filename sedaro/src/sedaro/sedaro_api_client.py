@@ -45,7 +45,7 @@ class SedaroApiClient(ApiClient):
             body = parse_urllib_response(res.response)
         return BranchClient(body, self)
 
-    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None):
+    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
         url = f'/data/?id={id}'
         if start is not None:
@@ -54,6 +54,8 @@ class SedaroApiClient(ApiClient):
             url += f'&stop={stop}'
         if binWidth is not None:
             url += f'&binWidth={binWidth}'
+        elif limit is not None:
+            url += f'&limit={limit}'
         response = self.call_api(url, 'GET')
         try:
             _response = parse_urllib_response(response)
