@@ -154,7 +154,7 @@ class BlockClient:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
-        body = self.data | attrs_to_update
+        body = {**self.data, **attrs_to_update}
 
         res = temp_crud(self._sedaro_client, 'PATCH')(getattr(self._block_openapi_instance, f'{UPDATE}_{snake_case(self._block_name)}'))(
             # body=self._block_class_client._update_class(**body), # temp_crud

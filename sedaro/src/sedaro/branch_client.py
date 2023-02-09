@@ -25,8 +25,9 @@ class BranchClient:
         self._sedaro_client = client
         self._block_id_to_type_map: Dict[str, str] = body['blockIdToTypeMap']
         '''Dictionary mapping Sedaro Block ids to the class name of the Block'''
-        self._block_class_to_block_group_map: Dict[str, str] = body['blockClassToBlockGroupMap'] \
-            | {'ConstantLoad': 'Load', 'Surface': 'Surface'}
+        self._block_class_to_block_group_map: Dict[str, str] = {
+            **body['blockClassToBlockGroupMap'], 'ConstantLoad': 'Load', 'Surface': 'Surface'
+        }
         # TODO: these blocks ^^^ added in manually, b/c they aren't explicitly in the BG's but are valid block class
         # clients; may be able to refactor this later
         '''Dictionary mapping Block class names to the Sedaro Block Group they are in'''
