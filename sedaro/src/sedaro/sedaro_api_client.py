@@ -57,12 +57,13 @@ class SedaroApiClient(ApiClient):
         elif limit is not None:
             url += f'&limit={limit}'
         response = self.call_api(url, 'GET')
+        _response = None
         try:
             _response = parse_urllib_response(response)
             if response.status != 200:
                 raise Exception()
         except:
-            reason = _response['error']['message'] if 'error' in _response else 'An unknown error occurred.'
+            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
