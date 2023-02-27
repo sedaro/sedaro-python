@@ -1,17 +1,17 @@
 from typing import TYPE_CHECKING, Dict, List, Union
-from pydash.strings import snake_case
 
+from pydash.strings import snake_case
 from sedaro_base_client.api_client import ApiResponse
-from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import \
+    SchemaFor200ResponseBodyApplicationJson
+
 from .block_class_client import BlockClassClient
 from .block_client import BlockClient
-from .utils import (
-    parse_block_crud_response,
-    sanitize_and_enforce_id_in_branch,
-    import_if_exists,
-    get_class_from_module
-)
 from .settings import BASE_PACKAGE_NAME
+from .utils import (get_class_from_module, import_if_exists,
+                    parse_block_crud_response,
+                    sanitize_and_enforce_id_in_branch)
+
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
 
@@ -50,7 +50,7 @@ class BranchClient:
         cant_create_err_msg = f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.'
 
         # -- check block type
-        if block_type not in self._block_class_to_block_group_map is None:
+        if block_type not in self._block_class_to_block_group_map:
             raise AttributeError(cant_create_err_msg)
 
         # -- check module exists
