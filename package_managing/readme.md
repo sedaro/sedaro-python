@@ -38,6 +38,6 @@ Inside `sedaro-python/`:
 - Open pull request. After merged, switch to main branch with new changes pulled in
 - Do everything under "Build" above
 - In `sedaro/`:
-  - `$ python -m twine upload dist/\*`
+  - `$ python3 -m twine upload dist/\*`
   - enter username and password
 - Use `python_version_manager` to install sedaro from **pypi** and run tests using **live server** in python 3.7 - 3.10

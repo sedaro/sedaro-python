@@ -10,7 +10,7 @@ class CommandError(Exception):
 
 
 def system(cmd):
-    # print('>>', cmd)
+    # print('>>', cmd) # toggle this to show the commands being run
     if os.system(cmd) != 0:
         raise CommandError()
 
@@ -77,7 +77,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         print('')
 
     try:
-        command = f'pyenv local {new_version} && python3 -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8'
+        command = f'python{new_version} -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8'
         if pypi_sedaro:
             command += f' && {PIP_INSTALL} sedaro'
         elif test_pypi_sedaro:
@@ -85,14 +85,10 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
             command += f' {PIP_INSTALL} --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
             command += f' && {PIP_INSTALL} -e sedaro'
-        system(command)
-        print(
-            f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
-        )
-
-        time.sleep(0.5)
         if run_tests:
-            system('python3 tests')
+            system(f'{command} && python3 tests')
+        else:
+            system(command)
 
     except Exception as e:
         print('')
