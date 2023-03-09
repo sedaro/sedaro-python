@@ -1,15 +1,15 @@
 import json
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from .utils import parse_urllib_response
 from .branch_client import BranchClient
 from .exceptions import SedaroApiException
-from .sim_client import SimClient
 from .settings import COMMON_API_KWARGS
+from .sim_client import SimClient
+from .utils import parse_urllib_response
 
 
 class SedaroApiClient(ApiClient):

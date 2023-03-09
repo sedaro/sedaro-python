@@ -26,7 +26,6 @@ import frozendict  # noqa: F401
 from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.vehicle_block_delete_res import VehicleBlockDeleteRes
 
 # Path params
 BranchIdSchema = schemas.IntSchema
@@ -62,7 +61,7 @@ request_path_block_id = api_client.PathParameter(
     schema=BlockIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = VehicleBlockDeleteRes
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -196,7 +195,11 @@ class BaseApi(api_client.Api):
                 api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 

@@ -7,7 +7,7 @@
   - `$ python3 client_generator`
   - Make sure to check `README` in client generator for "Known Issues"
   - Make sure dependencies in `sedaro/src/pyproject.toml` are up to date (should include everything in `requirements.txt` and `requirements-base-client.txt`)
-- Ensure `BlockClassClient` options are up-to-date in `tests/block_class_client_options.py` and in `sedaro/readme.md`
+- Ensure `BlockClassClient` options are up-to-date in `tests/test_bcc_options.py` and in `sedaro/readme.md`
   - Run `$ python3 client_generator/bcc_options.py` and compare against what's in both of those files.
 - Use `python_version_manager` to install **local sedaro** package and run tests using **dev server** in python 3.7 - 3.10
   - Make sure to comment back things that may have been commented out during client generator

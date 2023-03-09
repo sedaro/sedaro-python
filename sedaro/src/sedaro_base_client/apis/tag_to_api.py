@@ -5,6 +5,7 @@ from sedaro_base_client.apis.tags.branches_api import BranchesApi
 from sedaro_base_client.apis.tags.data_api import DataApi
 from sedaro_base_client.apis.tags.agent_api import AgentApi
 from sedaro_base_client.apis.tags.angular_velocity_sensor_api import AngularVelocitySensorApi
+from sedaro_base_client.apis.tags.antenna_api import AntennaApi
 from sedaro_base_client.apis.tags.averaging_algorithm_api import AveragingAlgorithmApi
 from sedaro_base_client.apis.tags.battery_api import BatteryApi
 from sedaro_base_client.apis.tags.battery_cell_api import BatteryCellApi
@@ -19,6 +20,11 @@ from sedaro_base_client.apis.tags.component_api import ComponentApi
 from sedaro_base_client.apis.tags.condition_api import ConditionApi
 from sedaro_base_client.apis.tags.constant_load_api import ConstantLoadApi
 from sedaro_base_client.apis.tags.cooler_api import CoolerApi
+from sedaro_base_client.apis.tags.cooperative_transmit_interface_api import CooperativeTransmitInterfaceApi
+from sedaro_base_client.apis.tags.data_bus_api import DataBusApi
+from sedaro_base_client.apis.tags.data_mode_api import DataModeApi
+from sedaro_base_client.apis.tags.data_storage_api import DataStorageApi
+from sedaro_base_client.apis.tags.data_type_api import DataTypeApi
 from sedaro_base_client.apis.tags.direction_sensor_api import DirectionSensorApi
 from sedaro_base_client.apis.tags.ekf_algorithm_api import EKFAlgorithmApi
 from sedaro_base_client.apis.tags.fov_constraint_api import FOVConstraintApi
@@ -27,20 +33,26 @@ from sedaro_base_client.apis.tags.gps_algorithm_api import GPSAlgorithmApi
 from sedaro_base_client.apis.tags.ground_target_api import GroundTargetApi
 from sedaro_base_client.apis.tags.group_condition_api import GroupConditionApi
 from sedaro_base_client.apis.tags.heater_api import HeaterApi
+from sedaro_base_client.apis.tags.internal_data_interface_api import InternalDataInterfaceApi
 from sedaro_base_client.apis.tags.jobs_api import JobsApi
+from sedaro_base_client.apis.tags.laser_comm_module_api import LaserCommModuleApi
 from sedaro_base_client.apis.tags.load_state_api import LoadStateApi
 from sedaro_base_client.apis.tags.local_vector_api import LocalVectorApi
 from sedaro_base_client.apis.tags.lock_pointing_mode_api import LockPointingModeApi
 from sedaro_base_client.apis.tags.mekf_algorithm_api import MEKFAlgorithmApi
 from sedaro_base_client.apis.tags.magnetorquer_api import MagnetorquerApi
 from sedaro_base_client.apis.tags.max_align_pointing_mode_api import MaxAlignPointingModeApi
+from sedaro_base_client.apis.tags.modem_api import ModemApi
 from sedaro_base_client.apis.tags.operational_mode_api import OperationalModeApi
 from sedaro_base_client.apis.tags.optical_attitude_sensor_api import OpticalAttitudeSensorApi
 from sedaro_base_client.apis.tags.orbit_api import OrbitApi
 from sedaro_base_client.apis.tags.pid_algorithm_api import PIDAlgorithmApi
 from sedaro_base_client.apis.tags.passive_pointing_mode_api import PassivePointingModeApi
+from sedaro_base_client.apis.tags.passive_transmit_interface_api import PassiveTransmitInterfaceApi
 from sedaro_base_client.apis.tags.position_sensor_api import PositionSensorApi
+from sedaro_base_client.apis.tags.power_processor_api import PowerProcessorApi
 from sedaro_base_client.apis.tags.reaction_wheel_api import ReactionWheelApi
+from sedaro_base_client.apis.tags.receive_interface_api import ReceiveInterfaceApi
 from sedaro_base_client.apis.tags.rectangular_field_of_view_api import RectangularFieldOfViewApi
 from sedaro_base_client.apis.tags.satellite_api import SatelliteApi
 from sedaro_base_client.apis.tags.sliding_mode_algorithm_api import SlidingModeAlgorithmApi
@@ -61,7 +73,6 @@ from sedaro_base_client.apis.tags.temp_controller_state_api import TempControlle
 from sedaro_base_client.apis.tags.thermal_interface_api import ThermalInterfaceApi
 from sedaro_base_client.apis.tags.thermal_interface_material_api import ThermalInterfaceMaterialApi
 from sedaro_base_client.apis.tags.thruster_api import ThrusterApi
-from sedaro_base_client.apis.tags.topology_api import TopologyApi
 from sedaro_base_client.apis.tags.triad_algorithm_api import TriadAlgorithmApi
 from sedaro_base_client.apis.tags.vector_sensor_api import VectorSensorApi
 
@@ -72,6 +83,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.DATA: DataApi,
         TagValues.AGENT: AgentApi,
         TagValues.ANGULAR_VELOCITY_SENSOR: AngularVelocitySensorApi,
+        TagValues.ANTENNA: AntennaApi,
         TagValues.AVERAGING_ALGORITHM: AveragingAlgorithmApi,
         TagValues.BATTERY: BatteryApi,
         TagValues.BATTERY_CELL: BatteryCellApi,
@@ -86,6 +98,11 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.CONDITION: ConditionApi,
         TagValues.CONSTANT_LOAD: ConstantLoadApi,
         TagValues.COOLER: CoolerApi,
+        TagValues.COOPERATIVE_TRANSMIT_INTERFACE: CooperativeTransmitInterfaceApi,
+        TagValues.DATA_BUS: DataBusApi,
+        TagValues.DATA_MODE: DataModeApi,
+        TagValues.DATA_STORAGE: DataStorageApi,
+        TagValues.DATA_TYPE: DataTypeApi,
         TagValues.DIRECTION_SENSOR: DirectionSensorApi,
         TagValues.EKF_ALGORITHM: EKFAlgorithmApi,
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
@@ -94,20 +111,26 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.GROUND_TARGET: GroundTargetApi,
         TagValues.GROUP_CONDITION: GroupConditionApi,
         TagValues.HEATER: HeaterApi,
+        TagValues.INTERNAL_DATA_INTERFACE: InternalDataInterfaceApi,
         TagValues.JOBS: JobsApi,
+        TagValues.LASER_COMM_MODULE: LaserCommModuleApi,
         TagValues.LOAD_STATE: LoadStateApi,
         TagValues.LOCAL_VECTOR: LocalVectorApi,
         TagValues.LOCK_POINTING_MODE: LockPointingModeApi,
         TagValues.MEKF_ALGORITHM: MEKFAlgorithmApi,
         TagValues.MAGNETORQUER: MagnetorquerApi,
         TagValues.MAX_ALIGN_POINTING_MODE: MaxAlignPointingModeApi,
+        TagValues.MODEM: ModemApi,
         TagValues.OPERATIONAL_MODE: OperationalModeApi,
         TagValues.OPTICAL_ATTITUDE_SENSOR: OpticalAttitudeSensorApi,
         TagValues.ORBIT: OrbitApi,
         TagValues.PID_ALGORITHM: PIDAlgorithmApi,
         TagValues.PASSIVE_POINTING_MODE: PassivePointingModeApi,
+        TagValues.PASSIVE_TRANSMIT_INTERFACE: PassiveTransmitInterfaceApi,
         TagValues.POSITION_SENSOR: PositionSensorApi,
+        TagValues.POWER_PROCESSOR: PowerProcessorApi,
         TagValues.REACTION_WHEEL: ReactionWheelApi,
+        TagValues.RECEIVE_INTERFACE: ReceiveInterfaceApi,
         TagValues.RECTANGULAR_FIELD_OF_VIEW: RectangularFieldOfViewApi,
         TagValues.SATELLITE: SatelliteApi,
         TagValues.SLIDING_MODE_ALGORITHM: SlidingModeAlgorithmApi,
@@ -128,7 +151,6 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
         TagValues.THRUSTER: ThrusterApi,
-        TagValues.TOPOLOGY: TopologyApi,
         TagValues.TRIAD_ALGORITHM: TriadAlgorithmApi,
         TagValues.VECTOR_SENSOR: VectorSensorApi,
     }
@@ -140,6 +162,7 @@ tag_to_api = TagToApi(
         TagValues.DATA: DataApi,
         TagValues.AGENT: AgentApi,
         TagValues.ANGULAR_VELOCITY_SENSOR: AngularVelocitySensorApi,
+        TagValues.ANTENNA: AntennaApi,
         TagValues.AVERAGING_ALGORITHM: AveragingAlgorithmApi,
         TagValues.BATTERY: BatteryApi,
         TagValues.BATTERY_CELL: BatteryCellApi,
@@ -154,6 +177,11 @@ tag_to_api = TagToApi(
         TagValues.CONDITION: ConditionApi,
         TagValues.CONSTANT_LOAD: ConstantLoadApi,
         TagValues.COOLER: CoolerApi,
+        TagValues.COOPERATIVE_TRANSMIT_INTERFACE: CooperativeTransmitInterfaceApi,
+        TagValues.DATA_BUS: DataBusApi,
+        TagValues.DATA_MODE: DataModeApi,
+        TagValues.DATA_STORAGE: DataStorageApi,
+        TagValues.DATA_TYPE: DataTypeApi,
         TagValues.DIRECTION_SENSOR: DirectionSensorApi,
         TagValues.EKF_ALGORITHM: EKFAlgorithmApi,
         TagValues.FOV_CONSTRAINT: FOVConstraintApi,
@@ -162,20 +190,26 @@ tag_to_api = TagToApi(
         TagValues.GROUND_TARGET: GroundTargetApi,
         TagValues.GROUP_CONDITION: GroupConditionApi,
         TagValues.HEATER: HeaterApi,
+        TagValues.INTERNAL_DATA_INTERFACE: InternalDataInterfaceApi,
         TagValues.JOBS: JobsApi,
+        TagValues.LASER_COMM_MODULE: LaserCommModuleApi,
         TagValues.LOAD_STATE: LoadStateApi,
         TagValues.LOCAL_VECTOR: LocalVectorApi,
         TagValues.LOCK_POINTING_MODE: LockPointingModeApi,
         TagValues.MEKF_ALGORITHM: MEKFAlgorithmApi,
         TagValues.MAGNETORQUER: MagnetorquerApi,
         TagValues.MAX_ALIGN_POINTING_MODE: MaxAlignPointingModeApi,
+        TagValues.MODEM: ModemApi,
         TagValues.OPERATIONAL_MODE: OperationalModeApi,
         TagValues.OPTICAL_ATTITUDE_SENSOR: OpticalAttitudeSensorApi,
         TagValues.ORBIT: OrbitApi,
         TagValues.PID_ALGORITHM: PIDAlgorithmApi,
         TagValues.PASSIVE_POINTING_MODE: PassivePointingModeApi,
+        TagValues.PASSIVE_TRANSMIT_INTERFACE: PassiveTransmitInterfaceApi,
         TagValues.POSITION_SENSOR: PositionSensorApi,
+        TagValues.POWER_PROCESSOR: PowerProcessorApi,
         TagValues.REACTION_WHEEL: ReactionWheelApi,
+        TagValues.RECEIVE_INTERFACE: ReceiveInterfaceApi,
         TagValues.RECTANGULAR_FIELD_OF_VIEW: RectangularFieldOfViewApi,
         TagValues.SATELLITE: SatelliteApi,
         TagValues.SLIDING_MODE_ALGORITHM: SlidingModeAlgorithmApi,
@@ -196,7 +230,6 @@ tag_to_api = TagToApi(
         TagValues.THERMAL_INTERFACE: ThermalInterfaceApi,
         TagValues.THERMAL_INTERFACE_MATERIAL: ThermalInterfaceMaterialApi,
         TagValues.THRUSTER: ThrusterApi,
-        TagValues.TOPOLOGY: TopologyApi,
         TagValues.TRIAD_ALGORITHM: TriadAlgorithmApi,
         TagValues.VECTOR_SENSOR: VectorSensorApi,
     }

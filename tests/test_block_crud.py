@@ -1,11 +1,11 @@
 from random import randrange
 
+from config import API_KEY, HOST, WILDFIRE_A_T_ID
+
 from sedaro import SedaroApiClient
-from sedaro.exceptions import NonexistantBlockError
 from sedaro.block_client import BlockClient
 from sedaro.branch_client import BranchClient
-
-from config import HOST, API_KEY, WILDFIRE_A_T_ID
+from sedaro.exceptions import NonexistantBlockError
 
 
 def test_get():
@@ -27,7 +27,7 @@ def test_create_update_and_delete_block():
             minSoc=0.2,
             capacity=500,
             curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
-            topology='10',
+            powerProcessor='10',
         )
 
         bc_id = battery_cell_client.id
@@ -99,8 +99,8 @@ def test_traversing_and_equality():
         solar_panel_client = branch_client.SolarPanel.get_first()
 
         assert isinstance(
-            solar_panel_client.cell.topology.subsystem.satellite.components[
-                0].thermal_interface_A[0].satellite.topology,
+            solar_panel_client.cell.powerProcessor.subsystem.satellite.components[
+                0].thermal_interface_A[0].satellite.powerProcessor,
             BlockClient
         )
 

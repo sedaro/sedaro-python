@@ -1,6 +1,19 @@
+import argparse
 import os
 import shutil
+import sys
 import time
+
+
+class CommandError(Exception):
+    pass
+
+
+def system(cmd):
+    # print('>>', cmd)
+    if os.system(cmd) != 0:
+        raise CommandError()
+
 
 QUIT = 'q'
 SWITCH_LOCAL = 'sl'
@@ -35,7 +48,7 @@ def get_cur_python_version():
 def switch_current_python_virtual_environment(new_version=None, run_tests=False, pypi_sedaro=False, test_pypi_sedaro=False):
     if new_version is None:
         print('\nAvailable python versions:')
-        os.system('pyenv versions')
+        system('pyenv versions')
         print('Note: use `$ pyenv install <version>` if don\'t see desired version.')
         new_version = input(
             '\nWhich python version would you like to switch to? (see above)\n~ '
@@ -72,14 +85,14 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
             command += f' {PIP_INSTALL} --index-url https://test.pypi.org/simple/ --upgrade --no-cache-dir --extra-index-url=https://pypi.org/simple/ sedaro'
         else:
             command += f' && {PIP_INSTALL} -e sedaro'
-        os.system(command)
+        system(command)
         print(
             f'\n🛰️  Virtual environment created/activated with Python {new_version} and sedaro installed {print_msg_end}'
         )
 
         time.sleep(0.5)
         if run_tests:
-            os.system('python3 tests')
+            system('python3 tests')
 
     except Exception as e:
         print('')
@@ -90,17 +103,17 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         switch_current_python_virtual_environment()
 
 
-def sedaro_client_python_version_manager():
+def sedaro_client_python_version_manager(how_proceed=None):
 
     print('\n---------< Sedero Client - python version manager >---------')
 
     print('\nCurrent python environment:')
-    os.system('pip -V')
+    system('pip3 -V')
 
     print(f'\nCurrent python version:')
     print(get_cur_python_version())
 
-    how_proceed = ''
+    how_proceed = how_proceed or ''
     while how_proceed not in OPTIONS_MAIN:
         print('Options:')
         print('  (note, "Switch" options deletes/recreates venv)')
@@ -150,4 +163,11 @@ def sedaro_client_python_version_manager():
 
 
 if __name__ == '__main__':
-    sedaro_client_python_version_manager()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-tl", "--test-local", action='count',
+                        help="Test Local", default=0)
+    pargs = parser.parse_args(sys.argv[1:])
+    how_proceed = None
+    if pargs.test_local:
+        how_proceed = TESTS_LOCAL
+    sedaro_client_python_version_manager(how_proceed=how_proceed)
