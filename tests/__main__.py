@@ -5,6 +5,7 @@ import test_bcc_options
 import test_block_crud
 import test_raw_requests
 import test_simulation
+import test_results
 from config import HOST
 
 ############## IMPORT AND ADD TEST FILES HERE ##############
@@ -15,7 +16,8 @@ imported_test_files = [
     test_bcc_options,
     test_block_crud,
     test_raw_requests,
-    test_simulation
+    test_simulation,
+    test_results,
 ]
 ############################################################
 

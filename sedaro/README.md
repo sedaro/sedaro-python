@@ -273,6 +273,22 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 
 ```
 
+## Use: View Results
+
+The primary entrypoint of the results API is the `SedaroSimulationResult` class. This class offers a few methods for pulling data from scenarios. The most commonly-used method is `.get_scenario_latest` that pulls the latest results into a new result object. If the simulation is not complete, the resulting object will indicate the status is "Running" and not contain any results.
+
+```py
+results = SedaroSimulationResult.from_scenario_latest(api_key, scenario_branch_id)
+```
+
+Alternatively, use the `.poll_scenario_latest` method to wait for an in-progress simulation to complete and download results after.
+
+```py
+results = SedaroSimulationResult.poll_scenario_latest(api_key, scenario_branch_id)
+```
+
+Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
+
 ## Use: Send Requests
 
 Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
