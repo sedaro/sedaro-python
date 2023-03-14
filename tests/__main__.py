@@ -1,14 +1,15 @@
-import time
 import platform
-from config import HOST
-
-############## IMPORT AND ADD TEST FILES HERE ##############
-# All imports are expected to have a `run_tests` function
+import time
 
 import test_bcc_options
 import test_block_crud
 import test_raw_requests
 import test_simulation
+from config import HOST
+
+############## IMPORT AND ADD TEST FILES HERE ##############
+# All imports are expected to have a `run_tests` function
+
 
 imported_test_files = [
     test_bcc_options,

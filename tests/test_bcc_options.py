@@ -1,8 +1,8 @@
+from config import API_KEY, HOST, WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID
+
 from sedaro import SedaroApiClient
 from sedaro.block_class_client import BlockClassClient
 from sedaro.block_client import BlockClient
-
-from config import HOST, API_KEY, WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID
 
 
 def test_block_class_client_options():
@@ -62,7 +62,7 @@ def test_block_class_client_options():
         'ThermalInterface',
         'ThermalInterfaceMaterial',
         'Thruster',
-        'Topology',
+        'PowerProcessor',
         'TriadAlgorithm',
         'VectorSensor',
     ]
@@ -80,7 +80,7 @@ def test_block_class_client_options():
                 assert isinstance(bcc, BlockClassClient)
 
                 # CHECK: these blocks can't be "created"
-                if any(string in block for string in ['Topology', 'Satellite', 'ConOps']) or block == 'Battery':
+                if any(string in block for string in ['PowerProcessor', 'Satellite', 'ConOps']) or block == 'Battery':
                     try:
                         getattr(bcc, 'create')()
                     except AttributeError as e:

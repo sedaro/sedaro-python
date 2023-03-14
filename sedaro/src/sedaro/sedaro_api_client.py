@@ -1,15 +1,15 @@
 import json
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from .utils import parse_urllib_response
 from .branch_client import BranchClient
 from .exceptions import SedaroApiException
-from .sim_client import SimClient
 from .settings import COMMON_API_KWARGS
+from .sim_client import SimClient
+from .utils import parse_urllib_response
 
 
 class SedaroApiClient(ApiClient):
@@ -45,7 +45,7 @@ class SedaroApiClient(ApiClient):
             body = parse_urllib_response(res.response)
         return BranchClient(body, self)
 
-    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None):
+    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None, axisOrder: str = None):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
         url = f'/data/?id={id}'
         if start is not None:
@@ -56,6 +56,11 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
+        if axisOrder is not None:
+            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
+                raise ValueError(
+                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
+            url += f'&axisOrder={axisOrder}'
         response = self.call_api(url, 'GET')
         _response = None
         try:

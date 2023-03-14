@@ -1,9 +1,11 @@
-import os
-import tempfile
-import shutil
+import argparse
 import json
-import urllib.request
+import os
+import shutil
+import sys
+import tempfile
 import urllib.error
+import urllib.request
 
 DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
 
@@ -19,16 +21,15 @@ REGENERATE = 'x'
 DIFFERENT_LANGUAGE = 'dl'
 
 
-def run_generator(skip_intro=False):
+def run_generator(skip_intro=False, language=None, how_to_proceed=None, spec_path=None):
     '''Begin basic interactive terminal to create a client.'''
 
     if not skip_intro:
         print('\n------< 🛰️  Sedaro OpenAPI Client Generator 🛰️  >------')
 
     # ----------------- get desired language for client -----------------
-    language = None
     while language == None:
-        print('\nWhat coding language would you like to generate a client for? (Can also type "options")')
+        print('\nWhat language would you like to generate a client for? (Can also type "options")')
         language = input('~ ').lower().strip()
 
         if language == "options":
@@ -52,7 +53,6 @@ def run_generator(skip_intro=False):
     BASE_CLIENT_BUILD_DIR = f'build/{language}/{PROJECT_NAME}'
 
     # --------- check if client exists and if want to overwrite ---------
-    how_to_proceed = None
     proceed_options = (
         GENERATE_NEW, DRY_RUN, MINIMAL_UPDATE, QUIT, DIFFERENT_LANGUAGE, REGENERATE
     )
@@ -105,14 +105,20 @@ def run_generator(skip_intro=False):
             os.system(f'rm -r {BASE_CLIENT_BUILD_DIR}')
 
         TEMP_SPEC_LOCATION = f'{temp_dir}/spec.json'
-        try:
-            urllib.request.urlretrieve(
-                DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
-        except urllib.error.URLError:
-            print(
-                f'\nError retrieving spec. Please ensure it is available at: "{DOWNLOAD_SPEC_FROM}".\n'
+        if spec_path is None:
+            try:
+                urllib.request.urlretrieve(
+                    DOWNLOAD_SPEC_FROM, f'{TEMP_SPEC_LOCATION}')
+            except urllib.error.URLError:
+                print(
+                    f'\nError retrieving spec. Please ensure it is available at: "{DOWNLOAD_SPEC_FROM}".\n'
+                )
+                return
+        else:
+            shutil.copyfile(
+                spec_path,
+                TEMP_SPEC_LOCATION
             )
-            return
 
         # ----- generate client -----
         cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
@@ -128,7 +134,9 @@ def run_generator(skip_intro=False):
         if how_to_proceed == MINIMAL_UPDATE:
             cmd += ' --minimal-update'
 
-        os.system(cmd)
+        if os.system(cmd) != 0:
+            print(f'\nError generating client for {language}')
+            exit(1)
 
         if language == PYTHON and how_to_proceed in {MINIMAL_UPDATE, REGENERATE, GENERATE_NEW}:
             PYTHON_BASE_CLIENT_DEST = f'{SEDARO}/src/{PACKAGE_NAME}'
@@ -149,4 +157,15 @@ def run_generator(skip_intro=False):
 
 
 if __name__ == '__main__':
-    run_generator()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-l", "--language", action='store', help="Language")
+    parser.add_argument("-m", "--min", action='count',
+                        help="Minimal Update", default=0)
+    parser.add_argument("-p", "--path", action='store',
+                        help="Path to spec file")
+    pargs = parser.parse_args(sys.argv[1:])
+    how_to_proceed = None
+    if pargs.min:
+        how_to_proceed = MINIMAL_UPDATE
+    run_generator(language=pargs.language,
+                  how_to_proceed=how_to_proceed, spec_path=pargs.path)
