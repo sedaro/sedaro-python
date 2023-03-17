@@ -84,10 +84,13 @@ class SedaroSimulationResult:
 
     @staticmethod
     def __get_simulation(api_instance, scenario_id: int) -> dict:
-        return api_instance.get_simulations(
-            path_params={'branchId': scenario_id},
-            query_params={'latest': ''}
-        ).body[0]
+        try:
+            return api_instance.get_simulations(
+                path_params={'branchId': scenario_id},
+                query_params={'latest': ''}
+            ).body[0]
+        except IndexError:
+            raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
 
     @property
     def templated_agents(self) -> List[str]:

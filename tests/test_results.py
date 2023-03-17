@@ -22,12 +22,9 @@ def test_query():
     block_result = agent_result.block('root')
 
     # Exercise iteration
-    for elapsed_time, _ in block_result.shadow:
+    for elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
-
-    # Exercise subseries
-    _ = block_result.position.ecef
 
 
 def test_save_load():
