@@ -78,20 +78,20 @@ class SedaroSeries:
 
     def plot(self, **kwargs):
         show = kwargs.pop('show', True)
-        self.__plot(plt.plot, show, kwargs)
+        self.__plot(show, kwargs)
 
     # def scatter(self, **kwargs):
     #     # TODO: Does not work with 2D value arrays
     #     show = kwargs.pop('show', True)
     #     self.__plot(plt.scatter, show, kwargs)
 
-    def __plot(self, plot_fcn, show, kwargs):
+    def __plot(self, show, kwargs):
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to plot.')
         try:
-            plot_fcn(self.__elapsed_time, self.__series, **kwargs)
+            plt.plot(self.__elapsed_time, self.__series, **kwargs)
             plt.xlabel('Elapsed Time (s)')
             if show:
                 plt.show()
@@ -117,7 +117,7 @@ class SedaroSeries:
         print("Sedaro Simulation Series Summary".center(HFILL))
         print(f"'{self.name}'".center(HFILL))
         hfill()
-        average_step = np.average(np.diff(self.elapsed_time))
+        average_step = self.duration / len(self.elapsed_time)
         print(f"📈 {len(self.mjd)} points covering {self.duration/60:.1f} minutes with ~{average_step:.1f}s steps")
 
         if self.__has_subseries:
