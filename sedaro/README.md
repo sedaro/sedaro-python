@@ -278,7 +278,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 The primary entrypoint of the results API is the `SedaroSimulationResult` class. This class offers a few methods for pulling data from scenarios. The most commonly-used method is `.get_scenario_latest` that pulls the latest results into a new result object. If the simulation is not complete, the resulting object will indicate the status is "Running" and not contain any results.
 
 ```py
-results = SedaroSimulationResult.from_scenario_latest(api_key, scenario_branch_id)
+results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id)
 ```
 
 Alternatively, use the `.poll_scenario_latest` method to wait for an in-progress simulation to complete and download results after.

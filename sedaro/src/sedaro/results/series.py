@@ -1,7 +1,6 @@
 import gzip
 import json
 
-import numpy as np
 try:
     import matplotlib.pyplot as plt
 except ImportError:
@@ -23,7 +22,7 @@ class SedaroSeries:
         '''
         self.__name = name
         self.__mjd = time
-        self.__elapsed_time = (np.array(self.__mjd) - self.__mjd[0]) * 86400
+        self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = series
         self.__has_subseries = isinstance(self.__series, dict)
         if self.__has_subseries:

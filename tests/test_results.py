@@ -1,4 +1,4 @@
-from config import API_KEY, WILDFIRE_SCENARIO_ID, SIMPLESAT_SCENARIO_ID
+from config import API_KEY, WILDFIRE_SCENARIO_ID, SIMPLESAT_SCENARIO_ID, HOST
 from sedaro import SedaroSimulationResult, SedaroAgentResult, SedaroBlockResult, SedaroSeries
 from tempfile import TemporaryDirectory
 from pathlib import Path
@@ -15,7 +15,7 @@ def test_query():
 
     Requires that SimpleSat has run successfully on the host.
     '''
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID)
+    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
     assert result.success
 
     agent_result = result.agent(result.templated_agents[0])
@@ -32,7 +32,7 @@ def test_save_load():
 
     Requires that SimpleSat has run successfully on the host.
     '''
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID)
+    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
     assert result.success
 
     with TemporaryDirectory() as temp_dir:
