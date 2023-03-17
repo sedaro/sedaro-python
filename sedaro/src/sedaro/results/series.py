@@ -117,7 +117,7 @@ class SedaroSeries:
         print("Sedaro Simulation Series Summary".center(HFILL))
         print(f"'{self.name}'".center(HFILL))
         hfill()
-        average_step = np.average(np.diff(self.elapsed_time))
+        average_step = self.duration / len(self.elapsed_time)
         print(f"📈 {len(self.mjd)} points covering {self.duration/60:.1f} minutes with ~{average_step:.1f}s steps")
 
         if self.__has_subseries:
