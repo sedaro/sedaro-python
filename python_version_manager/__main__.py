@@ -47,11 +47,11 @@ def get_cur_python_version():
 
 def switch_current_python_virtual_environment(new_version=None, run_tests=False, pypi_sedaro=False, test_pypi_sedaro=False):
     if new_version is None:
-        print('\nAvailable python versions:')
-        system('pyenv versions')
-        print('Note: use `$ pyenv install <version>` if don\'t see desired version.')
+        # print('\nAvailable python versions:')
+        # system('pyenv versions') # TODO: this shows only versions installed via pyenv, but we want it to grab the ones installed via brew
+        print('\nNote: use `$ brew install python@3.<#>` if desired version isn\'t installed.')
         new_version = input(
-            '\nWhich python version would you like to switch to? (see above)\n~ '
+            '\nWhich python version would you like to switch to?\n~ '
         )
 
     if os.path.isdir(VENV):
