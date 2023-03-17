@@ -6,7 +6,7 @@ from pathlib import Path
 
 def test_query_terminated():
     '''Test querying of a terminated scenario.'''
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, WILDFIRE_SCENARIO_ID)
+    result = SedaroSimulationResult.get_scenario_latest(API_KEY, WILDFIRE_SCENARIO_ID, host=HOST)
     assert not result.success
 
 
