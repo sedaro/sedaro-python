@@ -47,7 +47,7 @@ class SedaroApiClient(ApiClient):
 
     def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None, axisOrder: str = None):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
-        url = f'/data/{id}'
+        url = f'/data/{id}?'
         if start is not None:
             url += f'&start={start}'
         if stop is not None:
