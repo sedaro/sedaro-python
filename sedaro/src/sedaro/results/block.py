@@ -71,12 +71,13 @@ class SedaroBlockResult:
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def to_file(self, filename: Union[str, Path]) -> None:
+    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
             contents = {'structure': self.__structure, 'series': self.__series}
             json.dump(contents, json_file)
-            print(f"💾 Successfully saved to {filename}")
+            if verbose:
+                print(f"💾 Successfully saved to {filename}")
 
     @classmethod
     def from_file(cls, filename: Union[str, Path]):

@@ -65,7 +65,7 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def to_file(self, filename: Union[str, Path]) -> None:
+    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
             contents = {
@@ -74,7 +74,8 @@ class SedaroAgentResult:
                 'series': self.__series,
             }
             json.dump(contents, json_file)
-            print(f"💾 Successfully saved to {filename}")
+            if verbose:
+                print(f"💾 Successfully saved to {filename}")
 
     @classmethod
     def from_file(cls, filename: Union[str, Path]):

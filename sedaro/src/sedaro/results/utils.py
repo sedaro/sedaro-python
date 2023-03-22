@@ -1,6 +1,6 @@
 
 
-
+DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
     '0': 'gnc',
     '1': 'cdh',

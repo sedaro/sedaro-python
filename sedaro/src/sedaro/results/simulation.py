@@ -10,7 +10,7 @@ from pathlib import Path
 from sedaro import SedaroApiClient
 from sedaro_base_client.apis.tags import jobs_api
 from sedaro.results.utils import (
-    _get_agent_id_name_map, _restructure_data, progress_bar, hfill, HFILL, STATUS_ICON_MAP
+    _get_agent_id_name_map, _restructure_data, progress_bar, hfill, HFILL, STATUS_ICON_MAP, DEFAULT_HOST
 )
 from sedaro.results.agent import SedaroAgentResult
 
@@ -21,11 +21,14 @@ class SedaroSimulationResult:
         '''Initialize a new Simulation Result.
 
         See the following class methods for simple initialization:
+            - get
+            - poll
             - get_scenario_latest
             - poll_scenario_latest
             - from_file
         '''
         self.__simulation = {
+            'id': int(simulation['id']),
             'branch': int(simulation['branch']),
             'simulatedAgents': dict(simulation['simulatedAgents']),
             'dateCreated': simulation['dateCreated'],
@@ -51,46 +54,60 @@ class SedaroSimulationResult:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
     @classmethod
-    def get_scenario_latest(cls, api_key: str, scenario_id: int, host: str = 'https://api.sedaro.com'):
-        '''Query latest scenario result.'''
+    def get(cls, api_key: str, scenario_id: int, job_id: int = None, **kwargs):
+        '''Query a specific job result.'''
+        return cls.__get(api_key, scenario_id, job_id, **kwargs)
+
+    @classmethod
+    def poll(cls, api_key: str, scenario_id: int, job_id: int = None, retry_interval: int = 2, **kwargs):
+        '''Query a specific job result and wait for the sim if it is running.'''
+        return cls.__get(api_key, scenario_id, job_id, poll=True, retry_interval=retry_interval, **kwargs)
+
+    @classmethod
+    def __get(
+        cls,
+        api_key: str,
+        scenario_id: int,
+        job_id: int = None,
+        poll: bool = False,
+        retry_interval: int = 2,
+        host: str = DEFAULT_HOST,
+    ):
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             api_instance = jobs_api.JobsApi(sedaro_client)
-            simulation = cls.__get_simulation(api_instance, scenario_id)
+            if job_id is None:
+                try:
+                    job_id = api_instance.get_simulations(
+                        path_params={'branchId': scenario_id},
+                        query_params={'latest': ''}
+                    ).body[0]['id']
+                except IndexError:
+                    raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
+            simulation = cls.__get_simulation(api_instance, scenario_id, job_id)
+
+            if poll:
+                while simulation['status'] in ('PENDING', 'RUNNING'):
+                    simulation = cls.__get_simulation(api_instance, scenario_id, job_id)
+                    progress_bar(simulation['progress']['percentComplete'])
+                    time.sleep(retry_interval)
+
             if simulation['status'] == 'SUCCEEDED':
                 data = sedaro_client.get_data(simulation['dataId'])
             else:
                 data = None
+
             return cls(simulation, data)
 
-    @classmethod
-    def poll_scenario_latest(
-        cls,
-        api_key: str,
-        scenario_id: int,
-        host: str = 'https://api.sedaro.com',
-        retry_interval: int = 2
-    ):
-        '''Query latest scenario result and wait for sim if it is running.'''
-        with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            api_instance = jobs_api.JobsApi(sedaro_client)
-            simulation = cls.__get_simulation(api_instance, scenario_id)
-
-            while simulation['status'] in ('PENDING', 'RUNNING'):
-                simulation = cls.__get_simulation(api_instance, scenario_id)
-                progress_bar(simulation['progress']['percentComplete'])
-                time.sleep(retry_interval)
-
-            return cls.get_scenario_latest(api_key, scenario_id, host=host)
-
     @staticmethod
-    def __get_simulation(api_instance, scenario_id: int) -> dict:
+    def __get_simulation(api_instance: jobs_api.JobsApi, scenario_id: int, job_id: int) -> dict:
         try:
-            return api_instance.get_simulations(
-                path_params={'branchId': scenario_id},
-                query_params={'latest': ''}
-            ).body[0]
-        except IndexError:
-            raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
+            return api_instance.get_simulation(path_params={'branchId': scenario_id, 'jobId': job_id}).body
+        except Exception:
+            raise IndexError(f'Could not find any simulation results for job: {job_id}')
+
+    @property
+    def id(self) -> int:
+        return self.__simulation['id']
 
     @property
     def templated_agents(self) -> List[str]:
@@ -145,12 +162,13 @@ class SedaroSimulationResult:
         agent_id = self.__agent_id_from_name(name)
         return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name])
 
-    def to_file(self, filename: Union[str, Path]) -> None:
+    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save simulation result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
             contents = {'data': self.__data, 'simulation': self.__simulation}
             json.dump(contents, json_file)
-            print(f"💾 Successfully saved to {filename}")
+            if verbose:
+                print(f"💾 Successfully saved to {filename}")
 
     @classmethod
     def from_file(cls, filename: Union[str, Path]):
