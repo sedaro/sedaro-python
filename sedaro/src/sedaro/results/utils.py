@@ -20,6 +20,7 @@ STATUS_ICON_MAP = {
     "PAUSED": "⏸️",
     "PENDING": "⌛",
     "RUNNING": "⌛",
+    "ERROR": "❌"
 }
 HFILL = 75
 
