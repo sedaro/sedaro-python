@@ -1,18 +1,17 @@
 
+import datetime as dt
 import gzip
 import json
 import time
-
-import datetime as dt
-
-from typing import List, Union
 from pathlib import Path
+from typing import List, Union
+
 from sedaro import SedaroApiClient
-from sedaro_base_client.apis.tags import jobs_api
-from sedaro.results.utils import (
-    _get_agent_id_name_map, _restructure_data, progress_bar, hfill, HFILL, STATUS_ICON_MAP
-)
 from sedaro.results.agent import SedaroAgentResult
+from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
+                                  _get_agent_id_name_map, _restructure_data,
+                                  hfill, progress_bar)
+from sedaro_base_client.apis.tags import jobs_api
 
 
 class SedaroSimulationResult:
@@ -38,7 +37,8 @@ class SedaroSimulationResult:
             self.__meta = data['Data']['meta']
             raw_series = data['Data']['series']
             agent_id_name_map = _get_agent_id_name_map(self.__meta)
-            agent_simbed_id_map = {value: key for key, value in self.__simulation['simulatedAgents'].items()}
+            agent_simbed_id_map = {
+                value: key for key, value in self.__simulation['simulatedAgents'].items()}
             self.__simpleseries, self._agent_blocks = _restructure_data(
                 raw_series, agent_id_name_map, self.__meta, agent_simbed_id_map
             )
@@ -90,10 +90,12 @@ class SedaroSimulationResult:
                 query_params={'latest': ''}
             ).body[0]
         except IndexError:
-            raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
+            raise IndexError(
+                f'Could not find any simulation results for scenario: {scenario_id}')
 
     @property
     def templated_agents(self) -> List[str]:
+        self.__assert_success()
         return tuple([
             entry['name'] for _, entry
             in self.__meta['structure']['scenario']['Agent'].items()
@@ -102,6 +104,7 @@ class SedaroSimulationResult:
 
     @property
     def peripheral_agents(self) -> List[str]:
+        self.__assert_success()
         return tuple([
             entry['name'] for _, entry
             in self.__meta['structure']['scenario']['Agent'].items()
@@ -130,7 +133,8 @@ class SedaroSimulationResult:
 
     def __assert_success(self) -> None:
         if not self.success:
-            raise ValueError('This operation cannot be completed because the simulation failed.')
+            raise ValueError(
+                'This operation cannot be completed because the simulation failed.')
 
     def __agent_id_from_name(self, name: str) -> str:
         for id_, entry in self.__meta['structure']['scenario']['Agent'].items():
@@ -164,7 +168,8 @@ class SedaroSimulationResult:
         hfill()
         print(f'Sedaro Simulation Result Summary'.center(HFILL))
         hfill()
-        print(f'{STATUS_ICON_MAP[self.status]} Simulation {self.status.lower()} after {self.run_time:.1f}s')
+        print(
+            f'{STATUS_ICON_MAP[self.status]} Simulation {self.status.lower()} after {self.run_time:.1f}s')
 
         agents = self.templated_agents
         if len(agents) > 0:
