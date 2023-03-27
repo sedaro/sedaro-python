@@ -72,6 +72,7 @@ class SedaroSimulationResult:
         poll: bool = False,
         retry_interval: int = 2,
         host: str = DEFAULT_HOST,
+        **get_data_kwargs,
     ):
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             api_instance = jobs_api.JobsApi(sedaro_client)
@@ -92,7 +93,7 @@ class SedaroSimulationResult:
                     time.sleep(retry_interval)
 
             if simulation['status'] == 'SUCCEEDED':
-                data = sedaro_client.get_data(simulation['dataId'])
+                data = sedaro_client.get_data(simulation['dataId'], **get_data_kwargs)
             else:
                 data = None
 
