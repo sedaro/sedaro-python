@@ -1,20 +1,25 @@
-from importlib import import_module
 from dataclasses import dataclass
-from sedaro_base_client.api_client import Api
-from typing import TYPE_CHECKING, Tuple, Union, List
-from typing_extensions import Literal
+from importlib import import_module
+from typing import TYPE_CHECKING, List, Tuple, Union
+
 from pydash.strings import snake_case
+from sedaro_base_client.api_client import Api
+from typing_extensions import Literal
+
+from .block_client import BlockClient
+from .exceptions import NoBlockFoundError
+from .settings import BASE_PACKAGE_NAME, CREATE, UPDATE
+from .utils import (get_class_from_module, get_snake_and_pascal_case,
+                    sanitize_and_enforce_id_in_branch, temp_crud)
+
 # from functools import cached_property # doesn't work python 3.7
 
-from .settings import CREATE, UPDATE, BASE_PACKAGE_NAME
-from .block_client import BlockClient
-from .utils import get_snake_and_pascal_case, sanitize_and_enforce_id_in_branch, get_class_from_module, temp_crud
-from .exceptions import NoBlockFoundError
 
 if TYPE_CHECKING:
     from sedaro_base_client import schemas
-    from .sedaro_api_client import SedaroApiClient
+
     from .branch_client import BranchClient
+    from .sedaro_api_client import SedaroApiClient
 
 
 @dataclass
@@ -31,7 +36,7 @@ class BlockClassClient:
     '''The `BranchClient` this `BlockClassClient` is connected to'''
 
     def __str__(self) -> str:
-        return f'BlockClassClient({self._block_name}, branch={self._branch_client.id})'
+        return f'{self.__class__.__name__}({self._block_name}, branch={self._branch_client.id})'
 
     def __repr__(self):
         return self.__str__()
