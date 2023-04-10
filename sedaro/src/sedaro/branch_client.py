@@ -110,7 +110,6 @@ class BranchClient:
     # ==============================================================================================================
 
     # AGENT TEMPLATE
-    ActivePointingMode: BlockClassClient
     AngularVelocitySensor: BlockClassClient
     Antenna: BlockClassClient
     AveragingAlgorithm: BlockClassClient

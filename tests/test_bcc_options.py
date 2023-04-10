@@ -6,7 +6,6 @@ from sedaro.block_client import BlockClient
 
 # TODO: if update these lists, also update type hints of BranchClient
 agent_template_blocks = [
-    'ActivePointingMode',
     'AngularVelocitySensor',
     'Antenna',
     'AveragingAlgorithm',
