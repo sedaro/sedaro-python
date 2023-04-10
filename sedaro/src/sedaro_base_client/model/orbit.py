@@ -123,11 +123,70 @@ class Orbit(
                         _configuration=_configuration,
                         **kwargs,
                     )
+        
+            @staticmethod
+            def orbitalElements() -> typing.Type['OrbitalElementsData']:
+                return OrbitalElementsData
+            period = schemas.NumberSchema
+            semiLatusRectum = schemas.NumberSchema
+            radiusPerigee = schemas.NumberSchema
+            
+            
+            class shadow(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_maximum = 1.0
+                    inclusive_minimum = 0.0
+            
+            
+            class beta(
+                schemas.NumberSchema
+            ):
+            
+            
+                class MetaOapg:
+                    inclusive_maximum = 1.5707963267948966
+                    inclusive_minimum = -1.5707963267948966
+            
+            
+            class magneticFieldVector(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'magneticFieldVector':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+            atmosphericDensity = schemas.NumberSchema
             __annotations__ = {
                 "id": id,
                 "metamodel": metamodel,
                 "initialStateDefType": initialStateDefType,
                 "initialStateDefParams": initialStateDefParams,
+                "orbitalElements": orbitalElements,
+                "period": period,
+                "semiLatusRectum": semiLatusRectum,
+                "radiusPerigee": radiusPerigee,
+                "shadow": shadow,
+                "beta": beta,
+                "magneticFieldVector": magneticFieldVector,
+                "atmosphericDensity": atmosphericDensity,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -143,7 +202,31 @@ class Orbit(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["initialStateDefParams"]) -> MetaOapg.properties.initialStateDefParams: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["orbitalElements"]) -> 'OrbitalElementsData': ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["period"]) -> MetaOapg.properties.period: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["semiLatusRectum"]) -> MetaOapg.properties.semiLatusRectum: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["radiusPerigee"]) -> MetaOapg.properties.radiusPerigee: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["shadow"]) -> MetaOapg.properties.shadow: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["beta"]) -> MetaOapg.properties.beta: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["magneticFieldVector"]) -> MetaOapg.properties.magneticFieldVector: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["atmosphericDensity"]) -> MetaOapg.properties.atmosphericDensity: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -159,7 +242,31 @@ class Orbit(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["initialStateDefParams"]) -> typing.Union[MetaOapg.properties.initialStateDefParams, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["orbitalElements"]) -> typing.Union['OrbitalElementsData', schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["period"]) -> typing.Union[MetaOapg.properties.period, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["semiLatusRectum"]) -> typing.Union[MetaOapg.properties.semiLatusRectum, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["radiusPerigee"]) -> typing.Union[MetaOapg.properties.radiusPerigee, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["shadow"]) -> typing.Union[MetaOapg.properties.shadow, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["beta"]) -> typing.Union[MetaOapg.properties.beta, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["magneticFieldVector"]) -> typing.Union[MetaOapg.properties.magneticFieldVector, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["atmosphericDensity"]) -> typing.Union[MetaOapg.properties.atmosphericDensity, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -169,6 +276,14 @@ class Orbit(
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         initialStateDefType: typing.Union[MetaOapg.properties.initialStateDefType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         initialStateDefParams: typing.Union[MetaOapg.properties.initialStateDefParams, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        orbitalElements: typing.Union['OrbitalElementsData', schemas.Unset] = schemas.unset,
+        period: typing.Union[MetaOapg.properties.period, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        semiLatusRectum: typing.Union[MetaOapg.properties.semiLatusRectum, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        radiusPerigee: typing.Union[MetaOapg.properties.radiusPerigee, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        shadow: typing.Union[MetaOapg.properties.shadow, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        beta: typing.Union[MetaOapg.properties.beta, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        magneticFieldVector: typing.Union[MetaOapg.properties.magneticFieldVector, list, tuple, schemas.Unset] = schemas.unset,
+        atmosphericDensity: typing.Union[MetaOapg.properties.atmosphericDensity, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Orbit':
         return super().__new__(
@@ -178,6 +293,14 @@ class Orbit(
             metamodel=metamodel,
             initialStateDefType=initialStateDefType,
             initialStateDefParams=initialStateDefParams,
+            orbitalElements=orbitalElements,
+            period=period,
+            semiLatusRectum=semiLatusRectum,
+            radiusPerigee=radiusPerigee,
+            shadow=shadow,
+            beta=beta,
+            magneticFieldVector=magneticFieldVector,
+            atmosphericDensity=atmosphericDensity,
             _configuration=_configuration,
         )
 
@@ -188,6 +311,7 @@ from sedaro_base_client.model.geostationary_transfer_reference_orbit import Geos
 from sedaro_base_client.model.initial_state_def_type import InitialStateDefType
 from sedaro_base_client.model.iss_reference_orbit import IssReferenceOrbit
 from sedaro_base_client.model.metamodel import Metamodel
+from sedaro_base_client.model.orbital_elements_data import OrbitalElementsData
 from sedaro_base_client.model.polar_circular_reference_orbit import PolarCircularReferenceOrbit
 from sedaro_base_client.model.state_vector import StateVector
 from sedaro_base_client.model.sun_synchronous_circular_orbit import SunSynchronousCircularOrbit

@@ -36,8 +36,30 @@ class VehicleTemplate(
 
 
     class MetaOapg:
+        required = {
+            "inertia",
+            "cadScaleFactor",
+            "cadSignedUrl",
+            "mass",
+            "cadKey",
+        }
         
         class properties:
+            
+            
+            class cadKey(
+                schemas.StrSchema
+            ):
+                pass
+            
+            
+            class cadSignedUrl(
+                schemas.StrSchema
+            ):
+                pass
+            cadScaleFactor = schemas.NumberSchema
+            mass = schemas.NumberSchema
+            inertia = schemas.AnyTypeSchema
             
             
             class blocks(
@@ -118,17 +140,76 @@ class VehicleTemplate(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            conOps = schemas.StrSchema
-            satellite = schemas.StrSchema
+            selfId = schemas.StrSchema
+            
+            
+            class cadFileName(
+                schemas.StrSchema
+            ):
+                pass
+            
+            
+            class enabledModules(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.StrSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'enabledModules':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             missionOrbit = schemas.StrSchema
+            dynamicMass = schemas.NumberSchema
+            dynamicInertia = schemas.AnyTypeSchema
             __annotations__ = {
+                "cadKey": cadKey,
+                "cadSignedUrl": cadSignedUrl,
+                "cadScaleFactor": cadScaleFactor,
+                "mass": mass,
+                "inertia": inertia,
                 "blocks": blocks,
                 "index": index,
-                "conOps": conOps,
-                "satellite": satellite,
+                "selfId": selfId,
+                "cadFileName": cadFileName,
+                "enabledModules": enabledModules,
                 "missionOrbit": missionOrbit,
+                "dynamicMass": dynamicMass,
+                "dynamicInertia": dynamicInertia,
             }
         additional_properties = schemas.NotAnyTypeSchema
+    
+    inertia: MetaOapg.properties.inertia
+    cadScaleFactor: MetaOapg.properties.cadScaleFactor
+    cadSignedUrl: MetaOapg.properties.cadSignedUrl
+    mass: MetaOapg.properties.mass
+    cadKey: MetaOapg.properties.cadKey
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["inertia"]) -> MetaOapg.properties.inertia: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["cadScaleFactor"]) -> MetaOapg.properties.cadScaleFactor: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["cadSignedUrl"]) -> MetaOapg.properties.cadSignedUrl: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["mass"]) -> MetaOapg.properties.mass: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["cadKey"]) -> MetaOapg.properties.cadKey: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["blocks"]) -> MetaOapg.properties.blocks: ...
@@ -137,17 +218,41 @@ class VehicleTemplate(
     def __getitem__(self, name: typing_extensions.Literal["index"]) -> MetaOapg.properties.index: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
+    def __getitem__(self, name: typing_extensions.Literal["selfId"]) -> MetaOapg.properties.selfId: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
+    def __getitem__(self, name: typing_extensions.Literal["cadFileName"]) -> MetaOapg.properties.cadFileName: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["enabledModules"]) -> MetaOapg.properties.enabledModules: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["missionOrbit"]) -> MetaOapg.properties.missionOrbit: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["blocks"], typing_extensions.Literal["index"], typing_extensions.Literal["conOps"], typing_extensions.Literal["satellite"], typing_extensions.Literal["missionOrbit"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicMass"]) -> MetaOapg.properties.dynamicMass: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["dynamicInertia"]) -> MetaOapg.properties.dynamicInertia: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["blocks"], typing_extensions.Literal["index"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["missionOrbit"], typing_extensions.Literal["dynamicMass"], typing_extensions.Literal["dynamicInertia"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["inertia"]) -> MetaOapg.properties.inertia: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["cadScaleFactor"]) -> MetaOapg.properties.cadScaleFactor: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["cadSignedUrl"]) -> MetaOapg.properties.cadSignedUrl: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["mass"]) -> MetaOapg.properties.mass: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["cadKey"]) -> MetaOapg.properties.cadKey: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["blocks"]) -> typing.Union[MetaOapg.properties.blocks, schemas.Unset]: ...
@@ -156,34 +261,59 @@ class VehicleTemplate(
     def get_item_oapg(self, name: typing_extensions.Literal["index"]) -> typing.Union[MetaOapg.properties.index, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["selfId"]) -> typing.Union[MetaOapg.properties.selfId, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["cadFileName"]) -> typing.Union[MetaOapg.properties.cadFileName, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["enabledModules"]) -> typing.Union[MetaOapg.properties.enabledModules, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["missionOrbit"]) -> typing.Union[MetaOapg.properties.missionOrbit, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["blocks"], typing_extensions.Literal["index"], typing_extensions.Literal["conOps"], typing_extensions.Literal["satellite"], typing_extensions.Literal["missionOrbit"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicMass"]) -> typing.Union[MetaOapg.properties.dynamicMass, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["dynamicInertia"]) -> typing.Union[MetaOapg.properties.dynamicInertia, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["blocks"], typing_extensions.Literal["index"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["missionOrbit"], typing_extensions.Literal["dynamicMass"], typing_extensions.Literal["dynamicInertia"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
+        inertia: typing.Union[MetaOapg.properties.inertia, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        cadScaleFactor: typing.Union[MetaOapg.properties.cadScaleFactor, decimal.Decimal, int, float, ],
+        cadSignedUrl: typing.Union[MetaOapg.properties.cadSignedUrl, str, ],
+        mass: typing.Union[MetaOapg.properties.mass, decimal.Decimal, int, float, ],
+        cadKey: typing.Union[MetaOapg.properties.cadKey, str, ],
         blocks: typing.Union[MetaOapg.properties.blocks, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         index: typing.Union[MetaOapg.properties.index, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
+        selfId: typing.Union[MetaOapg.properties.selfId, str, schemas.Unset] = schemas.unset,
+        cadFileName: typing.Union[MetaOapg.properties.cadFileName, str, schemas.Unset] = schemas.unset,
+        enabledModules: typing.Union[MetaOapg.properties.enabledModules, list, tuple, schemas.Unset] = schemas.unset,
         missionOrbit: typing.Union[MetaOapg.properties.missionOrbit, str, schemas.Unset] = schemas.unset,
+        dynamicMass: typing.Union[MetaOapg.properties.dynamicMass, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        dynamicInertia: typing.Union[MetaOapg.properties.dynamicInertia, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'VehicleTemplate':
         return super().__new__(
             cls,
             *_args,
+            inertia=inertia,
+            cadScaleFactor=cadScaleFactor,
+            cadSignedUrl=cadSignedUrl,
+            mass=mass,
+            cadKey=cadKey,
             blocks=blocks,
             index=index,
-            conOps=conOps,
-            satellite=satellite,
+            selfId=selfId,
+            cadFileName=cadFileName,
+            enabledModules=enabledModules,
             missionOrbit=missionOrbit,
+            dynamicMass=dynamicMass,
+            dynamicInertia=dynamicInertia,
             _configuration=_configuration,
         )

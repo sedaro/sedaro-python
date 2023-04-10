@@ -45,42 +45,10 @@ class SolarCell(
         }
         
         class properties:
-            
-            
-            class openCircuitVoltage(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_minimum = 0.0
-            
-            
-            class shortCircuitCurrent(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_minimum = 0.0
-            
-            
-            class maxPowerVoltage(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_minimum = 0.0
-            
-            
-            class maxPowerCurrent(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_minimum = 0.0
+            openCircuitVoltage = schemas.NumberSchema
+            shortCircuitCurrent = schemas.NumberSchema
+            maxPowerVoltage = schemas.NumberSchema
+            maxPowerCurrent = schemas.NumberSchema
             
             
             class numJunctions(
@@ -113,7 +81,6 @@ class SolarCell(
             
                 class MetaOapg:
                     max_length = 32
-            powerProcessor = schemas.StrSchema
             __annotations__ = {
                 "openCircuitVoltage": openCircuitVoltage,
                 "shortCircuitCurrent": shortCircuitCurrent,
@@ -124,7 +91,6 @@ class SolarCell(
                 "metamodel": metamodel,
                 "partNumber": partNumber,
                 "manufacturer": manufacturer,
-                "powerProcessor": powerProcessor,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -161,10 +127,7 @@ class SolarCell(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["powerProcessor"]) -> MetaOapg.properties.powerProcessor: ...
-    
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["maxPowerCurrent"], typing_extensions.Literal["shortCircuitCurrent"], typing_extensions.Literal["numJunctions"], typing_extensions.Literal["maxPowerVoltage"], typing_extensions.Literal["openCircuitVoltage"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["powerProcessor"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["maxPowerCurrent"], typing_extensions.Literal["shortCircuitCurrent"], typing_extensions.Literal["numJunctions"], typing_extensions.Literal["maxPowerVoltage"], typing_extensions.Literal["openCircuitVoltage"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -195,10 +158,7 @@ class SolarCell(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["powerProcessor"]) -> typing.Union[MetaOapg.properties.powerProcessor, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["maxPowerCurrent"], typing_extensions.Literal["shortCircuitCurrent"], typing_extensions.Literal["numJunctions"], typing_extensions.Literal["maxPowerVoltage"], typing_extensions.Literal["openCircuitVoltage"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["powerProcessor"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["maxPowerCurrent"], typing_extensions.Literal["shortCircuitCurrent"], typing_extensions.Literal["numJunctions"], typing_extensions.Literal["maxPowerVoltage"], typing_extensions.Literal["openCircuitVoltage"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -213,7 +173,6 @@ class SolarCell(
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        powerProcessor: typing.Union[MetaOapg.properties.powerProcessor, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SolarCell':
         return super().__new__(
@@ -228,7 +187,6 @@ class SolarCell(
             metamodel=metamodel,
             partNumber=partNumber,
             manufacturer=manufacturer,
-            powerProcessor=powerProcessor,
             _configuration=_configuration,
         )
 

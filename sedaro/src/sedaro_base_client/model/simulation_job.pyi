@@ -35,7 +35,7 @@ class SimulationJob(
 
     class MetaOapg:
         required = {
-            "dataId",
+            "dataArray",
             "bedRef",
             "startTime",
             "stopTime",
@@ -45,7 +45,7 @@ class SimulationJob(
         }
         
         class properties:
-            id = schemas.IntSchema
+            id = schemas.StrSchema
             
             
             class status(
@@ -83,7 +83,7 @@ class SimulationJob(
                         **kwargs,
                     )
             bedRef = schemas.StrSchema
-            dataId = schemas.IntSchema
+            dataArray = schemas.StrSchema
             startTime = schemas.NumberSchema
             stopTime = schemas.NumberSchema
             
@@ -121,7 +121,7 @@ class SimulationJob(
                 "id": id,
                 "status": status,
                 "bedRef": bedRef,
-                "dataId": dataId,
+                "dataArray": dataArray,
                 "startTime": startTime,
                 "stopTime": stopTime,
                 "simulatedAgents": simulatedAgents,
@@ -129,7 +129,7 @@ class SimulationJob(
                 "progress": progress,
             }
     
-    dataId: MetaOapg.properties.dataId
+    dataArray: MetaOapg.properties.dataArray
     bedRef: MetaOapg.properties.bedRef
     startTime: MetaOapg.properties.startTime
     stopTime: MetaOapg.properties.stopTime
@@ -147,7 +147,7 @@ class SimulationJob(
     def __getitem__(self, name: typing_extensions.Literal["bedRef"]) -> MetaOapg.properties.bedRef: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["dataId"]) -> MetaOapg.properties.dataId: ...
+    def __getitem__(self, name: typing_extensions.Literal["dataArray"]) -> MetaOapg.properties.dataArray: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["startTime"]) -> MetaOapg.properties.startTime: ...
@@ -167,7 +167,7 @@ class SimulationJob(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataId", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataArray", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -182,7 +182,7 @@ class SimulationJob(
     def get_item_oapg(self, name: typing_extensions.Literal["bedRef"]) -> MetaOapg.properties.bedRef: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["dataId"]) -> MetaOapg.properties.dataId: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["dataArray"]) -> MetaOapg.properties.dataArray: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["startTime"]) -> MetaOapg.properties.startTime: ...
@@ -202,18 +202,18 @@ class SimulationJob(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataId", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "status", "bedRef", "dataArray", "startTime", "stopTime", "simulatedAgents", "realTime", "progress", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        dataId: typing.Union[MetaOapg.properties.dataId, decimal.Decimal, int, ],
+        dataArray: typing.Union[MetaOapg.properties.dataArray, str, ],
         bedRef: typing.Union[MetaOapg.properties.bedRef, str, ],
         startTime: typing.Union[MetaOapg.properties.startTime, decimal.Decimal, int, float, ],
         stopTime: typing.Union[MetaOapg.properties.stopTime, decimal.Decimal, int, float, ],
-        id: typing.Union[MetaOapg.properties.id, decimal.Decimal, int, ],
+        id: typing.Union[MetaOapg.properties.id, str, ],
         simulatedAgents: typing.Union[MetaOapg.properties.simulatedAgents, dict, frozendict.frozendict, ],
         status: typing.Union[MetaOapg.properties.status, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         realTime: typing.Union[MetaOapg.properties.realTime, bool, schemas.Unset] = schemas.unset,
@@ -224,7 +224,7 @@ class SimulationJob(
         return super().__new__(
             cls,
             *_args,
-            dataId=dataId,
+            dataArray=dataArray,
             bedRef=bedRef,
             startTime=startTime,
             stopTime=stopTime,

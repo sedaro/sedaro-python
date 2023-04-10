@@ -35,18 +35,15 @@ class BranchRes(
 
     class MetaOapg:
         required = {
-            "shareable",
             "dataSchema",
-            "data",
-            "sharePwRqd",
-            "dateModified",
-            "repository",
-            "uuid",
             "mission",
             "dateCreated",
+            "data",
             "name",
             "numSimulations",
+            "dateModified",
             "id",
+            "repository",
             "user",
         }
         
@@ -177,9 +174,6 @@ class BranchRes(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            uuid = schemas.UUIDSchema
-            shareable = schemas.BoolSchema
-            sharePwRqd = schemas.BoolSchema
             numSimulations = schemas.IntSchema
             dataSchema = schemas.DictSchema
             
@@ -233,27 +227,21 @@ class BranchRes(
                 "repository": repository,
                 "mission": mission,
                 "user": user,
-                "uuid": uuid,
-                "shareable": shareable,
-                "sharePwRqd": sharePwRqd,
                 "numSimulations": numSimulations,
                 "dataSchema": dataSchema,
                 "data": data,
                 "description": description,
             }
     
-    shareable: MetaOapg.properties.shareable
     dataSchema: MetaOapg.properties.dataSchema
-    data: MetaOapg.properties.data
-    sharePwRqd: MetaOapg.properties.sharePwRqd
-    dateModified: MetaOapg.properties.dateModified
-    repository: MetaOapg.properties.repository
-    uuid: MetaOapg.properties.uuid
     mission: MetaOapg.properties.mission
     dateCreated: MetaOapg.properties.dateCreated
+    data: MetaOapg.properties.data
     name: MetaOapg.properties.name
     numSimulations: MetaOapg.properties.numSimulations
+    dateModified: MetaOapg.properties.dateModified
     id: MetaOapg.properties.id
+    repository: MetaOapg.properties.repository
     user: MetaOapg.properties.user
     
     @typing.overload
@@ -278,15 +266,6 @@ class BranchRes(
     def __getitem__(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["shareable"]) -> MetaOapg.properties.shareable: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["sharePwRqd"]) -> MetaOapg.properties.sharePwRqd: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["numSimulations"]) -> MetaOapg.properties.numSimulations: ...
     
     @typing.overload
@@ -301,7 +280,7 @@ class BranchRes(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "repository", "mission", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "description", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "repository", "mission", "user", "numSimulations", "dataSchema", "data", "description", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -328,15 +307,6 @@ class BranchRes(
     def get_item_oapg(self, name: typing_extensions.Literal["user"]) -> MetaOapg.properties.user: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["shareable"]) -> MetaOapg.properties.shareable: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["sharePwRqd"]) -> MetaOapg.properties.sharePwRqd: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["numSimulations"]) -> MetaOapg.properties.numSimulations: ...
     
     @typing.overload
@@ -351,25 +321,22 @@ class BranchRes(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "repository", "mission", "user", "uuid", "shareable", "sharePwRqd", "numSimulations", "dataSchema", "data", "description", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "id", "dateCreated", "dateModified", "repository", "mission", "user", "numSimulations", "dataSchema", "data", "description", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        shareable: typing.Union[MetaOapg.properties.shareable, bool, ],
         dataSchema: typing.Union[MetaOapg.properties.dataSchema, dict, frozendict.frozendict, ],
-        data: typing.Union[MetaOapg.properties.data, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        sharePwRqd: typing.Union[MetaOapg.properties.sharePwRqd, bool, ],
-        dateModified: typing.Union[MetaOapg.properties.dateModified, str, datetime, ],
-        repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        uuid: typing.Union[MetaOapg.properties.uuid, str, uuid.UUID, ],
         mission: typing.Union[MetaOapg.properties.mission, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         dateCreated: typing.Union[MetaOapg.properties.dateCreated, str, datetime, ],
+        data: typing.Union[MetaOapg.properties.data, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         numSimulations: typing.Union[MetaOapg.properties.numSimulations, decimal.Decimal, int, ],
+        dateModified: typing.Union[MetaOapg.properties.dateModified, str, datetime, ],
         id: typing.Union[MetaOapg.properties.id, decimal.Decimal, int, ],
+        repository: typing.Union[MetaOapg.properties.repository, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         user: typing.Union[MetaOapg.properties.user, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -378,18 +345,15 @@ class BranchRes(
         return super().__new__(
             cls,
             *_args,
-            shareable=shareable,
             dataSchema=dataSchema,
-            data=data,
-            sharePwRqd=sharePwRqd,
-            dateModified=dateModified,
-            repository=repository,
-            uuid=uuid,
             mission=mission,
             dateCreated=dateCreated,
+            data=data,
             name=name,
             numSimulations=numSimulations,
+            dateModified=dateModified,
             id=id,
+            repository=repository,
             user=user,
             description=description,
             _configuration=_configuration,

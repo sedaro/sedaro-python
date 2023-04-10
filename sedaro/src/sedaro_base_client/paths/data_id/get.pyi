@@ -29,14 +29,12 @@ from sedaro_base_client.model.data_service_response import DataServiceResponse
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 # Query params
-IdSchema = schemas.IntSchema
 StartSchema = schemas.NumberSchema
 StopSchema = schemas.NumberSchema
 BinWidthSchema = schemas.NumberSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'id': typing.Union[IdSchema, decimal.Decimal, int, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -54,13 +52,6 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_id = api_client.QueryParameter(
-    name="id",
-    style=api_client.ParameterStyle.FORM,
-    schema=IdSchema,
-    required=True,
-    explode=True,
-)
 request_query_start = api_client.QueryParameter(
     name="start",
     style=api_client.ParameterStyle.FORM,
@@ -78,6 +69,32 @@ request_query_bin_width = api_client.QueryParameter(
     style=api_client.ParameterStyle.FORM,
     schema=BinWidthSchema,
     explode=True,
+)
+# Path params
+IdSchema = schemas.StrSchema
+RequestRequiredPathParams = typing_extensions.TypedDict(
+    'RequestRequiredPathParams',
+    {
+        'id': typing.Union[IdSchema, str, ],
+    }
+)
+RequestOptionalPathParams = typing_extensions.TypedDict(
+    'RequestOptionalPathParams',
+    {
+    },
+    total=False
+)
+
+
+class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
+    pass
+
+
+request_path_id = api_client.PathParameter(
+    name="id",
+    style=api_client.ParameterStyle.SIMPLE,
+    schema=IdSchema,
+    required=True,
 )
 SchemaFor200ResponseBodyApplicationJson = DataServiceResponse
 
@@ -127,6 +144,7 @@ class BaseApi(api_client.Api):
     def _get_data_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -140,6 +158,7 @@ class BaseApi(api_client.Api):
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -149,6 +168,7 @@ class BaseApi(api_client.Api):
     def _get_data_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -161,6 +181,7 @@ class BaseApi(api_client.Api):
     def _get_data_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -173,11 +194,24 @@ class BaseApi(api_client.Api):
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
+        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
+
+        _path_params = {}
+        for parameter in (
+            request_path_id,
+        ):
+            parameter_data = path_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            serialized_data = parameter.serialize(parameter_data)
+            _path_params.update(serialized_data)
+
+        for k, v in _path_params.items():
+            used_path = used_path.replace('{%s}' % k, v)
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_id,
             request_query_start,
             request_query_stop,
             request_query_bin_width,
@@ -231,6 +265,7 @@ class GetData(BaseApi):
     def get_data(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -244,6 +279,7 @@ class GetData(BaseApi):
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -253,6 +289,7 @@ class GetData(BaseApi):
     def get_data(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -265,6 +302,7 @@ class GetData(BaseApi):
     def get_data(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -272,6 +310,7 @@ class GetData(BaseApi):
     ):
         return self._get_data_oapg(
             query_params=query_params,
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -286,6 +325,7 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -299,6 +339,7 @@ class ApiForget(BaseApi):
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -308,6 +349,7 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -320,6 +362,7 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -327,6 +370,7 @@ class ApiForget(BaseApi):
     ):
         return self._get_data_oapg(
             query_params=query_params,
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

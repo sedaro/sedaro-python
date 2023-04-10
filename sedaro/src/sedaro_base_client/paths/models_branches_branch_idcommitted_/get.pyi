@@ -30,11 +30,11 @@ from sedaro_base_client.model.vehicle_template import VehicleTemplate
 from sedaro_base_client.model.scenario_template import ScenarioTemplate
 
 # Path params
-BranchIdSchema = schemas.IntSchema
+BranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
+        'branchId': typing.Union[BranchIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(

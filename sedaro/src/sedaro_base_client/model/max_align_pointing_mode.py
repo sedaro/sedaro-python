@@ -38,7 +38,6 @@ class MaxAlignPointingMode(
     class MetaOapg:
         required = {
             "name",
-            "pointingModeType",
         }
         
         class properties:
@@ -51,22 +50,6 @@ class MaxAlignPointingMode(
             
                 class MetaOapg:
                     max_length = 100
-            
-            
-            class pointingModeType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "MAX_SECONDARY_ALIGN": "MAX_SECONDARY_ALIGN",
-                    }
-                
-                @schemas.classproperty
-                def MAX_SECONDARY_ALIGN(cls):
-                    return cls("MAX_SECONDARY_ALIGN")
             id = schemas.StrSchema
         
             @staticmethod
@@ -75,30 +58,6 @@ class MaxAlignPointingMode(
             odAlgorithm = schemas.StrSchema
             adAlgorithm = schemas.StrSchema
             tcAlgorithm = schemas.StrSchema
-            conOps = schemas.StrSchema
-            
-            
-            class operationalModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'operationalModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             
             
             class reactionWheelCommands(
@@ -154,14 +113,11 @@ class MaxAlignPointingMode(
             maxAlignVector = schemas.StrSchema
             __annotations__ = {
                 "name": name,
-                "pointingModeType": pointingModeType,
                 "id": id,
                 "metamodel": metamodel,
                 "odAlgorithm": odAlgorithm,
                 "adAlgorithm": adAlgorithm,
                 "tcAlgorithm": tcAlgorithm,
-                "conOps": conOps,
-                "operationalModes": operationalModes,
                 "reactionWheelCommands": reactionWheelCommands,
                 "magnetorquerCommands": magnetorquerCommands,
                 "commandedAttitude": commandedAttitude,
@@ -175,13 +131,9 @@ class MaxAlignPointingMode(
         additional_properties = schemas.NotAnyTypeSchema
     
     name: MetaOapg.properties.name
-    pointingModeType: MetaOapg.properties.pointingModeType
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["pointingModeType"]) -> MetaOapg.properties.pointingModeType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -197,12 +149,6 @@ class MaxAlignPointingMode(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tcAlgorithm"]) -> MetaOapg.properties.tcAlgorithm: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> MetaOapg.properties.reactionWheelCommands: ...
@@ -231,15 +177,12 @@ class MaxAlignPointingMode(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["maxAlignVector"]) -> MetaOapg.properties.maxAlignVector: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["pointingModeType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["odAlgorithm"], typing_extensions.Literal["adAlgorithm"], typing_extensions.Literal["tcAlgorithm"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], typing_extensions.Literal["commandedAttitude"], typing_extensions.Literal["commandedAngularRates"], typing_extensions.Literal["lockBodyFrameVector"], typing_extensions.Literal["lockVector"], typing_extensions.Literal["acAlgorithm"], typing_extensions.Literal["maxAlignBodyFrameVector"], typing_extensions.Literal["maxAlignVector"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["odAlgorithm"], typing_extensions.Literal["adAlgorithm"], typing_extensions.Literal["tcAlgorithm"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], typing_extensions.Literal["commandedAttitude"], typing_extensions.Literal["commandedAngularRates"], typing_extensions.Literal["lockBodyFrameVector"], typing_extensions.Literal["lockVector"], typing_extensions.Literal["acAlgorithm"], typing_extensions.Literal["maxAlignBodyFrameVector"], typing_extensions.Literal["maxAlignVector"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["pointingModeType"]) -> MetaOapg.properties.pointingModeType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -255,12 +198,6 @@ class MaxAlignPointingMode(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tcAlgorithm"]) -> typing.Union[MetaOapg.properties.tcAlgorithm, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["reactionWheelCommands"]) -> typing.Union[MetaOapg.properties.reactionWheelCommands, schemas.Unset]: ...
@@ -289,21 +226,18 @@ class MaxAlignPointingMode(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["maxAlignVector"]) -> typing.Union[MetaOapg.properties.maxAlignVector, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["pointingModeType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["odAlgorithm"], typing_extensions.Literal["adAlgorithm"], typing_extensions.Literal["tcAlgorithm"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], typing_extensions.Literal["commandedAttitude"], typing_extensions.Literal["commandedAngularRates"], typing_extensions.Literal["lockBodyFrameVector"], typing_extensions.Literal["lockVector"], typing_extensions.Literal["acAlgorithm"], typing_extensions.Literal["maxAlignBodyFrameVector"], typing_extensions.Literal["maxAlignVector"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["odAlgorithm"], typing_extensions.Literal["adAlgorithm"], typing_extensions.Literal["tcAlgorithm"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], typing_extensions.Literal["commandedAttitude"], typing_extensions.Literal["commandedAngularRates"], typing_extensions.Literal["lockBodyFrameVector"], typing_extensions.Literal["lockVector"], typing_extensions.Literal["acAlgorithm"], typing_extensions.Literal["maxAlignBodyFrameVector"], typing_extensions.Literal["maxAlignVector"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        pointingModeType: typing.Union[MetaOapg.properties.pointingModeType, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         odAlgorithm: typing.Union[MetaOapg.properties.odAlgorithm, str, schemas.Unset] = schemas.unset,
         adAlgorithm: typing.Union[MetaOapg.properties.adAlgorithm, str, schemas.Unset] = schemas.unset,
         tcAlgorithm: typing.Union[MetaOapg.properties.tcAlgorithm, str, schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         reactionWheelCommands: typing.Union[MetaOapg.properties.reactionWheelCommands, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquerCommands: typing.Union[MetaOapg.properties.magnetorquerCommands, list, tuple, schemas.Unset] = schemas.unset,
         commandedAttitude: typing.Union[MetaOapg.properties.commandedAttitude, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -319,14 +253,11 @@ class MaxAlignPointingMode(
             cls,
             *_args,
             name=name,
-            pointingModeType=pointingModeType,
             id=id,
             metamodel=metamodel,
             odAlgorithm=odAlgorithm,
             adAlgorithm=adAlgorithm,
             tcAlgorithm=tcAlgorithm,
-            conOps=conOps,
-            operationalModes=operationalModes,
             reactionWheelCommands=reactionWheelCommands,
             magnetorquerCommands=magnetorquerCommands,
             commandedAttitude=commandedAttitude,

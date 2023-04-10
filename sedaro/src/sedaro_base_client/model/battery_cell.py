@@ -171,7 +171,6 @@ class BatteryCell(
             
                 class MetaOapg:
                     max_length = 32
-            powerProcessor = schemas.StrSchema
             __annotations__ = {
                 "partNumber": partNumber,
                 "esr": esr,
@@ -183,7 +182,6 @@ class BatteryCell(
                 "id": id,
                 "metamodel": metamodel,
                 "manufacturer": manufacturer,
-                "powerProcessor": powerProcessor,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -225,10 +223,7 @@ class BatteryCell(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["manufacturer"]) -> MetaOapg.properties.manufacturer: ...
     
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["powerProcessor"]) -> MetaOapg.properties.powerProcessor: ...
-    
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["curve"], typing_extensions.Literal["esr"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxDischargeCurrent"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["capacity"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["powerProcessor"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["curve"], typing_extensions.Literal["esr"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxDischargeCurrent"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["capacity"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["manufacturer"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -262,10 +257,7 @@ class BatteryCell(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["manufacturer"]) -> typing.Union[MetaOapg.properties.manufacturer, schemas.Unset]: ...
     
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["powerProcessor"]) -> typing.Union[MetaOapg.properties.powerProcessor, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["curve"], typing_extensions.Literal["esr"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxDischargeCurrent"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["capacity"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["powerProcessor"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["curve"], typing_extensions.Literal["esr"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxDischargeCurrent"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["capacity"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["manufacturer"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -281,7 +273,6 @@ class BatteryCell(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        powerProcessor: typing.Union[MetaOapg.properties.powerProcessor, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'BatteryCell':
         return super().__new__(
@@ -297,7 +288,6 @@ class BatteryCell(
             id=id,
             metamodel=metamodel,
             manufacturer=manufacturer,
-            powerProcessor=powerProcessor,
             _configuration=_configuration,
         )
 

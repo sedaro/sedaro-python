@@ -55,104 +55,33 @@ class CelestialTarget(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            
-            
-            class targetType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "CELESTIAL_TARGET": "CELESTIAL_TARGET",
-                    }
-                
-                @schemas.classproperty
-                def CELESTIAL_TARGET(cls):
-                    return cls("CELESTIAL_TARGET")
             rel_agentId = schemas.StrSchema
-            conOps = schemas.StrSchema
-            targetVector = schemas.StrSchema
-            
-            
-            class targetGroups(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'targetGroups':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             shadow = schemas.BoolSchema
             lst = schemas.NumberSchema
             position = schemas.AnyTypeSchema
-            
-            
-            class lat(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = -360.0
-            
-            
-            class lon(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = -360.0
-            
-            
-            class alt(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = -360.0
+        
+            @staticmethod
+            def lat() -> typing.Type['AngleBase199']:
+                return AngleBase199
+        
+            @staticmethod
+            def lon() -> typing.Type['AngleBase199']:
+                return AngleBase199
+        
+            @staticmethod
+            def alt() -> typing.Type['AngleBase199']:
+                return AngleBase199
             range = schemas.NumberSchema
             lineOfSight = schemas.BoolSchema
             relativePosition = schemas.AnyTypeSchema
-            
-            
-            class azimuth(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = -360.0
-            
-            
-            class elevation(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_maximum = 360.0
-                    inclusive_minimum = -360.0
+        
+            @staticmethod
+            def azimuth() -> typing.Type['AngleBase199']:
+                return AngleBase199
+        
+            @staticmethod
+            def elevation() -> typing.Type['AngleBase199']:
+                return AngleBase199
             
             
             class polynomialEphemerisBody(
@@ -193,11 +122,7 @@ class CelestialTarget(
                 "name": name,
                 "id": id,
                 "metamodel": metamodel,
-                "targetType": targetType,
                 "rel_agentId": rel_agentId,
-                "conOps": conOps,
-                "targetVector": targetVector,
-                "targetGroups": targetGroups,
                 "shadow": shadow,
                 "lst": lst,
                 "position": position,
@@ -225,19 +150,7 @@ class CelestialTarget(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetType"]) -> MetaOapg.properties.targetType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["rel_agentId"]) -> MetaOapg.properties.rel_agentId: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetVector"]) -> MetaOapg.properties.targetVector: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroups"]) -> MetaOapg.properties.targetGroups: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["shadow"]) -> MetaOapg.properties.shadow: ...
@@ -249,13 +162,13 @@ class CelestialTarget(
     def __getitem__(self, name: typing_extensions.Literal["position"]) -> MetaOapg.properties.position: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lat"]) -> MetaOapg.properties.lat: ...
+    def __getitem__(self, name: typing_extensions.Literal["lat"]) -> 'AngleBase199': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lon"]) -> MetaOapg.properties.lon: ...
+    def __getitem__(self, name: typing_extensions.Literal["lon"]) -> 'AngleBase199': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["alt"]) -> MetaOapg.properties.alt: ...
+    def __getitem__(self, name: typing_extensions.Literal["alt"]) -> 'AngleBase199': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["range"]) -> MetaOapg.properties.range: ...
@@ -267,15 +180,15 @@ class CelestialTarget(
     def __getitem__(self, name: typing_extensions.Literal["relativePosition"]) -> MetaOapg.properties.relativePosition: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["azimuth"]) -> MetaOapg.properties.azimuth: ...
+    def __getitem__(self, name: typing_extensions.Literal["azimuth"]) -> 'AngleBase199': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["elevation"]) -> MetaOapg.properties.elevation: ...
+    def __getitem__(self, name: typing_extensions.Literal["elevation"]) -> 'AngleBase199': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["polynomialEphemerisBody"]) -> MetaOapg.properties.polynomialEphemerisBody: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["targetType"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["conOps"], typing_extensions.Literal["targetVector"], typing_extensions.Literal["targetGroups"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["polynomialEphemerisBody"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["polynomialEphemerisBody"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -289,19 +202,7 @@ class CelestialTarget(
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetType"]) -> typing.Union[MetaOapg.properties.targetType, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["rel_agentId"]) -> typing.Union[MetaOapg.properties.rel_agentId, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetVector"]) -> typing.Union[MetaOapg.properties.targetVector, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroups"]) -> typing.Union[MetaOapg.properties.targetGroups, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["shadow"]) -> typing.Union[MetaOapg.properties.shadow, schemas.Unset]: ...
@@ -313,13 +214,13 @@ class CelestialTarget(
     def get_item_oapg(self, name: typing_extensions.Literal["position"]) -> typing.Union[MetaOapg.properties.position, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lat"]) -> typing.Union[MetaOapg.properties.lat, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["lat"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lon"]) -> typing.Union[MetaOapg.properties.lon, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["lon"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["alt"]) -> typing.Union[MetaOapg.properties.alt, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["alt"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["range"]) -> typing.Union[MetaOapg.properties.range, schemas.Unset]: ...
@@ -331,15 +232,15 @@ class CelestialTarget(
     def get_item_oapg(self, name: typing_extensions.Literal["relativePosition"]) -> typing.Union[MetaOapg.properties.relativePosition, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["azimuth"]) -> typing.Union[MetaOapg.properties.azimuth, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["azimuth"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["elevation"]) -> typing.Union[MetaOapg.properties.elevation, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["elevation"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["polynomialEphemerisBody"]) -> typing.Union[MetaOapg.properties.polynomialEphemerisBody, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["targetType"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["conOps"], typing_extensions.Literal["targetVector"], typing_extensions.Literal["targetGroups"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["polynomialEphemerisBody"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["polynomialEphemerisBody"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -348,22 +249,18 @@ class CelestialTarget(
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        targetType: typing.Union[MetaOapg.properties.targetType, str, schemas.Unset] = schemas.unset,
         rel_agentId: typing.Union[MetaOapg.properties.rel_agentId, str, schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        targetVector: typing.Union[MetaOapg.properties.targetVector, str, schemas.Unset] = schemas.unset,
-        targetGroups: typing.Union[MetaOapg.properties.targetGroups, list, tuple, schemas.Unset] = schemas.unset,
         shadow: typing.Union[MetaOapg.properties.shadow, bool, schemas.Unset] = schemas.unset,
         lst: typing.Union[MetaOapg.properties.lst, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         position: typing.Union[MetaOapg.properties.position, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        lat: typing.Union[MetaOapg.properties.lat, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        lon: typing.Union[MetaOapg.properties.lon, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        alt: typing.Union[MetaOapg.properties.alt, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        lat: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
+        lon: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
+        alt: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
         range: typing.Union[MetaOapg.properties.range, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         lineOfSight: typing.Union[MetaOapg.properties.lineOfSight, bool, schemas.Unset] = schemas.unset,
         relativePosition: typing.Union[MetaOapg.properties.relativePosition, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        azimuth: typing.Union[MetaOapg.properties.azimuth, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        elevation: typing.Union[MetaOapg.properties.elevation, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        azimuth: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
+        elevation: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
         polynomialEphemerisBody: typing.Union[MetaOapg.properties.polynomialEphemerisBody, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'CelestialTarget':
@@ -373,11 +270,7 @@ class CelestialTarget(
             name=name,
             id=id,
             metamodel=metamodel,
-            targetType=targetType,
             rel_agentId=rel_agentId,
-            conOps=conOps,
-            targetVector=targetVector,
-            targetGroups=targetGroups,
             shadow=shadow,
             lst=lst,
             position=position,
@@ -393,5 +286,6 @@ class CelestialTarget(
             _configuration=_configuration,
         )
 
+from sedaro_base_client.model.angle_base199 import AngleBase199
 from sedaro_base_client.model.metamodel import Metamodel
 from sedaro_base_client.model.polynomial_ephemeris_body import PolynomialEphemerisBody

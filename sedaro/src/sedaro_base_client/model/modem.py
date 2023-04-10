@@ -37,27 +37,10 @@ class Modem(
 
     class MetaOapg:
         required = {
-            "componentType",
             "name",
         }
         
         class properties:
-            
-            
-            class componentType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "MODEM": "MODEM",
-                    }
-                
-                @schemas.classproperty
-                def MODEM(cls):
-                    return cls("MODEM")
             
             
             class name(
@@ -90,8 +73,78 @@ class Modem(
             
                 class MetaOapg:
                     max_length = 32
-            hotTempRating = schemas.NumberSchema
-            coldTempRating = schemas.NumberSchema
+            
+            
+            class hotTempRating(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'hotTempRating':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class coldTempRating(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'coldTempRating':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class thermalCapacitance(
@@ -126,53 +179,6 @@ class Modem(
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'loadStates':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            satellite = schemas.StrSchema
-            
-            
-            class thermal_interface_A(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'thermal_interface_A':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class thermal_interface_B(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'thermal_interface_B':
                     return super().__new__(
                         cls,
                         _arg,
@@ -293,36 +299,40 @@ class Modem(
             coldMargin = schemas.NumberSchema
             
             
-            class tempControllers(
-                schemas.ListSchema
+            class temperature(
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    items = schemas.AnyTypeSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
             
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'tempControllers':
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'temperature':
                     return super().__new__(
                         cls,
-                        _arg,
+                        *_args,
                         _configuration=_configuration,
+                        **kwargs,
                     )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class temperature(
-                schemas.NumberSchema
-            ):
-            
-            
-                class MetaOapg:
-                    inclusive_minimum = -273.15
             
             
             class storage(
@@ -402,7 +412,6 @@ class Modem(
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
-                "componentType": componentType,
                 "name": name,
                 "id": id,
                 "metamodel": metamodel,
@@ -414,9 +423,6 @@ class Modem(
                 "cotsTemplate": cotsTemplate,
                 "subsystem": subsystem,
                 "loadStates": loadStates,
-                "satellite": satellite,
-                "thermal_interface_A": thermal_interface_A,
-                "thermal_interface_B": thermal_interface_B,
                 "dataSinks": dataSinks,
                 "dataSources": dataSources,
                 "dataStorage": dataStorage,
@@ -425,7 +431,6 @@ class Modem(
                 "dissipations": dissipations,
                 "hotMargin": hotMargin,
                 "coldMargin": coldMargin,
-                "tempControllers": tempControllers,
                 "temperature": temperature,
                 "storage": storage,
                 "readRate": readRate,
@@ -434,11 +439,7 @@ class Modem(
             }
         additional_properties = schemas.NotAnyTypeSchema
     
-    componentType: MetaOapg.properties.componentType
     name: MetaOapg.properties.name
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -474,15 +475,6 @@ class Modem(
     def __getitem__(self, name: typing_extensions.Literal["loadStates"]) -> MetaOapg.properties.loadStates: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["thermal_interface_A"]) -> MetaOapg.properties.thermal_interface_A: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dataSinks"]) -> MetaOapg.properties.dataSinks: ...
     
     @typing.overload
@@ -507,9 +499,6 @@ class Modem(
     def __getitem__(self, name: typing_extensions.Literal["coldMargin"]) -> MetaOapg.properties.coldMargin: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["tempControllers"]) -> MetaOapg.properties.tempControllers: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["temperature"]) -> MetaOapg.properties.temperature: ...
     
     @typing.overload
@@ -524,12 +513,9 @@ class Modem(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["externalInterfaces"]) -> MetaOapg.properties.externalInterfaces: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["componentType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["hotTempRating"], typing_extensions.Literal["coldTempRating"], typing_extensions.Literal["thermalCapacitance"], typing_extensions.Literal["cotsTemplate"], typing_extensions.Literal["subsystem"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["satellite"], typing_extensions.Literal["thermal_interface_A"], typing_extensions.Literal["thermal_interface_B"], typing_extensions.Literal["dataSinks"], typing_extensions.Literal["dataSources"], typing_extensions.Literal["dataStorage"], typing_extensions.Literal["dataModes"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["dissipations"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["tempControllers"], typing_extensions.Literal["temperature"], typing_extensions.Literal["storage"], typing_extensions.Literal["readRate"], typing_extensions.Literal["writeRate"], typing_extensions.Literal["externalInterfaces"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["hotTempRating"], typing_extensions.Literal["coldTempRating"], typing_extensions.Literal["thermalCapacitance"], typing_extensions.Literal["cotsTemplate"], typing_extensions.Literal["subsystem"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["dataSinks"], typing_extensions.Literal["dataSources"], typing_extensions.Literal["dataStorage"], typing_extensions.Literal["dataModes"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["dissipations"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["temperature"], typing_extensions.Literal["storage"], typing_extensions.Literal["readRate"], typing_extensions.Literal["writeRate"], typing_extensions.Literal["externalInterfaces"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["componentType"]) -> MetaOapg.properties.componentType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -565,15 +551,6 @@ class Modem(
     def get_item_oapg(self, name: typing_extensions.Literal["loadStates"]) -> typing.Union[MetaOapg.properties.loadStates, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_A"]) -> typing.Union[MetaOapg.properties.thermal_interface_A, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dataSinks"]) -> typing.Union[MetaOapg.properties.dataSinks, schemas.Unset]: ...
     
     @typing.overload
@@ -598,9 +575,6 @@ class Modem(
     def get_item_oapg(self, name: typing_extensions.Literal["coldMargin"]) -> typing.Union[MetaOapg.properties.coldMargin, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["tempControllers"]) -> typing.Union[MetaOapg.properties.tempControllers, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["temperature"]) -> typing.Union[MetaOapg.properties.temperature, schemas.Unset]: ...
     
     @typing.overload
@@ -615,27 +589,23 @@ class Modem(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["externalInterfaces"]) -> typing.Union[MetaOapg.properties.externalInterfaces, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["componentType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["hotTempRating"], typing_extensions.Literal["coldTempRating"], typing_extensions.Literal["thermalCapacitance"], typing_extensions.Literal["cotsTemplate"], typing_extensions.Literal["subsystem"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["satellite"], typing_extensions.Literal["thermal_interface_A"], typing_extensions.Literal["thermal_interface_B"], typing_extensions.Literal["dataSinks"], typing_extensions.Literal["dataSources"], typing_extensions.Literal["dataStorage"], typing_extensions.Literal["dataModes"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["dissipations"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["tempControllers"], typing_extensions.Literal["temperature"], typing_extensions.Literal["storage"], typing_extensions.Literal["readRate"], typing_extensions.Literal["writeRate"], typing_extensions.Literal["externalInterfaces"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["partNumber"], typing_extensions.Literal["manufacturer"], typing_extensions.Literal["hotTempRating"], typing_extensions.Literal["coldTempRating"], typing_extensions.Literal["thermalCapacitance"], typing_extensions.Literal["cotsTemplate"], typing_extensions.Literal["subsystem"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["dataSinks"], typing_extensions.Literal["dataSources"], typing_extensions.Literal["dataStorage"], typing_extensions.Literal["dataModes"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["dissipations"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["temperature"], typing_extensions.Literal["storage"], typing_extensions.Literal["readRate"], typing_extensions.Literal["writeRate"], typing_extensions.Literal["externalInterfaces"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        componentType: typing.Union[MetaOapg.properties.componentType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         partNumber: typing.Union[MetaOapg.properties.partNumber, str, schemas.Unset] = schemas.unset,
         manufacturer: typing.Union[MetaOapg.properties.manufacturer, str, schemas.Unset] = schemas.unset,
-        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         thermalCapacitance: typing.Union[MetaOapg.properties.thermalCapacitance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         cotsTemplate: typing.Union[MetaOapg.properties.cotsTemplate, str, schemas.Unset] = schemas.unset,
         subsystem: typing.Union[MetaOapg.properties.subsystem, str, schemas.Unset] = schemas.unset,
         loadStates: typing.Union[MetaOapg.properties.loadStates, list, tuple, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
-        thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
-        thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
         dataSinks: typing.Union[MetaOapg.properties.dataSinks, list, tuple, schemas.Unset] = schemas.unset,
         dataSources: typing.Union[MetaOapg.properties.dataSources, list, tuple, schemas.Unset] = schemas.unset,
         dataStorage: typing.Union[MetaOapg.properties.dataStorage, str, schemas.Unset] = schemas.unset,
@@ -644,8 +614,7 @@ class Modem(
         dissipations: typing.Union[MetaOapg.properties.dissipations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        tempControllers: typing.Union[MetaOapg.properties.tempControllers, list, tuple, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        temperature: typing.Union[MetaOapg.properties.temperature, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         storage: typing.Union[MetaOapg.properties.storage, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         readRate: typing.Union[MetaOapg.properties.readRate, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         writeRate: typing.Union[MetaOapg.properties.writeRate, decimal.Decimal, int, schemas.Unset] = schemas.unset,
@@ -655,7 +624,6 @@ class Modem(
         return super().__new__(
             cls,
             *_args,
-            componentType=componentType,
             name=name,
             id=id,
             metamodel=metamodel,
@@ -667,9 +635,6 @@ class Modem(
             cotsTemplate=cotsTemplate,
             subsystem=subsystem,
             loadStates=loadStates,
-            satellite=satellite,
-            thermal_interface_A=thermal_interface_A,
-            thermal_interface_B=thermal_interface_B,
             dataSinks=dataSinks,
             dataSources=dataSources,
             dataStorage=dataStorage,
@@ -678,7 +643,6 @@ class Modem(
             dissipations=dissipations,
             hotMargin=hotMargin,
             coldMargin=coldMargin,
-            tempControllers=tempControllers,
             temperature=temperature,
             storage=storage,
             readRate=readRate,
@@ -688,3 +652,4 @@ class Modem(
         )
 
 from sedaro_base_client.model.metamodel import Metamodel
+from sedaro_base_client.model.temperature_base199 import TemperatureBase199

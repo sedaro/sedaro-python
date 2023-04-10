@@ -51,24 +51,44 @@ class CircularFieldOfView(
             
             
             class halfAngle(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
-                pass
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            AngleFieldOfView24,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'halfAngle':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             id = schemas.StrSchema
         
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            
-            
-            class fieldOfViewType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def CIRC_FIELD_OF_VIEW(cls):
-                    return cls("CIRC_FIELD_OF_VIEW")
             boresightBodyFrameVector = schemas.StrSchema
             
             
@@ -98,7 +118,6 @@ class CircularFieldOfView(
                 "halfAngle": halfAngle,
                 "id": id,
                 "metamodel": metamodel,
-                "fieldOfViewType": fieldOfViewType,
                 "boresightBodyFrameVector": boresightBodyFrameVector,
                 "sensors": sensors,
             }
@@ -120,15 +139,12 @@ class CircularFieldOfView(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["fieldOfViewType"]) -> MetaOapg.properties.fieldOfViewType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["boresightBodyFrameVector"]) -> MetaOapg.properties.boresightBodyFrameVector: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["sensors"]) -> MetaOapg.properties.sensors: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["halfAngle"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["fieldOfViewType"], typing_extensions.Literal["boresightBodyFrameVector"], typing_extensions.Literal["sensors"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["halfAngle"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["boresightBodyFrameVector"], typing_extensions.Literal["sensors"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -145,25 +161,21 @@ class CircularFieldOfView(
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["fieldOfViewType"]) -> typing.Union[MetaOapg.properties.fieldOfViewType, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["boresightBodyFrameVector"]) -> typing.Union[MetaOapg.properties.boresightBodyFrameVector, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["sensors"]) -> typing.Union[MetaOapg.properties.sensors, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["halfAngle"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["fieldOfViewType"], typing_extensions.Literal["boresightBodyFrameVector"], typing_extensions.Literal["sensors"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["halfAngle"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["boresightBodyFrameVector"], typing_extensions.Literal["sensors"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        halfAngle: typing.Union[MetaOapg.properties.halfAngle, decimal.Decimal, int, float, ],
+        halfAngle: typing.Union[MetaOapg.properties.halfAngle, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        fieldOfViewType: typing.Union[MetaOapg.properties.fieldOfViewType, str, schemas.Unset] = schemas.unset,
         boresightBodyFrameVector: typing.Union[MetaOapg.properties.boresightBodyFrameVector, str, schemas.Unset] = schemas.unset,
         sensors: typing.Union[MetaOapg.properties.sensors, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -175,10 +187,10 @@ class CircularFieldOfView(
             name=name,
             id=id,
             metamodel=metamodel,
-            fieldOfViewType=fieldOfViewType,
             boresightBodyFrameVector=boresightBodyFrameVector,
             sensors=sensors,
             _configuration=_configuration,
         )
 
+from sedaro_base_client.model.angle_field_of_view24 import AngleFieldOfView24
 from sedaro_base_client.model.metamodel import Metamodel

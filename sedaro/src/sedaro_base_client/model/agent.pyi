@@ -56,7 +56,7 @@ class Agent(
             targetMapping = schemas.DictSchema
             agentGroupMapping = schemas.DictSchema
             differentiatingState = schemas.DictSchema
-            templateRef = schemas.IntSchema
+            templateRef = schemas.StrSchema
             orbit = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -144,7 +144,7 @@ class Agent(
         targetMapping: typing.Union[MetaOapg.properties.targetMapping, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         agentGroupMapping: typing.Union[MetaOapg.properties.agentGroupMapping, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         differentiatingState: typing.Union[MetaOapg.properties.differentiatingState, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
-        templateRef: typing.Union[MetaOapg.properties.templateRef, decimal.Decimal, int, schemas.Unset] = schemas.unset,
+        templateRef: typing.Union[MetaOapg.properties.templateRef, str, schemas.Unset] = schemas.unset,
         orbit: typing.Union[MetaOapg.properties.orbit, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Agent':

@@ -68,30 +68,111 @@ class OperationalMode(
             
             
             class minOccurrenceDuration(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationOperationalMode18,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'minOccurrenceDuration':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class maxOccurrenceDuration(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationOperationalMode19,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'maxOccurrenceDuration':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class minTimeBetweenOccurrences(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationOperationalMode20,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'minTimeBetweenOccurrences':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             pointingMode = schemas.StrSchema
             
             
@@ -116,118 +197,79 @@ class OperationalMode(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
-            class dataGenerationModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'dataGenerationModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class activeDataInterfaces(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'activeDataInterfaces':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            conOps = schemas.StrSchema
-            
-            
-            class tempControllerStates(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'tempControllerStates':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class loadStates(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'loadStates':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             compliance = schemas.BoolSchema
             
             
             class timeSinceActive(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationOperationalMode28,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'timeSinceActive':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class timeSinceInactive(
-                schemas.NumberSchema
+                schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
-                    inclusive_minimum = 0.0
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationOperationalMode29,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'timeSinceInactive':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             isActive = schemas.BoolSchema
             __annotations__ = {
                 "name": name,
@@ -239,11 +281,6 @@ class OperationalMode(
                 "minTimeBetweenOccurrences": minTimeBetweenOccurrences,
                 "pointingMode": pointingMode,
                 "conditions": conditions,
-                "dataGenerationModes": dataGenerationModes,
-                "activeDataInterfaces": activeDataInterfaces,
-                "conOps": conOps,
-                "tempControllerStates": tempControllerStates,
-                "loadStates": loadStates,
                 "compliance": compliance,
                 "timeSinceActive": timeSinceActive,
                 "timeSinceInactive": timeSinceInactive,
@@ -282,21 +319,6 @@ class OperationalMode(
     def __getitem__(self, name: typing_extensions.Literal["conditions"]) -> MetaOapg.properties.conditions: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["dataGenerationModes"]) -> MetaOapg.properties.dataGenerationModes: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["activeDataInterfaces"]) -> MetaOapg.properties.activeDataInterfaces: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["tempControllerStates"]) -> MetaOapg.properties.tempControllerStates: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["loadStates"]) -> MetaOapg.properties.loadStates: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["compliance"]) -> MetaOapg.properties.compliance: ...
     
     @typing.overload
@@ -308,7 +330,7 @@ class OperationalMode(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["isActive"]) -> MetaOapg.properties.isActive: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["priority"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["minOccurrenceDuration"], typing_extensions.Literal["maxOccurrenceDuration"], typing_extensions.Literal["minTimeBetweenOccurrences"], typing_extensions.Literal["pointingMode"], typing_extensions.Literal["conditions"], typing_extensions.Literal["dataGenerationModes"], typing_extensions.Literal["activeDataInterfaces"], typing_extensions.Literal["conOps"], typing_extensions.Literal["tempControllerStates"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["compliance"], typing_extensions.Literal["timeSinceActive"], typing_extensions.Literal["timeSinceInactive"], typing_extensions.Literal["isActive"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["priority"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["minOccurrenceDuration"], typing_extensions.Literal["maxOccurrenceDuration"], typing_extensions.Literal["minTimeBetweenOccurrences"], typing_extensions.Literal["pointingMode"], typing_extensions.Literal["conditions"], typing_extensions.Literal["compliance"], typing_extensions.Literal["timeSinceActive"], typing_extensions.Literal["timeSinceInactive"], typing_extensions.Literal["isActive"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -340,21 +362,6 @@ class OperationalMode(
     def get_item_oapg(self, name: typing_extensions.Literal["conditions"]) -> typing.Union[MetaOapg.properties.conditions, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["dataGenerationModes"]) -> typing.Union[MetaOapg.properties.dataGenerationModes, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["activeDataInterfaces"]) -> typing.Union[MetaOapg.properties.activeDataInterfaces, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["tempControllerStates"]) -> typing.Union[MetaOapg.properties.tempControllerStates, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["loadStates"]) -> typing.Union[MetaOapg.properties.loadStates, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["compliance"]) -> typing.Union[MetaOapg.properties.compliance, schemas.Unset]: ...
     
     @typing.overload
@@ -366,7 +373,7 @@ class OperationalMode(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["isActive"]) -> typing.Union[MetaOapg.properties.isActive, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["priority"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["minOccurrenceDuration"], typing_extensions.Literal["maxOccurrenceDuration"], typing_extensions.Literal["minTimeBetweenOccurrences"], typing_extensions.Literal["pointingMode"], typing_extensions.Literal["conditions"], typing_extensions.Literal["dataGenerationModes"], typing_extensions.Literal["activeDataInterfaces"], typing_extensions.Literal["conOps"], typing_extensions.Literal["tempControllerStates"], typing_extensions.Literal["loadStates"], typing_extensions.Literal["compliance"], typing_extensions.Literal["timeSinceActive"], typing_extensions.Literal["timeSinceInactive"], typing_extensions.Literal["isActive"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["priority"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["minOccurrenceDuration"], typing_extensions.Literal["maxOccurrenceDuration"], typing_extensions.Literal["minTimeBetweenOccurrences"], typing_extensions.Literal["pointingMode"], typing_extensions.Literal["conditions"], typing_extensions.Literal["compliance"], typing_extensions.Literal["timeSinceActive"], typing_extensions.Literal["timeSinceInactive"], typing_extensions.Literal["isActive"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -376,19 +383,14 @@ class OperationalMode(
         priority: typing.Union[MetaOapg.properties.priority, decimal.Decimal, int, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        minOccurrenceDuration: typing.Union[MetaOapg.properties.minOccurrenceDuration, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        maxOccurrenceDuration: typing.Union[MetaOapg.properties.maxOccurrenceDuration, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        minTimeBetweenOccurrences: typing.Union[MetaOapg.properties.minTimeBetweenOccurrences, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        minOccurrenceDuration: typing.Union[MetaOapg.properties.minOccurrenceDuration, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        maxOccurrenceDuration: typing.Union[MetaOapg.properties.maxOccurrenceDuration, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        minTimeBetweenOccurrences: typing.Union[MetaOapg.properties.minTimeBetweenOccurrences, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         pointingMode: typing.Union[MetaOapg.properties.pointingMode, str, schemas.Unset] = schemas.unset,
         conditions: typing.Union[MetaOapg.properties.conditions, list, tuple, schemas.Unset] = schemas.unset,
-        dataGenerationModes: typing.Union[MetaOapg.properties.dataGenerationModes, list, tuple, schemas.Unset] = schemas.unset,
-        activeDataInterfaces: typing.Union[MetaOapg.properties.activeDataInterfaces, list, tuple, schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        tempControllerStates: typing.Union[MetaOapg.properties.tempControllerStates, list, tuple, schemas.Unset] = schemas.unset,
-        loadStates: typing.Union[MetaOapg.properties.loadStates, list, tuple, schemas.Unset] = schemas.unset,
         compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
-        timeSinceActive: typing.Union[MetaOapg.properties.timeSinceActive, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        timeSinceInactive: typing.Union[MetaOapg.properties.timeSinceInactive, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        timeSinceActive: typing.Union[MetaOapg.properties.timeSinceActive, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        timeSinceInactive: typing.Union[MetaOapg.properties.timeSinceInactive, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'OperationalMode':
@@ -404,11 +406,6 @@ class OperationalMode(
             minTimeBetweenOccurrences=minTimeBetweenOccurrences,
             pointingMode=pointingMode,
             conditions=conditions,
-            dataGenerationModes=dataGenerationModes,
-            activeDataInterfaces=activeDataInterfaces,
-            conOps=conOps,
-            tempControllerStates=tempControllerStates,
-            loadStates=loadStates,
             compliance=compliance,
             timeSinceActive=timeSinceActive,
             timeSinceInactive=timeSinceInactive,
@@ -416,4 +413,9 @@ class OperationalMode(
             _configuration=_configuration,
         )
 
+from sedaro_base_client.model.duration_operational_mode18 import DurationOperationalMode18
+from sedaro_base_client.model.duration_operational_mode19 import DurationOperationalMode19
+from sedaro_base_client.model.duration_operational_mode20 import DurationOperationalMode20
+from sedaro_base_client.model.duration_operational_mode28 import DurationOperationalMode28
+from sedaro_base_client.model.duration_operational_mode29 import DurationOperationalMode29
 from sedaro_base_client.model.metamodel import Metamodel

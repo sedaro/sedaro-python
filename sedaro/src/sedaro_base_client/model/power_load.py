@@ -38,7 +38,6 @@ class PowerLoad(
     class MetaOapg:
         required = {
             "loadDefParams",
-            "loadDefType",
             "name",
             "epsOutputType",
         }
@@ -89,22 +88,6 @@ class PowerLoad(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            
-            
-            class loadDefType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "CONSTANT_POWER": "CONSTANT_POWER",
-                    }
-                
-                @schemas.classproperty
-                def CONSTANT_POWER(cls):
-                    return cls("CONSTANT_POWER")
         
             @staticmethod
             def loadDefParams() -> typing.Type['ConstantPowerParams']:
@@ -119,7 +102,42 @@ class PowerLoad(
             loadState = schemas.StrSchema
             powerConsumed = schemas.NumberSchema
             isActive = schemas.BoolSchema
-            dutyCyclePeriod = schemas.NumberSchema
+            
+            
+            class dutyCyclePeriod(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DurationLoad70,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'dutyCyclePeriod':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class dutyCyclePercentage(
@@ -133,7 +151,6 @@ class PowerLoad(
             __annotations__ = {
                 "name": name,
                 "epsOutputType": epsOutputType,
-                "loadDefType": loadDefType,
                 "loadDefParams": loadDefParams,
                 "id": id,
                 "metamodel": metamodel,
@@ -148,15 +165,11 @@ class PowerLoad(
         additional_properties = schemas.NotAnyTypeSchema
     
     loadDefParams: 'ConstantPowerParams'
-    loadDefType: MetaOapg.properties.loadDefType
     name: MetaOapg.properties.name
     epsOutputType: MetaOapg.properties.epsOutputType
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["loadDefParams"]) -> 'ConstantPowerParams': ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["loadDefType"]) -> MetaOapg.properties.loadDefType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -191,15 +204,12 @@ class PowerLoad(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["dutyCyclePercentage"]) -> MetaOapg.properties.dutyCyclePercentage: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["loadDefParams"], typing_extensions.Literal["loadDefType"], typing_extensions.Literal["name"], typing_extensions.Literal["epsOutputType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["busRegulator"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["loadState"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["isActive"], typing_extensions.Literal["dutyCyclePeriod"], typing_extensions.Literal["dutyCyclePercentage"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["loadDefParams"], typing_extensions.Literal["name"], typing_extensions.Literal["epsOutputType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["busRegulator"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["loadState"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["isActive"], typing_extensions.Literal["dutyCyclePeriod"], typing_extensions.Literal["dutyCyclePercentage"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["loadDefParams"]) -> 'ConstantPowerParams': ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["loadDefType"]) -> MetaOapg.properties.loadDefType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -234,14 +244,13 @@ class PowerLoad(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["dutyCyclePercentage"]) -> typing.Union[MetaOapg.properties.dutyCyclePercentage, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["loadDefParams"], typing_extensions.Literal["loadDefType"], typing_extensions.Literal["name"], typing_extensions.Literal["epsOutputType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["busRegulator"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["loadState"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["isActive"], typing_extensions.Literal["dutyCyclePeriod"], typing_extensions.Literal["dutyCyclePercentage"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["loadDefParams"], typing_extensions.Literal["name"], typing_extensions.Literal["epsOutputType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["busRegulator"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["loadState"], typing_extensions.Literal["powerConsumed"], typing_extensions.Literal["isActive"], typing_extensions.Literal["dutyCyclePeriod"], typing_extensions.Literal["dutyCyclePercentage"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         loadDefParams: 'ConstantPowerParams',
-        loadDefType: typing.Union[MetaOapg.properties.loadDefType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         epsOutputType: typing.Union[MetaOapg.properties.epsOutputType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -251,7 +260,7 @@ class PowerLoad(
         loadState: typing.Union[MetaOapg.properties.loadState, str, schemas.Unset] = schemas.unset,
         powerConsumed: typing.Union[MetaOapg.properties.powerConsumed, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
-        dutyCyclePeriod: typing.Union[MetaOapg.properties.dutyCyclePeriod, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        dutyCyclePeriod: typing.Union[MetaOapg.properties.dutyCyclePeriod, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         dutyCyclePercentage: typing.Union[MetaOapg.properties.dutyCyclePercentage, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'PowerLoad':
@@ -259,7 +268,6 @@ class PowerLoad(
             cls,
             *_args,
             loadDefParams=loadDefParams,
-            loadDefType=loadDefType,
             name=name,
             epsOutputType=epsOutputType,
             id=id,
@@ -275,5 +283,6 @@ class PowerLoad(
         )
 
 from sedaro_base_client.model.constant_power_params import ConstantPowerParams
+from sedaro_base_client.model.duration_load70 import DurationLoad70
 from sedaro_base_client.model.eps_output_types import EpsOutputTypes
 from sedaro_base_client.model.metamodel import Metamodel

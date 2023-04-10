@@ -37,28 +37,11 @@ class TargetGroupVector(
 
     class MetaOapg:
         required = {
-            "vectorType",
             "name",
         }
         
         class properties:
             name = schemas.StrSchema
-            
-            
-            class vectorType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "TARGET_GROUP": "TARGET_GROUP",
-                    }
-                
-                @schemas.classproperty
-                def TARGET_GROUP(cls):
-                    return cls("TARGET_GROUP")
             id = schemas.StrSchema
         
             @staticmethod
@@ -67,72 +50,19 @@ class TargetGroupVector(
             truth = schemas.AnyTypeSchema
             estimate = schemas.AnyTypeSchema
             eclipsed = schemas.BoolSchema
-            
-            
-            class directionSensors(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'directionSensors':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class vectorSensors(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'vectorSensors':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             targetGroup = schemas.StrSchema
             __annotations__ = {
                 "name": name,
-                "vectorType": vectorType,
                 "id": id,
                 "metamodel": metamodel,
                 "truth": truth,
                 "estimate": estimate,
                 "eclipsed": eclipsed,
-                "directionSensors": directionSensors,
-                "vectorSensors": vectorSensors,
                 "targetGroup": targetGroup,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
-    vectorType: MetaOapg.properties.vectorType
     name: MetaOapg.properties.name
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -153,20 +83,11 @@ class TargetGroupVector(
     def __getitem__(self, name: typing_extensions.Literal["eclipsed"]) -> MetaOapg.properties.eclipsed: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["directionSensors"]) -> MetaOapg.properties.directionSensors: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vectorSensors"]) -> MetaOapg.properties.vectorSensors: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targetGroup"]) -> MetaOapg.properties.targetGroup: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["vectorType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["truth"], typing_extensions.Literal["estimate"], typing_extensions.Literal["eclipsed"], typing_extensions.Literal["directionSensors"], typing_extensions.Literal["vectorSensors"], typing_extensions.Literal["targetGroup"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["truth"], typing_extensions.Literal["estimate"], typing_extensions.Literal["eclipsed"], typing_extensions.Literal["targetGroup"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vectorType"]) -> MetaOapg.properties.vectorType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -187,44 +108,32 @@ class TargetGroupVector(
     def get_item_oapg(self, name: typing_extensions.Literal["eclipsed"]) -> typing.Union[MetaOapg.properties.eclipsed, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["directionSensors"]) -> typing.Union[MetaOapg.properties.directionSensors, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vectorSensors"]) -> typing.Union[MetaOapg.properties.vectorSensors, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targetGroup"]) -> typing.Union[MetaOapg.properties.targetGroup, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["vectorType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["truth"], typing_extensions.Literal["estimate"], typing_extensions.Literal["eclipsed"], typing_extensions.Literal["directionSensors"], typing_extensions.Literal["vectorSensors"], typing_extensions.Literal["targetGroup"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["truth"], typing_extensions.Literal["estimate"], typing_extensions.Literal["eclipsed"], typing_extensions.Literal["targetGroup"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        vectorType: typing.Union[MetaOapg.properties.vectorType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         truth: typing.Union[MetaOapg.properties.truth, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         estimate: typing.Union[MetaOapg.properties.estimate, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         eclipsed: typing.Union[MetaOapg.properties.eclipsed, bool, schemas.Unset] = schemas.unset,
-        directionSensors: typing.Union[MetaOapg.properties.directionSensors, list, tuple, schemas.Unset] = schemas.unset,
-        vectorSensors: typing.Union[MetaOapg.properties.vectorSensors, list, tuple, schemas.Unset] = schemas.unset,
         targetGroup: typing.Union[MetaOapg.properties.targetGroup, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'TargetGroupVector':
         return super().__new__(
             cls,
             *_args,
-            vectorType=vectorType,
             name=name,
             id=id,
             metamodel=metamodel,
             truth=truth,
             estimate=estimate,
             eclipsed=eclipsed,
-            directionSensors=directionSensors,
-            vectorSensors=vectorSensors,
             targetGroup=targetGroup,
             _configuration=_configuration,
         )

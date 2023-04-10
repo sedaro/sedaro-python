@@ -92,7 +92,6 @@ class TargetGroup(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            conOps = schemas.StrSchema
             targetAssociations = schemas.DictSchema
             
             
@@ -109,29 +108,6 @@ class TargetGroup(
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'targets':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class targetGroupVectors(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'targetGroupVectors':
                     return super().__new__(
                         cls,
                         _arg,
@@ -169,10 +145,8 @@ class TargetGroup(
                 "targetType": targetType,
                 "id": id,
                 "metamodel": metamodel,
-                "conOps": conOps,
                 "targetAssociations": targetAssociations,
                 "targets": targets,
-                "targetGroupVectors": targetGroupVectors,
                 "filterConditions": filterConditions,
                 "activeTarget": activeTarget,
             }
@@ -194,16 +168,10 @@ class TargetGroup(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targetAssociations"]) -> MetaOapg.properties.targetAssociations: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targets"]) -> MetaOapg.properties.targets: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["targetGroupVectors"]) -> MetaOapg.properties.targetGroupVectors: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["filterConditions"]) -> MetaOapg.properties.filterConditions: ...
@@ -211,7 +179,7 @@ class TargetGroup(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["activeTarget"]) -> MetaOapg.properties.activeTarget: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["targetType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["targetAssociations"], typing_extensions.Literal["targets"], typing_extensions.Literal["targetGroupVectors"], typing_extensions.Literal["filterConditions"], typing_extensions.Literal["activeTarget"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["targetType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["targetAssociations"], typing_extensions.Literal["targets"], typing_extensions.Literal["filterConditions"], typing_extensions.Literal["activeTarget"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -228,16 +196,10 @@ class TargetGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targetAssociations"]) -> typing.Union[MetaOapg.properties.targetAssociations, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targets"]) -> typing.Union[MetaOapg.properties.targets, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["targetGroupVectors"]) -> typing.Union[MetaOapg.properties.targetGroupVectors, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["filterConditions"]) -> typing.Union[MetaOapg.properties.filterConditions, schemas.Unset]: ...
@@ -245,7 +207,7 @@ class TargetGroup(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["activeTarget"]) -> typing.Union[MetaOapg.properties.activeTarget, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["targetType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["targetAssociations"], typing_extensions.Literal["targets"], typing_extensions.Literal["targetGroupVectors"], typing_extensions.Literal["filterConditions"], typing_extensions.Literal["activeTarget"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["targetType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["targetAssociations"], typing_extensions.Literal["targets"], typing_extensions.Literal["filterConditions"], typing_extensions.Literal["activeTarget"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -255,10 +217,8 @@ class TargetGroup(
         targetType: typing.Union[MetaOapg.properties.targetType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
         targetAssociations: typing.Union[MetaOapg.properties.targetAssociations, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         targets: typing.Union[MetaOapg.properties.targets, list, tuple, schemas.Unset] = schemas.unset,
-        targetGroupVectors: typing.Union[MetaOapg.properties.targetGroupVectors, list, tuple, schemas.Unset] = schemas.unset,
         filterConditions: typing.Union[MetaOapg.properties.filterConditions, list, tuple, schemas.Unset] = schemas.unset,
         activeTarget: typing.Union[MetaOapg.properties.activeTarget, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -270,10 +230,8 @@ class TargetGroup(
             targetType=targetType,
             id=id,
             metamodel=metamodel,
-            conOps=conOps,
             targetAssociations=targetAssociations,
             targets=targets,
-            targetGroupVectors=targetGroupVectors,
             filterConditions=filterConditions,
             activeTarget=activeTarget,
             _configuration=_configuration,

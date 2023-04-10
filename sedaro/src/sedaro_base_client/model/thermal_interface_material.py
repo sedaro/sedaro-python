@@ -56,8 +56,78 @@ class ThermalInterfaceMaterial(
                     max_length = 100
             resistivity = schemas.NumberSchema
             thickness = schemas.NumberSchema
-            hotTempRating = schemas.NumberSchema
-            coldTempRating = schemas.NumberSchema
+            
+            
+            class hotTempRating(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'hotTempRating':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class coldTempRating(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'coldTempRating':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             id = schemas.StrSchema
         
             @staticmethod
@@ -164,10 +234,10 @@ class ThermalInterfaceMaterial(
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, decimal.Decimal, int, float, ],
+        hotTempRating: typing.Union[MetaOapg.properties.hotTempRating, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         thickness: typing.Union[MetaOapg.properties.thickness, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, decimal.Decimal, int, float, ],
+        coldTempRating: typing.Union[MetaOapg.properties.coldTempRating, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         resistivity: typing.Union[MetaOapg.properties.resistivity, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
@@ -191,3 +261,4 @@ class ThermalInterfaceMaterial(
         )
 
 from sedaro_base_client.model.metamodel import Metamodel
+from sedaro_base_client.model.temperature_base199 import TemperatureBase199

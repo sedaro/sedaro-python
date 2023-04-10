@@ -37,9 +37,7 @@ class AveragingAlgorithm(
 
     class MetaOapg:
         required = {
-            "algorithmType",
             "name",
-            "algorithmSubtype",
         }
         
         class properties:
@@ -52,45 +50,12 @@ class AveragingAlgorithm(
             
                 class MetaOapg:
                     max_length = 100
-            
-            
-            class algorithmType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "ATTITUDE_DETERMINATION": "ATTITUDE_DETERMINATION",
-                    }
-                
-                @schemas.classproperty
-                def ATTITUDE_DETERMINATION(cls):
-                    return cls("ATTITUDE_DETERMINATION")
-            
-            
-            class algorithmSubtype(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "AVERAGING": "AVERAGING",
-                    }
-                
-                @schemas.classproperty
-                def AVERAGING(cls):
-                    return cls("AVERAGING")
             id = schemas.StrSchema
         
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
             rate = schemas.NumberSchema
-            satellite = schemas.StrSchema
             
             
             class attitudeSolution(
@@ -185,12 +150,9 @@ class AveragingAlgorithm(
                     return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
-                "algorithmType": algorithmType,
-                "algorithmSubtype": algorithmSubtype,
                 "id": id,
                 "metamodel": metamodel,
                 "rate": rate,
-                "satellite": satellite,
                 "attitudeSolution": attitudeSolution,
                 "angularVelocitySolution": angularVelocitySolution,
                 "opticalAttitudeSensors": opticalAttitudeSensors,
@@ -198,18 +160,10 @@ class AveragingAlgorithm(
             }
         additional_properties = schemas.NotAnyTypeSchema
     
-    algorithmType: MetaOapg.properties.algorithmType
     name: MetaOapg.properties.name
-    algorithmSubtype: MetaOapg.properties.algorithmSubtype
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["algorithmType"]) -> MetaOapg.properties.algorithmType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["algorithmSubtype"]) -> MetaOapg.properties.algorithmSubtype: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -219,9 +173,6 @@ class AveragingAlgorithm(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["rate"]) -> MetaOapg.properties.rate: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["attitudeSolution"]) -> MetaOapg.properties.attitudeSolution: ...
@@ -235,18 +186,12 @@ class AveragingAlgorithm(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["angularVelocitySensors"]) -> MetaOapg.properties.angularVelocitySensors: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["algorithmType"], typing_extensions.Literal["name"], typing_extensions.Literal["algorithmSubtype"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["satellite"], typing_extensions.Literal["attitudeSolution"], typing_extensions.Literal["angularVelocitySolution"], typing_extensions.Literal["opticalAttitudeSensors"], typing_extensions.Literal["angularVelocitySensors"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["attitudeSolution"], typing_extensions.Literal["angularVelocitySolution"], typing_extensions.Literal["opticalAttitudeSensors"], typing_extensions.Literal["angularVelocitySensors"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["algorithmType"]) -> MetaOapg.properties.algorithmType: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["algorithmSubtype"]) -> MetaOapg.properties.algorithmSubtype: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -256,9 +201,6 @@ class AveragingAlgorithm(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["rate"]) -> typing.Union[MetaOapg.properties.rate, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["attitudeSolution"]) -> typing.Union[MetaOapg.properties.attitudeSolution, schemas.Unset]: ...
@@ -272,19 +214,16 @@ class AveragingAlgorithm(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["angularVelocitySensors"]) -> typing.Union[MetaOapg.properties.angularVelocitySensors, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["algorithmType"], typing_extensions.Literal["name"], typing_extensions.Literal["algorithmSubtype"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["satellite"], typing_extensions.Literal["attitudeSolution"], typing_extensions.Literal["angularVelocitySolution"], typing_extensions.Literal["opticalAttitudeSensors"], typing_extensions.Literal["angularVelocitySensors"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["attitudeSolution"], typing_extensions.Literal["angularVelocitySolution"], typing_extensions.Literal["opticalAttitudeSensors"], typing_extensions.Literal["angularVelocitySensors"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        algorithmType: typing.Union[MetaOapg.properties.algorithmType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         rate: typing.Union[MetaOapg.properties.rate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         attitudeSolution: typing.Union[MetaOapg.properties.attitudeSolution, list, tuple, schemas.Unset] = schemas.unset,
         angularVelocitySolution: typing.Union[MetaOapg.properties.angularVelocitySolution, list, tuple, schemas.Unset] = schemas.unset,
         opticalAttitudeSensors: typing.Union[MetaOapg.properties.opticalAttitudeSensors, list, tuple, schemas.Unset] = schemas.unset,
@@ -294,13 +233,10 @@ class AveragingAlgorithm(
         return super().__new__(
             cls,
             *_args,
-            algorithmType=algorithmType,
             name=name,
-            algorithmSubtype=algorithmSubtype,
             id=id,
             metamodel=metamodel,
             rate=rate,
-            satellite=satellite,
             attitudeSolution=attitudeSolution,
             angularVelocitySolution=angularVelocitySolution,
             opticalAttitudeSensors=opticalAttitudeSensors,

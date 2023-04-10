@@ -94,49 +94,9 @@ class BodyInFovCondition(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            conOps = schemas.StrSchema
-            
-            
-            class operationalModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'operationalModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             terminator = schemas.BoolSchema
             compliance = schemas.BoolSchema
             fieldOfView = schemas.StrSchema
-            
-            
-            class conditionType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "BodyInFovCondition": "BODY_IN_FOV_CONDITION",
-                    }
-                
-                @schemas.classproperty
-                def BODY_IN_FOV_CONDITION(cls):
-                    return cls("BodyInFovCondition")
             targetA = schemas.StrSchema
             negate = schemas.BoolSchema
             __annotations__ = {
@@ -145,12 +105,9 @@ class BodyInFovCondition(
                 "scalar": scalar,
                 "id": id,
                 "metamodel": metamodel,
-                "conOps": conOps,
-                "operationalModes": operationalModes,
                 "terminator": terminator,
                 "compliance": compliance,
                 "fieldOfView": fieldOfView,
-                "conditionType": conditionType,
                 "targetA": targetA,
                 "negate": negate,
             }
@@ -176,12 +133,6 @@ class BodyInFovCondition(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["terminator"]) -> MetaOapg.properties.terminator: ...
     
     @typing.overload
@@ -191,15 +142,12 @@ class BodyInFovCondition(
     def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conditionType"]) -> MetaOapg.properties.conditionType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targetA"]) -> MetaOapg.properties.targetA: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["negate"]) -> MetaOapg.properties.negate: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["scalar"], typing_extensions.Literal["name"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["targetA"], typing_extensions.Literal["negate"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["scalar"], typing_extensions.Literal["name"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["targetA"], typing_extensions.Literal["negate"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -219,12 +167,6 @@ class BodyInFovCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["terminator"]) -> typing.Union[MetaOapg.properties.terminator, schemas.Unset]: ...
     
     @typing.overload
@@ -234,15 +176,12 @@ class BodyInFovCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conditionType"]) -> typing.Union[MetaOapg.properties.conditionType, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targetA"]) -> typing.Union[MetaOapg.properties.targetA, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["negate"]) -> typing.Union[MetaOapg.properties.negate, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["scalar"], typing_extensions.Literal["name"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["targetA"], typing_extensions.Literal["negate"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["scalar"], typing_extensions.Literal["name"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["targetA"], typing_extensions.Literal["negate"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -253,12 +192,9 @@ class BodyInFovCondition(
         relationship: typing.Union[MetaOapg.properties.relationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         terminator: typing.Union[MetaOapg.properties.terminator, bool, schemas.Unset] = schemas.unset,
         compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
-        conditionType: typing.Union[MetaOapg.properties.conditionType, str, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
         negate: typing.Union[MetaOapg.properties.negate, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -271,12 +207,9 @@ class BodyInFovCondition(
             relationship=relationship,
             id=id,
             metamodel=metamodel,
-            conOps=conOps,
-            operationalModes=operationalModes,
             terminator=terminator,
             compliance=compliance,
             fieldOfView=fieldOfView,
-            conditionType=conditionType,
             targetA=targetA,
             negate=negate,
             _configuration=_configuration,

@@ -52,30 +52,6 @@ class TargetGroupInFovCondition(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            conOps = schemas.StrSchema
-            
-            
-            class operationalModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'operationalModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             terminator = schemas.BoolSchema
             compliance = schemas.BoolSchema
             targetGroup = schemas.StrSchema
@@ -110,16 +86,6 @@ class TargetGroupInFovCondition(
                         **kwargs,
                     )
             fieldOfView = schemas.StrSchema
-            
-            
-            class conditionType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def TARGET_GROUP_IN_FOV_CONDITION(cls):
-                    return cls("TargetGroupInFovCondition")
             
             
             class countRelationship(
@@ -161,15 +127,12 @@ class TargetGroupInFovCondition(
                 "name": name,
                 "id": id,
                 "metamodel": metamodel,
-                "conOps": conOps,
-                "operationalModes": operationalModes,
                 "terminator": terminator,
                 "compliance": compliance,
                 "targetGroup": targetGroup,
                 "isFilter": isFilter,
                 "targetCompliance": targetCompliance,
                 "fieldOfView": fieldOfView,
-                "conditionType": conditionType,
                 "countRelationship": countRelationship,
                 "countValue": countValue,
             }
@@ -185,12 +148,6 @@ class TargetGroupInFovCondition(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["terminator"]) -> MetaOapg.properties.terminator: ...
@@ -211,15 +168,12 @@ class TargetGroupInFovCondition(
     def __getitem__(self, name: typing_extensions.Literal["fieldOfView"]) -> MetaOapg.properties.fieldOfView: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conditionType"]) -> MetaOapg.properties.conditionType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["countRelationship"]) -> MetaOapg.properties.countRelationship: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["countValue"]) -> MetaOapg.properties.countValue: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -231,12 +185,6 @@ class TargetGroupInFovCondition(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["terminator"]) -> typing.Union[MetaOapg.properties.terminator, schemas.Unset]: ...
@@ -257,15 +205,12 @@ class TargetGroupInFovCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["fieldOfView"]) -> typing.Union[MetaOapg.properties.fieldOfView, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conditionType"]) -> typing.Union[MetaOapg.properties.conditionType, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["countRelationship"]) -> typing.Union[MetaOapg.properties.countRelationship, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["countValue"]) -> typing.Union[MetaOapg.properties.countValue, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["fieldOfView"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -274,15 +219,12 @@ class TargetGroupInFovCondition(
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         terminator: typing.Union[MetaOapg.properties.terminator, bool, schemas.Unset] = schemas.unset,
         compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
         targetGroup: typing.Union[MetaOapg.properties.targetGroup, str, schemas.Unset] = schemas.unset,
         isFilter: typing.Union[MetaOapg.properties.isFilter, str, schemas.Unset] = schemas.unset,
         targetCompliance: typing.Union[MetaOapg.properties.targetCompliance, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         fieldOfView: typing.Union[MetaOapg.properties.fieldOfView, str, schemas.Unset] = schemas.unset,
-        conditionType: typing.Union[MetaOapg.properties.conditionType, str, schemas.Unset] = schemas.unset,
         countRelationship: typing.Union[MetaOapg.properties.countRelationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         countValue: typing.Union[MetaOapg.properties.countValue, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -293,15 +235,12 @@ class TargetGroupInFovCondition(
             name=name,
             id=id,
             metamodel=metamodel,
-            conOps=conOps,
-            operationalModes=operationalModes,
             terminator=terminator,
             compliance=compliance,
             targetGroup=targetGroup,
             isFilter=isFilter,
             targetCompliance=targetCompliance,
             fieldOfView=fieldOfView,
-            conditionType=conditionType,
             countRelationship=countRelationship,
             countValue=countValue,
             _configuration=_configuration,

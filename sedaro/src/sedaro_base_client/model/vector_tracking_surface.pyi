@@ -39,7 +39,6 @@ class VectorTrackingSurface(
         required = {
             "area",
             "surfaceCentroid",
-            "motionType",
             "name",
         }
         
@@ -50,16 +49,6 @@ class VectorTrackingSurface(
                 schemas.StrSchema
             ):
                 pass
-            
-            
-            class motionType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def VECTOR_TRACKING(cls):
-                    return cls("VECTOR_TRACKING")
             area = schemas.NumberSchema
             surfaceCentroid = schemas.AnyTypeSchema
             id = schemas.StrSchema
@@ -69,76 +58,6 @@ class VectorTrackingSurface(
                 return Metamodel
             bodyFrameVector = schemas.StrSchema
             surfaceMaterial = schemas.StrSchema
-            satellite = schemas.StrSchema
-            
-            
-            class panels(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'panels':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class thermal_interface_A(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'thermal_interface_A':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class thermal_interface_B(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'thermal_interface_B':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             geocenterAngle = schemas.AnyTypeSchema
             
             
@@ -158,14 +77,119 @@ class VectorTrackingSurface(
                 schemas.NumberSchema
             ):
                 pass
-            surfaceNormalVector = schemas.AnyTypeSchema
-            sat2Sun = schemas.AnyTypeSchema
+            
+            
+            class surfaceNormalVector(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            FrameVectorBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'surfaceNormalVector':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class sat2Sun(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            FrameVectorBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'sat2Sun':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             earthIrHeatFlowRate = schemas.NumberSchema
             earthAlbedoHeatFlowRate = schemas.NumberSchema
             solarHeatFlowRate = schemas.NumberSchema
             spaceHeatFlowRate = schemas.NumberSchema
             heatFlowRate = schemas.NumberSchema
-            temperature = schemas.NumberSchema
+            
+            
+            class temperature(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'temperature':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             hotMargin = schemas.NumberSchema
             coldMargin = schemas.NumberSchema
             antiTrack = schemas.BoolSchema
@@ -247,17 +271,12 @@ class VectorTrackingSurface(
             trackedVector = schemas.StrSchema
             __annotations__ = {
                 "name": name,
-                "motionType": motionType,
                 "area": area,
                 "surfaceCentroid": surfaceCentroid,
                 "id": id,
                 "metamodel": metamodel,
                 "bodyFrameVector": bodyFrameVector,
                 "surfaceMaterial": surfaceMaterial,
-                "satellite": satellite,
-                "panels": panels,
-                "thermal_interface_A": thermal_interface_A,
-                "thermal_interface_B": thermal_interface_B,
                 "geocenterAngle": geocenterAngle,
                 "earthAlbedoViewFactor": earthAlbedoViewFactor,
                 "earthIrViewFactor": earthIrViewFactor,
@@ -283,7 +302,6 @@ class VectorTrackingSurface(
     
     area: MetaOapg.properties.area
     surfaceCentroid: MetaOapg.properties.surfaceCentroid
-    motionType: MetaOapg.properties.motionType
     name: MetaOapg.properties.name
     
     @typing.overload
@@ -291,9 +309,6 @@ class VectorTrackingSurface(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["surfaceCentroid"]) -> MetaOapg.properties.surfaceCentroid: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["motionType"]) -> MetaOapg.properties.motionType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -309,18 +324,6 @@ class VectorTrackingSurface(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["surfaceMaterial"]) -> MetaOapg.properties.surfaceMaterial: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["panels"]) -> MetaOapg.properties.panels: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["thermal_interface_A"]) -> MetaOapg.properties.thermal_interface_A: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["thermal_interface_B"]) -> MetaOapg.properties.thermal_interface_B: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["geocenterAngle"]) -> MetaOapg.properties.geocenterAngle: ...
@@ -382,7 +385,7 @@ class VectorTrackingSurface(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["trackedVector"]) -> MetaOapg.properties.trackedVector: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["area"], typing_extensions.Literal["surfaceCentroid"], typing_extensions.Literal["motionType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["bodyFrameVector"], typing_extensions.Literal["surfaceMaterial"], typing_extensions.Literal["satellite"], typing_extensions.Literal["panels"], typing_extensions.Literal["thermal_interface_A"], typing_extensions.Literal["thermal_interface_B"], typing_extensions.Literal["geocenterAngle"], typing_extensions.Literal["earthAlbedoViewFactor"], typing_extensions.Literal["earthIrViewFactor"], typing_extensions.Literal["solarViewFactor"], typing_extensions.Literal["surfaceNormalVector"], typing_extensions.Literal["sat2Sun"], typing_extensions.Literal["earthIrHeatFlowRate"], typing_extensions.Literal["earthAlbedoHeatFlowRate"], typing_extensions.Literal["solarHeatFlowRate"], typing_extensions.Literal["spaceHeatFlowRate"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["temperature"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["antiTrack"], typing_extensions.Literal["refVector1"], typing_extensions.Literal["refVector2"], typing_extensions.Literal["vectorProjection"], typing_extensions.Literal["articulationAngle"], typing_extensions.Literal["trackedVector"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["area"], typing_extensions.Literal["surfaceCentroid"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["bodyFrameVector"], typing_extensions.Literal["surfaceMaterial"], typing_extensions.Literal["geocenterAngle"], typing_extensions.Literal["earthAlbedoViewFactor"], typing_extensions.Literal["earthIrViewFactor"], typing_extensions.Literal["solarViewFactor"], typing_extensions.Literal["surfaceNormalVector"], typing_extensions.Literal["sat2Sun"], typing_extensions.Literal["earthIrHeatFlowRate"], typing_extensions.Literal["earthAlbedoHeatFlowRate"], typing_extensions.Literal["solarHeatFlowRate"], typing_extensions.Literal["spaceHeatFlowRate"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["temperature"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["antiTrack"], typing_extensions.Literal["refVector1"], typing_extensions.Literal["refVector2"], typing_extensions.Literal["vectorProjection"], typing_extensions.Literal["articulationAngle"], typing_extensions.Literal["trackedVector"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -391,9 +394,6 @@ class VectorTrackingSurface(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["surfaceCentroid"]) -> MetaOapg.properties.surfaceCentroid: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["motionType"]) -> MetaOapg.properties.motionType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -409,18 +409,6 @@ class VectorTrackingSurface(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["surfaceMaterial"]) -> typing.Union[MetaOapg.properties.surfaceMaterial, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["panels"]) -> typing.Union[MetaOapg.properties.panels, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_A"]) -> typing.Union[MetaOapg.properties.thermal_interface_A, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["thermal_interface_B"]) -> typing.Union[MetaOapg.properties.thermal_interface_B, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["geocenterAngle"]) -> typing.Union[MetaOapg.properties.geocenterAngle, schemas.Unset]: ...
@@ -482,7 +470,7 @@ class VectorTrackingSurface(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["trackedVector"]) -> typing.Union[MetaOapg.properties.trackedVector, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["area"], typing_extensions.Literal["surfaceCentroid"], typing_extensions.Literal["motionType"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["bodyFrameVector"], typing_extensions.Literal["surfaceMaterial"], typing_extensions.Literal["satellite"], typing_extensions.Literal["panels"], typing_extensions.Literal["thermal_interface_A"], typing_extensions.Literal["thermal_interface_B"], typing_extensions.Literal["geocenterAngle"], typing_extensions.Literal["earthAlbedoViewFactor"], typing_extensions.Literal["earthIrViewFactor"], typing_extensions.Literal["solarViewFactor"], typing_extensions.Literal["surfaceNormalVector"], typing_extensions.Literal["sat2Sun"], typing_extensions.Literal["earthIrHeatFlowRate"], typing_extensions.Literal["earthAlbedoHeatFlowRate"], typing_extensions.Literal["solarHeatFlowRate"], typing_extensions.Literal["spaceHeatFlowRate"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["temperature"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["antiTrack"], typing_extensions.Literal["refVector1"], typing_extensions.Literal["refVector2"], typing_extensions.Literal["vectorProjection"], typing_extensions.Literal["articulationAngle"], typing_extensions.Literal["trackedVector"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["area"], typing_extensions.Literal["surfaceCentroid"], typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["bodyFrameVector"], typing_extensions.Literal["surfaceMaterial"], typing_extensions.Literal["geocenterAngle"], typing_extensions.Literal["earthAlbedoViewFactor"], typing_extensions.Literal["earthIrViewFactor"], typing_extensions.Literal["solarViewFactor"], typing_extensions.Literal["surfaceNormalVector"], typing_extensions.Literal["sat2Sun"], typing_extensions.Literal["earthIrHeatFlowRate"], typing_extensions.Literal["earthAlbedoHeatFlowRate"], typing_extensions.Literal["solarHeatFlowRate"], typing_extensions.Literal["spaceHeatFlowRate"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["temperature"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], typing_extensions.Literal["antiTrack"], typing_extensions.Literal["refVector1"], typing_extensions.Literal["refVector2"], typing_extensions.Literal["vectorProjection"], typing_extensions.Literal["articulationAngle"], typing_extensions.Literal["trackedVector"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -490,16 +478,11 @@ class VectorTrackingSurface(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         area: typing.Union[MetaOapg.properties.area, decimal.Decimal, int, float, ],
         surfaceCentroid: typing.Union[MetaOapg.properties.surfaceCentroid, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        motionType: typing.Union[MetaOapg.properties.motionType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, schemas.Unset] = schemas.unset,
         surfaceMaterial: typing.Union[MetaOapg.properties.surfaceMaterial, str, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
-        panels: typing.Union[MetaOapg.properties.panels, list, tuple, schemas.Unset] = schemas.unset,
-        thermal_interface_A: typing.Union[MetaOapg.properties.thermal_interface_A, list, tuple, schemas.Unset] = schemas.unset,
-        thermal_interface_B: typing.Union[MetaOapg.properties.thermal_interface_B, list, tuple, schemas.Unset] = schemas.unset,
         geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         earthAlbedoViewFactor: typing.Union[MetaOapg.properties.earthAlbedoViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         earthIrViewFactor: typing.Union[MetaOapg.properties.earthIrViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -511,7 +494,7 @@ class VectorTrackingSurface(
         solarHeatFlowRate: typing.Union[MetaOapg.properties.solarHeatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         spaceHeatFlowRate: typing.Union[MetaOapg.properties.spaceHeatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         heatFlowRate: typing.Union[MetaOapg.properties.heatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        temperature: typing.Union[MetaOapg.properties.temperature, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        temperature: typing.Union[MetaOapg.properties.temperature, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         antiTrack: typing.Union[MetaOapg.properties.antiTrack, bool, schemas.Unset] = schemas.unset,
@@ -527,16 +510,11 @@ class VectorTrackingSurface(
             *_args,
             area=area,
             surfaceCentroid=surfaceCentroid,
-            motionType=motionType,
             name=name,
             id=id,
             metamodel=metamodel,
             bodyFrameVector=bodyFrameVector,
             surfaceMaterial=surfaceMaterial,
-            satellite=satellite,
-            panels=panels,
-            thermal_interface_A=thermal_interface_A,
-            thermal_interface_B=thermal_interface_B,
             geocenterAngle=geocenterAngle,
             earthAlbedoViewFactor=earthAlbedoViewFactor,
             earthIrViewFactor=earthIrViewFactor,
@@ -560,4 +538,6 @@ class VectorTrackingSurface(
             _configuration=_configuration,
         )
 
+from sedaro_base_client.model.frame_vector_base199 import FrameVectorBase199
 from sedaro_base_client.model.metamodel import Metamodel
+from sedaro_base_client.model.temperature_base199 import TemperatureBase199

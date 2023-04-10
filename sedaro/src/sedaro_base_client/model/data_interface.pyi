@@ -38,7 +38,6 @@ class DataInterface(
     class MetaOapg:
         required = {
             "onBitRate",
-            "interfaceType",
             "name",
             "alwaysActive",
         }
@@ -50,16 +49,6 @@ class DataInterface(
                 schemas.StrSchema
             ):
                 pass
-            
-            
-            class interfaceType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def DATA_INTERFACE(cls):
-                    return cls("DATA_INTERFACE")
             onBitRate = schemas.IntSchema
             alwaysActive = schemas.BoolSchema
             id = schemas.StrSchema
@@ -102,7 +91,6 @@ class DataInterface(
             isActive = schemas.BoolSchema
             __annotations__ = {
                 "name": name,
-                "interfaceType": interfaceType,
                 "onBitRate": onBitRate,
                 "alwaysActive": alwaysActive,
                 "id": id,
@@ -117,15 +105,11 @@ class DataInterface(
         additional_properties = schemas.NotAnyTypeSchema
     
     onBitRate: MetaOapg.properties.onBitRate
-    interfaceType: MetaOapg.properties.interfaceType
     name: MetaOapg.properties.name
     alwaysActive: MetaOapg.properties.alwaysActive
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["onBitRate"]) -> MetaOapg.properties.onBitRate: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["interfaceType"]) -> MetaOapg.properties.interfaceType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -157,15 +141,12 @@ class DataInterface(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["isActive"]) -> MetaOapg.properties.isActive: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["onBitRate"], typing_extensions.Literal["interfaceType"], typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["dataType"], typing_extensions.Literal["opModes"], typing_extensions.Literal["source"], typing_extensions.Literal["sink"], typing_extensions.Literal["bitRate"], typing_extensions.Literal["isActive"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["onBitRate"], typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["dataType"], typing_extensions.Literal["opModes"], typing_extensions.Literal["source"], typing_extensions.Literal["sink"], typing_extensions.Literal["bitRate"], typing_extensions.Literal["isActive"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["onBitRate"]) -> MetaOapg.properties.onBitRate: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["interfaceType"]) -> MetaOapg.properties.interfaceType: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -197,14 +178,13 @@ class DataInterface(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["isActive"]) -> typing.Union[MetaOapg.properties.isActive, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["onBitRate"], typing_extensions.Literal["interfaceType"], typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["dataType"], typing_extensions.Literal["opModes"], typing_extensions.Literal["source"], typing_extensions.Literal["sink"], typing_extensions.Literal["bitRate"], typing_extensions.Literal["isActive"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["onBitRate"], typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["dataType"], typing_extensions.Literal["opModes"], typing_extensions.Literal["source"], typing_extensions.Literal["sink"], typing_extensions.Literal["bitRate"], typing_extensions.Literal["isActive"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         onBitRate: typing.Union[MetaOapg.properties.onBitRate, decimal.Decimal, int, ],
-        interfaceType: typing.Union[MetaOapg.properties.interfaceType, str, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         alwaysActive: typing.Union[MetaOapg.properties.alwaysActive, bool, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -221,7 +201,6 @@ class DataInterface(
             cls,
             *_args,
             onBitRate=onBitRate,
-            interfaceType=interfaceType,
             name=name,
             alwaysActive=alwaysActive,
             id=id,

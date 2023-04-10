@@ -39,10 +39,8 @@ class SlidingModeAlgorithm(
         required = {
             "epsilon",
             "gainG",
-            "algorithmType",
             "gainK",
             "name",
-            "algorithmSubtype",
             "gainC",
         }
         
@@ -56,38 +54,6 @@ class SlidingModeAlgorithm(
             
                 class MetaOapg:
                     max_length = 100
-            
-            
-            class algorithmType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "ATTITUDE_CONTROL": "ATTITUDE_CONTROL",
-                    }
-                
-                @schemas.classproperty
-                def ATTITUDE_CONTROL(cls):
-                    return cls("ATTITUDE_CONTROL")
-            
-            
-            class algorithmSubtype(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "SLIDING_MODE": "SLIDING_MODE",
-                    }
-                
-                @schemas.classproperty
-                def SLIDING_MODE(cls):
-                    return cls("SLIDING_MODE")
             gainK = schemas.NumberSchema
             gainG = schemas.NumberSchema
             gainC = schemas.NumberSchema
@@ -98,7 +64,6 @@ class SlidingModeAlgorithm(
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
             rate = schemas.NumberSchema
-            satellite = schemas.StrSchema
             
             
             class actuators(
@@ -170,8 +135,6 @@ class SlidingModeAlgorithm(
                     return super().__getitem__(i)
             __annotations__ = {
                 "name": name,
-                "algorithmType": algorithmType,
-                "algorithmSubtype": algorithmSubtype,
                 "gainK": gainK,
                 "gainG": gainG,
                 "gainC": gainC,
@@ -179,7 +142,6 @@ class SlidingModeAlgorithm(
                 "id": id,
                 "metamodel": metamodel,
                 "rate": rate,
-                "satellite": satellite,
                 "actuators": actuators,
                 "reactionWheelCommands": reactionWheelCommands,
                 "magnetorquerCommands": magnetorquerCommands,
@@ -188,10 +150,8 @@ class SlidingModeAlgorithm(
     
     epsilon: MetaOapg.properties.epsilon
     gainG: MetaOapg.properties.gainG
-    algorithmType: MetaOapg.properties.algorithmType
     gainK: MetaOapg.properties.gainK
     name: MetaOapg.properties.name
-    algorithmSubtype: MetaOapg.properties.algorithmSubtype
     gainC: MetaOapg.properties.gainC
     
     @typing.overload
@@ -201,16 +161,10 @@ class SlidingModeAlgorithm(
     def __getitem__(self, name: typing_extensions.Literal["gainG"]) -> MetaOapg.properties.gainG: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["algorithmType"]) -> MetaOapg.properties.algorithmType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["gainK"]) -> MetaOapg.properties.gainK: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["algorithmSubtype"]) -> MetaOapg.properties.algorithmSubtype: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["gainC"]) -> MetaOapg.properties.gainC: ...
@@ -225,9 +179,6 @@ class SlidingModeAlgorithm(
     def __getitem__(self, name: typing_extensions.Literal["rate"]) -> MetaOapg.properties.rate: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["actuators"]) -> MetaOapg.properties.actuators: ...
     
     @typing.overload
@@ -236,7 +187,7 @@ class SlidingModeAlgorithm(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> MetaOapg.properties.magnetorquerCommands: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["epsilon"], typing_extensions.Literal["gainG"], typing_extensions.Literal["algorithmType"], typing_extensions.Literal["gainK"], typing_extensions.Literal["name"], typing_extensions.Literal["algorithmSubtype"], typing_extensions.Literal["gainC"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["satellite"], typing_extensions.Literal["actuators"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["epsilon"], typing_extensions.Literal["gainG"], typing_extensions.Literal["gainK"], typing_extensions.Literal["name"], typing_extensions.Literal["gainC"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["actuators"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -247,16 +198,10 @@ class SlidingModeAlgorithm(
     def get_item_oapg(self, name: typing_extensions.Literal["gainG"]) -> MetaOapg.properties.gainG: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["algorithmType"]) -> MetaOapg.properties.algorithmType: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["gainK"]) -> MetaOapg.properties.gainK: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["algorithmSubtype"]) -> MetaOapg.properties.algorithmSubtype: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["gainC"]) -> MetaOapg.properties.gainC: ...
@@ -271,9 +216,6 @@ class SlidingModeAlgorithm(
     def get_item_oapg(self, name: typing_extensions.Literal["rate"]) -> typing.Union[MetaOapg.properties.rate, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["actuators"]) -> typing.Union[MetaOapg.properties.actuators, schemas.Unset]: ...
     
     @typing.overload
@@ -282,7 +224,7 @@ class SlidingModeAlgorithm(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["magnetorquerCommands"]) -> typing.Union[MetaOapg.properties.magnetorquerCommands, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["epsilon"], typing_extensions.Literal["gainG"], typing_extensions.Literal["algorithmType"], typing_extensions.Literal["gainK"], typing_extensions.Literal["name"], typing_extensions.Literal["algorithmSubtype"], typing_extensions.Literal["gainC"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["satellite"], typing_extensions.Literal["actuators"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["epsilon"], typing_extensions.Literal["gainG"], typing_extensions.Literal["gainK"], typing_extensions.Literal["name"], typing_extensions.Literal["gainC"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rate"], typing_extensions.Literal["actuators"], typing_extensions.Literal["reactionWheelCommands"], typing_extensions.Literal["magnetorquerCommands"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -290,15 +232,12 @@ class SlidingModeAlgorithm(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         epsilon: typing.Union[MetaOapg.properties.epsilon, decimal.Decimal, int, float, ],
         gainG: typing.Union[MetaOapg.properties.gainG, decimal.Decimal, int, float, ],
-        algorithmType: typing.Union[MetaOapg.properties.algorithmType, str, ],
         gainK: typing.Union[MetaOapg.properties.gainK, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
-        algorithmSubtype: typing.Union[MetaOapg.properties.algorithmSubtype, str, ],
         gainC: typing.Union[MetaOapg.properties.gainC, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         rate: typing.Union[MetaOapg.properties.rate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         actuators: typing.Union[MetaOapg.properties.actuators, list, tuple, schemas.Unset] = schemas.unset,
         reactionWheelCommands: typing.Union[MetaOapg.properties.reactionWheelCommands, list, tuple, schemas.Unset] = schemas.unset,
         magnetorquerCommands: typing.Union[MetaOapg.properties.magnetorquerCommands, list, tuple, schemas.Unset] = schemas.unset,
@@ -309,15 +248,12 @@ class SlidingModeAlgorithm(
             *_args,
             epsilon=epsilon,
             gainG=gainG,
-            algorithmType=algorithmType,
             gainK=gainK,
             name=name,
-            algorithmSubtype=algorithmSubtype,
             gainC=gainC,
             id=id,
             metamodel=metamodel,
             rate=rate,
-            satellite=satellite,
             actuators=actuators,
             reactionWheelCommands=reactionWheelCommands,
             magnetorquerCommands=magnetorquerCommands,

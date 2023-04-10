@@ -73,101 +73,99 @@ class VehicleTemplateCrud(
                                 # classes don't exist yet because their module has not finished
                                 # loading
                                 return [
-                                    TargetGroupToSatelliteCondition,
-                                    ThermalInterface,
-                                    ReactionWheel,
-                                    SphericalFuelTank,
-                                    StaticThrustControlAlgorithm,
-                                    Antenna,
-                                    SlidingModeAlgorithm,
-                                    PowerProcessor,
-                                    Satellite,
-                                    RectangularFieldOfView,
-                                    OperationalMode,
-                                    InternalDataInterface,
-                                    CircularFieldOfView,
-                                    VectorTrackingSurface,
-                                    ReceiveInterface,
-                                    LockPointingMode,
-                                    SameTargetMultiCondition,
-                                    DataBus,
-                                    PowerLoad,
-                                    Orbit,
-                                    TimeCondition,
-                                    TransmitDataInterface,
-                                    CelestialVector,
-                                    Subsystem,
-                                    OpticalAttitudeSensor,
-                                    DataStorage,
-                                    DataInterface,
-                                    SunTrackingSurface,
-                                    PositionSensor,
-                                    TargetGroupToScalarCondition,
-                                    SolarPanel,
-                                    ConOps,
-                                    ActivePointingMode,
-                                    SatelliteToTargetCondition,
-                                    Modem,
-                                    BatteryCell,
-                                    QuasiRegDetPowerProcessor,
-                                    TargetGroupVector,
-                                    PIDAlgorithm,
-                                    AveragingAlgorithm,
-                                    VectorInFovCondition,
-                                    CooperativeTransmitInterface,
-                                    Component,
-                                    TwoConvMpptPowerProcessor,
-                                    MEKFAlgorithm,
-                                    TargetToTargetCondition,
-                                    PassivePointingMode,
-                                    SpherocylinderFuelTank,
-                                    TargetToScalarCondition,
-                                    TargetGroupInFovCondition,
-                                    DataMode,
-                                    DirectionSensor,
-                                    LoadState,
-                                    TempControllerState,
-                                    BodyFrameVector,
-                                    Battery,
-                                    BatteryPack,
-                                    SurfaceMaterial,
-                                    TargetGroupToTargetCondition,
-                                    FixedSurface,
-                                    LocalVector,
-                                    TargetGroup,
-                                    BodyInFovCondition,
-                                    CompoundCondition,
-                                    ThermalInterfaceMaterial,
-                                    SingleConvMpptPowerProcessor,
-                                    ExternalDataInterface,
-                                    SatelliteToScalarCondition,
-                                    GPSAlgorithm,
-                                    ResistanceLoad,
-                                    Cooler,
-                                    SolarCell,
-                                    EKFAlgorithm,
-                                    GroundTarget,
-                                    Thruster,
-                                    FullyRegDetPowerProcessor,
                                     AngularVelocitySensor,
-                                    MaxAlignPointingMode,
-                                    LaserCommModule,
-                                    FuelReservoir,
-                                    DataType,
-                                    VectorSensor,
-                                    TargetVector,
-                                    CelestialTarget,
-                                    Magnetorquer,
-                                    TargetInFovCondition,
+                                    PowerProcessor,
+                                    BodyFrameVector,
+                                    Component,
+                                    GroundTarget,
+                                    SpherocylinderFuelTank,
+                                    DataBus,
                                     TriadAlgorithm,
-                                    SolarArray,
-                                    ReferenceVector,
+                                    DataStorage,
+                                    DirectionSensor,
+                                    CelestialTarget,
                                     BusRegulator,
-                                    Heater,
-                                    SingleConvHybridPowerProcessor,
+                                    CooperativeTransmitInterface,
+                                    AveragingAlgorithm,
+                                    PassivePointingMode,
+                                    ReceiveInterface,
+                                    Satellite,
+                                    LoadState,
+                                    ResistanceLoad,
+                                    MekfAlgorithm,
                                     PassiveTransmitInterface,
                                     SpaceTarget,
+                                    TargetGroupToTargetCondition,
+                                    SatelliteToTargetCondition,
+                                    GpsAlgorithm,
+                                    FixedSurface,
+                                    DataType,
+                                    TargetToTargetCondition,
+                                    ThermalInterface,
+                                    VectorInFovCondition,
+                                    FuelReservoir,
+                                    DataMode,
+                                    CircularFieldOfView,
+                                    TargetGroupInFovCondition,
                                     SatelliteToSatelliteCondition,
+                                    TimeCondition,
+                                    Magnetorquer,
+                                    Modem,
+                                    TargetGroupToScalarCondition,
+                                    CompoundCondition,
+                                    VectorSensor,
+                                    QuasiRegDetPowerProcessor,
+                                    StaticThrustControlAlgorithm,
+                                    SlidingModeAlgorithm,
+                                    TwoConvMpptPowerProcessor,
+                                    TempControllerState,
+                                    BatteryCell,
+                                    OpticalAttitudeSensor,
+                                    DataInterface,
+                                    BodyInFovCondition,
+                                    InternalDataInterface,
+                                    Heater,
+                                    BatteryPack,
+                                    Cooler,
+                                    PowerLoad,
+                                    LaserCommModule,
+                                    SolarArray,
+                                    SingleConvMpptPowerProcessor,
+                                    TargetVector,
+                                    SingleConvHybridPowerProcessor,
+                                    RectangularFieldOfView,
+                                    VectorTrackingSurface,
+                                    ThermalInterfaceMaterial,
+                                    TransmitDataInterface,
+                                    TargetGroupVector,
+                                    PositionSensor,
+                                    LockPointingMode,
+                                    TargetGroup,
+                                    ReferenceVector,
+                                    TargetToScalarCondition,
+                                    OperationalMode,
+                                    SolarCell,
+                                    PidAlgorithm,
+                                    MaxAlignPointingMode,
+                                    Antenna,
+                                    EkfAlgorithm,
+                                    SphericalFuelTank,
+                                    ReactionWheel,
+                                    SolarPanel,
+                                    SurfaceMaterial,
+                                    CelestialVector,
+                                    LocalVector,
+                                    TargetInFovCondition,
+                                    Subsystem,
+                                    Battery,
+                                    FullyRegDetPowerProcessor,
+                                    Thruster,
+                                    SatelliteToScalarCondition,
+                                    SunTrackingSurface,
+                                    SameTargetMultiCondition,
+                                    TargetGroupToSatelliteCondition,
+                                    ExternalDataInterface,
+                                    Orbit,
                                 ]
                     
                     
@@ -282,7 +280,6 @@ class VehicleTemplateCrud(
             **kwargs,
         )
 
-from sedaro_base_client.model.active_pointing_mode import ActivePointingMode
 from sedaro_base_client.model.angular_velocity_sensor import AngularVelocitySensor
 from sedaro_base_client.model.antenna import Antenna
 from sedaro_base_client.model.averaging_algorithm import AveragingAlgorithm
@@ -297,7 +294,6 @@ from sedaro_base_client.model.celestial_vector import CelestialVector
 from sedaro_base_client.model.circular_field_of_view import CircularFieldOfView
 from sedaro_base_client.model.component import Component
 from sedaro_base_client.model.compound_condition import CompoundCondition
-from sedaro_base_client.model.con_ops import ConOps
 from sedaro_base_client.model.cooler import Cooler
 from sedaro_base_client.model.cooperative_transmit_interface import CooperativeTransmitInterface
 from sedaro_base_client.model.data_bus import DataBus
@@ -306,12 +302,12 @@ from sedaro_base_client.model.data_mode import DataMode
 from sedaro_base_client.model.data_storage import DataStorage
 from sedaro_base_client.model.data_type import DataType
 from sedaro_base_client.model.direction_sensor import DirectionSensor
-from sedaro_base_client.model.ekf_algorithm import EKFAlgorithm
+from sedaro_base_client.model.ekf_algorithm import EkfAlgorithm
 from sedaro_base_client.model.external_data_interface import ExternalDataInterface
 from sedaro_base_client.model.fixed_surface import FixedSurface
 from sedaro_base_client.model.fuel_reservoir import FuelReservoir
 from sedaro_base_client.model.fully_reg_det_power_processor import FullyRegDetPowerProcessor
-from sedaro_base_client.model.gps_algorithm import GPSAlgorithm
+from sedaro_base_client.model.gps_algorithm import GpsAlgorithm
 from sedaro_base_client.model.ground_target import GroundTarget
 from sedaro_base_client.model.heater import Heater
 from sedaro_base_client.model.internal_data_interface import InternalDataInterface
@@ -321,14 +317,14 @@ from sedaro_base_client.model.local_vector import LocalVector
 from sedaro_base_client.model.lock_pointing_mode import LockPointingMode
 from sedaro_base_client.model.magnetorquer import Magnetorquer
 from sedaro_base_client.model.max_align_pointing_mode import MaxAlignPointingMode
-from sedaro_base_client.model.mekf_algorithm import MEKFAlgorithm
+from sedaro_base_client.model.mekf_algorithm import MekfAlgorithm
 from sedaro_base_client.model.modem import Modem
 from sedaro_base_client.model.operational_mode import OperationalMode
 from sedaro_base_client.model.optical_attitude_sensor import OpticalAttitudeSensor
 from sedaro_base_client.model.orbit import Orbit
 from sedaro_base_client.model.passive_pointing_mode import PassivePointingMode
 from sedaro_base_client.model.passive_transmit_interface import PassiveTransmitInterface
-from sedaro_base_client.model.pid_algorithm import PIDAlgorithm
+from sedaro_base_client.model.pid_algorithm import PidAlgorithm
 from sedaro_base_client.model.position_sensor import PositionSensor
 from sedaro_base_client.model.power_load import PowerLoad
 from sedaro_base_client.model.power_processor import PowerProcessor

@@ -38,19 +38,19 @@ class Types(
 
     class MetaOapg:
         enum_value_to_name = {
-            "SPACE_TARGET": "SPACE_TARGET",
-            "CELESTIAL_TARGET": "CELESTIAL_TARGET",
-            "GROUND_TARGET": "GROUND_TARGET",
+            "SpaceTarget": "SPACE_TARGET",
+            "CelestialTarget": "CELESTIAL_TARGET",
+            "GroundTarget": "GROUND_TARGET",
         }
     
     @schemas.classproperty
     def SPACE_TARGET(cls):
-        return cls("SPACE_TARGET")
+        return cls("SpaceTarget")
     
     @schemas.classproperty
     def CELESTIAL_TARGET(cls):
-        return cls("CELESTIAL_TARGET")
+        return cls("CelestialTarget")
     
     @schemas.classproperty
     def GROUND_TARGET(cls):
-        return cls("GROUND_TARGET")
+        return cls("GroundTarget")

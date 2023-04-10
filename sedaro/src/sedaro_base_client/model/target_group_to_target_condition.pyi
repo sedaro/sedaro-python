@@ -163,30 +163,6 @@ class TargetGroupToTargetCondition(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            conOps = schemas.StrSchema
-            
-            
-            class operationalModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'operationalModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             terminator = schemas.BoolSchema
             compliance = schemas.BoolSchema
             targetGroup = schemas.StrSchema
@@ -293,16 +269,6 @@ class TargetGroupToTargetCondition(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            
-            
-            class conditionType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def TARGET_GROUP_TO_TARGET_CONDITION(cls):
-                    return cls("TargetGroupToTargetCondition")
             targetA = schemas.StrSchema
             __annotations__ = {
                 "name": name,
@@ -311,8 +277,6 @@ class TargetGroupToTargetCondition(
                 "targetParam": targetParam,
                 "id": id,
                 "metamodel": metamodel,
-                "conOps": conOps,
-                "operationalModes": operationalModes,
                 "terminator": terminator,
                 "compliance": compliance,
                 "targetGroup": targetGroup,
@@ -321,7 +285,6 @@ class TargetGroupToTargetCondition(
                 "countRelationship": countRelationship,
                 "countValue": countValue,
                 "groupRoller": groupRoller,
-                "conditionType": conditionType,
                 "targetA": targetA,
             }
         additional_properties = schemas.NotAnyTypeSchema
@@ -350,12 +313,6 @@ class TargetGroupToTargetCondition(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["terminator"]) -> MetaOapg.properties.terminator: ...
     
     @typing.overload
@@ -380,12 +337,9 @@ class TargetGroupToTargetCondition(
     def __getitem__(self, name: typing_extensions.Literal["groupRoller"]) -> MetaOapg.properties.groupRoller: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conditionType"]) -> MetaOapg.properties.conditionType: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["targetA"]) -> MetaOapg.properties.targetA: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["tgParam"], typing_extensions.Literal["name"], typing_extensions.Literal["targetParam"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], typing_extensions.Literal["groupRoller"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["targetA"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["tgParam"], typing_extensions.Literal["name"], typing_extensions.Literal["targetParam"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], typing_extensions.Literal["groupRoller"], typing_extensions.Literal["targetA"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -406,12 +360,6 @@ class TargetGroupToTargetCondition(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["terminator"]) -> typing.Union[MetaOapg.properties.terminator, schemas.Unset]: ...
@@ -438,12 +386,9 @@ class TargetGroupToTargetCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["groupRoller"]) -> typing.Union[MetaOapg.properties.groupRoller, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conditionType"]) -> typing.Union[MetaOapg.properties.conditionType, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["targetA"]) -> typing.Union[MetaOapg.properties.targetA, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["tgParam"], typing_extensions.Literal["name"], typing_extensions.Literal["targetParam"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], typing_extensions.Literal["groupRoller"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["targetA"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["tgParam"], typing_extensions.Literal["name"], typing_extensions.Literal["targetParam"], typing_extensions.Literal["relationship"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["targetGroup"], typing_extensions.Literal["isFilter"], typing_extensions.Literal["targetCompliance"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], typing_extensions.Literal["groupRoller"], typing_extensions.Literal["targetA"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -455,8 +400,6 @@ class TargetGroupToTargetCondition(
         relationship: typing.Union[MetaOapg.properties.relationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         terminator: typing.Union[MetaOapg.properties.terminator, bool, schemas.Unset] = schemas.unset,
         compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
         targetGroup: typing.Union[MetaOapg.properties.targetGroup, str, schemas.Unset] = schemas.unset,
@@ -465,7 +408,6 @@ class TargetGroupToTargetCondition(
         countRelationship: typing.Union[MetaOapg.properties.countRelationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         countValue: typing.Union[MetaOapg.properties.countValue, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         groupRoller: typing.Union[MetaOapg.properties.groupRoller, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        conditionType: typing.Union[MetaOapg.properties.conditionType, str, schemas.Unset] = schemas.unset,
         targetA: typing.Union[MetaOapg.properties.targetA, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'TargetGroupToTargetCondition':
@@ -478,8 +420,6 @@ class TargetGroupToTargetCondition(
             relationship=relationship,
             id=id,
             metamodel=metamodel,
-            conOps=conOps,
-            operationalModes=operationalModes,
             terminator=terminator,
             compliance=compliance,
             targetGroup=targetGroup,
@@ -488,7 +428,6 @@ class TargetGroupToTargetCondition(
             countRelationship=countRelationship,
             countValue=countValue,
             groupRoller=groupRoller,
-            conditionType=conditionType,
             targetA=targetA,
             _configuration=_configuration,
         )

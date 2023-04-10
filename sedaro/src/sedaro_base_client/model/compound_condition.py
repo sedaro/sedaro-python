@@ -92,30 +92,6 @@ class CompoundCondition(
             @staticmethod
             def metamodel() -> typing.Type['Metamodel']:
                 return Metamodel
-            conOps = schemas.StrSchema
-            
-            
-            class operationalModes(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.AnyTypeSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'operationalModes':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             terminator = schemas.BoolSchema
             compliance = schemas.BoolSchema
             
@@ -141,22 +117,6 @@ class CompoundCondition(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
-            class conditionType(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    enum_value_to_name = {
-                        "CompoundCondition": "COMPOUND_CONDITION",
-                    }
-                
-                @schemas.classproperty
-                def COMPOUND_CONDITION(cls):
-                    return cls("CompoundCondition")
             negate = schemas.BoolSchema
             
             
@@ -200,12 +160,9 @@ class CompoundCondition(
                 "operator": operator,
                 "id": id,
                 "metamodel": metamodel,
-                "conOps": conOps,
-                "operationalModes": operationalModes,
                 "terminator": terminator,
                 "compliance": compliance,
                 "conditions": conditions,
-                "conditionType": conditionType,
                 "negate": negate,
                 "countRelationship": countRelationship,
                 "countValue": countValue,
@@ -228,12 +185,6 @@ class CompoundCondition(
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conOps"]) -> MetaOapg.properties.conOps: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["operationalModes"]) -> MetaOapg.properties.operationalModes: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["terminator"]) -> MetaOapg.properties.terminator: ...
     
     @typing.overload
@@ -241,9 +192,6 @@ class CompoundCondition(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["conditions"]) -> MetaOapg.properties.conditions: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["conditionType"]) -> MetaOapg.properties.conditionType: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["negate"]) -> MetaOapg.properties.negate: ...
@@ -254,7 +202,7 @@ class CompoundCondition(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["countValue"]) -> MetaOapg.properties.countValue: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["operator"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["conditions"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["negate"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["operator"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["conditions"], typing_extensions.Literal["negate"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -271,12 +219,6 @@ class CompoundCondition(
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conOps"]) -> typing.Union[MetaOapg.properties.conOps, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["operationalModes"]) -> typing.Union[MetaOapg.properties.operationalModes, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["terminator"]) -> typing.Union[MetaOapg.properties.terminator, schemas.Unset]: ...
     
     @typing.overload
@@ -284,9 +226,6 @@ class CompoundCondition(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["conditions"]) -> typing.Union[MetaOapg.properties.conditions, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["conditionType"]) -> typing.Union[MetaOapg.properties.conditionType, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["negate"]) -> typing.Union[MetaOapg.properties.negate, schemas.Unset]: ...
@@ -297,7 +236,7 @@ class CompoundCondition(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["countValue"]) -> typing.Union[MetaOapg.properties.countValue, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["operator"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["conOps"], typing_extensions.Literal["operationalModes"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["conditions"], typing_extensions.Literal["conditionType"], typing_extensions.Literal["negate"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["operator"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["terminator"], typing_extensions.Literal["compliance"], typing_extensions.Literal["conditions"], typing_extensions.Literal["negate"], typing_extensions.Literal["countRelationship"], typing_extensions.Literal["countValue"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -307,12 +246,9 @@ class CompoundCondition(
         operator: typing.Union[MetaOapg.properties.operator, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
-        conOps: typing.Union[MetaOapg.properties.conOps, str, schemas.Unset] = schemas.unset,
-        operationalModes: typing.Union[MetaOapg.properties.operationalModes, list, tuple, schemas.Unset] = schemas.unset,
         terminator: typing.Union[MetaOapg.properties.terminator, bool, schemas.Unset] = schemas.unset,
         compliance: typing.Union[MetaOapg.properties.compliance, bool, schemas.Unset] = schemas.unset,
         conditions: typing.Union[MetaOapg.properties.conditions, list, tuple, schemas.Unset] = schemas.unset,
-        conditionType: typing.Union[MetaOapg.properties.conditionType, str, schemas.Unset] = schemas.unset,
         negate: typing.Union[MetaOapg.properties.negate, bool, schemas.Unset] = schemas.unset,
         countRelationship: typing.Union[MetaOapg.properties.countRelationship, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         countValue: typing.Union[MetaOapg.properties.countValue, decimal.Decimal, int, schemas.Unset] = schemas.unset,
@@ -325,12 +261,9 @@ class CompoundCondition(
             operator=operator,
             id=id,
             metamodel=metamodel,
-            conOps=conOps,
-            operationalModes=operationalModes,
             terminator=terminator,
             compliance=compliance,
             conditions=conditions,
-            conditionType=conditionType,
             negate=negate,
             countRelationship=countRelationship,
             countValue=countValue,

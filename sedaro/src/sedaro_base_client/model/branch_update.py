@@ -54,22 +54,9 @@ class BranchUpdate(
             
                 class MetaOapg:
                     max_length = 300
-            shareable = schemas.BoolSchema
-            
-            
-            class password(
-                schemas.StrSchema
-            ):
-            
-            
-                class MetaOapg:
-                    max_length = 128
-                    min_length = 8
             __annotations__ = {
                 "name": name,
                 "description": description,
-                "shareable": shareable,
-                "password": password,
             }
     
     @typing.overload
@@ -79,15 +66,9 @@ class BranchUpdate(
     def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["shareable"]) -> MetaOapg.properties.shareable: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["password"]) -> MetaOapg.properties.password: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "description", "shareable", "password", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "description", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -99,15 +80,9 @@ class BranchUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["shareable"]) -> typing.Union[MetaOapg.properties.shareable, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["password"]) -> typing.Union[MetaOapg.properties.password, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "description", "shareable", "password", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "description", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -116,8 +91,6 @@ class BranchUpdate(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
-        shareable: typing.Union[MetaOapg.properties.shareable, bool, schemas.Unset] = schemas.unset,
-        password: typing.Union[MetaOapg.properties.password, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'BranchUpdate':
@@ -126,8 +99,6 @@ class BranchUpdate(
             *_args,
             name=name,
             description=description,
-            shareable=shareable,
-            password=password,
             _configuration=_configuration,
             **kwargs,
         )

@@ -129,12 +129,81 @@ class ThermalInterface(
             surfaceB = schemas.StrSchema
             coolerA = schemas.StrSchema
             coolerB = schemas.StrSchema
-            satellite = schemas.StrSchema
             resistance = schemas.NumberSchema
             tempDelta = schemas.NumberSchema
             heatFlowRate = schemas.NumberSchema
-            hotTemp = schemas.NumberSchema
-            coldTemp = schemas.NumberSchema
+            
+            
+            class hotTemp(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'hotTemp':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class coldTemp(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TemperatureBase199,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'coldTemp':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             hotMargin = schemas.NumberSchema
             coldMargin = schemas.NumberSchema
             __annotations__ = {
@@ -151,7 +220,6 @@ class ThermalInterface(
                 "surfaceB": surfaceB,
                 "coolerA": coolerA,
                 "coolerB": coolerB,
-                "satellite": satellite,
                 "resistance": resistance,
                 "tempDelta": tempDelta,
                 "heatFlowRate": heatFlowRate,
@@ -206,9 +274,6 @@ class ThermalInterface(
     def __getitem__(self, name: typing_extensions.Literal["coolerB"]) -> MetaOapg.properties.coolerB: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["resistance"]) -> MetaOapg.properties.resistance: ...
     
     @typing.overload
@@ -229,7 +294,7 @@ class ThermalInterface(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["coldMargin"]) -> MetaOapg.properties.coldMargin: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["sideB"], typing_extensions.Literal["sideA"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["area"], typing_extensions.Literal["material"], typing_extensions.Literal["componentA"], typing_extensions.Literal["componentB"], typing_extensions.Literal["surfaceA"], typing_extensions.Literal["surfaceB"], typing_extensions.Literal["coolerA"], typing_extensions.Literal["coolerB"], typing_extensions.Literal["satellite"], typing_extensions.Literal["resistance"], typing_extensions.Literal["tempDelta"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["hotTemp"], typing_extensions.Literal["coldTemp"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["sideB"], typing_extensions.Literal["sideA"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["area"], typing_extensions.Literal["material"], typing_extensions.Literal["componentA"], typing_extensions.Literal["componentB"], typing_extensions.Literal["surfaceA"], typing_extensions.Literal["surfaceB"], typing_extensions.Literal["coolerA"], typing_extensions.Literal["coolerB"], typing_extensions.Literal["resistance"], typing_extensions.Literal["tempDelta"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["hotTemp"], typing_extensions.Literal["coldTemp"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -273,9 +338,6 @@ class ThermalInterface(
     def get_item_oapg(self, name: typing_extensions.Literal["coolerB"]) -> typing.Union[MetaOapg.properties.coolerB, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["resistance"]) -> typing.Union[MetaOapg.properties.resistance, schemas.Unset]: ...
     
     @typing.overload
@@ -296,7 +358,7 @@ class ThermalInterface(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["coldMargin"]) -> typing.Union[MetaOapg.properties.coldMargin, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["sideB"], typing_extensions.Literal["sideA"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["area"], typing_extensions.Literal["material"], typing_extensions.Literal["componentA"], typing_extensions.Literal["componentB"], typing_extensions.Literal["surfaceA"], typing_extensions.Literal["surfaceB"], typing_extensions.Literal["coolerA"], typing_extensions.Literal["coolerB"], typing_extensions.Literal["satellite"], typing_extensions.Literal["resistance"], typing_extensions.Literal["tempDelta"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["hotTemp"], typing_extensions.Literal["coldTemp"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["sideB"], typing_extensions.Literal["sideA"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["area"], typing_extensions.Literal["material"], typing_extensions.Literal["componentA"], typing_extensions.Literal["componentB"], typing_extensions.Literal["surfaceA"], typing_extensions.Literal["surfaceB"], typing_extensions.Literal["coolerA"], typing_extensions.Literal["coolerB"], typing_extensions.Literal["resistance"], typing_extensions.Literal["tempDelta"], typing_extensions.Literal["heatFlowRate"], typing_extensions.Literal["hotTemp"], typing_extensions.Literal["coldTemp"], typing_extensions.Literal["hotMargin"], typing_extensions.Literal["coldMargin"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -315,12 +377,11 @@ class ThermalInterface(
         surfaceB: typing.Union[MetaOapg.properties.surfaceB, str, schemas.Unset] = schemas.unset,
         coolerA: typing.Union[MetaOapg.properties.coolerA, str, schemas.Unset] = schemas.unset,
         coolerB: typing.Union[MetaOapg.properties.coolerB, str, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         resistance: typing.Union[MetaOapg.properties.resistance, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         tempDelta: typing.Union[MetaOapg.properties.tempDelta, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         heatFlowRate: typing.Union[MetaOapg.properties.heatFlowRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        hotTemp: typing.Union[MetaOapg.properties.hotTemp, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        coldTemp: typing.Union[MetaOapg.properties.coldTemp, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        hotTemp: typing.Union[MetaOapg.properties.hotTemp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        coldTemp: typing.Union[MetaOapg.properties.coldTemp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         hotMargin: typing.Union[MetaOapg.properties.hotMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         coldMargin: typing.Union[MetaOapg.properties.coldMargin, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -341,7 +402,6 @@ class ThermalInterface(
             surfaceB=surfaceB,
             coolerA=coolerA,
             coolerB=coolerB,
-            satellite=satellite,
             resistance=resistance,
             tempDelta=tempDelta,
             heatFlowRate=heatFlowRate,
@@ -354,3 +414,4 @@ class ThermalInterface(
 
 from sedaro_base_client.model.metamodel import Metamodel
 from sedaro_base_client.model.side_categories import SideCategories
+from sedaro_base_client.model.temperature_base199 import TemperatureBase199

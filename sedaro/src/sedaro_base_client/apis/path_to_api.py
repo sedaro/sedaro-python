@@ -4,7 +4,7 @@ from sedaro_base_client.paths import PathValues
 from sedaro_base_client.apis.paths.models_branches_branch_id_template import ModelsBranchesBranchIdTemplate
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_ import SimulationsBranchesBranchIdControl
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_job_id import SimulationsBranchesBranchIdControlJobId
-from sedaro_base_client.apis.paths.data_ import Data
+from sedaro_base_client.apis.paths.data_id import DataId
 from sedaro_base_client.apis.paths.models_branches_branch_id import ModelsBranchesBranchId
 from sedaro_base_client.apis.paths.models_branches_branch_idshare_auth_ import ModelsBranchesBranchIdshareAuth
 from sedaro_base_client.apis.paths.models_branches_branch_idcommits_ import ModelsBranchesBranchIdcommits
@@ -18,7 +18,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATE: ModelsBranchesBranchIdTemplate,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
-        PathValues.DATA_: Data,
+        PathValues.DATA_ID: DataId,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
         PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITS_: ModelsBranchesBranchIdcommits,
@@ -33,7 +33,7 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATE: ModelsBranchesBranchIdTemplate,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
-        PathValues.DATA_: Data,
+        PathValues.DATA_ID: DataId,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
         PathValues.MODELS_BRANCHES_BRANCH_IDCOMMITS_: ModelsBranchesBranchIdcommits,

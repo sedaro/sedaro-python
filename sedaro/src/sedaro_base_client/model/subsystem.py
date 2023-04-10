@@ -91,7 +91,6 @@ class Subsystem(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            satellite = schemas.StrSchema
             
             
             class components(
@@ -120,7 +119,6 @@ class Subsystem(
                 "id": id,
                 "metamodel": metamodel,
                 "category": category,
-                "satellite": satellite,
                 "components": components,
             }
         additional_properties = schemas.NotAnyTypeSchema
@@ -140,12 +138,9 @@ class Subsystem(
     def __getitem__(self, name: typing_extensions.Literal["category"]) -> MetaOapg.properties.category: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["satellite"]) -> MetaOapg.properties.satellite: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["components"]) -> MetaOapg.properties.components: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["category"], typing_extensions.Literal["satellite"], typing_extensions.Literal["components"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["category"], typing_extensions.Literal["components"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -162,12 +157,9 @@ class Subsystem(
     def get_item_oapg(self, name: typing_extensions.Literal["category"]) -> typing.Union[MetaOapg.properties.category, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["satellite"]) -> typing.Union[MetaOapg.properties.satellite, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["components"]) -> typing.Union[MetaOapg.properties.components, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["category"], typing_extensions.Literal["satellite"], typing_extensions.Literal["components"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["category"], typing_extensions.Literal["components"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -177,7 +169,6 @@ class Subsystem(
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         category: typing.Union[MetaOapg.properties.category, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        satellite: typing.Union[MetaOapg.properties.satellite, str, schemas.Unset] = schemas.unset,
         components: typing.Union[MetaOapg.properties.components, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Subsystem':
@@ -188,7 +179,6 @@ class Subsystem(
             id=id,
             metamodel=metamodel,
             category=category,
-            satellite=satellite,
             components=components,
             _configuration=_configuration,
         )
