@@ -96,16 +96,16 @@ class SedaroSimulationResult:
     def templated_agents(self) -> List[str]:
         return tuple([
             entry['name'] for _, entry
-            in self.__meta['structure']['scenario']['Agent'].items()
-            if not entry['peripheral']
+            in self.__meta['structure']['scenario']['blocks'].items()
+            if entry['type'] == 'Agent' and not entry['peripheral']
         ])
 
     @property
     def peripheral_agents(self) -> List[str]:
         return tuple([
             entry['name'] for _, entry
-            in self.__meta['structure']['scenario']['Agent'].items()
-            if entry['peripheral']
+            in self.__meta['structure']['scenario']['blocks'].items()
+            if entry['type'] == 'Agent' and entry['peripheral']
         ])
 
     @property
@@ -133,7 +133,7 @@ class SedaroSimulationResult:
             raise ValueError('This operation cannot be completed because the simulation failed.')
 
     def __agent_id_from_name(self, name: str) -> str:
-        for id_, entry in self.__meta['structure']['scenario']['Agent'].items():
+        for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
             if name == entry['name']:
                 return id_
         else:

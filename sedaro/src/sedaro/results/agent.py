@@ -95,13 +95,13 @@ class SedaroAgentResult:
             print(f'    • {ENGINE_EXPANSION[module]}')
 
         print("\n📦 Available Blocks")
-        print('    ' + '-' * 68)
-        print('    |' + 'id'.center(38) + 'name'.center(40-12) + '|')
-        print('    ' + '-' * 68)
+        print('    ' + '-' * 58)
+        print('    |' + 'id'.center(38) + 'name'.center(30-12) + '|')
+        print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
-                block_id_col = f"{block_id[:36]}"
+                block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
                 else:
@@ -109,8 +109,8 @@ class SedaroAgentResult:
             else:
                 block_id_col = f"root"
                 name_id_col = ''
-            print(f"    | {block_id_col:36s} | {name_id_col:25s} |")
-        print('    ' + '-' * 68)
+            print(f"    | {block_id_col:26s} | {name_id_col:25s} |")
+        print('    ' + '-' * 58)
 
         no_data_blocks = len(self.__block_structures) - len(self.__block_ids)
         if no_data_blocks > 0:
