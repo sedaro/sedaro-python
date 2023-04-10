@@ -4,6 +4,7 @@ from sedaro import SedaroApiClient
 from sedaro.block_class_client import BlockClassClient
 from sedaro.block_client import BlockClient
 
+# TODO: if update these lists, also update type hints of BranchClient
 agent_template_blocks = [
     'ActivePointingMode',
     'AngularVelocitySensor',
@@ -100,6 +101,8 @@ agent_template_blocks = [
     'VectorSensor',
     'VectorTrackingSurface'
 ]
+
+# TODO: if update these lists, also update type hints of BranchClient
 scenario_blocks = [
     'Agent',
     'AgentGroup',
