@@ -104,7 +104,7 @@ agent_template_blocks = [
 scenario_blocks = ['AgentGroup', 'ClockConfig', 'Orbit', 'Agent']
 
 
-def test_bcc_options():
+def test_block_class_client_options():
     for branch_id, blocks in [[SIMPLESAT_A_T_ID, agent_template_blocks], [SIMPLESAT_SCENARIO_ID, scenario_blocks]]:
         with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
             branch = sedaro.get_branch(branch_id)
@@ -143,4 +143,4 @@ def test_bcc_options():
 
 
 def run_tests():
-    test_bcc_options()
+    test_block_class_client_options()
