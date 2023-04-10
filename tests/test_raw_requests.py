@@ -14,7 +14,7 @@ def test_get_non_existant_branch():
         )
 
         assert res.get('error', {}).get(
-            'message', None) == "Invalid identifier for key: 'id'. The requested resource does not exist or is not accessible from this account."
+            'message', None) == 'The requested endpoint does not exist or is not accessible with your current permissions.'
 
 
 def test_raw_get_branch():
@@ -24,7 +24,7 @@ def test_raw_get_branch():
             'GET'
         )
         keys = res.keys()
-        for string in ['data', 'name', 'description', 'repository', 'user', 'tier2issues']:
+        for string in ['data', 'name', 'description', 'repository', 'tier2issues', 'workspace']:
             assert string in keys
 
 
