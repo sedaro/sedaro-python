@@ -1,5 +1,4 @@
-from config import (API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID,
-                    WILDFIRE_A_T_ID, WILDFIRE_SCENARIO_ID)
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 from sedaro.block_class_client import BlockClassClient
