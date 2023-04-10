@@ -13,7 +13,7 @@ from config import HOST
 
 
 imported_test_files = [
-    # test_bcc_options, # FIXME: remove this test and update docs
+    test_bcc_options,
     test_block_crud,
     test_raw_requests,
     # test_simulation, # FIXME
