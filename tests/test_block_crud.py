@@ -121,11 +121,11 @@ def test_traversing_and_equality_and_some_get_methods():
             cell=solar_cell.id
         )
 
-        # assert solar_panel == branch.SolarPanel.get_last() # FIXME: comment back in when works
+        assert solar_panel == branch.SolarPanel.get_last()
         assert solar_panel in branch.SolarPanel.get_all()
         assert solar_cell == power_subsystem.components[-1].cell
 
-        # assert isinstance(branch.PowerProcessor.get_first(), BlockClient) # FIXME: comment back in when works
+        assert isinstance(branch.PowerProcessor.get_first(), BlockClient)
 
         solar_cell.delete()
         solar_panel.delete()

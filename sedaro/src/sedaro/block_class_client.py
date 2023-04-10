@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List, Union
 from pydash import is_empty
 
 from .block_client import BlockClient
-# from .exceptions import NoBlockFoundError
+from .exceptions import NoBlockFoundError
 from .settings import BLOCKS, INDEX, TYPE
 from .utils import enforce_id_in_branch
 
@@ -123,37 +123,36 @@ class BlockClassClient:
             b_c for b_c in self.get_all() if all(getattr(b_c, k) == v for k, v in fields.items())
         ]
 
-    # FIXME: doesn't exactly work yet, because our ID's are not completely incremental
-    # def get_first(self):
-    #     """Returns a `BlockClient` associated with the least recently added (lowest `id`) Sedaro Block of the desired
-    #     type.
+    def get_first(self):
+        """Returns a `BlockClient` associated with the least recently added (lowest `id`) Sedaro Block of the desired
+        type.
 
-    #     Raises:
-    #         NoBlockFoundError: if no Blocks of the desired type exist in this Branch
+        Raises:
+            NoBlockFoundError: if no Blocks of the desired type exist in this Branch
 
-    #     Returns:
-    #         BlockClient: a client to interact with the corresponding Sedaro Block
-    #     """
-    #     all_ids = self.get_all_ids()
-    #     if not len(all_ids):
-    #         raise NoBlockFoundError(
-    #             f'No "{self.type}" Blocks exist in this Branch.'
-    #         )
-    #     return BlockClient(sorted(all_ids)[0], self)
+        Returns:
+            BlockClient: a client to interact with the corresponding Sedaro Block
+        """
+        all_ids = self.get_all_ids()
+        if not len(all_ids):
+            raise NoBlockFoundError(
+                f'No "{self.type}" Blocks exist in this Branch.'
+            )
+        return BlockClient(sorted(all_ids)[0], self)
 
-    # def get_last(self):
-    #     """Returns a `BlockClient` associated with the most recently added (highest `id`) Sedaro Block of the desired
-    #     type.
+    def get_last(self):
+        """Returns a `BlockClient` associated with the most recently added (highest `id`) Sedaro Block of the desired
+        type.
 
-    #     Raises:
-    #         NoBlockFoundError: if no Blocks of the desired type exist in this Branch
+        Raises:
+            NoBlockFoundError: if no Blocks of the desired type exist in this Branch
 
-    #     Returns:
-    #         BlockClient: a client to interact with the corresponding Sedaro Block
-    #     """
-    #     all_ids = self.get_all_ids()
-    #     if not len(all_ids):
-    #         raise NoBlockFoundError(
-    #             f'No "{self.type}" Blocks exist in this Branch.'
-    #         )
-    #     return BlockClient(sorted(all_ids)[-1], self)
+        Returns:
+            BlockClient: a client to interact with the corresponding Sedaro Block
+        """
+        all_ids = self.get_all_ids()
+        if not len(all_ids):
+            raise NoBlockFoundError(
+                f'No "{self.type}" Blocks exist in this Branch.'
+            )
+        return BlockClient(sorted(all_ids)[-1], self)
