@@ -1,5 +1,5 @@
 import string
-from random import choices, randrange
+from random import choices
 
 from sedaro import SedaroApiClient
 from sedaro.block_client import BlockClient
