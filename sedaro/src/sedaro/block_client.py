@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Dict
 
+from pydash import is_empty
+
 from .exceptions import NonexistantBlockError
 from .settings import (BLOCKS, DATA_SIDE, MANY_SIDE, ONE_SIDE, RELATIONSHIPS,
                        TYPE)
@@ -72,6 +74,7 @@ class BlockClient:
 
     @property
     def type(self) -> str:
+        '''Name of the class of the Sedaro Block this `BlockClient` is set up to interact with'''
         return self._block_class_client.type
 
     @property
@@ -109,11 +112,11 @@ class BlockClient:
                 f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
             )
 
-    def update(self, **attrs_to_update) -> 'BlockClient':
+    def update(self, **fields) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
 
         Args:
-            **attrs_to_update (Dict): desired attributes to update on the Sedaro Block
+            **fields (Dict): desired attributes to update on the Sedaro Block
 
         Raises:
             SedaroApiException: if there is an error in the response
@@ -121,8 +124,10 @@ class BlockClient:
         Returns:
             BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
         """
+        if is_empty(fields):
+            raise ValueError(f'Must provide fields to update on the {self.type}.')
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
-        self._branch_client.crud(blocks=[{**self.data, **attrs_to_update}])
+        self._branch_client.crud(blocks=[{**self.data, **fields}])
         return self
 
     def delete(self) -> str:

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, List, Union
 
+from pydash import is_empty
+
 from .block_client import BlockClient
 # from .exceptions import NoBlockFoundError
 from .settings import BLOCKS, INDEX, TYPE
@@ -45,6 +47,8 @@ class BlockClassClient:
         Returns:
             BlockClient: a client to interact with the created Sedaro Block
         """
+        if is_empty(fields):
+            raise ValueError(f'Must provide fields to create a {self.type}')
 
         res = self._branch_client.crud(blocks=[{**fields, **{'type': self.type}}])
         block_id = res['crud'][BLOCKS][0]
