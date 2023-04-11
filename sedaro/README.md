@@ -91,7 +91,7 @@ pip install sedaro
     The `repr` of a `BlockClient` will show you the corresponding Sedaro Block's data:
 
     ```py
-    print(repr(subsystem))
+    repr(subsystem)
 
     >>> Subsystem(
     >>>   category='CUSTOM'
@@ -119,7 +119,6 @@ pip install sedaro
     ```py
     solar_panel = subsystem.components[0]
 
-    print(solar_panel)
     >>> SolarPanel(id='NShKPImRZHxGAXqkPsluk')
     ```
 
