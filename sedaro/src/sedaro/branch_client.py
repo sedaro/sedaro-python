@@ -162,7 +162,6 @@ class BranchClient:
     ReactionWheel: BlockClassClient
     ReceiveInterface: BlockClassClient
     RectangularFieldOfView: BlockClassClient
-    ReferenceVector: BlockClassClient
     ResistanceLoad: BlockClassClient
     SameTargetMultiCondition: BlockClassClient
     Satellite: BlockClassClient

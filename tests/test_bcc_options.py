@@ -58,7 +58,6 @@ agent_template_blocks = [
     'ReactionWheel',
     'ReceiveInterface',
     'RectangularFieldOfView',
-    'ReferenceVector',
     'ResistanceLoad',
     'SameTargetMultiCondition',
     'Satellite',
