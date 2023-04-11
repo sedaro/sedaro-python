@@ -21,7 +21,7 @@ REGENERATE = 'x'
 DIFFERENT_LANGUAGE = 'dl'
 
 
-def run_generator(skip_intro=False, language=None, how_to_proceed=None, spec_path=None):
+def run_generator(skip_intro=False, language=None, how_to_proceed=None, spec_path=None, yes=False):
     '''Begin basic interactive terminal to create a client.'''
 
     if not skip_intro:
@@ -78,7 +78,7 @@ def run_generator(skip_intro=False, language=None, how_to_proceed=None, spec_pat
         if how_to_proceed not in proceed_options:
             print(f'\n"{how_to_proceed}" is not a valid choice')
 
-    if how_to_proceed == REGENERATE:
+    if how_to_proceed == REGENERATE and not yes:
         yn = None
         yn_options = ('y', 'n')
         while yn not in yn_options:
@@ -161,11 +161,17 @@ if __name__ == '__main__':
     parser.add_argument("-l", "--language", action='store', help="Language")
     parser.add_argument("-m", "--min", action='count',
                         help="Minimal Update", default=0)
+    parser.add_argument("-r", "--regen", action='count',
+                        help="Regenerate", default=0)
+    parser.add_argument("-y", action='count',
+                        help="Answer 'yes' to all prompts", default=0)
     parser.add_argument("-p", "--path", action='store',
                         help="Path to spec file")
     pargs = parser.parse_args(sys.argv[1:])
     how_to_proceed = None
     if pargs.min:
         how_to_proceed = MINIMAL_UPDATE
+    elif pargs.regen:
+        how_to_proceed = REGENERATE
     run_generator(language=pargs.language,
-                  how_to_proceed=how_to_proceed, spec_path=pargs.path)
+                  how_to_proceed=how_to_proceed, spec_path=pargs.path, yes=pargs.y)
