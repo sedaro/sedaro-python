@@ -64,11 +64,11 @@ request_query_latest = api_client.QueryParameter(
     explode=True,
 )
 # Path params
-BranchIdSchema = schemas.IntSchema
+BranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
+        'branchId': typing.Union[BranchIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(

@@ -1,4 +1,4 @@
-# Sedaro Python Client (Beta)
+# Sedaro Python Client
 
 A python client for interacting with the Sedaro Satellite API using intuitive classes and methods.
 
@@ -20,194 +20,112 @@ pip install sedaro
     from sedaro import SedaroApiClient
 
     API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
-    AGENT_TEMPLATE_BRANCH_ID = 1 # id of a Branch owned by my Sedaro account with the given api key
+    AGENT_TEMPLATE_BRANCH_ID = 'NShL_CIU9iuufSII49xm-' # id of a Branch owned by my Sedaro account with the given api key
 
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY) as sedaro:
         ...
     ```
 
     ```py
     # If using a dedicated enterprise Sedaro instance, overwrite the default `host` kwarg.
-    ...
     HOST = 'url-to-my-sedaro-server-instance.com'
 
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         ...
     ```
 
 2.  Use the client to instantiate a `BranchClient`.
 
     ```py
-    ...
-
-    with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
+    with SedaroApiClient(api_key=API_KEY) as sedaro:
+        branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
     ```
 
 3.  Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
 
     ```py
-    ...
+    branch.BatteryCell
+    branch.Component
+    branch.Subsystem
 
-        branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-
-        branch_client.BatteryCell
-
-        branch_client.Component
-
-        branch_client.Subsystem
-
-        # ...etc.
-
+    # ...etc.
     ```
 
-    - Valid `BlockClassClient`s for an Agent Template Branch are as follows:
+    Valid `BlockClassClient`s for Agent Template Branches and Scenario Branches can be found in our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/), by viewing the valid classes in the `blocks` key for the `Template` `PATCH` route.
 
-      - AngularVelocitySensor
-      - AveragingAlgorithm
-      - Battery
-      - BatteryCell
-      - BatteryPack
-      - BodyFrameVector
-      - BusRegulator
-      - CelestialTarget
-      - CelestialVector
-      - CircularFieldOfView
-      - Component
-      - Condition
-      - ConOps
-      - ConstantLoad
-      - Cooler
-      - DirectionSensor
-      - EKFAlgorithm
-      - FOVConstraint
-      - FuelReservoir
-      - GPSAlgorithm
-      - GroundTarget
-      - GroupCondition
-      - Heater
-      - LoadState
-      - LocalVector
-      - LockPointingMode
-      - Magnetorquer
-      - MaxAlignPointingMode
-      - MEKFAlgorithm
-      - OperationalMode
-      - OpticalAttitudeSensor
-      - PassivePointingMode
-      - PIDAlgorithm
-      - PositionSensor
-      - ReactionWheel
-      - RectangularFieldOfView
-      - Satellite
-      - SlidingModeAlgorithm
-      - SolarArray
-      - SolarCell
-      - SolarPanel
-      - SpaceTarget
-      - SphericalFuelTank
-      - SpherocylinderFuelTank
-      - StaticThrustControlAlgorithm
-      - Subsystem
-      - Surface
-      - SurfaceMaterial
-      - TargetGroup
-      - TargetGroupVector
-      - TargetVector
-      - TempControllerState
-      - ThermalInterface
-      - ThermalInterfaceMaterial
-      - Thruster
-      - PowerProcessor
-      - TriadAlgorithm
-      - VectorSensor
+    In code editors that support it, intellisense will suggest names for `BlockClassClients`. Pay attention to what is valid for an Agent Template vs a Scenario branch. If you key into an invalid value, an error will be raised.
 
-    - Valid `BlockClassClient`s for an Scenario Branch are as follows:
-      - Agent
-      - ClockConfig
-      - Orbit
 
 4.  A `BlockClassClient` has several methods:
 
     ```py
-    ...
-        branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'  # The ID of the related Satellite Block
-        )
-
-        branch_client.Subsystem.get(block_id) # ID of desired Subsystem
-        branch_client.Subsystem.get_all()
-        branch_client.Subsystem.get_first()
-        branch_client.Subsystem.get_last()
-        branch_client.Subsystem.get_all_ids()
+    branch.Subsystem.create(name='Structure')
+    branch.Subsystem.get(block_id) # ID of desired Subsystem
+    branch.Subsystem.get_all_ids()
+    branch.Subsystem.get_all()
+    branch.Subsystem.get_where()
+    branch.Subsystem.get_first()
+    branch.Subsystem.get_last()
     ```
 
-5.  Most `BlockClassClient` methods return a `BlockClient` which has several methods and properties.
+5.  These methods (except for `get_all_ids`) return a single or list of `BlockClient`(s). A `BlockClassClient` has several methods and properties.
 
     ```py
-    ...
-        subsystem_client = branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'
-        )
+    subsystem = branch.Subsystem.create(name='Structure')
 
-        subsystem_client.update(name='Structure 2.0')
+    subsystem.update(name='Structure 2.0')
 
-        subsystem_client.delete()
+    subsystem.delete()
     ```
 
+    A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
+
     ```py
-    ...
-    # A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
-        subsystem_client = branch_client.Subsystem.create(
-            name='Structure',
-            satellite='3'
-        )
+    subsystem = branch.Subsystem.create(name='Structure')
+    subsystem_2 = subsystem.update(name='Structure 2.0')
+    subsystem_3 = branch.Subsystem.get(subsystem.id)
 
-        subsystem_client_2 = subsystem_client.update(
-         name='Structure 2.0'
-        )
-
-        subsystem_client_3 = branch_client.Subsystem.get(subsystem_client.id)
-
-        assert subsystem_client == subsystem_client_2 == subsystem_client_3
+    assert subsystem == subsystem_2 == subsystem_3
     ```
 
+    The `repr` of a `BlockClient` will show you the corresponding Sedaro Block's data:
+
     ```py
-    ...
-    # Printing a `BlockClient` will show you the corresponding Sedaro Block's data:
-        print(subsystem_client)
+    repr(subsystem)
 
     >>> Subsystem(
-    >>>   id=27
-    >>>   name=Structure 2.0
-    >>>   category=CUSTOM
-    >>>   satellite=3
-    >>>   components=()
+    >>>   category='CUSTOM'
+    >>>   components=[]
+    >>>   id='NShHxZwUh1JGRfZKDvqdA'
+    >>>   name='Structure 2.0'
+    >>>   type='Subsystem'
     >>> )
     ```
 
+    Keying into any field existing on the corresponding Sedaro Block will return the value.
+
     ```py
-    # Keying into any property existing on the corresponding Sedaro Block will return that properties value.
-        subsystem_client.name
+    subsystem.name
 
     >>> 'Structure 2.0'
-    # Keying into a property that is a relationship field, will return a `BlockClient` corresponding to the related `Block` (or `list` of `BlockClient`s if it's a many-side relationship field).
-        subsystem.satellite
-
-    >>> Satellite(
-    >>>   id=3
-    >>>   mass=1000
-    >>>   ...etc
-    >>> )
     ```
 
-    ```py
-    # This allows for traversing Blocks in the model via relationship fields:
-        solar_panel_client = branch_client.SolarPanel.get_first()
+    Keying into relationship fields returns `BlockClient`s corresponding to the related Sedaro `Block`s as follows:
 
-        solar_panel_client.cell.panels[-1].subsystem.satellite.components[0].delete()
+      - `OneSide`: a `BlockClient`
+      - `ManySide`: a `list` of `BlockClient`s
+      - `DataSide`: a dictionary with `BlockClient`s as keys and relationship data as values
+
+    ```py
+    solar_panel = subsystem.components[0]
+
+    >>> SolarPanel(id='NShKPImRZHxGAXqkPsluk')
+    ```
+
+    Note that this allows for traversing via chained relationship fields.
+
+    ```py
+    solar_panel.cell.panels[-1].subsystem.components[0].delete()
     ```
 
 ### Full Example
@@ -216,32 +134,30 @@ pip install sedaro
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 
-API_KEY = 'my_api_key_generated_by_sedaro_satellite'
-AGENT_TEMPLATE_BRANCH_ID = 1
+API_KEY = 'api_key_generated_by_sedaro'
+AGENT_TEMPLATE_BRANCH_ID = 'NShL_CIU9iuufSII49xm-'
 
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
-    branch_client = sedaro_client.get_branch(AGENT_TEMPLATE_BRANCH_ID)
+with SedaroApiClient(api_key=API_KEY) as sedaro:
+    branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
 
-    battery_cell_client = branch_client.BatteryCell.create(
-        partNumber='987654321',
-        manufacturer='Sedaro Corporation',
-        esr=0.01,
-        maxChargeCurrent=15,
-        maxDischargeCurrent=100,
-        minSoc=0.2,
-        capacity=500,
-        curve=[[0, 0.5, 1], [12.2, 14.1, 16.8]],
-        powerProcessor='5',
+    solar_cell = branch.SolarCell.create(
+      partNumber="987654321",
+      manufacturer='Sedaro Corporation',
+      openCircuitVoltage=3.95,
+      shortCircuitCurrent=0.36,
+      maxPowerVoltage=3.54,
+      maxPowerCurrent=0.345,
+      numJunctions=3,
     )
 
-    bc_id = battery_cell_client.id
+    bc_id = solar_cell.id
 
-    battery_cell_client.update(partNumber="123456789")
+    solar_cell.update(partNumber="123456789")
 
-    battery_cell_client.delete()
+    solar_cell.delete()
 
     try:
-        battery_cell_client.update(partNumber="987654321")
+        solar_cell.update(partNumber="987654321")
     except NonexistantBlockError as e:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 ```
@@ -249,18 +165,18 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
 ## Use: Simulation
 
 ```py
-SCENARIO_BRANCH_ID = 2
+SCENARIO_BRANCH_ID = 'NShL7J0Rni63llTcEUp4F'
 
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+with SedaroApiClient(api_key=API_KEY) as sedaro:
 
     # Instantiate sim client
-    sim_client = sedaro_client.get_sim_client(SCENARIO_BRANCH_ID)
+    sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
 
     # Start simulation
-    sim_client.start()
+    sim.start()
 
     # Get simulation
-    response = sim_client.get_latest()
+    response = sim.get_latest()
 
     # Check status & percentage complete
     job = response.body[0]
@@ -268,7 +184,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro_client:
     print(job['progress']['percentComplete'])
 
     # Terminate simulation
-    response = sim_client.terminate(job['id'])
+    response = sim.terminate(job['id'])
     assert response.body['message'] == 'Successfully terminated simulation.'
 
 ```
@@ -294,15 +210,15 @@ Any object in the results API will provide a descriptive summary of its contents
 Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
 
 ```py
-with SedaroApiClient(api_key=API_KEY) as sedaro_client:
+with SedaroApiClient(api_key=API_KEY) as sedaro:
     # get a branch
-    sedaro_client.send_request(
+    sedaro.send_request(
         f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}',
         'GET'
     )
 
     # create a celestial target in a branch
-    sedaro_client.send_request(
+    sedaro.send_request(
         f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}/cdh/conops/celestial-targets/',
         'POST',
         body={
