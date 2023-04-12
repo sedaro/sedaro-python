@@ -1,14 +1,14 @@
 ## Task Link (if applicable)
-- 
+-
 
 ## Describe Your Changes
-- 
+-
 
 ## Sibling Branches/MRs
-- 
+-
 
 ## Next Steps?
-- 
+-
 
 ## Checklist
 - [ ] Necessary new tests added and documentation written
@@ -20,4 +20,4 @@
 - [ ] Backwards compatibility is understood and any breaking changes have been brought up to the team
 - [ ] No unintentional (debug-related) console prints
 
-Reminder to use `DRAFT:` until MR is ready
+Reminder to switch from "Create pull request" to "Create draft pull request" until ready.
