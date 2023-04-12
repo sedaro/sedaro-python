@@ -115,7 +115,8 @@ class BlockClient:
             )
 
     def clone(self, num: int = 1) -> 'List[BlockClient]':
-        """Creates 1+ copies of the Sedaro `Block` corresponding to the `BlockClient` this method is called on.
+        """In a single HTTP request, creates 1+ copies of the Sedaro `Block` corresponding to the `BlockClient` this
+        method is called on.
 
         Note:
         - if there is a name attribute on the `Block`, the names of the created `Block`s will have `'clone'` and 32
