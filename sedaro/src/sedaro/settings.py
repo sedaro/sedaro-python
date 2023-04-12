@@ -7,6 +7,8 @@ COMMON_API_KWARGS = {
 
 
 # template
+CRUD = 'crud'
+'''One of the keys in returned response from a template crud PATCH request'''
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
