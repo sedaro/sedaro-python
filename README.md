@@ -4,6 +4,7 @@ This is the repository that houses the [Sedaro Python Client](https://github.com
 
 ## To run tests:
 
+- Ensure `pytest` is installed in the python environment (`$ pip install pytest`)
 - For Sedaro devs testing in the local development environment: make sure `sedaro-app` container is running.
 - Create a `tests/config.py` file based on the `tests/config_example.py` file:
   - For Sedaro devs testing in the live environment: update the `HOST` variable to `'http://localhost:80'`.
