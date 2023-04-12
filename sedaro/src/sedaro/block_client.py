@@ -119,7 +119,7 @@ class BlockClient:
 
         Note:
         - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
-        - this will not work with `Block`s if the resulting clone violates unique constraints.
+        - this will not work if the resulting clone violates unique constraints.
 
         Returns:
             BlockClient: `BlockClient` associated with the created Sedaro `Block`
