@@ -120,10 +120,10 @@ class BlockClient:
 
         Note:
         - if there is a name attribute on the `Block`, the names of the created `Block`s will have `'clone'` and 32
-        random numbers appended to the end to ensure uniqueness. If the resulting name becomes to long for the `name`
+        random numbers appended to the end to ensure uniqueness. If the resulting name becomes too long for the `name`
         field, the clone will fail, in which case you can try again after shortening the name of the original `Block`.
-        Keep in mind that names this long may appear strange in some places when viewed in the Sedaro UI.
-        - this will not work with `Block`s if the resulting clones violate unique constraints (outside of `name`).
+        Keep in mind that these long names may appear strange when viewed in some parts of the Sedaro UI.
+        - this will not work with `Block`s if the resulting clones violate other unique constraints outside of `name`.
 
         Args:
             num (int, optional): the number of copies to make
