@@ -77,7 +77,7 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         print('')
 
     try:
-        command = f'python{new_version} -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8'
+        command = f'python{new_version} -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8 pytest'
         if pypi_sedaro:
             command += f' && {PIP_INSTALL} sedaro'
         elif test_pypi_sedaro:
