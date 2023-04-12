@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING, Dict
 from pydash import is_empty
 
 from .exceptions import NonexistantBlockError
-from .settings import (BLOCKS, DATA_SIDE, MANY_SIDE, ONE_SIDE, RELATIONSHIPS,
-                       TYPE)
+from .settings import (BLOCKS, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
+                       RELATIONSHIPS, TYPE)
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
@@ -126,6 +126,8 @@ class BlockClient:
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to update on the {self.type}.')
+        if ID in fields:
+            raise ValueError(f'Invalid kwarg for update method: {ID}.')
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
         self._branch_client.crud(blocks=[{**self.data, **fields}])
         return self
