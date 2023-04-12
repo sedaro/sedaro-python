@@ -49,10 +49,10 @@ class BlockClassClient:
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to create a {self.type}')
-        if ID in fields:
-            raise ValueError(f'Invalid kwarg for create method: {ID}.')
-        if TYPE in fields:
-            raise ValueError(f'Invalid kwarg for create method: "{TYPE}".')
+
+        for kwarg in [ID, TYPE]:
+            if kwarg in fields:
+                raise ValueError(f'Invalid kwarg for create method: {kwarg}.')
 
         res = self._branch_client.crud(blocks=[{**fields, **{TYPE: self.type}}])
         block_id = res[CRUD][BLOCKS][0]
