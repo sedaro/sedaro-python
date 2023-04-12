@@ -5,7 +5,7 @@ from pydash import is_empty
 
 from .block_client import BlockClient
 from .exceptions import NoBlockFoundError
-from .settings import BLOCKS, CRUD, INDEX, TYPE
+from .settings import BLOCKS, CRUD, ID, INDEX, TYPE
 from .utils import enforce_id_in_branch
 
 if TYPE_CHECKING:
