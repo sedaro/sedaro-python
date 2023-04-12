@@ -148,6 +148,46 @@ def test_block_client_equality():
 
         subsystem.delete()
 
+def test_block_client_clone():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+
+        # a Block that requires a unique "name" attribute
+        subsystem = branch.Subsystem.create(
+            name='Custom Subsystem',
+        )
+
+        subsystems = subsystem.clone(5)
+
+        assert len(subsystems) == 5
+        assert all([isinstance(s, BlockClient) for s in subsystems])
+
+        for s in subsystems:
+            s.delete()
+
+        subsystem.delete()
+
+        # a Block without a "name" attribute
+        solar_cell = branch.SolarCell.create(
+            partNumber=_random_str(),
+            manufacturer='Sedaro Corporation',
+            openCircuitVoltage=3.95,
+            shortCircuitCurrent=0.36,
+            maxPowerVoltage=3.54,
+            maxPowerCurrent=0.345,
+            numJunctions=3,
+        )
+
+        solar_cells = solar_cell.clone(5)
+
+        assert len(solar_cells) == 5
+        assert all([isinstance(s, BlockClient) for s in solar_cells])
+
+        for s_c in solar_cells:
+            s_c.delete()
+
+        solar_cell.delete()
+
 
 def run_tests():
     test_get()
@@ -155,3 +195,4 @@ def run_tests():
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality_and_some_get_methods()
     test_block_client_equality()
+    test_block_client_clone()
