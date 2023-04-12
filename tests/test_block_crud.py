@@ -1,10 +1,12 @@
 import string
 from random import choices
 
+import pytest
 from sedaro import SedaroApiClient
 from sedaro.block_client import BlockClient
 from sedaro.branch_client import BranchClient
 from sedaro.exceptions import NonexistantBlockError
+from sedaro.settings import ID
 
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID
 
@@ -148,6 +150,67 @@ def test_block_client_equality():
 
         subsystem.delete()
 
+def test_block_client_clone():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+
+        # a Block that requires a unique "name" attribute
+        subsystem = branch.Subsystem.create(
+            name='Custom Subsystem',
+        )
+
+        subsystem_clone = subsystem.clone()
+        assert isinstance(subsystem_clone, BlockClient)
+
+        # a Block without a "name" attribute
+        solar_cell = branch.SolarCell.create(
+            partNumber=_random_str(),
+            manufacturer='Sedaro Corporation',
+            openCircuitVoltage=3.95,
+            shortCircuitCurrent=0.36,
+            maxPowerVoltage=3.54,
+            maxPowerCurrent=0.345,
+            numJunctions=3,
+        )
+
+        solar_cell_clone = solar_cell.clone()
+        assert isinstance(solar_cell_clone, BlockClient)
+
+        branch.crud(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
+
+def test_some_errors():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+
+        with pytest.raises(ValueError, match=f'Must provide fields'):
+            branch.Subsystem.create()
+
+        subsystem = branch.Subsystem.create(name=_random_str())
+
+        with pytest.raises(ValueError, match=f'Invalid value for "{ID}"'):
+            subsystem.update(**{**subsystem.data, **{ID: 'asdfasdfasdf'}})
+
+        subsystem.delete()
+
+def test_ignore_id_and_type_in_create():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+
+        BAD_ID = 'catch me if you can'
+
+        subsystem = branch.Subsystem.create(
+            name=_random_str(),
+            id=BAD_ID,
+            type='WrongType'
+        )
+
+        assert isinstance(subsystem, BlockClient)
+        assert subsystem.type == 'Subsystem'
+        assert subsystem.id != BAD_ID
+
+        subsystem.delete()
+
+
 
 def run_tests():
     test_get()
@@ -155,3 +218,5 @@ def run_tests():
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality_and_some_get_methods()
     test_block_client_equality()
+    test_block_client_clone()
+    test_some_errors()

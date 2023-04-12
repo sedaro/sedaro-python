@@ -5,7 +5,7 @@ from pydash import is_empty
 
 from .block_client import BlockClient
 from .exceptions import NoBlockFoundError
-from .settings import BLOCKS, CRUD, INDEX, TYPE
+from .settings import BLOCKS, CRUD, ID, INDEX, TYPE
 from .utils import enforce_id_in_branch
 
 if TYPE_CHECKING:
@@ -36,7 +36,8 @@ class BlockClassClient:
         return self._branch_client._sedaro_client
 
     def create(self, **fields) -> BlockClient:
-        """Creates a Sedaro Block of the given type in the corresponding Branch.
+        """Creates a Sedaro Block of the given type in the corresponding Branch. Note that if 'id' or 'type' are passed
+        as kwargs, they will be ignored.
 
         Args:
             **fields (any): required and optional fields on the corresponding Sedaro Block.
@@ -49,6 +50,9 @@ class BlockClassClient:
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to create a {self.type}')
+
+        for kwarg in [ID, TYPE]:
+            fields.pop(kwarg, None)
 
         res = self._branch_client.crud(blocks=[{**fields, **{TYPE: self.type}}])
         block_id = res[CRUD][BLOCKS][0]

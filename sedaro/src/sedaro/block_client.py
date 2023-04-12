@@ -1,11 +1,13 @@
+import copy
+import uuid
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List
 
 from pydash import is_empty
 
 from .exceptions import NonexistantBlockError
-from .settings import (BLOCKS, DATA_SIDE, MANY_SIDE, ONE_SIDE, RELATIONSHIPS,
-                       TYPE)
+from .settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
+                       RELATIONSHIPS, TYPE)
 
 if TYPE_CHECKING:
     from .block_class_client import BlockClassClient
@@ -112,6 +114,28 @@ class BlockClient:
                 f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
             )
 
+    def clone(self) -> 'BlockClient':
+        """Creates a copy of the Sedaro `Block` corresponding to the `BlockClient` this method is called on.
+
+        Note:
+        - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
+        - this will not work if the resulting clone violates unique constraints.
+
+        Returns:
+            BlockClient: `BlockClient` associated with the created Sedaro `Block`
+        """
+        new_block = copy.deepcopy(self.data)
+        del new_block[ID]
+
+        if 'name' in new_block:
+            new_block['name'] = f'{new_block["name"]} (clone)'
+
+        res = self._branch_client.crud(
+            blocks=[new_block]
+        )
+
+        return self._branch_client.get_block(res[CRUD][BLOCKS][0])
+
     def update(self, **fields) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
 
@@ -126,6 +150,10 @@ class BlockClient:
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to update on the {self.type}.')
+
+        if ID in fields and fields[ID] != self.id:
+            raise ValueError(f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
+
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
         self._branch_client.crud(blocks=[{**self.data, **fields}])
         return self
