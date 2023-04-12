@@ -5,7 +5,7 @@ from pydash import is_empty
 
 from .block_client import BlockClient
 from .exceptions import NoBlockFoundError
-from .settings import BLOCKS, ID, INDEX, TYPE
+from .settings import BLOCKS, CRUD, INDEX, TYPE
 from .utils import enforce_id_in_branch
 
 if TYPE_CHECKING:
@@ -55,7 +55,7 @@ class BlockClassClient:
             raise ValueError(f'Invalid kwarg for create method: "{TYPE}".')
 
         res = self._branch_client.crud(blocks=[{**fields, **{TYPE: self.type}}])
-        block_id = res['crud'][BLOCKS][0]
+        block_id = res[CRUD][BLOCKS][0]
         return BlockClient(block_id, self)
 
     def get(self, id: Union[str, int]) -> BlockClient:
