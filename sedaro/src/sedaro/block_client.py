@@ -150,8 +150,10 @@ class BlockClient:
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to update on the {self.type}.')
-        if ID in fields:
-            raise ValueError(f'Invalid kwarg for update method: {ID}.')
+
+        if ID in fields and fields[ID] != self.id:
+            raise ValueError(f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
+
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
         self._branch_client.crud(blocks=[{**self.data, **fields}])
         return self
