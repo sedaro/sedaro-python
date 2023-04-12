@@ -157,15 +157,8 @@ def test_block_client_clone():
             name='Custom Subsystem',
         )
 
-        subsystems = subsystem.clone(5)
-
-        assert len(subsystems) == 5
-        assert all([isinstance(s, BlockClient) for s in subsystems])
-
-        for s in subsystems:
-            s.delete()
-
-        subsystem.delete()
+        subsystem_clone = subsystem.clone()
+        assert isinstance(subsystem_clone, BlockClient)
 
         # a Block without a "name" attribute
         solar_cell = branch.SolarCell.create(
@@ -178,15 +171,10 @@ def test_block_client_clone():
             numJunctions=3,
         )
 
-        solar_cells = solar_cell.clone(5)
+        solar_cell_clone = solar_cell.clone()
+        assert isinstance(solar_cell_clone, BlockClient)
 
-        assert len(solar_cells) == 5
-        assert all([isinstance(s, BlockClient) for s in solar_cells])
-
-        for s_c in solar_cells:
-            s_c.delete()
-
-        solar_cell.delete()
+        branch.crud(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
 
 
 def run_tests():

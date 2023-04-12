@@ -114,41 +114,27 @@ class BlockClient:
                 f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
             )
 
-    def clone(self, num: int = 1) -> 'List[BlockClient]':
-        """In a single HTTP request, creates 1+ copies of the Sedaro `Block` corresponding to the `BlockClient` this
-        method is called on.
+    def clone(self) -> 'BlockClient':
+        """Creates a copy of the Sedaro `Block` corresponding to the `BlockClient` this method is called on.
 
         Note:
-        - if there is a name attribute on the `Block`, the names of the created `Block`s will have `'clone'` and 32
-        random numbers appended to the end to ensure uniqueness. If the resulting name becomes too long for the `name`
-        field, the clone will fail, in which case you can try again after shortening the name of the original `Block`.
-        Keep in mind that these long names may appear strange when viewed in some parts of the Sedaro UI.
-        - this will not work with `Block`s if the resulting clones violate other unique constraints outside of `name`.
-
-        Args:
-            num (int, optional): the number of copies to make
+        - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
+        - this will not work with `Block`s if the resulting clone violates unique constraints.
 
         Returns:
-            List[BlockClient]: a list of `BlockClients` associated with the created Sedaro `Block`s
+            BlockClient: `BlockClient` associated with the created Sedaro `Block`
         """
         new_block = copy.deepcopy(self.data)
         del new_block[ID]
 
-        if 'name' not in new_block:
-            blocks = [new_block for _ in range(num)]
-
-        else:
-            blocks = []
-            for _ in range(num):
-                b = copy.deepcopy(new_block)
-                b['name'] = f'{b["name"]} - clone {str(uuid.uuid4()).replace("-", "")}'
-                blocks.append(b)
+        if 'name' in new_block:
+            new_block['name'] = f'{new_block["name"]} (clone)'
 
         res = self._branch_client.crud(
-            blocks=blocks
+            blocks=[new_block]
         )
 
-        return [self._branch_client.get_block(b_id) for b_id in res[CRUD][BLOCKS]]
+        return self._branch_client.get_block(res[CRUD][BLOCKS][0])
 
     def update(self, **fields) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
