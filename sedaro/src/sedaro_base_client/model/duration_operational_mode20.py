@@ -36,6 +36,7 @@ class DurationOperationalMode20(
     class MetaOapg:
         
         class properties:
+            min = schemas.NumberSchema
             
             
             class day(
@@ -47,14 +48,16 @@ class DurationOperationalMode20(
                     inclusive_minimum = 0.0
             s = schemas.NumberSchema
             hour = schemas.NumberSchema
-            min = schemas.NumberSchema
             __annotations__ = {
+                "min": min,
                 "day": day,
                 "s": s,
                 "hour": hour,
-                "min": min,
             }
         additional_properties = schemas.NotAnyTypeSchema
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["min"]) -> MetaOapg.properties.min: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["day"]) -> MetaOapg.properties.day: ...
@@ -65,12 +68,12 @@ class DurationOperationalMode20(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["hour"]) -> MetaOapg.properties.hour: ...
     
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["min"]) -> MetaOapg.properties.min: ...
-    
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["day"], typing_extensions.Literal["s"], typing_extensions.Literal["hour"], typing_extensions.Literal["min"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["min"], typing_extensions.Literal["day"], typing_extensions.Literal["s"], typing_extensions.Literal["hour"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["min"]) -> typing.Union[MetaOapg.properties.min, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["day"]) -> typing.Union[MetaOapg.properties.day, schemas.Unset]: ...
@@ -81,27 +84,24 @@ class DurationOperationalMode20(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["hour"]) -> typing.Union[MetaOapg.properties.hour, schemas.Unset]: ...
     
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["min"]) -> typing.Union[MetaOapg.properties.min, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["day"], typing_extensions.Literal["s"], typing_extensions.Literal["hour"], typing_extensions.Literal["min"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["min"], typing_extensions.Literal["day"], typing_extensions.Literal["s"], typing_extensions.Literal["hour"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
+        min: typing.Union[MetaOapg.properties.min, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         day: typing.Union[MetaOapg.properties.day, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         s: typing.Union[MetaOapg.properties.s, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         hour: typing.Union[MetaOapg.properties.hour, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        min: typing.Union[MetaOapg.properties.min, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'DurationOperationalMode20':
         return super().__new__(
             cls,
             *_args,
+            min=min,
             day=day,
             s=s,
             hour=hour,
-            min=min,
             _configuration=_configuration,
         )

@@ -38,7 +38,7 @@ class QuaternionBase220(
         class properties:
             
             
-            class ecef_body(
+            class eci_body(
                 schemas.ListSchema
             ):
             
@@ -50,7 +50,7 @@ class QuaternionBase220(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'ecef_body':
+                ) -> 'eci_body':
                     return super().__new__(
                         cls,
                         _arg,
@@ -107,7 +107,7 @@ class QuaternionBase220(
                     return super().__getitem__(i)
             
             
-            class eci_body(
+            class ecef_body(
                 schemas.ListSchema
             ):
             
@@ -119,7 +119,7 @@ class QuaternionBase220(
                     cls,
                     _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'eci_body':
+                ) -> 'ecef_body':
                     return super().__new__(
                         cls,
                         _arg,
@@ -129,15 +129,15 @@ class QuaternionBase220(
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             __annotations__ = {
-                "ecef_body": ecef_body,
+                "eci_body": eci_body,
                 "body_ecef": body_ecef,
                 "body_eci": body_eci,
-                "eci_body": eci_body,
+                "ecef_body": ecef_body,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["ecef_body"]) -> MetaOapg.properties.ecef_body: ...
+    def __getitem__(self, name: typing_extensions.Literal["eci_body"]) -> MetaOapg.properties.eci_body: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["body_ecef"]) -> MetaOapg.properties.body_ecef: ...
@@ -146,14 +146,14 @@ class QuaternionBase220(
     def __getitem__(self, name: typing_extensions.Literal["body_eci"]) -> MetaOapg.properties.body_eci: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["eci_body"]) -> MetaOapg.properties.eci_body: ...
+    def __getitem__(self, name: typing_extensions.Literal["ecef_body"]) -> MetaOapg.properties.ecef_body: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["ecef_body"], typing_extensions.Literal["body_ecef"], typing_extensions.Literal["body_eci"], typing_extensions.Literal["eci_body"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["eci_body"], typing_extensions.Literal["body_ecef"], typing_extensions.Literal["body_eci"], typing_extensions.Literal["ecef_body"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["ecef_body"]) -> typing.Union[MetaOapg.properties.ecef_body, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["eci_body"]) -> typing.Union[MetaOapg.properties.eci_body, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["body_ecef"]) -> typing.Union[MetaOapg.properties.body_ecef, schemas.Unset]: ...
@@ -162,26 +162,26 @@ class QuaternionBase220(
     def get_item_oapg(self, name: typing_extensions.Literal["body_eci"]) -> typing.Union[MetaOapg.properties.body_eci, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["eci_body"]) -> typing.Union[MetaOapg.properties.eci_body, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["ecef_body"]) -> typing.Union[MetaOapg.properties.ecef_body, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["ecef_body"], typing_extensions.Literal["body_ecef"], typing_extensions.Literal["body_eci"], typing_extensions.Literal["eci_body"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["eci_body"], typing_extensions.Literal["body_ecef"], typing_extensions.Literal["body_eci"], typing_extensions.Literal["ecef_body"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        ecef_body: typing.Union[MetaOapg.properties.ecef_body, list, tuple, schemas.Unset] = schemas.unset,
+        eci_body: typing.Union[MetaOapg.properties.eci_body, list, tuple, schemas.Unset] = schemas.unset,
         body_ecef: typing.Union[MetaOapg.properties.body_ecef, list, tuple, schemas.Unset] = schemas.unset,
         body_eci: typing.Union[MetaOapg.properties.body_eci, list, tuple, schemas.Unset] = schemas.unset,
-        eci_body: typing.Union[MetaOapg.properties.eci_body, list, tuple, schemas.Unset] = schemas.unset,
+        ecef_body: typing.Union[MetaOapg.properties.ecef_body, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'QuaternionBase220':
         return super().__new__(
             cls,
             *_args,
-            ecef_body=ecef_body,
+            eci_body=eci_body,
             body_ecef=body_ecef,
             body_eci=body_eci,
-            eci_body=eci_body,
+            ecef_body=ecef_body,
             _configuration=_configuration,
         )

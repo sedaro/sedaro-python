@@ -78,7 +78,6 @@ from sedaro_base_client.model.duration_operational_mode29 import DurationOperati
 from sedaro_base_client.model.ekf_algorithm import EkfAlgorithm
 from sedaro_base_client.model.eps_output_types import EpsOutputTypes
 from sedaro_base_client.model.equatorial_circular_reference_orbit import EquatorialCircularReferenceOrbit
-from sedaro_base_client.model.external_data_interface import ExternalDataInterface
 from sedaro_base_client.model.fixed_surface import FixedSurface
 from sedaro_base_client.model.frame_vector_base220 import FrameVectorBase220
 from sedaro_base_client.model.fuel_reservoir import FuelReservoir
@@ -174,7 +173,6 @@ from sedaro_base_client.model.thermal_interface_material import ThermalInterface
 from sedaro_base_client.model.thruster import Thruster
 from sedaro_base_client.model.time_condition import TimeCondition
 from sedaro_base_client.model.tle import Tle
-from sedaro_base_client.model.transmit_data_interface import TransmitDataInterface
 from sedaro_base_client.model.triad_algorithm import TriadAlgorithm
 from sedaro_base_client.model.two_conv_mppt_power_processor import TwoConvMpptPowerProcessor
 from sedaro_base_client.model.two_conv_mppt_topology_params import TwoConvMpptTopologyParams

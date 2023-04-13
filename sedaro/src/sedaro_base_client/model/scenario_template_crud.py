@@ -74,9 +74,9 @@ class ScenarioTemplateCrud(
                                 # loading
                                 return [
                                     Orbit,
-                                    ClockConfig,
-                                    Agent,
                                     AgentGroup,
+                                    Agent,
+                                    ClockConfig,
                                 ]
                     
                     

@@ -36,69 +36,69 @@ class DistanceSensors70(
     class MetaOapg:
         
         class properties:
-            cm = schemas.NumberSchema
             
             
             class km(
                 schemas.NumberSchema
             ):
                 pass
-            m = schemas.NumberSchema
+            cm = schemas.NumberSchema
             mm = schemas.NumberSchema
+            m = schemas.NumberSchema
             __annotations__ = {
-                "cm": cm,
                 "km": km,
-                "m": m,
+                "cm": cm,
                 "mm": mm,
+                "m": m,
             }
         additional_properties = schemas.NotAnyTypeSchema
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["cm"]) -> MetaOapg.properties.cm: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["km"]) -> MetaOapg.properties.km: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["m"]) -> MetaOapg.properties.m: ...
+    def __getitem__(self, name: typing_extensions.Literal["cm"]) -> MetaOapg.properties.cm: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["mm"]) -> MetaOapg.properties.mm: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["cm"], typing_extensions.Literal["km"], typing_extensions.Literal["m"], typing_extensions.Literal["mm"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["m"]) -> MetaOapg.properties.m: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["km"], typing_extensions.Literal["cm"], typing_extensions.Literal["mm"], typing_extensions.Literal["m"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["cm"]) -> typing.Union[MetaOapg.properties.cm, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["km"]) -> typing.Union[MetaOapg.properties.km, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["m"]) -> typing.Union[MetaOapg.properties.m, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["cm"]) -> typing.Union[MetaOapg.properties.cm, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["mm"]) -> typing.Union[MetaOapg.properties.mm, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["cm"], typing_extensions.Literal["km"], typing_extensions.Literal["m"], typing_extensions.Literal["mm"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["m"]) -> typing.Union[MetaOapg.properties.m, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["km"], typing_extensions.Literal["cm"], typing_extensions.Literal["mm"], typing_extensions.Literal["m"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        cm: typing.Union[MetaOapg.properties.cm, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         km: typing.Union[MetaOapg.properties.km, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        m: typing.Union[MetaOapg.properties.m, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        cm: typing.Union[MetaOapg.properties.cm, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         mm: typing.Union[MetaOapg.properties.mm, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        m: typing.Union[MetaOapg.properties.m, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'DistanceSensors70':
         return super().__new__(
             cls,
             *_args,
-            cm=cm,
             km=km,
-            m=m,
+            cm=cm,
             mm=mm,
+            m=m,
             _configuration=_configuration,
         )
