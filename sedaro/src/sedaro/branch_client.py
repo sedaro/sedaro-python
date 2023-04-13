@@ -156,8 +156,6 @@ class BranchClient:
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     EkfAlgorithm: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ExternalDataInterface: BlockClassClient
-    """A Sedaro `Block` class on an `AgentTemplate` branch"""
     FixedSurface: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     FuelReservoir: BlockClassClient
@@ -281,8 +279,6 @@ class BranchClient:
     Thruster: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     TimeCondition: BlockClassClient
-    """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TransmitDataInterface: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     TriadAlgorithm: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
