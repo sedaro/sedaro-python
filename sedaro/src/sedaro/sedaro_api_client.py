@@ -9,7 +9,7 @@ from .branch_client import BranchClient
 from .exceptions import SedaroApiException
 from .settings import COMMON_API_KWARGS
 from .sim_client import SimClient
-from .utils import parse_urllib_response
+from .utils import body_from_res, parse_urllib_response
 
 
 class SedaroApiClient(ApiClient):
@@ -40,10 +40,7 @@ class SedaroApiClient(ApiClient):
         # return BranchClient(res.body, self)
         res = branches_api_instance.get_branch(
             path_params={'branchId': id}, **COMMON_API_KWARGS)
-        body = res.body
-        if COMMON_API_KWARGS['skip_deserialization']:
-            body = parse_urllib_response(res.response)
-        return BranchClient(body, self)
+        return BranchClient(body_from_res(res), self)
 
     def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None, axisOrder: str = None):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
