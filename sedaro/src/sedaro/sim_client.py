@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.apis.tags import jobs_api
 from sedaro_base_client.api_client import ApiResponse
+from sedaro_base_client.apis.tags import jobs_api
+
+from .settings import COMMON_API_KWARGS
+from .utils import body_from_res
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
@@ -28,9 +31,11 @@ class SimClient:
         Returns:
             ApiResponse: response from the start simulation (job) request
         """
-        return self._base_jobs_api_client.start_simulation(
-            path_params={'branchId': self.branch_Id}
+        res = self._base_jobs_api_client.start_simulation(
+            path_params={'branchId': self.branch_Id},
+            **COMMON_API_KWARGS
         )
+        return body_from_res(res)
 
     def get_latest(self) -> ApiResponse:
         """Gets the latest running simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient`
@@ -39,10 +44,12 @@ class SimClient:
         Returns:
             ApiResponse: response from the get simulation (job) request
         """
-        return self._base_jobs_api_client.get_simulations(
+        res = self._base_jobs_api_client.get_simulations(
             path_params={'branchId': self.branch_Id},
-            query_params={'latest': ''}
+            query_params={'latest': ''},
+            **COMMON_API_KWARGS
         )
+        return body_from_res(res)
 
     def terminate(self, job_id: int) -> ApiResponse:
         """Terminate simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated
@@ -62,9 +69,11 @@ class SimClient:
         Returns:
             ApiResponse: response from the termiante simulation (job) request
         """
-        return self._base_jobs_api_client.terminate_simulation(
+        res = self._base_jobs_api_client.terminate_simulation(
             path_params={
                 'branchId': self.branch_Id,
                 'jobId': job_id
-            }
+            },
+            **COMMON_API_KWARGS
         )
+        return body_from_res(res)

@@ -7,8 +7,10 @@ from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
 
 def _check_job_status(job):
     assert job['status'] == 'RUNNING'
-    print('-', job['status'], '-', round(
-        job['progress']['percentComplete'], 2), '%')
+    print('-', job['status'], '-',
+        job['progress']['percentComplete'], '%')
+    # print('-', job['status'], '-', round(
+    #     job['progress']['percentComplete'], 2), '%') # FIXME Can switch this back when percentage complete isn't NONE
 
 
 def test_run_simulation():
@@ -21,21 +23,20 @@ def test_run_simulation():
         print('- Started simulation')
 
         # Get status #1
-        response = sim_client.get_latest()
-        _check_job_status(response.body[0])
+        job = sim_client.get_latest()[0]
+        _check_job_status(job)
         time.sleep(1)
 
         # Get status #2
-        response = sim_client.get_latest()
-        job = response.body[0]
+        job = sim_client.get_latest()[0]
         _check_job_status(job)
         time.sleep(1)
 
         # Terminate
         print('- Terminating...')
-        response = sim_client.terminate(job['id'])
-        print('-', response.body['message'])
-        assert response.body['message'] == 'Successfully terminated simulation.'
+        res = sim_client.terminate(job['id'])
+        print('-', res['message'])
+        assert res['message'] == 'Successfully terminated simulation.'
 
 
 def run_tests():
