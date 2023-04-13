@@ -97,7 +97,7 @@ class SunTrackingSurface(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            FrameVectorBase199,
+                            FrameVectorBase220,
                         ]
             
             
@@ -133,7 +133,7 @@ class SunTrackingSurface(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            FrameVectorBase199,
+                            FrameVectorBase220,
                         ]
             
             
@@ -174,7 +174,7 @@ class SunTrackingSurface(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -528,6 +528,6 @@ class SunTrackingSurface(
             _configuration=_configuration,
         )
 
-from sedaro_base_client.model.frame_vector_base199 import FrameVectorBase199
+from sedaro_base_client.model.frame_vector_base220 import FrameVectorBase220
 from sedaro_base_client.model.metamodel import Metamodel
-from sedaro_base_client.model.temperature_base199 import TemperatureBase199
+from sedaro_base_client.model.temperature_base220 import TemperatureBase220

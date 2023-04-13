@@ -36,6 +36,7 @@ class AngleSensors56(
     class MetaOapg:
         
         class properties:
+            deg = schemas.NumberSchema
             
             
             class rad(
@@ -45,43 +46,42 @@ class AngleSensors56(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            deg = schemas.NumberSchema
             __annotations__ = {
-                "rad": rad,
                 "deg": deg,
+                "rad": rad,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["rad"]) -> MetaOapg.properties.rad: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["deg"]) -> MetaOapg.properties.deg: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["rad"], typing_extensions.Literal["deg"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["rad"]) -> MetaOapg.properties.rad: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["deg"], typing_extensions.Literal["rad"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["rad"]) -> typing.Union[MetaOapg.properties.rad, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["deg"]) -> typing.Union[MetaOapg.properties.deg, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rad"], typing_extensions.Literal["deg"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["rad"]) -> typing.Union[MetaOapg.properties.rad, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["deg"], typing_extensions.Literal["rad"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        rad: typing.Union[MetaOapg.properties.rad, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         deg: typing.Union[MetaOapg.properties.deg, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        rad: typing.Union[MetaOapg.properties.rad, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'AngleSensors56':
         return super().__new__(
             cls,
             *_args,
-            rad=rad,
             deg=deg,
+            rad=rad,
             _configuration=_configuration,
         )

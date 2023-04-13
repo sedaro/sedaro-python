@@ -72,7 +72,7 @@ class RectangularFieldOfView(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            AngleFieldOfView29,
+                            AngleFieldOfView34,
                         ]
             
             
@@ -108,7 +108,7 @@ class RectangularFieldOfView(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            AngleFieldOfView30,
+                            AngleFieldOfView35,
                         ]
             
             
@@ -252,6 +252,6 @@ class RectangularFieldOfView(
             _configuration=_configuration,
         )
 
-from sedaro_base_client.model.angle_field_of_view29 import AngleFieldOfView29
-from sedaro_base_client.model.angle_field_of_view30 import AngleFieldOfView30
+from sedaro_base_client.model.angle_field_of_view34 import AngleFieldOfView34
+from sedaro_base_client.model.angle_field_of_view35 import AngleFieldOfView35
 from sedaro_base_client.model.metamodel import Metamodel

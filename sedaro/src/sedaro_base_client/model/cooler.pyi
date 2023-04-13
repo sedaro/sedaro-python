@@ -86,7 +86,7 @@ class Cooler(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -122,7 +122,7 @@ class Cooler(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -301,7 +301,7 @@ class Cooler(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -392,7 +392,7 @@ class Cooler(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -752,4 +752,4 @@ class Cooler(
         )
 
 from sedaro_base_client.model.metamodel import Metamodel
-from sedaro_base_client.model.temperature_base199 import TemperatureBase199
+from sedaro_base_client.model.temperature_base220 import TemperatureBase220

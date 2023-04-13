@@ -49,7 +49,7 @@ class CooperativeTransmitInterface(
                 schemas.StrSchema
             ):
                 pass
-            onBitRate = schemas.IntSchema
+            onBitRate = schemas.NumberSchema
             alwaysActive = schemas.BoolSchema
             id = schemas.StrSchema
         
@@ -85,7 +85,7 @@ class CooperativeTransmitInterface(
             
             
             class bitRate(
-                schemas.IntSchema
+                schemas.NumberSchema
             ):
                 pass
             isActive = schemas.BoolSchema
@@ -232,7 +232,7 @@ class CooperativeTransmitInterface(
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        onBitRate: typing.Union[MetaOapg.properties.onBitRate, decimal.Decimal, int, ],
+        onBitRate: typing.Union[MetaOapg.properties.onBitRate, decimal.Decimal, int, float, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         alwaysActive: typing.Union[MetaOapg.properties.alwaysActive, bool, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
@@ -241,7 +241,7 @@ class CooperativeTransmitInterface(
         opModes: typing.Union[MetaOapg.properties.opModes, list, tuple, schemas.Unset] = schemas.unset,
         source: typing.Union[MetaOapg.properties.source, str, schemas.Unset] = schemas.unset,
         sink: typing.Union[MetaOapg.properties.sink, str, schemas.Unset] = schemas.unset,
-        bitRate: typing.Union[MetaOapg.properties.bitRate, decimal.Decimal, int, schemas.Unset] = schemas.unset,
+        bitRate: typing.Union[MetaOapg.properties.bitRate, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         linkTarget: typing.Union[MetaOapg.properties.linkTarget, str, schemas.Unset] = schemas.unset,
         targetInFov: typing.Union[MetaOapg.properties.targetInFov, bool, schemas.Unset] = schemas.unset,

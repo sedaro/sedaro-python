@@ -44,8 +44,8 @@ class Categories(
         return cls("CDH")
     
     @schemas.classproperty
-    def COMMS(cls):
-        return cls("COMMS")
+    def DATA_HANDLING(cls):
+        return cls("DATA_HANDLING")
     
     @schemas.classproperty
     def GNC(cls):

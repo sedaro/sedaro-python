@@ -126,7 +126,7 @@ class LockPointingMode(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            AngularVelocityBase199,
+                            AngularVelocityBase220,
                         ]
             
             
@@ -292,5 +292,5 @@ class LockPointingMode(
             _configuration=_configuration,
         )
 
-from sedaro_base_client.model.angular_velocity_base199 import AngularVelocityBase199
+from sedaro_base_client.model.angular_velocity_base220 import AngularVelocityBase220
 from sedaro_base_client.model.metamodel import Metamodel

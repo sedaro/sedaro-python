@@ -58,35 +58,35 @@ class GroundTarget(
             position = schemas.AnyTypeSchema
         
             @staticmethod
-            def lat() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def lat() -> typing.Type['AngleBase220']:
+                return AngleBase220
         
             @staticmethod
-            def lon() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def lon() -> typing.Type['AngleBase220']:
+                return AngleBase220
         
             @staticmethod
-            def alt() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def alt() -> typing.Type['AngleBase220']:
+                return AngleBase220
             range = schemas.NumberSchema
             lineOfSight = schemas.BoolSchema
             relativePosition = schemas.AnyTypeSchema
         
             @staticmethod
-            def azimuth() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def azimuth() -> typing.Type['AngleBase220']:
+                return AngleBase220
         
             @staticmethod
-            def elevation() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def elevation() -> typing.Type['AngleBase220']:
+                return AngleBase220
         
             @staticmethod
-            def solarAz() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def solarAz() -> typing.Type['AngleBase220']:
+                return AngleBase220
         
             @staticmethod
-            def solarEl() -> typing.Type['AngleBase199']:
-                return AngleBase199
+            def solarEl() -> typing.Type['AngleBase220']:
+                return AngleBase220
             __annotations__ = {
                 "name": name,
                 "id": id,
@@ -132,13 +132,13 @@ class GroundTarget(
     def __getitem__(self, name: typing_extensions.Literal["position"]) -> MetaOapg.properties.position: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lat"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["lat"]) -> 'AngleBase220': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["lon"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["lon"]) -> 'AngleBase220': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["alt"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["alt"]) -> 'AngleBase220': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["range"]) -> MetaOapg.properties.range: ...
@@ -150,16 +150,16 @@ class GroundTarget(
     def __getitem__(self, name: typing_extensions.Literal["relativePosition"]) -> MetaOapg.properties.relativePosition: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["azimuth"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["azimuth"]) -> 'AngleBase220': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["elevation"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["elevation"]) -> 'AngleBase220': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["solarAz"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["solarAz"]) -> 'AngleBase220': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["solarEl"]) -> 'AngleBase199': ...
+    def __getitem__(self, name: typing_extensions.Literal["solarEl"]) -> 'AngleBase220': ...
     
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["solarAz"], typing_extensions.Literal["solarEl"], ]):
         # dict_instance[name] accessor
@@ -187,13 +187,13 @@ class GroundTarget(
     def get_item_oapg(self, name: typing_extensions.Literal["position"]) -> typing.Union[MetaOapg.properties.position, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lat"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["lat"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lon"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["lon"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["alt"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["alt"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["range"]) -> typing.Union[MetaOapg.properties.range, schemas.Unset]: ...
@@ -205,16 +205,16 @@ class GroundTarget(
     def get_item_oapg(self, name: typing_extensions.Literal["relativePosition"]) -> typing.Union[MetaOapg.properties.relativePosition, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["azimuth"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["azimuth"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["elevation"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["elevation"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["solarAz"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["solarAz"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["solarEl"]) -> typing.Union['AngleBase199', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["solarEl"]) -> typing.Union['AngleBase220', schemas.Unset]: ...
     
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["rel_agentId"], typing_extensions.Literal["shadow"], typing_extensions.Literal["lst"], typing_extensions.Literal["position"], typing_extensions.Literal["lat"], typing_extensions.Literal["lon"], typing_extensions.Literal["alt"], typing_extensions.Literal["range"], typing_extensions.Literal["lineOfSight"], typing_extensions.Literal["relativePosition"], typing_extensions.Literal["azimuth"], typing_extensions.Literal["elevation"], typing_extensions.Literal["solarAz"], typing_extensions.Literal["solarEl"], ]):
         return super().get_item_oapg(name)
@@ -229,16 +229,16 @@ class GroundTarget(
         shadow: typing.Union[MetaOapg.properties.shadow, bool, schemas.Unset] = schemas.unset,
         lst: typing.Union[MetaOapg.properties.lst, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         position: typing.Union[MetaOapg.properties.position, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        lat: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
-        lon: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
-        alt: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
+        lat: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
+        lon: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
+        alt: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
         range: typing.Union[MetaOapg.properties.range, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         lineOfSight: typing.Union[MetaOapg.properties.lineOfSight, bool, schemas.Unset] = schemas.unset,
         relativePosition: typing.Union[MetaOapg.properties.relativePosition, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        azimuth: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
-        elevation: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
-        solarAz: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
-        solarEl: typing.Union['AngleBase199', schemas.Unset] = schemas.unset,
+        azimuth: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
+        elevation: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
+        solarAz: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
+        solarEl: typing.Union['AngleBase220', schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'GroundTarget':
         return super().__new__(
@@ -264,5 +264,5 @@ class GroundTarget(
             _configuration=_configuration,
         )
 
-from sedaro_base_client.model.angle_base199 import AngleBase199
+from sedaro_base_client.model.angle_base220 import AngleBase220
 from sedaro_base_client.model.metamodel import Metamodel

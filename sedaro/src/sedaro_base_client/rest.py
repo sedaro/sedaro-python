@@ -11,13 +11,15 @@
 
 import logging
 import ssl
-import typing
 from urllib.parse import urlencode
+import typing
 
 import certifi
 import urllib3
-from sedaro_base_client.exceptions import ApiException, ApiValueError
 from urllib3._collections import HTTPHeaderDict
+
+from sedaro_base_client.exceptions import ApiException, ApiValueError
+
 
 logger = logging.getLogger(__name__)
 

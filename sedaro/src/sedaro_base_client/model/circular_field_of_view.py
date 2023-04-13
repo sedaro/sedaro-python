@@ -71,7 +71,7 @@ class CircularFieldOfView(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            AngleFieldOfView24,
+                            AngleFieldOfView29,
                         ]
             
             
@@ -195,5 +195,5 @@ class CircularFieldOfView(
             _configuration=_configuration,
         )
 
-from sedaro_base_client.model.angle_field_of_view24 import AngleFieldOfView24
+from sedaro_base_client.model.angle_field_of_view29 import AngleFieldOfView29
 from sedaro_base_client.model.metamodel import Metamodel

@@ -79,6 +79,29 @@ class DataMode(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class components(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.AnyTypeSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'components':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             isActive = schemas.BoolSchema
             __annotations__ = {
                 "name": name,
@@ -88,6 +111,7 @@ class DataMode(
                 "input": input,
                 "output": output,
                 "opModes": opModes,
+                "components": components,
                 "isActive": isActive,
             }
         additional_properties = schemas.NotAnyTypeSchema
@@ -117,9 +141,12 @@ class DataMode(
     def __getitem__(self, name: typing_extensions.Literal["opModes"]) -> MetaOapg.properties.opModes: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["components"]) -> MetaOapg.properties.components: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["isActive"]) -> MetaOapg.properties.isActive: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["input"], typing_extensions.Literal["output"], typing_extensions.Literal["opModes"], typing_extensions.Literal["isActive"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["input"], typing_extensions.Literal["output"], typing_extensions.Literal["opModes"], typing_extensions.Literal["components"], typing_extensions.Literal["isActive"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -145,9 +172,12 @@ class DataMode(
     def get_item_oapg(self, name: typing_extensions.Literal["opModes"]) -> typing.Union[MetaOapg.properties.opModes, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["components"]) -> typing.Union[MetaOapg.properties.components, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["isActive"]) -> typing.Union[MetaOapg.properties.isActive, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["input"], typing_extensions.Literal["output"], typing_extensions.Literal["opModes"], typing_extensions.Literal["isActive"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name"], typing_extensions.Literal["alwaysActive"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["input"], typing_extensions.Literal["output"], typing_extensions.Literal["opModes"], typing_extensions.Literal["components"], typing_extensions.Literal["isActive"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -160,6 +190,7 @@ class DataMode(
         input: typing.Union[MetaOapg.properties.input, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         output: typing.Union[MetaOapg.properties.output, dict, frozendict.frozendict, schemas.Unset] = schemas.unset,
         opModes: typing.Union[MetaOapg.properties.opModes, list, tuple, schemas.Unset] = schemas.unset,
+        components: typing.Union[MetaOapg.properties.components, list, tuple, schemas.Unset] = schemas.unset,
         isActive: typing.Union[MetaOapg.properties.isActive, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'DataMode':
@@ -173,6 +204,7 @@ class DataMode(
             input=input,
             output=output,
             opModes=opModes,
+            components=components,
             isActive=isActive,
             _configuration=_configuration,
         )

@@ -37,11 +37,7 @@ class Battery(
 
     class MetaOapg:
         required = {
-            "maxDischargeCurrentOverride",
-            "initialSoc",
-            "minSocOverride",
             "configurationType",
-            "maxChargeCurrentOverride",
         }
         
         class properties:
@@ -92,6 +88,11 @@ class Battery(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            id = schemas.StrSchema
+        
+            @staticmethod
+            def metamodel() -> typing.Type['Metamodel']:
+                return Metamodel
             
             
             class initialSoc(
@@ -116,11 +117,6 @@ class Battery(
                 schemas.NumberSchema
             ):
                 pass
-            id = schemas.StrSchema
-        
-            @staticmethod
-            def metamodel() -> typing.Type['Metamodel']:
-                return Metamodel
             powerProcessor = schemas.StrSchema
             
             
@@ -171,12 +167,12 @@ class Battery(
             voc = schemas.NumberSchema
             __annotations__ = {
                 "configurationType": configurationType,
+                "id": id,
+                "metamodel": metamodel,
                 "initialSoc": initialSoc,
                 "maxChargeCurrentOverride": maxChargeCurrentOverride,
                 "maxDischargeCurrentOverride": maxDischargeCurrentOverride,
                 "minSocOverride": minSocOverride,
-                "id": id,
-                "metamodel": metamodel,
                 "powerProcessor": powerProcessor,
                 "packs": packs,
                 "current": current,
@@ -196,32 +192,28 @@ class Battery(
             }
         additional_properties = schemas.NotAnyTypeSchema
     
-    maxDischargeCurrentOverride: MetaOapg.properties.maxDischargeCurrentOverride
-    initialSoc: MetaOapg.properties.initialSoc
-    minSocOverride: MetaOapg.properties.minSocOverride
     configurationType: MetaOapg.properties.configurationType
-    maxChargeCurrentOverride: MetaOapg.properties.maxChargeCurrentOverride
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["maxDischargeCurrentOverride"]) -> MetaOapg.properties.maxDischargeCurrentOverride: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["initialSoc"]) -> MetaOapg.properties.initialSoc: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["minSocOverride"]) -> MetaOapg.properties.minSocOverride: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["configurationType"]) -> MetaOapg.properties.configurationType: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["maxChargeCurrentOverride"]) -> MetaOapg.properties.maxChargeCurrentOverride: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metamodel"]) -> 'Metamodel': ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["initialSoc"]) -> MetaOapg.properties.initialSoc: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxChargeCurrentOverride"]) -> MetaOapg.properties.maxChargeCurrentOverride: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["maxDischargeCurrentOverride"]) -> MetaOapg.properties.maxDischargeCurrentOverride: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["minSocOverride"]) -> MetaOapg.properties.minSocOverride: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["powerProcessor"]) -> MetaOapg.properties.powerProcessor: ...
@@ -271,30 +263,30 @@ class Battery(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["voc"]) -> MetaOapg.properties.voc: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["maxDischargeCurrentOverride"], typing_extensions.Literal["initialSoc"], typing_extensions.Literal["minSocOverride"], typing_extensions.Literal["configurationType"], typing_extensions.Literal["maxChargeCurrentOverride"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["packs"], typing_extensions.Literal["current"], typing_extensions.Literal["voltage"], typing_extensions.Literal["power"], typing_extensions.Literal["soc"], typing_extensions.Literal["curve"], typing_extensions.Literal["idealMaxChargeCurrent"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxChargeVoltage"], typing_extensions.Literal["maxChargePower"], typing_extensions.Literal["idealMaxDischargeCurrent"], typing_extensions.Literal["esr"], typing_extensions.Literal["capacity"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["voc"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["configurationType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialSoc"], typing_extensions.Literal["maxChargeCurrentOverride"], typing_extensions.Literal["maxDischargeCurrentOverride"], typing_extensions.Literal["minSocOverride"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["packs"], typing_extensions.Literal["current"], typing_extensions.Literal["voltage"], typing_extensions.Literal["power"], typing_extensions.Literal["soc"], typing_extensions.Literal["curve"], typing_extensions.Literal["idealMaxChargeCurrent"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxChargeVoltage"], typing_extensions.Literal["maxChargePower"], typing_extensions.Literal["idealMaxDischargeCurrent"], typing_extensions.Literal["esr"], typing_extensions.Literal["capacity"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["voc"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["maxDischargeCurrentOverride"]) -> MetaOapg.properties.maxDischargeCurrentOverride: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["initialSoc"]) -> MetaOapg.properties.initialSoc: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["minSocOverride"]) -> MetaOapg.properties.minSocOverride: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["configurationType"]) -> MetaOapg.properties.configurationType: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["maxChargeCurrentOverride"]) -> MetaOapg.properties.maxChargeCurrentOverride: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metamodel"]) -> typing.Union['Metamodel', schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["initialSoc"]) -> typing.Union[MetaOapg.properties.initialSoc, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxChargeCurrentOverride"]) -> typing.Union[MetaOapg.properties.maxChargeCurrentOverride, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["maxDischargeCurrentOverride"]) -> typing.Union[MetaOapg.properties.maxDischargeCurrentOverride, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["minSocOverride"]) -> typing.Union[MetaOapg.properties.minSocOverride, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["powerProcessor"]) -> typing.Union[MetaOapg.properties.powerProcessor, schemas.Unset]: ...
@@ -344,19 +336,19 @@ class Battery(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["voc"]) -> typing.Union[MetaOapg.properties.voc, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["maxDischargeCurrentOverride"], typing_extensions.Literal["initialSoc"], typing_extensions.Literal["minSocOverride"], typing_extensions.Literal["configurationType"], typing_extensions.Literal["maxChargeCurrentOverride"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["packs"], typing_extensions.Literal["current"], typing_extensions.Literal["voltage"], typing_extensions.Literal["power"], typing_extensions.Literal["soc"], typing_extensions.Literal["curve"], typing_extensions.Literal["idealMaxChargeCurrent"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxChargeVoltage"], typing_extensions.Literal["maxChargePower"], typing_extensions.Literal["idealMaxDischargeCurrent"], typing_extensions.Literal["esr"], typing_extensions.Literal["capacity"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["voc"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["configurationType"], typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialSoc"], typing_extensions.Literal["maxChargeCurrentOverride"], typing_extensions.Literal["maxDischargeCurrentOverride"], typing_extensions.Literal["minSocOverride"], typing_extensions.Literal["powerProcessor"], typing_extensions.Literal["packs"], typing_extensions.Literal["current"], typing_extensions.Literal["voltage"], typing_extensions.Literal["power"], typing_extensions.Literal["soc"], typing_extensions.Literal["curve"], typing_extensions.Literal["idealMaxChargeCurrent"], typing_extensions.Literal["maxChargeCurrent"], typing_extensions.Literal["maxChargeVoltage"], typing_extensions.Literal["maxChargePower"], typing_extensions.Literal["idealMaxDischargeCurrent"], typing_extensions.Literal["esr"], typing_extensions.Literal["capacity"], typing_extensions.Literal["minSoc"], typing_extensions.Literal["voc"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        maxDischargeCurrentOverride: typing.Union[MetaOapg.properties.maxDischargeCurrentOverride, decimal.Decimal, int, float, ],
-        initialSoc: typing.Union[MetaOapg.properties.initialSoc, decimal.Decimal, int, float, ],
-        minSocOverride: typing.Union[MetaOapg.properties.minSocOverride, decimal.Decimal, int, float, ],
         configurationType: typing.Union[MetaOapg.properties.configurationType, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        maxChargeCurrentOverride: typing.Union[MetaOapg.properties.maxChargeCurrentOverride, decimal.Decimal, int, float, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
+        initialSoc: typing.Union[MetaOapg.properties.initialSoc, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxChargeCurrentOverride: typing.Union[MetaOapg.properties.maxChargeCurrentOverride, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        maxDischargeCurrentOverride: typing.Union[MetaOapg.properties.maxDischargeCurrentOverride, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        minSocOverride: typing.Union[MetaOapg.properties.minSocOverride, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         powerProcessor: typing.Union[MetaOapg.properties.powerProcessor, str, schemas.Unset] = schemas.unset,
         packs: typing.Union[MetaOapg.properties.packs, list, tuple, schemas.Unset] = schemas.unset,
         current: typing.Union[MetaOapg.properties.current, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
@@ -378,13 +370,13 @@ class Battery(
         return super().__new__(
             cls,
             *_args,
-            maxDischargeCurrentOverride=maxDischargeCurrentOverride,
-            initialSoc=initialSoc,
-            minSocOverride=minSocOverride,
             configurationType=configurationType,
-            maxChargeCurrentOverride=maxChargeCurrentOverride,
             id=id,
             metamodel=metamodel,
+            initialSoc=initialSoc,
+            maxChargeCurrentOverride=maxChargeCurrentOverride,
+            maxDischargeCurrentOverride=maxDischargeCurrentOverride,
+            minSocOverride=minSocOverride,
             powerProcessor=powerProcessor,
             packs=packs,
             current=current,

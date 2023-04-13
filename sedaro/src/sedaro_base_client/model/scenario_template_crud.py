@@ -73,10 +73,10 @@ class ScenarioTemplateCrud(
                                 # classes don't exist yet because their module has not finished
                                 # loading
                                 return [
-                                    Agent,
-                                    AgentGroup,
                                     Orbit,
                                     ClockConfig,
+                                    Agent,
+                                    AgentGroup,
                                 ]
                     
                     

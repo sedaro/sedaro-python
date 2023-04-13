@@ -40,7 +40,7 @@ class Categories(
         enum_value_to_name = {
             "POWER": "POWER",
             "CDH": "CDH",
-            "COMMS": "COMMS",
+            "DATA_HANDLING": "DATA_HANDLING",
             "GNC": "GNC",
             "THERMAL": "THERMAL",
             "STRUCTURE": "STRUCTURE",
@@ -56,8 +56,8 @@ class Categories(
         return cls("CDH")
     
     @schemas.classproperty
-    def COMMS(cls):
-        return cls("COMMS")
+    def DATA_HANDLING(cls):
+        return cls("DATA_HANDLING")
     
     @schemas.classproperty
     def GNC(cls):

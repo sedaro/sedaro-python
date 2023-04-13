@@ -158,7 +158,7 @@ class OpticalAttitudeSensor(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -194,7 +194,7 @@ class OpticalAttitudeSensor(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -373,7 +373,7 @@ class OpticalAttitudeSensor(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            TemperatureBase199,
+                            TemperatureBase220,
                         ]
             
             
@@ -763,4 +763,4 @@ class OpticalAttitudeSensor(
 from sedaro_base_client.model.angle_sensors51 import AngleSensors51
 from sedaro_base_client.model.angle_sensors56 import AngleSensors56
 from sedaro_base_client.model.metamodel import Metamodel
-from sedaro_base_client.model.temperature_base199 import TemperatureBase199
+from sedaro_base_client.model.temperature_base220 import TemperatureBase220
