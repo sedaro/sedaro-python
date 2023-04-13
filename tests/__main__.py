@@ -16,7 +16,7 @@ imported_test_files = [
     test_bcc_options,
     test_block_crud,
     test_raw_requests,
-    # test_simulation, # FIXME
+    test_simulation,  # FIXME
     # test_results, # FIXME
 ]
 ############################################################
