@@ -8,7 +8,7 @@ from sedaro_base_client.api_client import ApiResponse
 from urllib3.response import HTTPResponse
 
 from .exceptions import SedaroApiException
-from .settings import BLOCKS
+from .settings import BLOCKS, COMMON_API_KWARGS
 
 if TYPE_CHECKING:
     from .branch_client import BranchClient
@@ -45,6 +45,14 @@ def enforce_id_in_branch(branch_client: 'BranchClient', id: str):
     """
     if id not in branch_client.data[BLOCKS]:
         raise KeyError(f'There is no Block with id "{id}" in this Branch.')
+
+
+def body_from_res(res):
+    """
+    Returns `res.body` unless `skip_deserialization` is true, then parses body from `res.response` Should be used when
+    `COMMON_API_KWARGS` is spread in auto-generated HTTP request methods.
+    """
+    return parse_urllib_response(res.response) if COMMON_API_KWARGS['skip_deserialization'] else res.body
 
 
 # ======================================================================================================================
