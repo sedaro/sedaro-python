@@ -176,16 +176,15 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     sim.start()
 
     # Get simulation
-    response = sim.get_latest()
+    job_res = sim.get_latest()[0]
 
     # Check status & percentage complete
-    job = response.body[0]
-    assert job['status'] == 'RUNNING'
-    print(job['progress']['percentComplete'])
+    assert job_res['status'] == 'RUNNING'
+    print(job_res['progress']['percentComplete'])
 
     # Terminate simulation
-    response = sim.terminate(job['id'])
-    assert response.body['message'] == 'Successfully terminated simulation.'
+    response = sim.terminate(job_res['id'])
+    assert response['message'] == 'Successfully terminated simulation.'
 
 ```
 
