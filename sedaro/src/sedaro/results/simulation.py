@@ -25,8 +25,7 @@ class SedaroSimulationResult:
             - from_file
         '''
         self.__simulation = {
-            'branch': int(simulation['branch']),
-            'simulatedAgents': dict(simulation['simulatedAgents']),
+            'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
             'status': str(simulation['status']),
@@ -37,11 +36,7 @@ class SedaroSimulationResult:
             self.__meta = data['Data']['meta']
             raw_series = data['Data']['series']
             agent_id_name_map = _get_agent_id_name_map(self.__meta)
-            agent_simbed_id_map = {
-                value: key for key, value in self.__simulation['simulatedAgents'].items()}
-            self.__simpleseries, self._agent_blocks = _restructure_data(
-                raw_series, agent_id_name_map, self.__meta, agent_simbed_id_map
-            )
+            self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
         else:
             self.__meta = None
             self.__simpleseries = None
@@ -54,10 +49,9 @@ class SedaroSimulationResult:
     def get_scenario_latest(cls, api_key: str, scenario_id: int, host: str = 'https://api.sedaro.com'):
         '''Query latest scenario result.'''
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            api_instance = jobs_api.JobsApi(sedaro_client)
-            simulation = cls.__get_simulation(api_instance, scenario_id)
+            simulation = cls.__get_simulation(sedaro_client, scenario_id)
             if simulation['status'] == 'SUCCEEDED':
-                data = sedaro_client.get_data(simulation['dataId'])
+                data = sedaro_client.get_data(simulation['dataArray'])
             else:
                 data = None
             return cls(simulation, data)
@@ -72,23 +66,20 @@ class SedaroSimulationResult:
     ):
         '''Query latest scenario result and wait for sim if it is running.'''
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            api_instance = jobs_api.JobsApi(sedaro_client)
-            simulation = cls.__get_simulation(api_instance, scenario_id)
+            simulation = cls.__get_simulation(sedaro_client, scenario_id)
 
             while simulation['status'] in ('PENDING', 'RUNNING'):
-                simulation = cls.__get_simulation(api_instance, scenario_id)
+                simulation = cls.__get_simulation(sedaro_client, scenario_id)
                 progress_bar(simulation['progress']['percentComplete'])
                 time.sleep(retry_interval)
 
             return cls.get_scenario_latest(api_key, scenario_id, host=host)
 
     @staticmethod
-    def __get_simulation(api_instance, scenario_id: int) -> dict:
+    def __get_simulation(client, scenario_id: int) -> dict:
         try:
-            return api_instance.get_simulations(
-                path_params={'branchId': scenario_id},
-                query_params={'latest': ''}
-            ).body[0]
+            sim = client.get_sim_client(scenario_id)
+            return sim.get_latest()[0]
         except IndexError:
             raise IndexError(
                 f'Could not find any simulation results for scenario: {scenario_id}')
@@ -98,8 +89,8 @@ class SedaroSimulationResult:
         self.__assert_success()
         return tuple([
             entry['name'] for _, entry
-            in self.__meta['structure']['scenario']['Agent'].items()
-            if not entry['peripheral']
+            in self.__meta['structure']['scenario']['blocks'].items()
+            if entry['type'] == 'Agent' and not entry['peripheral']
         ])
 
     @property
@@ -107,8 +98,8 @@ class SedaroSimulationResult:
         self.__assert_success()
         return tuple([
             entry['name'] for _, entry
-            in self.__meta['structure']['scenario']['Agent'].items()
-            if entry['peripheral']
+            in self.__meta['structure']['scenario']['blocks'].items()
+            if entry['type'] == 'Agent' and entry['peripheral']
         ])
 
     @property
@@ -137,8 +128,8 @@ class SedaroSimulationResult:
                 'This operation cannot be completed because the simulation failed.')
 
     def __agent_id_from_name(self, name: str) -> str:
-        for id_, entry in self.__meta['structure']['scenario']['Agent'].items():
-            if name == entry['name']:
+        for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
+            if entry['type'] == 'Agent' and name == entry['name']:
                 return id_
         else:
             raise ValueError(f"Agent {name} not found in data set.")

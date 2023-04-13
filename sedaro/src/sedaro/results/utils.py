@@ -52,7 +52,12 @@ def _element_id_dict(agent_data):
 
 def _get_agent_id_name_map(meta):
     '''Get mapping from agent ID to name.'''
-    return {id_: entry['name'] for id_, entry in meta['structure']['scenario']['Agent'].items()}
+    return {
+        id_: entry['name']
+        for id_, entry in meta['structure']['scenario']['blocks'].items()
+        if entry['type'] == 'Agent'
+    }
+    # return {id_: entry['name'] for id_, entry in meta['structure']['scenario']['Agent'].items()}
 
 def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     '''Build a simplified series data structure
@@ -75,7 +80,7 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     return data
 
 
-def _restructure_data(series, agents, meta, agent_map):
+def _restructure_data(series, agents, meta):
     '''Build a simplified internal data structure.
 
     Creates a dictionary with the following key hierarchy:
@@ -91,19 +96,18 @@ def _restructure_data(series, agents, meta, agent_map):
     blocks = {}
     for series_key in series:
         agent_id, engine_id = series_key.split("/")
-        agent_simbed_id = agent_map[agent_id]
-        agent_name = agents[agent_simbed_id]
+        agent_name = agents[agent_id]
         engine_name = ENGINE_MAP[engine_id]
 
         if agent_name not in data:
             data[agent_name] = {}
 
         time, sub_series = series[series_key]
-        if agent_simbed_id not in blocks:
-            blocks[agent_simbed_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
+        if agent_id not in blocks:
+            blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
         data[agent_name][engine_name] = {
             'time': time,
-            'series': _simplify_series(sub_series[agent_id], blocks[agent_simbed_id])
+            'series': _simplify_series(sub_series[agent_id], blocks[agent_id])
         }
     return data, blocks
 
