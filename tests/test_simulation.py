@@ -7,10 +7,8 @@ from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
 
 def _check_job_status(job):
     assert job['status'] == 'RUNNING'
-    print('-', job['status'], '-',
-        job['progress']['percentComplete'], '%')
-    # print('-', job['status'], '-', round(
-    #     job['progress']['percentComplete'], 2), '%') # FIXME Can switch this back when percentage complete isn't NONE
+    print('-', job['status'], '-', round(
+        job['progress']['percentComplete'], 2), '%') # FIXME Can switch this back when percentage complete isn't NONE
 
 
 def test_run_simulation():
