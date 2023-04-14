@@ -57,7 +57,7 @@ def _get_agent_id_name_map(meta):
         for id_, entry in meta['structure']['scenario']['blocks'].items()
         if entry['type'] == 'Agent'
     }
-    # return {id_: entry['name'] for id_, entry in meta['structure']['scenario']['Agent'].items()}
+
 
 def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     '''Build a simplified series data structure
