@@ -239,14 +239,16 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     )
 
     # create a celestial target in a branch
+    sun = {
+        'name': 'Sun',
+        'polynomialEphemerisBody': 'SUN',
+        'type': 'CelestialTarget'
+    }
+
     sedaro.send_request(
-        f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}/cdh/conops/celestial-targets/',
-        'POST',
-        body={
-            'name': 'Sun',
-            'polynomialEphemerisBody': 'SUN',
-            'conOps': 2
-        }
+        f'/models/branches/{self.id}/template/',
+        'PATCH',
+        { 'blocks': [sun] }
     )
 ```
 
