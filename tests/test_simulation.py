@@ -2,7 +2,7 @@ import time
 
 from sedaro import SedaroApiClient
 
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
+from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
 
 
 def _check_job_status(job):
@@ -12,9 +12,9 @@ def _check_job_status(job):
 
 
 def test_run_simulation():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         # Instantiate job client
-        sim_client = sedaro_client.get_sim_client(SIMPLESAT_SCENARIO_ID)
+        sim_client = sedaro.get_sim_client(WILDFIRE_SCENARIO_ID)
 
         # Start simulation
         sim_client.start()
