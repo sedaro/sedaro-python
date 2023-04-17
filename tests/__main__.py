@@ -17,7 +17,7 @@ imported_test_files = [
     test_block_crud,
     test_raw_requests,
     test_simulation,
-    # test_results, # FIXME
+    test_results,
 ]
 ############################################################
 
