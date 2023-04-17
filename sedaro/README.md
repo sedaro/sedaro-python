@@ -162,6 +162,28 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
         assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
 ```
 
+### Multi-Block CRUD
+
+The `crud` method is also available for performing CRUD operations on multiple Sedaro blocks and/or root at the same time using kwargs as follows:
+- `root`: update fields on the root by passing a dictionary
+- `blocks`: create/update 1+ blocks by passing a list of dictionaries. If an `id` is present, the corresponding block will be updated. If an `id` isn't present, a `type` is required, and a new block will be created.
+- `delete`: delete 1+ blocks by passing a list of their block `id`s.
+
+```py
+with SedaroApiClient(api_key=API_KEY) as sedaro:
+    branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
+
+    branch.crud(
+        root={ "field": "value" }, # update fields on root
+        blocks=[
+            { "id": "NTF7dXNR15mmNrVzlhJcF", "field": "value" }, # update block
+            { "type": "SolarCell",  "field": "value", ... }, # create block
+        ],
+        delete=["NTF8-90Sh93mPKxJkq6z-"] # delete block
+    )
+```
+
+
 ## Use: Simulation
 
 ```py
