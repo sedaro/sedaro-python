@@ -241,7 +241,6 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     # create a celestial target in a branch
     sun = {
         'name': 'Sun',
-        'polynomialEphemerisBody': 'SUN',
         'type': 'CelestialTarget'
     }
 
