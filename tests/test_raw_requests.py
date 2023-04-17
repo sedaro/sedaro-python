@@ -36,7 +36,6 @@ def test_raw_request_CRUD_blocks():
             body={
                 BLOCKS: [{
                     'name': 'Sun ' + str(randrange(1, 100000)),
-                    'polynomialEphemerisBody': 'SUN',
                     'type': 'CelestialTarget'
                 }]
             }
