@@ -28,7 +28,7 @@ pip install sedaro
 
     ```py
     # If using a dedicated enterprise Sedaro instance, overwrite the default `host` kwarg.
-    HOST = 'url-to-my-sedaro-server-instance.com'
+    HOST = 'url-to-my-sedaro-instance.com'
 
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         ...
@@ -54,7 +54,6 @@ pip install sedaro
     Valid `BlockClassClient`s for Agent Template Branches and Scenario Branches can be found in our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/), by viewing the valid classes in the `blocks` key for the `Template` `PATCH` route.
 
     In code editors that support it, intellisense will suggest names for `BlockClassClients`. Pay attention to what is valid for an Agent Template vs a Scenario branch. If you key into an invalid value, an error will be raised.
-
 
 4.  A `BlockClassClient` has several methods:
 
@@ -112,9 +111,9 @@ pip install sedaro
 
     Keying into relationship fields returns `BlockClient`s corresponding to the related Sedaro `Block`s as follows:
 
-      - `OneSide`: a `BlockClient`
-      - `ManySide`: a `list` of `BlockClient`s
-      - `DataSide`: a dictionary with `BlockClient`s as keys and relationship data as values
+    - `OneSide`: a `BlockClient`
+    - `ManySide`: a `list` of `BlockClient`s
+    - `DataSide`: a dictionary with `BlockClient`s as keys and relationship data as values
 
     ```py
     solar_panel = subsystem.components[0]
