@@ -166,6 +166,12 @@ class Orbit(
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
             atmosphericDensity = schemas.NumberSchema
+            
+            
+            class lst(
+                schemas.NumberSchema
+            ):
+                pass
             __annotations__ = {
                 "id": id,
                 "metamodel": metamodel,
@@ -179,6 +185,7 @@ class Orbit(
                 "beta": beta,
                 "magneticFieldVector": magneticFieldVector,
                 "atmosphericDensity": atmosphericDensity,
+                "lst": lst,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -218,7 +225,10 @@ class Orbit(
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["atmosphericDensity"]) -> MetaOapg.properties.atmosphericDensity: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["lst"]) -> MetaOapg.properties.lst: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], typing_extensions.Literal["lst"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -258,7 +268,10 @@ class Orbit(
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["atmosphericDensity"]) -> typing.Union[MetaOapg.properties.atmosphericDensity, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["lst"]) -> typing.Union[MetaOapg.properties.lst, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id"], typing_extensions.Literal["metamodel"], typing_extensions.Literal["initialStateDefType"], typing_extensions.Literal["initialStateDefParams"], typing_extensions.Literal["orbitalElements"], typing_extensions.Literal["period"], typing_extensions.Literal["semiLatusRectum"], typing_extensions.Literal["radiusPerigee"], typing_extensions.Literal["shadow"], typing_extensions.Literal["beta"], typing_extensions.Literal["magneticFieldVector"], typing_extensions.Literal["atmosphericDensity"], typing_extensions.Literal["lst"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -276,6 +289,7 @@ class Orbit(
         beta: typing.Union[MetaOapg.properties.beta, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         magneticFieldVector: typing.Union[MetaOapg.properties.magneticFieldVector, list, tuple, schemas.Unset] = schemas.unset,
         atmosphericDensity: typing.Union[MetaOapg.properties.atmosphericDensity, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        lst: typing.Union[MetaOapg.properties.lst, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'Orbit':
         return super().__new__(
@@ -293,6 +307,7 @@ class Orbit(
             beta=beta,
             magneticFieldVector=magneticFieldVector,
             atmosphericDensity=atmosphericDensity,
+            lst=lst,
             _configuration=_configuration,
         )
 

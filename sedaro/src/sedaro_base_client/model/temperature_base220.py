@@ -36,6 +36,8 @@ class TemperatureBase220(
     class MetaOapg:
         
         class properties:
+            degC = schemas.NumberSchema
+            degF = schemas.NumberSchema
             
             
             class degK(
@@ -45,53 +47,51 @@ class TemperatureBase220(
             
                 class MetaOapg:
                     inclusive_minimum = 0.0
-            degF = schemas.NumberSchema
-            degC = schemas.NumberSchema
             __annotations__ = {
-                "degK": degK,
-                "degF": degF,
                 "degC": degC,
+                "degF": degF,
+                "degK": degK,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["degK"]) -> MetaOapg.properties.degK: ...
+    def __getitem__(self, name: typing_extensions.Literal["degC"]) -> MetaOapg.properties.degC: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["degF"]) -> MetaOapg.properties.degF: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["degC"]) -> MetaOapg.properties.degC: ...
+    def __getitem__(self, name: typing_extensions.Literal["degK"]) -> MetaOapg.properties.degK: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["degK"], typing_extensions.Literal["degF"], typing_extensions.Literal["degC"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["degC"], typing_extensions.Literal["degF"], typing_extensions.Literal["degK"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["degK"]) -> typing.Union[MetaOapg.properties.degK, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["degC"]) -> typing.Union[MetaOapg.properties.degC, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["degF"]) -> typing.Union[MetaOapg.properties.degF, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["degC"]) -> typing.Union[MetaOapg.properties.degC, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["degK"]) -> typing.Union[MetaOapg.properties.degK, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["degK"], typing_extensions.Literal["degF"], typing_extensions.Literal["degC"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["degC"], typing_extensions.Literal["degF"], typing_extensions.Literal["degK"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        degK: typing.Union[MetaOapg.properties.degK, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        degF: typing.Union[MetaOapg.properties.degF, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         degC: typing.Union[MetaOapg.properties.degC, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        degF: typing.Union[MetaOapg.properties.degF, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
+        degK: typing.Union[MetaOapg.properties.degK, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'TemperatureBase220':
         return super().__new__(
             cls,
             *_args,
-            degK=degK,
-            degF=degF,
             degC=degC,
+            degF=degF,
+            degK=degK,
             _configuration=_configuration,
         )

@@ -38,31 +38,6 @@ class FrameVectorBase220(
         class properties:
             
             
-            class eci(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    max_items = 3
-                    min_items = 3
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'eci':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
             class body(
                 schemas.ListSchema
             ):
@@ -86,42 +61,67 @@ class FrameVectorBase220(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            
+            
+            class eci(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    max_items = 3
+                    min_items = 3
+                    items = schemas.NumberSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'eci':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
-                "eci": eci,
                 "body": body,
+                "eci": eci,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["eci"]) -> MetaOapg.properties.eci: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["body"]) -> MetaOapg.properties.body: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["eci"], typing_extensions.Literal["body"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["eci"]) -> MetaOapg.properties.eci: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["body"], typing_extensions.Literal["eci"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["eci"]) -> typing.Union[MetaOapg.properties.eci, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["body"]) -> typing.Union[MetaOapg.properties.body, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["eci"], typing_extensions.Literal["body"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["eci"]) -> typing.Union[MetaOapg.properties.eci, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["body"], typing_extensions.Literal["eci"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        eci: typing.Union[MetaOapg.properties.eci, list, tuple, schemas.Unset] = schemas.unset,
         body: typing.Union[MetaOapg.properties.body, list, tuple, schemas.Unset] = schemas.unset,
+        eci: typing.Union[MetaOapg.properties.eci, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'FrameVectorBase220':
         return super().__new__(
             cls,
             *_args,
-            eci=eci,
             body=body,
+            eci=eci,
             _configuration=_configuration,
         )

@@ -134,157 +134,7 @@ class VehicleTemplateUpdate(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
-            
-            
-            class attitude(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def all_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            QuaternionBase220,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'attitude':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
-            class angularVelocity(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'angularVelocity':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class torque(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'torque':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class srpTorque(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'srpTorque':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class dragTorque(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'dragTorque':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-            
-            
-            class gravityGradientTorque(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.NumberSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'gravityGradientTorque':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
+            missionOrbit = schemas.StrSchema
             __annotations__ = {
                 "cadKey": cadKey,
                 "cadSignedUrl": cadSignedUrl,
@@ -294,12 +144,7 @@ class VehicleTemplateUpdate(
                 "selfId": selfId,
                 "cadFileName": cadFileName,
                 "enabledModules": enabledModules,
-                "attitude": attitude,
-                "angularVelocity": angularVelocity,
-                "torque": torque,
-                "srpTorque": srpTorque,
-                "dragTorque": dragTorque,
-                "gravityGradientTorque": gravityGradientTorque,
+                "missionOrbit": missionOrbit,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -334,24 +179,9 @@ class VehicleTemplateUpdate(
     def __getitem__(self, name: typing_extensions.Literal["enabledModules"]) -> MetaOapg.properties.enabledModules: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["attitude"]) -> MetaOapg.properties.attitude: ...
+    def __getitem__(self, name: typing_extensions.Literal["missionOrbit"]) -> MetaOapg.properties.missionOrbit: ...
     
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["angularVelocity"]) -> MetaOapg.properties.angularVelocity: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["torque"]) -> MetaOapg.properties.torque: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["srpTorque"]) -> MetaOapg.properties.srpTorque: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["dragTorque"]) -> MetaOapg.properties.dragTorque: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["gravityGradientTorque"]) -> MetaOapg.properties.gravityGradientTorque: ...
-    
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["attitude"], typing_extensions.Literal["angularVelocity"], typing_extensions.Literal["torque"], typing_extensions.Literal["srpTorque"], typing_extensions.Literal["dragTorque"], typing_extensions.Literal["gravityGradientTorque"], ]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["missionOrbit"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -380,24 +210,9 @@ class VehicleTemplateUpdate(
     def get_item_oapg(self, name: typing_extensions.Literal["enabledModules"]) -> typing.Union[MetaOapg.properties.enabledModules, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["attitude"]) -> typing.Union[MetaOapg.properties.attitude, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["missionOrbit"]) -> typing.Union[MetaOapg.properties.missionOrbit, schemas.Unset]: ...
     
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["angularVelocity"]) -> typing.Union[MetaOapg.properties.angularVelocity, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["torque"]) -> typing.Union[MetaOapg.properties.torque, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["srpTorque"]) -> typing.Union[MetaOapg.properties.srpTorque, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["dragTorque"]) -> typing.Union[MetaOapg.properties.dragTorque, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["gravityGradientTorque"]) -> typing.Union[MetaOapg.properties.gravityGradientTorque, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["attitude"], typing_extensions.Literal["angularVelocity"], typing_extensions.Literal["torque"], typing_extensions.Literal["srpTorque"], typing_extensions.Literal["dragTorque"], typing_extensions.Literal["gravityGradientTorque"], ]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["inertia"], typing_extensions.Literal["cadScaleFactor"], typing_extensions.Literal["cadSignedUrl"], typing_extensions.Literal["mass"], typing_extensions.Literal["cadKey"], typing_extensions.Literal["selfId"], typing_extensions.Literal["cadFileName"], typing_extensions.Literal["enabledModules"], typing_extensions.Literal["missionOrbit"], ]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -411,12 +226,7 @@ class VehicleTemplateUpdate(
         selfId: typing.Union[MetaOapg.properties.selfId, str, schemas.Unset] = schemas.unset,
         cadFileName: typing.Union[MetaOapg.properties.cadFileName, str, schemas.Unset] = schemas.unset,
         enabledModules: typing.Union[MetaOapg.properties.enabledModules, list, tuple, schemas.Unset] = schemas.unset,
-        attitude: typing.Union[MetaOapg.properties.attitude, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        angularVelocity: typing.Union[MetaOapg.properties.angularVelocity, list, tuple, schemas.Unset] = schemas.unset,
-        torque: typing.Union[MetaOapg.properties.torque, list, tuple, schemas.Unset] = schemas.unset,
-        srpTorque: typing.Union[MetaOapg.properties.srpTorque, list, tuple, schemas.Unset] = schemas.unset,
-        dragTorque: typing.Union[MetaOapg.properties.dragTorque, list, tuple, schemas.Unset] = schemas.unset,
-        gravityGradientTorque: typing.Union[MetaOapg.properties.gravityGradientTorque, list, tuple, schemas.Unset] = schemas.unset,
+        missionOrbit: typing.Union[MetaOapg.properties.missionOrbit, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'VehicleTemplateUpdate':
         return super().__new__(
@@ -430,13 +240,6 @@ class VehicleTemplateUpdate(
             selfId=selfId,
             cadFileName=cadFileName,
             enabledModules=enabledModules,
-            attitude=attitude,
-            angularVelocity=angularVelocity,
-            torque=torque,
-            srpTorque=srpTorque,
-            dragTorque=dragTorque,
-            gravityGradientTorque=gravityGradientTorque,
+            missionOrbit=missionOrbit,
             _configuration=_configuration,
         )
-
-from sedaro_base_client.model.quaternion_base220 import QuaternionBase220

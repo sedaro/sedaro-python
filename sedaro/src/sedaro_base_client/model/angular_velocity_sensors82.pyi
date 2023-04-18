@@ -42,12 +42,12 @@ class AngularVelocitySensors82(
                 schemas.NumberSchema
             ):
                 pass
-            deg_s = schemas.NumberSchema
             rpm = schemas.NumberSchema
+            deg_s = schemas.NumberSchema
             __annotations__ = {
                 "rad/s": rad_s,
-                "deg/s": deg_s,
                 "rpm": rpm,
+                "deg/s": deg_s,
             }
         additional_properties = schemas.NotAnyTypeSchema
     
@@ -55,12 +55,12 @@ class AngularVelocitySensors82(
     def __getitem__(self, name: typing_extensions.Literal["rad/s"]) -> MetaOapg.properties.rad_s: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["deg/s"]) -> MetaOapg.properties.deg_s: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["rpm"]) -> MetaOapg.properties.rpm: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["rad/s"], typing_extensions.Literal["deg/s"], typing_extensions.Literal["rpm"], ]):
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["deg/s"]) -> MetaOapg.properties.deg_s: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["rad/s"], typing_extensions.Literal["rpm"], typing_extensions.Literal["deg/s"], ]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -68,12 +68,12 @@ class AngularVelocitySensors82(
     def get_item_oapg(self, name: typing_extensions.Literal["rad/s"]) -> typing.Union[MetaOapg.properties.rad_s, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["deg/s"]) -> typing.Union[MetaOapg.properties.deg_s, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["rpm"]) -> typing.Union[MetaOapg.properties.rpm, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rad/s"], typing_extensions.Literal["deg/s"], typing_extensions.Literal["rpm"], ]):
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["deg/s"]) -> typing.Union[MetaOapg.properties.deg_s, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["rad/s"], typing_extensions.Literal["rpm"], typing_extensions.Literal["deg/s"], ]):
         return super().get_item_oapg(name)
 
     def __new__(

@@ -58,7 +58,7 @@ class SunTrackingSurface(
                 return Metamodel
             bodyFrameVector = schemas.StrSchema
             surfaceMaterial = schemas.StrSchema
-            geocenterAngle = schemas.AnyTypeSchema
+            geocenterAngle = schemas.NumberSchema
             
             
             class earthAlbedoViewFactor(
@@ -475,7 +475,7 @@ class SunTrackingSurface(
         metamodel: typing.Union['Metamodel', schemas.Unset] = schemas.unset,
         bodyFrameVector: typing.Union[MetaOapg.properties.bodyFrameVector, str, schemas.Unset] = schemas.unset,
         surfaceMaterial: typing.Union[MetaOapg.properties.surfaceMaterial, str, schemas.Unset] = schemas.unset,
-        geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        geocenterAngle: typing.Union[MetaOapg.properties.geocenterAngle, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         earthAlbedoViewFactor: typing.Union[MetaOapg.properties.earthAlbedoViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         earthIrViewFactor: typing.Union[MetaOapg.properties.earthIrViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         solarViewFactor: typing.Union[MetaOapg.properties.solarViewFactor, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
