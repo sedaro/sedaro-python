@@ -11,7 +11,6 @@ from sedaro.results.agent import SedaroAgentResult
 from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
                                   _get_agent_id_name_map, _restructure_data,
                                   hfill, progress_bar)
-from sedaro_base_client.apis.tags import jobs_api
 
 
 class SedaroSimulationResult:
