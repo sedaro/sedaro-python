@@ -2,6 +2,7 @@
 
 This is the repository that houses the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro) (stored in directory `sedaro/`). Other files and directories in this repository help with development and maintenance of the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro). See below for some helpful notes regarding those other files and directories.
 
+
 ## To run tests:
 
 - For Sedaro devs testing in the local development environment: make sure `sedaro-app` container is running.
