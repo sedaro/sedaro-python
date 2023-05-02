@@ -182,7 +182,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     )
 ```
 
-The response from this method is used to update the data in the `BranchClient` the method was called on. The content of
+The response from this method is used to update the blocks in the `BranchClient` the method was called on. The content of
 the response is also returned, as follows:
 ```py
 {
