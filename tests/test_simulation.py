@@ -1,14 +1,14 @@
 import time
 
-from sedaro import SedaroApiClient
-
 from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
+
+from sedaro import SedaroApiClient
 
 
 def _check_job_status(job):
     assert job['status'] == 'RUNNING'
     print('-', job['status'], '-', round(
-        job['progress']['percentComplete'], 2), '%') # FIXME Can switch this back when percentage complete isn't NONE
+        job['progress']['percentComplete'], 2), '%')
 
 
 def test_run_simulation():
