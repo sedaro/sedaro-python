@@ -73,7 +73,7 @@ class BlockClassClient:
         enforce_id_in_branch(self._branch_client, id)
 
         # in addition to checks in ^^^ also make sure is the correct type for this block class client
-        if self._branch_client.data[BLOCKS][id][TYPE] != self.type:
+        if id not in self.get_all_ids():
             raise KeyError(
                 f'There is no "{self.type}" with id "{id}" in this Branch.')
 
