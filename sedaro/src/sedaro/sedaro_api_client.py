@@ -1,6 +1,6 @@
 import base64
 import json
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
