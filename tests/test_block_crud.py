@@ -2,13 +2,13 @@ import string
 from random import choices
 
 import pytest
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID
+
 from sedaro import SedaroApiClient
 from sedaro.block_client import BlockClient
 from sedaro.branch_client import BranchClient
 from sedaro.exceptions import NonexistantBlockError
 from sedaro.settings import ID
-
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID
 
 _letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
 
@@ -22,6 +22,21 @@ def test_get():
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
         # print(f'\nres: {branch}\n')
         assert isinstance(branch, BranchClient)
+
+
+def test_get_blocks_all_and_single():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+        components = branch.Component.get_all()
+        component = components[-1]
+        assert branch.Component.get(component.id) == component
+
+        with pytest.raises(KeyError, match='no Block with id'):
+            branch.Component.get('not-an-id')
+
+        with pytest.raises(KeyError, match='no "PowerProcessor" with id'):
+            battery_id = branch.Battery.get_all_ids()[0]
+            branch.PowerProcessor.get(battery_id)
 
 
 def test_create_update_and_delete_block():
@@ -150,6 +165,7 @@ def test_block_client_equality():
 
         subsystem.delete()
 
+
 def test_block_client_clone():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
@@ -178,6 +194,7 @@ def test_block_client_clone():
 
         branch.crud(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
 
+
 def test_some_errors():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
@@ -191,6 +208,7 @@ def test_some_errors():
             subsystem.update(**{**subsystem.data, **{ID: 'asdfasdfasdf'}})
 
         subsystem.delete()
+
 
 def test_ignore_id_and_type_in_create():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
@@ -211,9 +229,9 @@ def test_ignore_id_and_type_in_create():
         subsystem.delete()
 
 
-
 def run_tests():
     test_get()
+    test_get_blocks_all_and_single()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
     test_traversing_and_equality_and_some_get_methods()
