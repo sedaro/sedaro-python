@@ -1,5 +1,6 @@
+import base64
 import json
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Tuple, Union
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
@@ -42,7 +43,15 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
-    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None, axisOrder: str = None):
+    def get_data(self,
+            id,
+            start: float = None,
+            stop: float = None,
+            binWidth: float = None,
+            limit: float = None,
+            axisOrder: str = None,
+            streams: List[Tuple[str, ...]] = []
+        ):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
         url = f'/data/{id}?'
         if start is not None:
@@ -53,6 +62,9 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
+        if len(streams) > 0:
+            encoded_streams = base64.b64encode(bytes(json.dumps(streams), encoding='utf-8')).decode('utf-8')
+            url += f'&streams={encoded_streams}'
         if axisOrder is not None:
             if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
                 raise ValueError(

@@ -4,7 +4,7 @@ import gzip
 import json
 import time
 from pathlib import Path
-from typing import List, Union
+from typing import List, Tuple, Union
 
 from sedaro import SedaroApiClient
 from sedaro.results.agent import SedaroAgentResult
@@ -45,12 +45,18 @@ class SedaroSimulationResult:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
     @classmethod
-    def get_scenario_latest(cls, api_key: str, scenario_id: int, host: str = 'https://api.sedaro.com'):
+    def get_scenario_latest(
+        cls,
+        api_key: str,
+        scenario_id: int,
+        host: str = 'https://api.sedaro.com',
+        streams: List[Tuple[str, ...]] = []
+    ):
         '''Query latest scenario result.'''
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             simulation = cls.__get_simulation(sedaro_client, scenario_id)
             if simulation['status'] == 'SUCCEEDED':
-                data = sedaro_client.get_data(simulation['dataArray'])
+                data = sedaro_client.get_data(simulation['dataArray'], streams=streams)
             else:
                 data = None
             return cls(simulation, data)
@@ -61,6 +67,7 @@ class SedaroSimulationResult:
         api_key: str,
         scenario_id: int,
         host: str = 'https://api.sedaro.com',
+        streams: List[Tuple[str, ...]] = [],
         retry_interval: int = 2
     ):
         '''Query latest scenario result and wait for sim if it is running.'''
@@ -72,7 +79,7 @@ class SedaroSimulationResult:
                 progress_bar(simulation['progress']['percentComplete'])
                 time.sleep(retry_interval)
 
-            return cls.get_scenario_latest(api_key, scenario_id, host=host)
+            return cls.get_scenario_latest(api_key, scenario_id, host=host, streams=streams)
 
     @staticmethod
     def __get_simulation(client, scenario_id: int) -> dict:
