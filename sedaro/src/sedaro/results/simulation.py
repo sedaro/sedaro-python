@@ -4,7 +4,7 @@ import gzip
 import json
 import time
 from pathlib import Path
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from sedaro import SedaroApiClient
 from sedaro.results.agent import SedaroAgentResult
@@ -50,9 +50,10 @@ class SedaroSimulationResult:
         api_key: str,
         scenario_id: int,
         host: str = 'https://api.sedaro.com',
-        streams: List[Tuple[str, ...]] = []
+        streams: Optional[List[Tuple[str, ...]]] = None
     ):
         '''Query latest scenario result.'''
+        streams = streams or []
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             simulation = cls.__get_simulation(sedaro_client, scenario_id)
             if simulation['status'] == 'SUCCEEDED':
@@ -67,10 +68,11 @@ class SedaroSimulationResult:
         api_key: str,
         scenario_id: int,
         host: str = 'https://api.sedaro.com',
-        streams: List[Tuple[str, ...]] = [],
+        streams: Optional[List[Tuple[str, ...]]] = None,
         retry_interval: int = 2
     ):
         '''Query latest scenario result and wait for sim if it is running.'''
+        streams = streams or []
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             simulation = cls.__get_simulation(sedaro_client, scenario_id)
 
