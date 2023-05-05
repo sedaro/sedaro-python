@@ -236,7 +236,61 @@ Alternatively, use the `.poll_scenario_latest` method to wait for an in-progress
 results = SedaroSimulationResult.poll_scenario_latest(api_key, scenario_branch_id)
 ```
 
+You can also use an optional kwarg, `streams`, with either of the above functions, to fetch results only from specific streams that you specify. If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it must be a list of tuples following particular rules:
+
+* Each tuple in the list can contain either 1 or 2 items.
+* If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
+* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'C&DH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
+
+For example, with the following code, `results` will only contain data for all engines of agent `foo` and the `Power` and `Thermal` engines of agent `bar`.
+
+```py
+selected_streams=[
+    ('foo',),
+    ('bar', 'Thermal'),
+    ('bar', 'Power')
+]
+results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id, streams=selected_streams)
+```
+
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
+
+## Use: Fetch Raw Data
+
+As an alternative to calling the functions in the `SedaroSimulationResult` class, you also fetch raw data directly from the `SedaroApiClient` class, with extra options not available when calling those functions.
+
+```py
+with SedaroApiClient(api_key=API_KEY) as sedaro:
+
+    # Instantiate sim client
+    sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
+
+    # Start simulation
+    sim.start()
+
+    # Get simulation
+    job_res = sim.get_latest()[0]
+    
+    # Get raw data
+    selected_streams=[
+        ('foo',),
+        ('bar', 'Thermal'),
+        ('bar', 'Power')
+    ]
+    data = sedaro.get_data(job_res['dataArray'], start=65000, stop=65001, limit=250, streams=selected_streams, axisOrder='TIME_MINOR')
+    ### alternative:
+    data = sedaro.get_data(job_res['dataArray'], start=65000, stop=65001, binWidth=0.004, streams=selected_streams, axisOrder='TIME_MINOR')
+```
+
+All arguments except the first are optional.
+
+Optional arguments:
+* `start` (float): the start time of the data to fetch, in MJD format. Defaults to the start of the simulation.
+* `stop` (float): the end time of the data to fetch, in MJD format. Defaults to the end of the simulation.
+* `limit` (int): the maximum number of points in time for which to fetch data for any stream. If not specified, there is no limit and data is fetched at full resolution. If a limit is specified, the duration of the time from `start` to `stop` is divided into the specified number of bins of equal duration, and data is selected from at most one point in time within each bin. Not that it is not guaranteed that you will receive exactly as many points in time as the limit you specify; you may receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps through the simulation.
+* `binWidth` (float): the width of the bins used in downsampling data, as described for `limit`. Note that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you would like to downsample data, use either `limit` or `binWidth`, but not both.
+* `streams` (list): specify which data streams you would like to fetch data for, according to the format described in the previous section. If no list is provided, data is fetched for all streams.
+* `axisOrder` (enum): the shape of each series in the response. Options: `'TIME_MAJOR'` and `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
 
 ## Use: Send Requests
 
