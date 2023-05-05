@@ -248,7 +248,7 @@ For example, with the following code, `results` will only contain data for all e
 selected_streams=[
     ('foo'),
     ('bar', 'Thermal'),
-    ('bar', 'Power)
+    ('bar', 'Power')
 ]
 results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id, streams=selected_streams)
 ```
