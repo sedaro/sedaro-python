@@ -246,7 +246,7 @@ For example, with the following code, `results` will only contain data for all e
 
 ```py
 selected_streams=[
-    ('foo'),
+    ('foo',),
     ('bar', 'Thermal'),
     ('bar', 'Power')
 ]
