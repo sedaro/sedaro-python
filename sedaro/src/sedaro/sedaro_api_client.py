@@ -50,7 +50,7 @@ class SedaroApiClient(ApiClient):
             binWidth: float = None,
             limit: float = None,
             axisOrder: str = None,
-            streams: List[Tuple[str, ...]] = []
+            streams: Optional[List[Tuple[str, ...]]] = None
         ):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
         url = f'/data/{id}?'
@@ -62,6 +62,7 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
+        streams = streams or []
         if len(streams) > 0:
             encoded_streams = base64.b64encode(bytes(json.dumps(streams), encoding='utf-8')).decode('utf-8')
             url += f'&streams={encoded_streams}'
