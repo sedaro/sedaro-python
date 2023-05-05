@@ -32,8 +32,8 @@ class SedaroSimulationResult:
         self.__data = data
         self.__branch = simulation['branch']
         if self.success:
-            self.__meta = data['Data']['meta']
-            raw_series = data['Data']['series']
+            self.__meta = data['meta']
+            raw_series = data['series']
             agent_id_name_map = _get_agent_id_name_map(self.__meta)
             self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
         else:
