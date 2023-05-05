@@ -64,8 +64,8 @@ class SedaroApiClient(ApiClient):
             url += f'&limit={limit}'
         streams = streams or []
         if len(streams) > 0:
-            encoded_streams = base64.b64encode(bytes(json.dumps(streams), encoding='utf-8')).decode('utf-8')
-            url += f'&streams={encoded_streams}'
+            encodedStreams = ','.join(['.'.join(x) for x in streams])
+            url += f'&streams={encodedStreams}'
         if axisOrder is not None:
             if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
                 raise ValueError(
