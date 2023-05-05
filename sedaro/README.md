@@ -236,6 +236,27 @@ Alternatively, use the `.poll_scenario_latest` method to wait for an in-progress
 results = SedaroSimulationResult.poll_scenario_latest(api_key, scenario_branch_id)
 ```
 
+You can also use an optional kwarg, `streams`, with either of the above functions, to fetch results only from specific streams that you specify. If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it must be a list of tuples following particular rules:
+
+* Each tuple in the list can contain either 1 or 2 items.
+* If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
+* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine. Data for the specified agent of this engine will be fetched.
+** 'GNC'
+** 'C&DH'
+** 'Thermal'
+** 'Power'
+
+For example, with the following code, `results` will only contain data for all engines of agent `foo` and the `Power` and `Thermal` engines of agent `bar`.
+
+```py
+selected_streams=[
+    ('foo'),
+    ('bar', 'Thermal'),
+    ('bar', 'Power)
+]
+results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id, streams=selected_streams)
+```
+
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
 
 ## Use: Send Requests
