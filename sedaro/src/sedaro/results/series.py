@@ -82,7 +82,7 @@ class SedaroSeries:
     def duration(self):
         return (self.mjd[-1] - self.mjd[0]) * 86400
 
-    def value_at(self, mjd, interpolate=True):
+    def value_at(self, mjd, interpolate=False):
         '''
         Get the value of this series at a particular time.
 
