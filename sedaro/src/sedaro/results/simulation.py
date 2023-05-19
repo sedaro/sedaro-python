@@ -31,8 +31,8 @@ class SedaroSimulationResult:
         }
         self.__branch = simulation['branch']
         self.__data = data
-        self.__meta = data['Data']['meta']
-        raw_series = data['Data']['series']
+        self.__meta = data['meta']
+        raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
 
@@ -135,7 +135,9 @@ class SedaroSimulationResult:
     def agent(self, name: str) -> SedaroAgentResult:
         '''Query results for a particular agent by name.'''
         agent_id = self.__agent_id_from_name(name)
-        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name])
+        initial_agent_models = self.__meta['structure']['agents']
+        initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
+        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state)
 
     def to_file(self, filename: Union[str, Path]) -> None:
         '''Save simulation result to compressed JSON file.'''

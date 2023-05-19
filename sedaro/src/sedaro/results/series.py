@@ -83,13 +83,9 @@ class SedaroSeries:
         return (self.mjd[-1] - self.mjd[0]) * 86400
 
     def value_at(self, mjd, interpolate=False):
-        '''
-        Get the value of this series at a particular time.
-
-        Only a series with no subseries is searchable.
-        '''
+        '''Get the value of this series at a particular time in mjd.'''
         if self.__has_subseries:
-            raise ValueError('Select a specific subseries to search.')
+            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__dtype}
         else:
             def raise_error():
                 raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
