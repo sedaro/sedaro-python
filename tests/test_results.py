@@ -92,8 +92,102 @@ def test_save_load():
         assert ref_series_result.mjd == new_series_result.mjd
         assert ref_series_result.values == new_series_result.values
 
+def test_query_model():
+    simulation_job = {
+        'branch': 'test_id',
+        'dateCreated': '2021-08-05T18:00:00.000Z',
+        'dateModified': '2021-08-05T18:00:00.000Z',
+        'status': 'SUCCEEDED',
+    }
+
+    data = {
+        'Data': {
+            'meta': {
+                'structure': {
+                    'scenario': {
+                        'blocks': {
+                            'a': {
+                                'type': 'Agent',
+                                'name': 'Agent',
+                                'id': 'a',
+                            }
+                        }
+                    },
+                    'agents': {
+                        'a': {
+                            'blocks': {
+                                'b': {
+                                    'id': 'b',
+                                    'name': 'Block',
+                                    'value': '0zero',
+                                    'otherValue': '0otherZero',
+                                },
+                            },
+                            'name': 'Root',
+                            'value': '0rzero',
+                            'otherValue': '0rotherZero',
+                        }
+                    }
+                }
+            },
+            'series': {
+                'a/0': [
+                    [1, 4],
+                    {
+                        'a': {
+                            'b': {
+                                'value': ['0first', '0second'],
+                            },
+                            'value': ['0rfirst', {'edge': 12}],
+                        }
+                    }
+                ],
+                'a/1': [
+                    [1, 2, 3, 4],
+                    {
+                        'a': {
+                            'b': {
+                                'otherValue': ['1first', '1second', '1third', '1fourth'],
+                            },
+                            'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
+                        }
+                    }
+                ],
+            }
+        }
+    }
+
+    results = SedaroSimulationResult(simulation_job, data)
+    agent = results.agent('Agent')
+    
+    model = agent.model_at(1)
+    assert model['value'] == '0rfirst'
+    assert model['otherValue'] == '1rfirst'
+    assert model['name'] == 'Root'
+    assert model['blocks']['b']['value'] == '0first'
+    assert model['blocks']['b']['otherValue'] == '1first'
+    assert model['blocks']['b']['name'] == 'Block'
+    
+    for t in [2, 2.1, 2.9999]:
+        model = agent.model_at(t)
+        assert model['value'] == '0rfirst'
+        assert model['otherValue'] == '1rsecond'
+        assert model['name'] == 'Root'
+        assert model['blocks']['b']['value'] == '0first'
+        assert model['blocks']['b']['otherValue'] == '1second'
+        assert model['blocks']['b']['name'] == 'Block'
+    
+    model = agent.model_at(4)
+    assert model['value']['edge'] == 12
+    assert model['otherValue'] == '1rfourth'
+    assert model['name'] == 'Root'
+    assert model['blocks']['b']['value'] == '0second'
+    assert model['blocks']['b']['otherValue'] == '1fourth'
+    assert model['blocks']['b']['name'] == 'Block'
+
 
 def run_tests():
     test_query_terminated()
     test_query()
     test_save_load()
+    test_query_model()
