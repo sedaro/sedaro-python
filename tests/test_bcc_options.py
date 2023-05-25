@@ -19,6 +19,7 @@ agent_template_blocks = [
     'CelestialVector',
     'CircularFieldOfView',
     'Component',
+    'ComponentToScalarCondition',
     'CompoundCondition',
     'Cooler',
     'CooperativeTransmitInterface',
@@ -112,7 +113,6 @@ def test_block_class_client_options():
         with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
             branch = sedaro.get_branch(branch_id)
             branch_blocks = sorted(branch.data['_block_names'])
-
             # CHECK: lists above are correct
             assert blocks == branch_blocks
 
