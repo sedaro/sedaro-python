@@ -244,7 +244,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check int at wrong index
         try:
             branch.crud(
@@ -252,7 +252,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check bool at wrong index
         try:
             branch.crud(
@@ -260,7 +260,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check string at wrong index
         try:
             branch.crud(
@@ -268,7 +268,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check size less than 3
         try:
             branch.crud(
@@ -276,7 +276,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check size greater than 3
         try:
             branch.crud(
@@ -284,7 +284,7 @@ def test_active_comm_interfaces_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
 
         assert True
 
@@ -304,7 +304,7 @@ def test_attitude_solution_error_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check size greater than 3
         try:
             branch.crud(
@@ -312,7 +312,7 @@ def test_attitude_solution_error_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check non-float values
         for i in range(len(validList)):
             failList = validList.copy()
@@ -323,7 +323,7 @@ def test_attitude_solution_error_tuple():
                 )
                 assert False
             except SedaroApiException as e:
-                print(e)
+                pass
         # Check non-list value
         try:
             branch.crud(
@@ -331,7 +331,7 @@ def test_attitude_solution_error_tuple():
             )
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
 
         assert True
 
@@ -370,7 +370,7 @@ def test_power_command_tuple():
             'powerCommand':["Fail", 0.5]}])
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check size greater than 2
         try:
             branch.crud(blocks=[{
@@ -379,7 +379,7 @@ def test_power_command_tuple():
             'powerCommand':[0.25, 0.5, 0.75]}])
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check size less than 2
         try:
             branch.crud(blocks=[{
@@ -388,7 +388,7 @@ def test_power_command_tuple():
             'powerCommand':[]}])
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # Check non-list value
         try:
             branch.crud(blocks=[{
@@ -397,7 +397,7 @@ def test_power_command_tuple():
             'powerCommand':"Fail"}])
             assert False
         except SedaroApiException as e:
-            print(e)
+            pass
         # All tests passed
         assert True
 
