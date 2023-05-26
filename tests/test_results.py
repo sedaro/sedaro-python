@@ -54,7 +54,7 @@ def test_query():
     block_result = agent_result.block('root')
 
     # Exercise iteration
-    for elapsed_time, _ in block_result.position.eci:
+    for elapsed_time, *_ in block_result.position.eci:
         if elapsed_time > 10:
             break
 
@@ -101,61 +101,59 @@ def test_query_model():
     }
 
     data = {
-        'Data': {
-            'meta': {
-                'structure': {
-                    'scenario': {
-                        'blocks': {
-                            'a': {
-                                'type': 'Agent',
-                                'name': 'Agent',
-                                'id': 'a',
-                            }
-                        }
-                    },
-                    'agents': {
+        'meta': {
+            'structure': {
+                'scenario': {
+                    'blocks': {
                         'a': {
-                            'blocks': {
-                                'b': {
-                                    'id': 'b',
-                                    'name': 'Block',
-                                    'value': '0zero',
-                                    'otherValue': '0otherZero',
-                                },
-                            },
-                            'name': 'Root',
-                            'value': '0rzero',
-                            'otherValue': '0rotherZero',
+                            'type': 'Agent',
+                            'name': 'Agent',
+                            'id': 'a',
                         }
+                    }
+                },
+                'agents': {
+                    'a': {
+                        'blocks': {
+                            'b': {
+                                'id': 'b',
+                                'name': 'Block',
+                                'value': '0zero',
+                                'otherValue': '0otherZero',
+                            },
+                        },
+                        'name': 'Root',
+                        'value': '0rzero',
+                        'otherValue': '0rotherZero',
                     }
                 }
-            },
-            'series': {
-                'a/0': [
-                    [1, 4],
-                    {
-                        'a': {
-                            'b': {
-                                'value': ['0first', '0second'],
-                            },
-                            'value': ['0rfirst', {'edge': 12}],
-                        }
-                    }
-                ],
-                'a/1': [
-                    [1, 2, 3, 4],
-                    {
-                        'a': {
-                            'b': {
-                                'otherValue': ['1first', '1second', '1third', '1fourth'],
-                            },
-                            'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
-                        }
-                    }
-                ],
             }
+        },
+        'series': {
+            'a/0': [
+                [1, 4],
+                {
+                    'a': {
+                        'b': {
+                            'value': ['0first', '0second'],
+                        },
+                        'value': ['0rfirst', {'edge': 12}],
+                    }
+                }
+            ],
+            'a/1': [
+                [1, 2, 3, 4],
+                {
+                    'a': {
+                        'b': {
+                            'otherValue': ['1first', '1second', '1third', '1fourth'],
+                        },
+                        'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
+                    }
+                }
+            ],
         }
-    }
+}
 
     results = SedaroSimulationResult(simulation_job, data)
     agent = results.agent('Agent')

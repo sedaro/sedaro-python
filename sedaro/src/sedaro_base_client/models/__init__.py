@@ -49,6 +49,8 @@ from sedaro_base_client.model.circular_field_of_view import CircularFieldOfView
 from sedaro_base_client.model.classical_orbital_elements import ClassicalOrbitalElements
 from sedaro_base_client.model.clock_config import ClockConfig
 from sedaro_base_client.model.component import Component
+from sedaro_base_client.model.component_parameters import ComponentParameters
+from sedaro_base_client.model.component_to_scalar_condition import ComponentToScalarCondition
 from sedaro_base_client.model.compound_condition import CompoundCondition
 from sedaro_base_client.model.compound_operators import CompoundOperators
 from sedaro_base_client.model.condition_relationship import ConditionRelationship
@@ -103,7 +105,6 @@ from sedaro_base_client.model.magnetorquer import Magnetorquer
 from sedaro_base_client.model.max_align_pointing_mode import MaxAlignPointingMode
 from sedaro_base_client.model.mekf_algorithm import MekfAlgorithm
 from sedaro_base_client.model.message_res import MessageRes
-from sedaro_base_client.model.metamodel import Metamodel
 from sedaro_base_client.model.modem import Modem
 from sedaro_base_client.model.operational_mode import OperationalMode
 from sedaro_base_client.model.optical_attitude_sensor import OpticalAttitudeSensor
@@ -114,11 +115,13 @@ from sedaro_base_client.model.passive_transmit_interface import PassiveTransmitI
 from sedaro_base_client.model.pid_algorithm import PidAlgorithm
 from sedaro_base_client.model.polar_circular_reference_orbit import PolarCircularReferenceOrbit
 from sedaro_base_client.model.polynomial_ephemeris_body import PolynomialEphemerisBody
+from sedaro_base_client.model.position_base220 import PositionBase220
 from sedaro_base_client.model.position_sensor import PositionSensor
 from sedaro_base_client.model.power_load import PowerLoad
 from sedaro_base_client.model.power_processor import PowerProcessor
 from sedaro_base_client.model.quasi_reg_det_power_processor import QuasiRegDetPowerProcessor
 from sedaro_base_client.model.quasi_reg_det_topology_params import QuasiRegDetTopologyParams
+from sedaro_base_client.model.quaternion_base220 import QuaternionBase220
 from sedaro_base_client.model.reaction_wheel import ReactionWheel
 from sedaro_base_client.model.receive_interface import ReceiveInterface
 from sedaro_base_client.model.rectangular_field_of_view import RectangularFieldOfView
@@ -129,9 +132,9 @@ from sedaro_base_client.model.satellite_parameters import SatelliteParameters
 from sedaro_base_client.model.satellite_to_satellite_condition import SatelliteToSatelliteCondition
 from sedaro_base_client.model.satellite_to_scalar_condition import SatelliteToScalarCondition
 from sedaro_base_client.model.satellite_to_target_condition import SatelliteToTargetCondition
-from sedaro_base_client.model.scenario_template import ScenarioTemplate
 from sedaro_base_client.model.scenario_template_crud import ScenarioTemplateCrud
 from sedaro_base_client.model.scenario_template_update import ScenarioTemplateUpdate
+from sedaro_base_client.model.scenario_template_with_meta_attrs import ScenarioTemplateWithMetaAttrs
 from sedaro_base_client.model.side_categories import SideCategories
 from sedaro_base_client.model.simulation_job import SimulationJob
 from sedaro_base_client.model.single_conv_hybrid_power_processor import SingleConvHybridPowerProcessor
@@ -181,6 +184,6 @@ from sedaro_base_client.model.vector import Vector
 from sedaro_base_client.model.vector_in_fov_condition import VectorInFovCondition
 from sedaro_base_client.model.vector_sensor import VectorSensor
 from sedaro_base_client.model.vector_tracking_surface import VectorTrackingSurface
-from sedaro_base_client.model.vehicle_template import VehicleTemplate
 from sedaro_base_client.model.vehicle_template_crud import VehicleTemplateCrud
 from sedaro_base_client.model.vehicle_template_update import VehicleTemplateUpdate
+from sedaro_base_client.model.vehicle_template_with_metaattrs import VehicleTemplateWithMetaattrs
