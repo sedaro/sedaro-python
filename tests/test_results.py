@@ -54,7 +54,7 @@ def test_query():
     block_result = agent_result.block('root')
 
     # Exercise iteration
-    for elapsed_time, *_ in block_result.position.eci:
+    for _, elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
 

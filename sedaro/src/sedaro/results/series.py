@@ -115,7 +115,7 @@ class SedaroSeries:
         try:
             if height is not None:
                 plt.rcParams['figure.figsize'] = [plt.rcParams['figure.figsize'][0], height]
-            plt.plot(self.__elapsed_time if elapsed_time else self.__mjd, self.__series, **kwargs)
+            plt.plot((self.__elapsed_time if elapsed_time else self.__mjd), self.__series, **kwargs)
             if 'label' in kwargs:
                 plt.legend(loc='upper left')
             plt.xlabel('Elapsed Time (s)' if elapsed_time else 'Time (MJD)')
