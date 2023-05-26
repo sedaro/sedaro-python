@@ -240,7 +240,7 @@ You can also use an optional kwarg, `streams`, with either of the above function
 
 * Each tuple in the list can contain either 1 or 2 items.
 * If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
-* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'C&DH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
+* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
 
 For example, with the following code, `results` will only contain data for all engines of agent `foo` and the `Power` and `Thermal` engines of agent `bar`.
 

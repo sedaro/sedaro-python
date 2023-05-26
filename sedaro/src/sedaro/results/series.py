@@ -1,5 +1,7 @@
+from functools import cached_property
 import gzip
 import json
+from scipy.interpolate import interp1d
 
 try:
     import matplotlib.pyplot as plt
@@ -8,7 +10,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from sedaro.results.utils import _get_series_type, hfill, HFILL
+from sedaro.results.utils import _get_series_type, hfill, HFILL, bsearch
 
 
 class SedaroSeries:
@@ -40,7 +42,7 @@ class SedaroSeries:
         '''
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to iterate over.')
-        return (entry for entry in zip(self.__elapsed_time, self.__series))
+        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series))
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name.
@@ -71,32 +73,61 @@ class SedaroSeries:
     @property
     def values(self):
         return self.__series
+    
+    @cached_property
+    def values_interpolant(self):
+        return interp1d(self.__mjd, self.__series)
 
     @property
     def duration(self):
         return (self.mjd[-1] - self.mjd[0]) * 86400
 
-    def plot(self, **kwargs):
-        show = kwargs.pop('show', True)
-        self.__plot(show, kwargs)
+    def value_at(self, mjd, interpolate=False):
+        '''Get the value of this series at a particular time in mjd.'''
+        if self.__has_subseries:
+            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__dtype}
+        else:
+            def raise_error():
+                raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
+            if mjd < self.__mjd[0] or mjd > self.__mjd[-1]:
+                raise_error()
+            if not interpolate:
+                index = bsearch(self.__mjd, mjd)
+                if index < 0:
+                    raise_error()
+            else:
+                return self.values_interpolant(mjd)
+            return self.__series[index]
+
+    def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
+        self.__plot(show, ylabel, elapsed_time, height, xlim, ylim, **kwargs)
 
     # def scatter(self, **kwargs):
     #     # TODO: Does not work with 2D value arrays
     #     show = kwargs.pop('show', True)
     #     self.__plot(plt.scatter, show, kwargs)
 
-    def __plot(self, show, kwargs):
+    def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to plot.')
         try:
-            plt.plot(self.__elapsed_time, self.__series, **kwargs)
-            plt.xlabel('Elapsed Time (s)')
+            if height is not None:
+                plt.rcParams['figure.figsize'] = [plt.rcParams['figure.figsize'][0], height]
+            plt.plot(self.__elapsed_time if elapsed_time else self.__mjd, self.__series, **kwargs)
+            if 'label' in kwargs:
+                plt.legend(loc='upper left')
+            plt.xlabel('Elapsed Time (s)' if elapsed_time else 'Time (MJD)')
+            plt.ylabel(ylabel)
+            if xlim:
+                plt.xlim(xlim)
+            if ylim:
+                plt.ylim(ylim)
             if show:
                 plt.show()
         except Exception:
-            raise ValueError("The data type of this series does not support plotting.")
+            raise ValueError("The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
     def to_file(self, filename):
         '''Save series to compressed JSON file.'''
