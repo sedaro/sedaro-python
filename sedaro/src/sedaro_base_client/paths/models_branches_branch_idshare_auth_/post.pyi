@@ -30,11 +30,11 @@ from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.branch_verify_password import BranchVerifyPassword
 
 # Path params
-BranchIdSchema = schemas.IntSchema
+BranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
+        'branchId': typing.Union[BranchIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(
@@ -177,7 +177,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Verify branch bassword
+        Verify branch password
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances

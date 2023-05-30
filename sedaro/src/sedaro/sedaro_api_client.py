@@ -1,5 +1,6 @@
+import base64
 import json
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Tuple
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
@@ -9,7 +10,7 @@ from .branch_client import BranchClient
 from .exceptions import SedaroApiException
 from .settings import COMMON_API_KWARGS
 from .sim_client import SimClient
-from .utils import parse_urllib_response
+from .utils import body_from_res, parse_urllib_response
 
 
 class SedaroApiClient(ApiClient):
@@ -40,14 +41,19 @@ class SedaroApiClient(ApiClient):
         # return BranchClient(res.body, self)
         res = branches_api_instance.get_branch(
             path_params={'branchId': id}, **COMMON_API_KWARGS)
-        body = res.body
-        if COMMON_API_KWARGS['skip_deserialization']:
-            body = parse_urllib_response(res.response)
-        return BranchClient(body, self)
+        return BranchClient(body_from_res(res), self)
 
-    def get_data(self, id, start: float = None, stop: float = None, binWidth: float = None, limit: float = None, axisOrder: str = None):
+    def get_data(self,
+            id,
+            start: float = None,
+            stop: float = None,
+            binWidth: float = None,
+            limit: float = None,
+            axisOrder: str = None,
+            streams: Optional[List[Tuple[str, ...]]] = None
+        ):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
-        url = f'/data/?id={id}'
+        url = f'/data/{id}?'
         if start is not None:
             url += f'&start={start}'
         if stop is not None:
@@ -56,6 +62,10 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
+        streams = streams or []
+        if len(streams) > 0:
+            encodedStreams = ','.join(['.'.join(x) for x in streams])
+            url += f'&streams={encodedStreams}'
         if axisOrder is not None:
             if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
                 raise ValueError(

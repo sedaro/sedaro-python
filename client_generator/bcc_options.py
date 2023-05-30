@@ -1,8 +1,10 @@
 import os
+
 from pydash.strings import pascal_case
 
 
 def get_block_class_client_options():
+    raise NotImplementedError('this function needs to be updated for model service 2.0')
     all_tags = os.listdir('./sedaro/src/sedaro_base_client/apis/tags')
     all_tags.sort()
     for t in all_tags:

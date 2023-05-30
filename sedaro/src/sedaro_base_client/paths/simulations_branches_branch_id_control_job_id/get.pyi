@@ -29,13 +29,13 @@ from sedaro_base_client.model.simulation_job import SimulationJob
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 # Path params
-BranchIdSchema = schemas.IntSchema
-JobIdSchema = schemas.IntSchema
+BranchIdSchema = schemas.StrSchema
+JobIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
-        'jobId': typing.Union[JobIdSchema, decimal.Decimal, int, ],
+        'branchId': typing.Union[BranchIdSchema, str, ],
+        'jobId': typing.Union[JobIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(

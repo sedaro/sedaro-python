@@ -1,4 +1,4 @@
-
+import math
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -20,6 +20,7 @@ STATUS_ICON_MAP = {
     "PAUSED": "⏸️",
     "PENDING": "⌛",
     "RUNNING": "⌛",
+    "ERROR": "❌"
 }
 HFILL = 75
 
@@ -29,9 +30,10 @@ def hfill(char="-", len=HFILL):
 
 
 def progress_bar(progress):
-    blocks = int(progress * 50 / 100)
-    bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
-    print(bar, end='\r')
+    if progress is not None:
+        blocks = int(progress * 50 / 100)
+        bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
+        print(bar, end='\r')
 
 
 def _element_id_dict(agent_data):
@@ -51,7 +53,12 @@ def _element_id_dict(agent_data):
 
 def _get_agent_id_name_map(meta):
     '''Get mapping from agent ID to name.'''
-    return {id_: entry['name'] for id_, entry in meta['structure']['scenario']['Agent'].items()}
+    return {
+        id_: entry['name']
+        for id_, entry in meta['structure']['scenario']['blocks'].items()
+        if entry['type'] == 'Agent'
+    }
+
 
 def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     '''Build a simplified series data structure
@@ -74,7 +81,7 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     return data
 
 
-def _restructure_data(series, agents, meta, agent_map):
+def _restructure_data(series, agents, meta):
     '''Build a simplified internal data structure.
 
     Creates a dictionary with the following key hierarchy:
@@ -90,19 +97,18 @@ def _restructure_data(series, agents, meta, agent_map):
     blocks = {}
     for series_key in series:
         agent_id, engine_id = series_key.split("/")
-        agent_simbed_id = agent_map[agent_id]
-        agent_name = agents[agent_simbed_id]
+        agent_name = agents[agent_id]
         engine_name = ENGINE_MAP[engine_id]
 
         if agent_name not in data:
             data[agent_name] = {}
 
         time, sub_series = series[series_key]
-        if agent_simbed_id not in blocks:
-            blocks[agent_simbed_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
+        if agent_id not in blocks:
+            blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
         data[agent_name][engine_name] = {
             'time': time,
-            'series': _simplify_series(sub_series[agent_id], blocks[agent_simbed_id])
+            'series': _simplify_series(sub_series[agent_id], blocks[agent_id])
         }
     return data, blocks
 
@@ -113,3 +119,23 @@ def _get_series_type(series):
             return type(entry).__name__
     else:
         return "None"
+
+def bsearch(ordered_series, value):
+    '''Binary search for a value in an ordered series.
+
+    Returns the index of the value in the series, or the index of the immediately
+    lower value if the value is not present.
+    '''
+    def _bsearch(low, high):
+        if high == low:
+            return low
+        mid = math.ceil((high + low) / 2)
+        if ordered_series[mid] == value:
+            return mid
+        elif ordered_series[mid] > value:
+            return _bsearch(low, mid-1)
+        else:
+            return _bsearch(mid, high)
+    if value < ordered_series[0]:
+        return -1
+    return _bsearch(0, len(ordered_series) - 1)

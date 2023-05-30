@@ -1,43 +1,56 @@
 from random import randrange
 
 from sedaro import SedaroApiClient
-from sedaro.utils import parse_urllib_response
+from sedaro.settings import BLOCKS, CRUD
 
-from config import HOST, API_KEY, WILDFIRE_A_T_ID
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID
+
+
+def test_get_non_existant_branch():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
+        res = sedaro_client.send_request(
+            f'/models/branches/999999999999999999999999',
+            'GET'
+        )
+
+        assert res.get('error', {}).get(
+            'message', None) == 'The requested endpoint does not exist or is not accessible with your current permissions.'
 
 
 def test_raw_get_branch():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         res = sedaro_client.send_request(
-            f'/models/branches/{WILDFIRE_A_T_ID}',
+            f'/models/branches/{SIMPLESAT_A_T_ID}',
             'GET'
         )
         keys = res.keys()
-        for string in ['data', 'name', 'description', 'repository', 'user']:
+        for string in ['data', 'name', 'description', 'repository', 'tier2issues', 'workspace']:
             assert string in keys
 
 
 def test_raw_request_CRUD_blocks():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro_client:
         res = sedaro_client.send_request(
-            f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/',
-            'POST',
+            f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
+            'PATCH',
             body={
-                'name': 'Sun ' + str(randrange(1, 100000)),
-                'polynomialEphemerisBody': 'SUN',
-                'conOps': 2
+                BLOCKS: [{
+                    'name': 'Sun ' + str(randrange(1, 100000)),
+                    'type': 'CelestialTarget'
+                }]
             }
         )
-        assert res['action'] == 'CREATE'
-        block_id = res['block']['id']
+        sun_id = res[CRUD][BLOCKS][0]
 
         res = sedaro_client.send_request(
-            f'/models/branches/{WILDFIRE_A_T_ID}/cdh/conops/celestial-targets/{block_id}',
-            'DELETE'
+            f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
+            'PATCH',
+            body={'delete': [sun_id]}
         )
-        assert res['action'] == 'DELETE'
+        assert res[CRUD]['delete'][0] == sun_id
 
 
 def run_tests():
+    test_get_non_existant_branch()
     test_raw_get_branch()
     test_raw_request_CRUD_blocks()

@@ -2,12 +2,17 @@
 
 This is the repository that houses the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro) (stored in directory `sedaro/`). Other files and directories in this repository help with development and maintenance of the [Sedaro Python Client](https://github.com/sedaro/sedaro-python/tree/main/sedaro). See below for some helpful notes regarding those other files and directories.
 
+## Usage:
+
+See [Sedaro Python Client](./sedaro/README.md) for usage instructions.
+
 ## To run tests:
 
 - For Sedaro devs testing in the local development environment: make sure `sedaro-app` container is running.
 - Create a `tests/config.py` file based on the `tests/config_example.py` file:
   - For Sedaro devs testing in the live environment: update the `HOST` variable to `'http://localhost:80'`.
   - For non-Sedaro devs testing in a dedicated Sedaro instance: update the `HOST` to the url of your Sedaro server.
+- Ensure `pytest` is installed in the python environment (`$ pip install pytest`). If you use the `python_version_manager` to create the virtual environment, it will be installed.
 
 Run:
 
@@ -55,6 +60,7 @@ python3 -V
 
   ```
   pip install -e sedaro
+  pip install pytest
   ```
 
 ## To run client generator:

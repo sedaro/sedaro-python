@@ -6,11 +6,12 @@ from typing import Generator, Union, List
 from pathlib import Path
 from sedaro.results.block import SedaroBlockResult
 from sedaro.results.utils import hfill, HFILL, ENGINE_EXPANSION
+from pydash import merge
 
 
 class SedaroAgentResult:
 
-    def __init__(self, name: str, block_structures: dict, series: dict):
+    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -26,6 +27,7 @@ class SedaroAgentResult:
             ),
             reverse=True
         )
+        self.__initial_state = initial_state
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
@@ -96,13 +98,13 @@ class SedaroAgentResult:
             print(f'    • {ENGINE_EXPANSION[module]}')
 
         print("\n📦 Available Blocks")
-        print('    ' + '-' * 68)
-        print('    |' + 'id'.center(38) + 'name'.center(40-12) + '|')
-        print('    ' + '-' * 68)
+        print('    ' + '-' * 58)
+        print('    |' + 'id'.center(38) + 'name'.center(30-12) + '|')
+        print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
-                block_id_col = f"{block_id[:36]}"
+                block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
                 else:
@@ -110,8 +112,8 @@ class SedaroAgentResult:
             else:
                 block_id_col = f"root"
                 name_id_col = ''
-            print(f"    | {block_id_col:36s} | {name_id_col:25s} |")
-        print('    ' + '-' * 68)
+            print(f"    | {block_id_col:26s} | {name_id_col:25s} |")
+        print('    ' + '-' * 58)
 
         no_data_blocks = len(self.__block_structures) - len(self.__block_ids)
         if no_data_blocks > 0:
@@ -119,3 +121,16 @@ class SedaroAgentResult:
 
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
+
+    def model_at(self, mjd):
+        if not self.__initial_state:
+            raise ValueError('A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
+        
+        # Rough out model
+        blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
+        model = {'blocks': blocks, **blocks['root']}
+        del blocks['root']
+
+        # Merge with initial state to fill in missing values
+        # This order will overwrite any values in the initial state with values from the simulation
+        return merge({}, self.__initial_state, model)

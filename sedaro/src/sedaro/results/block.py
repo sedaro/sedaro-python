@@ -23,7 +23,7 @@ class SedaroBlockResult:
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
-        self.__variables = [variable for _, data in self.__series.items() for variable in data['series']]
+        self.__variables = [variable for data in self.__series.values() for variable in data['series']]
 
     def __getattr__(self, name: str) -> SedaroSeries:
         '''Get a particular variable by name.
@@ -103,3 +103,6 @@ class SedaroBlockResult:
             print(f'    • {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
+
+    def value_at(self, mjd):
+        return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}

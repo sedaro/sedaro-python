@@ -34,13 +34,13 @@ from sedaro_base_client.model.branch_merge_conflicts_res import BranchMergeConfl
 from . import path
 
 # Path params
-CurrentBranchIdSchema = schemas.IntSchema
-IncomingBranchIdSchema = schemas.IntSchema
+CurrentBranchIdSchema = schemas.StrSchema
+IncomingBranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'currentBranchId': typing.Union[CurrentBranchIdSchema, decimal.Decimal, int, ],
-        'incomingBranchId': typing.Union[IncomingBranchIdSchema, decimal.Decimal, int, ],
+        'currentBranchId': typing.Union[CurrentBranchIdSchema, str, ],
+        'incomingBranchId': typing.Union[IncomingBranchIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(

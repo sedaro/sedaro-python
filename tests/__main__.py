@@ -4,8 +4,8 @@ import time
 import test_bcc_options
 import test_block_crud
 import test_raw_requests
-import test_simulation
 import test_results
+import test_simulation
 from config import HOST
 
 ############## IMPORT AND ADD TEST FILES HERE ##############

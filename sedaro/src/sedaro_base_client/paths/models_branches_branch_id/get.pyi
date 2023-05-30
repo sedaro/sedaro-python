@@ -28,11 +28,11 @@ from sedaro_base_client import schemas  # noqa: F401
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 # Path params
-BranchIdSchema = schemas.IntSchema
+BranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams',
     {
-        'branchId': typing.Union[BranchIdSchema, decimal.Decimal, int, ],
+        'branchId': typing.Union[BranchIdSchema, str, ],
     }
 )
 RequestOptionalPathParams = typing_extensions.TypedDict(
