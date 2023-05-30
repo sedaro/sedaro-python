@@ -37,6 +37,19 @@ class SimClient:
         )
         return body_from_res(res)
 
+    def get(self, job_id: str) -> ApiResponse:
+        """Gets a specific simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient`
+        was instantiated with.
+
+        Returns:
+            ApiResponse: response from the get simulation (job) request
+        """
+        res = self._base_jobs_api_client.get_simulation(
+            path_params={'branchId': self.branch_Id, 'jobId': job_id},
+            **COMMON_API_KWARGS
+        )
+        return body_from_res(res)
+
     def get_latest(self) -> ApiResponse:
         """Gets the latest running simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient`
         was instantiated with.

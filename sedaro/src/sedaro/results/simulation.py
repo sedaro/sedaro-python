@@ -26,8 +26,6 @@ class SedaroSimulationResult:
         self.__simulation = {
             'id': simulation['id'],
             'branch': simulation['branch'],
-            'simulatedAgents': dict(simulation['simulatedAgents']),
-            'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
             'status': str(simulation['status']),
@@ -43,20 +41,21 @@ class SedaroSimulationResult:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
     @classmethod
-    def get(cls, api_key: str, scenario_id: int, job_id: int = None, **kwargs):
-        '''Query a specific job result.'''
-        return cls.__get(api_key, scenario_id, job_id, poll=False, **kwargs)
+    def get(cls, api_key: str, scenario_id: str, job_id: str = None, **kwargs):
+        '''Query a job result.'''
+        return cls.__get(api_key, scenario_id, job_id, **kwargs)
 
     @classmethod
-    def poll(cls, api_key: str, scenario_id: int, job_id: int = None, retry_interval: int = 2, **kwargs):
-        '''Query a specific job result and wait for the sim if it is running.'''
+    def poll(cls, api_key: str, scenario_id: str, job_id: str = None, retry_interval: int = 2, **kwargs):
+        '''Query a job result and wait for the sim if it is running.'''
         return cls.__get(api_key, scenario_id, job_id, poll=True, retry_interval=retry_interval, **kwargs)
 
     @classmethod
     def __get(
         cls,
         api_key: str,
-        scenario_id: int,
+        scenario_id: str,
+        job_id: str = None,
         host: str = DEFAULT_HOST,
         streams: Optional[List[Tuple[str, ...]]] = None,
         poll: bool = False,
@@ -65,22 +64,27 @@ class SedaroSimulationResult:
         '''Query latest scenario result and wait for sim if it is running.'''
         streams = streams or []
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            simulation = cls.__get_simulation(sedaro_client, scenario_id)
+            sim_client = sedaro_client.get_sim_client(scenario_id)
+            if job_id is None:
+                try:
+                    job_id = sim_client.get_latest()[0].body[0]['id']
+                except IndexError:
+                    raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
+            simulation = cls.__get_simulation(sim_client, scenario_id, job_id)
 
             if poll:
                 while simulation['status'] in ('PENDING', 'RUNNING'):
                     progress_bar(simulation['progress']['percentComplete'])
                     time.sleep(retry_interval)
-                    simulation = cls.__get_simulation(sedaro_client, scenario_id)
+                    simulation = cls.__get_simulation(sedaro_client, scenario_id, job_id)
 
             data = sedaro_client.get_data(simulation['dataArray'], streams=streams)
             return cls(simulation, data)
 
     @staticmethod
-    def __get_simulation(client, scenario_id: int) -> dict:
+    def __get_simulation(client, scenario_id: str, job_id: str) -> dict:
         try:
-            sim = client.get_sim_client(scenario_id)
-            return sim.get_latest()[0]
+            return client.get(job_id)
         except IndexError:
             raise IndexError(
                 f'Could not find any simulation results for scenario: {scenario_id}')

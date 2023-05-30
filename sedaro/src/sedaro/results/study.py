@@ -54,10 +54,6 @@ class SedaroStudyResult:
 
     def __contains__(self, id_):
         '''Check if this study contains a certain simulation ID.'''
-        try:
-            id_ = int(id_)
-        except Exception:
-            raise ValueError(f'Unrecognized ID type (expected int): {type(id_)}')
         return id_ in self.job_ids
 
     @property
@@ -82,7 +78,7 @@ class SedaroStudyResult:
 
     @property
     def job_ids(self) -> List[int]:
-        return [int(entry) for entry in self.__metadata['jobs']]
+        return [entry for entry in self.__metadata['jobs']]
 
     @property
     def iterations(self) -> int:
@@ -138,11 +134,6 @@ class SedaroStudyResult:
 
     def result(self, id_: str) -> SedaroSimulationResult:
         '''Query results for a particular simulation.'''
-        try:
-            id_ = int(id_)
-        except Exception:
-            raise ValueError(f'Unrecognized ID type (expected int): {type(id_)}')
-
         result = None
         if self.__cache:
             if self.__cache_dir is None:
@@ -155,7 +146,7 @@ class SedaroStudyResult:
 
         if result is None:
             print(f'💾 Downloading simulation result id {id_}...', end='')
-            result = SedaroSimulationResult.get(self.__api_key, self.__scenario, id_, self.__host)
+            result = SedaroSimulationResult.get(self.__api_key, self.__scenario, job_id=id_, host=self.__host)
             print('done!')
 
         if self.__cache:
