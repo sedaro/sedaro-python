@@ -41,6 +41,22 @@ class SedaroSimulationResult:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
     @classmethod
+    def get_scenario_latest(cls, *args, **kwargs):
+        '''Get latest job result.
+
+        Deprecated method, use .get instead.
+        '''
+        return cls.get(*args, **kwargs)
+
+    @classmethod
+    def poll_scenario_latest(cls, *args, **kwargs):
+        '''Query latest job result and wait for sim if it is running.
+
+        Deprecated method, use .poll instead.
+        '''
+        return cls.poll(*args, **kwargs)
+
+    @classmethod
     def get(cls, api_key: str, scenario_id: str, job_id: str = None, **kwargs):
         '''Query a job result.'''
         return cls.__get(api_key, scenario_id, job_id, **kwargs)
@@ -67,7 +83,7 @@ class SedaroSimulationResult:
             sim_client = sedaro_client.get_sim_client(scenario_id)
             if job_id is None:
                 try:
-                    job_id = sim_client.get_latest()[0].body[0]['id']
+                    job_id = sim_client.get_latest()[0]['id']
                 except IndexError:
                     raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
             simulation = cls.__get_simulation(sim_client, scenario_id, job_id)
