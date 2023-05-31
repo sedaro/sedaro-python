@@ -63,33 +63,46 @@ class SedaroApiClient(ApiClient):
             raise FileExistsError('Provided file name is already in use. Please try again with a different file name.')
 
         # create temp directory in which to build zip
-        dirname = ''.join(choice(ascii_letters) for _ in range(32))
-        os.mkdir(dirname, mode=0o777)
-        archive = ZipFile(filename, 'w')
+        dirname = ''.join(choice(ascii_letters) for _ in range(32)) # random 32-char string
+        assert '/' not in dirname # extra level of protection against bad removes later
+        try:
+            os.mkdir(dirname, mode=0o777)
+            archive = ZipFile(filename, 'w')
 
-        # get list of agents
-        agents = []
-        for agent in branch.Agent.get_all():
-            agents.append(agent.id)
+            # get list of agents
+            agents = []
+            for agent in branch.Agent.get_all():
+                agents.append(agent.id)
+            
+            # get data for one agent at a time
+            MAX_CHUNKS = 4
+            if len(agents) < MAX_CHUNKS:
+                NUM_CHUNKS = len(agents)
+            else:
+                NUM_CHUNKS = MAX_CHUNKS
+            chunks = []
+            for _ in range(NUM_CHUNKS):
+                chunks.append([])
+            for i in range(len(agents)):
+                chunks[i % NUM_CHUNKS].append(agents[i])
+            with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
+                _id = [id for _ in range(NUM_CHUNKS)]
+                _dirname = [dirname for _ in range(NUM_CHUNKS)]
+                done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
+            for chunk in done:
+                for agent in chunk:
+                    archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
         
-        # get data for one agent at a time
-        MAX_CHUNKS = 4
-        if len(agents) < MAX_CHUNKS:
-            NUM_CHUNKS = len(agents)
-        else:
-            NUM_CHUNKS = MAX_CHUNKS
-        chunks = []
-        for _ in range(NUM_CHUNKS):
-            chunks.append([])
-        for i in range(len(agents)):
-            chunks[i % NUM_CHUNKS].append(agents[i])
-        with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
-            _id = [id for _ in range(NUM_CHUNKS)]
-            _dirname = [dirname for _ in range(NUM_CHUNKS)]
-            done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
-        for chunk in done:
-            for agent in chunk:
-                archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
+        except Exception:
+            # clean up
+            try:
+                archive.close()
+            except Exception:
+                pass
+            if path.exists():
+                os.remove(filename)
+            if pathlib.Path(dirname).exists():
+                shutil.rmtree(dirname, ignore_errors=True)
         
         # save zip file and delete temp directory
         archive.close()
