@@ -1,3 +1,4 @@
+import concurrent.futures
 import json
 import os
 import pathlib
@@ -48,7 +49,14 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
-    def download_data(self, branch, id, filename: str, axisOrder: str = None):
+    def download_data_in_parallel(self, agents, id, dirname: str):
+        for agent in agents:
+            agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
+            with open(f'{dirname}/{agent}.json', 'w') as fd:
+                json.dump(agentData, fd)
+        return agents
+
+    def download_data(self, branch, id, filename: str):
         # check if filename already exists
         path = pathlib.Path(filename)
         if path.exists():
@@ -65,11 +73,23 @@ class SedaroApiClient(ApiClient):
             agents.append(agent.id)
         
         # get data for one agent at a time
-        for agent in agents:
-            agentData = self.get_data(id, limit=None, axisOrder=axisOrder, streams=[(agent,)], bulktool=True)
-            with open(agentFilePath := f'{dirname}/{agent}.json', 'w') as fd:
-                json.dump(agentData, fd)
-            archive.write(agentFilePath, f'{agent}.json', ZIP_DEFLATED)
+        MAX_CHUNKS = 4
+        if len(agents) < MAX_CHUNKS:
+            NUM_CHUNKS = len(agents)
+        else:
+            NUM_CHUNKS = MAX_CHUNKS
+        chunks = []
+        for _ in range(NUM_CHUNKS):
+            chunks.append([])
+        for i in range(len(agents)):
+            chunks[i % NUM_CHUNKS].append(agents[i])
+        with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
+            _id = [id for _ in range(NUM_CHUNKS)]
+            _dirname = [dirname for _ in range(NUM_CHUNKS)]
+            done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
+        for chunk in done:
+            for agent in chunk:
+                archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
         
         # save zip file and delete temp directory
         archive.close()
