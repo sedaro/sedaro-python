@@ -2,9 +2,7 @@ import concurrent.futures
 import json
 import os
 import pathlib
-from random import choice
-import shutil
-from string import ascii_letters
+import tempfile
 from typing import Dict, List, Optional, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -53,62 +51,56 @@ class SedaroApiClient(ApiClient):
         for agent in agents:
             agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
             with open(f'{dirname}/{agent}.json', 'w') as fd:
+                print(f'Received data from agent: {agent}')
                 json.dump(agentData, fd)
         return agents
 
     def download_data(self, branch, id, filename: str):
         # check if filename already exists
-        path = pathlib.Path(filename)
-        if path.exists():
+        if pathlib.Path(filename).exists():
             raise FileExistsError('Provided file name is already in use. Please try again with a different file name.')
 
         # create temp directory in which to build zip
-        dirname = ''.join(choice(ascii_letters) for _ in range(32)) # random 32-char string
-        assert '/' not in dirname # extra level of protection against bad removes later
-        try:
-            os.mkdir(dirname, mode=0o777)
-            archive = ZipFile(filename, 'w')
-
-            # get list of agents
-            agents = []
-            for agent in branch.Agent.get_all():
-                agents.append(agent.id)
-            
-            # get data for one agent at a time
-            MAX_CHUNKS = 4
-            if len(agents) < MAX_CHUNKS:
-                NUM_CHUNKS = len(agents)
-            else:
-                NUM_CHUNKS = MAX_CHUNKS
-            chunks = []
-            for _ in range(NUM_CHUNKS):
-                chunks.append([])
-            for i in range(len(agents)):
-                chunks[i % NUM_CHUNKS].append(agents[i])
-            with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
-                _id = [id for _ in range(NUM_CHUNKS)]
-                _dirname = [dirname for _ in range(NUM_CHUNKS)]
-                done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
-            for chunk in done:
-                for agent in chunk:
-                    archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
-        
-        except Exception:
-            # clean up
+        archive = ZipFile(filename, 'w')
+        with tempfile.TemporaryDirectory() as dirname:
             try:
+                # get list of agents
+                agents = []
+                for agent in branch.Agent.get_all():
+                    agents.append(agent.id)
+                
+                # get data for one agent at a time
+                MAX_CHUNKS = 4
+                if len(agents) < MAX_CHUNKS:
+                    NUM_CHUNKS = len(agents)
+                else:
+                    NUM_CHUNKS = MAX_CHUNKS
+                chunks = []
+                for _ in range(NUM_CHUNKS):
+                    chunks.append([])
+                for i in range(len(agents)):
+                    chunks[i % NUM_CHUNKS].append(agents[i])
+                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
+                    _id = [id for _ in range(NUM_CHUNKS)]
+                    _dirname = [dirname for _ in range(NUM_CHUNKS)]
+                    done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
+                for chunk in done:
+                    for agent in chunk:
+                        archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
+                
+                # save zip file
                 archive.close()
+                print(f'Zip file created: {filename}')
+            
             except Exception:
-                pass
-            if pathlib.Path(filename).exists():
-                os.remove(filename)
-            if pathlib.Path(dirname).exists():
-                shutil.rmtree(dirname, ignore_errors=True)
-        
-        # save zip file and delete temp directory
-        archive.close()
-        shutil.rmtree(dirname, ignore_errors=True)
-
-        print(f'ZIP file created: {filename}')
+                try:
+                    archive.close()
+                except Exception:
+                    pass
+                if pathlib.Path(filename).exists():
+                    os.remove(filename)
+                print("Error: Unable to download data and build archive.")
+                return
 
     def get_data(self,
             id,
