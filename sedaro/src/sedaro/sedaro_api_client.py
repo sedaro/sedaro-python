@@ -130,7 +130,7 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
-        elif bulktool == True:
+        if bulktool == True:
             url += f'&bulktool={bulktool}'
         streams = streams or []
         if len(streams) > 0:
