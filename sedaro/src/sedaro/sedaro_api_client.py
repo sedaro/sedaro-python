@@ -99,7 +99,7 @@ class SedaroApiClient(ApiClient):
                 archive.close()
             except Exception:
                 pass
-            if path.exists():
+            if pathlib.Path(filename).exists():
                 os.remove(filename)
             if pathlib.Path(dirname).exists():
                 shutil.rmtree(dirname, ignore_errors=True)
