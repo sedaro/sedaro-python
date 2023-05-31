@@ -1,6 +1,10 @@
-import base64
 import json
+import os
+import pathlib
+from random import choice
+from string import ascii_letters
 from typing import Dict, List, Optional, Tuple
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
@@ -42,6 +46,35 @@ class SedaroApiClient(ApiClient):
         res = branches_api_instance.get_branch(
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
+
+    def download_data(self, branch, id, filename: str = None, axisOrder: str = None):
+        # check if filename already exists
+        path = pathlib.Path(filename)
+        if path.exists():
+            raise FileExistsError('Provided file name is already in use. Please try again with a different file name.')
+
+        # create temp directory in which to build zip
+        dirname = ''.join(choice(ascii_letters) for _ in range(32))
+        os.mkdir(dirname, mode=777)
+        archive = ZipFile(filename, 'w')
+
+        # get list of agents
+        agents = []
+        for agent in branch.Agent.get_all():
+            agents.append(agent.id)
+        
+        # get data for one agent at a time
+        for agent in agents:
+            agentData = self.get_data(id, limit=None, axisOrder=axisOrder, streams=[(agent.id,)])
+            with open(agentFilePath := f'{dirname}/{agent.id}.json', 'w') as fd:
+                json.dump(agentData, fd)
+            archive.write(agentFilePath, f'{agent.id}.json', ZIP_DEFLATED)
+        
+        # save zip file and delete temp directory
+        archive.close()
+        os.rmdir(dirname)
+
+        print(f'ZIP file created: {filename}')
 
     def get_data(self,
             id,
