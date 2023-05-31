@@ -2,6 +2,7 @@ import json
 import os
 import pathlib
 from random import choice
+import shutil
 from string import ascii_letters
 from typing import Dict, List, Optional, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -47,7 +48,7 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
-    def download_data(self, branch, id, filename: str = None, axisOrder: str = None):
+    def download_data(self, branch, id, filename: str, axisOrder: str = None):
         # check if filename already exists
         path = pathlib.Path(filename)
         if path.exists():
@@ -55,7 +56,7 @@ class SedaroApiClient(ApiClient):
 
         # create temp directory in which to build zip
         dirname = ''.join(choice(ascii_letters) for _ in range(32))
-        os.mkdir(dirname, mode=777)
+        os.mkdir(dirname, mode=0o777)
         archive = ZipFile(filename, 'w')
 
         # get list of agents
@@ -65,14 +66,14 @@ class SedaroApiClient(ApiClient):
         
         # get data for one agent at a time
         for agent in agents:
-            agentData = self.get_data(id, limit=None, axisOrder=axisOrder, streams=[(agent.id,)])
-            with open(agentFilePath := f'{dirname}/{agent.id}.json', 'w') as fd:
+            agentData = self.get_data(id, limit=None, axisOrder=axisOrder, streams=[(agent,)], bulktool=True)
+            with open(agentFilePath := f'{dirname}/{agent}.json', 'w') as fd:
                 json.dump(agentData, fd)
-            archive.write(agentFilePath, f'{agent.id}.json', ZIP_DEFLATED)
+            archive.write(agentFilePath, f'{agent}.json', ZIP_DEFLATED)
         
         # save zip file and delete temp directory
         archive.close()
-        os.rmdir(dirname)
+        shutil.rmtree(dirname, ignore_errors=True)
 
         print(f'ZIP file created: {filename}')
 
@@ -83,6 +84,7 @@ class SedaroApiClient(ApiClient):
             binWidth: float = None,
             limit: float = None,
             axisOrder: str = None,
+            bulktool: bool = False,
             streams: Optional[List[Tuple[str, ...]]] = None
         ):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
@@ -95,6 +97,8 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
+        elif bulktool == True:
+            url += f'&bulktool={bulktool}'
         streams = streams or []
         if len(streams) > 0:
             encodedStreams = ','.join(['.'.join(x) for x in streams])
