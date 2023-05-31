@@ -292,6 +292,20 @@ Optional arguments:
 * `streams` (list): specify which data streams you would like to fetch data for, according to the format described in the previous section. If no list is provided, data is fetched for all streams.
 * `axisOrder` (enum): the shape of each series in the response. Options: `'TIME_MAJOR'` and `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
 
+## Use: Download Raw Data
+
+You can download raw data to a ZIP file. Note that this requires passing in both the simulation ID and the branch.
+
+```py
+with SedaroApiClient(api_key=API_KEY) as sedaro:
+    branch = sedaro.get_branch(SCENARIO_BRANCH_ID)
+    sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
+    simId = sim.get_latest()[0]['dataArray']
+    sedaro.download_data(branch, simId, 'data.zip')
+```
+
+The above code will produce a ZIP file called `data.zip` in your working directory. Inside the ZIP file, there will be one JSON file for each agent, with its name being `<agent UUID>.json`.
+
 ## Use: Send Requests
 
 Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
