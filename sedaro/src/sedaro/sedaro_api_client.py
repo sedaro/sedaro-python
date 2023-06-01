@@ -1,9 +1,11 @@
 import concurrent.futures
 import json
+import math
 import os
 import pathlib
 import tempfile
 from threading import Lock
+import traceback
 from typing import Dict, List, Optional, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -49,6 +51,28 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
+    def build_progress_bar(self, progress):
+        fullBlock = '█'
+        partialBlocks = [' ', '▎', '▍', '▌', '▋', '▊', '▉', '█']
+
+        percentage = (float(progress['count'] / progress['total'])) * 100.0
+
+        blocks = ''
+        for i in range(25):
+            if percentage >= (i + 1) * 4:
+                blocks += fullBlock
+            elif percentage <= i * 4:
+                blocks += ' '
+            else:
+                remainder = (percentage - (i * 4)) * 2.0
+                try:
+                    blocks += partialBlocks[math.floor(remainder) - 1]
+                except Exception: # float imprecision caused remainder value slightly > 8
+                    blocks += partialBlocks[-1]
+
+        progressBar = f"Progress: {blocks}|  {percentage:.2f}%  "
+        print(progressBar, end='\r')
+
     def download_data_in_parallel(self, agents, id, dirname: str, progress):
         for agent in agents:
             agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
@@ -56,7 +80,7 @@ class SedaroApiClient(ApiClient):
                 mutex.acquire()
                 try:
                     progress['count'] += 1
-                    print(f"Progress: {progress['count']} / {progress['total']}", end='\r')
+                    self.build_progress_bar(progress)
                 finally:
                     mutex.release()
                 json.dump(agentData, fd)
@@ -89,8 +113,6 @@ class SedaroApiClient(ApiClient):
                     chunks[i % NUM_CHUNKS].append(agents[i])
                 progress = {'count': 0, 'total': len(agents)}
 
-                # print('\033[? 25l', end="") # hide cursor
-
                 with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
                     _id = [id for _ in range(NUM_CHUNKS)]
                     _dirname = [dirname for _ in range(NUM_CHUNKS)]
@@ -100,11 +122,9 @@ class SedaroApiClient(ApiClient):
                     for agent in chunk:
                         archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
                 
-                # print('\033[? 25h', end="") # show cursor again
-                
                 # save zip file
                 archive.close()
-                print(f'Zip file created: {filename}')
+                print(f'\nZip file created: {filename}')
             
             except Exception:
                 try:
@@ -113,6 +133,7 @@ class SedaroApiClient(ApiClient):
                     pass
                 if pathlib.Path(filename).exists():
                     os.remove(filename)
+                print(traceback.format_exc())
                 print("Error: Unable to download data and build archive.")
                 return
 
