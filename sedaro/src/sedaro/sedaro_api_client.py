@@ -74,8 +74,17 @@ class SedaroApiClient(ApiClient):
         print(progressBar, end='\r')
 
     def download_data_in_parallel(self, agents, id, dirname: str, progress):
+        MAX_ATTEMPTS = 3
         for agent in agents:
-            agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
+            attempts = MAX_ATTEMPTS
+            while attempts > 0:
+                agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
+                if 'series' in agentData:
+                    break
+                else:
+                    attempts -= 1
+            if attempts == 0:
+                raise f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts"
             with open(f'{dirname}/{agent}.json', 'w') as fd:
                 mutex.acquire()
                 try:
