@@ -3,6 +3,7 @@ import json
 import os
 import pathlib
 import tempfile
+from threading import Lock
 from typing import Dict, List, Optional, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -16,6 +17,7 @@ from .settings import COMMON_API_KWARGS
 from .sim_client import SimClient
 from .utils import body_from_res, parse_urllib_response
 
+mutex = Lock()
 
 class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
@@ -47,11 +49,16 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
-    def download_data_in_parallel(self, agents, id, dirname: str):
+    def download_data_in_parallel(self, agents, id, dirname: str, progress):
         for agent in agents:
             agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
             with open(f'{dirname}/{agent}.json', 'w') as fd:
-                print(f'Received data from agent: {agent}')
+                mutex.acquire()
+                try:
+                    progress['count'] += 1
+                    print(f"Progress: {progress['count']} / {progress['total']}", end='\r')
+                finally:
+                    mutex.release()
                 json.dump(agentData, fd)
         return agents
 
@@ -80,13 +87,20 @@ class SedaroApiClient(ApiClient):
                     chunks.append([])
                 for i in range(len(agents)):
                     chunks[i % NUM_CHUNKS].append(agents[i])
+                progress = {'count': 0, 'total': len(agents)}
+
+                # print('\033[? 25l', end="") # hide cursor
+
                 with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
                     _id = [id for _ in range(NUM_CHUNKS)]
                     _dirname = [dirname for _ in range(NUM_CHUNKS)]
-                    done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname)
+                    _progress = [progress] * NUM_CHUNKS
+                    done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname, _progress)
                 for chunk in done:
                     for agent in chunk:
                         archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
+                
+                # print('\033[? 25h', end="") # show cursor again
                 
                 # save zip file
                 archive.close()
