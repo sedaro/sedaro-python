@@ -136,6 +136,8 @@ class BranchClient:
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     Component: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
+    ComponentToScalarCondition: BlockClassClient
+    """A Sedaro `Block` class on an `AgentTemplate` branch"""
     CompoundCondition: BlockClassClient
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     Cooler: BlockClassClient

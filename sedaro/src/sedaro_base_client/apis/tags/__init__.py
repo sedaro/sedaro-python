@@ -8,5 +8,5 @@ import enum
 class TagValues(str, enum.Enum):
     BRANCHES = "Branches"
     DATA = "Data"
-    TEMPLATE = "Template"
+    TEMPLATES = "Templates"
     JOBS = "Jobs"

@@ -1,10 +1,10 @@
 # Sedaro Python Client
 
-A python client for interacting with the Sedaro Satellite API using intuitive classes and methods.
+A python client for interacting with the Sedaro API using intuitive classes and methods.
 
 This client is intended to be used alongside our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block.
 
-Package release versions correspond to the Sedaro Satellite application version at the time of package updates.
+Package release versions correspond to the Sedaro application version at the time of package updates.
 
 ## Install
 
@@ -14,12 +14,12 @@ pip install sedaro
 
 ## Use: Block CRUD
 
-1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Satellite Management Console.
+1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Management Console.
 
     ```py
     from sedaro import SedaroApiClient
 
-    API_KEY = 'my_api_key' # Generated in Sedaro Satellite Management Console
+    API_KEY = 'my_api_key' # Generated in Sedaro Management Console
     AGENT_TEMPLATE_BRANCH_ID = 'NShL_CIU9iuufSII49xm-' # id of a Branch owned by my Sedaro account with the given api key
 
     with SedaroApiClient(api_key=API_KEY) as sedaro:
@@ -240,7 +240,7 @@ You can also use an optional kwarg, `streams`, with either of the above function
 
 * Each tuple in the list can contain either 1 or 2 items.
 * If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
-* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'C&DH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
+* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
 
 For example, with the following code, `results` will only contain data for all engines of agent `foo` and the `Power` and `Thermal` engines of agent `bar`.
 

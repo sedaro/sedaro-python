@@ -1,4 +1,4 @@
-
+import math
 
 
 ENGINE_MAP = {
@@ -119,3 +119,23 @@ def _get_series_type(series):
             return type(entry).__name__
     else:
         return "None"
+
+def bsearch(ordered_series, value):
+    '''Binary search for a value in an ordered series.
+
+    Returns the index of the value in the series, or the index of the immediately
+    lower value if the value is not present.
+    '''
+    def _bsearch(low, high):
+        if high == low:
+            return low
+        mid = math.ceil((high + low) / 2)
+        if ordered_series[mid] == value:
+            return mid
+        elif ordered_series[mid] > value:
+            return _bsearch(low, mid-1)
+        else:
+            return _bsearch(mid, high)
+    if value < ordered_series[0]:
+        return -1
+    return _bsearch(0, len(ordered_series) - 1)

@@ -25,8 +25,6 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.branch_scenario_res import BranchScenarioRes
-from sedaro_base_client.model.branch_vehicle_res import BranchVehicleRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 from sedaro_base_client.model.branch_create import BranchCreate
 
@@ -67,43 +65,7 @@ request_body_branch_create = api_client.RequestBody(
     },
     required=True,
 )
-
-
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.ComposedSchema,
-):
-
-
-    class MetaOapg:
-        
-        @classmethod
-        @functools.lru_cache()
-        def any_of(cls):
-            # we need this here to make our import statements work
-            # we must store _composed_schemas in here so the code is only run
-            # when we invoke this method. If we kept this at the class
-            # level we would get an error because the class level
-            # code would be run when this module is imported, and these composed
-            # classes don't exist yet because their module has not finished
-            # loading
-            return [
-                BranchVehicleRes,
-                BranchScenarioRes,
-            ]
-
-
-    def __new__(
-        cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            *_args,
-            _configuration=_configuration,
-            **kwargs,
-        )
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass

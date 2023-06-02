@@ -2,12 +2,12 @@ import string
 from random import choices
 
 import pytest
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 from sedaro.block_client import BlockClient
 from sedaro.branch_client import BranchClient
-from sedaro.exceptions import NonexistantBlockError
+from sedaro.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro.settings import ID
 
 _letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
@@ -228,6 +228,178 @@ def test_ignore_id_and_type_in_create():
 
         subsystem.delete()
 
+# Check validation of the Vehicle Template activeCommInterfaces field
+def test_active_comm_interfaces_tuple():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+        # Check valid tuples
+        if not branch.crud(
+            root={'activeCommInterfaces': [[False, "Comms", 5], [True, "Interface", 112]]}
+        ):
+            assert False
+        # Check invalid value type
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[False, "Interface", 5], [0.5, "Interface", 5]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check int at wrong index
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[5, "Interface", 5]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check bool at wrong index
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[False, True, 5]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check string at wrong index
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[False, "Interface", "5"]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check size less than 3
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[False, "Interface"]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check size greater than 3
+        try:
+            branch.crud(
+                root={'activeCommInterfaces': [[False, "Interface", 5, True]]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+
+        assert True
+
+# Check validation of the Vehicle Template attitudeSolutionError field
+def test_attitude_solution_error_tuple():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+        validList = [0.25, 0.5, 0.75]
+        # Check valid tuple
+        if not branch.crud(root={'attitudeSolutionError': None}) or \
+            not branch.crud(root={'attitudeSolutionError': validList}):
+            assert False
+        # Check size less than 3
+        try:
+            branch.crud(
+                root={'attitudeSolutionError': validList[:-1]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check size greater than 3
+        try:
+            branch.crud(
+                root={'attitudeSolutionError': validList + [1.0]},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check non-float values
+        for i in range(len(validList)):
+            failList = validList.copy()
+            failList[i] = "Fail"
+            try:
+                branch.crud(
+                    root={'attitudeSolutionError': failList},
+                )
+                assert False
+            except SedaroApiException as e:
+                pass
+        # Check non-list value
+        try:
+            branch.crud(
+                root={'attitudeSolutionError': 50},
+            )
+            assert False
+        except SedaroApiException as e:
+            pass
+
+        assert True
+
+# Check validation of the Solar Array powerCommand field
+def test_power_command_tuple():
+    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
+        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
+        # Check valid tuples
+        if not branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 1",
+            'powerCommand':[None, None]}]):
+            assert False
+        if not branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 2",
+            'powerCommand':[0.0, None]}]):
+            assert False
+        if not branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 3",
+            'powerCommand':[None, 0.5]}]):
+            assert False
+        if not branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 4",
+            'powerCommand':[0.0, 0.5]}]):
+            assert False
+        # Delete created solar arrays
+        branch.crud(delete=branch.data['index']['SolarArray'])  
+        # Check non-float values
+        try:
+            branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 1",
+            'powerCommand':["Fail", 0.5]}])
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check size greater than 2
+        try:
+            branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 1",
+            'powerCommand':[0.25, 0.5, 0.75]}])
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check size less than 2
+        try:
+            branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 1",
+            'powerCommand':[]}])
+            assert False
+        except SedaroApiException as e:
+            pass
+        # Check non-list value
+        try:
+            branch.crud(blocks=[{
+            'type':"SolarArray",
+            'name':"Temp Array 1",
+            'powerCommand':"Fail"}])
+            assert False
+        except SedaroApiException as e:
+            pass
+        # All tests passed
+        assert True
 
 def run_tests():
     test_get()
@@ -238,3 +410,6 @@ def run_tests():
     test_block_client_equality()
     test_block_client_clone()
     test_some_errors()
+    test_active_comm_interfaces_tuple()
+    test_attitude_solution_error_tuple()
+    test_power_command_tuple()

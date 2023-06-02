@@ -121,7 +121,7 @@ def run_generator(skip_intro=False, language=None, how_to_proceed=None, spec_pat
             )
 
         # ----- generate client -----
-        cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli generate \
+        cmd = f'docker run --rm -v "${{PWD}}:/local" openapitools/openapi-generator-cli:v6.6.0 generate \
                 -i /local{TEMP_SPEC_LOCATION[1:]} \
                 -g {language} \
                 -o /local/{BASE_CLIENT_BUILD_DIR}'
