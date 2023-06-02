@@ -78,7 +78,7 @@ class SedaroApiClient(ApiClient):
         for agent in agents:
             attempts = MAX_ATTEMPTS
             while attempts > 0:
-                agentData = self.get_data(id, limit=None, streams=[(agent,)], bulktool=True)
+                agentData = self.get_data(id, limit=None, streams=[(agent,)])
                 if 'series' in agentData:
                     break
                 else:
@@ -153,7 +153,6 @@ class SedaroApiClient(ApiClient):
             binWidth: float = None,
             limit: float = None,
             axisOrder: str = None,
-            bulktool: bool = False,
             streams: Optional[List[Tuple[str, ...]]] = None
         ):
         """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
@@ -166,8 +165,6 @@ class SedaroApiClient(ApiClient):
             url += f'&binWidth={binWidth}'
         elif limit is not None:
             url += f'&limit={limit}'
-        if bulktool == True:
-            url += f'&bulktool={bulktool}'
         streams = streams or []
         if len(streams) > 0:
             encodedStreams = ','.join(['.'.join(x) for x in streams])
