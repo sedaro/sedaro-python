@@ -232,10 +232,9 @@ def test_ignore_id_and_type_in_create():
 
     subsystem.delete()
 
-# Check validation of the Vehicle Template activeCommInterfaces field
-
 
 def test_active_comm_interfaces_tuple():
+    """Check validation of the Vehicle Template activeCommInterfaces field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
     # Check valid tuples
     if not branch.crud(
@@ -293,10 +292,9 @@ def test_active_comm_interfaces_tuple():
 
     assert True
 
-# Check validation of the Vehicle Template attitudeSolutionError field
-
 
 def test_attitude_solution_error_tuple():
+    """Check validation of the Vehicle Template attitudeSolutionError field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
     validList = [0.25, 0.5, 0.75]
     # Check valid tuple
@@ -341,10 +339,9 @@ def test_attitude_solution_error_tuple():
 
     assert True
 
-# Check validation of the Solar Array powerCommand field
-
 
 def test_power_command_tuple():
+    """Check validation of the Solar Array powerCommand field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
     # Check valid tuples
     if not branch.crud(blocks=[{
