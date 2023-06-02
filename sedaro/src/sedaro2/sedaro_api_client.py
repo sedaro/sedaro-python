@@ -1,6 +1,6 @@
-import base64
 import json
-from typing import Dict, List, Optional, Tuple
+from contextlib import contextmanager
+from typing import Any, Dict, Generator, List, Optional, Tuple
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
@@ -17,6 +17,11 @@ class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
     def __init__(self, api_key, host='https://api.sedaro.com', *args, **kwargs):
+        self._api_key = api_key
+        self._api_host = host
+        self._api_args = args
+        self._api_kwargs = kwargs
+
         return super().__init__(
             configuration=Configuration(host=host),
             *args,
