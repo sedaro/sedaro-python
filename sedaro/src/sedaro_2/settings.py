@@ -13,6 +13,8 @@ CRUD = 'crud'
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
+VEHICLE_TEMPLATE = 'VehicleTemplate'
+SCENARIO = 'Scenario'
 
 # Relationships and Blocks
 MANY_SIDE = 'ManySide'
