@@ -270,7 +270,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
 
     # Get simulation
     job_res = sim.get_latest()[0]
-    
+
     # Get raw data
     selected_streams=[
         ('foo',),
