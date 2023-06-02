@@ -3,12 +3,11 @@ from random import choices
 
 import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, WILDFIRE_SCENARIO_ID
-
-from sedaro import SedaroApiClient
-from sedaro.block_client import BlockClient
-from sedaro.branch_client import BranchClient
-from sedaro.exceptions import NonexistantBlockError, SedaroApiException
-from sedaro.settings import ID
+from sedaro_2 import SedaroApiClient
+from sedaro_2.block_client import BlockClient
+from sedaro_2.branch_clients import BranchClient
+from sedaro_2.exceptions import NonexistantBlockError, SedaroApiException
+from sedaro_2.settings import ID
 
 _letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
 
@@ -18,10 +17,12 @@ def _random_str(length=10):
 
 
 def test_get():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
-        # print(f'\nres: {branch}\n')
-        assert isinstance(branch, BranchClient)
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+    assert isinstance(
+        sedaro.agent_template_branch(SIMPLESAT_A_T_ID), BranchClient
+    )
+    with pytest.raises(TypeError, match='VehicleTemplate not ScenarioTemplate'):
+        sedaro.agent_template_branch(WILDFIRE_SCENARIO_ID)
 
 
 def test_get_blocks_all_and_single():
