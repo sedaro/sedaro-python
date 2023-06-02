@@ -6,7 +6,6 @@ import time
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
-from sedaro import SedaroApiClient
 from sedaro.results.agent import SedaroAgentResult
 from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
                                   _get_agent_id_name_map, _restructure_data,
@@ -48,6 +47,8 @@ class SedaroSimulationResult:
         streams: Optional[List[Tuple[str, ...]]] = None
     ):
         '''Query latest scenario result.'''
+        from sedaro import SedaroApiClient
+
         streams = streams or []
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             simulation = cls.__get_simulation(sedaro_client, scenario_id)
@@ -64,6 +65,8 @@ class SedaroSimulationResult:
         retry_interval: int = 2
     ):
         '''Query latest scenario result and wait for sim if it is running.'''
+        from sedaro import SedaroApiClient
+
         streams = streams or []
         with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
             simulation = cls.__get_simulation(sedaro_client, scenario_id)
