@@ -23,7 +23,7 @@ TESTS_PYPI_TEST = 'tt'
 SWITCH_PYPI = 'sp'
 TESTS_PYPI = 'tp'
 
-PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
+PY_VERSIONS_TESTS = ['3.8', '3.9', '3.10', '3.11']
 
 SWITCH_INSTR = 'Switch python version, install sedaro from: '
 TEST_INSTR = f'Run tests in python versions {PY_VERSIONS_TESTS} using sedaro from: '
