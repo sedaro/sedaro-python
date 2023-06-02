@@ -30,6 +30,16 @@ class SedaroApiClient(ApiClient):
             header_value=api_key
         )
 
+    @contextmanager
+    def api_client(self) -> Generator[ApiClient, Any, None]:
+        yield ApiClient(
+            configuration=Configuration(host=self._api_host),
+            *self._api_args,
+            **self._api_kwargs,
+            header_name='X_API_KEY',
+            header_value=self._api_key
+        )
+
     def get_branch(self, id: int) -> BranchClient:
         """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
         be accessible to this `SedaroApiClient` via the `api_key`.
