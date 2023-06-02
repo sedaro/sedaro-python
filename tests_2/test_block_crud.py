@@ -17,8 +17,10 @@ def _random_str(length=10):
     return ''.join(choices(_letters_and_numbers, k=length))
 
 
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+
+
 def test_get():
-    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
     # test get agent template
     assert isinstance(
         sedaro.agent_template_branch(SIMPLESAT_A_T_ID), AgentTemplateBranch
