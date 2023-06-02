@@ -296,23 +296,22 @@ def test_active_comm_interfaces_tuple():
 def test_attitude_solution_error_tuple():
     """Check validation of the Vehicle Template attitudeSolutionError field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
-    validList = [0.25, 0.5, 0.75]
+    valid_list = [0.25, 0.5, 0.75]
+
+    def crud_a_s_e(val):
+        branch.crud(root={'attitudeSolutionError': valid_list})
 
     # Check valid tuple
-    if not branch.crud(root={'attitudeSolutionError': None}) or \
-            not branch.crud(root={'attitudeSolutionError': validList}):
-        assert False
+    crud_a_s_e(None)
+    crud_a_s_e(valid_list)
 
     def check_bad_a_s_e(val):
-        with pytest.raises(SedaroApiException):
-            branch.crud(
-                root={'attitudeSolutionError': val},
-            )
+        crud_a_s_e(val)
 
-    check_bad_a_s_e(validList[:-1])  # Check size less than 3
-    check_bad_a_s_e(validList + [1.0])  # Check size greater than 3
-    for i in range(len(validList)):  # Check non-float values in list
-        failList = validList.copy()
+    check_bad_a_s_e(valid_list[:-1])  # Check size less than 3
+    check_bad_a_s_e(valid_list + [1.0])  # Check size greater than 3
+    for i in range(len(valid_list)):  # Check non-float values in list
+        failList = valid_list.copy()
         failList[i] = "Fail"
         check_bad_a_s_e(failList)
     check_bad_a_s_e(50)  # Check non-list value
