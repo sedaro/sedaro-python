@@ -88,6 +88,9 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         if run_tests:
             system(f'{command} && python3 tests')
         else:
+            print('')
+            print(command)
+            print('')
             system(command)
 
     except Exception as e:
