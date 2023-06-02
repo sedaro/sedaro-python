@@ -229,6 +229,8 @@ def test_ignore_id_and_type_in_create():
         subsystem.delete()
 
 # Check validation of the Vehicle Template activeCommInterfaces field
+
+
 def test_active_comm_interfaces_tuple():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
@@ -289,13 +291,15 @@ def test_active_comm_interfaces_tuple():
         assert True
 
 # Check validation of the Vehicle Template attitudeSolutionError field
+
+
 def test_attitude_solution_error_tuple():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
         validList = [0.25, 0.5, 0.75]
         # Check valid tuple
         if not branch.crud(root={'attitudeSolutionError': None}) or \
-            not branch.crud(root={'attitudeSolutionError': validList}):
+                not branch.crud(root={'attitudeSolutionError': validList}):
             assert False
         # Check size less than 3
         try:
@@ -336,70 +340,73 @@ def test_attitude_solution_error_tuple():
         assert True
 
 # Check validation of the Solar Array powerCommand field
+
+
 def test_power_command_tuple():
     with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
         branch = sedaro.get_branch(SIMPLESAT_A_T_ID)
         # Check valid tuples
         if not branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 1",
-            'powerCommand':[None, None]}]):
+            'type': "SolarArray",
+            'name': "Temp Array 1",
+                'powerCommand': [None, None]}]):
             assert False
         if not branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 2",
-            'powerCommand':[0.0, None]}]):
+            'type': "SolarArray",
+            'name': "Temp Array 2",
+                'powerCommand': [0.0, None]}]):
             assert False
         if not branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 3",
-            'powerCommand':[None, 0.5]}]):
+            'type': "SolarArray",
+            'name': "Temp Array 3",
+                'powerCommand': [None, 0.5]}]):
             assert False
         if not branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 4",
-            'powerCommand':[0.0, 0.5]}]):
+            'type': "SolarArray",
+            'name': "Temp Array 4",
+                'powerCommand': [0.0, 0.5]}]):
             assert False
         # Delete created solar arrays
-        branch.crud(delete=branch.data['index']['SolarArray'])  
+        branch.crud(delete=branch.data['index']['SolarArray'])
         # Check non-float values
         try:
             branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 1",
-            'powerCommand':["Fail", 0.5]}])
+                'type': "SolarArray",
+                'name': "Temp Array 1",
+                'powerCommand': ["Fail", 0.5]}])
             assert False
         except SedaroApiException as e:
             pass
         # Check size greater than 2
         try:
             branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 1",
-            'powerCommand':[0.25, 0.5, 0.75]}])
+                'type': "SolarArray",
+                'name': "Temp Array 1",
+                'powerCommand': [0.25, 0.5, 0.75]}])
             assert False
         except SedaroApiException as e:
             pass
         # Check size less than 2
         try:
             branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 1",
-            'powerCommand':[]}])
+                'type': "SolarArray",
+                'name': "Temp Array 1",
+                'powerCommand': []}])
             assert False
         except SedaroApiException as e:
             pass
         # Check non-list value
         try:
             branch.crud(blocks=[{
-            'type':"SolarArray",
-            'name':"Temp Array 1",
-            'powerCommand':"Fail"}])
+                'type': "SolarArray",
+                'name': "Temp Array 1",
+                'powerCommand': "Fail"}])
             assert False
         except SedaroApiException as e:
             pass
         # All tests passed
         assert True
+
 
 def run_tests():
     test_get()
