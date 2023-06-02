@@ -2,10 +2,11 @@ import string
 from random import choices
 
 import pytest
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, WILDFIRE_SCENARIO_ID
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
 from sedaro_2.block_client import BlockClient
-from sedaro_2.branch_clients import BranchClient
+from sedaro_2.branch_clients import (AgentTemplateBranch, BranchClient,
+                                     ScenarioBranch)
 from sedaro_2.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro_2.settings import ID
 
@@ -18,11 +19,19 @@ def _random_str(length=10):
 
 def test_get():
     sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+    # test get agent template
     assert isinstance(
-        sedaro.agent_template_branch(SIMPLESAT_A_T_ID), BranchClient
+        sedaro.agent_template_branch(SIMPLESAT_A_T_ID), AgentTemplateBranch
     )
     with pytest.raises(TypeError, match='VehicleTemplate not ScenarioTemplate'):
-        sedaro.agent_template_branch(WILDFIRE_SCENARIO_ID)
+        sedaro.agent_template_branch(SIMPLESAT_SCENARIO_ID)
+
+    # test get scenario
+    assert isinstance(
+        sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID), ScenarioBranch
+    )
+    with pytest.raises(TypeError, match='ScenarioTemplate not VehicleTemplate'):
+        sedaro.scenario_branch(SIMPLESAT_A_T_ID)
 
 
 def test_get_blocks_all_and_single():
