@@ -303,19 +303,19 @@ def test_attitude_solution_error_tuple():
             not branch.crud(root={'attitudeSolutionError': validList}):
         assert False
 
-    def check_crud_a_s_e(val):
+    def check_bad_a_s_e(val):
         with pytest.raises(SedaroApiException):
             branch.crud(
                 root={'attitudeSolutionError': val},
             )
 
-    check_crud_a_s_e(validList[:-1])  # Check size less than 3
-    check_crud_a_s_e(validList + [1.0])  # Check size greater than 3
+    check_bad_a_s_e(validList[:-1])  # Check size less than 3
+    check_bad_a_s_e(validList + [1.0])  # Check size greater than 3
     for i in range(len(validList)):  # Check non-float values in list
         failList = validList.copy()
         failList[i] = "Fail"
-        check_crud_a_s_e(failList)
-    check_crud_a_s_e(50)  # Check non-list value
+        check_bad_a_s_e(failList)
+    check_bad_a_s_e(50)  # Check non-list value
 
 
 def test_power_command_tuple():
