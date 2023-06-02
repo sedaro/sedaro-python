@@ -6,7 +6,7 @@ from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from .branch_clients import AgentTemplateBranch, BranchClient
+from .branch_clients import AgentTemplateBranch, BranchClient, ScenarioBranch
 from .exceptions import SedaroApiException
 from .settings import COMMON_API_KWARGS
 from .sim_client import SimClient
@@ -68,6 +68,17 @@ class SedaroApiClient(ApiClient):
             AgentTemplateBranch: `AgentTemplateBranch` client
         """
         return AgentTemplateBranch(self.__get_branch(branch_id), self)
+
+    def scenario_branch(self, branch_id: str) -> ScenarioBranch:
+        """Instantiate an `ScenarioBranch` client associated with the Sedaro `Branch` with `branch_id`
+
+        Args:
+            branch_id (str): `id` of the Sedaro Agent Template `Branch` to get
+
+        Returns:
+            ScenarioBranch: `ScenarioBranch` client
+        """
+        return ScenarioBranch(self.__get_branch(branch_id), self)
 
     def get_branch(self, id: int) -> BranchClient:
         """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
