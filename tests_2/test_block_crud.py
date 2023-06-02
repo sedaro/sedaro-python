@@ -236,61 +236,23 @@ def test_ignore_id_and_type_in_create():
 def test_active_comm_interfaces_tuple():
     """Check validation of the Vehicle Template activeCommInterfaces field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
-    # Check valid tuples
-    if not branch.crud(
-        root={'activeCommInterfaces': [[False, "Comms", 5], [True, "Interface", 112]]}
-    ):
-        assert False
-    # Check invalid value type
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[False, "Interface", 5], [0.5, "Interface", 5]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check int at wrong index
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[5, "Interface", 5]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check bool at wrong index
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[False, True, 5]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check string at wrong index
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[False, "Interface", "5"]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check size less than 3
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[False, "Interface"]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check size greater than 3
-    try:
-        branch.crud(
-            root={'activeCommInterfaces': [[False, "Interface", 5, True]]},
-        )
-        assert False
-    except SedaroApiException as e:
-        pass
 
-    assert True
+    def crud_a_c_i(val):
+        branch.crud(root={'activeCommInterfaces': val})
+
+    # Check valid tuples
+    crud_a_c_i([[False, "Comms", 5], [True, "Interface", 112]])
+
+    for val in [
+        [[False, "Interface", 5], [0.5, "Interface", 5]],  # invalid value type
+        [[5, "Interface", 5]],  # int at wrong index
+        [[False, True, 5]],  # bool at wrong index
+        [[False, "Interface", "5"]],  # string at wrong index
+        [[False, "Interface"]],  # size less than 3
+        [[False, "Interface", 5, True]],  # size greater than 3
+    ]:
+        with pytest.raises(SedaroApiException):
+            crud_a_c_i(val)
 
 
 def test_attitude_solution_error_tuple():
@@ -299,14 +261,15 @@ def test_attitude_solution_error_tuple():
     valid_list = [0.25, 0.5, 0.75]
 
     def crud_a_s_e(val):
-        branch.crud(root={'attitudeSolutionError': valid_list})
+        branch.crud(root={'attitudeSolutionError': val})
 
     # Check valid tuple
     crud_a_s_e(None)
     crud_a_s_e(valid_list)
 
     def check_bad_a_s_e(val):
-        crud_a_s_e(val)
+        with pytest.raises(SedaroApiException):
+            crud_a_s_e(val)
 
     check_bad_a_s_e(valid_list[:-1])  # Check size less than 3
     check_bad_a_s_e(valid_list + [1.0])  # Check size greater than 3
