@@ -4,7 +4,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
 from ..block_class_client import BlockClassClient
-from ..settings import SCENARIO
+from ..settings import SCENARIO_TEMPLATE
 from .branch_client import BranchClient
 
 if TYPE_CHECKING:
@@ -15,8 +15,8 @@ class ScenarioBranch(BranchClient):
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, client: 'SedaroApiClient'):
         super().__init__(body, client)
-        if (type_ := self.data['type']) != SCENARIO:
-            raise TypeError(f'Branch must be of type {SCENARIO} not {type_}')
+        if (type_ := self.data['type']) != SCENARIO_TEMPLATE:
+            raise TypeError(f'Branch must be of type {SCENARIO_TEMPLATE} not {type_}')
 
     # ==============================================================================================================
     # For intellisense

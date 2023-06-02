@@ -14,7 +14,7 @@ BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
 VEHICLE_TEMPLATE = 'VehicleTemplate'
-SCENARIO = 'Scenario'
+SCENARIO_TEMPLATE = 'ScenarioTemplate'
 
 # Relationships and Blocks
 MANY_SIDE = 'ManySide'
