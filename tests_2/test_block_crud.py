@@ -321,67 +321,24 @@ def test_attitude_solution_error_tuple():
 def test_power_command_tuple():
     """Check validation of the Solar Array powerCommand field"""
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+
+    def crud_s_a(val):
+        branch.crud(blocks=[{
+            'type': "SolarArray",
+            'name': f"array {_random_str()}",
+            'powerCommand': val
+        }])
+
     # Check valid tuples
-    if not branch.crud(blocks=[{
-        'type': "SolarArray",
-        'name': "Temp Array 1",
-            'powerCommand': [None, None]}]):
-        assert False
-    if not branch.crud(blocks=[{
-        'type': "SolarArray",
-        'name': "Temp Array 2",
-            'powerCommand': [0.0, None]}]):
-        assert False
-    if not branch.crud(blocks=[{
-        'type': "SolarArray",
-        'name': "Temp Array 3",
-            'powerCommand': [None, 0.5]}]):
-        assert False
-    if not branch.crud(blocks=[{
-        'type': "SolarArray",
-        'name': "Temp Array 4",
-            'powerCommand': [0.0, 0.5]}]):
-        assert False
+    for val in [[None, None], [0.0, None], [None, 0.5], [0.0, 0.5]]:
+        crud_s_a(val)
     # Delete created solar arrays
     branch.crud(delete=branch.data['index']['SolarArray'])
-    # Check non-float values
-    try:
-        branch.crud(blocks=[{
-            'type': "SolarArray",
-            'name': "Temp Array 1",
-            'powerCommand': ["Fail", 0.5]}])
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check size greater than 2
-    try:
-        branch.crud(blocks=[{
-            'type': "SolarArray",
-            'name': "Temp Array 1",
-            'powerCommand': [0.25, 0.5, 0.75]}])
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check size less than 2
-    try:
-        branch.crud(blocks=[{
-            'type': "SolarArray",
-            'name': "Temp Array 1",
-            'powerCommand': []}])
-        assert False
-    except SedaroApiException as e:
-        pass
-    # Check non-list value
-    try:
-        branch.crud(blocks=[{
-            'type': "SolarArray",
-            'name': "Temp Array 1",
-            'powerCommand': "Fail"}])
-        assert False
-    except SedaroApiException as e:
-        pass
-    # All tests passed
-    assert True
+
+    # Check bad values
+    for val in [["Fail", 0.5], [0.25, 0.5, 0.75], [], "Fail"]:
+        with pytest.raises(SedaroApiException):
+            crud_s_a(val)
 
 
 def run_tests():
