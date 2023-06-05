@@ -140,6 +140,7 @@ class SedaroApiClient(ApiClient):
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
+    # FIXME: remove this method
     def get_sim_client(self, branch_id: int):
         """Creates and returns a Sedaro SimClient
 
