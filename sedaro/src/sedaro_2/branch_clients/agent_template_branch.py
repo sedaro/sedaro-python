@@ -13,8 +13,8 @@ if TYPE_CHECKING:
 
 class AgentTemplateBranch(BranchClient):
 
-    def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, client: 'SedaroApiClient'):
-        super().__init__(body, client)
+    def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
+        super().__init__(body, sedaro)
         if (type_ := self.data['type']) != VEHICLE_TEMPLATE:
             raise TypeError(f'Branch must be of type {VEHICLE_TEMPLATE} not {type_}')
 
