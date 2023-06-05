@@ -149,7 +149,7 @@ class SedaroApiClient(ApiClient):
         """
         return SimClient(self, branch_id)
 
-    def send_request(self, resource_path: str, method: str, body: Optional[Dict] = None):
+    def request(self, resource_path: str, method: str, body: Optional[Dict] = None):
         """Send a request to the Sedaro server
 
         Args:
@@ -164,10 +164,11 @@ class SedaroApiClient(ApiClient):
         if body is not None:
             body = json.dumps(body)
             headers['Content-Type'] = 'application/json'
-        res = self.call_api(
-            resource_path,
-            method.upper(),
-            headers=headers,
-            body=body
-        )
+        with self.api_client() as api:
+            res = api.call_api(
+                resource_path,
+                method.upper(),
+                headers=headers,
+                body=body
+            )
         return parse_urllib_response(res)
