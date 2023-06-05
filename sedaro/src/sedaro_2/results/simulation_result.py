@@ -80,6 +80,7 @@ class SimulationResult:
 
             return cls.get_scenario_latest(api_key, scenario_id, host=host, streams=streams)
 
+    # FIXME: remove this method
     @staticmethod
     def __get_simulation(client, scenario_id: int) -> dict:
         try:

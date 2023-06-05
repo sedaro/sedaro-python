@@ -59,24 +59,23 @@ class SimClient:
             )
         return body_from_res(res)
 
-    def terminate(self, job_id: int) -> ApiResponse:
+    def terminate(self, job_id: int = None, latest: bool = False) -> ApiResponse:
         """Terminate simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated
         with and the passed in `job_id`.
 
-        Note: the `job_id` of the "latest" running simulation can be retrieved via:
-
-        ```py
-            res = sim_client.get_latest()
-            job_id = res.body[0]['id']
-            sim_client.terminate(job_id)
-        ```
-
         Args:
-            job_id (`int`): id of the simulation (job) to termiante.
+            job_id (`int`, optional): id of the simulation (job) to termiante.
+            latest (`bool`, optional): indicates terminating the latest running job.
 
         Returns:
             ApiResponse: response from the termiante simulation (job) request
         """
+        if job_id is not None and latest:
+            raise ValueError('Cannot set both "job_id" and "latest".')
+
+        if latest:
+            job_id = self.get_latest()[0]['id']
+
         with self.__jobs_client() as jobs:
 
             res = jobs.terminate_simulation(
