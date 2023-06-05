@@ -15,14 +15,14 @@ class SimClient:
     branch_id: int
     _base_jobs_api_client: jobs_api.JobsApi
 
-    def __init__(self, sedaro_api_client: 'SedaroApiClient', branch_id: int):
+    def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
         """Instantiate a Sedaro SimClient
 
         Args:
-            sedaro_api_client (`SedaroApiClient`): the `SedaroApiClient`
+            sedaro (`SedaroApiClient`): the `SedaroApiClient`
             branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs).
         """
-        self._base_jobs_api_client = jobs_api.JobsApi(sedaro_api_client)
+        self._base_jobs_api_client = jobs_api.JobsApi(sedaro)
         self.branch_Id = branch_id
 
     def start(self) -> ApiResponse:
