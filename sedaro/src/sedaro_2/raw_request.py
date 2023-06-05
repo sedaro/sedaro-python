@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class RawRequest:
     def __init__(self, sedaro: 'SedaroApiClient') -> None:
-        self.sedaro = sedaro
+        self.__sedaro = sedaro
 
     def __request(self, resource_path: str, method: str, body: Optional[Dict] = None):
         """Send a request to the Sedaro server
@@ -26,7 +26,7 @@ class RawRequest:
         if body is not None:
             body = json.dumps(body)
             headers['Content-Type'] = 'application/json'
-        with self.sedaro.api_client() as api:
+        with self.__sedaro.api_client() as api:
             res = api.call_api(
                 resource_path,
                 method,
