@@ -9,9 +9,8 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def test_get_non_existant_branch():
-    res = sedaro.request(
+    res = sedaro.request.get(
         f'/models/branches/999999999999999999999999',
-        'GET'
     )
 
     assert res.get('error', {}).get(
@@ -19,9 +18,8 @@ def test_get_non_existant_branch():
 
 
 def test_raw_get_branch():
-    res = sedaro.request(
+    res = sedaro.request.get(
         f'/models/branches/{SIMPLESAT_A_T_ID}',
-        'GET'
     )
     keys = res.keys()
     for string in ['data', 'name', 'description', 'repository', 'tier2issues', 'workspace']:
@@ -29,9 +27,8 @@ def test_raw_get_branch():
 
 
 def test_raw_request_CRUD_blocks():
-    res = sedaro.request(
+    res = sedaro.request.patch(
         f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
-        'PATCH',
         body={
             BLOCKS: [{
                 'name': 'Sun ' + str(randrange(1, 100000)),
@@ -41,9 +38,8 @@ def test_raw_request_CRUD_blocks():
     )
     sun_id = res[CRUD][BLOCKS][0]
 
-    res = sedaro.request(
+    res = sedaro.request.patch(
         f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
-        'PATCH',
         body={'delete': [sun_id]}
     )
     assert res[CRUD]['delete'][0] == sun_id

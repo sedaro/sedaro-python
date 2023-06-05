@@ -72,9 +72,8 @@ class BranchClient:
             raise ValueError(
                 'Must provide at least one or more of the following args: "root" as a non-empty object, "blocks" and/or "delete" as non-empty arrays.')
 
-        res = self._sedaro_client.request(
+        res = self._sedaro_client.request.patch(
             f'/models/branches/{self.id}/template/',
-            'PATCH',
             {
                 'root': root,
                 'blocks': blocks,
