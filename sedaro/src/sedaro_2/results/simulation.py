@@ -12,7 +12,7 @@ from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
                                   hfill, progress_bar)
 
 
-class SedaroSimulationResult:
+class SimulationResult:
 
     def __init__(self, simulation: dict, data: dict):
         '''Initialize a new Simulation Result.
@@ -38,6 +38,7 @@ class SedaroSimulationResult:
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
+    # FIXME: remove this method
     @classmethod
     def get_scenario_latest(
         cls,
@@ -55,6 +56,7 @@ class SedaroSimulationResult:
             data = sedaro_client.get_data(simulation['dataArray'], streams=streams)
             return cls(simulation, data)
 
+    # FIXME: remove this method
     @classmethod
     def poll_scenario_latest(
         cls,
