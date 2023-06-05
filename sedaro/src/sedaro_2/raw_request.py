@@ -29,7 +29,7 @@ class RawRequest:
         with self.sedaro.api_client() as api:
             res = api.call_api(
                 resource_path,
-                method.upper(),
+                method,
                 headers=headers,
                 body=body
             )
