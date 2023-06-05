@@ -100,6 +100,7 @@ class SedaroApiClient(ApiClient):
             path_params={'branchId': id}, **COMMON_API_KWARGS)
         return BranchClient(body_from_res(res), self)
 
+    # FIXME: remove this method
     def get_data(self,
                  id,
                  start: float = None,
