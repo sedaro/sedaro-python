@@ -21,7 +21,7 @@ class BranchClient:
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         self.__ingest_branch_res(body)
-        self.__sedaro = sedaro
+        self._sedaro = sedaro
 
     def __str__(self):
         return f'BranchClient(id: {self.id}, name: "{self.name}")'
@@ -72,7 +72,7 @@ class BranchClient:
             raise ValueError(
                 'Must provide at least one or more of the following args: "root" as a non-empty object, "blocks" and/or "delete" as non-empty arrays.')
 
-        res = self.__sedaro.request.patch(
+        res = self._sedaro.request.patch(
             f'/models/branches/{self.id}/template/',
             {
                 'root': root,
