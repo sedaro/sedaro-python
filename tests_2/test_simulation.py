@@ -1,8 +1,10 @@
 import time
 
+from sedaro_2 import SedaroApiClient
+
 from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
 
-from sedaro import SedaroApiClient
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _check_job_status(job):
@@ -12,29 +14,27 @@ def _check_job_status(job):
 
 
 def test_run_simulation():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        # Instantiate job client
-        sim_client = sedaro.get_sim_client(WILDFIRE_SCENARIO_ID)
+    sim = sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation
 
-        # Start simulation
-        sim_client.start()
-        print('- Started simulation')
+    # Start simulation
+    sim.start()
+    print('- Started simulation')
 
-        # Get status #1
-        job = sim_client.get_latest()[0]
-        _check_job_status(job)
-        time.sleep(1)
+    # Get status #1
+    job = sim.get_latest()[0]
+    _check_job_status(job)
+    time.sleep(1)
 
-        # Get status #2
-        job = sim_client.get_latest()[0]
-        _check_job_status(job)
-        time.sleep(1)
+    # Get status #2
+    job = sim.get_latest()[0]
+    _check_job_status(job)
+    time.sleep(1)
 
-        # Terminate
-        print('- Terminating...')
-        res = sim_client.terminate(job['id'])
-        print('-', res['message'])
-        assert res['message'] == 'Successfully terminated simulation.'
+    # Terminate
+    print('- Terminating...')
+    res = sim.terminate(job['id'])
+    print('-', res['message'])
+    assert res['message'] == 'Successfully terminated simulation.'
 
 
 def run_tests():

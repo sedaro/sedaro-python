@@ -19,8 +19,9 @@ class ScenarioBranch(BranchClient):
         if (type_ := self.data['type']) != SCENARIO_TEMPLATE:
             raise TypeError(f'Branch must be of type {SCENARIO_TEMPLATE} not {type_}')
 
+    @property
     def simulation(self) -> SimClient:
-        """Get a `SimClient` to interact with the simulation connected to this Sedaro scenario `Branch`.
+        """A `SimClient` to interact with the simulation connected to this Sedaro scenario `Branch`.
 
         Returns:
             SimClient: a `SimClient`
