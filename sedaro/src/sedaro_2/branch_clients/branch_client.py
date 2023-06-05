@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 
 class BranchClient:
     data: 'Dict[str, Any]'
+    id: 'str'
+    """Branch `id`"""
 
     def __ingest_branch_res(self, branch_res_dict: dict):
         for k, v in branch_res_dict.items():
