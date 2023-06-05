@@ -3,35 +3,31 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
+from sedaro_2 import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
+                      SedaroSeries, SimulationResult)
 
-from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
-                    SedaroSeries, SedaroSimulationResult)
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _make_sure_wildfire_terminated():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        sim_client = sedaro.get_sim_client(WILDFIRE_SCENARIO_ID)
-        jobs = sim_client.get_latest()
+    sim = sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation
+    latest = sim.get_latest()
 
-        if not len(jobs) or jobs[0]['status'] != 'TERMINATED':
-            sim_client.start()
-            job = sim_client.get_latest()[0]
-            sim_client.terminate(job['id'])
+    if not len(latest) or latest[0]['status'] != 'TERMINATED':
+        sim.start()
+        latest = sim.get_latest()[0]
+        sim.terminate(latest['id'])
 
 
 def _make_sure_simplesat_done():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        sim_client = sedaro.get_sim_client(SIMPLESAT_SCENARIO_ID)
-        jobs = sim_client.get_latest()
-
-        if not len(jobs) or jobs[0]['status'] != 'SUCCEEDED':
-            sim_client = sedaro.get_sim_client(SIMPLESAT_SCENARIO_ID)
-            sim_client.start()
-            job = sim_client.get_latest()[0]
-
-            while job['status'] != 'SUCCEEDED':
-                job = sim_client.get_latest()[0]
-                time.sleep(1)
+    sim = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation
+    latest = sim.get_latest()
+    if not len(latest) or latest[0]['status'] != 'SUCCEEDED':
+        sim.start()
+        latest = sim.get_latest()[0]
+        while latest['status'] != 'SUCCEEDED':
+            latest = sim.get_latest()[0]
+            time.sleep(1)
 
 
 def test_query_terminated():
