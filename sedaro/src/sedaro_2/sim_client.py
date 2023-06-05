@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING
+from contextlib import contextmanager
+from typing import TYPE_CHECKING, Any, Generator
 
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.apis.tags import jobs_api
@@ -12,8 +13,6 @@ if TYPE_CHECKING:
 
 class SimClient:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
-    branch_id: int
-    _base_jobs_api_client: jobs_api.JobsApi
 
     def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
         """Instantiate a Sedaro SimClient
@@ -22,8 +21,13 @@ class SimClient:
             sedaro (`SedaroApiClient`): the `SedaroApiClient`
             branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs).
         """
-        self._base_jobs_api_client = jobs_api.JobsApi(sedaro)
         self.branch_Id = branch_id
+        self.__sedaro = sedaro
+
+    @contextmanager
+    def __jobs_client(self) -> Generator['jobs_api.JobsApi', Any, None]:
+        with self.__sedaro.api_client() as api:
+            yield jobs_api.JobsApi(api)
 
     def start(self) -> ApiResponse:
         """Starts simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated with.
@@ -31,10 +35,11 @@ class SimClient:
         Returns:
             ApiResponse: response from the start simulation (job) request
         """
-        res = self._base_jobs_api_client.start_simulation(
-            path_params={'branchId': self.branch_Id},
-            **COMMON_API_KWARGS
-        )
+        with self.__jobs_client() as jobs:
+            res = jobs.start_simulation(
+                path_params={'branchId': self.branch_Id},
+                **COMMON_API_KWARGS
+            )
         return body_from_res(res)
 
     def get_latest(self) -> ApiResponse:
@@ -44,11 +49,12 @@ class SimClient:
         Returns:
             ApiResponse: response from the get simulation (job) request
         """
-        res = self._base_jobs_api_client.get_simulations(
-            path_params={'branchId': self.branch_Id},
-            query_params={'latest': ''},
-            **COMMON_API_KWARGS
-        )
+        with self.__jobs_client() as jobs:
+            res = jobs.get_simulations(
+                path_params={'branchId': self.branch_Id},
+                query_params={'latest': ''},
+                **COMMON_API_KWARGS
+            )
         return body_from_res(res)
 
     def terminate(self, job_id: int) -> ApiResponse:
@@ -69,11 +75,13 @@ class SimClient:
         Returns:
             ApiResponse: response from the termiante simulation (job) request
         """
-        res = self._base_jobs_api_client.terminate_simulation(
-            path_params={
-                'branchId': self.branch_Id,
-                'jobId': job_id
-            },
-            **COMMON_API_KWARGS
-        )
+        with self.__jobs_client() as jobs:
+
+            res = jobs.terminate_simulation(
+                path_params={
+                    'branchId': self.branch_Id,
+                    'jobId': job_id
+                },
+                **COMMON_API_KWARGS
+            )
         return body_from_res(res)
