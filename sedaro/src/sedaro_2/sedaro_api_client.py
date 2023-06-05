@@ -152,4 +152,5 @@ class SedaroApiClient(ApiClient):
 
     @property
     def request(self):
+        """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
         return RawRequest(self)
