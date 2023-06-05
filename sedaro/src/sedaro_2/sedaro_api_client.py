@@ -80,6 +80,7 @@ class SedaroApiClient(ApiClient):
         """
         return ScenarioBranch(self.__get_branch(branch_id), self)
 
+    # FIXME: delete this method
     def get_branch(self, id: int) -> BranchClient:
         """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
         be accessible to this `SedaroApiClient` via the `api_key`.
