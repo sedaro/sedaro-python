@@ -46,12 +46,20 @@ class SimClient:
             )
         return body_from_res(res)
 
-    def get_latest(self) -> ApiResponse:
-        """Gets the latest running simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient`
-        was instantiated with.
+    def latest_raw(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
+        """Gets the latest simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient` was
+        instantiated with. This can return a response even before the simulation is done.
+
+        Args:
+            err_if_empty (bool, optional): Triggers raising an error if no simulation results and `err_if_empty`.\
+                Defaults to `False`.
+
+        Raises:
+            NoSimResultsError: if no simulation results and `err_if_empty`
 
         Returns:
-            ApiResponse: response from the get simulation (job) request
+            Union[Dict, None]: dictionary from response body from the get latest simulation (job) request, otherwise\
+                `None` if there is no latest simulation.
         """
         with self.__jobs_client() as jobs:
             res = jobs.get_simulations(
@@ -59,7 +67,14 @@ class SimClient:
                 query_params={'latest': ''},
                 **COMMON_API_KWARGS
             )
-        return body_from_res(res)
+        if len(body := body_from_res(res)):
+            return body[0]
+        if err_if_empty:
+            raise NoSimResultsError(
+                status=404,
+                reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
+            )
+        return None
 
     def terminate(self, job_id: int = None, latest: bool = False) -> ApiResponse:
         """Terminate simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated
