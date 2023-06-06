@@ -1,8 +1,7 @@
 import time
 
-from sedaro_2 import SedaroApiClient
-
 from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
+from sedaro_2 import SedaroApiClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -21,12 +20,12 @@ def test_run_simulation():
     print('- Started simulation')
 
     # Get status #1
-    job = sim.get_latest()[0]
+    job = sim.latest_raw()
     _check_job_status(job)
     time.sleep(1)
 
     # Get status #2
-    job = sim.get_latest()[0]
+    job = sim.latest_raw()
     _check_job_status(job)
     time.sleep(1)
 
