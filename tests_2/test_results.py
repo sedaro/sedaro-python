@@ -43,7 +43,7 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = SimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
+    result = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation.latest()
     assert result.success
 
     agent_result = result.agent(result.templated_agents[0])
@@ -61,7 +61,7 @@ def test_save_load():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = SimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
+    result = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation.latest()
     assert result.success
 
     with TemporaryDirectory() as temp_dir:
@@ -183,6 +183,6 @@ def test_query_model():
 
 def run_tests():
     test_query_terminated()
-    # test_query()
-    # test_save_load()
-    # test_query_model()
+    test_query()
+    test_save_load()
+    test_query_model()
