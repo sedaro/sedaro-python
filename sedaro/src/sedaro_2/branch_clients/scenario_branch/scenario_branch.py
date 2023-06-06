@@ -4,7 +4,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
 from ...settings import SCENARIO_TEMPLATE
-from ..block_clients import BlockType
+from ..blocks import BlockType
 from ..branch_client import BranchClient
 from .sim_client import SimClient
 

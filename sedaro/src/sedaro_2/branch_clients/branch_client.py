@@ -5,7 +5,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ..settings import BLOCKS, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
-from .block_clients import Block, BlockType
+from .blocks import Block, BlockType
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
