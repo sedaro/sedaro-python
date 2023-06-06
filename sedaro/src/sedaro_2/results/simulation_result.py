@@ -2,9 +2,8 @@
 import datetime as dt
 import gzip
 import json
-import time
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import List, Union
 
 from sedaro.results.agent import SedaroAgentResult
 from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
