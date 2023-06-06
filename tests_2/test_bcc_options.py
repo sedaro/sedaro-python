@@ -122,7 +122,7 @@ def test_block_class_client_options():
         for block_name in branch_block_names:
             block_type: BlockType = getattr(branch, block_name)
 
-            # CHECK: is a Block Class Client
+            # CHECK: is a BlockType
             assert isinstance(block_type, BlockType)
 
             # CHECK: can use create method
@@ -138,7 +138,7 @@ def test_block_class_client_options():
             if len(all_blocks_of_type):
                 assert isinstance(all_blocks_of_type[0], Block)
 
-        # CHECK: bad block class clients
+        # CHECK: bad BlockTypes
         for bad_block in ['try_me', 'and_me', 'NO_wayYou_will_CatchMe!!!!!!']:
             try:
                 getattr(branch, bad_block)
