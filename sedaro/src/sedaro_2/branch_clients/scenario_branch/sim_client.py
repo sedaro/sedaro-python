@@ -6,13 +6,13 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.apis.tags import jobs_api
 
-from .exceptions import NoSimResultsError, SedaroApiException
-from .results import SimulationResult
-from .settings import COMMON_API_KWARGS
-from .utils import body_from_res, parse_urllib_response, progress_bar
+from ...exceptions import NoSimResultsError, SedaroApiException
+from ...results import SimulationResult
+from ...settings import COMMON_API_KWARGS
+from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
-    from .sedaro_api_client import SedaroApiClient
+    from ...sedaro_api_client import SedaroApiClient
 
 
 class SimClient:
