@@ -39,58 +39,6 @@ class SimulationResult:
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
-    # FIXME: remove this method
-    @classmethod
-    def get_scenario_latest(
-        cls,
-        api_key: str,
-        scenario_id: int,
-        host: str = 'https://api.sedaro.com',
-        streams: Optional[List[Tuple[str, ...]]] = None
-    ):
-        '''Query latest scenario result.'''
-        from sedaro import SedaroApiClient
-
-        streams = streams or []
-        with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            simulation = cls.__get_simulation(sedaro_client, scenario_id)
-            data = sedaro_client.get_data(simulation['dataArray'], streams=streams)
-            return cls(simulation, data)
-
-    # FIXME: remove this method
-    @classmethod
-    def poll_scenario_latest(
-        cls,
-        api_key: str,
-        scenario_id: int,
-        host: str = 'https://api.sedaro.com',
-        streams: Optional[List[Tuple[str, ...]]] = None,
-        retry_interval: int = 2
-    ):
-        '''Query latest scenario result and wait for sim if it is running.'''
-        from sedaro import SedaroApiClient
-
-        streams = streams or []
-        with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            simulation = cls.__get_simulation(sedaro_client, scenario_id)
-
-            while simulation['status'] in ('PENDING', 'RUNNING'):
-                simulation = cls.__get_simulation(sedaro_client, scenario_id)
-                progress_bar(simulation['progress']['percentComplete'])
-                time.sleep(retry_interval)
-
-            return cls.get_scenario_latest(api_key, scenario_id, host=host, streams=streams)
-
-    # FIXME: remove this method
-    @staticmethod
-    def __get_simulation(client, scenario_id: int) -> dict:
-        try:
-            sim = client.get_sim_client(scenario_id)
-            return sim.get_latest()[0]
-        except IndexError:
-            raise IndexError(
-                f'Could not find any simulation results for scenario: {scenario_id}')
-
     @property
     def id(self):
         return self.__simulation['id']
