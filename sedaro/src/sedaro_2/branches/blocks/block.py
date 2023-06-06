@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 @dataclass
 class Block:
     id: str
-    _block_class_client: 'BlockType'
+    _block_type: 'BlockType'
     '''Class for interacting with all Blocks of this class type'''
 
     def __str__(self) -> str:
@@ -61,13 +61,13 @@ class Block:
         side_type = self.get_rel_field_type(key)
 
         if side_type == MANY_SIDE:
-            return [self._branch_client.block(id) for id in val]
+            return [self._branch.block(id) for id in val]
 
         if side_type == DATA_SIDE:
-            return {self._branch_client.block(id): data for id, data in val.items()}
+            return {self._branch.block(id): data for id, data in val.items()}
 
         if side_type == ONE_SIDE:
-            return self._branch_client.block(val)
+            return self._branch.block(val)
 
         raise NotImplementedError(
             f'Unsupported relationship type on "{self.data[TYPE]}", attribute: "{key}".'
@@ -76,23 +76,18 @@ class Block:
     @property
     def type(self) -> str:
         '''Name of the class of the Sedaro Block this `Block` is set up to interact with'''
-        return self._block_class_client.type
+        return self._block_type.type
 
     @property
     def data(self) -> Dict:
         '''The properties of the corresponding Sedaro Block as a dictionary'''
         self.enforce_still_exists()
-        return self._branch_client.data[BLOCKS][self.id]
+        return self._branch.data[BLOCKS][self.id]
 
     @property
-    def _branch_client(self) -> 'Branch':
+    def _branch(self) -> 'Branch':
         '''The `Branch` this `Block` is connected to'''
-        return self._block_class_client._branch_client
-
-    @property
-    def _sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `Block` was accessed through'''
-        return self._branch_client._sedaro_client
+        return self._block_type._branch
 
     def check_still_exists(self) -> bool:
         """Checks whether the Sedaro Block this `Block` references still exists.
@@ -100,7 +95,7 @@ class Block:
         Returns:
             bool: indication of whether or not the referenced Sedaro Block still exists
         """
-        return self.id in self._branch_client.data[BLOCKS]
+        return self.id in self._branch.data[BLOCKS]
 
     def enforce_still_exists(self) -> None:
         """Raises and error if the Sedaro Block this `Block` references no longer exists.
@@ -129,11 +124,11 @@ class Block:
         if 'name' in new_block:
             new_block['name'] = f'{new_block["name"]} (clone)'
 
-        res = self._branch_client.crud(
+        res = self._branch.crud(
             blocks=[new_block]
         )
 
-        return self._branch_client.block(res[CRUD][BLOCKS][0])
+        return self._branch.block(res[CRUD][BLOCKS][0])
 
     def update(self, **fields) -> 'Block':
         """Update attributes of the corresponding Sedaro Block
@@ -154,7 +149,7 @@ class Block:
             raise ValueError(f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
 
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
-        self._branch_client.crud(blocks=[{**self.data, **fields}])
+        self._branch.crud(blocks=[{**self.data, **fields}])
         return self
 
     def delete(self) -> str:
@@ -167,7 +162,7 @@ class Block:
             str: `id` of the deleted Sedaro Block
         """
         self.enforce_still_exists()
-        self._branch_client.crud(delete=[self.id])
+        self._branch.crud(delete=[self.id])
         return self.id
 
     def is_rel_field(self, field: str) -> bool:
@@ -182,7 +177,7 @@ class Block:
         Returns:
             bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
         """
-        return field in self._branch_client.data[RELATIONSHIPS][self.data[TYPE]]
+        return field in self._branch.data[RELATIONSHIPS][self.data[TYPE]]
 
     def get_rel_field_type(self, field: str) -> str:
         """Get the type of relationship of the field. Note: first call `is_rel_field` if you need to confirm `field` is
@@ -202,7 +197,7 @@ class Block:
             raise TypeError(
                 f'The given field "{field}" is not a relationship field on "{self.data[TYPE]}".')
 
-        return self._branch_client.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
+        return self._branch.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
 
 
 # ------ helper function and vars for this file only ------

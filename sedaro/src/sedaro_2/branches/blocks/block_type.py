@@ -18,17 +18,17 @@ class BlockType:
     '''Class for getting `Block`s associated with Sedaro Blocks of this class type'''
     type: str
     '''Name of the Sedaro Block class this `BlockType` is set up to interact with'''
-    _branch_client: 'Branch'
+    _branch: 'Branch'
     '''The `Branch` this `BlockType` is connected to'''
 
     def __str__(self) -> str:
-        return f'{self.__class__.__name__}({self.type}, branch={self._branch_client.id})'
+        return f'{self.__class__.__name__}({self.type}, branch={self._branch.id})'
 
     def __repr__(self):
         return self.__str__()
 
     def __hash__(self):
-        return hash(f'{self.__class__.__name__}-{self.type}-{self._branch_client.id}')
+        return hash(f'{self.__class__.__name__}-{self.type}-{self._branch.id}')
 
     def create(self, **fields) -> Block:
         """Creates a Sedaro Block of the given type in the corresponding Branch. Note that if 'id' or 'type' are passed
@@ -49,7 +49,7 @@ class BlockType:
         for kwarg in [ID, TYPE]:
             fields.pop(kwarg, None)
 
-        res = self._branch_client.crud(blocks=[{**fields, **{TYPE: self.type}}])
+        res = self._branch.crud(blocks=[{**fields, **{TYPE: self.type}}])
         block_id = res[CRUD][BLOCKS][0]
         return Block(block_id, self)
 
@@ -65,7 +65,7 @@ class BlockType:
         Returns:
             Block: a client to interact with the corresponding Sedaro Block
         """
-        enforce_id_in_branch(self._branch_client, id)
+        enforce_id_in_branch(self._branch, id)
 
         # in addition to checks in ^^^ also make sure is the correct type for this BlockType
         if id not in self.get_all_ids():
@@ -81,7 +81,7 @@ class BlockType:
         Returns:
             List[str]: list of `id`s
         """
-        index = self._branch_client.data[INDEX]
+        index = self._branch.data[INDEX]
 
         res = []
 
