@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 from sedaro_2 import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                       SedaroSeries, SimulationResult)
-from sedaro_2.exceptions import SedaroApiException
+from sedaro_2.exceptions import NoSimResultsError
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -16,7 +16,7 @@ def _make_sure_wildfire_terminated():
     try:
         results = sim.latest()
         assert results.status == 'TERMINATED'
-    except (SedaroApiException, AssertionError):
+    except (NoSimResultsError, AssertionError):
         sim.start()
         sim.terminate(latest=True)
 
