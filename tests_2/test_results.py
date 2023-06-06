@@ -12,7 +12,6 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 def _make_sure_wildfire_terminated():
     sim = sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation
-    latest = sim.get_latest()
 
     try:
         results = sim.latest()
