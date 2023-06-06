@@ -162,3 +162,30 @@ class SimClient:
         latest = self.latest_raw(err_if_empty=True)
         data = self.__get_data(latest['dataArray'], streams=streams or [])
         return SimulationResult(latest, data)
+
+    def poll_latest(
+        self,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        retry_interval: int = 2
+    ) -> SimulationResult:
+        """Query latest scenario result and wait for sim if it is running.
+
+        Args:
+            streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
+            retry_interval (int, optional): Seconds between retries. Defaults to 2.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
+        """
+        latest_raw = self.latest_raw(err_if_empty=True)
+        options = {'PENDING', 'RUNNING'}
+
+        while latest_raw['status'] in options:
+            progress_bar(latest_raw['progress']['percentComplete'])
+            latest_raw = self.latest_raw()
+            time.sleep(retry_interval)
+
+        return self.latest(streams=streams or [])
