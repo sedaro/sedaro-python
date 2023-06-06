@@ -6,7 +6,7 @@ from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from .branch_clients import AgentTemplateBranch, ScenarioBranch
+from .branches import AgentTemplateBranch, ScenarioBranch
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
 
