@@ -23,6 +23,7 @@ class SimulationResult:
             - from_file
         '''
         self.__simulation = {
+            'id': simulation['id'],
             'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
@@ -89,6 +90,10 @@ class SimulationResult:
         except IndexError:
             raise IndexError(
                 f'Could not find any simulation results for scenario: {scenario_id}')
+
+    @property
+    def id(self):
+        return self.__simulation['id']
 
     @property
     def templated_agents(self) -> List[str]:
