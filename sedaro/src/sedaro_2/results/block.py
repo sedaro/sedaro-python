@@ -3,8 +3,8 @@ import json
 from pathlib import Path
 from typing import Generator, Union
 
-from sedaro.results.series import SedaroSeries
-from sedaro.results.utils import ENGINE_EXPANSION, HFILL, hfill
+from .series import SedaroSeries
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
 class SedaroBlockResult:

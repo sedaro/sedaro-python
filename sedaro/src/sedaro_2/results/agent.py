@@ -5,8 +5,8 @@ from typing import Generator, List, Union
 
 from pydash import merge
 
-from sedaro.results.block import SedaroBlockResult
-from sedaro.results.utils import ENGINE_EXPANSION, HFILL, hfill
+from .block import SedaroBlockResult
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
 class SedaroAgentResult:
