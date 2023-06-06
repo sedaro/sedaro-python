@@ -5,7 +5,7 @@ from sedaro_2.branch_clients.blocks import Block, BlockType
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
-# TODO: if update these lists, also update type hints of BranchClient
+# TODO: if update these lists, also update type hints of respective AgentTemplateBranch
 agent_template_blocks = [
     'AngularVelocitySensor',
     'Antenna',
@@ -100,7 +100,7 @@ agent_template_blocks = [
     'VectorTrackingSurface'
 ]
 
-# TODO: if update these lists, also update type hints of BranchClient
+# TODO: if update these lists, also update type hints of ScenarioBranch
 scenario_blocks = [
     'Agent',
     'AgentGroup',
@@ -109,7 +109,7 @@ scenario_blocks = [
 ]
 
 
-def test_block_class_client_options():
+def test_block_type_options():
     for get_method, branch_id, expected_block_names in [
         [sedaro.agent_template_branch, SIMPLESAT_A_T_ID, agent_template_blocks],
         [sedaro.scenario_branch, SIMPLESAT_SCENARIO_ID, scenario_blocks]

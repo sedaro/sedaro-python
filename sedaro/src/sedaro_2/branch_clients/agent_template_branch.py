@@ -5,13 +5,13 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ..settings import VEHICLE_TEMPLATE
 from .blocks import BlockType
-from .branch_client import BranchClient
+from .branch_client import Branch
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
 
 
-class AgentTemplateBranch(BranchClient):
+class AgentTemplateBranch(Branch):
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)

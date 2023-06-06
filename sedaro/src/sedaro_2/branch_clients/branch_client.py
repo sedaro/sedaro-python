@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
 
 
-class BranchClient:
+class Branch:
     data: 'Dict[str, Any]'
     id: 'str'
     """Branch `id`"""
@@ -25,7 +25,7 @@ class BranchClient:
         self._sedaro = sedaro
 
     def __str__(self):
-        return f'BranchClient(id: {self.id}, name: "{self.name}")'
+        return f'{self.__class__.__name__}(id: {self.id}, name: "{self.name}")'
 
     def __repr__(self):
         return self.__str__()

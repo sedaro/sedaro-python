@@ -11,7 +11,7 @@ from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS
 
 if TYPE_CHECKING:
-    from .branch_clients.branch_client import BranchClient
+    from .branch_clients.branch_client import Branch
 
 
 def parse_urllib_response(response: HTTPResponse) -> Dict:
@@ -33,11 +33,11 @@ def check_for_res_error(response: ApiResponse):
         raise SedaroApiException(status=err['status'], reason=f"{err['code']}: {err['message']}")
 
 
-def enforce_id_in_branch(branch_client: 'BranchClient', id: str):
-    """Makes sure `id` exists in the Sedaro Branch associated with the `BranchClient`
+def enforce_id_in_branch(branch_client: 'Branch', id: str):
+    """Makes sure `id` exists in the Sedaro Branch associated with the `Branch`
 
     Args:
-        branch_client (BranchClient): the `BranchClient` associated with the Sedaro Branch to check for the `id`
+        branch_client (Branch): the `Branch` associated with the Sedaro Branch to check for the `id`
         id (str): `id` of the Sedaro Block to sanitize and check
 
     Raises:

@@ -10,7 +10,7 @@ from .block import Block
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
-    from ..branch_client import BranchClient
+    from ..branch_client import Branch
 
 
 @dataclass
@@ -18,8 +18,8 @@ class BlockType:
     '''Class for getting `Block`s associated with Sedaro Blocks of this class type'''
     type: str
     '''Name of the Sedaro Block class this `BlockType` is set up to interact with'''
-    _branch_client: 'BranchClient'
-    '''The `BranchClient` this `BlockType` is connected to'''
+    _branch_client: 'Branch'
+    '''The `Branch` this `BlockType` is connected to'''
 
     def __str__(self) -> str:
         return f'{self.__class__.__name__}({self.type}, branch={self._branch_client.id})'

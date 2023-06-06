@@ -10,7 +10,7 @@ from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
-    from ..branch_client import BranchClient
+    from ..branch_client import Branch
     from .block_type import BlockType
 
 
@@ -85,8 +85,8 @@ class Block:
         return self._branch_client.data[BLOCKS][self.id]
 
     @property
-    def _branch_client(self) -> 'BranchClient':
-        '''The `BranchClient` this `Block` is connected to'''
+    def _branch_client(self) -> 'Branch':
+        '''The `Branch` this `Block` is connected to'''
         return self._block_class_client._branch_client
 
     @property
