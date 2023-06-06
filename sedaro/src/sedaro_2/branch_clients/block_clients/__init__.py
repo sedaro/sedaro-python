@@ -1,2 +1,2 @@
 from .block import Block
-from .block_class_client import BlockType
+from .block_type import BlockType

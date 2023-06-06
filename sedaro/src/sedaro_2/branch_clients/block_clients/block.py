@@ -11,7 +11,7 @@ from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
     from ..branch_client import BranchClient
-    from .block_class_client import BlockType
+    from .block_type import BlockType
 
 
 @dataclass
