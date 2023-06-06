@@ -32,5 +32,5 @@ class NoBlockFoundError(SedaroException):
     pass
 
 
-class NoResultsError(SedaroApiException):
+class NoSimResultsError(SedaroApiException):
     pass
