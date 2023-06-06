@@ -23,7 +23,7 @@ class SimulationResult:
             - from_file
         '''
         self.__simulation = {
-            'id': simulation['id'],
+            'id': simulation.get('id', None),
             'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
