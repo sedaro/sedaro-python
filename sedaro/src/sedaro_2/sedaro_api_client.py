@@ -21,13 +21,6 @@ class SedaroApiClient(ApiClient):
         self._api_key = api_key
         self._api_host = host
 
-        # FIXME: remove this init when can
-        return super().__init__(
-            configuration=Configuration(host=host),
-            header_name='X_API_KEY',
-            header_value=api_key
-        )
-
     @contextmanager
     def api_client(self) -> Generator[ApiClient, Any, None]:
         """Instantiate ApiClient from sedaro_base_client
