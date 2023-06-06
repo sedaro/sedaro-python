@@ -74,25 +74,6 @@ class SedaroApiClient(ApiClient):
         """
         return ScenarioBranch(self.__get_branch(branch_id), self)
 
-    # FIXME: delete this method
-    def get_branch(self, id: int) -> BranchClient:
-        """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
-        be accessible to this `SedaroApiClient` via the `api_key`.
-
-        Args:
-            id (int): the id of the desired Sedaro Branch
-
-        Returns:
-            BranchClient: A `BranchClient` object used to interact with the data attached to the corresponding Sedaro
-            Branch.
-        """
-        branches_api_instance = branches_api.BranchesApi(self)
-        # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
-        # return BranchClient(res.body, self)
-        res = branches_api_instance.get_branch(
-            path_params={'branchId': id}, **COMMON_API_KWARGS)
-        return BranchClient(body_from_res(res), self)
-
     # FIXME: remove this method
     def get_data(self,
                  id,
