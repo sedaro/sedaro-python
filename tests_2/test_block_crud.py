@@ -159,11 +159,11 @@ def test_block_client_equality():
     branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
 
     subsystem = branch.Subsystem.create(
-        name='One subsystem to rule them all',
+        name=f'One subsystem to rule them all {_random_str()}',
     )
 
     subsystem_2 = subsystem.update(
-        name='One subsystem to find them')
+        name=f'One subsystem to find them {_random_str()}')
 
     subsystem_3 = branch.Subsystem.get(subsystem.id)
 
@@ -177,7 +177,7 @@ def test_block_client_clone():
 
     # a Block that requires a unique "name" attribute
     subsystem = branch.Subsystem.create(
-        name='Custom Subsystem',
+        name=f'Custom Subsystem {_random_str()}',
     )
 
     subsystem_clone = subsystem.clone()
