@@ -88,7 +88,7 @@ class BranchClient:
 
         return res
 
-    def get_block(self, id: Union[str, int]):
+    def block(self, id: Union[str, int]):
         """Creates a `BlockClient` associated with the Sedaro Block of the given `id`.
 
         Args:

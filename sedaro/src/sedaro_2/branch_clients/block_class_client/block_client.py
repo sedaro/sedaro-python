@@ -62,13 +62,13 @@ class BlockClient:
         side_type = self.get_rel_field_type(key)
 
         if side_type == MANY_SIDE:
-            return [self._branch_client.get_block(id) for id in val]
+            return [self._branch_client.block(id) for id in val]
 
         if side_type == DATA_SIDE:
-            return {self._branch_client.get_block(id): data for id, data in val.items()}
+            return {self._branch_client.block(id): data for id, data in val.items()}
 
         if side_type == ONE_SIDE:
-            return self._branch_client.get_block(val)
+            return self._branch_client.block(val)
 
         raise NotImplementedError(
             f'Unsupported relationship type on "{self.data[TYPE]}", attribute: "{key}".'
@@ -134,7 +134,7 @@ class BlockClient:
             blocks=[new_block]
         )
 
-        return self._branch_client.get_block(res[CRUD][BLOCKS][0])
+        return self._branch_client.block(res[CRUD][BLOCKS][0])
 
     def update(self, **fields) -> 'BlockClient':
         """Update attributes of the corresponding Sedaro Block
