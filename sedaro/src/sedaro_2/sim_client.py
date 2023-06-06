@@ -130,7 +130,6 @@ class SimClient:
 
     def latest(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         '''Query latest scenario result.'''
-        streams = streams or []
         try:
             latest = self.get_latest()[0]
         except IndexError:
@@ -139,5 +138,5 @@ class SimClient:
                 reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
             )
 
-        data = self.__get_data(latest['dataArray'], streams=streams)
+        data = self.__get_data(latest['dataArray'], streams=streams or [])
         return SimulationResult(latest, data)
