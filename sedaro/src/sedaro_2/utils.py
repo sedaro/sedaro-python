@@ -33,17 +33,17 @@ def check_for_res_error(response: ApiResponse):
         raise SedaroApiException(status=err['status'], reason=f"{err['code']}: {err['message']}")
 
 
-def enforce_id_in_branch(branch_client: 'Branch', id: str):
+def enforce_id_in_branch(branch: 'Branch', id: str):
     """Makes sure `id` exists in the Sedaro Branch associated with the `Branch`
 
     Args:
-        branch_client (Branch): the `Branch` associated with the Sedaro Branch to check for the `id`
+        branch (Branch): the `Branch` associated with the Sedaro Branch to check for the `id`
         id (str): `id` of the Sedaro Block to sanitize and check
 
     Raises:
         KeyError: if no corresponding Block exists in the Branch
     """
-    if id not in branch_client.data[BLOCKS]:
+    if id not in branch.data[BLOCKS]:
         raise KeyError(f'There is no Block with id "{id}" in this Branch.')
 
 
