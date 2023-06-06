@@ -146,6 +146,18 @@ class SimClient:
         return _response
 
     def latest(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+        """Query latest scenario result.
+
+        Args:
+            streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+            SedaroApiException: if no simulation has completed.
+
+        Returns:
+            SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
+        """
         '''Query latest scenario result.'''
         latest = self.latest_raw(err_if_empty=True)
         data = self.__get_data(latest['dataArray'], streams=streams or [])
