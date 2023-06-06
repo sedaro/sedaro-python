@@ -91,7 +91,7 @@ class SimClient:
             raise ValueError('Cannot set both "job_id" and "latest".')
 
         if latest:
-            job_id = self.get_latest()[0]['id']
+            job_id = self.latest_raw(err_if_empty=True)['id']
 
         with self.__jobs_client() as jobs:
 
@@ -147,13 +147,6 @@ class SimClient:
 
     def latest(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         '''Query latest scenario result.'''
-        try:
-            latest = self.get_latest()[0]
-        except IndexError:
-            raise NoSimResultsError(
-                status=404,
-                reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
-            )
-
+        latest = self.latest_raw(err_if_empty=True)
         data = self.__get_data(latest['dataArray'], streams=streams or [])
         return SimulationResult(latest, data)
