@@ -1,7 +1,6 @@
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
-from sedaro_2.branch_clients.block_class_client import BlockClassClient
-from sedaro_2.branch_clients.block_class_client.block_client import BlockClient
+from sedaro_2.branch_clients.block_clients import BlockClassClient, BlockClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 

@@ -4,7 +4,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import VEHICLE_TEMPLATE
-from .block_class_client import BlockClassClient
+from .block_clients import BlockClassClient
 from .branch_client import BranchClient
 
 if TYPE_CHECKING:

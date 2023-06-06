@@ -5,7 +5,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ...settings import SCENARIO_TEMPLATE
 from ...sim_client import SimClient
-from ..block_class_client import BlockClassClient
+from ..block_clients import BlockClassClient
 from ..branch_client import BranchClient
 
 if TYPE_CHECKING:

@@ -5,7 +5,7 @@ import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
 from sedaro_2.branch_clients import AgentTemplateBranch, ScenarioBranch
-from sedaro_2.branch_clients.block_class_client.block_client import BlockClient
+from sedaro_2.branch_clients.block_clients import BlockClient
 from sedaro_2.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro_2.settings import ID
 
