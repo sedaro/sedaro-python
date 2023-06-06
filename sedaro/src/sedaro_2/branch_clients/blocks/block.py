@@ -10,7 +10,7 @@ from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
-    from ..branch_client import Branch
+    from ..branch import Branch
     from .block_type import BlockType
 
 

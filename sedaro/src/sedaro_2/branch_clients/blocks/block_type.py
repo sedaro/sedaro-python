@@ -10,7 +10,7 @@ from .block import Block
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
-    from ..branch_client import Branch
+    from ..branch import Branch
 
 
 @dataclass

@@ -5,7 +5,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ..settings import VEHICLE_TEMPLATE
 from .blocks import BlockType
-from .branch_client import Branch
+from .branch import Branch
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient

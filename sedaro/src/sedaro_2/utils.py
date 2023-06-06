@@ -11,7 +11,7 @@ from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS
 
 if TYPE_CHECKING:
-    from .branch_clients.branch_client import Branch
+    from .branch_clients.branch import Branch
 
 
 def parse_urllib_response(response: HTTPResponse) -> Dict:
