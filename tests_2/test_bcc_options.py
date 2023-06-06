@@ -110,30 +110,30 @@ scenario_blocks = [
 
 
 def test_block_class_client_options():
-    for get_method, branch_id, blocks in [
+    for get_method, branch_id, expected_block_names in [
         [sedaro.agent_template_branch, SIMPLESAT_A_T_ID, agent_template_blocks],
         [sedaro.scenario_branch, SIMPLESAT_SCENARIO_ID, scenario_blocks]
     ]:
         branch = get_method(branch_id)
-        branch_blocks = sorted(branch.data['_block_names'])
+        branch_block_names = sorted(branch.data['_block_names'])
         # CHECK: lists above are correct
-        assert blocks == branch_blocks
+        assert expected_block_names == branch_block_names
 
-        for block in branch_blocks:
-            block_class_client: BlockType = getattr(branch, block)
+        for block_name in branch_block_names:
+            block_type: BlockType = getattr(branch, block_name)
 
             # CHECK: is a Block Class Client
-            assert isinstance(block_class_client, BlockType)
+            assert isinstance(block_type, BlockType)
 
             # CHECK: can use create method
             try:
-                block_class_client.create()
+                block_type.create()
             except Exception as e:
                 assert isinstance(e, ValueError)
                 assert 'Must provide fields' in str(e)
 
             # CHECK: can use get_all method
-            all_blocks_of_type = block_class_client.get_all()
+            all_blocks_of_type = block_type.get_all()
             assert type(all_blocks_of_type) == list
             if len(all_blocks_of_type):
                 assert isinstance(all_blocks_of_type[0], Block)
