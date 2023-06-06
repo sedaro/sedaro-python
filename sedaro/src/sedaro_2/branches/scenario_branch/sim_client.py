@@ -15,11 +15,11 @@ if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
 
 
-class SimClient:
+class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
 
     def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
-        """Instantiate a Sedaro SimClient
+        """Instantiate a Sedaro `Simulation`
 
         Args:
             sedaro (`SedaroApiClient`): the `SedaroApiClient`
@@ -34,7 +34,7 @@ class SimClient:
             yield jobs_api.JobsApi(api)
 
     def start(self) -> ApiResponse:
-        """Starts simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated with.
+        """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
 
         Returns:
             ApiResponse: response from the start simulation (job) request
@@ -47,8 +47,8 @@ class SimClient:
         return body_from_res(res)
 
     def latest_raw(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
-        """Gets the latest simulation (job) corresponding to the Sedaro Scenario Branch id that this `SimClient` was
-        instantiated with. This can return a response even before the simulation is done.
+        """Gets the latest simulation (job) corresponding to the respective Sedaro Scenario Branch id. This can return a
+        response even before the simulation is done.
 
         Args:
             err_if_empty (bool, optional): Triggers raising an error if no simulation results and `err_if_empty`.\
@@ -77,8 +77,8 @@ class SimClient:
         return None
 
     def terminate(self, job_id: int = None, latest: bool = False) -> ApiResponse:
-        """Terminate simulation corresponding to the Sedaro Scenario Branch id that this `SimClient` was instantiated
-        with and the passed in `job_id`.
+        """Terminate simulation corresponding to the respective Sedaro Scenario Branch id. Must provide either a
+        `job_id` or set `latest` to `True`.
 
         Args:
             job_id (`int`, optional): id of the simulation (job) to termiante.

@@ -6,7 +6,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 from ...settings import SCENARIO_TEMPLATE
 from ..blocks import BlockType
 from ..branch import Branch
-from .sim_client import SimClient
+from .sim_client import Simulation
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
@@ -20,15 +20,13 @@ class ScenarioBranch(Branch):
             raise TypeError(f'Branch must be of type {SCENARIO_TEMPLATE} not {type_}')
 
     @property
-    def simulation(self) -> SimClient:
-        """A `SimClient` to interact with the simulation connected to this Sedaro scenario `Branch`.
+    def simulation(self) -> 'Simulation':
+        """A `Simulation` instance to interact with the simulation connected to this Sedaro scenario `Branch`.
 
         Returns:
-            SimClient: a `SimClient`
+            Simulation: a `Simulation`
         """
-        # update methods inside sim client to call the context manager inside rather than expecting context manager
-        # to already be instantiated
-        return SimClient(self._sedaro, self.id)
+        return Simulation(self._sedaro, self.id)
 
     # ==============================================================================================================
     # For intellisense
