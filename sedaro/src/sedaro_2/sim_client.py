@@ -9,7 +9,7 @@ from sedaro_base_client.apis.tags import jobs_api
 from .exceptions import NoSimResultsError, SedaroApiException
 from .results import SimulationResult
 from .settings import COMMON_API_KWARGS
-from .utils import body_from_res, parse_urllib_response
+from .utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient

@@ -55,6 +55,13 @@ def body_from_res(res):
     return parse_urllib_response(res.response) if COMMON_API_KWARGS['skip_deserialization'] else res.body
 
 
+def progress_bar(progress):
+    if progress is not None:
+        blocks = int(progress * 50 / 100)
+        bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
+        print(bar, end='\r')
+
+
 # ======================================================================================================================
 # Below were used in the past and may be helpful in the future
 # ======================================================================================================================
