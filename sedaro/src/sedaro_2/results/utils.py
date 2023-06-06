@@ -28,13 +28,6 @@ def hfill(char="-", len=HFILL):
     print(char * len)
 
 
-def progress_bar(progress):
-    if progress is not None:
-        blocks = int(progress * 50 / 100)
-        bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
-        print(bar, end='\r')
-
-
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}

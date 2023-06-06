@@ -5,10 +5,9 @@ import json
 from pathlib import Path
 from typing import List, Union
 
-from sedaro.results.agent import SedaroAgentResult
-from sedaro.results.utils import (HFILL, STATUS_ICON_MAP,
-                                  _get_agent_id_name_map, _restructure_data,
-                                  hfill, progress_bar)
+from .agent import SedaroAgentResult
+from .utils import (HFILL, STATUS_ICON_MAP, _get_agent_id_name_map,
+                    _restructure_data, hfill)
 
 
 class SimulationResult:
