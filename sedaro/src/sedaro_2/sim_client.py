@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple
 from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.apis.tags import jobs_api
 
-from .exceptions import SedaroApiException
+from .exceptions import NoSimResultsError, SedaroApiException
 from .results import SimulationResult
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res, parse_urllib_response
@@ -134,7 +134,7 @@ class SimClient:
         try:
             latest = self.get_latest()[0]
         except IndexError:
-            raise SedaroApiException(
+            raise NoSimResultsError(
                 status=404,
                 reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
             )
