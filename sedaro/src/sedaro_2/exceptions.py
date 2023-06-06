@@ -30,3 +30,7 @@ class NonexistantBlockError(SedaroException):
 
 class NoBlockFoundError(SedaroException):
     pass
+
+
+class NoResultsError(SedaroApiException):
+    pass
