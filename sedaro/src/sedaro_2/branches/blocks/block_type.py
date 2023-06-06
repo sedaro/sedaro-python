@@ -30,11 +30,6 @@ class BlockType:
     def __hash__(self):
         return hash(f'{self.__class__.__name__}-{self.type}-{self._branch_client.id}')
 
-    @property
-    def _sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `BlockType` was accessed through'''
-        return self._branch_client._sedaro_client
-
     def create(self, **fields) -> Block:
         """Creates a Sedaro Block of the given type in the corresponding Branch. Note that if 'id' or 'type' are passed
         as kwargs, they will be ignored.
