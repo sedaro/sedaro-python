@@ -5,7 +5,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ..settings import BLOCKS, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
-from .block_clients import Block, BlockClassClient
+from .block_clients import Block, BlockType
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
@@ -30,14 +30,14 @@ class BranchClient:
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_type: str) -> BlockClassClient:
+    def __getattr__(self, block_type: str) -> BlockType:
 
         # -- check block type
         if block_type not in self.data['_supers']:
             raise AttributeError(
-                f'Unable to create a "BlockClassClient" from string: "{block_type}". Please check the name and try again.')
+                f'Unable to create a "{BlockType.__name__}" from string: "{block_type}". Please check the name and try again.')
 
-        return BlockClassClient(block_type, self)
+        return BlockType(block_type, self)
 
     def crud(
         self,

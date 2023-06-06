@@ -4,7 +4,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import VEHICLE_TEMPLATE
-from .block_clients import BlockClassClient
+from .block_clients import BlockType
 from .branch_client import BranchClient
 
 if TYPE_CHECKING:
@@ -23,185 +23,185 @@ class AgentTemplateBranch(BranchClient):
     # ==============================================================================================================
 
     # AGENT TEMPLATE
-    AngularVelocitySensor: BlockClassClient
+    AngularVelocitySensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Antenna: BlockClassClient
+    Antenna: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    AveragingAlgorithm: BlockClassClient
+    AveragingAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Battery: BlockClassClient
+    Battery: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    BatteryCell: BlockClassClient
+    BatteryCell: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    BatteryPack: BlockClassClient
+    BatteryPack: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    BodyFrameVector: BlockClassClient
+    BodyFrameVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    BodyInFovCondition: BlockClassClient
+    BodyInFovCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    BusRegulator: BlockClassClient
+    BusRegulator: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    CelestialTarget: BlockClassClient
+    CelestialTarget: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    CelestialVector: BlockClassClient
+    CelestialVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    CircularFieldOfView: BlockClassClient
+    CircularFieldOfView: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Component: BlockClassClient
+    Component: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ComponentToScalarCondition: BlockClassClient
+    ComponentToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    CompoundCondition: BlockClassClient
+    CompoundCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Cooler: BlockClassClient
+    Cooler: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    CooperativeTransmitInterface: BlockClassClient
+    CooperativeTransmitInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DataBus: BlockClassClient
+    DataBus: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DataInterface: BlockClassClient
+    DataInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DataMode: BlockClassClient
+    DataMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DataStorage: BlockClassClient
+    DataStorage: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DataType: BlockClassClient
+    DataType: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    DirectionSensor: BlockClassClient
+    DirectionSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    EkfAlgorithm: BlockClassClient
+    EkfAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    FixedSurface: BlockClassClient
+    FixedSurface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    FuelReservoir: BlockClassClient
+    FuelReservoir: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    FullyRegDetPowerProcessor: BlockClassClient
+    FullyRegDetPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    GpsAlgorithm: BlockClassClient
+    GpsAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    GroundTarget: BlockClassClient
+    GroundTarget: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Heater: BlockClassClient
+    Heater: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    InternalDataInterface: BlockClassClient
+    InternalDataInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    LaserCommModule: BlockClassClient
+    LaserCommModule: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    LoadState: BlockClassClient
+    LoadState: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    LocalVector: BlockClassClient
+    LocalVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    LockPointingMode: BlockClassClient
+    LockPointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Magnetorquer: BlockClassClient
+    Magnetorquer: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    MaxAlignPointingMode: BlockClassClient
+    MaxAlignPointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    MekfAlgorithm: BlockClassClient
+    MekfAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Modem: BlockClassClient
+    Modem: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    OperationalMode: BlockClassClient
+    OperationalMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    OpticalAttitudeSensor: BlockClassClient
+    OpticalAttitudeSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Orbit: BlockClassClient
+    Orbit: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PassivePointingMode: BlockClassClient
+    PassivePointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PassiveTransmitInterface: BlockClassClient
+    PassiveTransmitInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PidAlgorithm: BlockClassClient
+    PidAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PositionSensor: BlockClassClient
+    PositionSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PowerLoad: BlockClassClient
+    PowerLoad: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    PowerProcessor: BlockClassClient
+    PowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    QuasiRegDetPowerProcessor: BlockClassClient
+    QuasiRegDetPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ReactionWheel: BlockClassClient
+    ReactionWheel: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ReceiveInterface: BlockClassClient
+    ReceiveInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    RectangularFieldOfView: BlockClassClient
+    RectangularFieldOfView: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ResistanceLoad: BlockClassClient
+    ResistanceLoad: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SameTargetMultiCondition: BlockClassClient
+    SameTargetMultiCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Satellite: BlockClassClient
+    Satellite: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SatelliteToSatelliteCondition: BlockClassClient
+    SatelliteToSatelliteCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SatelliteToScalarCondition: BlockClassClient
+    SatelliteToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SatelliteToTargetCondition: BlockClassClient
+    SatelliteToTargetCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SingleConvHybridPowerProcessor: BlockClassClient
+    SingleConvHybridPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SingleConvMpptPowerProcessor: BlockClassClient
+    SingleConvMpptPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SlidingModeAlgorithm: BlockClassClient
+    SlidingModeAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SolarArray: BlockClassClient
+    SolarArray: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SolarCell: BlockClassClient
+    SolarCell: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SolarPanel: BlockClassClient
+    SolarPanel: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SpaceTarget: BlockClassClient
+    SpaceTarget: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SphericalFuelTank: BlockClassClient
+    SphericalFuelTank: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SpherocylinderFuelTank: BlockClassClient
+    SpherocylinderFuelTank: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    StaticThrustControlAlgorithm: BlockClassClient
+    StaticThrustControlAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Subsystem: BlockClassClient
+    Subsystem: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SunTrackingSurface: BlockClassClient
+    SunTrackingSurface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    SurfaceMaterial: BlockClassClient
+    SurfaceMaterial: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroup: BlockClassClient
+    TargetGroup: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroupInFovCondition: BlockClassClient
+    TargetGroupInFovCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroupToSatelliteCondition: BlockClassClient
+    TargetGroupToSatelliteCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroupToScalarCondition: BlockClassClient
+    TargetGroupToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroupToTargetCondition: BlockClassClient
+    TargetGroupToTargetCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetGroupVector: BlockClassClient
+    TargetGroupVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetInFovCondition: BlockClassClient
+    TargetInFovCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetToScalarCondition: BlockClassClient
+    TargetToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetToTargetCondition: BlockClassClient
+    TargetToTargetCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TargetVector: BlockClassClient
+    TargetVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TempControllerState: BlockClassClient
+    TempControllerState: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ThermalInterface: BlockClassClient
+    ThermalInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    ThermalInterfaceMaterial: BlockClassClient
+    ThermalInterfaceMaterial: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    Thruster: BlockClassClient
+    Thruster: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TimeCondition: BlockClassClient
+    TimeCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TriadAlgorithm: BlockClassClient
+    TriadAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    TwoConvMpptPowerProcessor: BlockClassClient
+    TwoConvMpptPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    VectorInFovCondition: BlockClassClient
+    VectorInFovCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    VectorSensor: BlockClassClient
+    VectorSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
-    VectorTrackingSurface: BlockClassClient
+    VectorTrackingSurface: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""

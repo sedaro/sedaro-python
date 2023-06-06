@@ -1,6 +1,6 @@
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
-from sedaro_2.branch_clients.block_clients import Block, BlockClassClient
+from sedaro_2.branch_clients.block_clients import Block, BlockType
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -120,10 +120,10 @@ def test_block_class_client_options():
         assert blocks == branch_blocks
 
         for block in branch_blocks:
-            block_class_client: BlockClassClient = getattr(branch, block)
+            block_class_client: BlockType = getattr(branch, block)
 
             # CHECK: is a Block Class Client
-            assert isinstance(block_class_client, BlockClassClient)
+            assert isinstance(block_class_client, BlockType)
 
             # CHECK: can use create method
             try:
@@ -144,7 +144,7 @@ def test_block_class_client_options():
                 getattr(branch, bad_block)
             except Exception as e:
                 assert isinstance(e, AttributeError)
-                assert f'Unable to create a "BlockClassClient" from string: "{bad_block}".' in str(e)
+                assert f'Unable to create a "{BlockType.__name__}" from string: "{bad_block}".' in str(e)
 
 
 def run_tests():

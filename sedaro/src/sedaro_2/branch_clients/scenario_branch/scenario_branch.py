@@ -4,7 +4,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
 from ...settings import SCENARIO_TEMPLATE
-from ..block_clients import BlockClassClient
+from ..block_clients import BlockType
 from ..branch_client import BranchClient
 from .sim_client import SimClient
 
@@ -35,11 +35,11 @@ class ScenarioBranch(BranchClient):
     # ==============================================================================================================
 
     # SCENARIO
-    Agent: BlockClassClient
+    Agent: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
-    AgentGroup: BlockClassClient
+    AgentGroup: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
-    ClockConfig: BlockClassClient
+    ClockConfig: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
-    Orbit: BlockClassClient
+    Orbit: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
