@@ -1,6 +1,5 @@
-import json
 from contextlib import contextmanager
-from typing import Any, Dict, Generator, List, Optional, Tuple
+from typing import Any, Dict, Generator
 
 from sedaro_2.raw_request import RawRequest
 from sedaro_base_client import Configuration
@@ -8,10 +7,8 @@ from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
 from .branch_clients import AgentTemplateBranch, ScenarioBranch
-from .exceptions import SedaroApiException
 from .settings import COMMON_API_KWARGS
-from .sim_client import SimClient
-from .utils import body_from_res, parse_urllib_response
+from .utils import body_from_res
 
 
 class SedaroApiClient(ApiClient):
@@ -73,58 +70,6 @@ class SedaroApiClient(ApiClient):
             ScenarioBranch: `ScenarioBranch` client
         """
         return ScenarioBranch(self.__get_branch(branch_id), self)
-
-    # FIXME: remove this method
-    def get_data(self,
-                 id,
-                 start: float = None,
-                 stop: float = None,
-                 binWidth: float = None,
-                 limit: float = None,
-                 axisOrder: str = None,
-                 streams: Optional[List[Tuple[str, ...]]] = None
-                 ):
-        """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
-        url = f'/data/{id}?'
-        if start is not None:
-            url += f'&start={start}'
-        if stop is not None:
-            url += f'&stop={stop}'
-        if binWidth is not None:
-            url += f'&binWidth={binWidth}'
-        elif limit is not None:
-            url += f'&limit={limit}'
-        streams = streams or []
-        if len(streams) > 0:
-            encodedStreams = ','.join(['.'.join(x) for x in streams])
-            url += f'&streams={encodedStreams}'
-        if axisOrder is not None:
-            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
-            url += f'&axisOrder={axisOrder}'
-        response = self.call_api(url, 'GET')
-        _response = None
-        try:
-            _response = parse_urllib_response(response)
-            if response.status != 200:
-                raise Exception()
-        except:
-            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-            raise SedaroApiException(status=response.status, reason=reason)
-        return _response
-
-    # FIXME: remove this method
-    def get_sim_client(self, branch_id: int):
-        """Creates and returns a Sedaro SimClient
-
-        Args:
-            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs)
-
-        Returns:
-            SimClient: a Sedaro SimClient
-        """
-        return SimClient(self, branch_id)
 
     @property
     def request(self):
