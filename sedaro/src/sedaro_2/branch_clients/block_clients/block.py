@@ -1,7 +1,7 @@
 import copy
 import uuid
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict
 
 from pydash import is_empty
 
@@ -40,8 +40,8 @@ class Block:
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the `Block` to access keys on the referenced Sedaro Block. Additionally, makes
-        it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
+        """Allows for dotting into the `Block` instance to access keys on the referenced Sedaro Block. Additionally,
+        makes it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
 
         Args:
             key (str): attribute being keyed into
