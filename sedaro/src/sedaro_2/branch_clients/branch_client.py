@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, Any, Dict, List, Union
 from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
-from ..block_class_client import BlockClassClient
-from ..block_client import BlockClient
 from ..settings import BLOCKS, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
+from .block_class_client import BlockClassClient
+from .block_class_client.block_client import BlockClient
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient

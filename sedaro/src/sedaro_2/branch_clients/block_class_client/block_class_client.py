@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING, List, Union
 
 from pydash import is_empty
 
+from ...exceptions import NoBlockFoundError
+from ...settings import BLOCKS, CRUD, ID, INDEX, TYPE
+from ...utils import enforce_id_in_branch
 from .block_client import BlockClient
-from .exceptions import NoBlockFoundError
-from .settings import BLOCKS, CRUD, ID, INDEX, TYPE
-from .utils import enforce_id_in_branch
 
 if TYPE_CHECKING:
-    from .branch_client import BranchClient
-    from .sedaro_api_client import SedaroApiClient
+    from ...sedaro_api_client import SedaroApiClient
+    from ..branch_client import BranchClient
 
 
 @dataclass

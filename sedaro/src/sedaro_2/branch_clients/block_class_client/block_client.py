@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, Dict, List
 
 from pydash import is_empty
 
-from .exceptions import NonexistantBlockError
-from .settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
-                       RELATIONSHIPS, TYPE)
+from ...exceptions import NonexistantBlockError
+from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
+                         RELATIONSHIPS, TYPE)
 
 if TYPE_CHECKING:
+    from ...sedaro_api_client import SedaroApiClient
+    from ..branch_client import BranchClient
     from .block_class_client import BlockClassClient
-    from .branch_client import BranchClient
-    from .sedaro_api_client import SedaroApiClient
 
 
 @dataclass
