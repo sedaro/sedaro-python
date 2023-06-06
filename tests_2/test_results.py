@@ -23,13 +23,12 @@ def _make_sure_wildfire_terminated():
 
 def _make_sure_simplesat_done():
     sim = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation
-    latest = sim.get_latest()
-    if not len(latest) or latest[0]['status'] != 'SUCCEEDED':
+    try:
+        results = sim.latest()
+        assert results.success
+    except (NoSimResultsError, AssertionError):
         sim.start()
-        latest = sim.get_latest()[0]
-        while latest['status'] != 'SUCCEEDED':
-            latest = sim.get_latest()[0]
-            time.sleep(1)
+        sim.poll_latest()
 
 
 def test_query_terminated():
