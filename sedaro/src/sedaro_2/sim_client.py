@@ -134,8 +134,10 @@ class SimClient:
         try:
             latest = self.get_latest()[0]
         except IndexError:
-            raise IndexError(
-                f'Could not find any simulation results for scenario: {self.__branch_id}')
+            raise SedaroApiException(
+                status=404,
+                reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
+            )
 
         data = self.__get_data(latest['dataArray'], streams=streams)
         return SimulationResult(latest, data)
