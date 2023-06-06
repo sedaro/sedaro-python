@@ -5,7 +5,7 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 
 from ..settings import BLOCKS, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
-from .block_clients import BlockClassClient, BlockClient
+from .block_clients import Block, BlockClassClient
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
@@ -88,7 +88,7 @@ class BranchClient:
         return res
 
     def block(self, id: Union[str, int]):
-        """Creates a `BlockClient` associated with the Sedaro Block of the given `id`.
+        """Creates a `Block` associated with the Sedaro Block of the given `id`.
 
         Args:
             id (Union[str, int]): `id` of the desired Sedaro Block
@@ -97,10 +97,10 @@ class BranchClient:
             KeyError: if no corresponding Block exists in the Branch
 
         Returns:
-            BlockClient: a client to interact with the corresponding Sedaro Block
+            Block: a client to interact with the corresponding Sedaro Block
         """
         enforce_id_in_branch(self, id)
-        return BlockClient(
+        return Block(
             id,
             getattr(self, self.data[BLOCKS][id][TYPE])
         )

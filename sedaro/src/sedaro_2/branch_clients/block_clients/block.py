@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class BlockClient:
+class Block:
     id: str
     _block_class_client: 'BlockClassClient'
     '''Class for interacting with all Blocks of this class type'''
@@ -36,12 +36,12 @@ class BlockClient:
         return isinstance(other, self.__class__) and self.id == other.id
 
     def __hash__(self):
-        # allows a BlockClient to be a key in a dict and @lru_cache wrapper to work on methods on this class
+        # allows a Block to be a key in a dict and @lru_cache wrapper to work on methods on this class
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block. Additionally, makes
-        it so dotting into relationship fields returns `BlockClient`s corresponding to the related Sedaro Blocks.
+        """Allows for dotting into the `Block` to access keys on the referenced Sedaro Block. Additionally, makes
+        it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
 
         Args:
             key (str): attribute being keyed into
@@ -76,7 +76,7 @@ class BlockClient:
 
     @property
     def type(self) -> str:
-        '''Name of the class of the Sedaro Block this `BlockClient` is set up to interact with'''
+        '''Name of the class of the Sedaro Block this `Block` is set up to interact with'''
         return self._block_class_client.type
 
     @property
@@ -87,16 +87,16 @@ class BlockClient:
 
     @property
     def _branch_client(self) -> 'BranchClient':
-        '''The `BranchClient` this `BlockClient` is connected to'''
+        '''The `BranchClient` this `Block` is connected to'''
         return self._block_class_client._branch_client
 
     @property
     def _sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `BlockClient` was accessed through'''
+        '''The `SedaroApiClient` this `Block` was accessed through'''
         return self._branch_client._sedaro_client
 
     def check_still_exists(self) -> bool:
-        """Checks whether the Sedaro Block this `BlockClient` references still exists.
+        """Checks whether the Sedaro Block this `Block` references still exists.
 
         Returns:
             bool: indication of whether or not the referenced Sedaro Block still exists
@@ -104,7 +104,7 @@ class BlockClient:
         return self.id in self._branch_client.data[BLOCKS]
 
     def enforce_still_exists(self) -> None:
-        """Raises and error if the Sedaro Block this `BlockClient` references no longer exists.
+        """Raises and error if the Sedaro Block this `Block` references no longer exists.
 
         Raises:
             NonexistantBlockError: indication that the Block no longer exists.
@@ -114,15 +114,15 @@ class BlockClient:
                 f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
             )
 
-    def clone(self) -> 'BlockClient':
-        """Creates a copy of the Sedaro `Block` corresponding to the `BlockClient` this method is called on.
+    def clone(self) -> 'Block':
+        """Creates a copy of the Sedaro `Block` corresponding to the `Block` this method is called on.
 
         Note:
         - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
         - this will not work if the resulting clone violates unique constraints.
 
         Returns:
-            BlockClient: `BlockClient` associated with the created Sedaro `Block`
+            Block: `Block` associated with the created Sedaro `Block`
         """
         new_block = copy.deepcopy(self.data)
         del new_block[ID]
@@ -136,7 +136,7 @@ class BlockClient:
 
         return self._branch_client.block(res[CRUD][BLOCKS][0])
 
-    def update(self, **fields) -> 'BlockClient':
+    def update(self, **fields) -> 'Block':
         """Update attributes of the corresponding Sedaro Block
 
         Args:
@@ -146,7 +146,7 @@ class BlockClient:
             SedaroApiException: if there is an error in the response
 
         Returns:
-            BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
+            Block: updated `Block` (Note: the previous `Block` reference is also updated)
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to update on the {self.type}.')

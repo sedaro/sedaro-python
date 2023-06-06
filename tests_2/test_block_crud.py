@@ -5,7 +5,7 @@ import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
 from sedaro_2.branch_clients import AgentTemplateBranch, ScenarioBranch
-from sedaro_2.branch_clients.block_clients import BlockClient
+from sedaro_2.branch_clients.block_clients import Block
 from sedaro_2.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro_2.settings import ID
 
@@ -149,7 +149,7 @@ def test_traversing_and_equality_and_some_get_methods():
     assert solar_panel in branch.SolarPanel.get_all()
     assert solar_cell == power_subsystem.components[-1].cell
 
-    assert isinstance(branch.PowerProcessor.get_first(), BlockClient)
+    assert isinstance(branch.PowerProcessor.get_first(), Block)
 
     solar_cell.delete()
     solar_panel.delete()
@@ -181,7 +181,7 @@ def test_block_client_clone():
     )
 
     subsystem_clone = subsystem.clone()
-    assert isinstance(subsystem_clone, BlockClient)
+    assert isinstance(subsystem_clone, Block)
 
     # a Block without a "name" attribute
     solar_cell = branch.SolarCell.create(
@@ -195,7 +195,7 @@ def test_block_client_clone():
     )
 
     solar_cell_clone = solar_cell.clone()
-    assert isinstance(solar_cell_clone, BlockClient)
+    assert isinstance(solar_cell_clone, Block)
 
     branch.crud(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
 
@@ -225,7 +225,7 @@ def test_ignore_id_and_type_in_create():
         type='WrongType'
     )
 
-    assert isinstance(subsystem, BlockClient)
+    assert isinstance(subsystem, Block)
     assert subsystem.type == 'Subsystem'
     assert subsystem.id != BAD_ID
 

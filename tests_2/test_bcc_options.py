@@ -1,6 +1,6 @@
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 from sedaro_2 import SedaroApiClient
-from sedaro_2.branch_clients.block_clients import BlockClassClient, BlockClient
+from sedaro_2.branch_clients.block_clients import Block, BlockClassClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -136,7 +136,7 @@ def test_block_class_client_options():
             all_blocks_of_type = block_class_client.get_all()
             assert type(all_blocks_of_type) == list
             if len(all_blocks_of_type):
-                assert isinstance(all_blocks_of_type[0], BlockClient)
+                assert isinstance(all_blocks_of_type[0], Block)
 
         # CHECK: bad block class clients
         for bad_block in ['try_me', 'and_me', 'NO_wayYou_will_CatchMe!!!!!!']:
