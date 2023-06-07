@@ -213,7 +213,7 @@ Any object in the results API will provide a descriptive summary of its contents
 
 ## Fetch Raw Data
 
-You also fetch raw results data directly with additional options to customize the result.
+You also fetch results directly as a plain dictionary with additional arguments to customize the result.
 
 ```py
 sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
@@ -221,17 +221,13 @@ sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 # Run simulation
 sim.start()
 
-# Get simulation
-job = sim.job()
-
-# Get raw data
+# After finished... get raw data
 selected_streams=[
     ('foo',),
     ('bar', 'Thermal'),
     ('bar', 'Power')
 ]
-data = sim.results_raw(
-  job['dataArray'],
+data = sim.results_plain(
   start=65000,
   stop=65001,
   limit=250,
@@ -239,8 +235,7 @@ data = sim.results_raw(
   axisOrder='TIME_MINOR'
 )
 ### alternative:
-data = sim.results_raw(
-  job['dataArray'],
+data = sim.results_plain(
   start=65000,
   stop=65001,
   binWidth=0.004,
@@ -249,7 +244,7 @@ data = sim.results_raw(
 )
 ```
 
-All arguments except the first are optional. See doc string in the `results_raw` for details on use of the arguments.
+See doc string in the `results_plain` for details on use of the arguments.
 
 ## Send Requests
 
