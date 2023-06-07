@@ -155,9 +155,9 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         '''Query latest scenario result.'''
-        latest = self.job(err_if_empty=True)
-        data = self.__get_data(latest['dataArray'], streams=streams or [])
-        return SimulationResult(latest, data)
+        latest_job = self.job(err_if_empty=True)
+        data = self.__get_data(latest_job['dataArray'], streams=streams or [])
+        return SimulationResult(latest_job, data)
 
     def poll_latest(
         self,
