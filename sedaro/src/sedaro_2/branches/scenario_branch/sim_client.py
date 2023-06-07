@@ -114,9 +114,9 @@ class Simulation:
             )
         return body_from_res(res)
 
-    def results_raw(
+    def results_plain(
         self,
-        id: str,
+        id: str = None,
         start: float = None,
         stop: float = None,
         binWidth: float = None,
@@ -124,10 +124,12 @@ class Simulation:
         axisOrder: str = None,
         streams: Optional[List[Tuple[str, ...]]] = None
     ):
-        """Method to retrieve simulation results from the Data Service with options to custumize the response.
+        """Query latest scenario and return results as a plain dictionary from the Data Service with options to
+        customize the response. If an `id` is passed, query for corresponding result rather than latest.
 
         Args:
-            id (str): `id` of the data array to fetch (get from `dataArray` attribute on a `job` response)
+            id (str, optional): `id` of the data array to fetch (found on `dataArray` attribute on a response from the `status` or\
+                `start` methods)
 
             start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
                 simulation.
@@ -156,6 +158,8 @@ class Simulation:
         Returns:
             dict: response from the `get` request
         """
+        if id == None:
+            id = self.status(err_if_empty=True)['dataArray']
         url = f'/data/{id}?'
         if start is not None:
             url += f'&start={start}'
@@ -221,7 +225,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         latest_job = self.status(err_if_empty=True)
-        data = self.results_raw(latest_job['dataArray'], streams=streams or [])
+        data = self.results_plain(latest_job['dataArray'], streams=streams or [])
         return SimulationResult(latest_job, data)
 
     def results_poll(

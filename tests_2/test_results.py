@@ -43,7 +43,15 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
+    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+
+    # make sure results_plain returns dictionary (testing latest and with id)
+    plain = sim.results_plain()
+    assert isinstance(plain, dict)
+    assert plain == sim.results_plain(plain['meta']['id'])
+
+    # test results method
+    result = sim.results()
     assert result.success
 
     agent_result = result.agent(result.templated_agents[0])
