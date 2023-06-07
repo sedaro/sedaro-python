@@ -144,6 +144,27 @@ class Simulation:
     def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query latest scenario result.
 
+        If you pass an argument to `streams`, it must be a list of tuples following particular rules:
+
+        - Each tuple in the list can contain either 1 or 2 items.
+        - If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
+            will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
+        - If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the\
+            following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
+            agent of this engine will be fetched.
+
+        For example, with the following code, `results` will only contain data for all engines of agent `foo` and the
+        `Power` and `Thermal` engines of agent `bar`.
+
+        ```py
+        selected_streams=[
+            ('foo',),
+            ('bar', 'Thermal'),
+            ('bar', 'Power')
+        ]
+        results = sim.results(streams=selected_streams)
+        ```
+
         Args:
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
 
@@ -164,7 +185,8 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         retry_interval: int = 2
     ) -> SimulationResult:
-        """Query latest scenario result and wait for sim to finish if it's running.
+        """Query latest scenario result and wait for sim to finish if it's running. See `results` method for details on
+        `strams` kwarg.
 
         Args:
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
