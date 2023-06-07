@@ -103,13 +103,6 @@ class SimulationResult:
             json.dump(contents, json_file)
             print(f"💾 Successfully saved to {filename}")
 
-    @classmethod
-    def from_file(cls, filename: Union[str, Path]):
-        '''Load simulation result from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return cls(contents['simulation'], contents['data'])
-
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
         hfill()
