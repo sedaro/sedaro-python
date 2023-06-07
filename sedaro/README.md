@@ -195,7 +195,7 @@ sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 sim.start()
 
 # Poll simulation, and return when complete (progress will be printed until ready)
-results = sim.poll_results()
+results = sim.results_poll()
 
 # If you know it's complete, query for results directly
 results = sim.results()
@@ -205,7 +205,7 @@ sim.start()
 sim.terminate()
 ```
 
-- For `results` and `poll_results`, you may also provide the optional kwarg `streams`. This triggers narrowing results to fetch only specific streams that you specify. See doc strings for the `results` method for details on how to use the `strams` kwarg.
+- For `results` and `results_poll`, you may also provide the optional kwarg `streams`. This triggers narrowing results to fetch only specific streams that you specify. See doc strings for the `results` method for details on how to use the `strams` kwarg.
 
 ## Results
 
