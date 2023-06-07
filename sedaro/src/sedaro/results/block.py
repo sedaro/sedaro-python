@@ -1,10 +1,10 @@
 import gzip
 import json
-
-from sedaro.results.series import SedaroSeries
-from sedaro.results.utils import hfill, HFILL, ENGINE_EXPANSION
-from typing import Generator, Union
 from pathlib import Path
+from typing import Generator, Union
+
+from .series import SedaroSeries
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
 class SedaroBlockResult:
