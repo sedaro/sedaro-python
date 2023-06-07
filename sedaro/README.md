@@ -2,7 +2,7 @@
 
 A python client for interacting with the Sedaro API using intuitive classes and methods.
 
-This client is intended to be used alongside our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block.
+This client is intended to be used alongside our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block. See docstrings on classes and their methods for further instructions and explanations.
 
 Package release versions correspond to the Sedaro application version at the time of package updates.
 
@@ -276,10 +276,6 @@ sedaro.send_request(
 ```
 
 Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch`s or `Block`s.
-
-## Further information
-
-See docstrings on classes and their methods for further instructions and explanations.
 
 ## Sedaro Base Client
 
