@@ -6,183 +6,171 @@ This client is intended to be used alongside our redocs [OpenAPI Specification](
 
 Package release versions correspond to the Sedaro application version at the time of package updates.
 
-## Install
+## Installation
 
 ```bash
 pip install sedaro
 ```
 
-## Use: Block CRUD
+## Getting Started
 
-1.  Instantiate the `SedaroApiClient` as a context manager. All code interacting with the API should be within the scope of that context manager. Generate an API key in the Sedaro Management Console.
+Instantiate `SedaroApiClient` and get a `Branch`
 
-    ```py
-    from sedaro import SedaroApiClient
+```py
+# Generate an API key in the Sedaro Management Console.
+sedaro = SedaroApiClient(api_key=API_KEY)
 
-    API_KEY = 'my_api_key' # Generated in Sedaro Management Console
-    AGENT_TEMPLATE_BRANCH_ID = 'NShL_CIU9iuufSII49xm-' # id of a Branch owned by my Sedaro account with the given api key
+# Get an agent template branch
+agent_template_branch = sedaro.agent_template_branch('NShL_CIU9iuufSII49xm-')
 
-    with SedaroApiClient(api_key=API_KEY) as sedaro:
-        ...
-    ```
+# Get a scenario branch
+scenario_branch = sedaro.agent_template_branch('NXKwd2xSSPo-V2ivlIr8k')
+```
 
-    ```py
-    # If using a dedicated enterprise Sedaro instance, overwrite the default `host` kwarg.
-    HOST = 'url-to-my-sedaro-instance.com'
+```py
+# If using a dedicated enterprise Sedaro instance, overwrite the default `host` kwarg.
+HOST = 'url-to-my-sedaro-instance.com'
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+```
 
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        ...
-    ```
+## Block CRUD
 
-2.  Use the client to instantiate a `BranchClient`.
+Use the `Branch` to access and utilize `BlockType`s. A `BlockType` is used to create and access Sedaro Blocks of the respective class.
 
-    ```py
-    with SedaroApiClient(api_key=API_KEY) as sedaro:
-        branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-    ```
+```py
+branch.BatteryCell
+branch.Component
+branch.Subsystem
+# ...etc.
+```
 
-3.  Use the `BranchClient` to access and utilize `BlockClassClient`s. A `BlockClassClient` is used to create and access Sedaro Blocks of the respective class.
+- Valid `BlockType`s for Agent Template Branches and Scenario Branches can be found in our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/), by viewing the valid classes in the `blocks` key for the `Template` `PATCH` route. In code editors that support it, intellisense will suggest names for `BlockTypes`.
 
-    ```py
-    branch.BatteryCell
-    branch.Component
-    branch.Subsystem
+A `BlockType` has several methods:
 
-    # ...etc.
-    ```
+```py
+branch.Subsystem.create(name='Structure')
+branch.Subsystem.get(block_id) # ID of desired Subsystem
+branch.Subsystem.get_all_ids()
+branch.Subsystem.get_all()
+branch.Subsystem.get_where()
+branch.Subsystem.get_first()
+branch.Subsystem.get_last()
+```
 
-    Valid `BlockClassClient`s for Agent Template Branches and Scenario Branches can be found in our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/), by viewing the valid classes in the `blocks` key for the `Template` `PATCH` route.
+These methods (except for `get_all_ids`) return a single or list of `Block`(s). A `Block` has several methods and properties.
 
-    In code editors that support it, intellisense will suggest names for `BlockClassClients`. Pay attention to what is valid for an Agent Template vs a Scenario branch. If you key into an invalid value, an error will be raised.
+```py
+subsystem = branch.Subsystem.create(name='Structure')
 
-4.  A `BlockClassClient` has several methods:
+subsystem.update(name='Structure 2.0')
 
-    ```py
-    branch.Subsystem.create(name='Structure')
-    branch.Subsystem.get(block_id) # ID of desired Subsystem
-    branch.Subsystem.get_all_ids()
-    branch.Subsystem.get_all()
-    branch.Subsystem.get_where()
-    branch.Subsystem.get_first()
-    branch.Subsystem.get_last()
-    ```
+subsystem.delete()
+```
 
-5.  These methods (except for `get_all_ids`) return a single or list of `BlockClient`(s). A `BlockClassClient` has several methods and properties.
+A `Block` will always be equal to and in sync with all other `Block`s referencing the same Sedaro Block:
 
-    ```py
-    subsystem = branch.Subsystem.create(name='Structure')
+```py
+subsystem = branch.Subsystem.create(name='Structure')
+subsystem_2 = subsystem.update(name='Structure 2.0')
+subsystem_3 = branch.Subsystem.get(subsystem.id)
 
-    subsystem.update(name='Structure 2.0')
+assert subsystem == subsystem_2 == subsystem_3
+```
 
-    subsystem.delete()
-    ```
+The `repr` of a `Block` will show you the corresponding Sedaro Block's data:
 
-    A `BlockClient` will always be equal to and in sync with all other `BlockClient`s referencing the same Sedaro Block:
+```py
+repr(subsystem)
 
-    ```py
-    subsystem = branch.Subsystem.create(name='Structure')
-    subsystem_2 = subsystem.update(name='Structure 2.0')
-    subsystem_3 = branch.Subsystem.get(subsystem.id)
+>>> Subsystem(
+>>>   category='CUSTOM'
+>>>   components=[]
+>>>   id='NShHxZwUh1JGRfZKDvqdA'
+>>>   name='Structure 2.0'
+>>>   type='Subsystem'
+>>> )
+```
 
-    assert subsystem == subsystem_2 == subsystem_3
-    ```
+Keying into any field existing on the corresponding Sedaro Block will return the value.
 
-    The `repr` of a `BlockClient` will show you the corresponding Sedaro Block's data:
+```py
+subsystem.name
+>>> 'Structure 2.0'
+```
 
-    ```py
-    repr(subsystem)
+Keying into relationship fields returns `Block`s corresponding to the related Sedaro `Block`s as follows:
 
-    >>> Subsystem(
-    >>>   category='CUSTOM'
-    >>>   components=[]
-    >>>   id='NShHxZwUh1JGRfZKDvqdA'
-    >>>   name='Structure 2.0'
-    >>>   type='Subsystem'
-    >>> )
-    ```
+- `OneSide`: a `Block`
+- `ManySide`: a `list` of `Block`s
+- `DataSide`: a dictionary with `Block`s as keys and relationship data as values
 
-    Keying into any field existing on the corresponding Sedaro Block will return the value.
+```py
+solar_panel = subsystem.components[0]
 
-    ```py
-    subsystem.name
+>>> SolarPanel(id='NShKPImRZHxGAXqkPsluk')
+```
 
-    >>> 'Structure 2.0'
-    ```
+Note that this allows for traversing via chained relationship fields.
 
-    Keying into relationship fields returns `BlockClient`s corresponding to the related Sedaro `Block`s as follows:
+```py
+solar_panel.cell.panels[-1].subsystem.components[0].delete()
+```
 
-    - `OneSide`: a `BlockClient`
-    - `ManySide`: a `list` of `BlockClient`s
-    - `DataSide`: a dictionary with `BlockClient`s as keys and relationship data as values
-
-    ```py
-    solar_panel = subsystem.components[0]
-
-    >>> SolarPanel(id='NShKPImRZHxGAXqkPsluk')
-    ```
-
-    Note that this allows for traversing via chained relationship fields.
-
-    ```py
-    solar_panel.cell.panels[-1].subsystem.components[0].delete()
-    ```
-
-### Full Example
+### **Full Example**
 
 ```py
 from sedaro import SedaroApiClient
 from sedaro.exceptions import NonexistantBlockError
 
 API_KEY = 'api_key_generated_by_sedaro'
-AGENT_TEMPLATE_BRANCH_ID = 'NShL_CIU9iuufSII49xm-'
+AGENT_TEMPLATE_ID = 'NShL_CIU9iuufSII49xm-'
 
-with SedaroApiClient(api_key=API_KEY) as sedaro:
-    branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
+sedaro = SedaroApiClient(api_key=API_KEY):
 
-    solar_cell = branch.SolarCell.create(
-      partNumber="987654321",
-      manufacturer='Sedaro Corporation',
-      openCircuitVoltage=3.95,
-      shortCircuitCurrent=0.36,
-      maxPowerVoltage=3.54,
-      maxPowerCurrent=0.345,
-      numJunctions=3,
-    )
+branch = sedaro.get_branch(AGENT_TEMPLATE_ID)
 
-    bc_id = solar_cell.id
+solar_cell = branch.SolarCell.create(
+  partNumber="987654321",
+  manufacturer='Sedaro Corporation',
+  openCircuitVoltage=3.95,
+  shortCircuitCurrent=0.36,
+  maxPowerVoltage=3.54,
+  maxPowerCurrent=0.345,
+  numJunctions=3,
+)
 
-    solar_cell.update(partNumber="123456789")
+sc_id = solar_cell.id
 
-    solar_cell.delete()
+solar_cell.update(partNumber="123456789")
 
-    try:
-        solar_cell.update(partNumber="987654321")
-    except NonexistantBlockError as e:
-        assert str(e) == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
+solar_cell.delete()
+
+try:
+    solar_cell.update(partNumber="987654321")
+except NonexistantBlockError as e:
+    assert str(e) == f'The referenced "SolarCell" (id: {sc_id}) no longer exists.'
 ```
 
 ### Multi-Block CRUD
 
-The `crud` method is also available for performing CRUD operations on multiple Sedaro blocks and/or root at the same time using kwargs as follows:
+The `crud` method is also available for performing operations on multiple Sedaro blocks and/or root at the same time using kwargs as follows:
 - `root`: update fields on the root by passing a dictionary
 - `blocks`: create/update 1+ blocks by passing a list of dictionaries. If an `id` is present, the corresponding block will be updated. If an `id` isn't present, a new block will be created. The `type` is always required.
 - `delete`: delete 1+ blocks by passing a list of their block `id`s.
 
 ```py
-with SedaroApiClient(api_key=API_KEY) as sedaro:
-    branch = sedaro.get_branch(AGENT_TEMPLATE_BRANCH_ID)
-
-    branch.crud(
-        root={ "field": "value" }, # update fields on root
-        blocks=[
-            { "id": "NTF7...", "type": "Modem", "field": "value" }, # update block
-            { "type": "SolarCell",  "field": "value", ... }, # create block
-        ],
-        delete=["NTF8-90Sh93mPKxJkq6z-"] # delete block
-    )
+branch.crud(
+    root={ "field": "value" }, # update fields on root
+    blocks=[
+        { "id": "NXKzb4gSdLyThwudHSR4k", "type": "Modem", "field": "value" }, # update block
+        { "type": "SolarCell",  "field": "value", ... }, # create block
+    ],
+    delete=["NTF8-90Sh93mPKxJkq6z-"] # delete block
+)
 ```
 
-The response from this method is used to update the blocks in the `BranchClient` the method was called on. The content of the response is also returned, as follows:
+The response from this method is used to update the blocks in the `Branch` the method was called on. The content of the response is also returned, as follows:
 ```py
 {
     "crud": {
@@ -196,51 +184,32 @@ The response from this method is used to update the blocks in the `BranchClient`
 ```
 
 
-## Use: Simulation
+## Simulation
+
+Access a `Simulation` via the `simulation` attribute on a `ScenarioBranch`.
 
 ```py
-SCENARIO_BRANCH_ID = 'NShL7J0Rni63llTcEUp4F'
+sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 
-with SedaroApiClient(api_key=API_KEY) as sedaro:
+# Start simulation
+sim.start()
 
-    # Instantiate sim client
-    sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
+# Poll simulation, and return when complete (progress will be printed until ready)
+results = sim.poll_results()
 
-    # Start simulation
-    sim.start()
+# If you know it's complete, query for results directly
+results = sim.results()
 
-    # Get simulation
-    job_res = sim.get_latest()[0]
-
-    # Check status & percentage complete
-    assert job_res['status'] == 'RUNNING'
-    print(job_res['progress']['percentComplete'])
-
-    # Terminate simulation
-    response = sim.terminate(job_res['id'])
-    assert response['message'] == 'Successfully terminated simulation.'
-
+# Terminate simulation
+sim.start()
+sim.terminate()
 ```
 
-## Use: View Results
+For `results` and `poll_results`, you can also use an optional kwarg, `streams` to fetch results only from specific streams that you specify. If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it must be a list of tuples following particular rules:
 
-The primary entrypoint of the results API is the `SedaroSimulationResult` class. This class offers a few methods for pulling data from scenarios. The most commonly-used method is `.get_scenario_latest` that pulls the latest results into a new result object. If the simulation is not complete, the resulting object will indicate the status is "Running" and not contain any results.
-
-```py
-results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id)
-```
-
-Alternatively, use the `.poll_scenario_latest` method to wait for an in-progress simulation to complete and download results after.
-
-```py
-results = SedaroSimulationResult.poll_scenario_latest(api_key, scenario_branch_id)
-```
-
-You can also use an optional kwarg, `streams`, with either of the above functions, to fetch results only from specific streams that you specify. If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it must be a list of tuples following particular rules:
-
-* Each tuple in the list can contain either 1 or 2 items.
-* If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
-* If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
+- Each tuple in the list can contain either 1 or 2 items.
+- If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
+- If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified agent of this engine will be fetched.
 
 For example, with the following code, `results` will only contain data for all engines of agent `foo` and the `Power` and `Thermal` engines of agent `bar`.
 
@@ -250,12 +219,14 @@ selected_streams=[
     ('bar', 'Thermal'),
     ('bar', 'Power')
 ]
-results = SedaroSimulationResult.get_scenario_latest(api_key, scenario_branch_id, streams=selected_streams)
+results = sim.results(streams=selected_streams)
 ```
+
+## Results
 
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
 
-## Use: Fetch Raw Data
+## Fetch Raw Data
 
 As an alternative to calling the functions in the `SedaroSimulationResult` class, you also fetch raw data directly from the `SedaroApiClient` class, with extra options not available when calling those functions.
 
@@ -269,7 +240,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     sim.start()
 
     # Get simulation
-    job_res = sim.get_latest()[0]
+    job_res = sim.latest_raw()
 
     # Get raw data
     selected_streams=[
@@ -300,7 +271,7 @@ Use built-in method to send customized requests to the host. See [OpenAPI Specif
 with SedaroApiClient(api_key=API_KEY) as sedaro:
     # get a branch
     sedaro.send_request(
-        f'/models/branches/{AGENT_TEMPLATE_BRANCH_ID}',
+        f'/models/branches/{AGENT_TEMPLATE_ID}',
         'GET'
     )
 
@@ -317,7 +288,7 @@ with SedaroApiClient(api_key=API_KEY) as sedaro:
     )
 ```
 
-Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `BranchClient`s or `BlockClient`s.
+Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch`s or `Block`s.
 
 ## Further information
 
