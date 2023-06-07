@@ -46,11 +46,13 @@ class Simulation:
             )
         return body_from_res(res)
 
-    def status(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
+    def status(self, job_id: str = None, *, err_if_empty: bool = False) -> Union[Dict, None]:
         """Gets the latest simulation corresponding to the respective Sedaro Scenario Branch id. This can return a
         response even before the simulation is done.
 
         Args:
+            job_id (str, optional): triggers getting the simulation job assocciated with the `id` rather than the\
+                default latest.
             err_if_empty (bool, optional): Triggers raising an error if no simulation results and `err_if_empty`.\
                 Defaults to `False`.
 
@@ -61,20 +63,32 @@ class Simulation:
             Union[Dict, None]: dictionary from response body from the get latest simulation request, otherwise `None` if\
                 there is no latest simulation.
         """
-        with self.__jobs_client() as jobs:
-            res = jobs.get_simulations(
-                path_params={'branchId': self.__branch_id},
-                query_params={'latest': ''},
-                **COMMON_API_KWARGS
-            )
-        if len(body := body_from_res(res)):
-            return body[0]
-        if err_if_empty:
-            raise NoSimResultsError(
-                status=404,
-                reason=f'Could not find any simulation results for scenario: {self.__branch_id}'
-            )
-        return None
+        if job_id is None:
+            with self.__jobs_client() as jobs:
+                res = jobs.get_simulations(
+                    path_params={'branchId': self.__branch_id},
+                    query_params={'latest': ''},
+                    **COMMON_API_KWARGS
+                )
+            if len(body := body_from_res(res)):
+                return body[0]
+            if err_if_empty:
+                raise NoSimResultsError(
+                    status=404,
+                    reason=f'Could not find any simulation for scenario: {self.__branch_id}'
+                )
+            return None
+
+        else:
+            with self.__jobs_client() as jobs:
+                res = jobs.get_simulation(
+                    path_params={
+                        'branchId': self.__branch_id,
+                        'jobId': job_id
+                    },
+                    **COMMON_API_KWARGS
+                )
+                return body_from_res(res)
 
     def terminate(self, job_id: int = None) -> ApiResponse:
         """Terminate latest running simulation job corresponding to the respective Sedaro Scenario Branch id. If a

@@ -14,11 +14,18 @@ def test_run_simulation():
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
     # Start simulation
-    sim.start()
+    job = sim.start()
     print('- Started simulation')
 
-    # Get status
-    _check_job_status(sim.status())
+    # Get status (via default latest)
+    _check_job_status(
+        sim.status()
+    )
+
+    # Get status (via id)
+    _check_job_status(
+        sim.status(job['id'])
+    )
 
     # Terminate
     print('- Terminating...')
