@@ -18,7 +18,7 @@ def _make_sure_wildfire_terminated():
         assert results.status == 'TERMINATED'
     except (NoSimResultsError, AssertionError):
         sim.start()
-        sim.terminate(latest=True)
+        sim.terminate()
 
 
 def _make_sure_simplesat_done():

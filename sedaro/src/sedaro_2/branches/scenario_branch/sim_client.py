@@ -76,21 +76,17 @@ class Simulation:
             )
         return None
 
-    def terminate(self, job_id: int = None, latest: bool = False) -> ApiResponse:
-        """Terminate simulation corresponding to the respective Sedaro Scenario Branch id. Must provide either a
-        `job_id` or set `latest` to `True`.
+    def terminate(self, job_id: int = None) -> ApiResponse:
+        """Terminate latest running simulation job corresponding to the respective Sedaro Scenario Branch id. If a
+        `job_id` is provided, that simulation job will be terminated rather than the latest.
 
         Args:
             job_id (`int`, optional): id of the simulation (job) to termiante.
-            latest (`bool`, optional): indicates terminating the latest running job.
 
         Returns:
             ApiResponse: response from the termiante simulation (job) request
         """
-        if job_id is not None and latest:
-            raise ValueError('Cannot set both "job_id" and "latest".')
-
-        if latest:
+        if job_id is None:
             job_id = self.job(err_if_empty=True)['id']
 
         with self.__jobs_client() as jobs:
