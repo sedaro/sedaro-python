@@ -21,10 +21,10 @@ Instantiate `SedaroApiClient` and get a `Branch`
 sedaro = SedaroApiClient(api_key=API_KEY)
 
 # Get an agent template branch
-agent_template_branch = sedaro.agent_template_branch('NShL_CIU9iuufSII49xm-')
+agent_template_branch = sedaro.agent_template('NShL_CIU9iuufSII49xm-')
 
 # Get a scenario branch
-scenario_branch = sedaro.agent_template_branch('NXKwd2xSSPo-V2ivlIr8k')
+scenario_branch = sedaro.scenario('NXKwd2xSSPo-V2ivlIr8k')
 ```
 
 ```py
@@ -35,7 +35,7 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 ## Block CRUD
 
-Use the `Branch` to access and utilize `BlockType`s. A `BlockType` is used to create and access Sedaro Blocks of the respective class.
+Use the `AgentTemplateBranch` or `ScenarioBranch` to access and utilize `BlockType`s. A `BlockType` is used to create and access Sedaro Blocks of the respective class.
 
 ```py
 branch.BatteryCell
