@@ -141,7 +141,7 @@ class Simulation:
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
-    def latest(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+    def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query latest scenario result.
 
         Args:
@@ -159,12 +159,12 @@ class Simulation:
         data = self.__get_data(latest_job['dataArray'], streams=streams or [])
         return SimulationResult(latest_job, data)
 
-    def poll_latest(
+    def poll_results(
         self,
         streams: Optional[List[Tuple[str, ...]]] = None,
         retry_interval: int = 2
     ) -> SimulationResult:
-        """Query latest scenario result and wait for sim if it is running.
+        """Query latest scenario result and wait for sim to finish if it's running.
 
         Args:
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
@@ -184,4 +184,4 @@ class Simulation:
             latest_job = self.job()
             time.sleep(retry_interval)
 
-        return self.latest(streams=streams or [])
+        return self.results(streams=streams or [])
