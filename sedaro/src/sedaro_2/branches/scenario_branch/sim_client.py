@@ -212,14 +212,14 @@ class Simulation:
 
     def poll_results(
         self,
-        streams: Optional[List[Tuple[str, ...]]] = None,
+        streams: List[Tuple[str, ...]] = None,
         retry_interval: int = 2
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If no argument is provided for
         `streams`, all data will be fetched. See `results` method for details on using the `strams` kwarg.
 
         Args:
-            streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to 2.
 
         Raises:
