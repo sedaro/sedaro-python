@@ -255,12 +255,11 @@ All arguments except the first are optional. See doc string in the `results_raw`
 
 Use the built-in method to send requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
 
+Through the `request` property, you can access `get`, `post`, `put`, `patch`, and `delete` methods.
+
 ```py
 # get a branch
-sedaro.send_request(
-    f'/models/branches/{AGENT_TEMPLATE_ID}',
-    'GET'
-)
+sedaro.request.get(f'/models/branches/{AGENT_TEMPLATE_ID}')
 
 # create a celestial target in a branch
 sun = {
@@ -268,9 +267,8 @@ sun = {
     'type': 'CelestialTarget'
 }
 
-sedaro.send_request(
+sedaro.request.patch(
     f'/models/branches/{self.id}/template/',
-    'PATCH',
     { 'blocks': [sun] }
 )
 ```
