@@ -142,7 +142,7 @@ class Simulation:
         return _response
 
     def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
-        """Query latest scenario result.
+        """Query latest scenario result. If no argument is provided for `streams`, all data will be fetched.
 
         If you pass an argument to `streams`, it must be a list of tuples following particular rules:
 
@@ -185,8 +185,8 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         retry_interval: int = 2
     ) -> SimulationResult:
-        """Query latest scenario result and wait for sim to finish if it's running. See `results` method for details on
-        `strams` kwarg.
+        """Query latest scenario result and wait for sim to finish if it's running. If no argument is provided for
+        `streams`, all data will be fetched. See `results` method for details on using the `strams` kwarg.
 
         Args:
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
