@@ -13,10 +13,9 @@ from .utils import (HFILL, STATUS_ICON_MAP, _get_agent_id_name_map,
 class SimulationResult:
 
     def __init__(self, simulation: dict, data: dict):
-        '''Initialize a new Simulation Result.
+        '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
 
-        See the following class methods for alternate initialization:
-            - from_file
+        See the `from_file` class method on this class for alternate initialization:
         '''
         self.__simulation = {
             'id': simulation.get('id', None),
