@@ -115,26 +115,29 @@ class Simulation:
         Args:
             id (str): `id` of the data array to fetch (get from `dataArray` attribute on a `job` response)
 
-            start (float): the start time of the data to fetch, in MJD format. Defaults to the start of the simulation.
+            start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
+                simulation.
 
-            stop (float): the end time of the data to fetch, in MJD format. Defaults to the end of the simulation.
+            stop (float, optional): the end time of the data to fetch, in MJD format. Defaults to the end of the\
+                simulation.
 
-            limit (int): the maximum number of points in time for which to fetch data for any stream. If not specified,\
-                there is no limit and data is fetched at full resolution. If a limit is specified, the duration of the\
-                time from `start` to `stop` is divided into the specified number of bins of equal duration, and data is\
-                selected from at most one point in time within each bin. Not that it is not guaranteed that you will\
-                receive exactly as many points in time as the limit you specify; you may receive\fewer, depending on the\
-                length of a data stream and/or the distribution of data point timestamps through the simulation.
+            limit (int, optional): the maximum number of points in time for which to fetch data for any stream. If not
+                specified, there is no limit and data is fetched at full resolution. If a limit is specified, the\
+                duration of the time from `start` to `stop` is divided into the specified number of bins of equal\
+                duration, and data is selected from at most one point in time within each bin. Not that it is not\
+                guaranteed that you will receive exactly as many points in time as the limit you specify; you may\
+                receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps\
+                through the simulation.
 
-            binWidth (float): the width of the bins used in downsampling data, as described for `limit`. Note that\
-                `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you would\
-                like to downsample data, use either `limit` or `binWidth`, but not both.
+            binWidth (float, optional): the width of the bins used in downsampling data, as described for `limit`. Note\
+                that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you\
+                would like to downsample data, use either `limit` or `binWidth`, but not both.
 
-            streams (list): specify which data streams you would like to fetch data for, according to the format\
-                described in the previous section. If no list is provided, data is fetched for all streams.
+            streams (list, optional): specify which data streams you would like to fetch data for, according to the\
+                format described in the previous section. If no list is provided, data is fetched for all streams.
 
-            axisOrder (enum): the shape of each series in the response. Options: `'TIME_MAJOR'` and `'TIME_MINOR'`.\
-                Default value, if not specified, is `'TIME_MAJOR'`.
+            axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
+                `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
 
         Returns:
             dict: response from the `get` request
@@ -154,8 +157,7 @@ class Simulation:
             url += f'&streams={encodedStreams}'
         if axisOrder is not None:
             if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
+                raise ValueError('axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
             url += f'&axisOrder={axisOrder}'
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET')
