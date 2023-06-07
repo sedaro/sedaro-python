@@ -224,7 +224,7 @@ class Simulation:
         data = self.results_raw(latest_job['dataArray'], streams=streams or [])
         return SimulationResult(latest_job, data)
 
-    def poll_results(
+    def results_poll(
         self,
         streams: List[Tuple[str, ...]] = None,
         retry_interval: int = 2

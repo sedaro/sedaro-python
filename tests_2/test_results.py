@@ -28,7 +28,7 @@ def _make_sure_simplesat_done():
         assert results.success
     except (NoSimResultsError, AssertionError):
         sim.start()
-        sim.poll_results()
+        sim.results_poll()
 
 
 def test_query_terminated():
