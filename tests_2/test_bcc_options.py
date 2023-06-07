@@ -148,4 +148,4 @@ def test_block_type_options():
 
 
 def run_tests():
-    test_block_class_client_options()
+    test_block_type_options()

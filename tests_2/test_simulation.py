@@ -20,12 +20,12 @@ def test_run_simulation():
     print('- Started simulation')
 
     # Get status #1
-    job = sim.latest_raw()
+    job = sim.job()
     _check_job_status(job)
     time.sleep(1)
 
     # Get status #2
-    job = sim.latest_raw()
+    job = sim.job()
     _check_job_status(job)
     time.sleep(1)
 

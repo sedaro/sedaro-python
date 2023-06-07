@@ -46,8 +46,8 @@ class Simulation:
             )
         return body_from_res(res)
 
-    def latest_raw(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
-        """Gets the latest simulation (job) corresponding to the respective Sedaro Scenario Branch id. This can return a
+    def job(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
+        """Gets the latest simulation job corresponding to the respective Sedaro Scenario Branch id. This can return a
         response even before the simulation is done.
 
         Args:
@@ -58,7 +58,7 @@ class Simulation:
             NoSimResultsError: if no simulation results and `err_if_empty`
 
         Returns:
-            Union[Dict, None]: dictionary from response body from the get latest simulation (job) request, otherwise\
+            Union[Dict, None]: dictionary from response body from the get latest simulation job request, otherwise\
                 `None` if there is no latest simulation.
         """
         with self.__jobs_client() as jobs:
@@ -91,7 +91,7 @@ class Simulation:
             raise ValueError('Cannot set both "job_id" and "latest".')
 
         if latest:
-            job_id = self.latest_raw(err_if_empty=True)['id']
+            job_id = self.job(err_if_empty=True)['id']
 
         with self.__jobs_client() as jobs:
 
@@ -159,7 +159,7 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         '''Query latest scenario result.'''
-        latest = self.latest_raw(err_if_empty=True)
+        latest = self.job(err_if_empty=True)
         data = self.__get_data(latest['dataArray'], streams=streams or [])
         return SimulationResult(latest, data)
 
@@ -180,12 +180,12 @@ class Simulation:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        latest_raw = self.latest_raw(err_if_empty=True)
+        latest_job = self.job(err_if_empty=True)
         options = {'PENDING', 'RUNNING'}
 
-        while latest_raw['status'] in options:
-            progress_bar(latest_raw['progress']['percentComplete'])
-            latest_raw = self.latest_raw()
+        while latest_job['status'] in options:
+            progress_bar(latest_job['progress']['percentComplete'])
+            latest_job = self.job()
             time.sleep(retry_interval)
 
         return self.latest(streams=streams or [])
