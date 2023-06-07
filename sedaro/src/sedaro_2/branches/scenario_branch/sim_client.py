@@ -33,11 +33,11 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield jobs_api.JobsApi(api)
 
-    def start(self) -> ApiResponse:
+    def start(self) -> Dict:
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
 
         Returns:
-            ApiResponse: response from the start simulation (job) request
+            Dict: body of the response from the start simulation request
         """
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
@@ -46,8 +46,8 @@ class Simulation:
             )
         return body_from_res(res)
 
-    def job(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
-        """Gets the latest simulation job corresponding to the respective Sedaro Scenario Branch id. This can return a
+    def status(self, *, err_if_empty: bool = False) -> Union[Dict, None]:
+        """Gets the latest simulation corresponding to the respective Sedaro Scenario Branch id. This can return a
         response even before the simulation is done.
 
         Args:
@@ -58,8 +58,8 @@ class Simulation:
             NoSimResultsError: if no simulation results and `err_if_empty`
 
         Returns:
-            Union[Dict, None]: dictionary from response body from the get latest simulation job request, otherwise\
-                `None` if there is no latest simulation.
+            Union[Dict, None]: dictionary from response body from the get latest simulation request, otherwise `None` if\
+                there is no latest simulation.
         """
         with self.__jobs_client() as jobs:
             res = jobs.get_simulations(
@@ -87,7 +87,7 @@ class Simulation:
             ApiResponse: response from the termiante simulation (job) request
         """
         if job_id is None:
-            job_id = self.job(err_if_empty=True)['id']
+            job_id = self.status(err_if_empty=True)['id']
 
         with self.__jobs_client() as jobs:
 
@@ -206,7 +206,7 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         '''Query latest scenario result.'''
-        latest_job = self.job(err_if_empty=True)
+        latest_job = self.status(err_if_empty=True)
         data = self.results_raw(latest_job['dataArray'], streams=streams or [])
         return SimulationResult(latest_job, data)
 
@@ -228,12 +228,12 @@ class Simulation:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        latest_job = self.job(err_if_empty=True)
+        latest_job = self.status(err_if_empty=True)
         options = {'PENDING', 'RUNNING'}
 
         while latest_job['status'] in options:
             progress_bar(latest_job['progress']['percentComplete'])
-            latest_job = self.job()
+            latest_job = self.status()
             time.sleep(retry_interval)
 
         return self.results(streams=streams or [])
