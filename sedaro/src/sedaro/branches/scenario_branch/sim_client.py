@@ -1,8 +1,5 @@
-import gzip
-import json
 import time
 from contextlib import contextmanager
-from pathlib import Path
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
 
@@ -258,10 +255,3 @@ class Simulation:
             time.sleep(retry_interval)
 
         return self.results(streams=streams or [])
-
-    @classmethod
-    def results_from_file(cls, filename: Union[str, Path]):
-        '''Load simulation result from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return SimulationResult(contents['simulation'], contents['data'])

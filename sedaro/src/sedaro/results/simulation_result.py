@@ -15,9 +15,7 @@ class SimulationResult:
     def __init__(self, simulation: dict, data: dict):
         '''Initialize a new Simulation Result.
 
-        See the following class methods for simple initialization:
-            - get_scenario_latest
-            - poll_scenario_latest
+        See the following class methods for alternate initialization:
             - from_file
         '''
         self.__simulation = {
@@ -125,3 +123,10 @@ class SimulationResult:
 
         hfill()
         print("❓ Query agent results with .agent(<NAME>)")
+
+    @classmethod
+    def from_file(cls, filename: Union[str, Path]):
+        '''Load simulation result from compressed JSON file.'''
+        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
+            contents = json.load(json_file)
+            return SimulationResult(contents['simulation'], contents['data'])
