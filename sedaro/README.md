@@ -213,44 +213,47 @@ Any object in the results API will provide a descriptive summary of its contents
 
 ## Fetch Raw Data
 
-As an alternative to calling the functions in the `SedaroSimulationResult` class, you also fetch raw data directly from the `SedaroApiClient` class, with extra options not available when calling those functions.
+You also fetch raw results data directly with additional options to customize the result.
 
 ```py
-with SedaroApiClient(api_key=API_KEY) as sedaro:
+sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 
-    # Instantiate sim client
-    sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
+# Run simulation
+sim.start()
 
-    # Start simulation
-    sim.start()
+# Get simulation
+job = sim.job()
 
-    # Get simulation
-    job_res = sim.latest_raw()
-
-    # Get raw data
-    selected_streams=[
-        ('foo',),
-        ('bar', 'Thermal'),
-        ('bar', 'Power')
-    ]
-    data = sedaro.get_data(job_res['dataArray'], start=65000, stop=65001, limit=250, streams=selected_streams, axisOrder='TIME_MINOR')
-    ### alternative:
-    data = sedaro.get_data(job_res['dataArray'], start=65000, stop=65001, binWidth=0.004, streams=selected_streams, axisOrder='TIME_MINOR')
+# Get raw data
+selected_streams=[
+    ('foo',),
+    ('bar', 'Thermal'),
+    ('bar', 'Power')
+]
+data = sim.results_raw(
+  job['dataArray'],
+  start=65000,
+  stop=65001,
+  limit=250,
+  streams=selected_streams,
+  axisOrder='TIME_MINOR'
+)
+### alternative:
+data = sim.results_raw(
+  job['dataArray'],
+  start=65000,
+  stop=65001,
+  binWidth=0.004,
+  streams=selected_streams,
+  axisOrder='TIME_MINOR'
+)
 ```
 
-All arguments except the first are optional.
+All arguments except the first are optional. See doc string in the `results_raw` for details on use of the arguments.
 
-Optional arguments:
-* `start` (float): the start time of the data to fetch, in MJD format. Defaults to the start of the simulation.
-* `stop` (float): the end time of the data to fetch, in MJD format. Defaults to the end of the simulation.
-* `limit` (int): the maximum number of points in time for which to fetch data for any stream. If not specified, there is no limit and data is fetched at full resolution. If a limit is specified, the duration of the time from `start` to `stop` is divided into the specified number of bins of equal duration, and data is selected from at most one point in time within each bin. Not that it is not guaranteed that you will receive exactly as many points in time as the limit you specify; you may receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps through the simulation.
-* `binWidth` (float): the width of the bins used in downsampling data, as described for `limit`. Note that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you would like to downsample data, use either `limit` or `binWidth`, but not both.
-* `streams` (list): specify which data streams you would like to fetch data for, according to the format described in the previous section. If no list is provided, data is fetched for all streams.
-* `axisOrder` (enum): the shape of each series in the response. Options: `'TIME_MAJOR'` and `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
+## Send Requests
 
-## Use: Send Requests
-
-Use built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
+Use the built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
 
 ```py
 with SedaroApiClient(api_key=API_KEY) as sedaro:
