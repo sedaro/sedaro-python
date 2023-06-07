@@ -253,27 +253,26 @@ All arguments except the first are optional. See doc string in the `results_raw`
 
 ## Send Requests
 
-Use the built-in method to send customized requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
+Use the built-in method to send requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
 
 ```py
-with SedaroApiClient(api_key=API_KEY) as sedaro:
-    # get a branch
-    sedaro.send_request(
-        f'/models/branches/{AGENT_TEMPLATE_ID}',
-        'GET'
-    )
+# get a branch
+sedaro.send_request(
+    f'/models/branches/{AGENT_TEMPLATE_ID}',
+    'GET'
+)
 
-    # create a celestial target in a branch
-    sun = {
-        'name': 'Sun',
-        'type': 'CelestialTarget'
-    }
+# create a celestial target in a branch
+sun = {
+    'name': 'Sun',
+    'type': 'CelestialTarget'
+}
 
-    sedaro.send_request(
-        f'/models/branches/{self.id}/template/',
-        'PATCH',
-        { 'blocks': [sun] }
-    )
+sedaro.send_request(
+    f'/models/branches/{self.id}/template/',
+    'PATCH',
+    { 'blocks': [sun] }
+)
 ```
 
 Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch`s or `Block`s.
