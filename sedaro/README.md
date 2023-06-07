@@ -128,7 +128,7 @@ AGENT_TEMPLATE_ID = 'NShL_CIU9iuufSII49xm-'
 
 sedaro = SedaroApiClient(api_key=API_KEY):
 
-branch = sedaro.get_branch(AGENT_TEMPLATE_ID)
+branch = sedaro.agent_template(AGENT_TEMPLATE_ID)
 
 solar_cell = branch.SolarCell.create(
   partNumber="987654321",
