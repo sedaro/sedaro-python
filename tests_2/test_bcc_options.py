@@ -111,8 +111,8 @@ scenario_blocks = [
 
 def test_block_type_options():
     for get_method, branch_id, expected_block_names in [
-        [sedaro.agent_template_branch, SIMPLESAT_A_T_ID, agent_template_blocks],
-        [sedaro.scenario_branch, SIMPLESAT_SCENARIO_ID, scenario_blocks]
+        [sedaro.agent_template, SIMPLESAT_A_T_ID, agent_template_blocks],
+        [sedaro.scenario, SIMPLESAT_SCENARIO_ID, scenario_blocks]
     ]:
         branch = get_method(branch_id)
         branch_block_names = sorted(branch.data['_block_names'])

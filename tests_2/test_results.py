@@ -11,7 +11,7 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _make_sure_wildfire_terminated():
-    sim = sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation
+    sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
     try:
         results = sim.results()
@@ -22,7 +22,7 @@ def _make_sure_wildfire_terminated():
 
 
 def _make_sure_simplesat_done():
-    sim = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation
+    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
     try:
         results = sim.results()
         assert results.success
@@ -34,7 +34,7 @@ def _make_sure_simplesat_done():
 def test_query_terminated():
     '''Test querying of a terminated scenario.'''
     _make_sure_wildfire_terminated()
-    assert not sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation.results().success
+    assert not sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation.results().success
 
 
 def test_query():
@@ -43,7 +43,7 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation.results()
+    result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
     assert result.success
 
     agent_result = result.agent(result.templated_agents[0])
@@ -61,7 +61,7 @@ def test_save_load():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID).simulation.results()
+    result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
     assert result.success
 
     with TemporaryDirectory() as temp_dir:

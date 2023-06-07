@@ -49,7 +49,7 @@ class SedaroApiClient(ApiClient):
                 path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
             return body_from_res(res)
 
-    def agent_template_branch(self, branch_id: str) -> AgentTemplateBranch:
+    def agent_template(self, branch_id: str) -> AgentTemplateBranch:
         """Instantiate an `AgentTemplateBranch` client associated with the Sedaro `Branch` with `branch_id`
 
         Args:
@@ -60,7 +60,7 @@ class SedaroApiClient(ApiClient):
         """
         return AgentTemplateBranch(self.__get_branch(branch_id), self)
 
-    def scenario_branch(self, branch_id: str) -> ScenarioBranch:
+    def scenario(self, branch_id: str) -> ScenarioBranch:
         """Instantiate an `ScenarioBranch` client associated with the Sedaro `Branch` with `branch_id`
 
         Args:

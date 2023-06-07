@@ -13,7 +13,7 @@ def _check_job_status(job):
 
 
 def test_run_simulation():
-    sim = sedaro.scenario_branch(WILDFIRE_SCENARIO_ID).simulation
+    sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
     # Start simulation
     sim.start()

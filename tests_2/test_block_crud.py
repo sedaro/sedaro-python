@@ -22,21 +22,21 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 def test_get():
     # test get agent template
     assert isinstance(
-        sedaro.agent_template_branch(SIMPLESAT_A_T_ID), AgentTemplateBranch
+        sedaro.agent_template(SIMPLESAT_A_T_ID), AgentTemplateBranch
     )
     with pytest.raises(TypeError, match='VehicleTemplate not ScenarioTemplate'):
-        sedaro.agent_template_branch(SIMPLESAT_SCENARIO_ID)
+        sedaro.agent_template(SIMPLESAT_SCENARIO_ID)
 
     # test get scenario
     assert isinstance(
-        sedaro.scenario_branch(SIMPLESAT_SCENARIO_ID), ScenarioBranch
+        sedaro.scenario(SIMPLESAT_SCENARIO_ID), ScenarioBranch
     )
     with pytest.raises(TypeError, match='ScenarioTemplate not VehicleTemplate'):
-        sedaro.scenario_branch(SIMPLESAT_A_T_ID)
+        sedaro.scenario(SIMPLESAT_A_T_ID)
 
 
 def test_get_blocks_all_and_single():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     components = branch.Component.get_all()
     component = components[-1]
     assert branch.Component.get(component.id) == component
@@ -50,7 +50,7 @@ def test_get_blocks_all_and_single():
 
 
 def test_create_update_and_delete_block():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     battery_cell_client = branch.BatteryCell.create(
         partNumber='987654321',
@@ -85,7 +85,7 @@ def test_create_update_and_delete_block():
 
 
 def test_update_rel_and_cascade_delete():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     num_subsystems = len(branch.Subsystem.get_all_ids())
 
@@ -124,7 +124,7 @@ def test_update_rel_and_cascade_delete():
 
 
 def test_traversing_and_equality_and_some_get_methods():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     power_subsystem = branch.Subsystem.get_where(category='POWER')[0]
 
     solar_cell = branch.SolarCell.create(
@@ -156,7 +156,7 @@ def test_traversing_and_equality_and_some_get_methods():
 
 
 def test_block_client_equality():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     subsystem = branch.Subsystem.create(
         name=f'One subsystem to rule them all {_random_str()}',
@@ -173,7 +173,7 @@ def test_block_client_equality():
 
 
 def test_block_client_clone():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     # a Block that requires a unique "name" attribute
     subsystem = branch.Subsystem.create(
@@ -201,7 +201,7 @@ def test_block_client_clone():
 
 
 def test_some_errors():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     with pytest.raises(ValueError, match=f'Must provide fields'):
         branch.Subsystem.create()
@@ -215,7 +215,7 @@ def test_some_errors():
 
 
 def test_ignore_id_and_type_in_create():
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     BAD_ID = 'catch me if you can'
 
@@ -234,7 +234,7 @@ def test_ignore_id_and_type_in_create():
 
 def test_active_comm_interfaces_tuple():
     """Check validation of the Vehicle Template activeCommInterfaces field"""
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     def crud_a_c_i(val):
         branch.crud(root={'activeCommInterfaces': val})
@@ -256,7 +256,7 @@ def test_active_comm_interfaces_tuple():
 
 def test_attitude_solution_error_tuple():
     """Check validation of the Vehicle Template attitudeSolutionError field"""
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     valid_list = [0.25, 0.5, 0.75]
 
     def crud_a_s_e(val):
@@ -281,7 +281,7 @@ def test_attitude_solution_error_tuple():
 
 def test_power_command_tuple():
     """Check validation of the Solar Array powerCommand field"""
-    branch = sedaro.agent_template_branch(SIMPLESAT_A_T_ID)
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
     def crud_s_a(val):
         branch.crud(blocks=[{
