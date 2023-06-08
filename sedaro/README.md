@@ -256,7 +256,8 @@ Through the `request` property, you can access `get`, `post`, `put`, `patch`, an
 ```py
 # get a branch
 sedaro.request.get(f'/models/branches/{AGENT_TEMPLATE_ID}')
-
+```
+```py
 # create a celestial target in a branch
 sun = {
     'name': 'Sun',
@@ -264,7 +265,7 @@ sun = {
 }
 
 sedaro.request.patch(
-    f'/models/branches/{self.id}/template/',
+    f'/models/branches/{AGENT_TEMPLATE_ID}/template/',
     { 'blocks': [sun] }
 )
 ```
