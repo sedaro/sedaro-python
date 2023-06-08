@@ -35,7 +35,7 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 ## Block CRUD
 
-Use the `AgentTemplateBranch` or `ScenarioBranch` to access and utilize `BlockType`s. A `BlockType` is used to create and access Sedaro Blocks of the respective class.
+Use the `AgentTemplateBranch` or `ScenarioBranch` to instantiate and utilize the `BlockType` class. A `BlockType` object is used to create and access Sedaro Blocks of the respective class.
 
 ```py
 branch.BatteryCell
