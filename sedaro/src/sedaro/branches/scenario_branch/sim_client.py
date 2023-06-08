@@ -243,7 +243,7 @@ class Simulation:
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
-            retry_interval (int, optional): Seconds between retries. Defaults to 2.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
