@@ -302,7 +302,12 @@ def test_power_command_tuple():
     branch.crud(delete=branch.data['index']['SolarArray'])
 
     # Check bad values
-    for val in [["Fail", 0.5], [0.25, 0.5, 0.75], [], "Fail"]:
+    for val in [
+        ["Fail", 0.5],  # Check non-float values
+        [0.25, 0.5, 0.75],  # Check len greater than 2
+        [],  # Check len less than 2
+        "Fail"  # Check non-list value
+    ]:
         with pytest.raises(SedaroApiException):
             create_solar_array(val)
 
