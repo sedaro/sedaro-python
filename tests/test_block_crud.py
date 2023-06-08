@@ -25,14 +25,14 @@ def test_get():
     assert isinstance(
         sedaro.agent_template(SIMPLESAT_A_T_ID), AgentTemplateBranch
     )
-    with pytest.raises(TypeError, match='VehicleTemplate not ScenarioTemplate'):
+    with pytest.raises(TypeError, match='"VehicleTemplate" not "ScenarioTemplate"'):
         sedaro.agent_template(SIMPLESAT_SCENARIO_ID)
 
     # test get scenario
     assert isinstance(
         sedaro.scenario(SIMPLESAT_SCENARIO_ID), ScenarioBranch
     )
-    with pytest.raises(TypeError, match='ScenarioTemplate not VehicleTemplate'):
+    with pytest.raises(TypeError, match='"ScenarioTemplate" not "VehicleTemplate"'):
         sedaro.scenario(SIMPLESAT_A_T_ID)
 
 

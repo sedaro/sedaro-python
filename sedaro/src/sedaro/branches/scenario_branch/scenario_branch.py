@@ -17,7 +17,7 @@ class ScenarioBranch(Branch):
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
         if (type_ := self.data['type']) != SCENARIO_TEMPLATE:
-            raise TypeError(f'Branch must be of type {SCENARIO_TEMPLATE} not {type_}')
+            raise TypeError(f'Branch must be of type "{SCENARIO_TEMPLATE}" not "{type_}"')
 
     @property
     def simulation(self) -> 'Simulation':
