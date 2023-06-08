@@ -237,11 +237,12 @@ def test_active_comm_interfaces_tuple():
     """Check validation of the Vehicle Template activeCommInterfaces field"""
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
-    def crud_a_c_i(val):
+    def crud_aci(val):
+        """Update activeCommInterfaces field with val"""
         branch.crud(root={'activeCommInterfaces': val})
 
     # Check valid tuples
-    crud_a_c_i([[False, "Comms", 5], [True, "Interface", 112]])
+    crud_aci([[False, "Comms", 5], [True, "Interface", 112]])
 
     for val in [
         [[False, "Interface", 5], [0.5, "Interface", 5]],  # invalid value type
@@ -252,7 +253,7 @@ def test_active_comm_interfaces_tuple():
         [[False, "Interface", 5, True]],  # size greater than 3
     ]:
         with pytest.raises(SedaroApiException):
-            crud_a_c_i(val)
+            crud_aci(val)
 
 
 def test_attitude_solution_error_tuple():
@@ -260,31 +261,34 @@ def test_attitude_solution_error_tuple():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     valid_list = [0.25, 0.5, 0.75]
 
-    def crud_a_s_e(val):
+    def crud_ase(val):
+        """Update attitudeSolutionError field with val"""
         branch.crud(root={'attitudeSolutionError': val})
 
     # Check valid tuple
-    crud_a_s_e(None)
-    crud_a_s_e(valid_list)
+    crud_ase(None)
+    crud_ase(valid_list)
 
-    def check_bad_a_s_e(val):
+    def check_bad_ase(val):
+        """Update attitudeSolutionError field with val and ensure raises error"""
         with pytest.raises(SedaroApiException):
-            crud_a_s_e(val)
+            crud_ase(val)
 
-    check_bad_a_s_e(valid_list[:-1])  # Check size less than 3
-    check_bad_a_s_e(valid_list + [1.0])  # Check size greater than 3
+    check_bad_ase(valid_list[:-1])  # Check size less than 3
+    check_bad_ase(valid_list + [1.0])  # Check size greater than 3
     for i in range(len(valid_list)):  # Check non-float values in list
         failList = valid_list.copy()
         failList[i] = "Fail"
-        check_bad_a_s_e(failList)
-    check_bad_a_s_e(50)  # Check non-list value
+        check_bad_ase(failList)
+    check_bad_ase(50)  # Check non-list value
 
 
 def test_power_command_tuple():
     """Check validation of the Solar Array powerCommand field"""
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
-    def crud_s_a(val):
+    def create_solar_array(val):
+        """Create a solar array with powerCommand field set to val"""
         branch.crud(blocks=[{
             'type': "SolarArray",
             'name': f"array {_random_str()}",
@@ -293,14 +297,14 @@ def test_power_command_tuple():
 
     # Check valid tuples
     for val in [[None, None], [0.0, None], [None, 0.5], [0.0, 0.5]]:
-        crud_s_a(val)
+        create_solar_array(val)
     # Delete created solar arrays
     branch.crud(delete=branch.data['index']['SolarArray'])
 
     # Check bad values
     for val in [["Fail", 0.5], [0.25, 0.5, 0.75], [], "Fail"]:
         with pytest.raises(SedaroApiException):
-            crud_s_a(val)
+            create_solar_array(val)
 
 
 def run_tests():
