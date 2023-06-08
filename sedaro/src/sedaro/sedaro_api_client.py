@@ -73,6 +73,6 @@ class SedaroApiClient(ApiClient):
         return ScenarioBranch(self.__get_branch(branch_id), self)
 
     @property
-    def request(self):
+    def request(self) -> PlainRequest:
         """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
         return PlainRequest(self)
