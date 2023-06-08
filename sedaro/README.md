@@ -249,7 +249,7 @@ See doc string in the `results_plain` for details on use of the arguments.
 
 ## Send Requests
 
-Use the built-in method to send requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
+Use the built-in method to send custom requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
 
 Through the `request` property, you can access `get`, `post`, `put`, `patch`, and `delete` methods.
 
