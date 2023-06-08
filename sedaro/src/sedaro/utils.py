@@ -56,6 +56,7 @@ def body_from_res(res):
 
 
 def progress_bar(progress):
+    """Prints a progress bar to the console"""
     if progress is not None:
         blocks = int(progress * 50 / 100)
         bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
