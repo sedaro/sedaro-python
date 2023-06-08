@@ -21,7 +21,7 @@ class ScenarioBranch(Branch):
 
     @property
     def simulation(self) -> 'Simulation':
-        """A `Simulation` instance to interact with the simulation connected to this Sedaro scenario `Branch`.
+        """A `Simulation` instance to interact with the simulation connected to this scenario branch.
 
         Returns:
             Simulation: a `Simulation`
