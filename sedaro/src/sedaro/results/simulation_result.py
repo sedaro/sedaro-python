@@ -3,7 +3,7 @@ import datetime as dt
 import gzip
 import json
 from pathlib import Path
-from typing import List, Union
+from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _get_agent_id_name_map,
@@ -26,7 +26,7 @@ class SimulationResult:
         }
         self.__branch = simulation['branch']
         self.__data = data
-        self.__meta = data['meta']
+        self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
@@ -40,7 +40,7 @@ class SimulationResult:
 
     @property
     def data_array_id(self):
-        return self.__meta['id']
+        return self.__meta.get('id', None)
 
     @property
     def templated_agents(self) -> List[str]:
