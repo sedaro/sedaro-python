@@ -19,7 +19,7 @@ class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
 
     def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
-        """Instantiate a Sedaro `Simulation`
+        """Instantiate a Sedaro `Simulation` instance
 
         Args:
             sedaro (`SedaroApiClient`): the `SedaroApiClient`
@@ -57,7 +57,7 @@ class Simulation:
                 Defaults to `False`.
 
         Raises:
-            NoSimResultsError: if no simulation results and `err_if_empty`
+            NoSimResultsError: if no simulation has been started and `err_if_empty` set to `True`
 
         Returns:
             Union[Dict, None]: dictionary from response body from the get latest simulation request, otherwise `None` if\
@@ -96,6 +96,9 @@ class Simulation:
 
         Args:
             job_id (`int`, optional): id of the simulation (job) to termiante.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
 
         Returns:
             ApiResponse: response from the termiante simulation (job) request
@@ -155,6 +158,9 @@ class Simulation:
 
             axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
                 `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
 
         Returns:
             dict: response from the `get` request
