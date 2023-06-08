@@ -106,8 +106,7 @@ Keying into relationship fields returns `Block`s corresponding to the related Se
 - `DataSide`: a dictionary with `Block`s as keys and relationship data as values
 
 ```py
-solar_panel = subsystem.components[0]
-
+subsystem.components[0]
 >>> SolarPanel(id='NShKPImRZHxGAXqkPsluk')
 ```
 
@@ -200,8 +199,7 @@ results = sim.results_poll()
 # If you know it's complete, query for results directly
 results = sim.results()
 
-# Terminate simulation
-sim.start()
+# Terminate a running simulation
 sim.terminate()
 ```
 
