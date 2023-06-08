@@ -75,7 +75,7 @@ class Block:
 
     @property
     def type(self) -> str:
-        '''Name of the class of the Sedaro Block this `Block` is set up to interact with'''
+        '''Name of the class of the Sedaro Block this `Block` instance is set up to interact with'''
         return self._block_type.type
 
     @property
@@ -86,11 +86,11 @@ class Block:
 
     @property
     def _branch(self) -> 'Branch':
-        '''The `Branch` this `Block` is connected to'''
+        '''The `Branch` this `Block` instance is connected to'''
         return self._block_type._branch
 
     def check_still_exists(self) -> bool:
-        """Checks whether the Sedaro Block this `Block` references still exists.
+        """Checks whether the Sedaro Block this `Block` instance references still exists.
 
         Returns:
             bool: indication of whether or not the referenced Sedaro Block still exists
@@ -98,7 +98,7 @@ class Block:
         return self.id in self._branch.data[BLOCKS]
 
     def enforce_still_exists(self) -> None:
-        """Raises and error if the Sedaro Block this `Block` references no longer exists.
+        """Raises and error if the Sedaro Block this `Block` instance references no longer exists.
 
         Raises:
             NonexistantBlockError: indication that the Block no longer exists.
@@ -109,7 +109,7 @@ class Block:
             )
 
     def clone(self) -> 'Block':
-        """Creates a copy of the Sedaro `Block` corresponding to the `Block` this method is called on.
+        """Creates a copy of the Sedaro Block corresponding to the `Block` instance this method is called on.
 
         Note:
         - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
