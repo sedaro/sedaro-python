@@ -270,7 +270,7 @@ sedaro.request.patch(
 )
 ```
 
-Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch`s or `Block`s.
+Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch` or `Block` objects.
 
 ## Sedaro Base Client
 
