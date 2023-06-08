@@ -88,7 +88,8 @@ class Branch:
         return res
 
     def block(self, id: Union[str, int]):
-        """Creates a `Block` associated with the Sedaro Block of the given `id`.
+        """A general method to instantiate a `Block` object associated with the Sedaro Block of the given `id`. Use the
+        `BlockType` properties on the Branch to instantiate `Block` objects narrowed to a specific type.
 
         Args:
             id (Union[str, int]): `id` of the desired Sedaro Block
