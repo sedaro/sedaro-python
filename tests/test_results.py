@@ -48,7 +48,8 @@ def test_query():
     # make sure results_plain returns dictionary (testing latest and with id)
     plain = sim.results_plain()
     assert isinstance(plain, dict)
-    assert plain == sim.results_plain(id=plain['meta']['id'])
+    data_array_id = plain['meta']['id']
+    assert plain == sim.results_plain(id=data_array_id)
 
     # test results method (default latest)
     result = sim.results()
@@ -56,11 +57,13 @@ def test_query():
 
     # test results method (with id)
     job = sim.status()
-    result_from_id = sim.results(job['id'])
+    job_id = job['id']
+    result_from_id = sim.results(job_id)
     assert result_from_id.success
 
-    # make sure results have same id
-    assert result.id == result_from_id.id
+    # make sure results have same ids
+    assert result.job_id == result_from_id.job_id == job_id
+    assert result.data_array_id == result_from_id.data_array_id == data_array_id
 
     agent_result = result.agent(result.templated_agents[0])
     block_result = agent_result.block('root')

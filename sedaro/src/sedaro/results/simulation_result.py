@@ -35,8 +35,12 @@ class SimulationResult:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
 
     @property
-    def id(self):
+    def job_id(self):
         return self.__simulation['id']
+
+    @property
+    def data_array_id(self):
+        return self.__meta['id']
 
     @property
     def templated_agents(self) -> List[str]:
