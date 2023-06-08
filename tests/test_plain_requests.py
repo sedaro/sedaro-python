@@ -17,7 +17,7 @@ def test_get_non_existant_branch():
         'message', None) == 'The requested endpoint does not exist or is not accessible with your current permissions.'
 
 
-def test_raw_get_branch():
+def test_plain_get_branch():
     res = sedaro.request.get(
         f'/models/branches/{SIMPLESAT_A_T_ID}',
     )
@@ -26,7 +26,7 @@ def test_raw_get_branch():
         assert string in keys
 
 
-def test_raw_request_CRUD_blocks():
+def test_plain_request_CRUD_blocks():
     res = sedaro.request.patch(
         f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
         body={
@@ -47,5 +47,5 @@ def test_raw_request_CRUD_blocks():
 
 def run_tests():
     test_get_non_existant_branch()
-    test_raw_get_branch()
-    test_raw_request_CRUD_blocks()
+    test_plain_get_branch()
+    test_plain_request_CRUD_blocks()
