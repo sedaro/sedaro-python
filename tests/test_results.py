@@ -50,9 +50,17 @@ def test_query():
     assert isinstance(plain, dict)
     assert plain == sim.results_plain(plain['meta']['id'])
 
-    # test results method
+    # test results method (default latest)
     result = sim.results()
     assert result.success
+
+    # test results method (with id)
+    job = sim.status()
+    result_from_id = sim.results(job['id'])
+    assert result_from_id.success
+
+    # make sure results have same id
+    assert result.id == result_from_id.id
 
     agent_result = result.agent(result.templated_agents[0])
     block_result = agent_result.block('root')

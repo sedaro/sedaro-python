@@ -189,10 +189,12 @@ class Simulation:
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
-    def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
-        """Query latest scenario result. If no argument is provided for `streams`, all data will be fetched.
+    def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+        """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
+        latest.
 
-        If you pass an argument to `streams`, it must be a list of tuples following particular rules:
+        If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it
+        must be a list of tuples following particular rules:
 
         - Each tuple in the list can contain either 1 or 2 items.
         - If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
@@ -214,7 +216,8 @@ class Simulation:
         ```
 
         Args:
-            streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to None.
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to `None`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -224,19 +227,21 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         '''Query latest scenario result.'''
-        latest_job = self.status(err_if_empty=True)
-        data = self.results_plain(latest_job['dataArray'], streams=streams or [])
-        return SimulationResult(latest_job, data)
+        job = self.status(job_id, err_if_empty=True)
+        data = self.results_plain(job['dataArray'], streams=streams or [])
+        return SimulationResult(job, data)
 
     def results_poll(
         self,
+        job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
         retry_interval: int = 2
     ) -> SimulationResult:
-        """Query latest scenario result and wait for sim to finish if it's running. If no argument is provided for
-        `streams`, all data will be fetched. See `results` method for details on using the `strams` kwarg.
+        """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
+        corresponding sim results rather than latest. See `results` method for details on using the `streams` kwarg.
 
         Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to 2.
 
@@ -246,12 +251,12 @@ class Simulation:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        latest_job = self.status(err_if_empty=True)
+        job = self.status(job_id, err_if_empty=True)
         options = {'PENDING', 'RUNNING'}
 
-        while latest_job['status'] in options:
-            progress_bar(latest_job['progress']['percentComplete'])
-            latest_job = self.status()
+        while job['status'] in options:
+            progress_bar(job['progress']['percentComplete'])
+            job = self.status()
             time.sleep(retry_interval)
 
         return self.results(streams=streams or [])
