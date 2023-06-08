@@ -128,8 +128,8 @@ class Simulation:
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
 
         Args:
-            id (str, optional): `id` of the data array to fetch (found on `dataArray` attribute on a response from the `status` or\
-                `start` methods)
+            id (str, optional): `id` of the data array to fetch (found on `dataArray` attribute on a response from the\
+                `status` or `start` methods)
 
             start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
                 simulation.
