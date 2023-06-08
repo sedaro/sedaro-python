@@ -193,16 +193,19 @@ sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 # Start simulation
 sim.start()
 
-# Poll simulation, and return when complete (progress will be printed until ready)
+# See simulation status
+sim.status()
+
+# Poll simulation, and return results when complete (progress will be printed until ready)
 results = sim.results_poll()
 
 # If you know it's complete, query for results directly
 results = sim.results()
 
-# Terminate a running simulation
+# Terminate running simulation
 sim.terminate()
 ```
-
+- The  `status`, `results`, `results_poll`, and `terminate` methods can all optionally take a `job_id`, otherwise they operate on the latest (most recently started/finished) simulation.
 - For `results` and `results_poll`, you may also provide the optional kwarg `streams`. This triggers narrowing results to fetch only specific streams that you specify. See doc strings for the `results` method for details on how to use the `streams` kwarg.
 
 ## Results
