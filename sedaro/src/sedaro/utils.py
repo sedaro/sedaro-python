@@ -37,7 +37,7 @@ def enforce_id_in_branch(branch: 'Branch', id: str):
     """Makes sure `id` exists in the Sedaro Branch associated with the `Branch`
 
     Args:
-        branch (Branch): the `Branch` associated with the Sedaro Branch to check for the `id`
+        branch (Branch): the `Branch` instance associated with the Sedaro Branch to check for the `id`
         id (str): `id` of the Sedaro Block to sanitize and check
 
     Raises:
