@@ -15,7 +15,7 @@ class SimulationResult:
     def __init__(self, simulation: dict, data: dict):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
 
-        See the `from_file` class method on this class for alternate initialization:
+        See the `from_file` class method on this class for alternate initialization.
         '''
         self.__simulation = {
             'id': simulation.get('id', None),
