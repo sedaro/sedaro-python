@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
 
 
-class RawRequest:
+class PlainRequest:
     def __init__(self, sedaro: 'SedaroApiClient') -> None:
         self.__sedaro = sedaro
 

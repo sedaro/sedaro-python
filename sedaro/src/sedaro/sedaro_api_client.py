@@ -5,7 +5,7 @@ from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from sedaro.raw_request import RawRequest
+from sedaro.plain_request import PlainRequest
 
 from .branches import AgentTemplateBranch, ScenarioBranch
 from .settings import COMMON_API_KWARGS
@@ -75,4 +75,4 @@ class SedaroApiClient(ApiClient):
     @property
     def request(self):
         """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
-        return RawRequest(self)
+        return PlainRequest(self)
