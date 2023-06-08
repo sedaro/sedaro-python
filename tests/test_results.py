@@ -48,7 +48,7 @@ def test_query():
     # make sure results_plain returns dictionary (testing latest and with id)
     plain = sim.results_plain()
     assert isinstance(plain, dict)
-    assert plain == sim.results_plain(plain['meta']['id'])
+    assert plain == sim.results_plain(id=plain['meta']['id'])
 
     # test results method (default latest)
     result = sim.results()

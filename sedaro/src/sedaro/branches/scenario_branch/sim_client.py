@@ -116,6 +116,7 @@ class Simulation:
 
     def results_plain(
         self,
+        *,
         id: str = None,
         start: float = None,
         stop: float = None,
@@ -228,7 +229,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id, err_if_empty=True)
-        data = self.results_plain(job['dataArray'], streams=streams or [])
+        data = self.results_plain(id=job['dataArray'], streams=streams or [])
         return SimulationResult(job, data)
 
     def results_poll(
