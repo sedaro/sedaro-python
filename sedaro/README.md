@@ -214,7 +214,7 @@ Any object in the results API will provide a descriptive summary of its contents
 
 ## Fetch Raw Data
 
-You also fetch results directly as a plain dictionary with additional arguments to customize the result.
+You may also fetch results directly as a plain dictionary with additional arguments to customize the result.
 
 ```py
 sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
