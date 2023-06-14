@@ -112,7 +112,7 @@ def test_block_class_client_options():
     for branch_id, blocks in [[SIMPLESAT_A_T_ID, agent_template_blocks], [SIMPLESAT_SCENARIO_ID, scenario_blocks]]:
         with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
             branch = sedaro.get_branch(branch_id)
-            branch_blocks = sorted(branch.data['_block_names'])
+            branch_blocks = sorted(branch.data['_blockNames'])
             # CHECK: lists above are correct
             assert blocks == branch_blocks
 
