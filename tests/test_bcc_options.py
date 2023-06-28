@@ -116,7 +116,7 @@ def test_block_type_options():
         [sedaro.scenario, SIMPLESAT_SCENARIO_ID, scenario_blocks]
     ]:
         branch = get_method(branch_id)
-        branch_block_names = sorted(branch.data['_block_names'])
+        branch_block_names = sorted(branch.data['_blockNames'])
         # CHECK: lists above are correct
         assert expected_block_names == branch_block_names
 
