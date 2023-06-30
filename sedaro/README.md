@@ -300,15 +300,21 @@ Spontaneous state is timestamped and interpreted such that it impacts the simula
 Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connections from external client(s). The existance of these blocks determines whether or not the external interface is enabled and active during a simulation. These blocks will also be version controlled just as any other block in a Sedaro model.
 
 ```python
+# Consume-only External State Block
+{
+  type: 'ExternalState',
+  consumed: ['position', 'velocity', 'BatteryPack.voltage'],
+}
+
 # Per Round External State Block
-eblock = {
+{
   type: 'PerRoundExternalState',
   produced: [
     'root.position.as.Position.eci', # Explicit QuantityKind
     {'Thruster': 'thrust'}, # Implicit QuantityKind
   ],
   consumed: ['time'],
-  engine: 'GNC',
+  engineIndex: 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
 }
 
 # Spontaneous External State Block
@@ -317,7 +323,7 @@ eblock = {
   produced: [
     'root.commandedAttitude.as.Quaternion.body_eci', # Explicit QuantityKind
   ],
-  engine: 'GNC',
+  engineIndex: 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
 }
 ```
 
@@ -341,7 +347,6 @@ time = 60050.0137 # Time in MJD
 # Query the simulation for the state defined on the ExternalState block at the given time
 # This blocks until the state is available from the simulation
 state = simulation.consume(agent_id, external_state_id, time)
-agents don't have external state blocks?
 print(state)
 ```
 
@@ -353,7 +358,6 @@ state = (
   [12, 0, 14.1, 14.3, 7, 0], # Thruster thrusts
 )
 consumed_state = simulation.produce(agent_id, per_round_external_state_id, state) # PerRound
-Don't consume state here?
 print(consumed_state)
 
 state = (
