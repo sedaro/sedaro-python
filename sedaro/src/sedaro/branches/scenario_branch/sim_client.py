@@ -3,7 +3,6 @@ from contextlib import contextmanager
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
 
-from sedaro_base_client.api_client import ApiResponse
 from sedaro_base_client.apis.tags import jobs_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException
@@ -100,14 +99,14 @@ class Simulation:
             NoSimResultsError: if no simulation has been started.
 
         Returns:
-            ApiResponse: response from the termiante simulation (job) request
+            SimulationHandle
         """
         if job_id is None:
             job_id = self.status()['id']
 
         with self.__jobs_client() as jobs:
 
-            res = jobs.terminate_simulation(
+            jobs.terminate_simulation(
                 path_params={
                     'branchId': self.__branch_id,
                     'jobId': job_id
@@ -270,7 +269,7 @@ class Simulation:
 
 
 class SimulationJob:
-    def __init__(self, job: dict): self.__job = job
+    def __init__(self, job: Union[dict, None]): self.__job = job
 
     def __getitems__(self, key):
         if self.__job:
@@ -292,11 +291,29 @@ class SimulationHandle:
 
     def __getitems__(self, key): return self.__job[key]
 
-    def status(self):
-        self.__job = self.__sim_client.status(self.__job['id'])
+    def status(self, err_if_empty: bool = True):
+        """Refreshes the local simulation status.
+
+        Args:
+            err_if_empty (bool, optional): Triggers raising an error if no simulation results and `err_if_empty`.\
+                Defaults to `True`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started and `err_if_empty` set to `True`
+
+        Returns:
+            SimulationHandle (self)
+        """
+        self.__job = self.__sim_client.status(
+            self.__job['id'], err_if_empty=err_if_empty)
         return self
 
     def terminate(self):
+        """Terminate the running simulation.
+
+        Returns:
+            SimulationHandle (self)
+        """
         self.__sim_client.terminate(self.__job['id'])
         self.__job = SimulationJob(None)
         return self

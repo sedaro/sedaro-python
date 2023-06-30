@@ -34,7 +34,8 @@ def _make_sure_simplesat_done():
 def test_query_terminated():
     '''Test querying of a terminated scenario.'''
     _make_sure_wildfire_terminated()
-    assert not sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation.results().success
+    assert not sedaro.scenario(
+        WILDFIRE_SCENARIO_ID).simulation.results().success
 
 
 def test_query():
@@ -45,14 +46,20 @@ def test_query():
     _make_sure_simplesat_done()
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
 
+    # Obtain handle
+    simulation_handle = sim.status()
+
     # make sure results_plain returns dictionary (testing latest and with id)
     plain = sim.results_plain()
     assert isinstance(plain, dict)
+    assert plain == simulation_handle.results_plain()
     data_array_id = plain['meta']['id']
     assert plain == sim.results_plain(id=data_array_id)
 
     # test results method (default latest)
     result = sim.results()
+    assert result.success
+    result = simulation_handle.results()
     assert result.success
 
     # test results method (with id)
@@ -103,7 +110,8 @@ def test_save_load():
         series_result.to_file(file_path)
         new_series_result = SedaroSeries.from_file(file_path)
 
-        ref_series_result = new_result.agent(result.templated_agents[0]).block('root').position.ecef
+        ref_series_result = new_result.agent(
+            result.templated_agents[0]).block('root').position.ecef
         assert ref_series_result.mjd == new_series_result.mjd
         assert ref_series_result.values == new_series_result.values
 

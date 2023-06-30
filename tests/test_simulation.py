@@ -15,7 +15,7 @@ def test_run_simulation():
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
     # Start simulation
-    job = sim.start()
+    simulation_handle = sim.start()
     print('- Started simulation')
 
     # Get status (via default latest)
@@ -25,14 +25,39 @@ def test_run_simulation():
 
     # Get status (via id)
     _check_job_status(
-        sim.status(job['id'])
+        sim.status(simulation_handle['id'])
     )
 
     # Terminate
     print('- Terminating...')
-    res = sim.terminate()
-    print('-', res['message'])
-    assert res['message'] == 'Successfully terminated simulation.'
+    terminated_handle = False
+    simulation_handle = sim.terminate()
+    try:
+        simulation_handle['id']
+    except Exception as e:
+        assert 'No simulation is running' in e
+        terminated_handle = True
+    assert terminated_handle
+
+    # Test control from handle
+    simulation_handle = sim.start()
+    print('- Started simulation (via handle)')
+
+    # Get status (via handle)
+    _check_job_status(
+        simulation_handle.status()
+    )
+
+    # Terminate
+    print('- Terminating (via handle)...')
+    simulation_handle.terminate()
+    terminated_handle = False
+    try:
+        simulation_handle['id']
+    except Exception as e:
+        assert 'No simulation is running' in e
+        terminated_handle = True
+    assert terminated_handle
 
 
 def run_tests():
