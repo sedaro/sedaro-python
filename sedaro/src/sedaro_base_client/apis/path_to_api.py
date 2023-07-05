@@ -4,6 +4,7 @@ from sedaro_base_client.paths import PathValues
 from sedaro_base_client.apis.paths.models_branches_branch_id_template import ModelsBranchesBranchIdTemplate
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_ import SimulationsBranchesBranchIdControl
 from sedaro_base_client.apis.paths.simulations_branches_branch_id_control_job_id import SimulationsBranchesBranchIdControlJobId
+from sedaro_base_client.apis.paths.simulations_jobs_job_id_externals_agent_id_external_state_block_id import SimulationsJobsJobIdExternalsAgentIdExternalStateBlockId
 from sedaro_base_client.apis.paths.data_id import DataId
 from sedaro_base_client.apis.paths.models_branches_branch_id import ModelsBranchesBranchId
 from sedaro_base_client.apis.paths.models_branches_branch_idshare_auth_ import ModelsBranchesBranchIdshareAuth
@@ -18,6 +19,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATE: ModelsBranchesBranchIdTemplate,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
+        PathValues.SIMULATIONS_JOBS_JOB_ID_EXTERNALS_AGENT_ID_EXTERNAL_STATE_BLOCK_ID: SimulationsJobsJobIdExternalsAgentIdExternalStateBlockId,
         PathValues.DATA_ID: DataId,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,
@@ -33,6 +35,7 @@ path_to_api = PathToApi(
         PathValues.MODELS_BRANCHES_BRANCH_ID_TEMPLATE: ModelsBranchesBranchIdTemplate,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_: SimulationsBranchesBranchIdControl,
         PathValues.SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID: SimulationsBranchesBranchIdControlJobId,
+        PathValues.SIMULATIONS_JOBS_JOB_ID_EXTERNALS_AGENT_ID_EXTERNAL_STATE_BLOCK_ID: SimulationsJobsJobIdExternalsAgentIdExternalStateBlockId,
         PathValues.DATA_ID: DataId,
         PathValues.MODELS_BRANCHES_BRANCH_ID: ModelsBranchesBranchId,
         PathValues.MODELS_BRANCHES_BRANCH_IDSHAREAUTH_: ModelsBranchesBranchIdshareAuth,

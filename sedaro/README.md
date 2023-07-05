@@ -279,101 +279,86 @@ Note that requests sent this way to CRUD Sedaro Blocks won't automatically updat
 
 ## External Simulation State Dependencies [WIP]
 
-The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Specifically, it supports simulation state production and consumption via independent client methods.
+The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).
 
 **Warning:** The following documentation is a work in progress as we continue to evolve this feature. It is recommended that you reach out to Sedaro Application Engineering for assistance using this capability while we mature the documentation for it.
 
-#### Consume [WIP]
+### Setup
 
-State is consumed by querying the simulation for specific information at a given timestamp.
-
-#### Produce [WIP]
-
-Producing state is supported across two modes: `Per Round` and `Spontaneous`.
-
-In `Per Round` state production, the external source of state is expected to provide new values at each "round" or simulation Engine timestep. In `Spontaneous` state production, the external source of state may provide new values at any time. This method of state production is only supported in real-time simulations (`ClockConfig.realTime == true`) and is important for use-cases such as commanding a system or part of a system to a new state (i.e., human/software-in-the-loop).
-
-Spontaneous state is timestamped and interpreted such that it impacts the simulation during the round at or immediately following the `timestamp`. Spontaneous state production is also unique in that it is not required to ever provide a value and can remain optionally unused during a simulation. In this case, the simulation will continue to consume the initial value for the state until a new value is provided.
-
-### Setup [WIP]
-
-Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connections from external client(s). The existance of these blocks determines whether or not the external interface is enabled and active during a simulation. These blocks will also be version controlled just as any other block in a Sedaro model.
+Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connections from external client(s) (i.e. [Cosimulation](https://sedaro.github.io/openapi/#tag/Externals)). The existance of these blocks determines whether or not the external interface is enabled and active during a simulation. These blocks will also be version controlled just as any other block in a Sedaro model.
 
 ```python
-# Consume-only External State Block
-{
-  type: 'ExternalState',
-  consumed: ['position', 'velocity', 'BatteryPack.voltage'],
-}
-
 # Per Round External State Block
 {
-  type: 'PerRoundExternalState',
-  produced: [
-    'root.position.as.Position.eci', # Explicit QuantityKind
-    {'Thruster': 'thrust'}, # Implicit QuantityKind
-  ],
-  consumed: ['time'],
-  engineIndex: 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
+    "id": "NZ2SGPWRnmdJhwUT4GD5k",
+    "type": "PerRoundExternalState",
+    "produced": [{"root": "velocity"}], # Implicit QuantityKind
+    "consumed": [{"prev.root.position.as": "Position.eci"}], # Explicit QuantityKind
+    "engineIndex": 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
+    "agents": ["NSghFfVT8ieam0ydeZGX-"]
 }
 
 # Spontaneous External State Block
 {
-  type: 'SpontaneousExternalState',
-  produced: [
-    'root.commandedAttitude.as.Quaternion.body_eci', # Explicit QuantityKind
-  ],
-  engineIndex: 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
+    "id": "NZ2SHUkS95z1GtmMZ0CTk",
+    "type": "SpontaneousExternalState",
+    "produced": [{"root": "activeOpMode"}],
+    "consumed": [{"prev.root.position.as": "Position.eci"}],
+    "engineIndex": 0, # 0: GNC, 1: C&DH, 2: Power, 3: Thermal
+    "agents": ["NSghFfVT8ieam0ydeZGX-"]
 }
 ```
 
-### Deploy (i.e. Initialize) [WIP]
+### Deploy (i.e. Initialize)
 
 ```python
 sim_client = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start the simulation
 # Note that when `sim_client.start()` returns, the simulation is running and ready for external state production/consumption
-simulation = sim_client.start()
+simulation_handle = sim_client.start()
 ```
 
-### Consume [WIP]
+### Consume
 
 ```python
 agent_id = ... # The ID of the relevant simulation Agent
-external_state_id = ... # The ID of the relevant ExternalState block
+per_round_external_state_id = ... # The ID of the relevant ExternalState block
+spontaneous_external_state_id = ... # The ID of the relevant ExternalState block
 time = 60050.0137 # Time in MJD
 
-# Query the simulation for the state defined on the ExternalState block at the given time
+# Query the simulation for the state defined on the ExternalState block at the optionally given time
 # This blocks until the state is available from the simulation
-state = simulation.consume(agent_id, external_state_id, time)
+state = simulasimulation_handletion.consume(agent_id, per_round_external_state_id)
+print(state)
+
+state = simulation_handle.consume(agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
 print(state)
 ```
 
-### Produce [WIP]
+### Produce
 
 ```python
 state = (
   [7000, 0, 0], # Position as ECI (km)
   [12, 0, 14.1, 14.3, 7, 0], # Thruster thrusts
 )
-consumed_state = simulation.produce(agent_id, per_round_external_state_id, state) # PerRound
-print(consumed_state)
+simulation_handle.produce(agent_id, per_round_external_state_id, state)
 
 state = (
   [0, 0, 0, 1], # Commanded Attitude as Quaternion
 )
-simulation.produce(agent_id, spontaneous_external_state_id, state, timestamp=60050.2) # Spontaneous
-# `timestamp` is optional.  If not provided, the simulation time at which the simulation receives the spontaneous state is used
+simulation_handle.produce(agent_id, spontaneous_external_state_id, state, timestamp=60050.2)
+# `timestamp` is optional.  If not provided, the `time` at which the simulation receives the spontaneous state is used
 # Note: `timestamp` can be used to intentionally inject latency between the time a command is sent and when it is to take effect.  This allows for more accurately modeling communications latency on various comms buses.
 ```
 
-### Teardown [WIP]
+### Teardown
 
 A simulation that terminates on its own will clean up all external state interfaces. Manually terminating the simulation will do the same:
 
 ```python
-sim.terminate()
+simulation_handle.terminate()
 ```
 
 ## Sedaro Base Client

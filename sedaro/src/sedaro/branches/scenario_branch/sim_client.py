@@ -4,6 +4,7 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
 
 from sedaro_base_client.apis.tags import jobs_api
+from sedaro_base_client.apis.tags import externals_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException
 from ...results import SimulationResult
@@ -12,6 +13,18 @@ from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
+
+
+def handle_response(response):
+    _response = None
+    try:
+        _response = parse_urllib_response(response)
+        if response.status != 200:
+            raise Exception()
+    except:
+        reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
+        raise SedaroApiException(status=response.status, reason=reason)
+    return _response
 
 
 class Simulation:
@@ -31,6 +44,11 @@ class Simulation:
     def __jobs_client(self) -> Generator['jobs_api.JobsApi', Any, None]:
         with self.__sedaro.api_client() as api:
             yield jobs_api.JobsApi(api)
+
+    @contextmanager
+    def __externals_client(self) -> Generator['externals_api.ExternalsApi', Any, None]:
+        with self.__sedaro.api_client() as api:
+            yield externals_api.ExternalsApi(api)
 
     def start(self) -> 'SimulationHandle':
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
@@ -185,15 +203,7 @@ class Simulation:
             url += f'&axisOrder={axisOrder}'
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET')
-        _response = None
-        try:
-            _response = parse_urllib_response(response)
-            if response.status != 200:
-                raise Exception()
-        except:
-            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-            raise SedaroApiException(status=response.status, reason=reason)
-        return _response
+        return handle_response(response)
 
     def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
@@ -431,8 +441,29 @@ class SimulationHandle:
             retry_interval=retry_interval
         )
 
-    def consume(self, agent_id: str, external_state_id: str, time: float):
-        ...
+    def consume(self, agent_id: str, external_state_id: str, time: float = None):
+        with self.__sim_client.__externals_client() as externals_client:
+            response = externals_client.get_external(
+                path_params={
+                    'jobId': self.__job['id'],
+                    'agentId': agent_id,
+                    'externalStateBlockId': external_state_id,
+                },
+                query_params=({'time': time} if time is not None else {}),
+            )
+        return handle_response(response)
 
-    def produce(self, agent_id: str, external_state_id: str, timestamp: float = None):
-        ...
+    def produce(self, agent_id: str, external_state_id: str, values: Union[list, tuple], timestamp: float = None):
+        with self.__sim_client.__externals_client() as externals_client:
+            response = externals_client.put_external(
+                path_params={
+                    'jobId': self.__job['id'],
+                    'agentId': agent_id,
+                    'externalStateBlockId': external_state_id,
+                },
+                body=(
+                    {'values': [*values]} |
+                    ({'timestamp': timestamp} if timestamp is not None else {})
+                ),
+            )
+        return handle_response(response)
