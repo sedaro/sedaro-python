@@ -1,10 +1,12 @@
+from sedaro import SedaroApiClient
+from sedaro.branches.blocks import Block, BlockType
+
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
-from sedaro import SedaroApiClient
-from sedaro.block_class_client import BlockClassClient
-from sedaro.block_client import BlockClient
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
-# TODO: if update these lists, also update type hints of BranchClient
+
+# TODO: if update these lists, also update type hints of respective AgentTemplateBranch
 agent_template_blocks = [
     'AngularVelocitySensor',
     'Antenna',
@@ -99,7 +101,7 @@ agent_template_blocks = [
     'VectorTrackingSurface'
 ]
 
-# TODO: if update these lists, also update type hints of BranchClient
+# TODO: if update these lists, also update type hints of ScenarioBranch
 scenario_blocks = [
     'Agent',
     'AgentGroup',
@@ -108,41 +110,43 @@ scenario_blocks = [
 ]
 
 
-def test_block_class_client_options():
-    for branch_id, blocks in [[SIMPLESAT_A_T_ID, agent_template_blocks], [SIMPLESAT_SCENARIO_ID, scenario_blocks]]:
-        with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-            branch = sedaro.get_branch(branch_id)
-            branch_blocks = sorted(branch.data['_blockNames'])
-            # CHECK: lists above are correct
-            assert blocks == branch_blocks
+def test_block_type_options():
+    for get_method, branch_id, expected_block_names in [
+        [sedaro.agent_template, SIMPLESAT_A_T_ID, agent_template_blocks],
+        [sedaro.scenario, SIMPLESAT_SCENARIO_ID, scenario_blocks]
+    ]:
+        branch = get_method(branch_id)
+        branch_block_names = sorted(branch.data['_blockNames'])
+        # CHECK: lists above are correct
+        assert expected_block_names == branch_block_names
 
-            for block in branch_blocks:
-                block_class_client: BlockClassClient = getattr(branch, block)
+        for block_name in branch_block_names:
+            block_type: BlockType = getattr(branch, block_name)
 
-                # CHECK: is a Block Class Client
-                assert isinstance(block_class_client, BlockClassClient)
+            # CHECK: is a BlockType
+            assert isinstance(block_type, BlockType)
 
-                # CHECK: can use create method
-                try:
-                    block_class_client.create()
-                except Exception as e:
-                    assert isinstance(e, ValueError)
-                    assert 'Must provide fields' in str(e)
+            # CHECK: can use create method
+            try:
+                block_type.create()
+            except Exception as e:
+                assert isinstance(e, ValueError)
+                assert 'Must provide fields' in str(e)
 
-                # CHECK: can use get_all method
-                all_blocks_of_type = block_class_client.get_all()
-                assert type(all_blocks_of_type) == list
-                if len(all_blocks_of_type):
-                    assert isinstance(all_blocks_of_type[0], BlockClient)
+            # CHECK: can use get_all method
+            all_blocks_of_type = block_type.get_all()
+            assert type(all_blocks_of_type) == list
+            if len(all_blocks_of_type):
+                assert isinstance(all_blocks_of_type[0], Block)
 
-        # CHECK: bad block class clients
+        # CHECK: bad BlockTypes
         for bad_block in ['try_me', 'and_me', 'NO_wayYou_will_CatchMe!!!!!!']:
             try:
                 getattr(branch, bad_block)
             except Exception as e:
                 assert isinstance(e, AttributeError)
-                assert f'Unable to create a "BlockClassClient" from string: "{bad_block}".' in str(e)
+                assert f'Unable to create a "{BlockType.__name__}" from string: "{bad_block}".' in str(e)
 
 
 def run_tests():
-    test_block_class_client_options()
+    test_block_type_options()

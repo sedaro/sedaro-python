@@ -1,24 +1,23 @@
 import copy
-import uuid
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict
 
 from pydash import is_empty
 
-from .exceptions import NonexistantBlockError
-from .settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
-                       RELATIONSHIPS, TYPE)
+from ...exceptions import NonexistantBlockError
+from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
+                         RELATIONSHIPS, TYPE)
 
 if TYPE_CHECKING:
-    from .block_class_client import BlockClassClient
-    from .branch_client import BranchClient
-    from .sedaro_api_client import SedaroApiClient
+    from ...sedaro_api_client import SedaroApiClient
+    from ..branch import Branch
+    from .block_type import BlockType
 
 
 @dataclass
-class BlockClient:
+class Block:
     id: str
-    _block_class_client: 'BlockClassClient'
+    _block_type: 'BlockType'
     '''Class for interacting with all Blocks of this class type'''
 
     def __str__(self) -> str:
@@ -36,12 +35,12 @@ class BlockClient:
         return isinstance(other, self.__class__) and self.id == other.id
 
     def __hash__(self):
-        # allows a BlockClient to be a key in a dict and @lru_cache wrapper to work on methods on this class
+        # allows a Block instance to be a key in a dictionary
         return hash(self.__class__.__name__ + self.id)
 
     def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the `BlockClient` to access keys on the referenced Sedaro Block. Additionally, makes
-        it so dotting into relationship fields returns `BlockClient`s corresponding to the related Sedaro Blocks.
+        """Allows for dotting into the `Block` instance to access keys on the referenced Sedaro Block. Additionally,
+        makes it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
 
         Args:
             key (str): attribute being keyed into
@@ -62,13 +61,13 @@ class BlockClient:
         side_type = self.get_rel_field_type(key)
 
         if side_type == MANY_SIDE:
-            return [self._branch_client.get_block(id) for id in val]
+            return [self._branch.block(id) for id in val]
 
         if side_type == DATA_SIDE:
-            return {self._branch_client.get_block(id): data for id, data in val.items()}
+            return {self._branch.block(id): data for id, data in val.items()}
 
         if side_type == ONE_SIDE:
-            return self._branch_client.get_block(val)
+            return self._branch.block(val)
 
         raise NotImplementedError(
             f'Unsupported relationship type on "{self.data[TYPE]}", attribute: "{key}".'
@@ -76,35 +75,30 @@ class BlockClient:
 
     @property
     def type(self) -> str:
-        '''Name of the class of the Sedaro Block this `BlockClient` is set up to interact with'''
-        return self._block_class_client.type
+        '''Name of the class of the Sedaro Block this `Block` instance is set up to interact with'''
+        return self._block_type.type
 
     @property
     def data(self) -> Dict:
         '''The properties of the corresponding Sedaro Block as a dictionary'''
         self.enforce_still_exists()
-        return self._branch_client.data[BLOCKS][self.id]
+        return self._branch.data[BLOCKS][self.id]
 
     @property
-    def _branch_client(self) -> 'BranchClient':
-        '''The `BranchClient` this `BlockClient` is connected to'''
-        return self._block_class_client._branch_client
-
-    @property
-    def _sedaro_client(self) -> 'SedaroApiClient':
-        '''The `SedaroApiClient` this `BlockClient` was accessed through'''
-        return self._branch_client._sedaro_client
+    def _branch(self) -> 'Branch':
+        '''The `Branch` this `Block` instance is connected to'''
+        return self._block_type._branch
 
     def check_still_exists(self) -> bool:
-        """Checks whether the Sedaro Block this `BlockClient` references still exists.
+        """Checks whether the Sedaro Block this `Block` instance references still exists.
 
         Returns:
             bool: indication of whether or not the referenced Sedaro Block still exists
         """
-        return self.id in self._branch_client.data[BLOCKS]
+        return self.id in self._branch.data[BLOCKS]
 
     def enforce_still_exists(self) -> None:
-        """Raises and error if the Sedaro Block this `BlockClient` references no longer exists.
+        """Raises and error if the Sedaro Block this `Block` instance references no longer exists.
 
         Raises:
             NonexistantBlockError: indication that the Block no longer exists.
@@ -114,15 +108,15 @@ class BlockClient:
                 f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
             )
 
-    def clone(self) -> 'BlockClient':
-        """Creates a copy of the Sedaro `Block` corresponding to the `BlockClient` this method is called on.
+    def clone(self) -> 'Block':
+        """Creates a copy of the Sedaro Block corresponding to the `Block` instance this method is called on.
 
         Note:
         - if there is a name attribute, the name of the created `Block`s will have `'(clone)'` appended to it.
         - this will not work if the resulting clone violates unique constraints.
 
         Returns:
-            BlockClient: `BlockClient` associated with the created Sedaro `Block`
+            Block: `Block` associated with the created Sedaro `Block`
         """
         new_block = copy.deepcopy(self.data)
         del new_block[ID]
@@ -130,13 +124,13 @@ class BlockClient:
         if 'name' in new_block:
             new_block['name'] = f'{new_block["name"]} (clone)'
 
-        res = self._branch_client.crud(
+        res = self._branch.crud(
             blocks=[new_block]
         )
 
-        return self._branch_client.get_block(res[CRUD][BLOCKS][0])
+        return self._branch.block(res[CRUD][BLOCKS][0])
 
-    def update(self, **fields) -> 'BlockClient':
+    def update(self, **fields) -> 'Block':
         """Update attributes of the corresponding Sedaro Block
 
         Args:
@@ -146,7 +140,7 @@ class BlockClient:
             SedaroApiException: if there is an error in the response
 
         Returns:
-            BlockClient: updated `BlockClient` (Note: the previous `BlockClient` reference is also updated)
+            Block: updated `Block` (Note: the previous `Block` reference is also updated)
         """
         if is_empty(fields):
             raise ValueError(f'Must provide fields to update on the {self.type}.')
@@ -155,7 +149,7 @@ class BlockClient:
             raise ValueError(f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
 
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
-        self._branch_client.crud(blocks=[{**self.data, **fields}])
+        self._branch.crud(blocks=[{**self.data, **fields}])
         return self
 
     def delete(self) -> str:
@@ -168,7 +162,7 @@ class BlockClient:
             str: `id` of the deleted Sedaro Block
         """
         self.enforce_still_exists()
-        self._branch_client.crud(delete=[self.id])
+        self._branch.crud(delete=[self.id])
         return self.id
 
     def is_rel_field(self, field: str) -> bool:
@@ -183,7 +177,7 @@ class BlockClient:
         Returns:
             bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
         """
-        return field in self._branch_client.data[RELATIONSHIPS][self.data[TYPE]]
+        return field in self._branch.data[RELATIONSHIPS][self.data[TYPE]]
 
     def get_rel_field_type(self, field: str) -> str:
         """Get the type of relationship of the field. Note: first call `is_rel_field` if you need to confirm `field` is
@@ -203,7 +197,7 @@ class BlockClient:
             raise TypeError(
                 f'The given field "{field}" is not a relationship field on "{self.data[TYPE]}".')
 
-        return self._branch_client.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
+        return self._branch.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
 
 
 # ------ helper function and vars for this file only ------

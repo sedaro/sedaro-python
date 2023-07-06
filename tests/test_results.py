@@ -1,44 +1,40 @@
-import time
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
-                    SedaroSeries, SedaroSimulationResult)
+                    SedaroSeries, SimulationResult)
+from sedaro.exceptions import NoSimResultsError
+
+sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _make_sure_wildfire_terminated():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        sim_client = sedaro.get_sim_client(WILDFIRE_SCENARIO_ID)
-        jobs = sim_client.get_latest()
+    sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
-        if not len(jobs) or jobs[0]['status'] != 'TERMINATED':
-            sim_client.start()
-            job = sim_client.get_latest()[0]
-            sim_client.terminate(job['id'])
+    try:
+        results = sim.results()
+        assert results.status == 'TERMINATED'
+    except (NoSimResultsError, AssertionError):
+        sim.start()
+        sim.terminate()
 
 
 def _make_sure_simplesat_done():
-    with SedaroApiClient(api_key=API_KEY, host=HOST) as sedaro:
-        sim_client = sedaro.get_sim_client(SIMPLESAT_SCENARIO_ID)
-        jobs = sim_client.get_latest()
-
-        if not len(jobs) or jobs[0]['status'] != 'SUCCEEDED':
-            sim_client = sedaro.get_sim_client(SIMPLESAT_SCENARIO_ID)
-            sim_client.start()
-            job = sim_client.get_latest()[0]
-
-            while job['status'] != 'SUCCEEDED':
-                job = sim_client.get_latest()[0]
-                time.sleep(1)
+    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+    try:
+        results = sim.results()
+        assert results.success
+    except (NoSimResultsError, AssertionError):
+        sim.start()
+        sim.results_poll()
 
 
 def test_query_terminated():
     '''Test querying of a terminated scenario.'''
     _make_sure_wildfire_terminated()
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, WILDFIRE_SCENARIO_ID, host=HOST)
-    assert not result.success
+    assert not sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation.results().success
 
 
 def test_query():
@@ -47,8 +43,27 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
+    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+
+    # make sure results_plain returns dictionary (testing latest and with id)
+    plain = sim.results_plain()
+    assert isinstance(plain, dict)
+    data_array_id = plain['meta']['id']
+    assert plain == sim.results_plain(id=data_array_id)
+
+    # test results method (default latest)
+    result = sim.results()
     assert result.success
+
+    # test results method (with id)
+    job = sim.status()
+    job_id = job['id']
+    result_from_id = sim.results(job_id)
+    assert result_from_id.success
+
+    # make sure results have same ids
+    assert result.job_id == result_from_id.job_id == job_id
+    assert result.data_array_id == result_from_id.data_array_id == data_array_id
 
     agent_result = result.agent(result.templated_agents[0])
     block_result = agent_result.block('root')
@@ -65,13 +80,13 @@ def test_save_load():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    result = SedaroSimulationResult.get_scenario_latest(API_KEY, SIMPLESAT_SCENARIO_ID, host=HOST)
+    result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
     assert result.success
 
     with TemporaryDirectory() as temp_dir:
         file_path = Path(temp_dir) / "sim.bak"
         result.to_file(file_path)
-        new_result = SedaroSimulationResult.from_file(file_path)
+        new_result = SimulationResult.from_file(file_path)
 
         file_path = Path(temp_dir) / "agent.bak"
         agent_result = new_result.agent(new_result.templated_agents[0])
@@ -91,6 +106,7 @@ def test_save_load():
         ref_series_result = new_result.agent(result.templated_agents[0]).block('root').position.ecef
         assert ref_series_result.mjd == new_series_result.mjd
         assert ref_series_result.values == new_series_result.values
+
 
 def test_query_model():
     simulation_job = {
@@ -153,11 +169,11 @@ def test_query_model():
                 }
             ],
         }
-}
+    }
 
-    results = SedaroSimulationResult(simulation_job, data)
+    results = SimulationResult(simulation_job, data)
     agent = results.agent('Agent')
-    
+
     model = agent.model_at(1)
     assert model['value'] == '0rfirst'
     assert model['otherValue'] == '1rfirst'
@@ -165,7 +181,7 @@ def test_query_model():
     assert model['blocks']['b']['value'] == '0first'
     assert model['blocks']['b']['otherValue'] == '1first'
     assert model['blocks']['b']['name'] == 'Block'
-    
+
     for t in [2, 2.1, 2.9999]:
         model = agent.model_at(t)
         assert model['value'] == '0rfirst'
@@ -174,7 +190,7 @@ def test_query_model():
         assert model['blocks']['b']['value'] == '0first'
         assert model['blocks']['b']['otherValue'] == '1second'
         assert model['blocks']['b']['name'] == 'Block'
-    
+
     model = agent.model_at(4)
     assert model['value']['edge'] == 12
     assert model['otherValue'] == '1rfourth'
