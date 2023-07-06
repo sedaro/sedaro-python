@@ -336,6 +336,10 @@ state = simulation_handle.consume(agent_id, spontaneous_external_state_id, time=
 print(state)
 ```
 
+**Note:** Calling `consume` with a `time` value that the simulation hasn't reached yet will block until the simulation catches up. This is currently subject to a 10 minute timeout. If the request fails after 10 minutes, it is recommended that it be reattempted.
+
+Similarly, calling `consume` with a `time` that too far lags the current simulation might result in an error as the value has been garbage collected from the simulation caches and is no longer available for retrieval. If this is the case, please fetch the data from the Data Service (via the Results API) instead.
+
 ### Produce
 
 ```python
