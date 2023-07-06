@@ -35,7 +35,7 @@ def test_run_simulation():
     try:
         simulation_handle['id']
     except Exception as e:
-        assert 'No simulation is running' in e
+        assert 'No simulation is running' in str(e)
         terminated_handle = True
     assert terminated_handle
 
@@ -55,7 +55,7 @@ def test_run_simulation():
     try:
         simulation_handle['id']
     except Exception as e:
-        assert 'No simulation is running' in e
+        assert 'No simulation is running' in str(e)
         terminated_handle = True
     assert terminated_handle
 

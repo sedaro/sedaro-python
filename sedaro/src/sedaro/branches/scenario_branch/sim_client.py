@@ -285,6 +285,7 @@ class Simulation:
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
+    def get(self, key, default=None): return self.__job.get(key, default)
 
     def __getitem__(self, key):
         if self.__job:
@@ -304,7 +305,8 @@ class SimulationHandle:
         self.__job = SimulationJob(job)
         self.__sim_client = sim_client
 
-    def __getitems__(self, key): return self.__job[key]
+    def __getitem__(self, key): return self.__job[key]
+    def get(self, key, default=None): return self.__job.get(key, default)
 
     def status(self, err_if_empty: bool = True):
         """Refreshes the local simulation status.
