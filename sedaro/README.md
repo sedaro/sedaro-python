@@ -127,7 +127,7 @@ from sedaro.exceptions import NonexistantBlockError
 API_KEY = 'api_key_generated_by_sedaro'
 AGENT_TEMPLATE_ID = 'NShL_CIU9iuufSII49xm-'
 
-sedaro = SedaroApiClient(api_key=API_KEY):
+sedaro = SedaroApiClient(api_key=API_KEY)
 
 branch = sedaro.agent_template(AGENT_TEMPLATE_ID)
 
@@ -191,7 +191,7 @@ The response from this method is used to update the blocks in the `Branch` the m
 Access a `Simulation` via the `simulation` attribute on a `ScenarioBranch`.
 
 ```py
-sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
+sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start simulation
 sim.start()
@@ -221,7 +221,7 @@ Any object in the results API will provide a descriptive summary of its contents
 You may also fetch results directly as a plain dictionary with additional arguments to customize the result.
 
 ```py
-sim = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
+sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Run simulation
 sim.start()
@@ -312,7 +312,7 @@ Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connec
 ### Deploy (i.e. Initialize)
 
 ```python
-sim_client = sedaro.scenario_branch('NShL7J0Rni63llTcEUp4F').simulation
+sim_client = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start the simulation
 # Note that when `sim_client.start()` returns, the simulation is running and ready for external state production/consumption

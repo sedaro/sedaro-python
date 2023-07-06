@@ -5,6 +5,7 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
 
 from sedaro_base_client.apis.tags import jobs_api
 from sedaro_base_client.apis.tags import externals_api
+import numpy as np
 
 from ...exceptions import NoSimResultsError, SedaroApiException
 from ...results import SimulationResult
@@ -15,16 +16,12 @@ if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
 
 
-def handle_response(response):
-    _response = None
-    try:
-        _response = parse_urllib_response(response)
-        if response.status != 200:
-            raise Exception()
-    except:
-        reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-        raise SedaroApiException(status=response.status, reason=reason)
-    return _response
+def serdes(v):
+    if type(v) is dict and 'ndarray' in v:
+        return np.array(v['ndarray'])
+    if type(v) is np.ndarray:
+        return {'ndarray': v.tolist()}
+    return v
 
 
 class Simulation:
@@ -46,7 +43,7 @@ class Simulation:
             yield jobs_api.JobsApi(api)
 
     @contextmanager
-    def __externals_client(self) -> Generator['externals_api.ExternalsApi', Any, None]:
+    def externals_client(self) -> Generator['externals_api.ExternalsApi', Any, None]:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
@@ -203,7 +200,15 @@ class Simulation:
             url += f'&axisOrder={axisOrder}'
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET')
-        return handle_response(response)
+        _response = None
+        try:
+            _response = parse_urllib_response(response)
+            if response.status != 200:
+                raise Exception()
+        except:
+            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
+            raise SedaroApiException(status=response.status, reason=reason)
+        return _response
 
     def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
@@ -281,7 +286,7 @@ class Simulation:
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
 
-    def __getitems__(self, key):
+    def __getitem__(self, key):
         if self.__job:
             if key in self.__job:
                 return self.__job[key]
@@ -442,7 +447,7 @@ class SimulationHandle:
         )
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
-        with self.__sim_client.__externals_client() as externals_client:
+        with self.__sim_client.externals_client() as externals_client:
             response = externals_client.get_external(
                 path_params={
                     'jobId': self.__job['id'],
@@ -450,11 +455,15 @@ class SimulationHandle:
                     'externalStateBlockId': external_state_id,
                 },
                 query_params=({'time': time} if time is not None else {}),
+                **COMMON_API_KWARGS,
             )
-        return handle_response(response)
+        return tuple(serdes(v) for v in body_from_res(response))
 
-    def produce(self, agent_id: str, external_state_id: str, values: Union[list, tuple], timestamp: float = None):
-        with self.__sim_client.__externals_client() as externals_client:
+    def produce(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
+        if type(values) is not tuple:
+            raise TypeError(
+                '`values` must be passed as a tuple of one or more state variable values (ex. `([x, y, z],)` where `[x, y, z]` is the external state]).')
+        with self.__sim_client.externals_client() as externals_client:
             response = externals_client.put_external(
                 path_params={
                     'jobId': self.__job['id'],
@@ -462,8 +471,9 @@ class SimulationHandle:
                     'externalStateBlockId': external_state_id,
                 },
                 body=(
-                    {'values': [*values]} |
+                    {'values': [serdes(v) for v in values]} |
                     ({'timestamp': timestamp} if timestamp is not None else {})
                 ),
+                **COMMON_API_KWARGS,
             )
-        return handle_response(response)
+        return tuple(serdes(v) for v in body_from_res(response))
