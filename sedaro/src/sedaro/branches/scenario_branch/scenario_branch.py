@@ -17,7 +17,8 @@ class ScenarioBranch(Branch):
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
         if (type_ := self.data['type']) != SCENARIO_TEMPLATE:
-            raise TypeError(f'Branch must be of type "{SCENARIO_TEMPLATE}" not "{type_}"')
+            raise TypeError(
+                f'Branch must be of type "{SCENARIO_TEMPLATE}" not "{type_}"')
 
     @property
     def simulation(self) -> 'Simulation':
@@ -40,4 +41,8 @@ class ScenarioBranch(Branch):
     ClockConfig: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
     Orbit: BlockType
+    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    PerRoundExternalState: BlockType
+    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    SpontaneousExternalState: BlockType
     """A Sedaro `Block` class on a `ScenarioTemplate` branch"""

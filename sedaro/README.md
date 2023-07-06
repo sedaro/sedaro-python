@@ -194,10 +194,10 @@ Access a `Simulation` via the `simulation` attribute on a `ScenarioBranch`.
 sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start simulation
-sim.start()
+simulation_handle = sim.start()
 
 # See simulation status
-sim.status()
+simulation_handle = sim.status()
 
 # Poll simulation, and return results when complete (progress will be printed until ready)
 results = sim.results_poll()
@@ -211,6 +211,26 @@ sim.terminate()
 
 - The `status`, `results`, `results_poll`, and `terminate` methods can all optionally take a `job_id`, otherwise they operate on the latest (most recently started/finished) simulation.
 - For `results` and `results_poll`, you may also provide the optional kwarg `streams`. This triggers narrowing results to fetch only specific streams that you specify. See doc strings for the `results` method for details on how to use the `streams` kwarg.
+
+### Simulation Handle
+
+The following `Simulation` methods are also available on the `SimulationHandle` returned by `sim.start()` and `sim.status()`:
+
+```py
+simulation_handle.status()
+simulation_handle.results_poll()
+simulation_handle.results()
+simulation_handle.results_plain(...)
+simulation_handle.terminate()
+```
+
+The `SimulationHandle` can also be used to access the attributes of the running simulation. For example:
+
+```py
+simulation_handle['id']
+simulation_handle['status']
+...
+```
 
 ## Results
 
