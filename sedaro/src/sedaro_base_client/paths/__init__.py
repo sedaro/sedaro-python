@@ -9,6 +9,7 @@ class PathValues(str, enum.Enum):
     MODELS_BRANCHES_BRANCH_ID_TEMPLATE = "/models/branches/{branchId}/template"
     SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_ = "/simulations/branches/{branchId}/control/"
     SIMULATIONS_BRANCHES_BRANCH_ID_CONTROL_JOB_ID = "/simulations/branches/{branchId}/control/{jobId}"
+    SIMULATIONS_JOBS_JOB_ID_EXTERNALS_AGENT_ID_EXTERNAL_STATE_BLOCK_ID = "/simulations/jobs/{jobId}/externals/{agentId}/{externalStateBlockId}"
     DATA_ID = "/data/{id}"
     MODELS_BRANCHES_BRANCH_ID = "/models/branches/{branchId}"
     MODELS_BRANCHES_BRANCH_IDSHAREAUTH_ = "/models/branches/{branchId}share-auth/"

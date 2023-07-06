@@ -106,7 +106,9 @@ scenario_blocks = [
     'Agent',
     'AgentGroup',
     'ClockConfig',
-    'Orbit'
+    'Orbit',
+    'PerRoundExternalState',
+    'SpontaneousExternalState',
 ]
 
 
