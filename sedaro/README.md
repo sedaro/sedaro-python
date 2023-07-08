@@ -297,7 +297,7 @@ sedaro.request.patch(
 
 Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch` or `Block` objects.
 
-## External Simulation State Dependencies [WIP]
+## External Simulation State Dependencies
 
 The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).
 

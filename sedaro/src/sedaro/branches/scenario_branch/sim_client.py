@@ -21,6 +21,10 @@ def serdes(v):
         return np.array(v['ndarray'])
     if type(v) is np.ndarray:
         return {'ndarray': v.tolist()}
+    if type(v) is dict:
+        return {k: serdes(v) for k, v in v.items()}
+    if type(v) is list:
+        return [serdes(v) for v in v]
     return v
 
 
