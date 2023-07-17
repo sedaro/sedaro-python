@@ -3,9 +3,8 @@ from contextlib import contextmanager
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
 
-from sedaro_base_client.apis.tags import jobs_api
-from sedaro_base_client.apis.tags import externals_api
 import numpy as np
+from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException
 from ...results import SimulationResult
@@ -476,10 +475,10 @@ class SimulationHandle:
                     'agentId': agent_id,
                     'externalStateBlockId': external_state_id,
                 },
-                body=(
-                    {'values': [serdes(v) for v in values]} |
-                    ({'timestamp': timestamp} if timestamp is not None else {})
-                ),
+                body=({
+                    **{'values': [serdes(v) for v in values]},
+                    **({'timestamp': timestamp} if timestamp is not None else {})
+                }),
                 **COMMON_API_KWARGS,
             )
         return tuple(serdes(v) for v in body_from_res(response))
