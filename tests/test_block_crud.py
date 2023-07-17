@@ -334,10 +334,8 @@ def test_multiblock_crud_with_ref_ids():
     bc = branch.BatteryCell.get_where(partNumber=batt_cell_part_number)[0]
     try:
         assert bp.cell.id == bc.id
-    except AssertionError:
-        bp.delete()
-        bc.delete()
-        raise
+    finally:
+        branch.crud(delete=[bp.id, bc.id])
 
 def run_tests():
     test_get()
