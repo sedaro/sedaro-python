@@ -2,13 +2,13 @@ import string
 from random import choices
 
 import pytest
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
-
 from sedaro import SedaroApiClient
 from sedaro.branches import AgentTemplateBranch, ScenarioBranch
 from sedaro.branches.blocks import Block
 from sedaro.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro.settings import ID
+
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 _letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
 
@@ -311,6 +311,33 @@ def test_power_command_tuple():
         with pytest.raises(SedaroApiException):
             create_solar_array(val)
 
+def test_multiblock_crud_with_ref_ids():
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
+    batt_pack_name = f'Battery Pack {_random_str()}'
+    batt_cell_part_number = f'Battery Cell {_random_str()}'
+    branch.crud(blocks=[
+        {'type': 'BatteryPack', 'name': batt_pack_name, "numSeries": 1, "numParallel": 1, 'cell': '$-batt-cell'},
+        {
+            'id': '$-batt-cell',
+            'type': 'BatteryCell',
+            'partNumber': batt_cell_part_number,
+            'esr':0.01,
+            'maxChargeCurrent':15,
+            'maxDischargeCurrent':100,
+            'minSoc':0.2,
+            'capacity':500,
+            'curve':[[0, 0.5, 1], [12.2, 14.1, 16.8]],
+        },
+    ])
+
+    bp = branch.BatteryPack.get_where(name=batt_pack_name)[0]
+    bc = branch.BatteryCell.get_where(partNumber=batt_cell_part_number)[0]
+    try:
+        assert bp.cell.id == bc.id
+    except AssertionError:
+        bp.delete()
+        bc.delete()
+        raise
 
 def run_tests():
     test_get()
@@ -324,3 +351,4 @@ def run_tests():
     test_active_comm_interfaces_tuple()
     test_attitude_solution_error_tuple()
     test_power_command_tuple()
+    test_multiblock_crud_with_ref_ids()
