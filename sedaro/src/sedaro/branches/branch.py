@@ -48,12 +48,20 @@ class Branch:
     ) -> 'dict':
         """Method to perform multiple CRUD operations at the same time.
 
+        In this method, relationship fields can point at existing `BlockID`'s or "ref id"s. A "ref id" is similar to a
+        json "reference" and is used as follows:
+        - It is any string starting with `'$'`.
+        - It must be in the `id` field of a single `Block` dictionary created in this transaction.
+        - It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
+        - All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
+
         Args:
             root (dict, optional): a `dict` of field/value pairs to update on the `root` of the branch template this\
                 method is called on. Defaults to `None`.
-            blocks (list, optional): a `list` of Block dictionaries. If there is an `id` in the `dict`, updates an\
-                existing Block, otherwise creates a new Block. Defaults to `None`.
-            delete (list, optional): a list of `id`s of Blocks to be deleted. Defaults to `None`.
+            blocks (list, optional): a `list` of `Block` dictionaries. `Block` dictionaries with no `id` or a "ref id"\
+                will be created, otherwise they should have an `id` field referencing an existing block and the\
+                dictionary will be used to update the `Block`. Defaults to `None`.
+            delete (list, optional): a list of `id`s of `Block`s to be deleted. Defaults to `None`.
 
         Raises:
             SedaroApiException: if there is an error in the response

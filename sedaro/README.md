@@ -161,6 +161,14 @@ The `crud` method is also available for performing operations on multiple Sedaro
 - `blocks`: create/update 1+ blocks by passing a list of dictionaries. If an `id` is present, the corresponding block will be updated. If an `id` isn't present, a new block will be created. The `type` is always required.
 - `delete`: delete 1+ blocks by passing a list of their block `id`s.
 
+In this method, relationship fields can point at existing `BlockID`'s or "ref id"s. A "ref id" is similar to a
+json "reference" and is used as follows:
+  - It is any string starting with `'$'`.
+  - It must be in the `id` field of a single `Block` dictionary created in this transaction.
+  - It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
+  - All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
+
+
 ```py
 branch.crud(
     root={ "field": "value" }, # update fields on root
