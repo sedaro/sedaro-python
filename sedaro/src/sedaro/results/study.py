@@ -15,12 +15,6 @@ class SedaroStudyResult:
     def __init__(self, host, scenario_id, api_key: str, metadata, cache: bool = True, cache_dir = None):
         '''Initialize a new Study Result.
 
-        See the following class methods for simple initialization:
-            - get
-            - poll
-            - get_scenario_latest
-            - poll_scenario_latest
-
         By default, this class will lazily load simulation results as requested
         and cache them in-memory. All constructors support the following
         optional arguments for caching:
@@ -83,54 +77,6 @@ class SedaroStudyResult:
     @property
     def iterations(self) -> int:
         return len(self.__metadata['jobs'])
-
-    @classmethod
-    def __get(
-        cls,
-        api_key: str,
-        scenario_id: int,
-        job_id: int = None,
-        poll: bool = False,
-        retry_interval: int = 2,
-        host: str = DEFAULT_HOST,
-        cache: bool = False,
-        cache_dir = None,
-    ):
-        with SedaroApiClient(api_key=api_key, host=host) as sedaro_client:
-            api_instance = jobs_api.JobsApi(sedaro_client)
-            if job_id is None:
-                try:
-                    job_id = api_instance.get_studies(
-                        path_params={'branchId': scenario_id},
-                        query_params={'latest': ''}
-                    ).body[0]['id']
-                except IndexError:
-                    raise IndexError(f'Could not find any simulation results for scenario: {scenario_id}')
-            study = cls.__get_study(api_instance, scenario_id, job_id)
-
-            if poll:
-                while study['status'] in ('PENDING', 'RUNNING'):
-                    study = cls.__get_study(api_instance, scenario_id, job_id)
-                    time.sleep(retry_interval)
-
-            return cls(host, scenario_id, api_key, study, cache=cache, cache_dir=cache_dir)
-
-    @staticmethod
-    def __get_study(api_instance: jobs_api.JobsApi, scenario_id: int, job_id: int) -> dict:
-        try:
-            return api_instance.get_study(path_params={'branchId': scenario_id, 'jobId': job_id}).body
-        except Exception:
-            raise IndexError(f'Could not find any study results for job: {job_id}')
-
-    @classmethod
-    def get(cls, api_key: str, scenario_id: int, job_id: int = None, **kwargs):
-        '''Query a specific study result.'''
-        return cls.__get(api_key, scenario_id, job_id, **kwargs)
-
-    @classmethod
-    def poll( cls, api_key: str, scenario_id: int, job_id: int = None, retry_interval: int = 2, **kwargs):
-        '''Query a specific study result and wait for it to finish if it is running.'''
-        return cls.__get(api_key, scenario_id, job_id, poll=True, retry_interval=retry_interval, **kwargs)
 
     def result(self, id_: str) -> SedaroSimulationResult:
         '''Query results for a particular simulation.'''
