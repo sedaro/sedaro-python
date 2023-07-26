@@ -1,6 +1,7 @@
-from functools import cached_property
 import gzip
 import json
+from functools import cached_property
+
 from scipy.interpolate import interp1d
 
 try:
@@ -10,7 +11,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from sedaro.results.utils import _get_series_type, hfill, HFILL, bsearch
+from .utils import HFILL, _get_series_type, bsearch, hfill
 
 
 class SedaroSeries:
@@ -76,7 +77,7 @@ class SedaroSeries:
     @property
     def values(self):
         return self.__series
-    
+
     @cached_property
     def values_interpolant(self):
         return interp1d(self.__mjd, self.__series)
@@ -130,7 +131,8 @@ class SedaroSeries:
             if show:
                 plt.show()
         except Exception:
-            raise ValueError("The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
+            raise ValueError(
+                "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
     def to_file(self, filename, verbose=True):
         '''Save series to compressed JSON file.'''

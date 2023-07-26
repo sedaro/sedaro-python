@@ -29,13 +29,6 @@ def hfill(char="-", len=HFILL):
     print(char * len)
 
 
-def progress_bar(progress):
-    if progress is not None:
-        blocks = int(progress * 50 / 100)
-        bar = '[' + ('■' * blocks + '□'*(50 - blocks)).ljust(50) + f'] ({progress:.2f}%)'
-        print(bar, end='\r')
-
-
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}
@@ -119,6 +112,7 @@ def _get_series_type(series):
             return type(entry).__name__
     else:
         return "None"
+
 
 def bsearch(ordered_series, value):
     '''Binary search for a value in an ordered series.

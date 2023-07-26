@@ -23,7 +23,7 @@ TESTS_PYPI_TEST = 'tt'
 SWITCH_PYPI = 'sp'
 TESTS_PYPI = 'tp'
 
-PY_VERSIONS_TESTS = ['3.7', '3.8', '3.9', '3.10']
+PY_VERSIONS_TESTS = ['3.8', '3.9', '3.10', '3.11']
 
 SWITCH_INSTR = 'Switch python version, install sedaro from: '
 TEST_INSTR = f'Run tests in python versions {PY_VERSIONS_TESTS} using sedaro from: '
@@ -72,9 +72,6 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
     if run_tests:
         # Don't show whole pip output ("quiet" flag) when running tests
         PIP_INSTALL += ' -q'
-    else:
-        # Print empty line before pip output when it's not "quiet"
-        print('')
 
     try:
         command = f'python{new_version} -m venv ./.venv && source .venv/bin/activate && {PIP_INSTALL} --upgrade pip && {PIP_INSTALL} -U autopep8 pytest'
@@ -86,9 +83,15 @@ def switch_current_python_virtual_environment(new_version=None, run_tests=False,
         else:
             command += f' && {PIP_INSTALL} -e sedaro'
         if run_tests:
-            system(f'{command} && python3 tests')
-        else:
-            system(command)
+            command += ' && python3 tests'
+
+        print_command = command.replace(" &&", "\n   &&")
+        print(f'\n  "{print_command}"')
+        if not run_tests:
+            # Print empty line before pip output when it's not "quiet"
+            print('')
+
+        system(command)
 
     except Exception as e:
         print('')

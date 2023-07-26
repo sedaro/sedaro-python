@@ -12,6 +12,7 @@ class SedaroApiException(ApiException, SedaroException):
     Base exception for api exceptions raised by the Sedaro Python Client, inherits from `sedaro_base_client`'s
     `ApiException`
     """
+
     def __init__(self, status: Union[str, int, None] = None, reason: Union[str, None] = None, api_response: Any = None):
         """Initialize SedaroApiException
 
@@ -28,4 +29,8 @@ class NonexistantBlockError(SedaroException):
 
 
 class NoBlockFoundError(SedaroException):
+    pass
+
+
+class NoSimResultsError(SedaroApiException):
     pass

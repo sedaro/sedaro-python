@@ -9,4 +9,5 @@ class TagValues(str, enum.Enum):
     BRANCHES = "Branches"
     DATA = "Data"
     TEMPLATES = "Templates"
+    EXTERNALS = "Externals"
     JOBS = "Jobs"

@@ -50,9 +50,9 @@ python3 -V
 
 - Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
 
-  - Switch out "3.7" for desired version
+  - Switch out "3.8" for desired version
   ```zsh
-  python3.7 -m venv ./.venv
+  python3.8 -m venv ./.venv
   source .venv/bin/activate
   ```
 

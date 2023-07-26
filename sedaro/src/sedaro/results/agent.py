@@ -1,12 +1,12 @@
 import gzip
 import json
-
-
-from typing import Generator, Union, List
 from pathlib import Path
-from sedaro.results.block import SedaroBlockResult
-from sedaro.results.utils import hfill, HFILL, ENGINE_EXPANSION
+from typing import Generator, List, Union
+
 from pydash import merge
+
+from .block import SedaroBlockResult
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
 class SedaroAgentResult:
@@ -24,7 +24,7 @@ class SedaroAgentResult:
             block_id
             for module in self.__series
             for block_id in self.__series[module]['series']
-            ),
+        ),
             reverse=True
         )
         self.__initial_state = initial_state
@@ -124,8 +124,9 @@ class SedaroAgentResult:
 
     def model_at(self, mjd):
         if not self.__initial_state:
-            raise ValueError('A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
-        
+            raise ValueError(
+                'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
+
         # Rough out model
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
         model = {'blocks': blocks, **blocks['root']}

@@ -3,7 +3,8 @@ import time
 
 import test_bcc_options
 import test_block_crud
-import test_raw_requests
+import test_externals
+import test_plain_requests
 import test_results
 import test_simulation
 from config import HOST
@@ -15,9 +16,10 @@ from config import HOST
 imported_test_files = [
     test_bcc_options,
     test_block_crud,
-    test_raw_requests,
+    test_plain_requests,
     test_simulation,
     test_results,
+    test_externals,
 ]
 ############################################################
 
