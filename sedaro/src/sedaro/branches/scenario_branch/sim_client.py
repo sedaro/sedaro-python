@@ -2,6 +2,16 @@ import time
 from contextlib import contextmanager
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
+import concurrent.futures
+import json
+import math
+import os
+import pathlib
+import tempfile
+from threading import Lock
+import traceback
+from typing import Dict, List, Optional, Tuple
+from zipfile import ZipFile, ZIP_DEFLATED
 
 import numpy as np
 from sedaro_base_client.apis.tags import externals_api, jobs_api
@@ -26,6 +36,7 @@ def serdes(v):
         return [serdes(v) for v in v]
     return v
 
+mutex = Lock() TODODODODODODODODODODO
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -282,6 +293,101 @@ class Simulation:
             time.sleep(retry_interval)
 
         return self.results(streams=streams or [])
+    
+    def build_progress_bar(self, progress):
+        fullBlock = '█'
+        partialBlocks = [' ', '▎', '▍', '▌', '▋', '▊', '▉', '█']
+
+        percentage = (float(progress['count'] / progress['total'])) * 100.0
+
+        blocks = ''
+        for i in range(25):
+            if percentage >= (i + 1) * 4:
+                blocks += fullBlock
+            elif percentage <= i * 4:
+                blocks += ' '
+            else:
+                remainder = (percentage - (i * 4)) * 2.0
+                try:
+                    blocks += partialBlocks[math.floor(remainder) - 1]
+                except Exception: # float imprecision caused remainder value slightly > 8
+                    blocks += partialBlocks[-1]
+
+        progressBar = f"Progress: {blocks}|  {percentage:.2f}%  "
+        print(progressBar, end='\r')
+
+    def download_data_in_parallel(self, agents, id, dirname: str, progress):
+        MAX_ATTEMPTS = 3
+        for agent in agents:
+            attempts = MAX_ATTEMPTS
+            while attempts > 0:
+                agentData = self.get_data(id, limit=None, streams=[(agent,)])
+                if 'series' in agentData:
+                    break
+                else:
+                    attempts -= 1
+            if attempts == 0:
+                raise f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts"
+            with open(f'{dirname}/{agent}.json', 'w') as fd:
+                mutex.acquire()
+                try:
+                    progress['count'] += 1
+                    self.build_progress_bar(progress)
+                finally:
+                    mutex.release()
+                json.dump(agentData, fd)
+        return agents
+
+    def download_data(self, branch, id, filename: str):
+        # check if filename already exists
+        if pathlib.Path(filename).exists():
+            raise FileExistsError('Provided file name is already in use. Please try again with a different file name.')
+
+        # create temp directory in which to build zip
+        archive = ZipFile(filename, 'w')
+        with tempfile.TemporaryDirectory() as dirname:
+            try:
+                # get list of agents
+                agents = []
+                for agent in branch.Agent.get_all():
+                    agents.append(agent.id)
+                
+                # get data for one agent at a time
+                MAX_CHUNKS = 4
+                if len(agents) < MAX_CHUNKS:
+                    NUM_CHUNKS = len(agents)
+                else:
+                    NUM_CHUNKS = MAX_CHUNKS
+                chunks = []
+                for _ in range(NUM_CHUNKS):
+                    chunks.append([])
+                for i in range(len(agents)):
+                    chunks[i % NUM_CHUNKS].append(agents[i])
+                progress = {'count': 0, 'total': len(agents)}
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
+                    _id = [id] * NUM_CHUNKS
+                    _dirname = [dirname] * NUM_CHUNKS
+                    _progress = [progress] * NUM_CHUNKS
+                    done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname, _progress)
+                for chunk in done:
+                    for agent in chunk:
+                        archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
+                
+                # save zip file
+                archive.close()
+                print(f'\nZip file created: {filename}')
+            
+            except Exception:
+                try:
+                    archive.close()
+                except Exception:
+                    pass
+                if pathlib.Path(filename).exists():
+                    os.remove(filename)
+                print(traceback.format_exc())
+                print("Error: Unable to download data and build archive.")
+                return
 
 
 class SimulationJob:
