@@ -1,220 +1,78 @@
-import concurrent.futures
-import json
-import math
-import os
-import pathlib
-import tempfile
-from threading import Lock
-import traceback
-from typing import Dict, List, Optional, Tuple
-from zipfile import ZipFile, ZIP_DEFLATED
+from contextlib import contextmanager
+from typing import Any, Dict, Generator
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
 
-from .branch_client import BranchClient
-from .exceptions import SedaroApiException
-from .settings import COMMON_API_KWARGS
-from .sim_client import SimClient
-from .utils import body_from_res, parse_urllib_response
+from sedaro.plain_request import PlainRequest
 
-mutex = Lock()
+from .branches import AgentTemplateBranch, ScenarioBranch
+from .settings import COMMON_API_KWARGS
+from .utils import body_from_res
+
 
 class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
-    def __init__(self, api_key, host='https://api.sedaro.com', *args, **kwargs):
-        return super().__init__(
-            configuration=Configuration(host=host),
-            *args,
-            **kwargs,
+    def __init__(self, api_key, host='https://api.sedaro.com'):
+        self._api_key = api_key
+        self._api_host = host
+
+    @contextmanager
+    def api_client(self) -> Generator[ApiClient, Any, None]:
+        """Instantiate ApiClient from sedaro_base_client
+
+        Yields:
+            Generator[ApiClient, Any, None]: ApiClient
+        """
+        with ApiClient(
+            configuration=Configuration(host=self._api_host),
             header_name='X_API_KEY',
-            header_value=api_key
-        )
+            header_value=self._api_key
+        ) as api:
+            yield api
 
-    def get_branch(self, id: int) -> BranchClient:
-        """Gets a Sedaro Branch based on the given `id` and creates a `BranchClient` from the response. The branch must
-        be accessible to this `SedaroApiClient` via the `api_key`.
-
-        Args:
-            id (int): the id of the desired Sedaro Branch
-
-        Returns:
-            BranchClient: A `BranchClient` object used to interact with the data attached to the corresponding Sedaro
-            Branch.
-        """
-        branches_api_instance = branches_api.BranchesApi(self)
-        # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
-        # return BranchClient(res.body, self)
-        res = branches_api_instance.get_branch(
-            path_params={'branchId': id}, **COMMON_API_KWARGS)
-        return BranchClient(body_from_res(res), self)
-
-    def build_progress_bar(self, progress):
-        fullBlock = '█'
-        partialBlocks = [' ', '▎', '▍', '▌', '▋', '▊', '▉', '█']
-
-        percentage = (float(progress['count'] / progress['total'])) * 100.0
-
-        blocks = ''
-        for i in range(25):
-            if percentage >= (i + 1) * 4:
-                blocks += fullBlock
-            elif percentage <= i * 4:
-                blocks += ' '
-            else:
-                remainder = (percentage - (i * 4)) * 2.0
-                try:
-                    blocks += partialBlocks[math.floor(remainder) - 1]
-                except Exception: # float imprecision caused remainder value slightly > 8
-                    blocks += partialBlocks[-1]
-
-        progressBar = f"Progress: {blocks}|  {percentage:.2f}%  "
-        print(progressBar, end='\r')
-
-    def download_data_in_parallel(self, agents, id, dirname: str, progress):
-        MAX_ATTEMPTS = 3
-        for agent in agents:
-            attempts = MAX_ATTEMPTS
-            while attempts > 0:
-                agentData = self.get_data(id, limit=None, streams=[(agent,)])
-                if 'series' in agentData:
-                    break
-                else:
-                    attempts -= 1
-            if attempts == 0:
-                raise f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts"
-            with open(f'{dirname}/{agent}.json', 'w') as fd:
-                mutex.acquire()
-                try:
-                    progress['count'] += 1
-                    self.build_progress_bar(progress)
-                finally:
-                    mutex.release()
-                json.dump(agentData, fd)
-        return agents
-
-    def download_data(self, branch, id, filename: str):
-        # check if filename already exists
-        if pathlib.Path(filename).exists():
-            raise FileExistsError('Provided file name is already in use. Please try again with a different file name.')
-
-        # create temp directory in which to build zip
-        archive = ZipFile(filename, 'w')
-        with tempfile.TemporaryDirectory() as dirname:
-            try:
-                # get list of agents
-                agents = []
-                for agent in branch.Agent.get_all():
-                    agents.append(agent.id)
-                
-                # get data for one agent at a time
-                MAX_CHUNKS = 4
-                if len(agents) < MAX_CHUNKS:
-                    NUM_CHUNKS = len(agents)
-                else:
-                    NUM_CHUNKS = MAX_CHUNKS
-                chunks = []
-                for _ in range(NUM_CHUNKS):
-                    chunks.append([])
-                for i in range(len(agents)):
-                    chunks[i % NUM_CHUNKS].append(agents[i])
-                progress = {'count': 0, 'total': len(agents)}
-
-                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
-                    _id = [id for _ in range(NUM_CHUNKS)]
-                    _dirname = [dirname for _ in range(NUM_CHUNKS)]
-                    _progress = [progress] * NUM_CHUNKS
-                    done = executor.map(self.download_data_in_parallel, chunks, _id, _dirname, _progress)
-                for chunk in done:
-                    for agent in chunk:
-                        archive.write(f'{dirname}/{agent}.json', f'{agent}.json', ZIP_DEFLATED)
-                
-                # save zip file
-                archive.close()
-                print(f'\nZip file created: {filename}')
-            
-            except Exception:
-                try:
-                    archive.close()
-                except Exception:
-                    pass
-                if pathlib.Path(filename).exists():
-                    os.remove(filename)
-                print(traceback.format_exc())
-                print("Error: Unable to download data and build archive.")
-                return
-
-    def get_data(self,
-            id,
-            start: float = None,
-            stop: float = None,
-            binWidth: float = None,
-            limit: float = None,
-            axisOrder: str = None,
-            streams: Optional[List[Tuple[str, ...]]] = None
-        ):
-        """Simplified Data Service getter with significantly higher performance over the Swagger-generated client."""
-        url = f'/data/{id}?'
-        if start is not None:
-            url += f'&start={start}'
-        if stop is not None:
-            url += f'&stop={stop}'
-        if binWidth is not None:
-            url += f'&binWidth={binWidth}'
-        elif limit is not None:
-            url += f'&limit={limit}'
-        streams = streams or []
-        if len(streams) > 0:
-            encodedStreams = ','.join(['.'.join(x) for x in streams])
-            url += f'&streams={encodedStreams}'
-        if axisOrder is not None:
-            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
-            url += f'&axisOrder={axisOrder}'
-        response = self.call_api(url, 'GET')
-        _response = None
-        try:
-            _response = parse_urllib_response(response)
-            if response.status != 200:
-                raise Exception()
-        except:
-            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-            raise SedaroApiException(status=response.status, reason=reason)
-        return _response
-
-    def get_sim_client(self, branch_id: int):
-        """Creates and returns a Sedaro SimClient
+    def __get_branch(self, branch_id: str) -> Dict:
+        """Get Sedaro `Branch` with given `branch_id` from `host`
 
         Args:
-            branch_id (int): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs)
+            branch_id (str): `id` of the Sedaro `Branch` to get
 
         Returns:
-            SimClient: a Sedaro SimClient
+            Dict: `body` of the response as a `dict`
         """
-        return SimClient(self, branch_id)
+        with self.api_client() as api:
+            branches_api_instance = branches_api.BranchesApi(api)
+            # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
+            # return Branch(res.body, self)
+            res = branches_api_instance.get_branch(
+                path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
+            return body_from_res(res)
 
-    def send_request(self, resource_path: str, method: str, body: Optional[Dict] = None):
-        """Send a request to the Sedaro server
+    def agent_template(self, branch_id: str) -> AgentTemplateBranch:
+        """Instantiate an `AgentTemplateBranch` object associated with the Sedaro `Branch` with `branch_id`
 
         Args:
-            resource_path (str): url path (everything after the host) for desired route
-            method (str): HTTP method ('GET', 'POST', 'DELETE'...etc)
-            body (Optional[Union[str, bytes]], optional): Body of the request. Defaults to None.
+            branch_id (str): `id` of the Sedaro Agent Template `Branch` to get
 
         Returns:
-            Dict: dictionary from the response body
+            AgentTemplateBranch: `AgentTemplateBranch` object
         """
-        headers = {}
-        if body is not None:
-            body = json.dumps(body)
-            headers['Content-Type'] = 'application/json'
-        res = self.call_api(
-            resource_path,
-            method.upper(),
-            headers=headers,
-            body=body
-        )
-        return parse_urllib_response(res)
+        return AgentTemplateBranch(self.__get_branch(branch_id), self)
+
+    def scenario(self, branch_id: str) -> ScenarioBranch:
+        """Instantiate an `ScenarioBranch` object associated with the Sedaro `Branch` with `branch_id`
+
+        Args:
+            branch_id (str): `id` of the Sedaro Agent Template `Branch` to get
+
+        Returns:
+            ScenarioBranch: `ScenarioBranch` object
+        """
+        return ScenarioBranch(self.__get_branch(branch_id), self)
+
+    @property
+    def request(self) -> PlainRequest:
+        """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
+        return PlainRequest(self)
