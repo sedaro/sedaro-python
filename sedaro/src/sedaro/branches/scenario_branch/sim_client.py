@@ -22,7 +22,7 @@ def serdes(v):
         return {'ndarray': v.tolist()}
     if type(v) is dict:
         return {k: serdes(v) for k, v in v.items()}
-    if type(v) is list:
+    if type(v) in {list, tuple}:
         return [serdes(v) for v in v]
     return v
 
@@ -106,7 +106,7 @@ class Simulation:
                 )
                 return SimulationHandle(body_from_res(res), self)
 
-    def terminate(self, job_id: int = None) -> 'SimulationHandle':
+    def terminate(self, job_id: int = None) -> None:
         """Terminate latest running simulation job corresponding to the respective Sedaro Scenario Branch id. If a
         `job_id` is provided, that simulation job will be terminated rather than the latest.
 
@@ -123,7 +123,6 @@ class Simulation:
             job_id = self.status()['id']
 
         with self.__jobs_client() as jobs:
-
             jobs.terminate_simulation(
                 path_params={
                     'branchId': self.__branch_id,
@@ -131,7 +130,6 @@ class Simulation:
                 },
                 **COMMON_API_KWARGS
             )
-        return SimulationHandle(None, self)
 
     def results_plain(
         self,
@@ -324,9 +322,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        self.__job = self.__sim_client.status(
-            self.__job['id'], err_if_empty=err_if_empty)
-        return self
+        return self := self.__sim_client.status(self.__job['id'], err_if_empty=err_if_empty)
 
     def terminate(self):
         """Terminate the running simulation.
@@ -335,7 +331,6 @@ class SimulationHandle:
             SimulationHandle (self)
         """
         self.__sim_client.terminate(self.__job['id'])
-        self.__job = SimulationJob(None)
         return self
 
     def results_plain(

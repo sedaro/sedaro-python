@@ -5,7 +5,7 @@ from sedaro import SedaroApiClient
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
-def _check_job_status(job):
+def _check_job_status_running(job):
     assert job['status'] == 'RUNNING'
     print('-', job['status'], '-', round(
         job['progress']['percentComplete'], 2), '%')
@@ -19,45 +19,39 @@ def test_run_simulation():
     print('- Started simulation')
 
     # Get status (via default latest)
-    _check_job_status(
+    _check_job_status_running(
         sim.status()
     )
 
     # Get status (via id)
-    _check_job_status(
+    _check_job_status_running(
         sim.status(simulation_handle['id'])
     )
 
     # Terminate
     print('- Terminating...')
-    terminated_handle = False
-    simulation_handle = sim.terminate()
-    try:
-        simulation_handle['id']
-    except Exception as e:
-        assert 'No simulation is running' in str(e)
-        terminated_handle = True
-    assert terminated_handle
+    sim.terminate()
 
     # Test control from handle
     simulation_handle = sim.start()
     print('- Started simulation (via handle)')
 
     # Get status (via handle)
-    _check_job_status(
-        simulation_handle.status()
+    _check_job_status_running(
+        simulation_handle := simulation_handle.status()
+    )
+    # Assert idempotency
+    _check_job_status_running(
+        simulation_handle := simulation_handle.status()
     )
 
     # Terminate
     print('- Terminating (via handle)...')
     simulation_handle.terminate()
-    terminated_handle = False
-    try:
-        simulation_handle['id']
-    except Exception as e:
-        assert 'No simulation is running' in str(e)
-        terminated_handle = True
-    assert terminated_handle
+
+    # Test that handle is still useable
+    assert simulation_handle.status()['status'] == 'TERMINATED'
+    simulation_handle.results()
 
 
 def run_tests():
