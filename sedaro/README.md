@@ -163,11 +163,11 @@ The `crud` method is also available for performing operations on multiple Sedaro
 
 In this method, relationship fields can point at existing `BlockID`'s or "ref id"s. A "ref id" is similar to a
 json "reference" and is used as follows:
-  - It is any string starting with `'$'`.
-  - It must be in the `id` field of a single `Block` dictionary created in this transaction.
-  - It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
-  - All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
 
+- It is any string starting with `'$'`.
+- It must be in the `id` field of a single `Block` dictionary created in this transaction.
+- It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
+- All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
 
 ```py
 branch.crud(
@@ -278,6 +278,16 @@ data = sim.results_plain(
 ```
 
 See doc string in the `results_plain` for details on use of the arguments.
+
+## Bulk Download
+
+Use the following method to download larger datasets more efficiently. See the doc string for details on use of the arguments.
+
+```py
+sim.download()
+```
+
+This will produce a ZIP archive called `data.zip` in your working directory. Inside the ZIP archive, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
 
 ## Send Requests
 
