@@ -27,7 +27,7 @@ class ScenarioBranch(Branch):
         Returns:
             Simulation: a `Simulation`
         """
-        return Simulation(self._sedaro, self.id)
+        return Simulation(self._sedaro, self)
 
     # ==============================================================================================================
     # For intellisense
