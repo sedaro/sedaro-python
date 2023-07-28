@@ -281,16 +281,13 @@ See doc string in the `results_plain` for details on use of the arguments.
 
 ## Bulk Download
 
-Use the following example to download larger datasets more efficiently.
+Use the following method to download larger datasets more efficiently. See the doc string for details on use of the arguments.
 
 ```py
-branch = sedaro.get_branch(SCENARIO_BRANCH_ID)
-sim = sedaro.get_sim_client(SCENARIO_BRANCH_ID)
-simId = sim.get_latest()[0]['dataArray'] TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
-sedaro.download_data(branch, simId, 'data.zip')
+sim.download()
 ```
 
-This will produce a ZIP file called `data.zip` in your working directory. Inside the ZIP file, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
+This will produce a ZIP archive called `data.zip` in your working directory. Inside the ZIP archive, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
 
 ## Send Requests
 
