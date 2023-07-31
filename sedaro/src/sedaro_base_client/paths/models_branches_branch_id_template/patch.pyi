@@ -25,10 +25,10 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.vehicle_template_crud import VehicleTemplateCrud
-from sedaro_base_client.model.scenario_template_crud import ScenarioTemplateCrud
+from sedaro_base_client.model.scenario_template_update_interface import ScenarioTemplateUpdateInterface
 from sedaro_base_client.model.template_crud_res import TemplateCrudRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.vehicle_template_update_interface import VehicleTemplateUpdateInterface
 
 # Path params
 BranchIdSchema = schemas.StrSchema
@@ -77,8 +77,8 @@ class SchemaForRequestBodyApplicationJson(
             # classes don't exist yet because their module has not finished
             # loading
             return [
-                ScenarioTemplateCrud,
-                VehicleTemplateCrud,
+                VehicleTemplateUpdateInterface,
+                ScenarioTemplateUpdateInterface,
             ]
 
 
@@ -214,7 +214,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        CRUD Template and Blocks
+        Update a Template Model
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances

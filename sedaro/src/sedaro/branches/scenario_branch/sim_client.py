@@ -38,29 +38,6 @@ def serdes(v):
     return v
 
 
-def progress_bar(progress):
-    fullBlock = '█'
-    partialBlocks = [' ', '▎', '▍', '▌', '▋', '▊', '▉', '█']
-
-    percentage = (float(progress['count'] / progress['total'])) * 100.0
-
-    blocks = ''
-    for i in range(25):
-        if percentage >= (i + 1) * 4:
-            blocks += fullBlock
-        elif percentage <= i * 4:
-            blocks += ' '
-        else:
-            remainder = (percentage - (i * 4)) * 2.0
-            try:
-                blocks += partialBlocks[math.floor(remainder) - 1]
-            except Exception:  # float imprecision caused remainder value slightly > 8
-                blocks += partialBlocks[-1]
-
-    progressBar = f"Progress: {blocks}|  {percentage:.2f}%  "
-    print(progressBar, end='\r')
-
-
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
 
@@ -341,7 +318,8 @@ class Simulation:
                 progress_lock.acquire()
                 try:
                     progress['count'] += 1
-                    progress_bar(progress)
+                    progress_bar(
+                        (float(progress['count'] / progress['total'])) * 100.0)
                 finally:
                     progress_lock.release()
                 json.dump(agentData, fd, indent=2)
@@ -374,7 +352,8 @@ class Simulation:
                 for i in range(len(agent_ids)):
                     chunks[i % NUM_CHUNKS].append(agent_ids[i])
                 progress = {'count': 0, 'total': len(agent_ids)}
-                progress_bar(progress)
+                progress_bar(
+                    (float(progress['count'] / progress['total'])) * 100.0)
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
                     shared = (data_array_id, dirname, progress, Lock())

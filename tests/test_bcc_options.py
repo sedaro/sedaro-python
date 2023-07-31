@@ -62,7 +62,6 @@ agent_template_blocks = [
     'RectangularFieldOfView',
     'ResistanceLoad',
     'SameTargetMultiCondition',
-    'Satellite',
     'SatelliteToSatelliteCondition',
     'SatelliteToScalarCondition',
     'SatelliteToTargetCondition',
@@ -120,7 +119,7 @@ def test_block_type_options():
         branch = get_method(branch_id)
         branch_block_names = sorted(branch.data['_blockNames'])
         # CHECK: lists above are correct
-        assert expected_block_names == branch_block_names
+        assert expected_block_names == branch_block_names, f'Set difference: {set(expected_block_names) - set(branch_block_names)}'
 
         for block_name in branch_block_names:
             block_type: BlockType = getattr(branch, block_name)

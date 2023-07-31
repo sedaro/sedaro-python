@@ -11,3 +11,4 @@ class TagValues(str, enum.Enum):
     TEMPLATES = "Templates"
     EXTERNALS = "Externals"
     JOBS = "Jobs"
+    REPOSITORIES = "Repositories"

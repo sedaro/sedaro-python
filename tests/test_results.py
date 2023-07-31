@@ -208,8 +208,14 @@ def test_query_model():
     assert model['blocks']['b']['name'] == 'Block'
 
 
+def test_download():
+    sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
+    sim.download(overwrite=True)
+
+
 def run_tests():
     test_query_terminated()
     test_query()
     test_save_load()
     test_query_model()
+    test_download()

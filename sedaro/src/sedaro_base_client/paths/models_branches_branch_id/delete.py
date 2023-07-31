@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
+from sedaro_base_client.model.entity_delete_res import EntityDeleteRes
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.branch_delete_res import BranchDeleteRes
 
 from . import path
 
@@ -56,7 +56,7 @@ request_path_branch_id = api_client.PathParameter(
     schema=BranchIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = BranchDeleteRes
+SchemaFor200ResponseBodyApplicationJson = EntityDeleteRes
 
 
 @dataclass
