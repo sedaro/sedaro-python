@@ -4,7 +4,7 @@ A python client for interacting with the Sedaro API using intuitive classes and 
 
 This client is intended to be used alongside our [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block. See docstrings on classes and their methods for further instructions and explanations.
 
-It is recommended that you are familiar with [Modeling in Sedaro](https://sedaro.github.io/openapi/#tag/Templates) as a prerequisite to using this client.
+It is recommended that you are familiar with [Modeling in Sedaro](https://sedaro.github.io/openapi/#tag/MetaModel) as a prerequisite to using this client.
 
 Package release versions correspond to the Sedaro application version at the time of package updates.
 
