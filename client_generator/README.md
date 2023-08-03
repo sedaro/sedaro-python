@@ -25,4 +25,4 @@ First:
 Second:
 
 - Issue: The classes that the Open API Generator creates don't like it when `None` is passed for some Optional properties that have a specific type.
-- Temporary Workaround: comment out `beta`,`orbitalElements`, `missionOrbit`, and `shadow` on `VehicleTemplate` when running the client generator.
+- Temporary Workaround: comment out `beta`,`orbitalElements`, `missionOrbit`, and `shadow` on `Spacecraft` when running the client generator.

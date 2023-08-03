@@ -2,13 +2,13 @@ import string
 from random import choices
 
 import pytest
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
+
 from sedaro import SedaroApiClient
 from sedaro.branches import AgentTemplateBranch, ScenarioBranch
 from sedaro.branches.blocks import Block
 from sedaro.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro.settings import ID
-
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 _letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
 
@@ -25,14 +25,14 @@ def test_get():
     assert isinstance(
         sedaro.agent_template(SIMPLESAT_A_T_ID), AgentTemplateBranch
     )
-    with pytest.raises(TypeError, match='"VehicleTemplate" not "ScenarioTemplate"'):
+    with pytest.raises(TypeError, match='not "Scenario"'):
         sedaro.agent_template(SIMPLESAT_SCENARIO_ID)
 
     # test get scenario
     assert isinstance(
         sedaro.scenario(SIMPLESAT_SCENARIO_ID), ScenarioBranch
     )
-    with pytest.raises(TypeError, match='"ScenarioTemplate" not "VehicleTemplate"'):
+    with pytest.raises(TypeError, match='not "Spacecraft"'):
         sedaro.scenario(SIMPLESAT_A_T_ID)
 
 
