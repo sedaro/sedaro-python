@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
-from ..settings import VEHICLE_TEMPLATE
+from ..settings import VEHICLE_TEMPLATES
 from .blocks import BlockType
 from .branch import Branch
 
@@ -15,8 +15,8 @@ class AgentTemplateBranch(Branch):
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
-        if (type_ := self.data['type']) != VEHICLE_TEMPLATE:
-            raise TypeError(f'Branch must be of type "{VEHICLE_TEMPLATE}" not "{type_}"')
+        if (type_ := self.data['type']) not in VEHICLE_TEMPLATES:
+            raise TypeError(f'Branch must be of type "{VEHICLE_TEMPLATES}" not "{type_}"')
 
     # ==============================================================================================================
     # For intellisense
