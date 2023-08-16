@@ -6,7 +6,6 @@ from sedaro_base_client.paths.models_branches_branch_id.get import \
 from ...settings import SCENARIO_TEMPLATE
 from ..blocks import BlockType
 from ..branch import Branch
-from .sim_client import Simulation
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
@@ -21,13 +20,24 @@ class ScenarioBranch(Branch):
                 f'Branch must be of type "{SCENARIO_TEMPLATE}" not "{type_}"')
 
     @property
-    def simulation(self) -> 'Simulation':
+    def simulation(self):
         """A `Simulation` instance to interact with the simulation connected to this scenario branch.
 
         Returns:
             Simulation: a `Simulation`
         """
+        from .sim_client import Simulation
         return Simulation(self._sedaro, self)
+
+    @property
+    def study(self):
+        """A `Sttudy` instance to interact with a study connected to this scenario branch.
+
+        Returns:
+            Study: a `Study`
+        """
+        from .study_client import Study
+        return Study(self._sedaro, self)
 
     # ==============================================================================================================
     # For intellisense
@@ -35,14 +45,14 @@ class ScenarioBranch(Branch):
 
     # SCENARIO
     Agent: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
     AgentGroup: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
     ClockConfig: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
     Orbit: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
     PerRoundExternalState: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
     SpontaneousExternalState: BlockType
-    """A Sedaro `Block` class on a `ScenarioTemplate` branch"""
+    """A Sedaro `Block` class on a `Scenario` branch"""
