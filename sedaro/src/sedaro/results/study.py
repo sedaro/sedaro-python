@@ -9,14 +9,14 @@ from sedaro.results.utils import HFILL, STATUS_ICON_MAP, hfill
 
 class StudyResult:
 
-    def __init__(self, client, metadata: dict):
+    def __init__(self, study, metadata: dict):
         '''Initialize a new Study Result.
 
         By default, this class will lazily load simulation results as requested
         and cache them in-memory. Different caching options can be enabled with
         the .set_cache method.
         '''
-        self.__sedaro = client
+        self.__study = study
         self.__metadata = metadata
         self.__cache = True
         self.__cache_dir = None
@@ -98,7 +98,7 @@ class StudyResult:
 
         if result is None:
             print(f'💾 Downloading simulation result id {id_}...', end='')
-            result = Simulation(self.__sedaro, self.branch).results(id_)
+            result = Simulation(self.__study._sedaro, self.__study._branch).results(id_)
             print('done!')
 
         if self.__cache:
@@ -119,7 +119,7 @@ class StudyResult:
     def refresh(self) -> None:
         '''Update metadata for this study.'''
         from sedaro.branches.scenario_branch.study_client import Study
-        self.__metadata = Study(self.__sedaro, self.branch).status(self.id)
+        self.__metadata = self.__study.status(self.id)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

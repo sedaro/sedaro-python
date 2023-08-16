@@ -10,25 +10,26 @@ from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res
 
 if TYPE_CHECKING:
+    from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
 
 class Study:
     """A client to interact with the Sedaro API study (jobs) routes"""
 
-    def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
+    def __init__(self, sedaro: 'SedaroApiClient', branch: 'ScenarioBranch'):
         """Instantiate a Sedaro `Study` instance
 
         Args:
             sedaro (`SedaroApiClient`): the `SedaroApiClient`
             branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs).
         """
-        self.__branch_id = branch_id
-        self.__sedaro = sedaro
+        self._branch = branch
+        self._sedaro = sedaro
 
     @contextmanager
     def __jobs_client(self) -> Generator['jobs_api.JobsApi', Any, None]:
-        with self.__sedaro.api_client() as api:
+        with self._sedaro.api_client() as api:
             yield jobs_api.JobsApi(api)
 
     def start(self, iterations: int) -> 'StudyHandle':
@@ -39,7 +40,7 @@ class Study:
         """
         with self.__jobs_client() as jobs:
             res = jobs.start_study(
-                path_params={'branchId': self.__branch_id},
+                path_params={'branchId': self._branch.id},
                 query_params={'iterations': iterations},
                 **COMMON_API_KWARGS
             )
@@ -62,7 +63,7 @@ class Study:
         if job_id is None:
             with self.__jobs_client() as jobs:
                 res = jobs.get_studies(
-                    path_params={'branchId': self.__branch_id},
+                    path_params={'branchId': self._branch.id},
                     query_params={'latest': ''},
                     **COMMON_API_KWARGS
                 )
@@ -71,14 +72,14 @@ class Study:
 
             raise NoSimResultsError(
                 status=404,
-                reason=f'Could not find any studies for scenario: {self.__branch_id}'
+                reason=f'Could not find any studies for scenario: {self._branch.id}'
             )
 
         else:
             with self.__jobs_client() as jobs:
                 res = jobs.get_study(
                     path_params={
-                        'branchId': self.__branch_id,
+                        'branchId': self._branch.id,
                         'jobId': job_id
                     },
                     **COMMON_API_KWARGS
@@ -105,7 +106,7 @@ class Study:
 
             jobs.terminate_study(
                 path_params={
-                    'branchId': self.__branch_id,
+                    'branchId': self._branch.id,
                     'jobId': job_id
                 },
                 **COMMON_API_KWARGS
@@ -127,7 +128,7 @@ class Study:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        return StudyResult(self.__sedaro, job)
+        return StudyResult(self, job)
 
     def results_poll(self, job_id: str = None, retry_interval: int = 2) -> StudyResult:
         """Query latest scenario study result and wait for sim to finish if it's running. If a `job_id` is passed, query for

@@ -37,7 +37,7 @@ class ScenarioBranch(Branch):
             Study: a `Study`
         """
         from .study_client import Study
-        return Study(self._sedaro, self.id)
+        return Study(self._sedaro, self)
 
     # ==============================================================================================================
     # For intellisense
