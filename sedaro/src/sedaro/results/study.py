@@ -65,7 +65,7 @@ class StudyResult:
     def iterations(self) -> int:
         return len(self.__metadata['jobs'])
 
-    def set_cache(self, cache: bool, cache_dir: str = None) -> None:
+    def set_cache(self, cache: bool = True, cache_dir: str = None) -> None:
         '''Set caching options for this study result.
 
         Args:
@@ -106,7 +106,7 @@ class StudyResult:
                 self.__cached_sim_results[id_] = result
             else:
                 if not cache_file.exists():
-                    result.to_file(cache_file, verbose=False)
+                    result.to_file(cache_file)
 
         return result
 
