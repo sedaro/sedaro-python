@@ -13,8 +13,8 @@ CRUD = 'crud'
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
-VEHICLE_TEMPLATE = 'VehicleTemplate'
-SCENARIO_TEMPLATE = 'ScenarioTemplate'
+VEHICLE_TEMPLATES = {'Spacecraft', 'TerrestrialVehicle'}
+SCENARIO_TEMPLATE = 'Scenario'
 
 # Relationships and Blocks
 MANY_SIDE = 'ManySide'

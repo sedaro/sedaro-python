@@ -56,14 +56,7 @@ def test_run_externals():
 
     # Terminate
     print('- Terminating...')
-    terminated_handle = False
-    simulation_handle = sim.terminate()
-    try:
-        simulation_handle['id']
-    except Exception as e:
-        assert 'No simulation is running' in str(e)
-        terminated_handle = True
-    assert terminated_handle
+    sim.terminate()
 
 
 def run_tests():

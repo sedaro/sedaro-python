@@ -2,6 +2,16 @@ import time
 from contextlib import contextmanager
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
                     Union)
+import concurrent.futures
+import json
+import math
+import os
+import pathlib
+import tempfile
+from threading import Lock
+import traceback
+from typing import Dict, List, Optional, Tuple
+from zipfile import ZipFile, ZIP_DEFLATED
 
 import numpy as np
 from sedaro_base_client.apis.tags import externals_api, jobs_api
@@ -13,6 +23,7 @@ from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
+    from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
 
@@ -23,7 +34,7 @@ def serdes(v):
         return {'ndarray': v.tolist()}
     if type(v) is dict:
         return {k: serdes(v) for k, v in v.items()}
-    if type(v) is list:
+    if type(v) in {list, tuple}:
         return [serdes(v) for v in v]
     return v
 
@@ -31,14 +42,15 @@ def serdes(v):
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
 
-    def __init__(self, sedaro: 'SedaroApiClient', branch_id: int):
+    def __init__(self, sedaro: 'SedaroApiClient', branch: 'ScenarioBranch'):
         """Instantiate a Sedaro `Simulation` instance
 
         Args:
             sedaro (`SedaroApiClient`): the `SedaroApiClient`
             branch_id (`int`): id of the desired Sedaro Scenario Branch to interact with its simulations (jobs).
         """
-        self.__branch_id = branch_id
+        self.__branch = branch
+        self.__branch_id = branch.id
         self.__sedaro = sedaro
 
     @contextmanager
@@ -107,7 +119,7 @@ class Simulation:
                 )
                 return SimulationHandle(body_from_res(res), self)
 
-    def terminate(self, job_id: int = None) -> 'SimulationHandle':
+    def terminate(self, job_id: int = None) -> None:
         """Terminate latest running simulation job corresponding to the respective Sedaro Scenario Branch id. If a
         `job_id` is provided, that simulation job will be terminated rather than the latest.
 
@@ -124,7 +136,6 @@ class Simulation:
             job_id = self.status()['id']
 
         with self.__jobs_client() as jobs:
-
             jobs.terminate_simulation(
                 path_params={
                     'branchId': self.__branch_id,
@@ -132,7 +143,6 @@ class Simulation:
                 },
                 **COMMON_API_KWARGS
             )
-        return SimulationHandle(None, self)
 
     def results_plain(
         self,
@@ -286,6 +296,92 @@ class Simulation:
 
         return self.results(streams=streams or [])
 
+    def __download(self, p):
+        agents, id, dirname, progress, progress_lock = p
+        MAX_ATTEMPTS = 3
+        for agent in agents:
+            attempts = MAX_ATTEMPTS
+            while attempts > 0:
+                agentData = self.results_plain(
+                    id=id,
+                    limit=None,
+                    streams=[(agent,)],
+                )
+                if 'series' in agentData:
+                    break
+                else:
+                    print('Data retrieval failed. Retrying...')
+                    attempts -= 1
+            else:
+                raise Exception(
+                    f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts")
+            with open(f'{dirname}/{agent}.json', 'w') as fd:
+                progress_lock.acquire()
+                try:
+                    progress['count'] += 1
+                    progress_bar(
+                        (float(progress['count'] / progress['total'])) * 100.0)
+                finally:
+                    progress_lock.release()
+                json.dump(agentData, fd, indent=2)
+        return agents
+
+    def download(self, data_array_id: str = None, filename: str = 'sedaro.zip', agent_ids: List[str] = None, overwrite: bool = False):
+        if not overwrite and pathlib.Path(filename).exists():
+            raise FileExistsError(
+                f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
+
+        # create temp directory in which to build zip
+        archive = ZipFile(filename, 'w')
+        with tempfile.TemporaryDirectory() as dirname:
+            try:
+                # Eventually this should be updated to get the Agents from the model snapshot saved alongside the
+                # data in case the model changes prior to download.
+                agent_ids = agent_ids or self.__branch.Agent.get_all_ids()
+                if not data_array_id:
+                    data_array_id = self.status()['dataArray']
+
+                # get data for one agent at a time
+                MAX_CHUNKS = 4
+                if len(agent_ids) < MAX_CHUNKS:
+                    NUM_CHUNKS = len(agent_ids)
+                else:
+                    NUM_CHUNKS = MAX_CHUNKS
+                chunks = []
+                for _ in range(NUM_CHUNKS):
+                    chunks.append([])
+                for i in range(len(agent_ids)):
+                    chunks[i % NUM_CHUNKS].append(agent_ids[i])
+                progress = {'count': 0, 'total': len(agent_ids)}
+                progress_bar(
+                    (float(progress['count'] / progress['total'])) * 100.0)
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
+                    shared = (data_array_id, dirname, progress, Lock())
+                    done = executor.map(
+                        self.__download,
+                        [(c, *shared) for c in chunks]
+                    )
+                print(f'\nBuilding {filename}...')
+                for chunk in done:
+                    for agent in chunk:
+                        archive.write(f'{dirname}/{agent}.json',
+                                      f'{agent}.json', ZIP_DEFLATED)
+
+                # save zip file
+                archive.close()
+                print(f'Done. Created: {filename}')
+                print('See https://sedaro.github.io/openapi/#tag/Data for details on the data format of each individual JSON file in the archive.')
+
+            except Exception:
+                try:
+                    archive.close()
+                except Exception:
+                    pass
+                if pathlib.Path(filename).exists():
+                    os.remove(filename)
+                raise Exception("Unable to download data and build archive.")
+
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -325,9 +421,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        self.__job = self.__sim_client.status(
-            self.__job['id'], err_if_empty=err_if_empty)
-        return self
+        return (self := self.__sim_client.status(self.__job['id'], err_if_empty=err_if_empty))
 
     def terminate(self):
         """Terminate the running simulation.
@@ -336,7 +430,6 @@ class SimulationHandle:
             SimulationHandle (self)
         """
         self.__sim_client.terminate(self.__job['id'])
-        self.__job = SimulationJob(None)
         return self
 
     def results_plain(

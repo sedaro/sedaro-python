@@ -27,7 +27,7 @@ class ScenarioBranch(Branch):
             Simulation: a `Simulation`
         """
         from .sim_client import Simulation
-        return Simulation(self._sedaro, self.id)
+        return Simulation(self._sedaro, self)
 
     @property
     def study(self):

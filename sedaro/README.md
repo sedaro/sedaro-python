@@ -4,7 +4,7 @@ A python client for interacting with the Sedaro API using intuitive classes and 
 
 This client is intended to be used alongside our [OpenAPI Specification](https://sedaro.github.io/openapi/). Please refer to this documentation for detailed information on the names, attributes, and relationships of each Sedaro Block. See docstrings on classes and their methods for further instructions and explanations.
 
-It is recommended that you are familiar with [Modeling in Sedaro](https://sedaro.github.io/openapi/#tag/Templates) as a prerequisite to using this client.
+It is recommended that you are familiar with [Modeling in Sedaro](https://sedaro.github.io/openapi/#tag/MetaModel) as a prerequisite to using this client.
 
 Package release versions correspond to the Sedaro application version at the time of package updates.
 
@@ -163,11 +163,11 @@ The `crud` method is also available for performing operations on multiple Sedaro
 
 In this method, relationship fields can point at existing `BlockID`'s or "ref id"s. A "ref id" is similar to a
 json "reference" and is used as follows:
-  - It is any string starting with `'$'`.
-  - It must be in the `id` field of a single `Block` dictionary created in this transaction.
-  - It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
-  - All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
 
+- It is any string starting with `'$'`.
+- It must be in the `id` field of a single `Block` dictionary created in this transaction.
+- It can be referenced in any relationship field on root or any `Block` dictionary in this transaction.
+- All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
 
 ```py
 branch.crud(
@@ -278,6 +278,16 @@ data = sim.results_plain(
 ```
 
 See doc string in the `results_plain` for details on use of the arguments.
+
+## Bulk Download
+
+Use the following method to download larger datasets more efficiently. See the doc string for details on use of the arguments.
+
+```py
+sim.download()
+```
+
+This will produce a ZIP archive called `data.zip` in your working directory. Inside the ZIP archive, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
 
 ## Send Requests
 
