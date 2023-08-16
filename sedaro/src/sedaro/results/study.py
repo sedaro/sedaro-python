@@ -1,46 +1,29 @@
-import time
-
 import datetime as dt
-
-from typing import List
 from pathlib import Path
-from sedaro import SedaroApiClient
-from sedaro_base_client.apis.tags import jobs_api
-from sedaro.results import SedaroSimulationResult
-from sedaro.results.utils import hfill, HFILL, DEFAULT_HOST, STATUS_ICON_MAP
+from typing import List
+
+from sedaro.branches.scenario_branch.sim_client import Simulation
+from sedaro.results.simulation_result import SimulationResult
+from sedaro.results.utils import HFILL, STATUS_ICON_MAP, hfill
 
 
-class SedaroStudyResult:
+class StudyResult:
 
-    def __init__(self, host, scenario_id, api_key: str, metadata, cache: bool = True, cache_dir = None):
+    def __init__(self, client, metadata: dict):
         '''Initialize a new Study Result.
 
         By default, this class will lazily load simulation results as requested
-        and cache them in-memory. All constructors support the following
-        optional arguments for caching:
-            - cache: Boolean option to turn caching on or off.
-            - cache_dir: Path to a directory for on-disk caching.
+        and cache them in-memory. Different caching options can be enabled with
+        the .set_cache method.
         '''
-        self.__api_key = api_key
-        self.__scenario = scenario_id
-        self.__host = host
-
+        self.__sedaro = client
         self.__metadata = metadata
-
-        self.__cache = cache
+        self.__cache = True
         self.__cache_dir = None
         self.__cached_sim_results = {}
-        if self.__cache:
-            if cache_dir is not None:
-                self.__cache_dir = Path(cache_dir)
-                if not self.__cache_dir.is_dir():
-                    raise ValueError(f'Cache directory not found: {cache_dir}')
-        else:
-            if self.__cache_dir is not None:
-                raise ValueError(f'Cache directory is defined but caching is off.')
 
     def __repr__(self) -> str:
-        return f'SedaroStudyResult(branch={self.__scenario}, status={self.status}, iterations={self.iterations})'
+        return f'SedaroStudyResult(branch={self.branch}, status={self.status}, iterations={self.iterations})'
 
     def __iter__(self):
         '''Iterate through simulation results.'''
@@ -53,6 +36,10 @@ class SedaroStudyResult:
     @property
     def id(self) -> int:
         return self.__metadata['id']
+
+    @property
+    def branch(self) -> str:
+        return self.__metadata['branch']
 
     @property
     def scenario_hash(self) -> str:
@@ -78,7 +65,26 @@ class SedaroStudyResult:
     def iterations(self) -> int:
         return len(self.__metadata['jobs'])
 
-    def result(self, id_: str) -> SedaroSimulationResult:
+    def set_cache(self, cache: bool, cache_dir: str = None) -> None:
+        '''Set caching options for this study result.
+
+        Args:
+            cache: Boolean option to turn caching on or off.
+            cache_dir: Path to a directory for on-disk caching.
+        '''
+        self.__cache = cache
+        self.__cache_dir = cache_dir
+        if self.__cache:
+            if cache_dir is not None:
+                self.__cache_dir = Path(cache_dir)
+                if not self.__cache_dir.is_dir():
+                    raise ValueError(f'Cache directory not found: {cache_dir}')
+        else:
+            if self.__cache_dir is not None:
+                raise ValueError(f'Cache directory is defined but caching is off.')
+        self.__cached_sim_results = {}
+
+    def result(self, id_: str) -> SimulationResult:
         '''Query results for a particular simulation.'''
         result = None
         if self.__cache:
@@ -88,11 +94,11 @@ class SedaroStudyResult:
             else:
                 cache_file = self.__cache_dir / f'sim_{id_}.cache'
                 if cache_file.exists():
-                    result = SedaroSimulationResult.from_file(cache_file)
+                    result = SimulationResult.from_file(cache_file)
 
         if result is None:
             print(f'💾 Downloading simulation result id {id_}...', end='')
-            result = SedaroSimulationResult.get(self.__api_key, self.__scenario, job_id=id_, host=self.__host)
+            result = Simulation(self.__sedaro, self.branch).results(id_)
             print('done!')
 
         if self.__cache:
@@ -112,9 +118,8 @@ class SedaroStudyResult:
 
     def refresh(self) -> None:
         '''Update metadata for this study.'''
-        with SedaroApiClient(api_key=self.__api_key, host=self.__host) as sedaro_client:
-            api_instance = jobs_api.JobsApi(sedaro_client)
-            self.__metadata = SedaroStudyResult.__get_study(api_instance, self.__scenario, self.id)
+        from sedaro.branches.scenario_branch.study_client import Study
+        self.__metadata = Study(self.__sedaro, self.branch).status(self.id)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
