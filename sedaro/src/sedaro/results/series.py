@@ -45,6 +45,9 @@ class SedaroSeries:
             raise ValueError('Select a specific subseries to iterate over.')
         return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series))
 
+    def __len__(self) -> int:
+        return len(self.mjd)
+
     def __getitem__(self, subseries_name: str):
         '''Get a particular subseries by name.
 
@@ -135,12 +138,13 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def to_file(self, filename):
+    def to_file(self, filename, verbose=True):
         '''Save series to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
             contents = {'name': self.__name, 'time': self.__mjd, 'series': self.__series}
             json.dump(contents, json_file)
-            print(f"💾 Successfully saved to {filename}")
+            if verbose:
+                print(f"💾 Successfully saved to {filename}")
 
     @classmethod
     def from_file(cls, filename):
@@ -155,7 +159,7 @@ class SedaroSeries:
         print(f"'{self.name}'".center(HFILL))
         hfill()
         average_step = self.duration / len(self.elapsed_time)
-        print(f"📈 {len(self.mjd)} points covering {self.duration/60:.1f} minutes with ~{average_step:.1f}s steps")
+        print(f"📈 {len(self)} points covering {self.duration/60:.1f} minutes with ~{average_step:.1f}s steps")
 
         if self.__has_subseries:
             print("\n📑 This series has subseries.")
