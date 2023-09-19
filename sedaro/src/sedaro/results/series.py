@@ -48,10 +48,10 @@ class SedaroSeries:
     def __len__(self) -> int:
         return len(self.mjd)
 
-    def __getattr__(self, subseries_name: str):
+    def __getitem__(self, subseries_name: str):
         '''Get a particular subseries by name.
 
-        Typically invoked by calling .<SUBSERIES_NAME> on an instance
+        Typically invoked by indexing [<SUBSERIES_NAME>] on an instance
         of SedaroSeries. Can only be called if the series has subseries.
         '''
         if not self.__has_subseries:
@@ -61,6 +61,10 @@ class SedaroSeries:
             return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name])
         else:
             raise ValueError(f"Subseries '{subseries_name}' not found.")
+
+    def __getattr__(self, subseries_name: str):
+        '''Get a particular subseries by name as an attribute.'''
+        return self[subseries_name]
 
     @property
     def name(self):
@@ -174,6 +178,6 @@ class SedaroSeries:
 
         hfill()
         if self.__has_subseries:
-            print("❓ Call .<SUBSERIES_NAME> to select a subseries")
+            print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
         else:
             print("❓ Call .plot to visualize results")
