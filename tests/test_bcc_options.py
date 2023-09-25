@@ -154,7 +154,8 @@ def test_block_type_options():
                 getattr(branch, bad_block)
             except Exception as e:
                 assert isinstance(e, AttributeError)
-                assert f'Unable to create a "{BlockType.__name__}" from string: "{bad_block}".' in str(e)
+                expected_err = f'Unable to find an attribute or create a "{BlockType.__name__}" from string: "{bad_block}".'
+                assert expected_err in str(e)
 
 
 def run_tests():
