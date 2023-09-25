@@ -1,8 +1,25 @@
+import time
+
 from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+
+
+def _job_status_is_pending(job):
+    return job['status'] == 'PENDING'
+
+
+def _wait_until_passed_pending(simulation_handle):
+    start_time = time.perf_counter()
+    print('- Wait until no longer "PENDING"...')
+
+    while _job_status_is_pending(simulation_handle.status()):
+        max_seconds = 180
+        if time.perf_counter() - start_time > max_seconds:
+            raise TimeoutError(f'Simulation did not start within {max_seconds} seconds')
+        time.sleep(2)
 
 
 def _check_job_status_running(job):
@@ -17,6 +34,8 @@ def test_run_simulation():
     # Start simulation
     simulation_handle = sim.start()
     print('- Started simulation')
+
+    _wait_until_passed_pending(simulation_handle)
 
     # Get status (via default latest)
     _check_job_status_running(
@@ -35,6 +54,8 @@ def test_run_simulation():
     # Test control from handle
     simulation_handle = sim.start()
     print('- Started simulation (via handle)')
+
+    _wait_until_passed_pending(simulation_handle)
 
     # Get status (via handle)
     _check_job_status_running(
