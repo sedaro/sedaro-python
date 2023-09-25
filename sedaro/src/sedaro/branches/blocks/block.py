@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Dict
 from pydash import is_empty
 
 from ...exceptions import NonexistantBlockError
-from ...settings import BLOCKS, CRUD, ID, TYPE
+from ...settings import BLOCKS, CRUD, ID, RELATIONSHIPS, TYPE
 from ..common import Common
 
 if TYPE_CHECKING:
@@ -52,6 +52,12 @@ class Block(Common):
     def _branch(self) -> 'Branch':
         '''The `Branch` this `Block` instance is connected to'''
         return self._block_type._branch
+
+    @property
+    def _relationship_attrs(self) -> Dict:
+        """The relationship fields dictionary from the meta attributes corresponding to the Sedaro Block this `Block`
+        instance is associated with."""
+        return self._branch.data[RELATIONSHIPS][self.type]
 
     def check_still_exists(self) -> bool:
         """Checks whether the Sedaro Block this `Block` instance references still exists.

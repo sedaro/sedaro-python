@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Dict
 
-from ..settings import DATA_SIDE, MANY_SIDE, ONE_SIDE, RELATIONSHIPS, TYPE
+from ..settings import DATA_SIDE, MANY_SIDE, ONE_SIDE, TYPE
 
 if TYPE_CHECKING:
     from .branch import Branch
@@ -20,6 +20,13 @@ class Common(ABC):
     @abstractmethod
     def _branch(self) -> 'Branch':
         '''Access the `Branch` this instance is associated with.'''
+        pass
+
+    @property
+    @abstractmethod
+    def _relationship_attrs(self) -> Dict:
+        '''Access the relationship fields dictionary from the meta attributes corresponding to root or the `Block` this
+        instance is associated with.'''
         pass
 
     def __getattr__(self, key: str) -> any:
@@ -69,7 +76,7 @@ class Common(ABC):
         Returns:
             bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
         """
-        return field in self._branch.data[RELATIONSHIPS][self.data[TYPE]]
+        return field in self._relationship_attrs
 
     def get_rel_field_type(self, field: str) -> str:
         """Get the type of relationship of the field. Note: first call `is_rel_field` if you need to confirm `field` is
@@ -89,7 +96,7 @@ class Common(ABC):
             raise TypeError(
                 f'The given field "{field}" is not a relationship field on "{self.data[TYPE]}".')
 
-        return self._branch.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
+        return self._relationship_attrs[field][TYPE]
 
 
 # ------ helper function and vars for this file only ------
