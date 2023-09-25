@@ -3,21 +3,23 @@ from typing import TYPE_CHECKING, Any, Dict, List, Union
 from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
-from ..settings import BLOCKS, TYPE
+from ..settings import BLOCKS, RELATIONSHIPS, ROOT, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
 from .blocks import Block, BlockType
+from .common import Common
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
 
 
-class Branch:
-    data: 'Dict[str, Any]'
+class Branch(Common):
+    _data: 'Dict[str, Any]'
     id: 'str'
     """Branch `id`"""
 
     def __ingest_branch_res(self, branch_res_dict: dict):
         for k, v in branch_res_dict.items():
+            k = '_data' if k == 'data' else k  # b/c `data` must be property overwriting abstract method of parent class
             setattr(self, k, v)
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
@@ -30,14 +32,33 @@ class Branch:
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_type: str) -> BlockType:
+    def __getattr__(self, block_type_or_attr: str) -> Union[BlockType, Any]:
 
-        # -- check block type
-        if block_type not in self.data['_supers']:
+        if block_type_or_attr in self.data['_supers']:
+            return BlockType(block_type_or_attr, self)
+
+        try:
+            return super().__getattr__(block_type_or_attr)
+        except AttributeError:
             raise AttributeError(
-                f'Unable to create a "{BlockType.__name__}" from string: "{block_type}". Please check the name and try again.')
+                f'Unable to find an attribute or create a "{BlockType.__name__}" from string: "{block_type_or_attr}". Please check the name and try again.')
 
-        return BlockType(block_type, self)
+    @property
+    def type(self) -> str:
+        """`Metamodel` type of the branch"""
+        return self.data[TYPE]
+
+    @property
+    def data(self) -> 'Dict':
+        return self._data
+
+    @property
+    def _branch(self) -> 'Branch':
+        return self
+
+    @property
+    def _relationship_attrs(self) -> Dict:
+        return self.data[RELATIONSHIPS][ROOT]
 
     def crud(
         self,
