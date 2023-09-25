@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Union
 
+from pydash import is_empty
 from sedaro_base_client.paths.models_branches_branch_id.get import \
     SchemaFor200ResponseBodyApplicationJson
 
@@ -134,3 +135,21 @@ class Branch(Common):
             id,
             getattr(self, self.data[BLOCKS][id][TYPE])
         )
+
+    def update(self, **fields) -> 'Branch':
+        """Update attributes on the root of the `Branch.data` dictionary
+
+        Args:
+            **fields (Dict): desired field/value pairs to update
+
+        Raises:
+            SedaroApiException: if there is an error in the response
+
+        Returns:
+            Branch: updated `Branch` (Note: the previous `Branch` reference is also updated)
+        """
+        if is_empty(fields):
+            raise ValueError(f'Must provide fields to update on the {self.type}.')
+
+        self._branch.crud(root=fields)
+        return self
