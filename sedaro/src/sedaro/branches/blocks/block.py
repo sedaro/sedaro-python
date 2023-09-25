@@ -104,7 +104,7 @@ class Block(Common):
         """Update attributes of the corresponding Sedaro Block
 
         Args:
-            **fields (Dict): desired attributes to update on the Sedaro Block
+            **fields (Dict): desired field/value pairs to update
 
         Raises:
             SedaroApiException: if there is an error in the response
