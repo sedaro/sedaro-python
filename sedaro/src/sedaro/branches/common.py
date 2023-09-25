@@ -65,7 +65,7 @@ class Common(ABC):
         )
 
     def is_rel_field(self, field: str) -> bool:
-        """Checks if the given `field` is a relationship field on the associated Sedaro Block.
+        """Checks if the given `field` is a relationship field on the associated Sedaro Block or root.
 
         Args:
             field (str): field to check
@@ -74,7 +74,7 @@ class Common(ABC):
             TypeError: if the value of `field` is not a string
 
         Returns:
-            bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
+            bool: indicates if the given `field` is a relationship field or not
         """
         return field in self._relationship_attrs
 
@@ -86,8 +86,8 @@ class Common(ABC):
             field (str): the field to get the relationship type for
 
         Raises:
-            TypeError: if the value of `field` is not a string or not a relationship field on this type of Sedaro Block
-            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
+            TypeError: if the value of `field` is not a string or not a relationship field
+            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block or root
 
         Returns:
             str: a string indicating the type of relationship field
@@ -102,5 +102,5 @@ class Common(ABC):
 # ------ helper function and vars for this file only ------
 
 
-def make_attr_error(field: str, block_name: str) -> str:
-    return AttributeError(f'There is no "{field}" attribute on "{block_name}"')
+def make_attr_error(field: str, name: str) -> str:
+    return AttributeError(f'There is no "{field}" attribute on "{name}"')
