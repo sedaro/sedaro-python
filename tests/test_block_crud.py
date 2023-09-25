@@ -45,6 +45,17 @@ def test_keying_into_root_attrs():
     assert isinstance(branch.migrated, (type(None), str))
 
 
+def test_updating_root_attrs():
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
+    prev_mass = branch.mass
+
+    branch.update(mass=prev_mass + 1)
+    assert branch.mass == prev_mass + 1
+
+    branch.update(mass=prev_mass)
+    assert branch.mass == prev_mass
+
+
 def test_get_blocks_all_and_single():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     components = branch.Component.get_all()
