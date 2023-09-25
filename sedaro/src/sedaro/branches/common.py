@@ -30,17 +30,17 @@ class Common(ABC):
         pass
 
     def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the instance to access keys on the referenced Sedaro Block. Additionally,
+        """Allows for dotting into the instance to access keys on the referenced Sedaro `Block` or root. Additionally,
         makes it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
 
         Args:
             key (str): attribute being keyed into
 
         Raises:
-            AttributeError: if the attribute doesn't exist on the refrenced Sedaro Block
+            AttributeError: if the attribute doesn't exist
 
         Returns:
-            any: the value of the corresponding attribute on the referenced Sedaro Block
+            any: the value of the corresponding attribute
         """
         if key not in self.data:
             raise make_attr_error(key, self.data[TYPE])
