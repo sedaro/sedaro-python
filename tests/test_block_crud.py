@@ -311,6 +311,7 @@ def test_power_command_tuple():
         with pytest.raises(SedaroApiException):
             create_solar_array(val)
 
+
 def test_multiblock_crud_with_ref_ids():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     batt_pack_name = f'Battery Pack {_random_str()}'
@@ -321,12 +322,12 @@ def test_multiblock_crud_with_ref_ids():
             'id': '$-batt-cell',
             'type': 'BatteryCell',
             'partNumber': batt_cell_part_number,
-            'esr':0.01,
-            'maxChargeCurrent':15,
-            'maxDischargeCurrent':100,
-            'minSoc':0.2,
-            'capacity':500,
-            'curve':[[0, 0.5, 1], [12.2, 14.1, 16.8]],
+            'esr': 0.01,
+            'maxChargeCurrent': 15,
+            'maxDischargeCurrent': 100,
+            'minSoc': 0.2,
+            'capacity': 500,
+            'curve': [[0, 0.5, 1], [12.2, 14.1, 16.8]],
         },
     ])
 
@@ -336,6 +337,7 @@ def test_multiblock_crud_with_ref_ids():
         assert bp.cell.id == bc.id
     finally:
         branch.crud(delete=[bp.id, bc.id])
+
 
 def run_tests():
     test_get()
