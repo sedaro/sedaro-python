@@ -36,6 +36,15 @@ def test_get():
         sedaro.scenario(SIMPLESAT_A_T_ID)
 
 
+def test_keying_into_root_attrs():
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
+    assert branch.type == 'Spacecraft'
+    assert isinstance(branch.attitude, dict)
+    assert isinstance(branch.enabledModules, list)
+    assert isinstance(branch.angularVelocity, list)
+    assert isinstance(branch.migrated, (type(None), str))
+
+
 def test_get_blocks_all_and_single():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     components = branch.Component.get_all()
@@ -151,6 +160,7 @@ def test_traversing_and_equality_and_some_get_methods():
     assert solar_cell == power_subsystem.components[-1].cell
 
     assert isinstance(branch.PowerProcessor.get_first(), Block)
+    assert branch.powerProcessor == branch.PowerProcessor.get_first()
 
     solar_cell.delete()
     solar_panel.delete()
@@ -341,6 +351,7 @@ def test_multiblock_crud_with_ref_ids():
 
 def run_tests():
     test_get()
+    test_keying_into_root_attrs()
     test_get_blocks_all_and_single()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
