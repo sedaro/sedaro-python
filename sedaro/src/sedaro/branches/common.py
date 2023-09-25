@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Dict
 
 from ..settings import DATA_SIDE, MANY_SIDE, ONE_SIDE, RELATIONSHIPS, TYPE
@@ -8,7 +7,6 @@ if TYPE_CHECKING:
     from .branch import Branch
 
 
-@dataclass
 class Common(ABC):
     """Abstract class for common functionality between `Branch` and `Block` classes."""
 
