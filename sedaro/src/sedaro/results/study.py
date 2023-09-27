@@ -135,6 +135,7 @@ class StudyResult:
             print('\n📋 Study contains 1 simulation')
         else:
             print(f'\n📋 Study contains {self.iterations} simulations')
+        print(f'\n {str(self.job_ids)}')
 
         if self.__cache:
             if self.__cache_dir is None:
