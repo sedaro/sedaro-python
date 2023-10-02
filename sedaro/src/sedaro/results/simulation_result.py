@@ -53,9 +53,9 @@ class SimulationResult:
     @property
     def peripheral_agents(self) -> List[str]:
         return tuple([
-            entry['name'] for _, entry
+            entry['name'] for id_, entry
             in self.__meta['structure']['scenario']['blocks'].items()
-            if entry['type'] == 'Agent' and entry['peripheral']
+            if entry['type'] == 'Agent' and entry['peripheral'] and id_ in self._agent_blocks
         ])
 
     @property
@@ -86,7 +86,8 @@ class SimulationResult:
     def __agent_id_from_name(self, name: str) -> str:
         for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
             if entry['type'] == 'Agent' and name == entry['name']:
-                return id_
+                if id_ in self._agent_blocks:
+                    return id_
         else:
             raise ValueError(f"Agent {name} not found in data set.")
 
