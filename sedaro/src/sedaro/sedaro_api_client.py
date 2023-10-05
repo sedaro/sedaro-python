@@ -10,6 +10,8 @@ from sedaro.plain_request import PlainRequest
 from .branches import AgentTemplateBranch, ScenarioBranch
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
+from js import XMLHttpRequest
+import json
 
 
 class SedaroApiClient(ApiClient):
@@ -42,13 +44,19 @@ class SedaroApiClient(ApiClient):
         Returns:
             Dict: `body` of the response as a `dict`
         """
-        with self.api_client() as api:
-            branches_api_instance = branches_api.BranchesApi(api)
-            # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
-            # return Branch(res.body, self)
-            res = branches_api_instance.get_branch(
-                path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
-            return body_from_res(res)
+        # with self.api_client() as api:
+        #     branches_api_instance = branches_api.BranchesApi(api)
+        #     # res = branches_api_instance.get_branch(path_params={'branchId': id}) # TODO: temp_crud
+        #     # return Branch(res.body, self)
+        #     res = branches_api_instance.get_branch(
+        #         path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
+        #     return body_from_res(res)
+        req = XMLHttpRequest.new()
+        req.open('GET', self._api_host + f'/models/branches/{branch_id}', False)
+        req.setRequestHeader('Authorization', f"Bearer {self._api_key}")
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        req.send(None)
+        return json.loads(req.response)
 
     def agent_template(self, branch_id: str) -> AgentTemplateBranch:
         """Instantiate an `AgentTemplateBranch` object associated with the Sedaro `Branch` with `branch_id`

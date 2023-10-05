@@ -2,10 +2,12 @@ import json
 from typing import TYPE_CHECKING, Dict, Optional
 
 from .utils import parse_urllib_response
+# from pyodide.http import pyfetch
+# import asyncio
+from js import XMLHttpRequest
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
-
 
 class PlainRequest:
     def __init__(self, sedaro: 'SedaroApiClient') -> None:
@@ -22,6 +24,27 @@ class PlainRequest:
         Returns:
             Dict: dictionary from the response body
         """
+
+        # async def do():
+        #     response = await pyfetch(
+        #         url=self.__sedaro._api_host + resource_path,
+        #         method=method,
+        #         headers={
+        #             'Content-Type': 'application/json',
+        #             'X_API_KEY': self.__sedaro._api_key,
+        #         }
+        #     )
+        #     return await response.json()
+        # loop = asyncio.get_event_loop()
+        # return loop.run_until_complete(do())
+    
+        req = XMLHttpRequest.new()
+        req.open(method, self.__sedaro._api_host + resource_path, False)
+        req.setRequestHeader('Authorization', f"Bearer {self.__sedaro._api_key}")
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        req.send(json.dumps(body))
+        return json.loads(req.response)
+
         headers = {}
         if body is not None:
             body = json.dumps(body)

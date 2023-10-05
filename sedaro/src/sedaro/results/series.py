@@ -2,7 +2,7 @@ import gzip
 import json
 from functools import cached_property
 
-from scipy.interpolate import interp1d
+# from scipy.interpolate import interp1d
 
 try:
     import matplotlib.pyplot as plt
