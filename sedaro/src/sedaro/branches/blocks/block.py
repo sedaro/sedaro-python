@@ -5,17 +5,16 @@ from typing import TYPE_CHECKING, Dict
 from pydash import is_empty
 
 from ...exceptions import NonexistantBlockError
-from ...settings import (BLOCKS, CRUD, DATA_SIDE, ID, MANY_SIDE, ONE_SIDE,
-                         RELATIONSHIPS, TYPE)
+from ...settings import BLOCKS, CRUD, ID, RELATIONSHIPS, TYPE
+from ..common import Common
 
 if TYPE_CHECKING:
-    from ...sedaro_api_client import SedaroApiClient
     from ..branch import Branch
     from .block_type import BlockType
 
 
 @dataclass
-class Block:
+class Block(Common):
     id: str
     _block_type: 'BlockType'
     '''Class for interacting with all Blocks of this class type'''
@@ -38,41 +37,6 @@ class Block:
         # allows a Block instance to be a key in a dictionary
         return hash(self.__class__.__name__ + self.id)
 
-    def __getattr__(self, key: str) -> any:
-        """Allows for dotting into the `Block` instance to access keys on the referenced Sedaro Block. Additionally,
-        makes it so dotting into relationship fields returns `Block`s corresponding to the related Sedaro Blocks.
-
-        Args:
-            key (str): attribute being keyed into
-
-        Raises:
-            AttributeError: if the attribute doesn't exist on the refrenced Sedaro Block
-
-        Returns:
-            any: the value of the corresponding attribute on the referenced Sedaro Block
-        """
-        if key not in self.data:
-            raise make_attr_error(key, self.data[TYPE])
-        val = self.data[key]
-
-        if not self.is_rel_field(key):
-            return val
-
-        side_type = self.get_rel_field_type(key)
-
-        if side_type == MANY_SIDE:
-            return [self._branch.block(id) for id in val]
-
-        if side_type == DATA_SIDE:
-            return {self._branch.block(id): data for id, data in val.items()}
-
-        if side_type == ONE_SIDE:
-            return self._branch.block(val)
-
-        raise NotImplementedError(
-            f'Unsupported relationship type on "{self.data[TYPE]}", attribute: "{key}".'
-        )
-
     @property
     def type(self) -> str:
         '''Name of the class of the Sedaro Block this `Block` instance is set up to interact with'''
@@ -88,6 +52,12 @@ class Block:
     def _branch(self) -> 'Branch':
         '''The `Branch` this `Block` instance is connected to'''
         return self._block_type._branch
+
+    @property
+    def _relationship_attrs(self) -> Dict:
+        """The relationship fields dictionary from the meta attributes corresponding to the Sedaro Block this `Block`
+        instance is associated with."""
+        return self._branch.data[RELATIONSHIPS][self.type]
 
     def check_still_exists(self) -> bool:
         """Checks whether the Sedaro Block this `Block` instance references still exists.
@@ -134,7 +104,7 @@ class Block:
         """Update attributes of the corresponding Sedaro Block
 
         Args:
-            **fields (Dict): desired attributes to update on the Sedaro Block
+            **fields (Dict): desired field/value pairs to update
 
         Raises:
             SedaroApiException: if there is an error in the response
@@ -164,42 +134,3 @@ class Block:
         self.enforce_still_exists()
         self._branch.crud(delete=[self.id])
         return self.id
-
-    def is_rel_field(self, field: str) -> bool:
-        """Checks if the given `field` is a relationship field on the associated Sedaro Block.
-
-        Args:
-            field (str): field to check
-
-        Raises:
-            TypeError: if the value of `field` is not a string
-
-        Returns:
-            bool: indicates if the given `field` is a relationship field on the Sedaro Block or not.
-        """
-        return field in self._branch.data[RELATIONSHIPS][self.data[TYPE]]
-
-    def get_rel_field_type(self, field: str) -> str:
-        """Get the type of relationship of the field. Note: first call `is_rel_field` if you need to confirm `field` is
-        a relationship field.
-
-        Args:
-            field (str): the field to get the relationship type for
-
-        Raises:
-            TypeError: if the value of `field` is not a string or not a relationship field on this type of Sedaro Block
-            KeyError: if the value of `field` does not correspond to any field on the associated Sedaro Block
-
-        Returns:
-            str: a string indicating the type of relationship field
-        """
-        if not self.is_rel_field(field):
-            raise TypeError(
-                f'The given field "{field}" is not a relationship field on "{self.data[TYPE]}".')
-
-        return self._branch.data[RELATIONSHIPS][self.data[TYPE]][field][TYPE]
-
-
-# ------ helper function and vars for this file only ------
-def make_attr_error(field: str, block_name: str) -> str:
-    return AttributeError(f'There is no "{field}" attribute on "{block_name}"')

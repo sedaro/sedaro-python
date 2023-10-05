@@ -1,7 +1,7 @@
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
+
 from sedaro import SedaroApiClient
 from sedaro.branches.blocks import Block, BlockType
-
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -154,7 +154,8 @@ def test_block_type_options():
                 getattr(branch, bad_block)
             except Exception as e:
                 assert isinstance(e, AttributeError)
-                assert f'Unable to create a "{BlockType.__name__}" from string: "{bad_block}".' in str(e)
+                expected_err = f'Unable to find an attribute or create a "{BlockType.__name__}" from string: "{bad_block}".'
+                assert expected_err in str(e)
 
 
 def run_tests():
