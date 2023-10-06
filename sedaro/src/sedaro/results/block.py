@@ -103,6 +103,60 @@ class SedaroBlockResult:
             print(f'    • {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
+        print("📊 Display all block variables statistics with .stats( output_html=False ) ")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
+
+    def stats(self, output_html=False):
+        try:
+            import pandas as pd
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+            var_dfs = []
+
+            def add_to_df_list(first_value, column_name, data):
+                if type(first_value) is list:
+                    list_len = len(first_value)
+                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
+                    if list_len == 4:
+                        columns.append(f'{column_name}_Q') 
+                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
+                else:
+                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
+
+            for variable_name in self.variables:
+                variable_data = self.variable(variable_name)
+                        
+                column_name = f'{self.name}.{variable_name}'
+                if variable_data.has_subseries:
+                    for key, subtype in variable_data.subtypes:
+                        first_value = variable_data[key].values[0]
+                        data = variable_data[key].values
+                        add_to_df_list(first_value, f'{column_name}.{key}', data)
+                else:
+                    first_value = variable_data.values[0]
+                    data = variable_data.values
+                    add_to_df_list(first_value, column_name, data)
+                
+            block_dfs = pd.concat( var_dfs, axis=1)
+            try:
+                from IPython.display import display
+                display(block_dfs.describe(include='all').T)
+            except:
+                print(block_dfs.describe(include='all').T)
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+
+        try:
+            import sweetviz as sv
+        except ImportError:
+            print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+        else:
+            sv.config_parser['Layout']['show_logo'] = '0' 
+            sv_report = sv.analyze(block_dfs, pairwise_analysis="off" )
+
+            if output_html:
+                sv_report.show_html(filepath=f'Block_{self.name}_Report.html')
+            else:
+                sv_report.show_notebook(w="90%", h="full", layout='vertical')

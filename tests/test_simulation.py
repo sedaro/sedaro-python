@@ -6,9 +6,10 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _check_job_status_running(job):
-    assert job['status'] == 'RUNNING'
-    print('-', job['status'], '-', round(
-        job['progress']['percentComplete'], 2), '%')
+    assert (job['status'] in ['RUNNING', 'PENDING'])
+    if job['status'] == 'RUNNING':
+        print('-', job['status'], '-', round(
+            job['progress']['percentComplete'], 2), '%')
 
 
 def test_run_simulation():

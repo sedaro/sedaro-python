@@ -1,6 +1,6 @@
 import datetime as dt
 from pathlib import Path
-from typing import List
+from typing import List, Optional, Tuple
 
 from sedaro.branches.scenario_branch.sim_client import Simulation
 from sedaro.results.simulation_result import SimulationResult
@@ -9,7 +9,7 @@ from sedaro.results.utils import HFILL, STATUS_ICON_MAP, hfill
 
 class StudyResult:
 
-    def __init__(self, study, metadata: dict):
+    def __init__(self, study, metadata):
         '''Initialize a new Study Result.
 
         By default, this class will lazily load simulation results as requested
@@ -84,31 +84,37 @@ class StudyResult:
                 raise ValueError(f'Cache directory is defined but caching is off.')
         self.__cached_sim_results = {}
 
-    def result(self, id_: str) -> SimulationResult:
+    def result(self, id_: str, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         '''Query results for a particular simulation.'''
         result = None
+        engines_selected = ""
+        if streams:
+            engines_selected = ".".join([ f"{agent_id}_{engine_name}" for agent_id, engine_name in streams])
+
+        cache_string = f"{id_}_{engines_selected}"
+
         if self.__cache:
             if self.__cache_dir is None:
-                if id_ in self.__cached_sim_results:
-                    result = self.__cached_sim_results[id_]
+                if cache_string in self.__cached_sim_results:
+                    result = self.__cached_sim_results[cache_string]
             else:
-                cache_file = self.__cache_dir / f'sim_{id_}.cache'
+                cache_file = self.__cache_dir / f'sim_{cache_string}.cache'
                 if cache_file.exists():
                     result = SimulationResult.from_file(cache_file)
 
         if result is None:
             print(f'💾 Downloading simulation result id {id_}...', end='')
-            result = Simulation(self.__study._sedaro, self.__study._branch).results(id_)
+            result = Simulation(self.__study._sedaro, self.__study._branch).results(id_, streams)
             print('done!')
 
         if self.__cache:
             if self.__cache_dir is None:
-                self.__cached_sim_results[id_] = result
+                self.__cached_sim_results[cache_string] = result
             else:
                 if not cache_file.exists():
                     result.to_file(cache_file)
 
-        return result
+        return result  
 
     def clear_cache(self) -> None:
         self.__cached_sim_results = {}
@@ -145,3 +151,4 @@ class StudyResult:
 
         hfill()
         print("❓ Query individual simulation results with .result(<ID>)")
+

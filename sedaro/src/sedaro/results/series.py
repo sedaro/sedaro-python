@@ -11,6 +11,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
+
 from .utils import HFILL, _get_series_type, bsearch, hfill
 
 
@@ -67,6 +68,10 @@ class SedaroSeries:
         return self[subseries_name]
 
     @property
+    def has_subseries(self):
+        return self.__has_subseries
+
+    @property
     def name(self):
         return self.__name
 
@@ -81,6 +86,14 @@ class SedaroSeries:
     @property
     def values(self):
         return self.__series
+
+    @property
+    def subtypes(self):
+        if self.has_subseries:
+            return self.__dtype.items()
+        else:
+            return {}
+
 
     @cached_property
     def values_interpolant(self):
@@ -138,6 +151,56 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
+    def stats(self, output_html=False):
+        if self.__has_subseries:
+            raise ValueError('Select a specific subseries to generate statitics.')
+
+        try:
+            import pandas as pd
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+        except ImportError:
+            STATS_ENABLED = False
+        else:
+            STATS_ENABLED = True
+
+        if not STATS_ENABLED:
+            raise ValueError('Statistics is disabled because pandas and/or sweetviz could not be imported')
+
+
+        columns       = [self.name]
+        variable_data = self.__series
+        first_value   = variable_data[0]
+
+        if type(first_value) is list:
+            list_len = len(first_value)
+            columns = [f'{self.name}_X', f'{self.name}_Y', f'{self.name}_Z']
+            if list_len == 4:
+                columns.append(f'{self.name}_Q') 
+        
+        df = pd.DataFrame(variable_data, columns=columns ) 
+
+        try:
+            from IPython.display import display
+            display(df.describe(include='all').T)
+        except:
+            print(df.describe(include='all').T)
+        
+
+        try:
+            import sweetviz as sv
+        except ImportError:
+            print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+        else:
+            sv.config_parser['Layout']['show_logo'] = '0' 
+            sv_report = sv.analyze(df, pairwise_analysis="off" )
+
+            if output_html:
+                sv_report.show_html(filepath=f'{self.name}_Report.html')
+            else:
+                sv_report.show_notebook(w="90%", h="full", layout='vertical')
+
+
     def to_file(self, filename, verbose=True):
         '''Save series to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
@@ -181,3 +244,4 @@ class SedaroSeries:
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
         else:
             print("❓ Call .plot to visualize results")
+            print("📊 Display statistics with .stats( output_html=False ) ")

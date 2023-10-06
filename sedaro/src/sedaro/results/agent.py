@@ -67,6 +67,15 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
+    def blockname(self, name:str) -> SedaroBlockResult:
+        for block_id in self.__block_ids:
+            if block_id != 'root':
+                block_name = self.__block_structures[block_id].get('name', None)
+                if name == block_name:
+                    return self.block(block_id)
+        raise ValueError(f"Block name '{name}' not found.")
+
+
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
@@ -86,7 +95,7 @@ class SedaroAgentResult:
             contents = json.load(json_file)
             return cls(contents['name'], contents['block_structures'], contents['series'])
 
-    def summarize(self) -> None:
+    def summarize(self) -> dict:
         '''Summarize these results in the console.'''
         hfill()
         print(f"Agent Result Summary".center(HFILL))
@@ -101,12 +110,16 @@ class SedaroAgentResult:
         print('    ' + '-' * 58)
         print('    |' + 'id'.center(38) + 'name'.center(30-12) + '|')
         print('    ' + '-' * 58)
+
+        blockname_to_id = {}
+
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
+                    blockname_to_id[name_id_col] = block_id
                 else:
                     name_id_col = f'<Unnamed Block>'
             else:
@@ -120,7 +133,74 @@ class SedaroAgentResult:
             print(f"\n    {no_data_blocks} block(s) with no associated data")
 
         hfill()
-        print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
+        print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>) or .blockname(<name>)")
+        print("📊 Display agent modules variables statistics with .stats( module, output_html=False, make_histogram_plots=False ) ")
+        print(f"🧩        Where module must be one of the following: { [module for module in self.__series] } ")
+
+    def stats(self, module, output_html=False, make_histogram_plots=False):
+        if module not in self.__series:
+            print(f"Module: '{module}' not found with this agent results object. Available modules are { [module for module in self.__series] }")
+            return
+        try:
+            import pandas as pd
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+            var_dfs = []
+
+            # todo: move the repeated code to utils
+            def add_to_df_list(first_value, column_name, data):
+                if type(first_value) is list:
+                    list_len = len(first_value)
+                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
+                    if list_len == 4:
+                        columns.append(f'{column_name}_Q') 
+                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
+                else:
+                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
+
+            for block_id in self.__series[module]['series']:
+                block_results = self.block(block_id)
+                block_name = block_results.name
+               
+                for variable_name in block_results.variables:
+                    variable_data = block_results.variable(variable_name)
+                    column_name   = f'{block_name}.{variable_name}'
+
+                    if variable_data.has_subseries:
+                        for key, subtype in variable_data.subtypes:
+                            first_value = variable_data[key].values[0]
+                            data = variable_data[key].values
+                            add_to_df_list(first_value, f'{column_name}.{key}', data)
+                    else:
+                        first_value = variable_data.values[0]
+                        data = variable_data.values
+                        add_to_df_list(first_value, column_name, data)
+                    
+            block_dfs = pd.concat( var_dfs, axis=1)     
+            try:
+                from IPython.display import display
+                display(block_dfs.describe(include='all').T)
+            except:
+                print(block_dfs.describe(include='all').T)
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+
+        if make_histogram_plots:
+            print('⚠️ Rendering the histogram plots can take some time if the module has a large number of blocks/variables')
+            try:
+                import sweetviz as sv
+            except ImportError:
+                print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+            else:
+                sv.config_parser['Layout']['show_logo'] = '0' 
+                sv_report = sv.analyze(block_dfs, pairwise_analysis="off" )
+
+                if output_html:
+                    sv_report.show_html(filepath=f'agent_{self.name}_Report.html')
+                else:
+                    sv_report.show_notebook(w="90%", h="full", layout='vertical')        
+
+
 
     def model_at(self, mjd):
         if not self.__initial_state:
