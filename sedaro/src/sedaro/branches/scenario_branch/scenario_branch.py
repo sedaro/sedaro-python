@@ -56,3 +56,9 @@ class ScenarioBranch(Branch):
     """A Sedaro `Block` class on a `Scenario` branch"""
     SpontaneousExternalState: BlockType
     """A Sedaro `Block` class on a `Scenario` branch"""
+    WaypointPathWithDuration: BlockType
+    """A Sedaro `Block` class on a `Scenario` branch"""
+    WaypointPathWithTimestamps: BlockType
+    """A Sedaro `Block` class on a `Scenario` branch"""
+    WaypointPathWithSpeed: BlockType
+    """A Sedaro `Block` class on a `Scenario` branch"""
