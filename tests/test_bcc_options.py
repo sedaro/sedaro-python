@@ -1,3 +1,5 @@
+import inspect
+
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
@@ -140,8 +142,13 @@ def test_block_type_options():
         # CHECK: lists above are correct
         assert expected_block_names == branch_block_names, f'Extra: {set(expected_block_names) - set(branch_block_names)}, Missing: {set(branch_block_names) - set(expected_block_names)}'
 
+        annotations_dict = inspect.get_annotations(branch.__class__)
+
         for block_name in branch_block_names:
             block_type: BlockType = getattr(branch, block_name)
+
+            # CHECK: is annotated (for intellisense)
+            assert block_name in annotations_dict
 
             # CHECK: is a BlockType
             assert isinstance(block_type, BlockType)
