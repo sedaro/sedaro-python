@@ -108,6 +108,55 @@ class SedaroBlockResult:
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
 
+
+    def scatter_matrix(self):
+        try:
+            import pandas as pd
+            from pandas.plotting import scatter_matrix
+            import matplotlib.pyplot as plt
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+            var_dfs = []
+
+            def add_to_df_list(first_value, column_name, data):
+                if type(first_value) is list:
+                    list_len = len(first_value)
+                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
+                    if list_len == 4:
+                        columns.append(f'{column_name}_Q') 
+                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
+                else:
+                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
+
+            for variable_name in self.variables:
+                variable_data = self.variable(variable_name)                
+                column_name = f'{self.name}.{variable_name}'
+                if variable_data.has_subseries:
+                    for key, subtype in variable_data.subtypes:
+                        first_value = variable_data[key].values[0]
+                        data = variable_data[key].values
+                        add_to_df_list(first_value, f'{column_name}.{key}', data)
+                        break
+                else:
+                    first_value = variable_data.values[0]
+                    data = variable_data.values
+                    add_to_df_list(first_value, column_name, data)
+                    
+            block_dfs = pd.concat( var_dfs, axis=1)
+            just_numbers = block_dfs.select_dtypes(include=['number'])
+            no_distint_cols = just_numbers[[c for c in list(just_numbers)
+                                                    if len(just_numbers[c].unique()) > 1]]
+            sm = scatter_matrix(no_distint_cols, alpha=0.2, figsize=(12,12), diagonal='kde')
+            # Change label rotation
+            [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
+            [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
+            [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
+            [s.set_xticks(()) for s in sm.reshape(-1)]
+            [s.set_yticks(()) for s in sm.reshape(-1)]
+            plt.show()
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+
     def stats(self, output_html=False):
         try:
             import pandas as pd
@@ -138,13 +187,13 @@ class SedaroBlockResult:
                     first_value = variable_data.values[0]
                     data = variable_data.values
                     add_to_df_list(first_value, column_name, data)
-                
             block_dfs = pd.concat( var_dfs, axis=1)
             try:
                 from IPython.display import display
                 display(block_dfs.describe(include='all').T)
             except:
                 print(block_dfs.describe(include='all').T)
+
         except ImportError:
             raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
 
