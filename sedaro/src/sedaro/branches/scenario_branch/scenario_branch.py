@@ -47,20 +47,20 @@ class ScenarioBranch(Branch):
     # $AUTO_EDIT_START$
 
     Agent: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     AgentGroup: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     ClockConfig: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     Orbit: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     PerRoundExternalState: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     SpontaneousExternalState: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     WaypointPathWithDuration: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
-    WaypointPathWithTimestamps: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     WaypointPathWithSpeed: BlockType
-    """A Sedaro `Block` class on a `Scenario` branch"""
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    WaypointPathWithTimestamps: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
