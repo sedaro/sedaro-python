@@ -21,8 +21,7 @@ def update_branch_bcc_annotations():
     ):
         branch = get_method(branch_id)
         branch_kls = branch.__class__
-        class_file = inspect.getfile(branch_kls)
-        class_path = Path(class_file).relative_to(Path.cwd())
+        class_path = Path(inspect.getfile(branch_kls)).relative_to(Path.cwd())
 
         with class_path.open('r+') as f:
             while line := f.readline():
