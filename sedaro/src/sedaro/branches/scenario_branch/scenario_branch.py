@@ -45,6 +45,7 @@ class ScenarioBranch(Branch):
 
     # next line used to know where to start auto edit
     # $AUTO_EDIT_START$
+
     Agent: BlockType
     """A Sedaro `Block` class on a `Scenario` branch"""
     AgentGroup: BlockType
