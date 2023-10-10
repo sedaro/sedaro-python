@@ -12,6 +12,8 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def update_branch_bcc_annotations():
+    EDIT_START = '$AUTO_EDIT_START$'
+
     for get_method, branch_id in (
         (sedaro.agent_template, AGENT_TEMPLATE_ID),
         (sedaro.scenario, SCENARIO_ID)
@@ -23,12 +25,12 @@ def update_branch_bcc_annotations():
 
         with class_path.open('r+') as f:
             while line := f.readline():
-                if '$AUTO_EDIT_START$' in line:
+                if EDIT_START in line:
                     f.seek(0, 1)
                     f.truncate()
                     break
             else:
-                raise ValueError('Unable to find $AUTO_EDIT_START$ in file')
+                raise ValueError(f'Unable to find {EDIT_START} in file')
 
             f.write('\n')
             a_or_an = 'an' if branch_kls.__name__[0].lower() in 'aeiou' else 'a'
