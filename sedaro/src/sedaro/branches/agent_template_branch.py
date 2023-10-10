@@ -24,7 +24,6 @@ class AgentTemplateBranch(Branch):
 
     # next line used to know where to start auto edit
     # $AUTO_EDIT_START$
-
     AngularVelocitySensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplate` branch"""
     Antenna: BlockType
