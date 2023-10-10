@@ -4,9 +4,10 @@ from pathlib import Path
 from sedaro import SedaroApiClient
 
 API_KEY = 'API_KEY'
-HOST = 'http://localhost:80'
 AGENT_TEMPLATE_ID = 'SIMPLESAT_A_T_ID'
 SCENARIO_ID = 'SIMPLESAT_SCENARIO_ID'
+
+HOST = 'http://localhost:80'
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
