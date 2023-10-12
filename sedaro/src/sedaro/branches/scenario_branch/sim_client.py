@@ -153,7 +153,9 @@ class Simulation:
         binWidth: float = None,
         limit: float = None,
         axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        continuationToken: bytes = None,
     ):
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
@@ -213,16 +215,28 @@ class Simulation:
                 raise ValueError(
                     'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
             url += f'&axisOrder={axisOrder}'
+        if sampleRate is not None:
+            url += f'&sampleRate={sampleRate}'
+        body = b''
+        if continuationToken is not None:
+            body = continuationToken
         with self.__sedaro.api_client() as api:
-            response = api.call_api(url, 'GET')
+            response = api.call_api(url, 'GET', body=body)
         _response = None
+        has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
+            if 'ctoken' in _response['meta']:
+                if len(_response['meta']['ctoken']['streams']) > 0:
+                    has_nonempty_ctoken = True
+                    ctoken = _response['meta']['ctoken']['streams']
             if response.status != 200:
                 raise Exception()
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
+        if has_nonempty_ctoken:
+            pass # do stuff
         return _response
 
     def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
