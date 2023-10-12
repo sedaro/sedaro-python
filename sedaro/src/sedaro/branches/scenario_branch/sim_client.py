@@ -38,8 +38,28 @@ def serdes(v):
         return [serdes(v) for v in v]
     return v
 
+def concat_stream_data(main, other, len_main, len_other):
+    assert type(main) == dict and type(other) == dict
+    for k in other:
+        if k not in main:
+            main[k] = [None * len_main]
+        main[k].extend(other[k])
+    for k in main:
+        if k not in other:
+            main[k].extend([None * len_other])
+
+def concat_stream(main, other):
+    len_main = len(main[0])
+    len_other = len(other[0])
+    main[0].extend(other[0])
+    concat_stream_data(main[1], other[1], len_main, len_other)
+
 def concat_results(main, other):
-    pass
+    for stream in other:
+        if stream not in main:
+            main[stream] = other
+        else: # concat stream parts
+            concat_stream(main[stream], other[stream])
 
 def update_metadata(main, other):
     pass
