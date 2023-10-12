@@ -181,7 +181,8 @@ class Simulation:
                 would like to downsample data, use either `limit` or `binWidth`, but not both.
 
             streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the previous section. If no list is provided, data is fetched for all streams.
+                format described in the docstring for the `results` method below. If no list is provided,\
+                data is fetched for all streams.
 
             axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
                 `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
