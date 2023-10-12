@@ -38,6 +38,11 @@ def serdes(v):
         return [serdes(v) for v in v]
     return v
 
+def concat_results(main, other):
+    pass
+
+def update_metadata(main, other):
+    pass
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -236,7 +241,28 @@ class Simulation:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         if has_nonempty_ctoken:
-            pass # do stuff
+            result = _response
+            while has_nonempty_ctoken:
+                # fetch page
+                request_url = f'/data/{id}?'
+                request_body = json.dumps(ctoken).encode('utf-8')
+                page = api.call_api(request_url, 'GET', body=request_body)
+                _page = parse_urllib_response(page)
+                try:
+                    if 'ctoken' in _page['meta']:
+                        if len(_response['meta']['ctoken']['streams']) > 0:
+                            has_nonempty_ctoken = True
+                            ctoken = _response['meta']['ctoken']['streams']
+                    if page.status != 200:
+                        raise Exception()
+                except Exception:
+                    reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
+                    raise SedaroApiException(status=page.status, reason=reason)
+                # concat results
+                concat_results(result['series'], _page['series'])
+                # update metadata
+                update_metadata(result['meta'], _page['meta'])
+            _response = result
         return _response
 
     def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
