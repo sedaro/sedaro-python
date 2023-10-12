@@ -16,8 +16,9 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import numpy as np
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
+from sedaro.results.simulation_result import SimulationResult
+
 from ...exceptions import NoSimResultsError, SedaroApiException
-from ...results import SimulationResult
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 

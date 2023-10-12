@@ -47,7 +47,7 @@ agent_template_blocks = [
     'MaxAlignPointingMode',
     'MekfAlgorithm',
     'Modem',
-    'OperationalMode',
+    'SpacecraftOperationalMode',
     'OpticalAttitudeSensor',
     'Orbit',
     'PassivePointingMode',
@@ -55,7 +55,7 @@ agent_template_blocks = [
     'PidAlgorithm',
     'PositionSensor',
     'PowerLoad',
-    'PowerProcessor',
+    'PhotovoltaicPowerProcessor',
     'QuasiRegDetPowerProcessor',
     'ReactionWheel',
     'ReceiveInterface',
@@ -65,6 +65,7 @@ agent_template_blocks = [
     'SatelliteToSatelliteCondition',
     'SatelliteToScalarCondition',
     'SatelliteToTargetCondition',
+    'ScanFieldOfViewArticulationMode',
     'SingleConvHybridPowerProcessor',
     'SingleConvMpptPowerProcessor',
     'SlidingModeAlgorithm',
@@ -74,6 +75,7 @@ agent_template_blocks = [
     'SpaceTarget',
     'SphericalFuelTank',
     'SpherocylinderFuelTank',
+    'StaticFieldOfViewArticulationMode',
     'StaticThrustControlAlgorithm',
     'Subsystem',
     'SunTrackingSurface',
@@ -89,10 +91,12 @@ agent_template_blocks = [
     'TargetToTargetCondition',
     'TargetVector',
     'TempControllerState',
+    'ThermalDesignLayout',
     'ThermalInterface',
     'ThermalInterfaceMaterial',
     'Thruster',
     'TimeCondition',
+    'TrackingFieldOfViewArticulationMode',
     'TriadAlgorithm',
     'TwoConvMpptPowerProcessor',
     'VectorInFovCondition',
@@ -108,18 +112,22 @@ scenario_blocks = [
     'Orbit',
     'PerRoundExternalState',
     'SpontaneousExternalState',
+    'WaypointPathWithDuration',
+    'WaypointPathWithTimestamps',
+    'WaypointPathWithSpeed'
 ]
 
 
 def test_block_type_options():
-    for get_method, branch_id, expected_block_names in [
+    for get_method, branch_id, _expected_block_names in [
         [sedaro.agent_template, SIMPLESAT_A_T_ID, agent_template_blocks],
         [sedaro.scenario, SIMPLESAT_SCENARIO_ID, scenario_blocks]
     ]:
         branch = get_method(branch_id)
         branch_block_names = sorted(branch.data['_blockNames'])
+        expected_block_names = sorted(_expected_block_names)
         # CHECK: lists above are correct
-        assert expected_block_names == branch_block_names, f'Set difference: {set(expected_block_names) - set(branch_block_names)}'
+        assert expected_block_names == branch_block_names, f'Extra: {set(expected_block_names) - set(branch_block_names)}, Missing: {set(branch_block_names) - set(expected_block_names)}'
 
         for block_name in branch_block_names:
             block_type: BlockType = getattr(branch, block_name)
@@ -146,7 +154,8 @@ def test_block_type_options():
                 getattr(branch, bad_block)
             except Exception as e:
                 assert isinstance(e, AttributeError)
-                assert f'Unable to create a "{BlockType.__name__}" from string: "{bad_block}".' in str(e)
+                expected_err = f'Unable to find an attribute or create a "{BlockType.__name__}" from string: "{bad_block}".'
+                assert expected_err in str(e)
 
 
 def run_tests():

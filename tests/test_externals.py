@@ -1,6 +1,7 @@
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
-import numpy as np
 import json
+
+import numpy as np
+from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 
