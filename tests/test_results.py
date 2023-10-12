@@ -130,7 +130,7 @@ def test_query_model():
                 'scenario': {
                     'blocks': {
                         'a': {
-                            'type': 'Agent',
+                            'type': 'TemplatedAgent',
                             'name': 'Agent',
                             'id': 'a',
                         }

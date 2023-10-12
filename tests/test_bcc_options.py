@@ -1,7 +1,7 @@
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
+
 from sedaro import SedaroApiClient
 from sedaro.branches.blocks import Block, BlockType
-
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -102,7 +102,7 @@ agent_template_blocks = [
 
 # TODO: if update these lists, also update type hints of ScenarioBranch
 scenario_blocks = [
-    'Agent',
+    'TemplatedAgent',
     'AgentGroup',
     'ClockConfig',
     'Orbit',

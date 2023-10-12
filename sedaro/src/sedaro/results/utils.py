@@ -48,7 +48,7 @@ def _get_agent_id_name_map(meta):
     return {
         id_: entry['name']
         for id_, entry in meta['structure']['scenario']['blocks'].items()
-        if entry['type'] == 'Agent'
+        if 'peripheral' in entry
     }
 
 
