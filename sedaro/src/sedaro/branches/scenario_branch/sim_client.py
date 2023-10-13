@@ -329,7 +329,12 @@ class Simulation:
         _response['series'] = set_nested(_response['series'])
         return _response
 
-    def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+    def results(
+            self,
+            job_id: str = None,
+            streams: Optional[List[Tuple[str, ...]]] = None,
+            sampleRate: int = None
+        ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -368,14 +373,15 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], streams=streams or [])
+        data = self.results_plain(id=job['dataArray'], streams=streams or [], sampleRate=sampleRate or 1)
         return SimulationResult(job, data)
 
     def results_poll(
         self,
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
-        retry_interval: int = 2
+        sampleRate: int = None,
+        retry_interval: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
         corresponding sim results rather than latest. See `results` method for details on using the `streams` kwarg.
@@ -399,7 +405,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [])
+        return self.results(streams=streams or [], sampleRate=sampleRate or 1)
 
     def __download(self, p):
         agents, id, dirname, progress, progress_lock = p
@@ -544,7 +550,9 @@ class SimulationHandle:
         binWidth: float = None,
         limit: float = None,
         axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        continuationToken: bytes = None,
     ):
         """Query simulation results as a plain dictionary from the Data Service with options to
         customize the response.
@@ -587,7 +595,9 @@ class SimulationHandle:
             binWidth=binWidth,
             limit=limit,
             axisOrder=axisOrder,
-            streams=streams
+            streams=streams,
+            sampleRate=sampleRate,
+            continuationToken=continuationToken,
         )
 
     def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
