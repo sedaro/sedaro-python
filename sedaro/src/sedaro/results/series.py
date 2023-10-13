@@ -116,6 +116,7 @@ class SedaroSeries:
     #     self.__plot(plt.scatter, show, kwargs)
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
+        print(self.__series)
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries:

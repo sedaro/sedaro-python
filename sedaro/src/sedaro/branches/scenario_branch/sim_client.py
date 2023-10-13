@@ -102,7 +102,8 @@ def set_nested(results):
     nested = {}
     for k in results:
         kspl = k.split('/')[0]
-        nested[k] = (results[k][0], {kspl : set_numeric_as_list(__set_nested(results[k][1][kspl]))})
+        # nested[k] = (results[k][0], {kspl : flatdict.FlatDict(results[k][1][kspl], delimiter='.').as_dict()})
+        nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
 
 class Simulation:
@@ -292,12 +293,14 @@ class Simulation:
         has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
-            if _response['meta']['version'] == 3:
+            if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 if 'ctoken' in _response['meta']:
                     if len(_response['meta']['ctoken']['streams']) > 0:
                         has_nonempty_ctoken = True
                         ctoken = _response['meta']['ctoken']['streams']
+            else:
+                is_v3 = False
             if response.status != 200:
                 raise Exception()
         except:
@@ -327,6 +330,7 @@ class Simulation:
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
             _response['series'] = set_nested(_response['series'])
+        # print(json.dumps(_response))
         return _response
 
     def results(
