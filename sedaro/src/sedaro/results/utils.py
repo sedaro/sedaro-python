@@ -113,7 +113,6 @@ def _get_series_type(series):
     else:
         return "None"
 
-
 def bsearch(ordered_series, value):
     '''Binary search for a value in an ordered series.
 

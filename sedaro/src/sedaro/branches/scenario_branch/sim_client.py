@@ -67,6 +67,46 @@ def update_metadata(main, other):
             main['counts'][k] = 0
         main['counts'][k] += other['counts'][k]
 
+def __set_nested(data, key, value):
+    keyList = key.split('.')
+    cursor = data
+    for k in keyList[:-1]:
+        if k not in cursor:
+            cursor[k] = {}
+        # Edge Case: This protects against when initialState is something like `orbitalElements: None` and then later is
+        # `orbitalElements: {a, e, inc, ...}`.  Both `orbitalElements` and `orbitalElements.a` exist in the flatMap so
+        # we take the more specific key for now.
+        if type(cursor[k]) is not dict:
+            cursor[k] = {}
+        cursor = cursor[k]
+    if keyList[-1] not in cursor:
+        cursor[keyList[-1]] = value
+
+def set_numeric_as_list(d):
+    if not isinstance(d, dict):
+        return d
+    new_dict = {}
+    for k, v in d.items():
+        if isinstance(v, dict):
+            if '0' in v.keys():
+                nv = []
+                for ik in sorted(list(v.keys()), key=lambda x: int(x)):
+                    nv.append(set_numeric_as_list(v[ik]))
+            else:
+                nv = set_numeric_as_list(v)
+        else:
+            nv = v
+        new_dict[k] = nv
+    return new_dict
+
+def set_nested(results):
+    # first, set nested without worrying about lists vs dicts
+    nested_results = []
+    for k, v in results.items():
+        __set_nested(nested_results, k, v)
+    # then convert numerically keyed dicts to lists
+    return set_numeric_as_list(nested_results)
+
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
 
@@ -286,6 +326,7 @@ class Simulation:
                 # update metadata
                 update_metadata(result['meta'], _page['meta'])
             _response = result
+        _response['series'] = set_nested(_response['series'])
         return _response
 
     def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
