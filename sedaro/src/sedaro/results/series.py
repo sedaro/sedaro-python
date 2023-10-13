@@ -11,8 +11,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, _get_series_type, bsearch, hfill
-
+from .utils import HFILL, _get_series_type, bsearch, hfill, to_time_major
 
 class SedaroSeries:
 
@@ -26,7 +25,7 @@ class SedaroSeries:
         self.__name = name
         self.__mjd = time
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__series = series
+        self.__series = to_time_major(series)
         self.__has_subseries = isinstance(self.__series, dict)
         if self.__has_subseries:
             self.__dtype = {key: _get_series_type(subseries) for key, subseries in self.__series.items()}
@@ -116,7 +115,7 @@ class SedaroSeries:
     #     self.__plot(plt.scatter, show, kwargs)
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
-        print(self.__series)
+        # print(self.__series)
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries:
