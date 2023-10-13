@@ -86,6 +86,7 @@ def set_numeric_as_list(d):
     return new_dict
 
 def set_nested(results):
+    # TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
     # first, set nested without worrying about lists vs dicts
     nested_results = flatdict.FlatDict(results, delimiter='.').as_dict()
     # then convert numerically keyed dicts to lists
