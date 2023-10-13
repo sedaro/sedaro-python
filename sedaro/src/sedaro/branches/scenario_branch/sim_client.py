@@ -85,12 +85,25 @@ def set_numeric_as_list(d):
         new_dict[k] = nv
     return new_dict
 
+def __set_nested(results):
+    nested = {}
+    for k, v in results.items():
+        ptr = nested
+        tokens = k.split('.')
+        for token in tokens[:-1]:
+            if token not in ptr:
+                ptr[token] = {}
+            ptr = ptr[token]
+        ptr[tokens[-1]] = v
+    return nested
+
+# TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
 def set_nested(results):
-    # TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
-    # first, set nested without worrying about lists vs dicts
-    nested_results = flatdict.FlatDict(results, delimiter='.').as_dict()
-    # then convert numerically keyed dicts to lists
-    return set_numeric_as_list(nested_results)
+    nested = {}
+    for k in results:
+        kspl = k.split('/')[0]
+        nested[k] = (results[k][0], {kspl : set_numeric_as_list(__set_nested(results[k][1][kspl]))})
+    return nested
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -279,39 +292,41 @@ class Simulation:
         has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
-            if 'ctoken' in _response['meta']:
-                if len(_response['meta']['ctoken']['streams']) > 0:
-                    has_nonempty_ctoken = True
-                    ctoken = _response['meta']['ctoken']['streams']
+            if _response['meta']['version'] == 3:
+                is_v3 = True
+                if 'ctoken' in _response['meta']:
+                    if len(_response['meta']['ctoken']['streams']) > 0:
+                        has_nonempty_ctoken = True
+                        ctoken = _response['meta']['ctoken']['streams']
             if response.status != 200:
                 raise Exception()
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if has_nonempty_ctoken:
-            result = _response
-            while has_nonempty_ctoken:
-                # fetch page
-                request_url = f'/data/{id}?'
-                request_body = json.dumps(ctoken).encode('utf-8')
-                page = api.call_api(request_url, 'GET', body=request_body)
-                _page = parse_urllib_response(page)
-                try:
-                    if 'ctoken' in _page['meta']:
-                        if len(_response['meta']['ctoken']['streams']) > 0:
+        if is_v3:
+            if has_nonempty_ctoken: # need to fetch more pages
+                result = _response
+                while has_nonempty_ctoken:
+                    # fetch page
+                    request_url = f'/data/{id}?'
+                    request_body = json.dumps(ctoken).encode('utf-8')
+                    page = api.call_api(request_url, 'GET', body=request_body)
+                    _page = parse_urllib_response(page)
+                    try:
+                        if 'ctoken' in _page['meta'] and len(_response['meta']['ctoken']['streams']) > 0:
                             has_nonempty_ctoken = True
                             ctoken = _response['meta']['ctoken']['streams']
-                    if page.status != 200:
-                        raise Exception()
-                except Exception:
-                    reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                    raise SedaroApiException(status=page.status, reason=reason)
-                # concat results
-                concat_results(result['series'], _page['series'])
-                # update metadata
-                update_metadata(result['meta'], _page['meta'])
-            _response = result
-        _response['series'] = set_nested(_response['series'])
+                        else:
+                            has_nonempty_ctoken = False
+                        if page.status != 200:
+                            raise Exception()
+                    except Exception:
+                        reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
+                        raise SedaroApiException(status=page.status, reason=reason)
+                    concat_results(result['series'], _page['series'])
+                    update_metadata(result['meta'], _page['meta'])
+                _response = result
+            _response['series'] = set_nested(_response['series'])
         return _response
 
     def results(
