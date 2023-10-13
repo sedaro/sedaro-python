@@ -68,21 +68,6 @@ def update_metadata(main, other):
             main['counts'][k] = 0
         main['counts'][k] += other['counts'][k]
 
-# def __set_nested(data, key, value):
-#     keyList = key.split('.')
-#     cursor = data
-#     for k in keyList[:-1]:
-#         if k not in cursor:
-#             cursor[k] = {}
-#         # Edge Case: This protects against when initialState is something like `orbitalElements: None` and then later is
-#         # `orbitalElements: {a, e, inc, ...}`.  Both `orbitalElements` and `orbitalElements.a` exist in the flatMap so
-#         # we take the more specific key for now.
-#         if type(cursor[k]) is not dict:
-#             cursor[k] = {}
-#         cursor = cursor[k]
-#     if keyList[-1] not in cursor:
-#         cursor[keyList[-1]] = value
-
 def set_numeric_as_list(d):
     if not isinstance(d, dict):
         return d
