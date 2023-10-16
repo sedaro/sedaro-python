@@ -202,7 +202,9 @@ Access a `Simulation` via the `simulation` attribute on a `ScenarioBranch`.
 sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start simulation
-simulation_handle = sim.start()
+simulation_handle = sim.start() # This will return imediately after queueing the simulation job
+# To instead wait for simulation to enter the RUNNING state, pass `wait=True`
+# simulation_handle = sim.start(wait=True)
 
 # See simulation status
 simulation_handle = sim.status()
@@ -252,7 +254,7 @@ You may also fetch results directly as a plain dictionary with additional argume
 sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Run simulation
-sim.start()
+sim.start(wait=True)
 
 # After finished... get raw data
 selected_streams=[
@@ -353,8 +355,10 @@ Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connec
 sim_client = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start the simulation
-# Note that when `sim_client.start()` returns, the simulation is running and ready for external state production/consumption
-simulation_handle = sim_client.start()
+# Note that when `sim_client.start()` returns, the simulation job has entered your Workspace queue to be built and run. 
+# Passing `wait=True` to start() will wait until the simulation has entered the RUNNING state before returning. 
+# At this time, the simulation is ready for external state production/consumption
+simulation_handle = sim_client.start(wait=True)
 ```
 
 ### Consume
