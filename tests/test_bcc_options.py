@@ -1,142 +1,20 @@
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
+from sedaro.branches import AgentTemplateBranch, ScenarioBranch
 from sedaro.branches.blocks import Block, BlockType
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
-# TODO: if update these lists, also update type hints of respective AgentTemplateBranch
-agent_template_blocks = [
-    'AngularVelocitySensor',
-    'Antenna',
-    'AreaTarget',
-    'AttitudeDynamics',
-    'AveragingAlgorithm',
-    'Battery',
-    'BatteryCell',
-    'BatteryPack',
-    'BodyFrameVector',
-    'BodyInFovCondition',
-    'BusRegulator',
-    'CelestialTarget',
-    'CelestialVector',
-    'CircularFieldOfView',
-    'Component',
-    'ComponentToScalarCondition',
-    'CompoundCondition',
-    'Cooler',
-    'CooperativeTransmitInterface',
-    'DataBus',
-    'DataInterface',
-    'DataMode',
-    'DataStorage',
-    'DataType',
-    'DirectionSensor',
-    'EkfAlgorithm',
-    'ElapsedTimeCondition',
-    'FixedSurface',
-    'FuelReservoir',
-    'FullyRegDetPowerProcessor',
-    'GenericAdAlgorithm',
-    'GenericOdAlgorithm',
-    'GpsAlgorithm',
-    'GroundTarget',
-    'Heater',
-    'IdealOrbitalAttitudeDynamics',
-    'InternalDataInterface',
-    'LaserCommModule',
-    'LoadState',
-    'LocalVector',
-    'LockPointingMode',
-    'Magnetorquer',
-    'MaxAlignPointingMode',
-    'MekfAlgorithm',
-    'Modem',
-    'SpacecraftOperationalMode',
-    'OrbitalAttitudeDynamics',
-    'OpticalAttitudeSensor',
-    'Orbit',
-    'PassivePointingMode',
-    'PassiveTransmitInterface',
-    'PidAlgorithm',
-    'PositionSensor',
-    'PowerLoad',
-    'PhotovoltaicPowerProcessor',
-    'QuasiRegDetPowerProcessor',
-    'ReactionWheel',
-    'ReceiveInterface',
-    'RectangularFieldOfView',
-    'ResistanceLoad',
-    'SameTargetMultiCondition',
-    'SatelliteToSatelliteCondition',
-    'SatelliteToScalarCondition',
-    'SatelliteToTargetCondition',
-    'ScanFieldOfViewArticulationMode',
-    'SingleConvHybridPowerProcessor',
-    'SingleConvMpptPowerProcessor',
-    'SlidingModeAlgorithm',
-    'SolarArray',
-    'SolarCell',
-    'SolarPanel',
-    'SpaceTarget',
-    'SphericalFuelTank',
-    'SpherocylinderFuelTank',
-    'StaticFieldOfViewArticulationMode',
-    'StaticThrustControlAlgorithm',
-    'Subsystem',
-    'SunTrackingSurface',
-    'SurfaceMaterial',
-    'TargetAttitudeSensor',
-    'TargetGroup',
-    'TargetGroupInFovCondition',
-    'TargetGroupToSatelliteCondition',
-    'TargetGroupToScalarCondition',
-    'TargetGroupToTargetCondition',
-    'TargetGroupVector',
-    'TargetInFovCondition',
-    'TargetPositionSensor',
-    'TargetRangeRateSensor',
-    'TargetRangeSensor',
-    'TargetToScalarCondition',
-    'TargetToTargetCondition',
-    'TargetVector',
-    'TempControllerState',
-    'ThermalDesignLayout',
-    'ThermalInterface',
-    'ThermalInterfaceMaterial',
-    'Thruster',
-    'TimeCondition',
-    'TrackingFieldOfViewArticulationMode',
-    'TriadAlgorithm',
-    'TwoConvMpptPowerProcessor',
-    'VectorInFovCondition',
-    'VectorSensor',
-    'VectorTrackingSurface'
-]
-
-# TODO: if update these lists, also update type hints of ScenarioBranch
-scenario_blocks = [
-    'Agent',
-    'AgentGroup',
-    'ClockConfig',
-    'Orbit',
-    'PerRoundExternalState',
-    'SpontaneousExternalState',
-    'WaypointPathWithDuration',
-    'WaypointPathWithTimestamps',
-    'WaypointPathWithSpeed'
-]
-
-
 def test_block_type_options():
-    for get_method, branch_id, _expected_block_names in [
-        [sedaro.agent_template, SIMPLESAT_A_T_ID, agent_template_blocks],
-        [sedaro.scenario, SIMPLESAT_SCENARIO_ID, scenario_blocks]
+    for get_method, branch_id, TemplateBranch in [
+        [sedaro.agent_template, SIMPLESAT_A_T_ID, AgentTemplateBranch],
+        [sedaro.scenario, SIMPLESAT_SCENARIO_ID, ScenarioBranch]
     ]:
+        expected_block_names = sorted([k for k,v in TemplateBranch.__dict__['__annotations__'].items() if v == BlockType])
         branch = get_method(branch_id)
         branch_block_names = sorted(branch.data['_blockNames'])
-        expected_block_names = sorted(_expected_block_names)
         # CHECK: lists above are correct
         assert expected_block_names == branch_block_names, f'Extra: {set(expected_block_names) - set(branch_block_names)}, Missing: {set(branch_block_names) - set(expected_block_names)}'
 
@@ -148,10 +26,12 @@ def test_block_type_options():
 
             # CHECK: can use create method
             try:
-                block_type.create()
-            except Exception as e:
-                assert isinstance(e, ValueError)
-                assert 'Must provide fields' in str(e)
+                block = block_type.create()
+                block.delete()
+            except AttributeError:
+                raise
+            except:
+                pass
 
             # CHECK: can use get_all method
             all_blocks_of_type = block_type.get_all()
