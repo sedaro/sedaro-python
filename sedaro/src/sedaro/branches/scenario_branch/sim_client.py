@@ -1,24 +1,24 @@
-import time
-from contextlib import contextmanager
-from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
-                    Union)
 import concurrent.futures
 import json
 import math
 import os
 import pathlib
 import tempfile
-from threading import Lock
+import time
 import traceback
-from typing import Dict, List, Optional, Tuple
-from zipfile import ZipFile, ZIP_DEFLATED
+from contextlib import contextmanager
+from threading import Lock
+from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
+                    Union)
+from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import NoSimResultsError, SedaroApiException
+from ...exceptions import (NoSimResultsError, SedaroApiException,
+                           SimInitializationError)
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
@@ -87,6 +87,8 @@ class Simulation:
             if (handle := handle.status())['status'] in {'PENDING', 'QUEUED'}:
                 time.sleep(0.1)
                 t += 0.1
+            elif handle['status'] in {'FAILED', 'ERROR'}:
+                raise SimInitializationError(handle['message'])
             else:
                 return handle
         raise TimeoutError(f'Simulation did not deploy before timeout of {timeout}.')

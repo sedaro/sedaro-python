@@ -225,9 +225,6 @@ def test_block_client_clone():
 def test_some_errors():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
-    with pytest.raises(ValueError, match=f'Must provide fields'):
-        branch.Subsystem.create()
-
     subsystem = branch.Subsystem.create(name=_random_str())
 
     with pytest.raises(ValueError, match=f'Invalid value for "{ID}"'):

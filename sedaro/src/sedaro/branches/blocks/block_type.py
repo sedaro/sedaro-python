@@ -43,8 +43,6 @@ class BlockType:
         Returns:
             Block: a client to interact with the created Sedaro Block
         """
-        if is_empty(fields):
-            raise ValueError(f'Must provide fields to create a {self.type}')
 
         for kwarg in [ID, TYPE]:
             fields.pop(kwarg, None)
