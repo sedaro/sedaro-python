@@ -137,6 +137,7 @@ def bsearch(ordered_series, value):
 
 
 def to_time_major(series):
+    print(f"CONVERTING SERIES TO TIME MAJOR! Series is of type {type(series)}")
     if type(series) not in [list, dict]:
         return series
     elif type(series) == dict:
@@ -145,9 +146,11 @@ def to_time_major(series):
             new[k] = to_time_major(series[k])
         return new
     else: # type(series) == list
+        print(f"Length of data list before: {len(series)}")
         np_data = np.array(series)
         if np_data.ndim > 1:
             axes = (np_data.ndim - 1,) + tuple(range(np_data.ndim - 1))
             np_data = np.transpose(np_data, axes=axes)
         reshaped_data = np_data.tolist()
+        print(f"Length of reshaped data list: {len(reshaped_data)}")
         return reshaped_data
