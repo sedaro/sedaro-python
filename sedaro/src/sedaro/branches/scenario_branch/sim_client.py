@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from typing import (TYPE_CHECKING, Any, Generator, List, Optional, Tuple,
                     Union)
 import concurrent.futures
+import flatdict
 import json
 import os
 import pathlib
@@ -84,14 +85,30 @@ def set_numeric_as_list(d):
 
 def __set_nested(results):
     nested = {}
-    for k, v in results.items():
-        ptr = nested
-        tokens = k.split('.')
-        for token in tokens[:-1]:
-            if token not in ptr:
-                ptr[token] = {}
-            ptr = ptr[token]
-        ptr[tokens[-1]] = v
+    for k in sorted(list(results.keys())):
+        v = results[k]
+        try:
+            ptr = nested
+            tokens = k.split('.')
+            for token in tokens[:-1]:
+                if token not in ptr:
+                    ptr[token] = {}
+                ptr = ptr[token]
+            ptr[tokens[-1]] = v
+        except TypeError:
+            ptr = nested
+            for token in tokens[:-1]:
+                if type(ptr[token]) == list:
+                    del ptr[token]
+                    break
+                else:
+                    ptr = ptr[token]
+            ptr = nested
+            for token in tokens[:-1]:
+                if token not in ptr:
+                    ptr[token] = {}
+                ptr = ptr[token]
+            ptr[tokens[-1]] = v
     return nested
 
 # TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
@@ -99,7 +116,7 @@ def set_nested(results):
     nested = {}
     for k in results:
         kspl = k.split('/')[0]
-        # nested[k] = (results[k][0], {kspl : flatdict.FlatDict(results[k][1][kspl], delimiter='.').as_dict()})
+        # nested[k] = (results[k][0], {kspl : flatdict.FlatterDict(results[k][1][kspl], delimiter='.').as_dict()})
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
 
@@ -286,6 +303,7 @@ class Simulation:
             body = continuationToken
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET', body=body)
+            print(f"got page")
         _response = None
         has_nonempty_ctoken = False
         try:
@@ -311,6 +329,7 @@ class Simulation:
                     request_url = f'/data/{id}?'
                     request_body = json.dumps(ctoken).encode('utf-8')
                     page = api.call_api(request_url, 'GET', body=request_body)
+                    print(f"got page")
                     _page = parse_urllib_response(page)
                     try:
                         if 'ctoken' in _page['meta'] and len(_response['meta']['ctoken']['streams']) > 0:
