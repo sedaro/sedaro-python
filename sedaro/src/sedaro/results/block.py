@@ -4,12 +4,12 @@ from pathlib import Path
 from typing import Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, HFILL, hfill
+from .utils import ENGINE_EXPANSION, HFILL, hfill, to_time_major
 
 
 class SedaroBlockResult:
 
-    def __init__(self, structure, series: dict):
+    def __init__(self, structure, series: dict, axis: str):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -23,6 +23,7 @@ class SedaroBlockResult:
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
+        self.__axis = axis
         self.__variables = [variable for data in self.__series.values() for variable in data['series']]
 
     def __getattr__(self, name: str) -> SedaroSeries:
@@ -33,10 +34,17 @@ class SedaroBlockResult:
         '''
         for module in self.__series:
             if name in self.__series[module]['series']:
+                print(f"Axis order: {self.__axis}")
+                series_to_prepare = self.__series[module]['series'][name]
+                if self.__axis == 'TIME_MINOR':
+                    series_prepared = to_time_major(self.__series[module]['series'][name])
+                else:
+                    series_prepared = series_to_prepare
+                # print(series_prepared)
                 return SedaroSeries(
                     name,
                     self.__series[module]['time'],
-                    self.__series[module]['series'][name],
+                    series_prepared
                 )
         else:
             raise ValueError(f'Variable "{name}" not found.')

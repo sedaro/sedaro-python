@@ -95,8 +95,12 @@ class SimulationResult:
         '''Query results for a particular agent by name.'''
         agent_id = self.__agent_id_from_name(name)
         initial_agent_models = self.__meta['structure']['agents']
+        try:
+            axis = self.__meta['axis']
+        except KeyError:
+            axis = 'TIME_MAJOR'
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state)
+        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state, axis=axis)
 
     def to_file(self, filename: Union[str, Path]) -> None:
         '''Save simulation result to compressed JSON file.'''

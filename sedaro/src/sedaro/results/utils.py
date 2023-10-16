@@ -137,9 +137,14 @@ def bsearch(ordered_series, value):
 
 
 def to_time_major(series):
-    if type(series) != list:
+    if type(series) not in [list, dict]:
         return series
-    else:
+    elif type(series) == dict:
+        new = {}
+        for k in series:
+            new[k] = to_time_major(series[k])
+        return new
+    else: # type(series) == list
         np_data = np.array(series)
         if np_data.ndim > 1:
             axes = (np_data.ndim - 1,) + tuple(range(np_data.ndim - 1))
