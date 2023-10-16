@@ -305,8 +305,10 @@ class Simulation:
         if stop is not None:
             url += f'&stop={stop}'
         if binWidth is not None:
+            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
             url += f'&binWidth={binWidth}'
         elif limit is not None:
+            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
             url += f'&limit={limit}'
         streams = streams or []
         if len(streams) > 0:
@@ -324,7 +326,6 @@ class Simulation:
             body = continuationToken
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET', body=body)
-            print(f"got page")
         _response = None
         has_nonempty_ctoken = False
         try:
@@ -350,7 +351,6 @@ class Simulation:
                     request_url = f'/data/{id}?'
                     request_body = json.dumps(ctoken).encode('utf-8')
                     page = api.call_api(request_url, 'GET', body=request_body)
-                    print(f"got page")
                     _page = parse_urllib_response(page)
                     try:
                         if 'ctoken' in _page['meta'] and len(_response['meta']['ctoken']['streams']) > 0:
