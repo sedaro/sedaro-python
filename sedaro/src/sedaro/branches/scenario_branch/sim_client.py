@@ -330,7 +330,6 @@ class Simulation:
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
             _response['series'] = set_nested(_response['series'])
-        # print(json.dumps(_response))
         return _response
 
     def results(

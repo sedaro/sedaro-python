@@ -92,7 +92,6 @@ class SedaroSeries:
 
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
-        print(f"Has subseries? {self.__has_subseries}")
         if self.__has_subseries:
             return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__dtype}
         else:
@@ -106,8 +105,6 @@ class SedaroSeries:
                     raise_error()
             else:
                 return self.values_interpolant(mjd)
-            print("MADE IT HERE!")
-            # print(f"series looks like: {self.__series[:10]}")
             return self.__series_major()[index]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
@@ -125,7 +122,6 @@ class SedaroSeries:
             return self.__series
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
-        # print(self.__series)
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries:
