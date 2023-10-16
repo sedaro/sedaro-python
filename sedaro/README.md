@@ -265,17 +265,15 @@ selected_streams=[
 data = sim.results_plain(
   start=65000,
   stop=65001,
-  limit=250,
+  sampleRank=1,
   streams=selected_streams,
-  axisOrder='TIME_MINOR'
 )
 ### alternative:
 data = sim.results_plain(
   start=65000,
   stop=65001,
-  binWidth=0.004,
+  sampleRank=8,
   streams=selected_streams,
-  axisOrder='TIME_MINOR'
 )
 ```
 
