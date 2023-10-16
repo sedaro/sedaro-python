@@ -26,7 +26,8 @@ def test_block_type_options():
 
             # CHECK: can use create method
             try:
-                block_type.create()
+                block = block_type.create()
+                block.delete()
             except AttributeError:
                 raise
             except:
