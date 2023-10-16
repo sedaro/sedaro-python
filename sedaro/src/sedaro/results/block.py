@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, HFILL, hfill, to_time_major
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
 class SedaroBlockResult:
@@ -34,17 +34,11 @@ class SedaroBlockResult:
         '''
         for module in self.__series:
             if name in self.__series[module]['series']:
-                print(f"Axis order: {self.__axis}")
-                series_to_prepare = self.__series[module]['series'][name]
-                if self.__axis == 'TIME_MINOR':
-                    series_prepared = to_time_major(self.__series[module]['series'][name])
-                else:
-                    series_prepared = series_to_prepare
-                # print(series_prepared)
                 return SedaroSeries(
                     name,
                     self.__series[module]['time'],
-                    series_prepared
+                    self.__series[module]['series'][name],
+                    self.__axis
                 )
         else:
             raise ValueError(f'Variable "{name}" not found.')
