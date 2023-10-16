@@ -276,6 +276,9 @@ class Simulation:
         Returns:
             dict: response from the `get` request
         """
+        if sampleRate is None and continuationToken is None:
+            sampleRate = 1
+
         if id == None:
             id = self.status()['dataArray']
         url = f'/data/{id}?'

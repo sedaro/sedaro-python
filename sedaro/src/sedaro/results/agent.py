@@ -75,6 +75,7 @@ class SedaroAgentResult:
                 'name': self.__name,
                 'block_structures': self.__block_structures,
                 'series': self.__series,
+                'axis': self.__axis,
             }
             json.dump(contents, json_file)
             if verbose:
@@ -85,7 +86,7 @@ class SedaroAgentResult:
         '''Load agent result from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
-            return cls(contents['name'], contents['block_structures'], contents['series'])
+            return cls(contents['name'], contents['block_structures'], contents['series'], axis=contents['axis'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

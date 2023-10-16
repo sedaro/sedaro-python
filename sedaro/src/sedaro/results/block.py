@@ -76,7 +76,7 @@ class SedaroBlockResult:
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {'structure': self.__structure, 'series': self.__series}
+            contents = {'structure': self.__structure, 'series': self.__series, 'axis': self.__axis}
             json.dump(contents, json_file)
             if verbose:
                 print(f"💾 Successfully saved to {filename}")
@@ -86,7 +86,7 @@ class SedaroBlockResult:
         '''Load agent result from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
-            return cls(contents['structure'], contents['series'])
+            return cls(contents['structure'], contents['series'], contents['axis'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
