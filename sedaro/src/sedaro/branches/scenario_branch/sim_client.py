@@ -254,8 +254,10 @@ class Simulation:
         axisOrder: str = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        continuationToken: bytes = None,
+        continuationToken: str = None,
     ):
+        t = time.time()
+        print(f"Getting results (plain)!")
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
 
@@ -323,19 +325,21 @@ class Simulation:
             url += f'&sampleRate={sampleRate}'
         body = b''
         if continuationToken is not None:
-            body = continuationToken
+            body = {'continuationToken': continuationToken}
         with self.__sedaro.api_client() as api:
-            response = api.call_api(url, 'GET', body=body)
+            response = api.call_api(url, 'GET', body=body, headers={'Content-Type': 'application/json'})
+            print('got page')
         _response = None
         has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
-                if 'ctoken' in _response['meta']:
-                    if len(_response['meta']['ctoken']['streams']) > 0:
+                if 'ctokens' in _response['meta']:
+                    print(_response['meta']['ctokens'])
+                    if len(_response['meta']['ctokens']['streams']) > 0:
                         has_nonempty_ctoken = True
-                        ctoken = _response['meta']['ctoken']['streams']
+                        ctoken = _response['meta']['ctokens']
             else:
                 is_v3 = False
             if response.status != 200:
@@ -344,18 +348,21 @@ class Simulation:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         if is_v3:
+            print('is v3')
             if has_nonempty_ctoken: # need to fetch more pages
                 result = _response
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?'
-                    request_body = json.dumps(ctoken).encode('utf-8')
-                    page = api.call_api(request_url, 'GET', body=request_body)
+                    request_body = json.dumps(ctoken)
+                    print(f'request body contents: {request_body}')
+                    page = api.call_api(request_url, 'GET', body=b'', headers={'X-CToken': request_body})
+                    print('got page')
                     _page = parse_urllib_response(page)
                     try:
-                        if 'ctoken' in _page['meta'] and len(_response['meta']['ctoken']['streams']) > 0:
+                        if 'ctokens' in _page['meta'] and len(_response['meta']['ctokens']['streams']) > 0:
                             has_nonempty_ctoken = True
-                            ctoken = _response['meta']['ctoken']['streams']
+                            ctoken = _response['meta']['ctokens']
                         else:
                             has_nonempty_ctoken = False
                         if page.status != 200:
@@ -367,6 +374,7 @@ class Simulation:
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
             _response['series'] = set_nested(_response['series'])
+        print(f"Done getting results! Elapsed time: {time.time() - t}")
         return _response
 
     def results(
