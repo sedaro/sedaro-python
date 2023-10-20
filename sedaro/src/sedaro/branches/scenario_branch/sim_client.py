@@ -42,24 +42,25 @@ def concat_stream_data(main, other, len_main, len_other):
     assert type(main) == dict and type(other) == dict
     for k in other:
         if k not in main:
-            main[k] = [None * len_main]
+            main[k] = [None for _ in range(len_main)]
         main[k].extend(other[k])
     for k in main:
         if k not in other:
-            main[k].extend([None * len_other])
+            main[k].extend([None for _ in range(len_other)])
 
-def concat_stream(main, other):
+def concat_stream(main, other, stream_id):
     len_main = len(main[0])
     len_other = len(other[0])
     main[0].extend(other[0])
-    concat_stream_data(main[1], other[1], len_main, len_other)
+    stream_id_short = stream_id.split('/')[0]
+    concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
 
 def concat_results(main, other):
     for stream in other:
         if stream not in main:
-            main[stream] = other
+            main[stream] = other[stream]
         else: # concat stream parts
-            concat_stream(main[stream], other[stream])
+            concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
     for k in other['counts']:
@@ -360,9 +361,9 @@ class Simulation:
                     print('got page')
                     _page = parse_urllib_response(page)
                     try:
-                        if 'ctokens' in _page['meta'] and len(_response['meta']['ctokens']['streams']) > 0:
+                        if 'ctokens' in _page['meta'] and len(_page['meta']['ctokens']['streams']) > 0:
                             has_nonempty_ctoken = True
-                            ctoken = _response['meta']['ctokens']
+                            ctoken = _page['meta']['ctokens']
                         else:
                             has_nonempty_ctoken = False
                         if page.status != 200:
