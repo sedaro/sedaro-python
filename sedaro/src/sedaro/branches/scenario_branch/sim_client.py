@@ -258,6 +258,7 @@ class Simulation:
         continuationToken: str = None,
     ):
         t = time.time()
+        concatopstime = 0
         print(f"Getting results (plain)!")
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
@@ -336,11 +337,11 @@ class Simulation:
             _response = parse_urllib_response(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
-                if 'ctokens' in _response['meta']:
-                    print(_response['meta']['ctokens'])
-                    if len(_response['meta']['ctokens']['streams']) > 0:
+                if 'continuationToken' in _response['meta']:
+                    print(_response['meta']['continuationToken'])
+                    if len(_response['meta']['continuationToken']['streams']) > 0:
                         has_nonempty_ctoken = True
-                        ctoken = _response['meta']['ctokens']
+                        ctoken = _response['meta']['continuationToken']
             else:
                 is_v3 = False
             if response.status != 200:
@@ -361,9 +362,9 @@ class Simulation:
                     print('got page')
                     _page = parse_urllib_response(page)
                     try:
-                        if 'ctokens' in _page['meta'] and len(_page['meta']['ctokens']['streams']) > 0:
+                        if 'continuationToken' in _page['meta'] and len(_page['meta']['continuationToken']['streams']) > 0:
                             has_nonempty_ctoken = True
-                            ctoken = _page['meta']['ctokens']
+                            ctoken = _page['meta']['continuationToken']
                         else:
                             has_nonempty_ctoken = False
                         if page.status != 200:
@@ -371,10 +372,16 @@ class Simulation:
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
+                    t_ = time.time()
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
+                    concatopstime += time.time() - t_
                 _response = result
+            print(f"concat ops time after part 1: {concatopstime}")
+            t_ = time.time()
             _response['series'] = set_nested(_response['series'])
+            concatopstime += time.time() - t_
+            print(f"concat ops time after part 2: {concatopstime}")
         print(f"Done getting results! Elapsed time: {time.time() - t}")
         return _response
 
