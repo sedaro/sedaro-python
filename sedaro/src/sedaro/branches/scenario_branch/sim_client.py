@@ -1,11 +1,9 @@
 import concurrent.futures
-import flatdict
 import json
 import os
 import pathlib
 import tempfile
 import time
-import traceback
 from contextlib import contextmanager
 from threading import Lock
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
@@ -257,9 +255,6 @@ class Simulation:
         sampleRate: int = None,
         continuationToken: str = None,
     ):
-        t = time.time()
-        concatopstime = 0
-        print(f"Getting results (plain)!")
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
 
@@ -298,6 +293,8 @@ class Simulation:
         Returns:
             dict: response from the `get` request
         """
+        # t = time.time()
+
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
@@ -325,23 +322,21 @@ class Simulation:
             url += f'&axisOrder={axisOrder}'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
-        body = b''
         if continuationToken is not None:
-            body = {'continuationToken': continuationToken}
+            url += f'&continuationToken={continuationToken}'
         with self.__sedaro.api_client() as api:
-            response = api.call_api(url, 'GET', body=body, headers={'Content-Type': 'application/json'})
-            print('got page')
+            # t_ = time.time()
+            response = api.call_api(url, 'GET', headers={'Content-Type': 'application/json'})
+            # print(f"Got page. Full elapsed RTT for request: {time.time() - t_}")
         _response = None
         has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
-                if 'continuationToken' in _response['meta']:
-                    print(_response['meta']['continuationToken'])
-                    if len(_response['meta']['continuationToken']['streams']) > 0:
-                        has_nonempty_ctoken = True
-                        ctoken = _response['meta']['continuationToken']
+                if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
+                    has_nonempty_ctoken = True
+                    ctoken = _response['meta']['continuationToken']
             else:
                 is_v3 = False
             if response.status != 200:
@@ -349,20 +344,18 @@ class Simulation:
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3:
-            print('is v3')
+        if is_v3: # keep fetching pages until we get an empty continuation token
             if has_nonempty_ctoken: # need to fetch more pages
                 result = _response
                 while has_nonempty_ctoken:
                     # fetch page
-                    request_url = f'/data/{id}?'
-                    request_body = json.dumps(ctoken)
-                    print(f'request body contents: {request_body}')
-                    page = api.call_api(request_url, 'GET', body=b'', headers={'X-CToken': request_body})
-                    print('got page')
+                    request_url = f'/data/{id}?&continuationToken={ctoken}'
+                    # t_ = time.time()
+                    page = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
+                    # print(f"Got page. Full elapsed RTT for request: {time.time() - t_}")
                     _page = parse_urllib_response(page)
                     try:
-                        if 'continuationToken' in _page['meta'] and len(_page['meta']['continuationToken']['streams']) > 0:
+                        if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
                             ctoken = _page['meta']['continuationToken']
                         else:
@@ -372,17 +365,11 @@ class Simulation:
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
-                    t_ = time.time()
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
-                    concatopstime += time.time() - t_
                 _response = result
-            print(f"concat ops time after part 1: {concatopstime}")
-            t_ = time.time()
             _response['series'] = set_nested(_response['series'])
-            concatopstime += time.time() - t_
-            print(f"concat ops time after part 2: {concatopstime}")
-        print(f"Done getting results! Elapsed time: {time.time() - t}")
+        # print(f"Done getting results! Elapsed time: {time.time() - t}")
         return _response
 
     def results(

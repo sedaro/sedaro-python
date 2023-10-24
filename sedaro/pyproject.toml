@@ -9,7 +9,7 @@ description = "A python client to interact with the Sedaro API."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [ "Programming Language :: Python :: 3.8", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Operating System :: OS Independent", "Topic :: Software Development",]
-dependencies = [ "certifi >= 14.5.14", "flatdict ~= 4.0.1", "frozendict ~= 2.3.4", "numpy ~= 1.23.0", "python-dateutil ~= 2.7", "setuptools >= 21.0.0", "typing_extensions ~= 4.3.0", "urllib3 ~= 1.26.7", "pydash >= 5.1.1", "scipy >= 1.10.1", "numpy",]
+dependencies = [ "certifi >= 14.5.14", "flatdict ~= 4.0.1", "frozendict ~= 2.3.4", "grequests ~= 0.7.0", "numpy ~= 1.23.0", "python-dateutil ~= 2.7", "setuptools >= 21.0.0", "typing_extensions ~= 4.3.0", "urllib3 ~= 1.26.7", "pydash >= 5.1.1", "scipy >= 1.10.1", "numpy",]
 [[project.authors]]
 name = "Sedaro"
 email = "support@sedarotech.com"
