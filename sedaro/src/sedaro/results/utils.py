@@ -51,7 +51,7 @@ def _agent_in_type_supers(type_, meta_supers):
         supertypes = meta_supers[type_]
         if len(supertypes) == 0:
             return False
-        return any(_agent_in_type_supers(supertype, meta_supers) for supertype in meta_supers[type_])
+        return any(_agent_in_type_supers(supertype, meta_supers) for supertype in supertypes)
     else:
         return False
 
