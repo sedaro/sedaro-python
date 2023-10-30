@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
-from .utils import (HFILL, STATUS_ICON_MAP, _get_agent_id_name_map,
-                    _restructure_data, hfill)
+from .utils import (HFILL, STATUS_ICON_MAP, _agent_in_type_supers,
+                    _get_agent_id_name_map, _restructure_data, hfill)
 
 
 class SimulationResult:
@@ -47,7 +47,7 @@ class SimulationResult:
         return tuple([
             entry['name'] for _, entry
             in self.__meta['structure']['scenario']['blocks'].items()
-            if entry['type'] == 'Agent' and not entry['peripheral']
+            if entry['type'] == 'TemplatedAgent'
         ])
 
     @property
@@ -55,7 +55,7 @@ class SimulationResult:
         return tuple([
             entry['name'] for id_, entry
             in self.__meta['structure']['scenario']['blocks'].items()
-            if entry['type'] == 'Agent' and entry['peripheral'] and id_ in self._agent_blocks
+            if entry['type'] != 'TemplatedAgent' and _agent_in_type_supers(entry['type'], self.__meta['structure']['scenario']['_supers']) and id_ in self._agent_blocks
         ])
 
     @property
@@ -85,7 +85,7 @@ class SimulationResult:
 
     def __agent_id_from_name(self, name: str) -> str:
         for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
-            if entry['type'] == 'Agent' and name == entry['name']:
+            if name == entry.get('name') and _agent_in_type_supers(entry['type'], self.__meta['structure']['scenario']['_supers']):
                 if id_ in self._agent_blocks:
                     return id_
         else:

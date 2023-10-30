@@ -44,12 +44,24 @@ def _element_id_dict(agent_data):
     return out
 
 
+def _agent_in_type_supers(type_, meta_supers):
+    if type_ == 'Agent':
+        return True
+    elif type_ in meta_supers:
+        supertypes = meta_supers[type_]
+        if len(supertypes) == 0:
+            return False
+        return any(_agent_in_type_supers(supertype, meta_supers) for supertype in meta_supers[type_])
+    else:
+        return False
+
+
 def _get_agent_id_name_map(meta):
     '''Get mapping from agent ID to name.'''
     return {
         id_: entry['name']
         for id_, entry in meta['structure']['scenario']['blocks'].items()
-        if entry['type'] == 'Agent'
+        if _agent_in_type_supers(entry['type'], meta['structure']['scenario']['_supers'])
     }
 
 
