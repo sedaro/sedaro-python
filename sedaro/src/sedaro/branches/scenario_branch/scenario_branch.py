@@ -52,6 +52,10 @@ class ScenarioBranch(Branch):
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     ClockConfig: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
+    Menu: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    MenuItem: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
     Orbit: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     PerRoundExternalState: BlockType
@@ -63,4 +67,6 @@ class ScenarioBranch(Branch):
     WaypointPathWithSpeed: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     WaypointPathWithTimestamps: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    WidgetSpec: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""

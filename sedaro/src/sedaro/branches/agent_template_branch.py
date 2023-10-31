@@ -107,6 +107,8 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     LockPointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    MagneticHysteresisRod: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Magnetorquer: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     MaxAlignPointingMode: BlockType
@@ -124,6 +126,8 @@ class AgentTemplateBranch(Branch):
     PassivePointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     PassiveTransmitInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PermanentDipoleMagnet: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     PhotovoltaicPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""

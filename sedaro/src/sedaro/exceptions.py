@@ -31,6 +31,9 @@ class NonexistantBlockError(SedaroException):
 class NoBlockFoundError(SedaroException):
     pass
 
+class SimInitializationError(SedaroException):
+    pass
+
 
 class NoSimResultsError(SedaroApiException):
     pass
