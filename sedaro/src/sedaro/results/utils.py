@@ -44,14 +44,14 @@ def _element_id_dict(agent_data):
     return out
 
 
-def _agent_in_type_supers(type_, meta_supers):
-    if type_ == 'Agent':
+def _block_type_in_supers(block_type: str, meta_supers: dict, super_type: str = 'Agent') -> bool:
+    if block_type == super_type:
         return True
-    elif type_ in meta_supers:
-        supertypes = meta_supers[type_]
+    elif block_type in meta_supers:
+        supertypes = meta_supers[block_type]
         if len(supertypes) == 0:
             return False
-        return any(_agent_in_type_supers(supertype, meta_supers) for supertype in supertypes)
+        return any(_block_type_in_supers(supertype, meta_supers) for supertype in supertypes)
     else:
         return False
 
@@ -61,7 +61,7 @@ def _get_agent_id_name_map(meta):
     return {
         id_: entry['name']
         for id_, entry in meta['structure']['scenario']['blocks'].items()
-        if _agent_in_type_supers(entry['type'], meta['structure']['scenario']['_supers'])
+        if _block_type_in_supers(entry['type'], meta['structure']['scenario']['_supers'])
     }
 
 
