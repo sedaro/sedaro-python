@@ -17,7 +17,16 @@ def test_set_nested_and_numeric():
     assert set_numeric_as_list({'a': [1, 2], 'b': {'zero': [1, 2], 'one': [1, 2]}}) == {'a': [1, 2], 'b': {'zero': [1, 2], 'one': [1, 2]}}
 
 def test_concat_and_update():
-    pass
+    main = {'counts': {'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000}}
+    other = {'counts': {'baz': 1000, 'qux': 100, 'quux': 10, 'corge': 1}}
+    combined = {'counts': {'foo': 1, 'bar': 10, 'baz': 1100, 'qux': 1100, 'quux': 10, 'corge': 1}}
+    update_metadata(main, other)
+    assert main == combined
+    main = {'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000, 'counts': []}
+    other = {'baz': 1000, 'qux': 100, 'quux': 10, 'corge': 1, 'counts': []}
+    combined = {'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000, 'counts': []}
+    update_metadata(main, other)
+    assert main == combined
 
 def test_to_time_major():
     assert to_time_major(True) == True # items other than lists or dicts are returned as is
