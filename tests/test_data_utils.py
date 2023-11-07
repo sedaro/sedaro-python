@@ -27,6 +27,42 @@ def test_concat_and_update():
     combined = {'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000, 'counts': []}
     update_metadata(main, other)
     assert main == combined
+    main_data = {'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}
+    other_data = {'b': [1, 2, 3, 4, 5], 'c': [1, 2, 3, 4, 5]}
+    concat_stream_data(main_data, other_data, 5, 5)
+    assert main_data == {
+        'a': [1, 2, 3, 4, 5, None, None, None, None, None],
+        'b': [1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
+        'c': [None, None, None, None, None, 1, 2, 3, 4, 5]
+    }
+    main_data = ([1, 2, 3, 4, 5], {'foo': {'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}})
+    other_data = ([6, 7, 8, 9, 10], {'foo': {'b': [1, 2, 3, 4, 5], 'c': [1, 2, 3, 4, 5]}})
+    concat_stream(main_data, other_data, 'foo/0')
+    assert main_data == ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], {'foo': {
+        'a': [1, 2, 3, 4, 5, None, None, None, None, None],
+        'b': [1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
+        'c': [None, None, None, None, None, 1, 2, 3, 4, 5]
+    }})
+    main_result = {'foo/0': ([1, 2, 3, 4, 5], {'foo': {'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}}), 'foo/1': ([1, 2], {'foo': {'a': [1, 2]}})}
+    other_result = {'foo/0': ([6, 7, 8, 9, 10], {'foo': {'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}}), 'foo/2': ([1, 2], {'foo': {'a': [1, 2]}})}
+    concat_results(main_result, other_result)
+    assert main_result == {
+        'foo/0': ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], {'foo': {
+            'a': [1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
+            'b': [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+        }}),
+        'foo/1': ([1, 2], {'foo': {'a': [1, 2]}}),
+        'foo/2': ([1, 2], {'foo': {'a': [1, 2]}}),
+    }
+    main_data = {'a': [None, None, None, None, None]}
+    other_data = {'a': [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]}
+    concat_stream_data(main_data, other_data, 5, 5)
+    print(main_data)
+    assert main_data == {'a': [
+        [None, None, None, None, None, 1, 2, 3, 4, 5],
+        [None, None, None, None, None, 1, 2, 3, 4, 5],
+        [None, None, None, None, None, 1, 2, 3, 4, 5],
+    ]}
 
 def test_to_time_major():
     assert to_time_major(True) == True # items other than lists or dicts are returned as is
