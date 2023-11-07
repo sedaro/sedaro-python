@@ -54,15 +54,6 @@ def test_concat_and_update():
         'foo/1': ([1, 2], {'foo': {'a': [1, 2]}}),
         'foo/2': ([1, 2], {'foo': {'a': [1, 2]}}),
     }
-    # main_data = {'a': [None, None, None, None, None]}
-    # other_data = {'a': [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]}
-    # concat_stream_data(main_data, other_data, 5, 5)
-    # print(main_data)
-    # assert main_data == {'a': [
-    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
-    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
-    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
-    # ]}
 
 def test_concat_ragged():
     main = {'foo/0': ([1, 2, 3, 4, 5], {'foo': {
