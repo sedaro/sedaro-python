@@ -116,7 +116,6 @@ def set_nested(results):
     nested = {}
     for k in results:
         kspl = k.split('/')[0]
-        # nested[k] = (results[k][0], {kspl : flatdict.FlatterDict(results[k][1][kspl], delimiter='.').as_dict()})
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
 
@@ -293,7 +292,6 @@ class Simulation:
         Returns:
             dict: response from the `get` request
         """
-        # t = time.time()
 
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
@@ -325,9 +323,7 @@ class Simulation:
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
         with self.__sedaro.api_client() as api:
-            # t_ = time.time()
             response = api.call_api(url, 'GET', headers={'Content-Type': 'application/json'})
-            # print(f"Got page. Full elapsed RTT for request: {time.time() - t_}")
         _response = None
         has_nonempty_ctoken = False
         try:
@@ -350,9 +346,7 @@ class Simulation:
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    # t_ = time.time()
                     page = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
-                    # print(f"Got page. Full elapsed RTT for request: {time.time() - t_}")
                     _page = parse_urllib_response(page)
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
@@ -369,7 +363,6 @@ class Simulation:
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
             _response['series'] = set_nested(_response['series'])
-        # print(f"Done getting results! Elapsed time: {time.time() - t}")
         return _response
 
     def results(
@@ -416,7 +409,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], streams=streams or [], sampleRate=sampleRate or 1)
+        data = self.results_plain(id=job['dataArray'], streams=streams or [], sampleRate=sampleRate)
         return SimulationResult(job, data)
 
     def results_poll(
@@ -453,7 +446,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [], sampleRate=sampleRate or 1)
+        return self.results(streams=streams or [], sampleRate=sampleRate)
 
     def __download(self, p):
         agents, id, dirname, progress, progress_lock = p
