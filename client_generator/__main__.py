@@ -7,7 +7,7 @@ import tempfile
 import urllib.error
 import urllib.request
 
-DOWNLOAD_SPEC_FROM = 'http://localhost:8081/sedaro-satellite.json'
+DOWNLOAD_SPEC_FROM = 'http://localhost/redoc/sedaro-satellite.json'
 
 # CONSTANTS
 PYTHON = 'python'
