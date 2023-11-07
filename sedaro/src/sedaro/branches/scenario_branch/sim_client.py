@@ -11,9 +11,8 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
-from sedaro_base_client.apis.tags import externals_api, jobs_api
-
 from sedaro.results.simulation_result import SimulationResult
+from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
@@ -161,7 +160,7 @@ class Simulation:
         handle = SimulationHandle(body_from_res(res), self)
         if not wait:
             return handle
-        
+
         t = 0
         while t < (timeout or float('inf')):
             if (handle := handle.status())['status'] in {'PENDING', 'QUEUED'}:
@@ -365,12 +364,12 @@ class Simulation:
             _response['series'] = set_nested(_response['series'])
         return _response
 
-    def results(
-            self,
-            job_id: str = None,
-            streams: Optional[List[Tuple[str, ...]]] = None,
-            sampleRate: int = None
-        ) -> SimulationResult:
+    def results(self,
+                job_id: str = None,
+                start: float = None,
+                stop: float = None,
+                streams: Optional[List[Tuple[str, ...]]] = None,
+                sampleRate: int = None) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -409,7 +408,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], streams=streams or [], sampleRate=sampleRate)
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate)
         return SimulationResult(job, data)
 
     def results_poll(
