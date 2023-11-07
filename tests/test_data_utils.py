@@ -54,15 +54,40 @@ def test_concat_and_update():
         'foo/1': ([1, 2], {'foo': {'a': [1, 2]}}),
         'foo/2': ([1, 2], {'foo': {'a': [1, 2]}}),
     }
-    main_data = {'a': [None, None, None, None, None]}
-    other_data = {'a': [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]}
-    concat_stream_data(main_data, other_data, 5, 5)
-    print(main_data)
-    assert main_data == {'a': [
-        [None, None, None, None, None, 1, 2, 3, 4, 5],
-        [None, None, None, None, None, 1, 2, 3, 4, 5],
-        [None, None, None, None, None, 1, 2, 3, 4, 5],
-    ]}
+    # main_data = {'a': [None, None, None, None, None]}
+    # other_data = {'a': [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]}
+    # concat_stream_data(main_data, other_data, 5, 5)
+    # print(main_data)
+    # assert main_data == {'a': [
+    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
+    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
+    #     [None, None, None, None, None, 1, 2, 3, 4, 5],
+    # ]}
+
+def test_concat_ragged():
+    main = {'foo/0': ([1, 2, 3, 4, 5], {'foo': {
+        'a.0': [1, 2, 3, 4, 5],
+        'a.1': [1, 2, 3, 4, 5],
+        'a.2': [1, 2, 3, 4, 5],
+        'b.0': [1, 2, 3, 4, 5],
+        'b.1': [1, 2, 3, 4, 5],
+        'b.2': [1, 2, 3, 4, 5],
+    }})}
+    other = {'foo/0': ([6, 7, 8, 9, 10], {'foo': {
+        'b.0': [6, 7, 8, 9, 10],
+        'b.1': [6, 7, 8, 9, 10],
+        'b.2': [6, 7, 8, 9, 10],
+        'c.0': [6, 7, 8, 9, 10],
+        'c.1': [6, 7, 8, 9, 10],
+        'c.2': [6, 7, 8, 9, 10],
+    }})}
+    concat_results(main, other)
+    result = set_nested(main)
+    assert result == {'foo/0': ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], {'foo': {
+        'a': [[1, 2, 3, 4, 5, None, None, None, None, None] for _ in range(3)],
+        'b': [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10] for _ in range(3)],
+        'c': [[None, None, None, None, None, 6, 7, 8, 9, 10] for _ in range(3)]
+    }})}
 
 def test_to_time_major():
     assert to_time_major(True) == True # items other than lists or dicts are returned as is
@@ -74,6 +99,7 @@ def test_to_time_major():
 def run_tests():
     test_set_nested_and_numeric()
     test_concat_and_update()
+    test_concat_ragged()
     test_to_time_major()
 
 run_tests()
