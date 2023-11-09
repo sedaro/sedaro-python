@@ -138,14 +138,6 @@ class FastFetcher:
 
     def get(self, url):
         return FastFetcherResponse(requests.get(url=self.host + url, headers=self.headers))
-    
-    # @staticmethod
-    # def loads(response):
-    #     try:
-    #         return orjson.loads(response.text)
-    #     except Exception:
-    #         return json.loads(response.text)
-
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
