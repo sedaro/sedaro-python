@@ -134,7 +134,7 @@ class SedaroAgentResult:
 
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>) or .blockname(<name>)")
-        print("📊 Display agent modules variables statistics with .stats( module, output_html=False, make_histogram_plots=False ) ")
+        print("📊 Display agent modules variables statistics with .stats( module ) ")
         print(f"🧩        Where module must be one of the following: { [module for module in self.__series] } ")
 
     def stats(self, module, output_html=False, make_histogram_plots=False):

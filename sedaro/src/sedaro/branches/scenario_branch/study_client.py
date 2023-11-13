@@ -154,6 +154,12 @@ class Study:
         return self.results(job_id=job_id)
 
     def stats_results(self) -> StudyStatsResult:
+        """ Generates Statistics based on the study result data 
+        Args: none
+        raises:
+        Returns:
+           StudyStatsResult: an 'StudyStatsResult' instance
+        """
         return StudyStatsResult(self)
 
 class StudyJob:
