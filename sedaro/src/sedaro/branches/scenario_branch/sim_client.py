@@ -13,7 +13,6 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
-from sedaro_base_client import Configuration
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import (NoSimResultsError, SedaroApiException,
