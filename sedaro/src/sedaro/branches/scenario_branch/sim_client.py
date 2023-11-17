@@ -1,6 +1,5 @@
 import concurrent.futures
 import json
-import orjson
 import os
 import pathlib
 import requests
@@ -316,9 +315,6 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
 
-        t = time.time()
-        page_time = time.time()
-
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
@@ -349,15 +345,11 @@ class Simulation:
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
         
-        
-        # with self.__sedaro.api_client() as api:
-        # response = api.call_api(url, 'GET', headers={'Content-Type': 'application/json'})
         response = fast_fetcher.get(url)
         _response = None
         has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
-            # _response = FastFetcher.loads(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
@@ -370,15 +362,12 @@ class Simulation:
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        print(f"Page time: {time.time() - page_time}")
-        page_time = time.time()
         if is_v3: # keep fetching pages until we get an empty continuation token
             if has_nonempty_ctoken: # need to fetch more pages
                 result = _response
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    # page = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
                     page = fast_fetcher.get(request_url)
                     _page = parse_urllib_response(page)
                     try:
@@ -394,11 +383,8 @@ class Simulation:
                         raise SedaroApiException(status=page.status, reason=reason)
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
-                    print(f"Page time: {time.time() - page_time}")
-                    page_time = time.time()
                 _response = result
             _response['series'] = set_nested(_response['series'])
-        print(f"Elapsed time: {time.time() - t}")
         return _response
 
     def results(self,
