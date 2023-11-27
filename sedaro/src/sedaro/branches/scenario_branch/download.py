@@ -1,5 +1,7 @@
 import dask.dataframe as dd
 import os
+from pathlib import Path
+import shutil
 from uuid import uuid6
 import zipfile
 
@@ -22,13 +24,18 @@ class DownloadManager:
             self.streams[stream_id].ingest(stream_id, stream_data)
 
     def archive(self, path):
+        # create temp working directory
+        os.mkdir(tmpdir := f".{uuid6()}")
         for stream_id, stream_manager in self.streams.items():
-            # temp working directory
-            os.mkdir(tmpdir := uuid6())
             stream_manager.dataframe.to_parquet(f"{tmpdir}/{stream_id}.parquet", overwrite=True, ignore_divisions=True)
-            # zip and move to specified path
-            path_end = path.split('/')[-1]
-            with zipfile.ZipFile(f"{tmpdir}/{path_end}.zip", 'w') as zip:
-                for file in os.listdir(tmpdir):
-                    if file.endswith('.parquet'):
-                        zip.write(f"{tmpdir}/{file}")
+        # zip and move to specified path
+        path_end = path.split('/')[-1]
+        with zipfile.ZipFile(f"{tmpdir}/{path_end}.zip", 'w') as zip:
+            for file in os.listdir(tmpdir):
+                if file.endswith('.parquet'):
+                    zip.write(f"{tmpdir}/{file}")
+        dirs = '/'.join(path.split('/')[:-1])
+        Path(dirs).mkdir(parents=True, exist_ok=True)
+        os.rename(f"{tmpdir}/{path_end}.zip", path)
+        # clean up
+        shutil.rmtree(tmpdir)
