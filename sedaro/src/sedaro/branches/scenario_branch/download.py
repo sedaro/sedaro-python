@@ -1,4 +1,7 @@
 import dask.dataframe as dd
+import os
+from uuid import uuid6
+import zipfile
 
 class StreamManager:
     def __init__(self):
@@ -20,4 +23,12 @@ class DownloadManager:
 
     def archive(self, path):
         for stream_id, stream_manager in self.streams.items():
-            stream_manager.dataframe.to_parquet(f"{path}/{stream_id}.parquet", overwrite=True, ignore_divisions=True)
+            # temp working directory
+            os.mkdir(tmpdir := uuid6())
+            stream_manager.dataframe.to_parquet(f"{tmpdir}/{stream_id}.parquet", overwrite=True, ignore_divisions=True)
+            # zip and move to specified path
+            path_end = path.split('/')[-1]
+            with zipfile.ZipFile(f"{tmpdir}/{path_end}.zip", 'w') as zip:
+                for file in os.listdir(tmpdir):
+                    if file.endswith('.parquet'):
+                        zip.write(f"{tmpdir}/{file}")
