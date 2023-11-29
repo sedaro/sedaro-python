@@ -273,12 +273,16 @@ class Simulation:
         sampleRate: int = None,
         continuationToken: str = None,
         download: bool = False,
+        filename: str = None,
     ):
         with self.__sedaro.api_client() as api:
             fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
 
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
+        
+        if download == True and filename is None:
+            raise ValueError('When `download` is True, a `filename` value must be provided.')
 
         if id == None:
             id = self.status()['dataArray']
@@ -355,7 +359,7 @@ class Simulation:
                 _response['series'] = set_nested(_response['series'])
         if download:
             dm.ingest(_response['series'])
-            dm.archive('datastore/data.parquet')
+            dm.archive(filename)
         else:
             return _response
 
@@ -507,92 +511,18 @@ class Simulation:
 
         return self.results(streams=streams or [], sampleRate=sampleRate)
 
-    def __download(self, p):
-        agents, id, dirname, progress, progress_lock = p
-        MAX_ATTEMPTS = 3
-        for agent in agents:
-            attempts = MAX_ATTEMPTS
-            while attempts > 0:
-                agentData = self.results_plain(
-                    id=id,
-                    limit=None,
-                    streams=[(agent,)],
-                )
-                if 'series' in agentData:
-                    break
-                else:
-                    print('Data retrieval failed. Retrying...')
-                    attempts -= 1
-            else:
-                raise Exception(
-                    f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts")
-            with open(f'{dirname}/{agent}.json', 'w') as fd:
-                progress_lock.acquire()
-                try:
-                    progress['count'] += 1
-                    progress_bar(
-                        (float(progress['count'] / progress['total'])) * 100.0)
-                finally:
-                    progress_lock.release()
-                json.dump(agentData, fd, indent=2)
-        return agents
-
-    def download(self, data_array_id: str = None, filename: str = 'sedaro.zip', agent_ids: List[str] = None, overwrite: bool = False):
+    def download(self, data_array_id: str = None, filename: str = None, agent_ids: List[str] = None, overwrite: bool = False):
         if not overwrite and pathlib.Path(filename).exists():
             raise FileExistsError(
                 f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
 
-        # create temp directory in which to build zip
-        archive = ZipFile(filename, 'w')
-        with tempfile.TemporaryDirectory() as dirname:
-            try:
-                # Eventually this should be updated to get the Agents from the model snapshot saved alongside the
-                # data in case the model changes prior to download.
-                agent_ids = agent_ids or self.__branch.Agent.get_all_ids()
-                if not data_array_id:
-                    data_array_id = self.status()['dataArray']
-
-                # get data for one agent at a time
-                MAX_CHUNKS = 4
-                if len(agent_ids) < MAX_CHUNKS:
-                    NUM_CHUNKS = len(agent_ids)
-                else:
-                    NUM_CHUNKS = MAX_CHUNKS
-                chunks = []
-                for _ in range(NUM_CHUNKS):
-                    chunks.append([])
-                for i in range(len(agent_ids)):
-                    chunks[i % NUM_CHUNKS].append(agent_ids[i])
-                progress = {'count': 0, 'total': len(agent_ids)}
-                progress_bar(
-                    (float(progress['count'] / progress['total'])) * 100.0)
-
-                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
-                    shared = (data_array_id, dirname, progress, Lock())
-                    done = executor.map(
-                        self.__download,
-                        [(c, *shared) for c in chunks]
-                    )
-                print(f'\nBuilding {filename}...')
-                for chunk in done:
-                    for agent in chunk:
-                        archive.write(f'{dirname}/{agent}.json',
-                                      f'{agent}.json', ZIP_DEFLATED)
-
-                # save zip file
-                archive.close()
-                print(f'Done. Created: {filename}')
-                print('See https://sedaro.github.io/openapi/#tag/Data for details on the data format of each individual JSON file in the archive.')
-
-            except Exception:
-                try:
-                    archive.close()
-                except Exception:
-                    pass
-                if pathlib.Path(filename).exists():
-                    os.remove(filename)
-                raise Exception("Unable to download data and build archive.")
-
+        job_id = self.status(data_array_id)
+        self.__fetch(
+            id=job_id['dataArray'],
+            streams=agent_ids,
+            download=True,
+            filename=filename,
+        )
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -759,6 +689,14 @@ class SimulationHandle:
             streams=streams,
             retry_interval=retry_interval
         )
+
+    def download(
+        self,
+        streams: List[Tuple[str, ...]] = None,
+        filename: str = None,
+        overwrite: bool = False
+    ):
+        return self.__sim_client.download(self.__job['id'], filename=filename, agent_ids=streams, overwrite=overwrite)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:
