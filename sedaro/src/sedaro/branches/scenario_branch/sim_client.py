@@ -12,7 +12,6 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
-from sedaro.branches.scenario_branch.download import DownloadManager
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
@@ -272,7 +271,7 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
-        download: bool = False,
+        download_manager = None,
         filename: str = None,
     ):
         with self.__sedaro.api_client() as api:
@@ -281,7 +280,7 @@ class Simulation:
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
         
-        if download == True and filename is None:
+        if download_manager is not None and filename is None:
             raise ValueError('When `download` is True, a `filename` value must be provided.')
 
         if id == None:
@@ -318,9 +317,8 @@ class Simulation:
             _response = parse_urllib_response(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
-                if download:
-                    dm = DownloadManager(_response['meta'])
-                    dm.ingest(_response['series'])
+                if download_manager is not None:
+                    download_manager.ingest(_response['series'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
@@ -339,8 +337,8 @@ class Simulation:
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
                     _page = parse_urllib_response(page)
-                    if download:
-                        dm.ingest(_page['series'])
+                    if download_manager is not None:
+                        download_manager.ingest(_page['series'])
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
@@ -355,12 +353,9 @@ class Simulation:
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
-            if not download:
+            if download_manager is None:
                 _response['series'] = set_nested(_response['series'])
-        if download:
-            dm.ingest(_response['series'])
-            dm.archive(filename)
-        else:
+        if download_manager is None:
             return _response
 
     def results_plain(
@@ -425,7 +420,6 @@ class Simulation:
             streams=streams,
             sampleRate=sampleRate,
             continuationToken=continuationToken,
-            download=False
         )
 
     def results(self,
@@ -511,16 +505,36 @@ class Simulation:
 
         return self.results(streams=streams or [], sampleRate=sampleRate)
 
-    def download(self, data_array_id: str = None, filename: str = None, agent_ids: List[str] = None, overwrite: bool = False):
+    def __get_metadata(self, sim_id: str = None):
+        with self.__sedaro.api_client() as api:
+            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
+        url = f'/data/metadata/{sim_id}?'
+        response = fast_fetcher.get(url)
+        response_dict = json.loads(response.data)
+        return response_dict
+
+    def download(
+        self,
+        data_array_id: str = None,
+        filename: str = None,
+        agent_ids: List[str] = None,
+        workers: int = 2,
+        overwrite: bool = False
+    ):
+        # import here to avoid circular import
+        from sedaro.branches.scenario_branch.download import DownloadManager
+
         if not overwrite and pathlib.Path(filename).exists():
             raise FileExistsError(
                 f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
 
         job_id = self.status(data_array_id)
+        metadata = self.__get_metadata(job_id['dataArray'])
+        download_manager = DownloadManager(metadata, workers)
         self.__fetch(
             id=job_id['dataArray'],
             streams=agent_ids,
-            download=True,
+            download=download_manager,
             filename=filename,
         )
 
@@ -694,9 +708,10 @@ class SimulationHandle:
         self,
         streams: List[Tuple[str, ...]] = None,
         filename: str = None,
+        workers: int = 2,
         overwrite: bool = False
     ):
-        return self.__sim_client.download(self.__job['id'], filename=filename, agent_ids=streams, overwrite=overwrite)
+        return self.__sim_client.download(self.__job['id'], filename=filename, workers=workers, agent_ids=streams, overwrite=overwrite)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:

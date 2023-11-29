@@ -7,7 +7,7 @@ from tqdm import TqdmWarning
 import uuid6
 import warnings
 
-# imprecise float math sometimes forces Tqdm to clamp a number to a range
+# imprecision of float math sometimes forces Tqdm to clamp a number to a range
 # this suppresses the warning that prints each time that happens
 warnings.filterwarnings('ignore', category=TqdmWarning)
 
@@ -47,19 +47,22 @@ class StreamManager:
             self.dataframe = dd.concat([self.dataframe, dd.from_dict(core_data, npartitions=1)], axis=0)
 
 class DownloadManager:
-    def __init__(self, meta):
-        self.streams = {}
-        self.position = 0
-        self.progress_bar = ProgressBar(meta['start'], meta['stop'], meta['numStreams'])
+    def __init__(self, metadata, workers):
+        self.streams = metadata['streams']
+        self.start = metadata['start']
+        self.stop = metadata['stop']
+        self.num_workers = workers
 
-    def newStreamManager(self):
-        sm = StreamManager()
-        return sm
+    def download(self):
+        # apportion streams to workers
+        workers = [[] for _ in range(self.num_workers)]
+        for i, stream in enumerate(self.streams):
+            workers[i % self.num_workers].append(stream)
 
     def ingest(self, page):
         for stream_id, stream_data in page.items():
             if stream_id not in self.streams:
-                self.streams[stream_id] = self.newStreamManager()
+                self.streams[stream_id] = StreamManager()
             self.streams[stream_id].ingest(stream_id, stream_data)
             self.progress_bar.update(stream_id, stream_data[1][stream_id.split('/')[0]]['time'][-1])
 
