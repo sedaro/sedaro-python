@@ -12,6 +12,7 @@ from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
+from sedaro.branches.scenario_branch.download import DownloadManager
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
@@ -351,6 +352,8 @@ class Simulation:
             _response = parse_urllib_response(response)
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
+                dm = DownloadManager(_response['meta'])
+                dm.ingest(_response['series'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
@@ -369,6 +372,7 @@ class Simulation:
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
                     _page = parse_urllib_response(page)
+                    dm.ingest(_page['series'])
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
@@ -383,8 +387,15 @@ class Simulation:
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
-            _response['series'] = set_nested(_response['series'])
+            # _response['series'] = set_nested(_response['series'])
+        # return _response
+        # print("Downloaded. Saving as Parquet...")
+        # dm = DownloadManager(_response['meta'])
+        dm.ingest(_response['series'])
+        dm.archive('datastore/data.parquet')
+        # print("Saved.")
         return _response
+
 
     def results(self,
                 job_id: str = None,
