@@ -260,6 +260,105 @@ class Simulation:
                 **COMMON_API_KWARGS
             )
 
+    def __fetch(
+        self,
+        *,
+        id: str = None,
+        start: float = None,
+        stop: float = None,
+        binWidth: float = None,
+        limit: float = None,
+        axisOrder: str = None,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        continuationToken: str = None,
+        download: bool = False,
+    ):
+        with self.__sedaro.api_client() as api:
+            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
+
+        if sampleRate is None and continuationToken is None:
+            sampleRate = 1
+
+        if id == None:
+            id = self.status()['dataArray']
+        url = f'/data/{id}?'
+        if start is not None:
+            url += f'&start={start}'
+        if stop is not None:
+            url += f'&stop={stop}'
+        if binWidth is not None:
+            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
+            url += f'&binWidth={binWidth}'
+        elif limit is not None:
+            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
+            url += f'&limit={limit}'
+        streams = streams or []
+        if len(streams) > 0:
+            encodedStreams = ','.join(['.'.join(x) for x in streams])
+            url += f'&streams={encodedStreams}'
+        if axisOrder is not None:
+            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
+                raise ValueError(
+                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
+            url += f'&axisOrder={axisOrder}'
+        if sampleRate is not None:
+            url += f'&sampleRate={sampleRate}'
+        if continuationToken is not None:
+            url += f'&continuationToken={continuationToken}'
+        
+        response = fast_fetcher.get(url)
+        _response = None
+        has_nonempty_ctoken = False
+        try:
+            _response = parse_urllib_response(response)
+            if 'version' in _response['meta'] and _response['meta']['version'] == 3:
+                is_v3 = True
+                if download:
+                    dm = DownloadManager(_response['meta'])
+                    dm.ingest(_response['series'])
+                if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
+                    has_nonempty_ctoken = True
+                    ctoken = _response['meta']['continuationToken']
+            else:
+                is_v3 = False
+            if response.status != 200:
+                raise Exception()
+        except:
+            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
+            raise SedaroApiException(status=response.status, reason=reason)
+        if is_v3: # keep fetching pages until we get an empty continuation token
+            if has_nonempty_ctoken: # need to fetch more pages
+                result = _response
+                while has_nonempty_ctoken:
+                    # fetch page
+                    request_url = f'/data/{id}?&continuationToken={ctoken}'
+                    page = fast_fetcher.get(request_url)
+                    _page = parse_urllib_response(page)
+                    if download:
+                        dm.ingest(_page['series'])
+                    try:
+                        if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
+                            has_nonempty_ctoken = True
+                            ctoken = _page['meta']['continuationToken']
+                        else:
+                            has_nonempty_ctoken = False
+                        if page.status != 200:
+                            raise Exception()
+                    except Exception:
+                        reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
+                        raise SedaroApiException(status=page.status, reason=reason)
+                    concat_results(result['series'], _page['series'])
+                    update_metadata(result['meta'], _page['meta'])
+                _response = result
+            if not download:
+                _response['series'] = set_nested(_response['series'])
+        if download:
+            dm.ingest(_response['series'])
+            dm.archive('datastore/data.parquet')
+        else:
+            return _response
+
     def results_plain(
         self,
         *,
@@ -312,90 +411,18 @@ class Simulation:
             dict: response from the `get` request
         """
 
-        with self.__sedaro.api_client() as api:
-            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
-
-        if sampleRate is None and continuationToken is None:
-            sampleRate = 1
-
-        if id == None:
-            id = self.status()['dataArray']
-        url = f'/data/{id}?'
-        if start is not None:
-            url += f'&start={start}'
-        if stop is not None:
-            url += f'&stop={stop}'
-        if binWidth is not None:
-            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
-            url += f'&binWidth={binWidth}'
-        elif limit is not None:
-            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
-            url += f'&limit={limit}'
-        streams = streams or []
-        if len(streams) > 0:
-            encodedStreams = ','.join(['.'.join(x) for x in streams])
-            url += f'&streams={encodedStreams}'
-        if axisOrder is not None:
-            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
-            url += f'&axisOrder={axisOrder}'
-        if sampleRate is not None:
-            url += f'&sampleRate={sampleRate}'
-        if continuationToken is not None:
-            url += f'&continuationToken={continuationToken}'
-        
-        response = fast_fetcher.get(url)
-        _response = None
-        has_nonempty_ctoken = False
-        try:
-            _response = parse_urllib_response(response)
-            if 'version' in _response['meta'] and _response['meta']['version'] == 3:
-                is_v3 = True
-                dm = DownloadManager(_response['meta'])
-                dm.ingest(_response['series'])
-                if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
-                    has_nonempty_ctoken = True
-                    ctoken = _response['meta']['continuationToken']
-            else:
-                is_v3 = False
-            if response.status != 200:
-                raise Exception()
-        except:
-            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-            raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3: # keep fetching pages until we get an empty continuation token
-            if has_nonempty_ctoken: # need to fetch more pages
-                result = _response
-                while has_nonempty_ctoken:
-                    # fetch page
-                    request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    page = fast_fetcher.get(request_url)
-                    _page = parse_urllib_response(page)
-                    dm.ingest(_page['series'])
-                    try:
-                        if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
-                            has_nonempty_ctoken = True
-                            ctoken = _page['meta']['continuationToken']
-                        else:
-                            has_nonempty_ctoken = False
-                        if page.status != 200:
-                            raise Exception()
-                    except Exception:
-                        reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                        raise SedaroApiException(status=page.status, reason=reason)
-                    concat_results(result['series'], _page['series'])
-                    update_metadata(result['meta'], _page['meta'])
-                _response = result
-            # _response['series'] = set_nested(_response['series'])
-        # return _response
-        # print("Downloaded. Saving as Parquet...")
-        # dm = DownloadManager(_response['meta'])
-        dm.ingest(_response['series'])
-        dm.archive('datastore/data.parquet')
-        # print("Saved.")
-        return _response
-
+        return self.__fetch(
+            id=id,
+            start=start,
+            stop=stop,
+            binWidth=binWidth,
+            limit=limit,
+            axisOrder=axisOrder,
+            streams=streams,
+            sampleRate=sampleRate,
+            continuationToken=continuationToken,
+            download=False
+        )
 
     def results(self,
                 job_id: str = None,

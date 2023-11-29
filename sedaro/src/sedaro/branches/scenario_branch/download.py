@@ -71,7 +71,7 @@ class DownloadManager:
         progress_bar = tqdm(range(len(self.streams)), desc='Archiving...')
         for stream_id, stream_manager in self.streams.items():
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
-            stream_manager.dataframe.to_parquet(pqn := f"{tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
+            stream_manager.dataframe.to_parquet(f"{tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
             progress_bar.update(1) # increment progress bar
             progress_bar.refresh()
         progress_bar.close()
