@@ -25,7 +25,7 @@ class ProgressBar:
         if new > self.stop:
             new = self.stop
         incr = ((new - self.start) / (self.stop - self.start)) - self.prev[stream_id]
-        self.bar.update(incr)
+        self.bar.update(min(incr, self.num_streams - self.bar.n))
         self.bar.refresh()
         self.prev[stream_id] = incr
 
