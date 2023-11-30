@@ -490,11 +490,7 @@ class Simulation:
     def __downloadInParallel(self, sim_id, streams, tmpdir, filename, download_bar, archive_bar):
         download_worker = DownloadWorker(tmpdir, filename, download_bar, archive_bar)
         streams_fmt = [tuple(stream.split('.')) for stream in streams]
-        try:
-            self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=1, download_manager=download_worker)
-        except Exception:
-            import traceback
-            print(traceback.format_exc())
+        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=1, download_manager=download_worker)
 
     def download(
         self,
@@ -515,44 +511,52 @@ class Simulation:
             metadata['streams'] = agent_ids
         os.mkdir(tmpdir := f".{uuid6.uuid7()}")
 
-        workers = [[] for _ in range(num_workers)]
-        for i, stream in enumerate(metadata['streams']):
-            workers[i % num_workers].append(stream)
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
-        archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...")
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            executor.map(self.__downloadInParallel,
-                         [sim_id] * num_workers,
-                         workers,
-                         [tmpdir] * num_workers,
-                         [filename] * num_workers,
-                         [download_bar] * num_workers,
-                         [archive_bar] * num_workers)
-            executor.shutdown(wait=True)
-        download_bar.complete()
-        archive_bar.bar.close()
-        print("Building zip file...")
-        shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
-        curr_zip_base = ''
-        # if the path is to another directory, make that directory if nonexistent, and move the zip there
-        if len(path_split := filename.split('/')) > 1:
-            path_dirs = '/'.join(path_split[:-1])
-            pathlib.Path(path_dirs).mkdir(parents=True, exist_ok=True)
-            shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
-            zip_desired_name = path_split[-1]
-        else:
-            zip_desired_name = filename
-        # rename zip to specified name
-        if len(curr_zip_base) > 0:
-            zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
-            curr_zip_name = f"{curr_zip_base}/{tmpzip}"
-        else:
-            zip_new_path = zip_desired_name
-            curr_zip_name = tmpzip
-        os.rename(f"{curr_zip_name}.zip", zip_new_path)
-        # remove tmpdir
-        os.system(f"rm -r {tmpdir}") # TODO: make this safer
-        print(f"Successfully archived at {zip_new_path}")
+        success = False
+        try:
+            workers = [[] for _ in range(num_workers)]
+            for i, stream in enumerate(metadata['streams']):
+                workers[i % num_workers].append(stream)
+            download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+            archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...")
+
+            with ThreadPoolExecutor(max_workers=num_workers) as executor:
+                executor.map(self.__downloadInParallel,
+                            [sim_id] * num_workers,
+                            workers,
+                            [tmpdir] * num_workers,
+                            [filename] * num_workers,
+                            [download_bar] * num_workers,
+                            [archive_bar] * num_workers)
+                executor.shutdown(wait=True)
+            download_bar.complete()
+            archive_bar.bar.close()
+
+            print("Building zip file...")
+            shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
+            curr_zip_base = ''
+            # if the path is to another directory, make that directory if nonexistent, and move the zip there
+            if len(path_split := filename.split('/')) > 1:
+                path_dirs = '/'.join(path_split[:-1])
+                pathlib.Path(path_dirs).mkdir(parents=True, exist_ok=True)
+                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
+                zip_desired_name = path_split[-1]
+            else:
+                zip_desired_name = filename
+            # rename zip to specified name
+            if len(curr_zip_base) > 0:
+                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
+                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
+            else:
+                zip_new_path = zip_desired_name
+                curr_zip_name = tmpzip
+            os.rename(f"{curr_zip_name}.zip", zip_new_path)
+            # remove tmpdir
+            os.system(f"rm -r {tmpdir}")
+            success = True
+            print(f"Successfully archived at {zip_new_path}")
+        finally: # remove tmpdir even if an error occurs
+            if not success:
+                os.system(f"rm -r {tmpdir}")
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
