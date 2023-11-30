@@ -78,7 +78,6 @@ class DownloadWorker:
         self.download_bar = download_bar
         self.archive_bar = archive_bar
         self.streams = {}
-        self.stream_keys = {}
 
     def ingest(self, page):
         for stream_id, stream_data in page.items():

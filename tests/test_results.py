@@ -5,6 +5,7 @@ from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
+from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
@@ -209,6 +210,13 @@ def test_query_model():
 
 
 def test_download():
+    # test download internals
+    download_worker = StreamManager(None)
+    download_worker.keys = set(['position', 'position.x', 'positionx', 'time', 'timeStep', 'timeStep.s'])
+    to_remove = download_worker.select_columns_to_remove()
+    assert set(to_remove) == set(['position', 'timeStep'])
+
+    # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
     sim.download(overwrite=True)
 
