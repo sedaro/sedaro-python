@@ -23,6 +23,8 @@ class ProgressBar:
         if new > self.stop:
             new = self.stop
         incr = ((new - self.start) / (self.stop - self.start)) - self.prev[stream_id]
+        # sometimes the elapsed time goes over the sim stop time
+        # this would cause the progress bar to go over 100%, so we clamp it
         self.bar.update(min(incr, self.num_streams - self.bar.n))
         self.bar.refresh()
         self.prev[stream_id] = incr
