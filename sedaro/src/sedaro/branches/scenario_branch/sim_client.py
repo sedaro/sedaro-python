@@ -6,6 +6,7 @@ import requests
 import shutil
 import tempfile
 import time
+from tqdm import tqdm
 from contextlib import contextmanager
 from threading import Lock
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
@@ -16,7 +17,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
-from sedaro.branches.scenario_branch.download import DownloadWorker
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import COMMON_API_KWARGS
@@ -513,8 +514,8 @@ class Simulation:
         response_dict = json.loads(response.data)
         return response_dict
 
-    def __downloadInParallel(self, sim_id, streams, tmpdir, filename):
-        download_worker = DownloadWorker(tmpdir, filename)
+    def __downloadInParallel(self, sim_id, streams, tmpdir, filename, download_bar, archive_bar):
+        download_worker = DownloadWorker(tmpdir, filename, download_bar, archive_bar)
         streams_fmt = [tuple(stream.split('.')) for stream in streams]
         try:
             self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=1, download_manager=download_worker)
@@ -544,10 +545,20 @@ class Simulation:
         workers = [[] for _ in range(num_workers)]
         for i, stream in enumerate(metadata['streams']):
             workers[i % num_workers].append(stream)
-        print("Downloading...")
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...", pos=0)
+        archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...", pos=1)
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [tmpdir] * num_workers, [filename] * num_workers)
+            executor.map(self.__downloadInParallel,
+                         [sim_id] * num_workers,
+                         workers,
+                         [tmpdir] * num_workers,
+                         [filename] * num_workers,
+                         [download_bar] * num_workers,
+                         [archive_bar] * num_workers)
             executor.shutdown(wait=True)
+        download_bar.complete()
+        archive_bar.complete()
+        print("Building zip file...")
         shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
         curr_zip_base = ''
         # if the path is to another directory, make that directory if nonexistent, and move the zip there
