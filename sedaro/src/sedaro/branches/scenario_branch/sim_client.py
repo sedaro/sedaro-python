@@ -557,7 +557,8 @@ class Simulation:
                          [archive_bar] * num_workers)
             executor.shutdown(wait=True)
         download_bar.complete()
-        archive_bar.complete()
+        # archive_bar.complete()
+        archive_bar.bar.close()
         print("Building zip file...")
         shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
         curr_zip_base = ''
