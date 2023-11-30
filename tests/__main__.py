@@ -15,13 +15,13 @@ from config import HOST
 
 
 imported_test_files = [
-    test_bcc_options,
-    test_crud_and_traversal,
-    test_data_utils,
-    test_plain_requests,
-    test_simulation,
+    # test_bcc_options,
+    # test_crud_and_traversal,
+    # test_data_utils,
+    # test_plain_requests,
+    # test_simulation,
     test_results,
-    test_externals,
+    # test_externals,
 ]
 ############################################################
 

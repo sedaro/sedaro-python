@@ -40,6 +40,17 @@ class ProgressBar:
         self.bar.refresh()
         self.bar.close()
 
+class ArchiveProgressBar(ProgressBar):
+    def __init__(self, num_streams):
+        super().__init__(None, None, num_streams, "Archiving...")
+
+    def update(self):
+        self.bar.update(1)
+        self.bar.refresh()
+
+    def complete(self):
+        self.bar.close()
+
 class StreamManager:
     def __init__(self, download_bar):
         self.dataframe = None
@@ -101,4 +112,4 @@ class DownloadWorker:
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.filter_columns()
             stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{prep_stream_id(stream_id)}", overwrite=True, ignore_divisions=True)
-            self.archive_bar.incr(1)
+            self.archive_bar.update()

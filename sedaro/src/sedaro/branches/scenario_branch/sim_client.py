@@ -12,7 +12,7 @@ import uuid6
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
-from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.branches.scenario_branch.download import ArchiveProgressBar, DownloadWorker, ProgressBar
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import COMMON_API_KWARGS
@@ -520,7 +520,7 @@ class Simulation:
             for i, stream in enumerate(metadata['streams']):
                 workers[i % num_workers].append(stream)
             download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
-            archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...")
+            archive_bar = ArchiveProgressBar(len(metadata['streams']))
 
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
                 executor.map(self.__downloadInParallel,
@@ -532,7 +532,7 @@ class Simulation:
                             [archive_bar] * num_workers)
                 executor.shutdown(wait=True)
             download_bar.complete()
-            archive_bar.bar.close()
+            archive_bar.complete()
 
             print("Building zip file...")
             shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
