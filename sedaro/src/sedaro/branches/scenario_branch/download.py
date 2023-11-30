@@ -16,6 +16,8 @@ class ProgressBar:
         self.prev = {}
 
     def update(self, stream_id, new):
+        # used for the download progress bar. Updates the progress bar based on the time range
+        # fetched for a stream by the latest page.
         if stream_id not in self.prev:
             self.prev[stream_id] = 0
         if new > self.stop:
@@ -25,11 +27,13 @@ class ProgressBar:
         self.bar.refresh()
         self.prev[stream_id] = incr
 
-    def incr1(self):
-        self.bar.update(1)
+    def incr(self, n):
+        # increment the progress bar by n. Used in the archive progress bar.
+        self.bar.update(n)
         self.bar.refresh()
 
     def complete(self):
+        # set the progress bar to EXACTLY 100% and close it
         self.bar.update(self.num_streams - self.bar.n) # see https://github.com/tqdm/tqdm/issues/1264
         self.bar.refresh()
         self.bar.close()
@@ -78,4 +82,4 @@ class DownloadWorker:
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.filter_columns()
             stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
-            self.archive_bar.incr1()
+            self.archive_bar.incr(1)
