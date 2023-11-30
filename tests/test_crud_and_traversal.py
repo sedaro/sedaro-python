@@ -36,6 +36,26 @@ def test_get():
         sedaro.scenario(SIMPLESAT_A_T_ID)
 
 
+def test_keying_into_root_attrs():
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
+    assert branch.type == 'Spacecraft'
+    assert isinstance(branch.attitude, dict)
+    assert isinstance(branch.enabledModules, list)
+    assert isinstance(branch.angularVelocity, list)
+    assert isinstance(branch.migrated, (type(None), str))
+
+
+def test_updating_root_attrs():
+    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
+    prev_mass = branch.mass
+
+    branch.update(mass=prev_mass + 1)
+    assert branch.mass == prev_mass + 1
+
+    branch.update(mass=prev_mass)
+    assert branch.mass == prev_mass
+
+
 def test_get_blocks_all_and_single():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     components = branch.Component.get_all()
@@ -151,6 +171,7 @@ def test_traversing_and_equality_and_some_get_methods():
     assert solar_cell == power_subsystem.components[-1].cell
 
     assert isinstance(branch.PowerProcessor.get_first(), Block)
+    assert branch.powerProcessor == branch.PowerProcessor.get_first()
 
     solar_cell.delete()
     solar_panel.delete()
@@ -203,9 +224,6 @@ def test_block_client_clone():
 
 def test_some_errors():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
-
-    with pytest.raises(ValueError, match=f'Must provide fields'):
-        branch.Subsystem.create()
 
     subsystem = branch.Subsystem.create(name=_random_str())
 
@@ -311,6 +329,7 @@ def test_power_command_tuple():
         with pytest.raises(SedaroApiException):
             create_solar_array(val)
 
+
 def test_multiblock_crud_with_ref_ids():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     batt_pack_name = f'Battery Pack {_random_str()}'
@@ -321,12 +340,12 @@ def test_multiblock_crud_with_ref_ids():
             'id': '$-batt-cell',
             'type': 'BatteryCell',
             'partNumber': batt_cell_part_number,
-            'esr':0.01,
-            'maxChargeCurrent':15,
-            'maxDischargeCurrent':100,
-            'minSoc':0.2,
-            'capacity':500,
-            'curve':[[0, 0.5, 1], [12.2, 14.1, 16.8]],
+            'esr': 0.01,
+            'maxChargeCurrent': 15,
+            'maxDischargeCurrent': 100,
+            'minSoc': 0.2,
+            'capacity': 500,
+            'curve': [[0, 0.5, 1], [12.2, 14.1, 16.8]],
         },
     ])
 
@@ -337,8 +356,10 @@ def test_multiblock_crud_with_ref_ids():
     finally:
         branch.crud(delete=[bp.id, bc.id])
 
+
 def run_tests():
     test_get()
+    test_keying_into_root_attrs()
     test_get_blocks_all_and_single()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()

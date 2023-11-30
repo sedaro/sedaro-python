@@ -1,24 +1,23 @@
-import time
-from contextlib import contextmanager
-from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
-                    Union)
 import concurrent.futures
 import json
 import math
 import os
 import pathlib
 import tempfile
-from threading import Lock
+import time
 import traceback
-from typing import Dict, List, Optional, Tuple
-from zipfile import ZipFile, ZIP_DEFLATED
+from contextlib import contextmanager
+from threading import Lock
+from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
+                    Union)
+from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
+from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 
-from sedaro.results.simulation_result import SimulationResult
-
-from ...exceptions import NoSimResultsError, SedaroApiException
+from ...exceptions import (NoSimResultsError, SedaroApiException,
+                           SimInitializationError)
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
@@ -63,8 +62,12 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
-    def start(self) -> 'SimulationHandle':
+    def start(self, wait=False, timeout=None) -> 'SimulationHandle':
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
+
+        Args:
+            wait (bool, optional): Triggers waiting for simulation to deploy and transition to `RUNNING` before returning. Defaults to `False`.
+            timeout (int, optional): Seconds to wait for simulation to deploy and transition to `RUNNING` before raising an error. Defaults to `None`.
 
         Returns:
             SimulationHandle
@@ -74,7 +77,20 @@ class Simulation:
                 path_params={'branchId': self.__branch_id},
                 **COMMON_API_KWARGS
             )
-        return SimulationHandle(body_from_res(res), self)
+        handle = SimulationHandle(body_from_res(res), self)
+        if not wait:
+            return handle
+
+        t = 0
+        while t < (timeout or float('inf')):
+            if (handle := handle.status())['status'] in {'PENDING', 'QUEUED'}:
+                time.sleep(0.1)
+                t += 0.1
+            elif handle['status'] in {'FAILED', 'ERROR'}:
+                raise SimInitializationError(handle['message'])
+            else:
+                return handle
+        raise TimeoutError(f'Simulation did not deploy before timeout of {timeout}.')
 
     def status(self, job_id: str = None, *, err_if_empty: bool = True) -> 'SimulationHandle':
         """Gets the latest simulation corresponding to the respective Sedaro Scenario Branch id. This can return a
@@ -224,7 +240,11 @@ class Simulation:
             raise SedaroApiException(status=response.status, reason=reason)
         return _response
 
-    def results(self, job_id: str = None, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+    def results(self,
+                job_id: str = None,
+                start: float = None,
+                stop: float = None,
+                streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -263,7 +283,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], streams=streams or [])
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [])
         return SimulationResult(job, data)
 
     def results_poll(
@@ -287,10 +307,15 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        options = {'PENDING', 'RUNNING'}
+        options = {'QUEUED', 'PENDING', 'RUNNING'}
 
         while job['status'] in options:
-            progress_bar(job['progress']['percentComplete'])
+            if job['status'] == 'QUEUED':
+                print('Simulation is queued...', end='\r')
+            if job['status'] == 'PENDING':
+                print('Simulation is building...', end='\r')
+            else:
+                progress_bar(job['progress']['percentComplete'])
             job = self.status()
             time.sleep(retry_interval)
 

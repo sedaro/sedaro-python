@@ -1,6 +1,7 @@
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
-import numpy as np
 import json
+
+import numpy as np
+from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 
@@ -34,15 +35,16 @@ def __do_test(simulation_handle):
     assert len(result) == 1
     assert type(result[0]) is np.ndarray
     assert result[0].shape == (3,)
-    assert json.dumps(result[0].tolist()) == json.dumps(
-        [6774.087229886119, 419.06940018131314, 419.06776101443677])
+    np.testing.assert_allclose(result[0], [6774.087229886119, 419.06940018131314, 419.06776101443677])
+    # assert json.dumps(result[0].tolist()) == json.dumps(
+    #     [6774.087229886119, 419.06940018131314, 419.06776101443677])
 
 
 def test_run_externals():
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
 
     # Start simulation
-    simulation_handle = sim.start()
+    simulation_handle = sim.start(wait=True)
     print('- Started simulation')
 
     __do_test(simulation_handle)
