@@ -55,8 +55,7 @@ class StreamManager:
         self.keys.update(core_data.keys())
         self.download_bar.update(stream_id, core_data['time'][-1])
 
-    def filter_columns(self):
-        """Remove columns whose name is a parent of another column's name."""
+    def select_columns_to_remove(self):
         columns_to_remove = set()
         for column in self.keys:
             for other_column in self.keys:
@@ -65,6 +64,11 @@ class StreamManager:
                     # for instance, we want to remove 'position' if 'position.x' is present, but not if only 'positionx' is present
                     if other_column[len(column)] == '.':
                         columns_to_remove.add(column)
+        return list(columns_to_remove)
+
+    def filter_columns(self):
+        """Remove columns whose name is a parent of another column's name."""
+        columns_to_remove = self.select_columns_to_remove()
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
 class DownloadWorker:
