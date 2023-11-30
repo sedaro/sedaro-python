@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -218,7 +219,11 @@ def test_download():
 
     # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
-    sim.download(overwrite=True)
+    sim.download(filename="sedaro.zip", overwrite=True)
+    try:
+        assert os.path.exists("sedaro.zip")
+    finally:
+        os.remove("sedaro.zip")
 
 
 def run_tests():
