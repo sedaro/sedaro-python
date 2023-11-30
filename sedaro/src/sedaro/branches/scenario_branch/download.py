@@ -62,7 +62,7 @@ class StreamManager:
             for other_column in self.keys:
                 if column != other_column and column in other_column:
                     # the below check ensures that it's a parent column, not just a column with a shared prefix
-                    # for instance, we want to remove 'position' if 'position.x' is present, but not if 'positionx' is present
+                    # for instance, we want to remove 'position' if 'position.x' is present, but not if only 'positionx' is present
                     if other_column[len(column)] == '.':
                         columns_to_remove.add(column)
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
