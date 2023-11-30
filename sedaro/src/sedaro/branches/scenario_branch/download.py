@@ -29,11 +29,6 @@ class ProgressBar:
         self.bar.refresh()
         self.prev[stream_id] = incr
 
-    def incr(self, n):
-        # increment the progress bar by n. Used in the archive progress bar.
-        self.bar.update(n)
-        self.bar.refresh()
-
     def complete(self):
         # set the progress bar to EXACTLY 100% and close it
         self.bar.update(self.num_streams - self.bar.n) # see https://github.com/tqdm/tqdm/issues/1264
