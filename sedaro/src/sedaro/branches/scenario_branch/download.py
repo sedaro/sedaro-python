@@ -13,8 +13,8 @@ import warnings
 warnings.filterwarnings('ignore', category=TqdmWarning)
 
 class ProgressBar:
-    def __init__(self, start, stop, num_streams, desc, pos=0):
-        self.bar = tqdm(range(num_streams), desc=desc, position=pos, bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
+    def __init__(self, start, stop, num_streams, desc):
+        self.bar = tqdm(range(num_streams), desc=desc,  bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
         self.num_streams = num_streams
         self.start = start
         self.stop = stop

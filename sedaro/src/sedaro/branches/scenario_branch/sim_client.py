@@ -545,8 +545,8 @@ class Simulation:
         workers = [[] for _ in range(num_workers)]
         for i, stream in enumerate(metadata['streams']):
             workers[i % num_workers].append(stream)
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...", pos=0)
-        archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...", pos=1)
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        archive_bar = ProgressBar(None, None, len(metadata['streams']), "Archiving...")
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
             executor.map(self.__downloadInParallel,
                          [sim_id] * num_workers,
@@ -557,7 +557,6 @@ class Simulation:
                          [archive_bar] * num_workers)
             executor.shutdown(wait=True)
         download_bar.complete()
-        # archive_bar.complete()
         archive_bar.bar.close()
         print("Building zip file...")
         shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
