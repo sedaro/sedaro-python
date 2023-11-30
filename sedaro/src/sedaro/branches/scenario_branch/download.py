@@ -56,12 +56,15 @@ class StreamManager:
         self.download_bar.update(stream_id, core_data['time'][-1])
 
     def filter_columns(self):
-        """Remove columns whose name is a strict prefix of another column's name."""
+        """Remove columns whose name is a parent of another column's name."""
         columns_to_remove = set()
         for column in self.keys:
             for other_column in self.keys:
-                if column != other_column and column != 'time' and column in other_column:
-                    columns_to_remove.add(column)
+                if column != other_column and column in other_column:
+                    # the below check ensures that it's a parent column, not just a column with a shared prefix
+                    # for instance, we want to remove 'position' if 'position.x' is present, but not if 'positionx' is present
+                    if other_column[len(column)] == '.':
+                        columns_to_remove.add(column)
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
 class DownloadWorker:
