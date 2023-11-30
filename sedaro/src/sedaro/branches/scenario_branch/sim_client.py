@@ -494,9 +494,9 @@ class Simulation:
 
     def download(
         self,
-        data_array_id: str = None,
+        simulation_id: str = None,
         filename: str = None,
-        agent_ids: List[str] = None,
+        streams: List[str] = None,
         num_workers: int = 2,
         overwrite: bool = False
     ):
@@ -508,10 +508,10 @@ class Simulation:
             raise FileExistsError(
                 f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
 
-        job_id = self.status(data_array_id)
+        job_id = self.status(simulation_id)
         metadata = self.__get_metadata(sim_id := job_id['dataArray'])
-        if agent_ids is not None:
-            metadata['streams'] = agent_ids
+        if streams is not None:
+            metadata['streams'] = streams
         os.mkdir(tmpdir := f".{uuid6.uuid7()}")
 
         success = False
@@ -736,7 +736,7 @@ class SimulationHandle:
         workers: int = 2,
         overwrite: bool = False
     ):
-        return self.__sim_client.download(self.__job['id'], filename=filename, workers=workers, agent_ids=streams, overwrite=overwrite)
+        return self.__sim_client.download(self.__job['id'], filename=filename, workers=workers, streams=streams, overwrite=overwrite)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:
