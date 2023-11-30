@@ -501,6 +501,9 @@ class Simulation:
         overwrite: bool = False
     ):
 
+        if filename is None:
+            raise ValueError('No filename provided. Please provide a filename via the `filename` argument.')
+
         if not overwrite and pathlib.Path(filename).exists():
             raise FileExistsError(
                 f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
