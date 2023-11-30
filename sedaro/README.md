@@ -281,13 +281,18 @@ See doc string in the `results_plain` for details on use of the arguments.
 
 ## Bulk Download
 
-Use the following method to download larger datasets more efficiently. See the doc string for details on use of the arguments.
+Use the following method to download larger datasets more efficiently. Arguments:
+- filename (required): the path at which the downloaded data should be stored
+- simulation_id (optional): the UUID of the specific simulation for which to download data. If not specified, defaults to the most recently run simulation on the provided scenario.
+- workers (optional): the number of parallel workers that should be used. Defaults to 2.
+- streams (optional): the specific streams for which to download data, following the format in the above section. If not specified, data is downloaded for all streams.
+- overwrite (optional): if True, if a file exists at the specified path, the downloader will overwrite it. If False, it will raise an exception. Defaults to False.
 
 ```py
-sim.download()
+sim.download(filename='archive.zip')
 ```
 
-This will produce a ZIP archive called `data.zip` in your working directory. Inside the ZIP archive, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
+This will produce a ZIP archive called `archive.zip` (more generally, whatever argument you provide for `filename`) in your working directory. Inside the ZIP archive, there will be one directory for each stream. This directory will contain a Parquet dataset for its corresponding stream. This Parquet dataset may consist of one file, or of multiple files.
 
 ## Send Requests
 
