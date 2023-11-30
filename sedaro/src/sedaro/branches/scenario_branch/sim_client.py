@@ -554,6 +554,8 @@ class Simulation:
             os.system(f"rm -r {tmpdir}")
             success = True
             print(f"Successfully archived at {zip_new_path}")
+        except Exception as e:
+            raise e
         finally: # remove tmpdir even if an error occurs
             if not success:
                 os.system(f"rm -r {tmpdir}")
