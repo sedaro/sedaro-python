@@ -154,6 +154,12 @@ class SedaroSeries:
     def stats(self, output_html=False):
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to generate statitics.')
+            # for key, value in self.__dtype.items():
+            #     if value == 'None':
+            #         print(f"    - '{key}': All entries in this subseries are None")
+            #     else:
+            #         print(f"    - '{key}': '{value}'")
+            #         self.__series[key].stats(output_html)
 
         try:
             import pandas as pd
