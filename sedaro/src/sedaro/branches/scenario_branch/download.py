@@ -71,6 +71,17 @@ class StreamManager:
         columns_to_remove = self.select_columns_to_remove()
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
+def prep_stream_id(stream_id):
+    engines = {
+        '0': 'GNC',
+        '1': 'CDH',
+        '2': 'Power',
+        '3': 'Thermal'
+    }
+    split_base = stream_id.split('/')
+    prepped_stream_id = f"{split_base[0]}.{engines[split_base[1]]}"
+    return prepped_stream_id
+
 class DownloadWorker:
     def __init__(self, tmpdir, filename, download_bar, archive_bar):
         self.tmpdir = tmpdir
@@ -89,5 +100,5 @@ class DownloadWorker:
         for stream_id, stream_manager in self.streams.items():
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.filter_columns()
-            stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
+            stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{prep_stream_id(stream_id)}", overwrite=True, ignore_divisions=True)
             self.archive_bar.incr(1)
