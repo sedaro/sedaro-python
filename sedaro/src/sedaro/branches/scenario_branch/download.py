@@ -1,3 +1,4 @@
+from concurrent.futures import ProcessPoolExecutor
 import dask.dataframe as dd
 import os
 from pathlib import Path
@@ -37,6 +38,7 @@ class ProgressBar:
 class StreamManager:
     def __init__(self):
         self.dataframe = None
+        self.keys = set()
         # self.progress_bar = ProgressBar(position, start, stop)
 
     def ingest(self, stream_id, stream_data):
@@ -45,57 +47,32 @@ class StreamManager:
             self.dataframe = dd.from_dict(core_data, npartitions=1)
         else:
             self.dataframe = dd.concat([self.dataframe, dd.from_dict(core_data, npartitions=1)], axis=0)
+        self.keys.update(core_data.keys())
 
-class DownloadManager:
-    def __init__(self, metadata, workers):
-        self.streams = metadata['streams']
-        self.start = metadata['start']
-        self.stop = metadata['stop']
-        self.num_workers = workers
+    def filter_columns(self):
+        """Remove columns whose name is a strict prefix of another column's name."""
+        columns_to_remove = set()
+        for column in self.keys:
+            for other_column in self.keys:
+                if column != other_column and column != 'time' and column in other_column:
+                    columns_to_remove.add(column)
+        self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
-    def download(self):
-        # apportion streams to workers
-        workers = [[] for _ in range(self.num_workers)]
-        for i, stream in enumerate(self.streams):
-            workers[i % self.num_workers].append(stream)
+class DownloadWorker:
+    def __init__(self, tmpdir, filename):
+        self.tmpdir = tmpdir
+        self.filename = filename
+        self.streams = {}
+        self.stream_keys = {}
 
     def ingest(self, page):
         for stream_id, stream_data in page.items():
             if stream_id not in self.streams:
                 self.streams[stream_id] = StreamManager()
             self.streams[stream_id].ingest(stream_id, stream_data)
-            self.progress_bar.update(stream_id, stream_data[1][stream_id.split('/')[0]]['time'][-1])
 
-    def archive(self, path):
-        # create temp working directory
-        os.mkdir(tmpdir := f".{uuid6.uuid7()}")
-        self.progress_bar.complete()
-        # build parquet files in tmpdir
-        progress_bar = tqdm(range(len(self.streams)), desc='Archiving...')
+    def archive(self):
         for stream_id, stream_manager in self.streams.items():
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
-            stream_manager.dataframe.to_parquet(f"{tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
-            progress_bar.update(1) # increment progress bar
-            progress_bar.refresh()
-        progress_bar.close()
-        # use shutil to make zip in working directory with provisional name
-        shutil.make_archive(tmpzip := f"{uuid6.uuid7()}", 'zip', tmpdir)
-        curr_zip_base = ''
-        # if the path is to another directory, make that directory if nonexistent, and move the zip there
-        if len(path_split := path.split('/')) > 1:
-            path_dirs = '/'.join(path_split[:-1])
-            Path(path_dirs).mkdir(parents=True, exist_ok=True)
-            shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
-            zip_desired_name = path_split[-1]
-        else:
-            zip_desired_name = path
-        # rename zip to specified name
-        if len(curr_zip_base) > 0:
-            zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
-            curr_zip_name = f"{curr_zip_base}/{tmpzip}"
-        else:
-            zip_new_path = zip_desired_name
-            curr_zip_name = tmpzip
-        os.rename(f"{curr_zip_name}.zip", zip_new_path)
-        # remove tmpdir
-        os.system(f"rm -r {tmpdir}") # TODO: make this safer
+            stream_manager.filter_columns()
+            stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{stream_id.replace('/', '!')}", overwrite=True, ignore_divisions=True)
