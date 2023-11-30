@@ -1,18 +1,13 @@
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 import pathlib
-import requests
 import shutil
-import tempfile
 import time
-from tqdm import tqdm
 from contextlib import contextmanager
-from threading import Lock
-from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
+from typing import (TYPE_CHECKING, Any, Generator, List, Optional, Tuple,
                     Union)
 import uuid6
-from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
@@ -121,24 +116,6 @@ def set_nested(results):
         kspl = k.split('/')[0]
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
-
-class FastFetcherResponse:
-    def __init__(self, response):
-        self.data = response.text
-        self.status = response.status_code
-
-class FastFetcher:
-    """Accelerated request handler for data page fetching."""
-    def __init__(self, api_key, host):
-        self.headers = {
-            'X_API_KEY': api_key,
-            'User-Agent': 'OpenAPI-Generator/1.0.0/python',
-            'Content-Type': 'application/json',
-        }
-        self.host = host
-
-    def get(self, url):
-        return FastFetcherResponse(requests.get(url=self.host + url, headers=self.headers))
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -276,9 +253,6 @@ class Simulation:
         continuationToken: str = None,
         download_manager = None,
     ):
-        with self.__sedaro.api_client() as api:
-            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
-
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
@@ -308,8 +282,8 @@ class Simulation:
             url += f'&sampleRate={sampleRate}'
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
-        
-        response = fast_fetcher.get(url)
+        with self.__sedaro.api_client() as api:
+            response = api.call_api(url, 'GET', headers={'Content-Type': 'application/json'})
         _response = None
         has_nonempty_ctoken = False
         try:
@@ -334,7 +308,7 @@ class Simulation:
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    page = fast_fetcher.get(request_url)
+                    page = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
                     _page = parse_urllib_response(page)
                     if download_manager is not None:
                         download_manager.ingest(_page['series'])
@@ -507,10 +481,9 @@ class Simulation:
         return self.results(streams=streams or [], sampleRate=sampleRate)
 
     def __get_metadata(self, sim_id: str = None):
+        request_url = f'/data/metadata/{sim_id}?'
         with self.__sedaro.api_client() as api:
-            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
-        url = f'/data/metadata/{sim_id}?'
-        response = fast_fetcher.get(url)
+            response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
         response_dict = json.loads(response.data)
         return response_dict
 
