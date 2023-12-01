@@ -108,6 +108,7 @@ class DownloadWorker:
     def archive(self):
         for stream_id, stream_manager in self.streams.items():
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
+            stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
             stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{prep_stream_id(stream_id)}", overwrite=True, ignore_divisions=True)
             self.archive_bar.update()

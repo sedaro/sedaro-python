@@ -1,3 +1,5 @@
+import dask.dataframe as dd
+import numpy as np
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -209,6 +211,19 @@ def test_query_model():
     assert model['blocks']['b']['otherValue'] == '1fourth'
     assert model['blocks']['b']['name'] == 'Block'
 
+class MockDownloadBar:
+    def __init__(self):
+        pass
+    def update(self, *args, **kwargs):
+        pass
+
+def compare_with_nans(a, b):
+    assert len(a) == len(b)
+    for i in range(len(a)):
+        if np.isnan(a[i]):
+            assert np.isnan(b[i])
+        else:
+            assert a[i] == b[i]
 
 def test_download():
     # test download internals
@@ -216,6 +231,29 @@ def test_download():
     download_worker.keys = set(['position', 'position.x', 'positionx', 'time', 'timeStep', 'timeStep.s'])
     to_remove = download_worker.select_columns_to_remove()
     assert set(to_remove) == set(['position', 'timeStep'])
+
+    # test some insertions
+    download_worker = StreamManager(MockDownloadBar())
+    dict_1 = {'a': [1, 2, 3], 'b': [1, 2, 3], 'time': [1, 2, 3]}
+    download_worker.ingest_core_data('foo', dict_1)
+    assert download_worker.keys == set(['a', 'b', 'time'])
+    assert set(download_worker.dataframe.columns) == set(['a', 'b', 'time'])
+    c = download_worker.dataframe.compute()
+    assert list(c['a']) == [1, 2, 3]
+    assert list(c['b']) == [1, 2, 3]
+    assert list(c['time']) == [1, 2, 3]
+
+    dict_2 = {'a': [4, 5, 6], 'c': [4, 5, 6], 'time': [4, 5, 6]}
+    download_worker.ingest_core_data('foo', dict_2)
+    assert download_worker.keys == set(['a', 'b', 'c', 'time'])
+    assert set(download_worker.dataframe.columns) == set(['a', 'b', 'c', 'time'])
+    download_worker.dataframe = download_worker.dataframe.repartition(npartitions=1)
+    download_worker.dataframe = download_worker.dataframe.reset_index(drop=True)
+    c = download_worker.dataframe.compute()
+    assert list(c['a']) == [1, 2, 3, 4, 5, 6]
+    compare_with_nans(list(c['b']), [1.0, 2.0, 3.0, float('nan'), float('nan'), float('nan')])
+    compare_with_nans(list(c['c']), [float('nan'), float('nan'), float('nan'), 4.0, 5.0, 6.0])
+    assert list(c['time']) == [1, 2, 3, 4, 5, 6]
 
     # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
