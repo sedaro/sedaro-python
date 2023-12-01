@@ -52,14 +52,17 @@ class StreamManager:
         self.keys = set()
         self.download_bar = download_bar
 
-    def ingest(self, stream_id, stream_data):
-        core_data = stream_data[1][stream_id.split('/')[0]]
+    def ingest_core_data(self, stream_id, core_data):
         if self.dataframe is None:
             self.dataframe = dd.from_dict(core_data, npartitions=1)
         else:
             self.dataframe = dd.concat([self.dataframe, dd.from_dict(core_data, npartitions=1)], axis=0)
         self.keys.update(core_data.keys())
         self.download_bar.update(stream_id, core_data['time'][-1])
+
+    def ingest(self, stream_id, stream_data):
+        core_data = stream_data[1][stream_id.split('/')[0]]
+        self.ingest_core_data(stream_id, core_data)
 
     def select_columns_to_remove(self):
         columns_to_remove = set()
