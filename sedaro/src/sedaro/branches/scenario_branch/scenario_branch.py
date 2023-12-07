@@ -31,7 +31,7 @@ class ScenarioBranch(Branch):
 
     @property
     def study(self):
-        """A `Sttudy` instance to interact with a study connected to this scenario branch.
+        """A `Study` instance to interact with a study connected to this scenario branch.
 
         Returns:
             Study: a `Study`

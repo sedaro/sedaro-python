@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Generator, Union
 from sedaro_base_client.apis.tags import jobs_api
 
 from ...exceptions import NoSimResultsError
-from ...results import StudyResult, StudyStatsResult
+from ...results import StudyResult
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res
 
@@ -153,14 +153,6 @@ class Study:
 
         return self.results(job_id=job_id)
 
-    def stats_results(self) -> StudyStatsResult:
-        """ Generates Statistics based on the study result data 
-        Args: none
-        raises:
-        Returns:
-           StudyStatsResult: an 'StudyStatsResult' instance
-        """
-        return StudyStatsResult(self)
 
 class StudyJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -243,7 +235,5 @@ class StudyHandle:
         """
         return self.__study_client.results_poll(job_id=self.__job['id'],retry_interval=retry_interval)
 
-    def stats_results(self) -> StudyStatsResult:
-        return StudyStatsResult(self.__study_client)
 
 

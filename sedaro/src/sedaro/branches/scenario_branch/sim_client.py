@@ -228,6 +228,7 @@ class Simulation:
                 raise ValueError(
                     'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
             url += f'&axisOrder={axisOrder}'
+        print(url)
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET')
         _response = None
@@ -244,7 +245,10 @@ class Simulation:
                 job_id: str = None,
                 start: float = None,
                 stop: float = None,
-                streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
+                streams: Optional[List[Tuple[str, ...]]] = None,
+                binWidth: float = None,
+                limit: float = None,
+                ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -283,7 +287,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [])
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], binWidth=binWidth, limit=limit)
         return SimulationResult(job, data)
 
     def results_poll(

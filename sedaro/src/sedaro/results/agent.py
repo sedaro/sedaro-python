@@ -1,7 +1,7 @@
 import gzip
 import json
 from pathlib import Path
-from typing import Generator, List, Union
+from typing import Generator, List, Union, Dict
 
 from pydash import merge
 
@@ -45,6 +45,9 @@ class SedaroAgentResult:
     def blocks(self) -> List[str]:
         return self.__block_ids
 
+    def blockToName(self) -> Dict[str, str]:
+        return { self.__block_structures[block_id].get('name', None): block_id for block_id in self.__block_ids if block_id in self.__block_structures }
+
     def block(self, id_: str) -> SedaroBlockResult:
         '''Query results for a particular block by ID.'''
         id_ = str(id_)
@@ -75,7 +78,6 @@ class SedaroAgentResult:
                     return self.block(block_id)
         raise ValueError(f"Block name '{name}' not found.")
 
-
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
@@ -95,7 +97,7 @@ class SedaroAgentResult:
             contents = json.load(json_file)
             return cls(contents['name'], contents['block_structures'], contents['series'])
 
-    def summarize(self) -> dict:
+    def summarize(self) -> None:
         '''Summarize these results in the console.'''
         hfill()
         print(f"Agent Result Summary".center(HFILL))
@@ -111,15 +113,12 @@ class SedaroAgentResult:
         print('    |' + 'id'.center(38) + 'name'.center(30-12) + '|')
         print('    ' + '-' * 58)
 
-        blockname_to_id = {}
-
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
-                    blockname_to_id[name_id_col] = block_id
                 else:
                     name_id_col = f'<Unnamed Block>'
             else:
@@ -136,6 +135,7 @@ class SedaroAgentResult:
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>) or .blockname(<name>)")
         print("📊 Display agent modules variables statistics with .stats( module ) ")
         print(f"🧩        Where module must be one of the following: { [module for module in self.__series] } ")
+
 
     def stats(self, module, output_html=False, make_histogram_plots=False):
         if module not in self.__series:
