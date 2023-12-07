@@ -481,7 +481,7 @@ class Simulation:
         return self.results(streams=streams or [], sampleRate=sampleRate)
 
     def __get_metadata(self, sim_id: str = None):
-        request_url = f'/data/metadata/{sim_id}?'
+        request_url = f'/data/{sim_id}/metadata?'
         with self.__sedaro.api_client() as api:
             response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
         response_dict = json.loads(response.data)
