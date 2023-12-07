@@ -27,6 +27,7 @@ class StudyResult:
         self.__cached_sim_results = {}
         self.__limit = None
         self.__binWidth = None
+        
 
     def __repr__(self) -> str:
         return f'SedaroStudyResult(branch={self.branch}, status={self.status}, iterations={self.iterations})'
@@ -196,9 +197,9 @@ class StudyResult:
             print("❓ Agent data not yet loaded. Load with .summarize_agents()")
 
         hfill()
-        print("❓ Set results downsampling with:")
-        print("                       with .set_result_limit(<# of points>) ")
-        print("                       with .set_result_binWidth( <timestep_mjd> ) ")
+        print("❓ First set desired results downsampling with:")
+        print("       .set_result_limit(<# of points>) ")
+        print("       .set_result_binWidth( <fraction of overall points> )   ")
         hfill()
         print("❓ Query individual simulation results with .sim_result(<ID>)")
         print("❓ Load all Study result data and list Study Agent information with .summarize_agents()")
@@ -209,14 +210,11 @@ class StudyResult:
         hfill()
         
 
-    def stats_results(self, _id):
-        return study_stats_results([_id])
-
-    def agents(self, name:str):
+    def agents(self, name:str) -> StudyAgentResult:
         simjob_to_agents =  { simjob_id:simresults.agent(name)   for (simjob_id, simresults) in self.study_results_dict.items() }
         return StudyAgentResult(self.id, name, simjob_to_agents)
 
-    def study_dataframe(self, agent_id, engine_name, agent_name):
+    def study_dataframe(self, agent_id, engine_name, agent_name) -> pd.DataFrame:
         agent_engine_sim_results = {}
         
         agent_engine_df = {}

@@ -45,8 +45,14 @@ class SedaroAgentResult:
     def blocks(self) -> List[str]:
         return self.__block_ids
 
-    def blockToName(self) -> Dict[str, str]:
+    @property
+    def blockNameToID(self) -> Dict[str, str]:
         return { self.__block_structures[block_id].get('name', None): block_id for block_id in self.__block_ids if block_id in self.__block_structures }
+
+    @property
+    def blockIdToName(self) -> Dict[str, str]:
+        return { block_id: self.__block_structures[block_id].get('name', None) for block_id in self.__block_ids if block_id in self.__block_structures }
+
 
     def block(self, id_: str) -> SedaroBlockResult:
         '''Query results for a particular block by ID.'''
@@ -133,74 +139,112 @@ class SedaroAgentResult:
 
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>) or .blockname(<name>)")
+        hfill()
+        print("⍆ The following commands have an optional variables argument which is a list of blockname.variable prefixes to filter on.")
         print("📊 Display agent modules variables statistics with .stats( module ) ")
         print(f"🧩        Where module must be one of the following: { [module for module in self.__series] } ")
+        print("📊 Display all agent block variables histograms for a study simulation with .sim_histogram( sim_id, output_html=False, variables=None )")
+        print("📈📉 Display block variables scatter matrix plot  ")
+        print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 
 
-    def stats(self, module, output_html=False, make_histogram_plots=False):
-        if module not in self.__series:
-            print(f"Module: '{module}' not found with this agent results object. Available modules are { [module for module in self.__series] }")
-            return
+    def create_dataframe(self, module, variables=None):
         try:
             import pandas as pd
             pd.set_option('display.max_rows', None)
             pd.set_option('display.max_columns', None)
-            var_dfs = []
-
-            # todo: move the repeated code to utils
-            def add_to_df_list(first_value, column_name, data):
-                if type(first_value) is list:
-                    list_len = len(first_value)
-                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
-                    if list_len == 4:
-                        columns.append(f'{column_name}_Q') 
-                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
-                else:
-                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
-
-            for block_id in self.__series[module]['series']:
-                block_results = self.block(block_id)
-                block_name = block_results.name
-               
-                for variable_name in block_results.variables:
-                    variable_data = block_results.variable(variable_name)
-                    column_name   = f'{block_name}.{variable_name}'
-
-                    if variable_data.has_subseries:
-                        for key, subtype in variable_data.subtypes:
-                            first_value = variable_data[key].values[0]
-                            data = variable_data[key].values
-                            add_to_df_list(first_value, f'{column_name}.{key}', data)
-                    else:
-                        first_value = variable_data.values[0]
-                        data = variable_data.values
-                        add_to_df_list(first_value, column_name, data)
-                    
-            block_dfs = pd.concat( var_dfs, axis=1)     
-            try:
-                from IPython.display import display
-                display(block_dfs.describe(include='all').T)
-            except:
-                print(block_dfs.describe(include='all').T)
         except ImportError:
             raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
 
-        if make_histogram_plots:
-            print('⚠️ Rendering the histogram plots can take some time if the module has a large number of blocks/variables')
-            try:
-                import sweetviz as sv
-            except ImportError:
-                print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+        var_dfs = []
+        def add_to_df_list(first_value, column_name, data):
+            if type(first_value) is list:
+                list_len = len(first_value)
+                columns = [ f'{column_name}.{index}' for index in range(list_len)]
+                var_dfs.append( pd.DataFrame(data, columns=columns ) )
             else:
-                sv.config_parser['Layout']['show_logo'] = '0' 
-                sv_report = sv.analyze(block_dfs, pairwise_analysis="off" )
+                var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
 
-                if output_html:
-                    sv_report.show_html(filepath=f'agent_{self.name}_Report.html')
-                else:
-                    sv_report.show_notebook(w="90%", h="full", layout='vertical')        
+        for block_id in self.__series[module]['series']:
+            block_results = self.block(block_id)
+            block_name = block_results.name
 
+            for variable_name in block_results.variables:
+                variable_data = block_results.variable(variable_name)
+                column_name   = f'{block_name}.{variable_name}'
 
+                if variable_data.has_subseries:
+                    for key, subtype in variable_data.subtypes:                    
+                        data = [value for value in variable_data[key].values if value is not None]
+                        first_value = data[0] if len(data) > 0 else None
+                        if first_value is None:
+                            continue
+                        column_name_key = f'{column_name}.{key}'
+                        if variables is not None and not any([ column_name_key.startswith(variable) for variable in variables]):
+                            continue
+                        add_to_df_list(first_value, column_name_key, data)
+                else: 
+                    if variables is not None and not any([ column_name.startswith(variable) for variable in variables]):
+                        continue                  
+                    data = [ value for value in variable_data.values if value is not None]
+                    first_value = data[0] if len(data) > 0 else None
+                    if first_value is None:
+                        continue
+                    add_to_df_list(first_value, column_name, data)
+                
+        block_dfs = pd.concat( var_dfs, axis=1) 
+        return block_dfs
+     
+    def stats(self, module, variables=None):
+        if module not in self.__series:
+            print(f"Module: '{module}' not found with this agent results object. Available modules are { [module for module in self.__series] }")
+            return
+        
+        block_dfs = self.create_dataframe(module, variables)
+   
+        try:
+            from IPython.display import display
+            display(block_dfs.describe(include='all').T)
+        except:
+            print(block_dfs.describe(include='all').T)
+
+    def histogram(self, module, output_html=False, variables=None):
+        print('⚠️ Rendering the histogram plots can take some time if the module has a large number of blocks/variables')
+        try:
+            import sweetviz as sv
+        except ImportError:
+            print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+        else:
+            block_dfs = self.create_dataframe(module, variables)
+            sv.config_parser['Layout']['show_logo'] = '0' 
+            sv_report = sv.analyze(block_dfs, pairwise_analysis="off" )
+
+            if output_html:
+                sv_report.show_html(filepath=f'agent_{self.name}_Report.html')
+            else:
+                sv_report.show_notebook(w="90%", h="full", layout='vertical')  
+
+    def scatter_matrix(self, module, variables=None):
+        try:
+            import pandas as pd
+            import matplotlib.pyplot as plt
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas and/or matplotlib could not be imported. (pip install pandas)')
+
+        block_dfs = self.create_dataframe(module, variables)
+        just_numbers = block_dfs.select_dtypes(include=['number'])
+        no_distint_cols = just_numbers[[c for c in list(just_numbers)
+                                                if len(just_numbers[c].unique()) > 1]]
+        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(12,12), diagonal='kde')
+        # Change label rotation
+        [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
+        [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
+        [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
+        [s.set_xticks(()) for s in sm.reshape(-1)]
+        [s.set_yticks(()) for s in sm.reshape(-1)]
+        plt.show()      
 
     def model_at(self, mjd):
         if not self.__initial_state:

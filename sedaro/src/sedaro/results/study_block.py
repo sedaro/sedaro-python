@@ -8,7 +8,8 @@ from .utils import ENGINE_EXPANSION, HFILL, hfill
 from .study_series import StudySeries
 
 
-
+# What is the difference between StudyBlockResult and StudySeries?
+# StudyBlockResult is a collection of SedaroBlockResults
 class StudyBlockResult:
 
     def __init__(self, study_id, name, blocks):
@@ -85,32 +86,47 @@ class StudyBlockResult:
             print(f'    • {variable}')
         hfill()
 
-        print("❓ Query variables with .<VARIABLE_NAME>")
-        print("Σ Display all block variables statistics for a study simulation with .sim_stats( sim_id, output_html=False ) ")
-
+        print("❓ Query variables with .<VARIABLE_NAME> or .variable( VARIABLE_NAME )")
+        print("⍆ The following commands have an optional variables argument which is a list of variable names prefixes to filter on.")
+        print("Σ Display all block variables statistics for a study simulation with .sim_stats( sim_id, output_html=False, variables=None ) ")
+        print("📊 Display all block variables histograms for a study simulation with .sim_histogram( sim_id, output_html=False, variables=None )")
         print("📈📉 Display block variables scatter matrix plot  ")
-        print("📉📈 for a study simulation with .sim_scatter_matrix( sim_id )") 
+        print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 
 
     def value_at(self, mjd):
         return { sim_id: block.value_at(mjd) for (sim_id, block) in self._blocks.items()}
 
-    def sim_scatter_matrix(self, sim_id):
+    def sim_scatter_matrix(self, sim_id, variables=None):
         if sim_id in self._blocks:
-            self._blocks[sim_id].scatter_matrix()
+            self._blocks[sim_id].scatter_matrix(variables)
         else:
             print(f"Error: Study sim id {sim_id} not found.") 
             self._print_sim_ids()    
 
-    def sim_stats(self, sim_id, output_html=False):
+    def sim_stats(self, sim_id:str, variables=None):
         if sim_id in self._blocks:
-            self._blocks[sim_id].stats(output_html)
+            self._blocks[sim_id].stats(variables)
         else:
             print(f"Error: Study sim id {sim_id} not found.") 
             self._print_sim_ids()
 
-    def study_stats(self):
-        # TODO
+    def sim_histogram(self, sim_id:str, output_html=False, variables=None):
+        if sim_id in self._blocks:
+            self._blocks[sim_id].histogram(output_html, variables)
+        else:
+            print(f"Error: Study sim id {sim_id} not found.") 
+            self._print_sim_ids()
+
+    def study_stats(self, module:str, variables=None):
+        # todo
+        pass
+
+    def study_histogram(self, module:str, output_html= False, variables=None):
+        # todo
+        pass
+
+    def study_scatter_matrix(self, module:str,  variables=None):
         pass
 
     def _print_sim_ids(self):

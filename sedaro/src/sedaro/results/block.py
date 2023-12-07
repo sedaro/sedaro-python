@@ -109,99 +109,43 @@ class SedaroBlockResult:
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
 
 
-    def scatter_matrix(self):
+    def scatter_matrix(self, variables=None):
         try:
             import pandas as pd
-            from pandas.plotting import scatter_matrix
             import matplotlib.pyplot as plt
-            pd.set_option('display.max_rows', None)
-            pd.set_option('display.max_columns', None)
-            var_dfs = []
-
-            def add_to_df_list(first_value, column_name, data):
-                if type(first_value) is list:
-                    list_len = len(first_value)
-                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
-                    if list_len == 4:
-                        columns.append(f'{column_name}_Q') 
-                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
-                else:
-                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
-
-            for variable_name in self.variables:
-                variable_data = self.variable(variable_name)                
-                column_name = f'{self.name}.{variable_name}'
-                if variable_data.has_subseries:
-                    for key, subtype in variable_data.subtypes:
-                        first_value = variable_data[key].values[0]
-                        data = variable_data[key].values
-                        add_to_df_list(first_value, f'{column_name}.{key}', data)
-                        break
-                else:
-                    first_value = variable_data.values[0]
-                    data = variable_data.values
-                    add_to_df_list(first_value, column_name, data)
-                    
-            block_dfs = pd.concat( var_dfs, axis=1)
-            just_numbers = block_dfs.select_dtypes(include=['number'])
-            no_distint_cols = just_numbers[[c for c in list(just_numbers)
-                                                    if len(just_numbers[c].unique()) > 1]]
-            sm = scatter_matrix(no_distint_cols, alpha=0.2, figsize=(12,12), diagonal='kde')
-            # Change label rotation
-            [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
-            [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
-            [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
-            [s.set_xticks(()) for s in sm.reshape(-1)]
-            [s.set_yticks(()) for s in sm.reshape(-1)]
-            plt.show()
         except ImportError:
-            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+            raise ValueError('scatter_matrix is disabled because pandas and/or matplotlib could not be imported. (pip install pandas)')
 
-    def stats(self, output_html=False):
+        block_dfs = self.create_dataframe(variables) 
+        just_numbers = block_dfs.select_dtypes(include=['number'])
+        no_distint_cols = just_numbers[[c for c in list(just_numbers)
+                                                if len(just_numbers[c].unique()) > 1]]
+        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(12,12), diagonal='kde')
+        # Change label rotation
+        [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
+        [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
+        [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
+        [s.set_xticks(()) for s in sm.reshape(-1)]
+        [s.set_yticks(()) for s in sm.reshape(-1)]
+        plt.show()
+
+
+    def stats(self, variables=None):
+        block_dfs = self.create_dataframe(variables) 
+
         try:
-            import pandas as pd
-            pd.set_option('display.max_rows', None)
-            pd.set_option('display.max_columns', None)
-            var_dfs = []
+            from IPython.display import display
+            display(block_dfs.describe(include='all').T)
+        except:
+            print(block_dfs.describe(include='all').T)
 
-            def add_to_df_list(first_value, column_name, data):
-                if type(first_value) is list:
-                    list_len = len(first_value)
-                    columns = [f'{column_name}_X', f'{column_name}_Y', f'{column_name}_Z']
-                    if list_len == 4:
-                        columns.append(f'{column_name}_Q') 
-                    var_dfs.append( pd.DataFrame(data, columns=columns ) )
-                else:
-                    var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
-
-            for variable_name in self.variables:
-                variable_data = self.variable(variable_name)
-                        
-                column_name = f'{self.name}.{variable_name}'
-                if variable_data.has_subseries:
-                    for key, subtype in variable_data.subtypes:
-                        first_value = variable_data[key].values[0]
-                        data = variable_data[key].values
-                        add_to_df_list(first_value, f'{column_name}.{key}', data)
-                else:
-                    first_value = variable_data.values[0]
-                    data = variable_data.values
-                    add_to_df_list(first_value, column_name, data)
-            block_dfs = pd.concat( var_dfs, axis=1)
-            try:
-                from IPython.display import display
-                display(block_dfs.describe(include='all').T)
-            except:
-                print(block_dfs.describe(include='all').T)
-
-        except ImportError:
-            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
-
+    def histogram(self, output_html=False, variables=None):
         try:
             import sweetviz as sv
         except ImportError:
             print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
         else:
+            block_dfs = self.create_dataframe(variables)
             sv.config_parser['Layout']['show_logo'] = '0' 
             sv_report = sv.analyze(block_dfs, pairwise_analysis="off" )
 
@@ -209,3 +153,43 @@ class SedaroBlockResult:
                 sv_report.show_html(filepath=f'Block_{self.name}_Report.html')
             else:
                 sv_report.show_notebook(w="90%", h="full", layout='vertical')
+
+    def create_dataframe(self, variables=None):
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        var_dfs = []
+
+        def add_to_df_list(first_value, column_name, data):
+            if type(first_value) is list:
+                list_len = len(first_value)
+                columns = [ f'{column_name}.{index}' for index in range(list_len)]
+                var_dfs.append( pd.DataFrame(data, columns=columns ) )
+            else:
+                var_dfs.append( pd.DataFrame(data, columns=[column_name]) )
+        if variables is None:
+            variables = self.variables
+        for variable_name in variables:
+            variable_data = self.variable(variable_name)
+                    
+            column_name = f'{self.name}.{variable_name}'
+            if variable_data.has_subseries:
+                for key, subtype in variable_data.subtypes:
+                    data = [ value for value in  variable_data[key].values if value is not None]
+                    first_value = data[0] if len(data) > 0 else None
+                    if first_value is None:
+                        continue
+                    add_to_df_list(first_value, f'{column_name}.{key}', data)
+            else:                    
+                data = [ value for value in variable_data.values if value is not None]
+                first_value = data[0] if len(data) > 0 else None
+                if first_value is None:
+                    continue
+                add_to_df_list(first_value, column_name, data)
+        block_dfs = pd.concat( var_dfs, axis=1)
+        return block_dfs
+

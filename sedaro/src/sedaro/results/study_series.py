@@ -110,11 +110,18 @@ class StudySeries:
         if show:
             plt.show()
 
-    def sim_stats(self, job_id, output_html=False):
+    def sim_stats(self, job_id):
         if job_id in self._series:
-            self._series[job_id].stats(output_html)
+            self._series[job_id].stats()
         else:
-            print(f"Error: Study sim id {sim_id} not found.") 
+            print(f"Error: Study sim id {job_id} not found.") 
+            self._print_sim_ids()
+
+    def sim_histogram(self, job_id, output_html=False):
+        if job_id in self._series:
+            self._series[job_id].histogram(output_html)
+        else:
+            print(f"Error: Study sim id {job_id} not found.") 
             self._print_sim_ids()
 
     def to_file(self, filename, verbose=True):
