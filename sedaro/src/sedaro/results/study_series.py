@@ -124,6 +124,27 @@ class StudySeries:
             print(f"Error: Study sim id {job_id} not found.") 
             self._print_sim_ids()
 
+    def make_study_dataframe(self, variables=None):
+        try:
+            import pandas as pd
+            pd.set_option('display.max_rows', None)
+            pd.set_option('display.max_columns', None)
+        except ImportError:
+            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
+
+        series_dataframes = { sim_id: series.make_dataframe(variables) for (sim_id, series) in self._series.items()}
+        return pd.concat(series_dataframes, axis=1)
+    
+    def study_stats(self, module:str, variables=None):
+        # todo
+        pass
+
+    def study_histogram(self, module:str, output_html= False, variables=None):
+        # todo
+        pass
+
+    def study_scatter_matrix(self, module:str,  variables=None):
+        pass
     def to_file(self, filename, verbose=True):
         pass
 

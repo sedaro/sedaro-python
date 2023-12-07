@@ -39,9 +39,14 @@ class StudyAgentResult:
         ' Assumes all simjobs of a study have the same blocks'
         return self._first_agent.blocks
 
-    def blockToName(self) -> Dict[str, str]:
+    @property
+    def blockNameToID(self) -> Dict[str, str]:
         ' Assumes all simjobs of a study have the same blocks'
-        return self._first_agent.blockToName()
+        return self._first_agent.blockNameToID
+
+    @property
+    def blockIdToName(self) -> Dict[str, str]:
+        return self._first_agent.blockIdToName
 
 
     def blocks(self, id_: str) -> StudyBlockResult:
@@ -95,7 +100,6 @@ class StudyAgentResult:
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
-                    #blockname_to_id[name_id_col] = block_id
                 else:
                     name_id_col = f'<Unnamed Block>'
             else:
@@ -110,16 +114,47 @@ class StudyAgentResult:
 
         hfill()
         print("❓ Query block results from all study simulations with .blocks(<ID>) or .blocks(<PARTIAL_ID>) or .blocksname(<name>)")
-        print("📊 Display a simulation agent module variables statistics with .sim_stats( module, sim_id ) ")
+        print("｛｝ Get a dict of block name to block_id with .blockNameToID")
+        print("｛｝ Get a dict of block ID's to block name with .blockIdToName")
+        print("［］ Get a list of block ID's  with .blockList()")
+        hfill()
+        print("⍆ The following commands have an optional variables argument which is a list of blockname.variable prefixes to filter on.")
+        print("📊 Display a simulation agent module variables statistics with .sim_stats( module, sim_id,variables ) ")
         print(f"🧩   Where module must be one of the following: { [module for module in self._first_agent._SedaroAgentResult__series] } ")
+        print("📊 Display all agent block variables histograms for a study simulation with .sim_histogram( sim_id, output_html=False, variables=None )")
+        print("📈📉 Display block variables scatter matrix plot  ")
+        print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 
-    def study_stats(self):
+
+    def study_stats(self, module:str, variables=None):
         # todo
         pass
 
-    def sim_stats(self, module:str,  sim_id: str, output_html=False, make_histogram_plots=False):
+    def study_histogram(self, module:str, output_html= False, variables=None):
+        # todo
+        pass
+
+    def study_scatter_matrix(self, module:str,  variables=None):
+        pass
+
+
+    def sim_stats(self, module:str,  sim_id: str, variables=None):
         if sim_id in self._simjob_to_agents:
-            self._simjob_to_agents[sim_id].stats(module, output_html, make_histogram_plots)  
+            self._simjob_to_agents[sim_id].stats(module, variables=variables)  
+        else:
+            print(f"Error: Study sim id {sim_id} not found.")  
+            self.print_sim_ids()
+
+    def sim_histogram(self, module:str, sim_id: str, output_html= False, variables=None):
+        if sim_id in self._simjob_to_agents:
+            self._simjob_to_agents[sim_id].histogram(module,variables=variables)  
+        else:
+            print(f"Error: Study sim id {sim_id} not found.")  
+            self.print_sim_ids()
+
+    def sim_scatter_matrix(self, module:str, sim_id: str, variables=None):
+        if sim_id in self._simjob_to_agents:
+            self._simjob_to_agents[sim_id].scatter_matrix(module,variables=variables)  
         else:
             print(f"Error: Study sim id {sim_id} not found.")  
             self.print_sim_ids()

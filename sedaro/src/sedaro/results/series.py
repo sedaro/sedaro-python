@@ -151,15 +151,9 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def stats(self, output_html=False):
+    def create_dataframe(self):
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to generate statitics.')
-            # for key, value in self.__dtype.items():
-            #     if value == 'None':
-            #         print(f"    - '{key}': All entries in this subseries are None")
-            #     else:
-            #         print(f"    - '{key}': '{value}'")
-            #         self.__series[key].stats(output_html)
 
         try:
             import pandas as pd
@@ -173,26 +167,34 @@ class SedaroSeries:
         if not STATS_ENABLED:
             raise ValueError('Statistics is disabled because pandas and/or sweetviz could not be imported')
 
-
         columns       = [self.name]
-        variable_data = self.__series
-        first_value   = variable_data[0]
+        variable_data = [ data for data in self.__series if data is not None ]
+        first_value   = variable_data[0] if len(variable_data) > 0 else None
+        if first_value is None:
+            return pd.DataFrame([])
 
         if type(first_value) is list:
-            list_len = len(first_value)
-            columns = [f'{self.name}_X', f'{self.name}_Y', f'{self.name}_Z']
-            if list_len == 4:
-                columns.append(f'{self.name}_Q') 
+                list_len = len(first_value)
+                columns = [ f'{self.name}.{index}' for index in range(list_len)]
         
         df = pd.DataFrame(variable_data, columns=columns ) 
+        return df
 
+    def stats(self, output_html=False):
+        
+        df = self.create_dataframe()
         try:
             from IPython.display import display
             display(df.describe(include='all').T)
         except:
             print(df.describe(include='all').T)
-        
 
+    def histogram(self, output_html=False):
+        if self.__has_subseries:
+            raise ValueError('Select a specific subseries to generate statitics.')
+        
+        df = self.create_dataframe()
+        
         try:
             import sweetviz as sv
         except ImportError:
