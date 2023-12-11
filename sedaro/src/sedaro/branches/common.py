@@ -49,6 +49,10 @@ class Common(ABC):
         if not self.is_rel_field(key):
             return val
 
+        # If relationship is undefined, return None
+        if val is None:
+            return None
+
         side_type = self.get_rel_field_type(key)
 
         if side_type == MANY_SIDE:

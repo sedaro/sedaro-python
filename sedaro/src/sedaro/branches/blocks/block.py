@@ -40,7 +40,7 @@ class Block(Common):
     @property
     def type(self) -> str:
         '''Name of the class of the Sedaro Block this `Block` instance is set up to interact with'''
-        return self._block_type.type
+        return self.data[TYPE]
 
     @property
     def data(self) -> Dict:
@@ -113,10 +113,12 @@ class Block(Common):
             Block: updated `Block` (Note: the previous `Block` reference is also updated)
         """
         if is_empty(fields):
-            raise ValueError(f'Must provide fields to update on the {self.type}.')
+            raise ValueError(
+                f'Must provide fields to update on the {self.type}.')
 
         if ID in fields and fields[ID] != self.id:
-            raise ValueError(f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
+            raise ValueError(
+                f'Invalid value for "{ID}". Omit or ensure it is the same as this Block\'s {ID}.')
 
         # NOTE: `self.data` calls `self.enforce_still_exists()`, so don't need to call here
         self._branch.crud(blocks=[{**self.data, **fields}])
