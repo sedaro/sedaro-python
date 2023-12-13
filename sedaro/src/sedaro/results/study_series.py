@@ -105,7 +105,7 @@ class StudySeries:
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         for (sim_id, series) in self._series.items():
             series.plot(False, ylabel, elapsed_time, height, xlim, ylim, label=sim_id, **kwargs)
-        plt.legend()
+        plt.legend(bbox_to_anchor=(1, 1))
         plt.title(f"Study:{self._study_id}:{self._name}")
         if show:
             plt.show()
@@ -124,7 +124,7 @@ class StudySeries:
             print(f"Error: Study sim id {job_id} not found.") 
             self._print_sim_ids()
 
-    def make_study_dataframe(self, variables=None):
+    def make_study_dataframe(self):
         try:
             import pandas as pd
             pd.set_option('display.max_rows', None)
@@ -132,19 +132,43 @@ class StudySeries:
         except ImportError:
             raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
 
-        series_dataframes = { sim_id: series.make_dataframe(variables) for (sim_id, series) in self._series.items()}
+        series_dataframes = { sim_id: series.create_dataframe() for (sim_id, series) in self._series.items()}
         return pd.concat(series_dataframes, axis=1)
     
-    def study_stats(self, module:str, variables=None):
-        # todo
-        pass
+    def study_stats(self):
+        thisDF = self.make_study_dataframe()
+        return thisDF.describe().T
 
-    def study_histogram(self, module:str, output_html= False, variables=None):
-        # todo
-        pass
+    def study_histogram(self, size=10, bins=10):
+        thisDF = self.make_study_dataframe()
+        return thisDF.hist(figsize=(size,size), bins=bins)
+    
+    def study_subplots(self,  size=10, cols=1):
+        thisDF = self.make_study_dataframe()
+        rows = len(thisDF.columns)
+        rows = rows // cols if rows % cols == 0 else rows // cols + 1
+        
+        fig = plt.figure(figsize=(size, size))
+        gs = fig.add_gridspec(rows, cols) 
+        plots = gs.subplots(sharex=True, sharey=True)
+        fig.suptitle(f'Study ID: {self._study_id} - {self.name}')
+        for row in range(rows):
+            for col in range(cols):
+                index = row*cols+col
+                if index >= len(thisDF.columns):
+                    break
+                sim_id = thisDF.columns[index]
+                this_plot = plots[row,col] if rows > 1 and cols > 1 else plots[index]      
+                sim_id = thisDF.columns[index]
+                this_plot.set_title(f'{sim_id[0]}')
+                this_plot.set_xlabel('Time (s)')
+                this_plot.grid(True)   
+                this_plot.plot( thisDF[ sim_id ].values, label=sim_id,linestyle='', marker='D', markersize=2 )
 
-    def study_scatter_matrix(self, module:str,  variables=None):
-        pass
+        for ax in plots.flat:
+            ax.label_outer()
+        plt.show()
+
     def to_file(self, filename, verbose=True):
         pass
 
@@ -195,6 +219,7 @@ class StudySeries:
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
         else:
             print("❓ Call .plot to visualize results of all study series results")
+            print("?  Call .study_subplots(size=10, cols=1) to visualize results of all study series results in subplots")
             print("📊 Display statistics with .sim_stats(sim_id, output_html=False ) ")
 
 
