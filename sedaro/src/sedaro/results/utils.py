@@ -52,7 +52,7 @@ def _block_type_in_supers(block_type: str, meta_supers: dict, super_type: str = 
         supertypes = meta_supers[block_type]
         if len(supertypes) == 0:
             return False
-        return any(_block_type_in_supers(supertype, meta_supers) for supertype in supertypes)
+        return any(_block_type_in_supers(supertype, meta_supers, super_type=super_type) for supertype in supertypes)
     else:
         return False
 

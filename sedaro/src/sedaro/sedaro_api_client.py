@@ -16,6 +16,8 @@ class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
     def __init__(self, api_key, host='https://api.sedaro.com'):
+        if host[-1] == '/':
+            host = host[:-1]  # remove trailing forward slash
         self._api_key = api_key
         self._api_host = host
 
