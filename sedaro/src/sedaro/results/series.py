@@ -66,6 +66,12 @@ class SedaroSeries:
         '''Get a particular subseries by name as an attribute.'''
         return self[subseries_name]
 
+    def __series_major(self):
+        if self.__axis == 'TIME_MINOR':
+            return to_time_major(self.__series)
+        else:
+            return self.__series
+
     @property
     def name(self):
         return self.__name
@@ -80,7 +86,7 @@ class SedaroSeries:
 
     @property
     def values(self):
-        return self.__series
+        return self.__series_major()
 
     @cached_property
     def values_interpolant(self):
@@ -114,12 +120,6 @@ class SedaroSeries:
     #     # TODO: Does not work with 2D value arrays
     #     show = kwargs.pop('show', True)
     #     self.__plot(plt.scatter, show, kwargs)
-
-    def __series_major(self):
-        if self.__axis == 'TIME_MINOR':
-            return to_time_major(self.__series)
-        else:
-            return self.__series
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         if not PLOTTING_ENABLED:
