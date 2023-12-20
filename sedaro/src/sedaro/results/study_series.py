@@ -169,6 +169,25 @@ class StudySeries:
             ax.label_outer()
         plt.show()
 
+    def study_scatter_matrix(self, size=10):
+        import pandas as pd
+        thisDF = self.make_study_dataframe()
+        # breaks with Nones so strip them 
+        just_numbers = thisDF.select_dtypes(include=['number'])
+        no_distint_cols = just_numbers[[c for c in list(just_numbers)
+                                                if len(just_numbers[c].unique()) > 1]]
+        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(size,size), diagonal='kde')
+        # Change label rotation
+        [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
+        [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
+        [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
+        [s.set_xticks(()) for s in sm.reshape(-1)]
+        [s.set_yticks(()) for s in sm.reshape(-1)]
+        plt.show()     
+
+
+
+
     def to_file(self, filename, verbose=True):
         pass
 
@@ -221,6 +240,13 @@ class StudySeries:
             print("❓ Call .plot to visualize results of all study series results")
             print("?  Call .study_subplots(size=10, cols=1) to visualize results of all study series results in subplots")
             print("📊 Display statistics with .sim_stats(sim_id, output_html=False ) ")
+            print("-----Compare results with other simulations in study-----")
+            print("📈📉 Display scatter matrix plot  ")
+            print("📉📈      with .study_scatter_matrix( size=10 )") 
+            print("📊 Display histograms with other study values with .study_histogram(size=10, bins=10)")
+            print("🀕 Create subplots with .study_subplots(size=10, cols=1)")
+            print("𝛴 Display statistics with .study_stats() ")
+            print("🐼 Return a pandas dataframe with .make_study_dataframe() ")
 
 
 
