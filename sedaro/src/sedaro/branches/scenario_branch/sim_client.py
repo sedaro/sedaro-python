@@ -123,6 +123,10 @@ class FastFetcherResponse:
     def __init__(self, response):
         self.data = response.text
         self.status = response.status_code
+        self.response = response
+
+    def __getattr__(self, key):
+        return self.response[key]
 
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
