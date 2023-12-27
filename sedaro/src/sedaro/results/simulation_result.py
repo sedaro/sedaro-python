@@ -36,10 +36,7 @@ class SimulationResult:
             axis = 'TIME_MAJOR'
         if axis != 'TIME_MAJOR':
             assert axis == 'TIME_MINOR'
-            series_time_major = {}
-            for agent in self.__simpleseries:
-                series_time_major[agent] = (series_time_major[agent][0], to_time_major(series_time_major[agent][1]))
-            self.__simpleseries = series_time_major
+            self.__simpleseries = to_time_major(self.__simpleseries)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
