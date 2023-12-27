@@ -11,11 +11,11 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, _get_series_type, bsearch, hfill, to_time_major
+from .utils import HFILL, _get_series_type, bsearch, hfill
 
 class SedaroSeries:
 
-    def __init__(self, name, time, series, axis):
+    def __init__(self, name, time, series):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -25,7 +25,6 @@ class SedaroSeries:
         self.__name = name
         self.__mjd = time
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__axis = axis
         self.__series = series
         self.__has_subseries = isinstance(self.__series, dict)
         if self.__has_subseries:
@@ -43,7 +42,7 @@ class SedaroSeries:
         '''
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to iterate over.')
-        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series_major()))
+        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series))
 
     def __len__(self) -> int:
         return len(self.mjd)
@@ -58,19 +57,13 @@ class SedaroSeries:
             raise ValueError('This series has no subseries.')
         elif subseries_name in self.__series:
             new_series_name = f'{self.__name}.{subseries_name}'
-            return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name], self.__axis)
+            return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name])
         else:
             raise ValueError(f"Subseries '{subseries_name}' not found.")
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
         return self[subseries_name]
-
-    def __series_major(self):
-        if self.__axis == 'TIME_MINOR':
-            return to_time_major(self.__series)
-        else:
-            return self.__series
 
     @property
     def name(self):
@@ -86,7 +79,7 @@ class SedaroSeries:
 
     @property
     def values(self):
-        return self.__series_major()
+        return self.__series
 
     @cached_property
     def values_interpolant(self):
@@ -111,7 +104,7 @@ class SedaroSeries:
                     raise_error()
             else:
                 return self.values_interpolant(mjd)
-            return self.__series_major()[index]
+            return self.__series[index]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
         self.__plot(show, ylabel, elapsed_time, height, xlim, ylim, **kwargs)
@@ -129,7 +122,7 @@ class SedaroSeries:
         try:
             if height is not None:
                 plt.rcParams['figure.figsize'] = [plt.rcParams['figure.figsize'][0], height]
-            plt.plot((self.__elapsed_time if elapsed_time else self.__mjd), self.__series_major(), **kwargs)
+            plt.plot((self.__elapsed_time if elapsed_time else self.__mjd), self.__series, **kwargs)
             if 'label' in kwargs:
                 plt.legend(loc='upper left')
             plt.xlabel('Elapsed Time (s)' if elapsed_time else 'Time (MJD)')
@@ -147,7 +140,7 @@ class SedaroSeries:
     def to_file(self, filename, verbose=True):
         '''Save series to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {'name': self.__name, 'time': self.__mjd, 'series': self.__series, 'axis': self.__axis}
+            contents = {'name': self.__name, 'time': self.__mjd, 'series': self.__series}
             json.dump(contents, json_file)
             if verbose:
                 print(f"💾 Successfully saved to {filename}")
@@ -157,7 +150,7 @@ class SedaroSeries:
         '''Load series from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
-            return cls(contents['name'], contents['time'], contents['series'], contents['axis'])
+            return cls(contents['name'], contents['time'], contents['series'])
 
     def summarize(self):
         hfill()
