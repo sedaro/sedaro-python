@@ -13,6 +13,7 @@ else:
 
 from .utils import HFILL, _get_series_type, bsearch, hfill
 
+
 class SedaroSeries:
 
     def __init__(self, name, time, series):
