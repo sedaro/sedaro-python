@@ -9,7 +9,7 @@ from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 class SedaroBlockResult:
 
-    def __init__(self, structure, series: dict, axis: str):
+    def __init__(self, structure, series: dict):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -23,7 +23,6 @@ class SedaroBlockResult:
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
-        self.__axis = axis
         self.__variables = [variable for data in self.__series.values() for variable in data['series']]
 
     def __getattr__(self, name: str) -> SedaroSeries:
@@ -37,8 +36,7 @@ class SedaroBlockResult:
                 return SedaroSeries(
                     name,
                     self.__series[module]['time'],
-                    self.__series[module]['series'][name],
-                    self.__axis
+                    self.__series[module]['series'][name]
                 )
         else:
             raise ValueError(f'Variable "{name}" not found.')
@@ -76,7 +74,7 @@ class SedaroBlockResult:
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {'structure': self.__structure, 'series': self.__series, 'axis': self.__axis}
+            contents = {'structure': self.__structure, 'series': self.__series}
             json.dump(contents, json_file)
             if verbose:
                 print(f"💾 Successfully saved to {filename}")
@@ -86,7 +84,7 @@ class SedaroBlockResult:
         '''Load agent result from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
-            return cls(contents['structure'], contents['series'], contents['axis'])
+            return cls(contents['structure'], contents['series'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
