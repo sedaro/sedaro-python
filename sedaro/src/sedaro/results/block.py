@@ -36,7 +36,7 @@ class SedaroBlockResult:
                 return SedaroSeries(
                     name,
                     self.__series[module]['time'],
-                    self.__series[module]['series'][name]
+                    self.__series[module]['series'][name],
                 )
         else:
             raise ValueError(f'Variable "{name}" not found.')
