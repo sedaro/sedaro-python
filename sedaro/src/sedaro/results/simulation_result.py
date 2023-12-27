@@ -7,7 +7,7 @@ from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, hfill)
+                    _get_agent_id_name_map, _restructure_data, hfill, to_time_major)
 
 
 class SimulationResult:
@@ -30,6 +30,16 @@ class SimulationResult:
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
+        try:
+            axis = self.__meta['axis']
+        except KeyError:
+            axis = 'TIME_MAJOR'
+        if axis != 'TIME_MAJOR':
+            assert axis == 'TIME_MINOR'
+            series_time_major = {}
+            for agent in self.__simpleseries:
+                series_time_major[agent] = (series_time_major[agent][0], to_time_major(series_time_major[agent][1]))
+            self.__simpleseries = series_time_major
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
@@ -95,12 +105,8 @@ class SimulationResult:
         '''Query results for a particular agent by name.'''
         agent_id = self.__agent_id_from_name(name)
         initial_agent_models = self.__meta['structure']['agents']
-        try:
-            axis = self.__meta['axis']
-        except KeyError:
-            axis = 'TIME_MAJOR'
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state, axis=axis)
+        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state)
 
     def to_file(self, filename: Union[str, Path]) -> None:
         '''Save simulation result to compressed JSON file.'''
