@@ -67,21 +67,12 @@ def update_metadata(main, other):
         main['counts'][k] += other['counts'][k]
 
 def set_numeric_as_list(d):
-    if not isinstance(d, dict):
-        return d
-    new_dict = {}
-    for k, v in d.items():
-        if isinstance(v, dict):
-            if '0' in v.keys():
-                nv = []
-                for ik in sorted(list(v.keys()), key=lambda x: int(x)):
-                    nv.append(set_numeric_as_list(v[ik]))
-            else:
-                nv = set_numeric_as_list(v)
+    if isinstance(d, dict):
+        if all(key.isdigit() for key in d.keys()):  # Check if all keys are array indexes in string form
+            return [set_numeric_as_list(d[key]) for key in sorted(d.keys(), key=int)]
         else:
-            nv = v
-        new_dict[k] = nv
-    return new_dict
+            return {k: set_numeric_as_list(v) for k, v in d.items()}
+    return d
 
 def __set_nested(results):
     nested = {}
