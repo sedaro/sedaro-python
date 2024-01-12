@@ -42,12 +42,18 @@ class AgentModelParametersOverridePaths():
     def listPaths(self) -> list[str]:
             return list(self.path_to_agent_key.keys())
 
-    def findBestMatch(self, search_for_path:str) -> str:
-            return max(self.path_to_agent_key.keys(), key=lambda path: fuzz.ratio(search_for_path, path ))
+    def findBestPathMatch(self, search_for_path:str) -> str:
+            return max(self.path_to_agent_key.keys(), 
+                       key=lambda path: fuzz.ratio(search_for_path, path ))
+    
+    # finds the top n best matches
+    def findPathMatches(self, search_for_path:str, number_matches=5) -> list[str]:
+            return sorted(self.path_to_agent_key.keys(), 
+                          key=lambda path: fuzz.ratio(search_for_path, path ), reverse=True)[0:number_matches]
 
     def findValueOf(self, path:str) -> str | float | int | dict | list:
         if path in self.path_to_agent_key:
                 return self.agent_branches_flat[ self.path_to_agent_key[path] ]
         else:
-                return { "NotFoundPath": f"{path}", "Did you mean": max(self.path_to_agent_key.keys(), key=lambda aPath: fuzz.ratio( path, aPath )) } 
+                return { "NotFoundPath": f"{path}", "Did you mean": self.findBestPathMatch(path) }
 

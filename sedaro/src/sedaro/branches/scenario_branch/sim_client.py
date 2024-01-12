@@ -228,7 +228,6 @@ class Simulation:
                 raise ValueError(
                     'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
             url += f'&axisOrder={axisOrder}'
-        print(url)
         with self.__sedaro.api_client() as api:
             response = api.call_api(url, 'GET')
         _response = None
