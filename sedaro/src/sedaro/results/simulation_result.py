@@ -7,7 +7,7 @@ from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, hfill)
+                    _get_agent_id_name_map, _restructure_data, hfill, to_time_major)
 
 
 class SimulationResult:
@@ -30,6 +30,13 @@ class SimulationResult:
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
+        try:
+            axis = self.__meta['axis']
+        except KeyError:
+            axis = 'TIME_MAJOR'
+        if axis != 'TIME_MAJOR':
+            assert axis == 'TIME_MINOR'
+            self.__simpleseries = to_time_major(self.__simpleseries)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
