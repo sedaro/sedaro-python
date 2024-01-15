@@ -46,8 +46,6 @@ class ScenarioBranch(Branch):
     # next line used to know where to start auto edit
     # $AUTO_EDIT_START$
 
-    Agent: BlockType
-    """A Sedaro `Block` class on a `ScenarioBranch`"""
     AgentGroup: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     ClockConfig: BlockType
@@ -55,8 +53,6 @@ class ScenarioBranch(Branch):
     Menu: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     MenuItem: BlockType
-    """A Sedaro `Block` class on a `ScenarioBranch`"""
-    Orbit: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     PerRoundExternalState: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
@@ -69,4 +65,26 @@ class ScenarioBranch(Branch):
     WaypointPathWithTimestamps: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     WidgetSpec: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PeripheralGroundArea: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    SpkEphemeris: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PeripheralSpacePoint: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PropagatedOrbitKinematics: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    EcefStationaryKinematics: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PeripheralGroundPoint: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    OverrideSet: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    StkEphemeris: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PeripheralAgent: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    PeripheralCelestialPoint: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
+    TemplatedAgent: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""

@@ -128,6 +128,10 @@ def test_query_model():
         'meta': {
             'structure': {
                 'scenario': {
+                    '_supers': {
+                        'BlockWithQuantityKind': [],
+                        'Agent': ['BlockWithQuantityKind'],
+                    },
                     'blocks': {
                         'a': {
                             'type': 'Agent',
@@ -138,6 +142,7 @@ def test_query_model():
                 },
                 'agents': {
                     'a': {
+                        '_supers': {},
                         'blocks': {
                             'b': {
                                 'id': 'b',
