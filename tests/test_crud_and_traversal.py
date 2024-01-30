@@ -10,7 +10,8 @@ from sedaro.branches.blocks import Block
 from sedaro.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro.settings import ID
 
-_letters_and_numbers = string.ascii_uppercase + string.digits + string.ascii_lowercase
+_letters_and_numbers = string.ascii_uppercase + \
+    string.digits + string.ascii_lowercase
 
 
 def _random_str(length=10):
@@ -41,7 +42,7 @@ def test_keying_into_root_attrs():
     assert branch.type == 'Spacecraft'
     assert isinstance(branch.attitude, dict)
     assert isinstance(branch.enabledModules, list)
-    assert isinstance(branch.angularVelocity, list)
+    assert isinstance(branch.angularVelocity, dict)
     assert isinstance(branch.migrated, (type(None), str))
 
 
@@ -102,7 +103,7 @@ def test_create_update_and_delete_block():
         battery_cell_client.update(partNumber="123456789")
     except NonexistantBlockError as e:
         msg = str(e)
-        assert msg == f'The referenced "BatteryCell" (id: {bc_id}) no longer exists.'
+        assert msg == f'The referenced Block with ID: {bc_id} no longer exists.'
 
 
 def test_update_rel_and_cascade_delete():
@@ -134,14 +135,14 @@ def test_update_rel_and_cascade_delete():
         subsystem.delete()
     except NonexistantBlockError as e:
         msg = str(e)
-        assert msg == f'The referenced "Subsystem" (id: {ss_id}) no longer exists.'
+        assert msg == f'The referenced Block with ID: {ss_id} no longer exists.'
 
     # make sure component is also deleted when subsystem is deleted
     try:
         component.update(name='Trying to update name')
     except NonexistantBlockError as e:
         msg = str(e)
-        assert msg == f'The referenced "Component" (id: {c_id}) no longer exists.'
+        assert msg == f'The referenced Block with ID: {c_id} no longer exists.'
 
 
 def test_traversing_and_equality_and_some_get_methods():
@@ -219,7 +220,8 @@ def test_block_client_clone():
     solar_cell_clone = solar_cell.clone()
     assert isinstance(solar_cell_clone, Block)
 
-    branch.crud(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
+    branch.crud(delete=[subsystem_clone.id, subsystem.id,
+                solar_cell_clone.id, solar_cell.id])
 
 
 def test_some_errors():
@@ -335,7 +337,8 @@ def test_multiblock_crud_with_ref_ids():
     batt_pack_name = f'Battery Pack {_random_str()}'
     batt_cell_part_number = f'Battery Cell {_random_str()}'
     branch.crud(blocks=[
-        {'type': 'BatteryPack', 'name': batt_pack_name, "numSeries": 1, "numParallel": 1, 'cell': '$-batt-cell'},
+        {'type': 'BatteryPack', 'name': batt_pack_name,
+            "numSeries": 1, "numParallel": 1, 'cell': '$-batt-cell'},
         {
             'id': '$-batt-cell',
             'type': 'BatteryCell',

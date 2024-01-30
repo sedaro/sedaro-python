@@ -75,7 +75,7 @@ class Block(Common):
         """
         if not self.check_still_exists():
             raise NonexistantBlockError(
-                f'The referenced "{self.type}" (id: {self.id}) no longer exists.'
+                f'The referenced Block with ID: {self.id} no longer exists.'
             )
 
     def clone(self) -> 'Block':

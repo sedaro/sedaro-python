@@ -16,7 +16,8 @@ class AgentTemplateBranch(Branch):
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
         if (type_ := self.data['type']) not in VEHICLE_TEMPLATES:
-            raise TypeError(f'Branch must be of type "{VEHICLE_TEMPLATES}" not "{type_}"')
+            raise TypeError(
+                f'Branch must be of type "{VEHICLE_TEMPLATES}" not "{type_}"')
 
     # ==============================================================================================================
     # For intellisense
@@ -30,8 +31,6 @@ class AgentTemplateBranch(Branch):
     Antenna: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     AreaTarget: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    AttitudeDynamics: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     AveragingAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -105,8 +104,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     LocalVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    LockPointingMode: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     MagneticHysteresisRod: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Magnetorquer: BlockType
@@ -118,8 +115,6 @@ class AgentTemplateBranch(Branch):
     Modem: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     OpticalAttitudeSensor: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    Orbit: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     OrbitalAttitudeDynamics: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -170,8 +165,6 @@ class AgentTemplateBranch(Branch):
     SolarPanel: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     SpaceTarget: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    SpacecraftOperationalMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     SphericalFuelTank: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -238,4 +231,62 @@ class AgentTemplateBranch(Branch):
     VectorSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     VectorTrackingSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    UnresponsiveThrusterFailureMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    UnresponsiveSensorFailureMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    CombinationalLogic: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TriadAttitudeInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    MagneticDetumblingAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GeoAreaDateTimeGroup: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    CloudFractionGroup: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    UnresponsiveReactionWheelFailureMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    SensorFailureMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    CloudFractionGroupToScalarCondition: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FieldOfViewArticulationMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PropagatedOrbitKinematics: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    SpkEphemeris: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    DynamicallyLoadedComponent: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    LockSpinPointingMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FiniteStateMachine: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RelativeSchedule: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    LogicalConfiguration: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FixedSchedule: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ActivePointingMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    StkEphemeris: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    StateTransition: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    Sensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PowerProcessor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FiniteDifferenceOrbitInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    UnresponsiveMagnetorquerFailureMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    DirectMeasurementAttitudeInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    Routine: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    StaticAttitudeInitializer: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
