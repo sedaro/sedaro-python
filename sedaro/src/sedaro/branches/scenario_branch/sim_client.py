@@ -114,6 +114,8 @@ class FastFetcherResponse:
     def __init__(self, response: requests.Response):
         if response.headers['Content-Type'] == 'application/json':
             self.data = response.text
+        elif response.headers['Content-Type'] == 'application/msgpack':
+            self.data = response.content
         self.status = response.status_code
         self.response = response
 
