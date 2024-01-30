@@ -1,5 +1,6 @@
 import concurrent.futures
 import json
+import msgpack
 import os
 import pathlib
 import requests
@@ -113,14 +114,26 @@ def set_nested(results):
 class FastFetcherResponse:
     def __init__(self, response: requests.Response):
         if response.headers['Content-Type'] == 'application/json':
+            self.type = 'application/json'
             self.data = response.text
         elif response.headers['Content-Type'] == 'application/msgpack':
+            self.type = 'application/msgpack'
             self.data = response.content
+        else:
+            raise Exception("Unexpected MIME type")
         self.status = response.status_code
         self.response = response
 
     def __getattr__(self, key):
         return self.response[key]
+
+    def parse(self):
+        if self.type == 'application/json':
+            return parse_urllib_response(self)
+        elif self.type == 'application/msgpack':
+            return msgpack.unpackb(self.data):
+        else:
+            raise Exception("Unexpected MIME type")
 
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
@@ -346,7 +359,7 @@ class Simulation:
         _response = None
         has_nonempty_ctoken = False
         try:
-            _response = parse_urllib_response(response)
+            _response = response.parse()
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
@@ -366,7 +379,7 @@ class Simulation:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
-                    _page = parse_urllib_response(page)
+                    _page = page.parse()
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
