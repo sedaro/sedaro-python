@@ -131,7 +131,7 @@ class FastFetcherResponse:
         if self.type == 'application/json':
             return parse_urllib_response(self)
         elif self.type == 'application/msgpack':
-            return msgpack.unpackb(self.data):
+            return msgpack.unpackb(self.data)
         else:
             raise Exception("Unexpected MIME type")
 
