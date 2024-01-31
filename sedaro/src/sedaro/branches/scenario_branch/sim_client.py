@@ -282,7 +282,7 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
-        useMsgpack: bool = None
+        encoding: str = 'json',
     ):
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
@@ -355,8 +355,7 @@ class Simulation:
             url += f'&sampleRate={sampleRate}'
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
-        if useMsgpack:
-            url += f'&useMsgpack=True'
+        url += f'&encoding={encoding}'
         
         response = fast_fetcher.get(url)
         _response = None
@@ -406,7 +405,7 @@ class Simulation:
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
-                useMsgpack: bool = None) -> SimulationResult:
+                encoding: str = 'json') -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -445,7 +444,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, useMsgpack=useMsgpack)
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, encoding=encoding)
         return SimulationResult(job, data)
 
     def results_poll(
@@ -453,7 +452,7 @@ class Simulation:
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
-        useMsgpack: bool = None,
+        encoding: str = 'json',
         retry_interval: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
@@ -483,7 +482,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [], sampleRate=sampleRate, useMsgpack=useMsgpack)
+        return self.results(streams=streams or [], sampleRate=sampleRate, encoding=encoding)
 
     def __download(self, p):
         agents, id, dirname, progress, progress_lock = p
