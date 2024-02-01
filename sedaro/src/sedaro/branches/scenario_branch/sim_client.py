@@ -280,7 +280,7 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
-        download_manager = None,
+        download_manager: DownloadWorker = None,
     ):
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
