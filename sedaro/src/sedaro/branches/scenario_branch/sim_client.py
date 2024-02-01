@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+import dask.dataframe
 import json
 import msgpack
 import os
@@ -362,12 +363,22 @@ class Simulation:
         else:
             download_manager.archive()
 
+    def __results(self,
+                simulation_id: str = None,
+                start: float = None,
+                stop: float = None,
+                streams: Optional[List[Tuple[str, ...]]] = None,
+                sampleRate: int = None,
+                num_workers: int = 2) -> dask.dataframe:
+        pass
+
     def results(self,
                 job_id: str = None,
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
-                sampleRate: int = None) -> SimulationResult:
+                sampleRate: int = None,
+                num_workers: int = 2) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -406,7 +417,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate)
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
         return SimulationResult(job, data)
 
     def results_poll(
