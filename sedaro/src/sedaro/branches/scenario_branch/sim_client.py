@@ -390,12 +390,19 @@ class Simulation:
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
                 num_workers: int = 2) -> dask.dataframe:
+
         metadata = self.__get_metadata(sim_id := job_id['dataArray'])
         filtered_streams = self.__get_filtered_streams(streams, metadata)
         num_workers = min(num_workers, len(filtered_streams))
         workers = [[] for _ in range(num_workers)]
         for i, stream in enumerate(streams):
             workers[i % num_workers].append(stream)
+
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, [download_bar] * num_workers)
+        download_bar.complete()
 
     def results(self,
                 job_id: str = None,
