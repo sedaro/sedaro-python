@@ -367,70 +367,6 @@ class Simulation:
         else:
             download_manager.archive()
 
-    def results_plain(
-        self,
-        *,
-        id: str = None,
-        start: float = None,
-        stop: float = None,
-        binWidth: float = None,
-        limit: float = None,
-        axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None,
-        sampleRate: int = None,
-        continuationToken: str = None,
-    ):
-        """Query latest scenario and return results as a plain dictionary from the Data Service with options to
-        customize the response. If an `id` is passed, query for corresponding result rather than latest.
-
-        Args:
-            id (str, optional): `id` of the data array to fetch (found on `dataArray` attribute on a response from the\
-                `status` or `start` methods)
-
-            start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
-                simulation.
-
-            stop (float, optional): the end time of the data to fetch, in MJD format. Defaults to the end of the\
-                simulation.
-
-            limit (int, optional): the maximum number of points in time for which to fetch data for any stream. If not
-                specified, there is no limit and data is fetched at full resolution. If a limit is specified, the\
-                duration of the time from `start` to `stop` is divided into the specified number of bins of equal\
-                duration, and data is selected from at most one point in time within each bin. Not that it is not\
-                guaranteed that you will receive exactly as many points in time as the limit you specify; you may\
-                receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps\
-                through the simulation.
-
-            binWidth (float, optional): the width of the bins used in downsampling data, as described for `limit`. Note\
-                that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you\
-                would like to downsample data, use either `limit` or `binWidth`, but not both.
-
-            streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the docstring for the `results` method below. If no list is provided,\
-                data is fetched for all streams.
-
-            axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
-                `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
-
-        Raises:
-            NoSimResultsError: if no simulation has been started.
-
-        Returns:
-            dict: response from the `get` request
-        """
-
-        return self.__fetch(
-            id=id,
-            start=start,
-            stop=stop,
-            binWidth=binWidth,
-            limit=limit,
-            axisOrder=axisOrder,
-            streams=streams,
-            sampleRate=sampleRate,
-            continuationToken=continuationToken,
-        )
-
     def results(self,
                 job_id: str = None,
                 start: float = None,
@@ -645,63 +581,6 @@ class SimulationHandle:
         """
         self.__sim_client.terminate(self.__job['id'])
         return self
-
-    def results_plain(
-        self,
-        start: float = None,
-        stop: float = None,
-        binWidth: float = None,
-        limit: float = None,
-        axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None,
-        sampleRate: int = None,
-        continuationToken: bytes = None,
-    ):
-        """Query simulation results as a plain dictionary from the Data Service with options to
-        customize the response.
-
-        Args:
-            start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
-                simulation.
-
-            stop (float, optional): the end time of the data to fetch, in MJD format. Defaults to the end of the\
-                simulation.
-
-            limit (int, optional): the maximum number of points in time for which to fetch data for any stream. If not
-                specified, there is no limit and data is fetched at full resolution. If a limit is specified, the\
-                duration of the time from `start` to `stop` is divided into the specified number of bins of equal\
-                duration, and data is selected from at most one point in time within each bin. Not that it is not\
-                guaranteed that you will receive exactly as many points in time as the limit you specify; you may\
-                receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps\
-                through the simulation.
-
-            binWidth (float, optional): the width of the bins used in downsampling data, as described for `limit`. Note\
-                that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you\
-                would like to downsample data, use either `limit` or `binWidth`, but not both.
-
-            streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the previous section. If no list is provided, data is fetched for all streams.
-
-            axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
-                `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
-
-        Raises:
-            NoSimResultsError: if no simulation has been started.
-
-        Returns:
-            dict: response from the `get` request
-        """
-        return self.__sim_client.results_plain(
-            id=self.__job['dataArray'],
-            start=start,
-            stop=stop,
-            binWidth=binWidth,
-            limit=limit,
-            axisOrder=axisOrder,
-            streams=streams,
-            sampleRate=sampleRate,
-            continuationToken=continuationToken,
-        )
 
     def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
         """Query simulaiton results.
