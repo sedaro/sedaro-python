@@ -277,7 +277,6 @@ class Simulation:
         stop: float = None,
         binWidth: float = None,
         limit: float = None,
-        axisOrder: str = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
@@ -306,11 +305,7 @@ class Simulation:
         if len(streams) > 0:
             encodedStreams = ','.join(['.'.join(x) for x in streams])
             url += f'&streams={encodedStreams}'
-        if axisOrder is not None:
-            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
-            url += f'&axisOrder={axisOrder}'
+        url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
         if continuationToken is not None:
