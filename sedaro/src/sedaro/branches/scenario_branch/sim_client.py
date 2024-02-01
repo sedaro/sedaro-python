@@ -363,14 +363,39 @@ class Simulation:
         else:
             download_manager.archive()
 
+    def __get_filtered_streams(self, requested_streams: list, metadata: dict):
+        streams_raw = metadata['streams']
+        streams_true = {}
+        for stream in streams_raw:
+            assert len(stream) == 2
+            if stream[0] not in streams_true:
+                streams_true[stream[0]] = []
+            streams_true[stream[0]].append(stream[1])
+        filtered_streams = []
+        for stream in requested_streams:
+            if stream[0] in streams_true:
+                if len(stream) == 1:
+                    for v in streams_true[stream[0]]:
+                        filtered_streams.append((stream[0], v))
+                else:
+                    if stream[0] in streams_true:
+                        if stream[1] in streams_true[stream[0]]:
+                            filtered_streams.append(stream[0], stream[1])
+        return filtered_streams
+
     def __results(self,
-                simulation_id: str = None,
+                job_id: str = None,
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
                 num_workers: int = 2) -> dask.dataframe:
-        pass
+        metadata = self.__get_metadata(sim_id := job_id['dataArray'])
+        filtered_streams = self.__get_filtered_streams(streams, metadata)
+        num_workers = min(num_workers, len(filtered_streams))
+        workers = [[] for _ in range(num_workers)]
+        for i, stream in enumerate(streams):
+            workers[i % num_workers].append(stream)
 
     def results(self,
                 job_id: str = None,
@@ -417,7 +442,8 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        # data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        data = NotImplemented
         return SimulationResult(job, data)
 
     def results_poll(
