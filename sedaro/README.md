@@ -150,7 +150,7 @@ solar_cell.delete()
 try:
     solar_cell.update(partNumber="987654321")
 except NonexistantBlockError as e:
-    assert str(e) == f'The referenced "SolarCell" (id: {sc_id}) no longer exists.'
+    assert str(e) == f'The referenced Block with ID: {sc_id} no longer exists.'
 ```
 
 ### Multi-Block CRUD
@@ -358,8 +358,8 @@ Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connec
 sim_client = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start the simulation
-# Note that when `sim_client.start()` returns, the simulation job has entered your Workspace queue to be built and run. 
-# Passing `wait=True` to start() will wait until the simulation has entered the RUNNING state before returning. 
+# Note that when `sim_client.start()` returns, the simulation job has entered your Workspace queue to be built and run.
+# Passing `wait=True` to start() will wait until the simulation has entered the RUNNING state before returning.
 # At this time, the simulation is ready for external state production/consumption
 simulation_handle = sim_client.start(wait=True)
 ```

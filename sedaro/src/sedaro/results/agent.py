@@ -11,7 +11,7 @@ from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 class SedaroAgentResult:
 
-    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None, axis: str = 'TIME_MAJOR'):
+    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -20,7 +20,6 @@ class SedaroAgentResult:
         self.__name = name
         self.__block_structures = block_structures
         self.__series = series
-        self.__axis = axis
         self.__block_ids = sorted(set(
             block_id
             for module in self.__series
@@ -66,7 +65,7 @@ class SedaroAgentResult:
                 block_data[module]['time'] = self.__series[module]['time']
                 block_data[module]['series'] = self.__series[module]['series'][id_]
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
-        return SedaroBlockResult(block_structure, block_data, self.__axis)
+        return SedaroBlockResult(block_structure, block_data)
 
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
         '''Save agent result to compressed JSON file.'''
@@ -75,7 +74,6 @@ class SedaroAgentResult:
                 'name': self.__name,
                 'block_structures': self.__block_structures,
                 'series': self.__series,
-                'axis': self.__axis,
             }
             json.dump(contents, json_file)
             if verbose:
@@ -86,7 +84,7 @@ class SedaroAgentResult:
         '''Load agent result from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
-            return cls(contents['name'], contents['block_structures'], contents['series'], axis=contents['axis'])
+            return cls(contents['name'], contents['block_structures'], contents['series'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
