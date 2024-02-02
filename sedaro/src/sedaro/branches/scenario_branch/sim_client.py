@@ -354,7 +354,7 @@ class Simulation:
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
-        download_manager.archive()
+        download_manager.finalize()
 
     def __get_filtered_streams(self, requested_streams: list, metadata: dict):
         streams_raw = metadata['streams']

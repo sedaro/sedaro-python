@@ -92,11 +92,8 @@ def prep_stream_id(stream_id):
     return prepped_stream_id
 
 class DownloadWorker:
-    def __init__(self, tmpdir, filename, download_bar, archive_bar):
-        self.tmpdir = tmpdir
-        self.filename = filename
+    def __init__(self, download_bar):
         self.download_bar = download_bar
-        self.archive_bar = archive_bar
         self.streams = {}
 
     def ingest(self, page):
@@ -105,10 +102,8 @@ class DownloadWorker:
                 self.streams[stream_id] = StreamManager(self.download_bar)
             self.streams[stream_id].ingest(stream_id, stream_data)
 
-    def archive(self):
-        for stream_id, stream_manager in self.streams.items():
+    def finalize(self):
+        for _, stream_manager in self.streams.items():
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
-            stream_manager.dataframe.to_parquet(f"{self.tmpdir}/{prep_stream_id(stream_id)}", overwrite=True, ignore_divisions=True)
-            self.archive_bar.update()
