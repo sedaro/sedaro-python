@@ -320,8 +320,7 @@ class Simulation:
             _response = response.parse()
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
-                if download_manager is not None:
-                    download_manager.ingest(_response['series'])
+                download_manager.ingest(_response['series'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
@@ -340,8 +339,7 @@ class Simulation:
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
                     _page = page.parse()
-                    if download_manager is not None:
-                        download_manager.ingest(_page['series'])
+                    download_manager.ingest(_page['series'])
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
@@ -356,12 +354,7 @@ class Simulation:
                     concat_results(result['series'], _page['series'])
                     update_metadata(result['meta'], _page['meta'])
                 _response = result
-            if download_manager is None:
-                _response['series'] = set_nested(_response['series'])
-        if download_manager is None:
-            return _response
-        else:
-            download_manager.archive()
+        download_manager.archive()
 
     def __get_filtered_streams(self, requested_streams: list, metadata: dict):
         streams_raw = metadata['streams']
