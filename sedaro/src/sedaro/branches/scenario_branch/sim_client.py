@@ -376,13 +376,21 @@ class Simulation:
                             filtered_streams.append(stream[0], stream[1])
         return filtered_streams
 
+    def __downloadInParallel(self, sim_id, streams, params, download_bar):
+        start = params['start']
+        stop = params['stop']
+        sampleRate = params['sampleRate']
+        download_worker = DownloadWorker(download_bar)
+        streams_fmt = [tuple(stream.split('.')) for stream in streams]
+        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_worker)
+
     def __results(self,
                 job_id: str = None,
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
-                num_workers: int = 2) -> dask.dataframe:
+                num_workers: int = 2) -> "dict[str, dask.dataframe]":
 
         metadata = self.__get_metadata(sim_id := job_id['dataArray'])
         filtered_streams = self.__get_filtered_streams(streams, metadata)
@@ -488,11 +496,6 @@ class Simulation:
             response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
         response_dict = json.loads(response.data)
         return response_dict
-
-    def __downloadInParallel(self, sim_id, streams, tmpdir, filename, download_bar, archive_bar):
-        download_worker = DownloadWorker(tmpdir, filename, download_bar, archive_bar)
-        streams_fmt = [tuple(stream.split('.')) for stream in streams]
-        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=1, download_manager=download_worker)
 
     def download(
         self,
