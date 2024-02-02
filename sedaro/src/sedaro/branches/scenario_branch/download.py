@@ -107,3 +107,17 @@ class DownloadWorker:
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
+
+    def add_metadata(self, metadata):
+        self.metadata = metadata
+
+    def update_metadata(self, new_metadata):
+        for k in new_metadata['counts']:
+            if k not in self.metadata['counts']:
+                self.metadata['counts'][k] = 0
+            self.metadata['counts'][k] += new_metadata['counts'][k]
+
+    def finalize_metadata(self, others: "list[DownloadWorker]"):
+        for other in others:
+            self.update_metadata(other.metadata)
+        return self.metadata

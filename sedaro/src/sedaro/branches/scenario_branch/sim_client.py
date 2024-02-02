@@ -62,10 +62,10 @@ def concat_results(main, other):
             concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
-    for k in other['counts']:
-        if k not in main['counts']:
-            main['counts'][k] = 0
-        main['counts'][k] += other['counts'][k]
+        for k in other['counts']:
+            if k not in main['counts']:
+                main['counts'][k] = 0
+            main['counts'][k] += other['counts'][k]
 
 def set_numeric_as_list(d):
     if isinstance(d, dict):
@@ -321,6 +321,7 @@ class Simulation:
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 download_manager.ingest(_response['series'])
+                download_manager.add_metadata(_response['meta'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
@@ -333,7 +334,6 @@ class Simulation:
             raise SedaroApiException(status=response.status, reason=reason)
         if is_v3: # keep fetching pages until we get an empty continuation token
             if has_nonempty_ctoken: # need to fetch more pages
-                result = _response
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
@@ -351,9 +351,7 @@ class Simulation:
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
-                    concat_results(result['series'], _page['series'])
-                    update_metadata(result['meta'], _page['meta'])
-                _response = result
+                    download_manager.update_metadata(_page['meta'])
         download_manager.finalize()
 
     def __get_filtered_streams(self, requested_streams: list, metadata: dict):
@@ -409,7 +407,7 @@ class Simulation:
         stream_results = {}
         for download_manager in download_managers:
             stream_results.update(download_manager.streams)
-        return stream_results
+        return {'meta': download_managers[0].finalize_metadata(download_managers[1:]), 'series': stream_results}
 
     def results(self,
                 job_id: str = None,
