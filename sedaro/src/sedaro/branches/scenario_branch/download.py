@@ -80,6 +80,9 @@ class StreamManager:
         columns_to_remove = self.select_columns_to_remove()
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
+    def finalize(self):
+        return self.dataframe
+
 def prep_stream_id(stream_id):
     engines = {
         '0': 'GNC',
@@ -107,6 +110,8 @@ class DownloadWorker:
             stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
+        for k in self.streams:
+            self.streams[k] = self.streams[k].finalize()
 
     def add_metadata(self, metadata):
         self.metadata = metadata
