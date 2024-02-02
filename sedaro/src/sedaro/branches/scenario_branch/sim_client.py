@@ -376,13 +376,12 @@ class Simulation:
                             filtered_streams.append(stream[0], stream[1])
         return filtered_streams
 
-    def __downloadInParallel(self, sim_id, streams, params, download_bar):
+    def __downloadInParallel(self, sim_id, streams, params, download_manager):
         start = params['start']
         stop = params['stop']
         sampleRate = params['sampleRate']
-        download_worker = DownloadWorker(download_bar)
         streams_fmt = [tuple(stream.split('.')) for stream in streams]
-        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_worker)
+        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
 
     def __results(self,
                 job_id: str = None,
@@ -400,10 +399,14 @@ class Simulation:
             workers[i % num_workers].append(stream)
 
         download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, [download_bar] * num_workers)
+            executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers)
+            executor.shutdown(wait=True)
         download_bar.complete()
+
+        stream_results = {}
 
     def results(self,
                 job_id: str = None,
