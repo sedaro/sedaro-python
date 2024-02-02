@@ -407,6 +407,9 @@ class Simulation:
         download_bar.complete()
 
         stream_results = {}
+        for download_manager in download_managers:
+            stream_results.update(download_manager.streams)
+        return stream_results
 
     def results(self,
                 job_id: str = None,
@@ -453,8 +456,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        # data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
-        data = NotImplemented
+        data = self.__results(job_id, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
         return SimulationResult(job, data)
 
     def results_poll(
