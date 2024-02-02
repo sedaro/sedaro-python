@@ -356,23 +356,26 @@ class Simulation:
 
     def __get_filtered_streams(self, requested_streams: list, metadata: dict):
         streams_raw = metadata['streams']
-        streams_true = {}
-        for stream in streams_raw:
-            assert len(stream) == 2
-            if stream[0] not in streams_true:
-                streams_true[stream[0]] = []
-            streams_true[stream[0]].append(stream[1])
-        filtered_streams = []
-        for stream in requested_streams:
-            if stream[0] in streams_true:
-                if len(stream) == 1:
-                    for v in streams_true[stream[0]]:
-                        filtered_streams.append((stream[0], v))
-                else:
-                    if stream[0] in streams_true:
-                        if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append(stream[0], stream[1])
-        return filtered_streams
+        if requested_streams is None:
+            return streams_raw
+        else:
+            streams_true = {}
+            for stream in streams_raw:
+                stream_parts = stream.split('.')
+                if stream_parts[0] not in streams_true:
+                    streams_true[stream_parts[0]] = []
+                streams_true[stream_parts[0]].append(stream_parts[1])
+            filtered_streams = []
+            for stream in requested_streams:
+                if stream[0] in streams_true:
+                    if len(stream) == 1:
+                        for v in streams_true[stream[0]]:
+                            filtered_streams.append((stream[0], v))
+                    else:
+                        if stream[0] in streams_true:
+                            if stream[1] in streams_true[stream[0]]:
+                                filtered_streams.append(stream[0], stream[1])
+            return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager):
         start = params['start']
