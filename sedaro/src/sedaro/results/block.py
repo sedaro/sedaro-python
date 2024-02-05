@@ -72,7 +72,7 @@ class SedaroBlockResult:
         return self.__getattr__(name)
 
     def to_file(self, filename: Union[str, Path], verbose=True) -> None:
-        '''Save agent result to compressed JSON file.'''
+        '''Save block result to compressed JSON file.'''
         with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
             contents = {'structure': self.__structure, 'series': self.__series}
             json.dump(contents, json_file)
@@ -81,7 +81,7 @@ class SedaroBlockResult:
 
     @classmethod
     def from_file(cls, filename: Union[str, Path]):
-        '''Load agent result from compressed JSON file.'''
+        '''Load block result from compressed JSON file.'''
         with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
             contents = json.load(json_file)
             return cls(contents['structure'], contents['series'])
