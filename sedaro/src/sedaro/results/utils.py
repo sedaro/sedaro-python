@@ -113,7 +113,6 @@ def _restructure_data(series, agents, meta):
         sub_series = series[series_key]
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
-            print(blocks[agent_id])
         data[agent_name][engine_name] = {
             'time': time,
             'series': _simplify_series(sub_series, blocks[agent_id])
