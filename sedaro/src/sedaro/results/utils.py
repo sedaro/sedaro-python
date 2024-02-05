@@ -109,6 +109,7 @@ def _restructure_data(series, agents, meta):
         if agent_name not in data:
             data[agent_name] = {}
 
+        print(list(series[series_key].index))
         time, sub_series = series[series_key]
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))

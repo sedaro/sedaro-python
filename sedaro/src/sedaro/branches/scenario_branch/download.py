@@ -81,7 +81,7 @@ class StreamManager:
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
     def finalize(self):
-        return self.dataframe
+        return self.dataframe.set_index('time')
 
 def prep_stream_id(stream_id):
     engines = {

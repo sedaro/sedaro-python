@@ -29,6 +29,7 @@ class SimulationResult:
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
+        print(agent_id_name_map)
         self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
         try:
             axis = self.__meta['axis']
