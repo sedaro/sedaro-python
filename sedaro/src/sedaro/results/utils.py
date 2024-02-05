@@ -87,7 +87,7 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     return data
 
 
-def _restructure_data(series, agents, meta):
+def _restructure_data(series, agents):
     '''Build a simplified internal data structure.
 
     Creates a dictionary with the following key hierarchy:
@@ -100,7 +100,6 @@ def _restructure_data(series, agents, meta):
                         Variable Name
     '''
     data = {}
-    blocks = {}
     for series_key in series:
         agent_id, engine_id = series_key.split("/")
         agent_name = agents[agent_id]
@@ -109,15 +108,11 @@ def _restructure_data(series, agents, meta):
         if agent_name not in data:
             data[agent_name] = {}
 
-        time = list(series[series_key].index)
-        sub_series = series[series_key]
-        if agent_id not in blocks:
-            blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
         data[agent_name][engine_name] = {
-            'time': time,
-            'series': _simplify_series(sub_series, blocks[agent_id])
+            'time': list(series[series_key].index),
+            'series': series[series_key]
         }
-    return data, blocks
+    return data
 
 
 def _get_series_type(series):
