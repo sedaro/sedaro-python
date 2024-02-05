@@ -160,7 +160,22 @@ class SimulationResult:
 
     @classmethod
     def load(cls, filename: Union[str, Path]):
-        NotImplemented
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            shutil.unpack_archive(filename, tmpdir, 'zip')
+            with open(f"{tmpdir}/simulation.json", "r") as fp:
+                simulation = json.load(fp)
+            data = {}
+            with open(f"{tmpdir}/meta.json", "r") as fp:
+                data['meta'] = json.load(fp)
+            parquets = os.listdir(f"{tmpdir}/data/")
+            data['series'] = {}
+            for agent in parquets:
+                df = dd.from_parquet(f"{tmpdir}/data/{agent}")
+                data['series'][agent] = df
+        except Exception as e:
+            raise e
+        return SimulationResult(simulation, data)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
