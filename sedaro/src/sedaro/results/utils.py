@@ -100,10 +100,12 @@ def _restructure_data(series, agents):
                         Variable Name
     '''
     data = {}
+    agent_list = []
     for series_key in series:
         agent_id, engine_id = series_key.split("/")
         agent_name = agents[agent_id]
         engine_name = ENGINE_MAP[engine_id]
+        agent_list.append(agent_id)
 
         if agent_name not in data:
             data[agent_name] = {}
@@ -112,7 +114,7 @@ def _restructure_data(series, agents):
             'time': list(series[series_key].index),
             'series': series[series_key]
         }
-    return data
+    return data, agent_list
 
 
 def _get_series_type(series):
