@@ -128,7 +128,7 @@ class SimulationResult:
             for agent in self.__data['series']:
                 path = f"{tmpdir}/data/{agent}"
                 df : dd = self.__data['series'][agent]
-                df.to_parquet(path)
+                df.to_parquet(path.replace('/', ' '))
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
             curr_zip_base = ''
             # if the path is to another directory, make that directory if nonexistent, and move the zip there
@@ -171,7 +171,7 @@ class SimulationResult:
             data['series'] = {}
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
-                data['series'][agent] = df
+                data['series'][agent.replace(' ', '/')] = df
         except Exception as e:
             raise e
         return SimulationResult(simulation, data)
