@@ -1,9 +1,12 @@
 
+import dask.dataframe as dd
 import datetime as dt
-import gzip
 import json
+import os
 from pathlib import Path
+import shutil
 from typing import Dict, List, Union
+import uuid6
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
@@ -25,7 +28,8 @@ class SimulationResult:
             'status': str(simulation['status']),
         }
         self.__branch = simulation['branch']
-        self.__data = data
+        self.___simulation = simulation
+        self.___data = data
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
@@ -113,7 +117,25 @@ class SimulationResult:
     #         return SimulationResult(contents['simulation'], contents['data'])
 
     def save(self, filename: Union[str, Path]):
-        NotImplemented
+        success = False
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            os.mkdir(tmpdir)
+            with open(f"{tmpdir}/simulation.json", "w") as fp:
+                json.dump(self.___simulation, fp)
+            with open(f"{tmpdir}/meta.json", "w") as fp:
+                json.dump(self.___data['meta'], fp)
+            os.mkdir(f"{tmpdir}/data")
+            for agent in self.___data['series']:
+                path = f"{tmpdir}/data/{agent}"
+                df : dd = self.___data['series'][agent]
+                df.to_parquet(path)
+            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
+        except Exception as e:
+            raise e
+        finally:
+            if not success:
+                os.system(f"rm -r {tmpdir}")
 
     @classmethod
     def load(cls, filename: Union[str, Path]):
