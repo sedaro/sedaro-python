@@ -28,8 +28,7 @@ class SimulationResult:
             'status': str(simulation['status']),
         }
         self.__branch = simulation['branch']
-        self.___simulation = simulation
-        self.___data = data
+        self.__data = data
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
@@ -122,13 +121,13 @@ class SimulationResult:
             tmpdir = f".{uuid6.uuid7()}"
             os.mkdir(tmpdir)
             with open(f"{tmpdir}/simulation.json", "w") as fp:
-                json.dump(self.___simulation, fp)
+                json.dump(self.__simulation, fp)
             with open(f"{tmpdir}/meta.json", "w") as fp:
-                json.dump(self.___data['meta'], fp)
+                json.dump(self.__data['meta'], fp)
             os.mkdir(f"{tmpdir}/data")
-            for agent in self.___data['series']:
+            for agent in self.__data['series']:
                 path = f"{tmpdir}/data/{agent}"
-                df : dd = self.___data['series'][agent]
+                df : dd = self.__data['series'][agent]
                 df.to_parquet(path)
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
             curr_zip_base = ''
@@ -171,7 +170,7 @@ class SimulationResult:
             parquets = os.listdir(f"{tmpdir}/data/")
             data['series'] = {}
             for agent in parquets:
-                df = dd.from_parquet(f"{tmpdir}/data/{agent}")
+                df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 data['series'][agent] = df
         except Exception as e:
             raise e
