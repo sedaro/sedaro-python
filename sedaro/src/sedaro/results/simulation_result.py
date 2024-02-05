@@ -101,20 +101,6 @@ class SimulationResult:
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         return SedaroAgentResult(name, self.__agent_ids[agent_id], self.__dataframes[name], initial_state=initial_state)
 
-    # def to_file(self, filename: Union[str, Path]) -> None:
-    #     '''Save simulation result to compressed JSON file.'''
-    #     with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-    #         contents = {'data': self.__data, 'simulation': self.__simulation}
-    #         json.dump(contents, json_file)
-    #         print(f"💾 Successfully saved to {filename}")
-
-    # @classmethod
-    # def from_file(cls, filename: Union[str, Path]):
-    #     '''Load simulation result from compressed JSON file.'''
-    #     with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-    #         contents = json.load(json_file)
-    #         return SimulationResult(contents['simulation'], contents['data'])
-
     def save(self, filename: Union[str, Path]):
         success = False
         try:
