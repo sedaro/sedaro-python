@@ -131,6 +131,27 @@ class SimulationResult:
                 df : dd = self.___data['series'][agent]
                 df.to_parquet(path)
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
+            curr_zip_base = ''
+            # if the path is to another directory, make that directory if nonexistent, and move the zip there
+            if len(path_split := filename.split('/')) > 1:
+                path_dirs = '/'.join(path_split[:-1])
+                Path(path_dirs).mkdir(parents=True, exist_ok=True)
+                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
+                zip_desired_name = path_split[-1]
+            else:
+                zip_desired_name = filename
+            # rename zip to specified name
+            if len(curr_zip_base) > 0:
+                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
+                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
+            else:
+                zip_new_path = zip_desired_name
+                curr_zip_name = tmpzip
+            os.rename(f"{curr_zip_name}.zip", zip_new_path)
+            # remove tmpdir
+            os.system(f"rm -r {tmpdir}")
+            success = True
+            print(f"Successfully archived at {zip_new_path}")
         except Exception as e:
             raise e
         finally:
