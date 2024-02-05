@@ -29,9 +29,7 @@ class SimulationResult:
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        print(agent_id_name_map)
-        # self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
-        self.__dataframes = _restructure_data(raw_series, agent_id_name_map)
+        self.__dataframes, self.__agent_ids = _restructure_data(raw_series, agent_id_name_map)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
@@ -57,7 +55,7 @@ class SimulationResult:
         return tuple([
             entry['name'] for id_, entry
             in self.__meta['structure']['scenario']['blocks'].items()
-            if _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers'], super_type='PeripheralAgent') and id_ in self._agent_blocks
+            if _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers'], super_type='PeripheralAgent') and id_ in self.__agent_ids
         ])
 
     @property
@@ -88,7 +86,7 @@ class SimulationResult:
     def __agent_id_from_name(self, name: str) -> str:
         for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
             if name == entry.get('name') and _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers']):
-                if id_ in self._agent_blocks:
+                if id_ in self.__agent_ids:
                     return id_
         else:
             raise ValueError(f"Agent {name} not found in data set.")
@@ -98,7 +96,7 @@ class SimulationResult:
         agent_id = self.__agent_id_from_name(name)
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state)
+        return SedaroAgentResult(name, self.__agent_ids[agent_id], self.__dataframes[name], initial_state=initial_state)
 
     def to_file(self, filename: Union[str, Path]) -> None:
         '''Save simulation result to compressed JSON file.'''
