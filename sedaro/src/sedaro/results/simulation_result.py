@@ -97,9 +97,13 @@ class SimulationResult:
     def agent(self, name: str) -> SedaroAgentResult:
         '''Query results for a particular agent by name.'''
         agent_id = self.__agent_id_from_name(name)
+        agent_dataframes = {}
+        for stream_id in self.__data['series']:
+            if stream_id.startswith(agent_id):
+                agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__agent_ids[agent_id], self.__dataframes[name], initial_state=initial_state)
+        return SedaroAgentResult(name, self.__agent_ids[agent_id], self.__data['series'][agent_id], initial_state=initial_state)
 
     def save(self, filename: Union[str, Path]):
         success = False
