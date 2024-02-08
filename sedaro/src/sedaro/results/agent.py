@@ -180,7 +180,7 @@ class SedaroAgentResult:
         print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':
-                block_name = self.__block_structures[block_id].get('name', None)
+                block_name = self.__block_uuids[block_id]
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
