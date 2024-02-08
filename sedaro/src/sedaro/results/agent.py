@@ -10,7 +10,7 @@ import uuid6
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, HFILL, hfill
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
 
 
 class SedaroAgentResult:
@@ -172,7 +172,7 @@ class SedaroAgentResult:
 
         print("🧩 Simulated Modules")
         for module in self.__series:
-            print(f'    • {ENGINE_EXPANSION[module]}')
+            print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
 
         print("\n📦 Available Blocks")
         print('    ' + '-' * 58)
