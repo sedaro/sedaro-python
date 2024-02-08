@@ -10,7 +10,7 @@ import uuid6
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, hfill, to_time_major)
+                    _get_agent_id_name_map, _get_agent_mapping, hfill)
 
 
 class SimulationResult:
@@ -32,7 +32,7 @@ class SimulationResult:
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        self.__dataframes, self.__agent_ids = _restructure_data(raw_series, agent_id_name_map)
+        self.__agent_ids = _get_agent_mapping(raw_series, agent_id_name_map)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'

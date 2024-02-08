@@ -87,34 +87,12 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     return data
 
 
-def _restructure_data(series, agents):
-    '''Build a simplified internal data structure.
-
-    Creates a dictionary with the following key hierarchy:
-
-        Agent Name
-            Engine Name (gnc, cdh, power, thermal)
-                Time
-                Series
-                    Block ID (or root)
-                        Variable Name
-    '''
-    data = {}
+def _get_agent_mapping(series, agents):
     agent_mapping = {}
     for series_key in series:
-        agent_id, engine_id = series_key.split("/")
-        agent_name = agents[agent_id]
-        engine_name = ENGINE_MAP[engine_id]
-        agent_mapping[agent_id] = agent_name
-
-        if agent_name not in data:
-            data[agent_name] = {}
-
-        data[agent_name][engine_name] = {
-            'time': list(series[series_key].index),
-            'series': series[series_key]
-        }
-    return data, agent_mapping
+        agent_id = series_key.split("/")[0]
+        agent_mapping[agent_id] = agents[agent_id]
+    return agent_mapping
 
 
 def _get_series_type(series):
