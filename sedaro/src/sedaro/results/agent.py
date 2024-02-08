@@ -37,17 +37,25 @@ class SedaroAgentResult:
         SedaroSimulationResult or the .from_file method of this class.
         '''
         self.__name = name
+        for k in series:
+            self.__agent_uuid = k.split('/')[0]
+            break
         self.__structure = structure
         self.__block_structures = block_structures
         self.__series = series
+        self.__block_uuids = {}
+        for block_uuid in self.__structure['agents'][self.__agent_uuid]['blocks']:
+            if 'name' in self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]:
+                self.__block_uuids[block_uuid] = self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]['name']
+            else:
+                self.__block_uuids[block_uuid] = None
         self.__block_ids = sorted(set(
-            block_id
+            block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
             for module in self.__series
             for block_id in self.__series[module].columns.tolist()
         ),
             reverse=True
         )
-        print(self.__block_structures)
         self.__initial_state = initial_state
         self.__initialize_block_structure()
         self.__get_agent_block_uuids()
