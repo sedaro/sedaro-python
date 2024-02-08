@@ -1,7 +1,9 @@
 import gzip
 import json
+import os
 from pathlib import Path
 from typing import Generator, List, Union
+import uuid6
 
 from pydash import merge
 
@@ -23,7 +25,7 @@ class SedaroAgentResult:
         self.__block_ids = sorted(set(
             block_id
             for module in self.__series
-            for block_id in self.__series[module]['series']
+            for block_id in self.__series[module].columns.tolist()
         ),
             reverse=True
         )
@@ -67,24 +69,85 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
-        '''Save agent result to compressed JSON file.'''
-        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {
-                'name': self.__name,
-                'block_structures': self.__block_structures,
-                'series': self.__series,
-            }
-            json.dump(contents, json_file)
-            if verbose:
-                print(f"💾 Successfully saved to {filename}")
+    def save(self, filename: Union[str, Path]):
+        success = False
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            # os.mkdir(tmpdir)
+            # with open(f"{tmpdir}/simulation.json", "w") as fp:
+            #     json.dump(self.__simulation, fp)
+            # with open(f"{tmpdir}/meta.json", "w") as fp:
+            #     json.dump(self.__data['meta'], fp)
+            # os.mkdir(f"{tmpdir}/data")
+            # for agent in self.__data['series']:
+            #     path = f"{tmpdir}/data/{agent}"
+            #     df : dd = self.__data['series'][agent]
+            #     df.to_parquet(path.replace('/', ' '))
+            # shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
+            # curr_zip_base = ''
+            # # if the path is to another directory, make that directory if nonexistent, and move the zip there
+            # if len(path_split := filename.split('/')) > 1:
+            #     path_dirs = '/'.join(path_split[:-1])
+            #     Path(path_dirs).mkdir(parents=True, exist_ok=True)
+            #     shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
+            #     zip_desired_name = path_split[-1]
+            # else:
+            #     zip_desired_name = filename
+            # # rename zip to specified name
+            # if len(curr_zip_base) > 0:
+            #     zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
+            #     curr_zip_name = f"{curr_zip_base}/{tmpzip}"
+            # else:
+            #     zip_new_path = zip_desired_name
+            #     curr_zip_name = tmpzip
+            # os.rename(f"{curr_zip_name}.zip", zip_new_path)
+            # # remove tmpdir
+            # os.system(f"rm -r {tmpdir}")
+            # success = True
+            # print(f"Successfully archived at {zip_new_path}")
+        except Exception as e:
+            raise e
+        finally:
+            if not success:
+                os.system(f"rm -r {tmpdir}")
 
     @classmethod
-    def from_file(cls, filename: Union[str, Path]):
-        '''Load agent result from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return cls(contents['name'], contents['block_structures'], contents['series'])
+    def load(cls, filename: Union[str, Path]):
+        try:
+            name, block_structures, series, initial_state = NotImplemented
+            # shutil.unpack_archive(filename, tmpdir, 'zip')
+            # with open(f"{tmpdir}/simulation.json", "r") as fp:
+            #     simulation = json.load(fp)
+            # data = {}
+            # with open(f"{tmpdir}/meta.json", "r") as fp:
+            #     data['meta'] = json.load(fp)
+            # parquets = os.listdir(f"{tmpdir}/data/")
+            # data['series'] = {}
+            # for agent in parquets:
+            #     df = dd.read_parquet(f"{tmpdir}/data/{agent}")
+            #     data['series'][agent.replace(' ', '/')] = df
+        except Exception as e:
+            raise e
+        return SedaroAgentResult(name, block_structures, series, initial_state)
+
+    # def to_file(self, filename: Union[str, Path], verbose=True) -> None:
+    #     '''Save agent result to compressed JSON file.'''
+    #     with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
+    #         contents = {
+    #             'name': self.__name,
+    #             'block_structures': self.__block_structures,
+    #             'series': self.__series,
+    #         }
+    #         json.dump(contents, json_file)
+    #         if verbose:
+    #             print(f"💾 Successfully saved to {filename}")
+
+    # @classmethod
+    # def from_file(cls, filename: Union[str, Path]):
+    #     '''Load agent result from compressed JSON file.'''
+    #     with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
+    #         contents = json.load(json_file)
+    #         return cls(contents['name'], contents['block_structures'], contents['series'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
