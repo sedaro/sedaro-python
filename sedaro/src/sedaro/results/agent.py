@@ -143,7 +143,7 @@ class SedaroAgentResult:
         print("⍆ The following commands have an optional variables argument which is a list of blockname.variable prefixes to filter on.")
         print("📊 Display agent modules variables statistics with .stats( module ) ")
         print(f"🧩        Where module must be one of the following: { [module for module in self.__series] } ")
-        print("📊 Display all agent block variables histograms for a study simulation with .sim_histogram( sim_id, output_html=False, variables=None )")
+        print("📊 Display all agent module variables histograms for a study simulation with .sim_histogram( module, output_html=False, variables=None )")
         print("📈📉 Display block variables scatter matrix plot  ")
         print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 

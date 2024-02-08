@@ -32,7 +32,7 @@ class Study:
         with self._sedaro.api_client() as api:
             yield jobs_api.JobsApi(api)
 
-    def start(self, iterations: int) -> 'StudyHandle':
+    def start(self, iterations: int, overrides_id: str = None) -> 'StudyHandle':
         """Starts study corresponding to the respective Sedaro Scenario Branch id.
 
         Returns:
@@ -41,7 +41,7 @@ class Study:
         with self.__jobs_client() as jobs:
             res = jobs.start_study(
                 path_params={'branchId': self._branch.id},
-                query_params={'iterations': iterations},
+                query_params={'iterations': iterations, 'override_id': overrides_id},
                 **COMMON_API_KWARGS
             )
         return StudyHandle(body_from_res(res), self)
