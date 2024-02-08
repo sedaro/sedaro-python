@@ -118,40 +118,21 @@ class SedaroAgentResult:
     @classmethod
     def load(cls, filename: Union[str, Path]):
         try:
-            name, block_structures, series, initial_state = NotImplemented
-            # shutil.unpack_archive(filename, tmpdir, 'zip')
-            # with open(f"{tmpdir}/simulation.json", "r") as fp:
-            #     simulation = json.load(fp)
-            # data = {}
-            # with open(f"{tmpdir}/meta.json", "r") as fp:
-            #     data['meta'] = json.load(fp)
-            # parquets = os.listdir(f"{tmpdir}/data/")
-            # data['series'] = {}
-            # for agent in parquets:
-            #     df = dd.read_parquet(f"{tmpdir}/data/{agent}")
-            #     data['series'][agent.replace(' ', '/')] = df
+            tmpdir = f".{uuid6.uuid7()}"
+            shutil.unpack_archive(filename, tmpdir, 'zip')
+            with open(f"{tmpdir}/meta.json", "r") as fp:
+                meta = json.load(fp)
+                name = meta['name']
+                block_structures = meta['block_structures']
+                initial_state = meta['initial_state']
+            engines = {}
+            parquets = os.listdir(f"{tmpdir}/data/")
+            for agent in parquets:
+                df = dd.read_parquet(f"{tmpdir}/data/{agent}")
+                engines[agent.replace(' ', '/')] = df
         except Exception as e:
             raise e
-        return SedaroAgentResult(name, block_structures, series, initial_state)
-
-    # def to_file(self, filename: Union[str, Path], verbose=True) -> None:
-    #     '''Save agent result to compressed JSON file.'''
-    #     with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-    #         contents = {
-    #             'name': self.__name,
-    #             'block_structures': self.__block_structures,
-    #             'series': self.__series,
-    #         }
-    #         json.dump(contents, json_file)
-    #         if verbose:
-    #             print(f"💾 Successfully saved to {filename}")
-
-    # @classmethod
-    # def from_file(cls, filename: Union[str, Path]):
-    #     '''Load agent result from compressed JSON file.'''
-    #     with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-    #         contents = json.load(json_file)
-    #         return cls(contents['name'], contents['block_structures'], contents['series'])
+        return SedaroAgentResult(name, block_structures, engines, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
