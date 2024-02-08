@@ -27,13 +27,14 @@ class SedaroAgentResult:
                     assert column not in column_mapping
                     column_mapping[column] = module
 
-    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None):
+    def __init__(self, name: str, block_structures: dict, series: dict, structure: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
         SedaroSimulationResult or the .from_file method of this class.
         '''
         self.__name = name
+        self.__structure = structure
         self.__block_structures = block_structures
         self.__series = series
         self.__block_ids = sorted(set(
@@ -43,6 +44,7 @@ class SedaroAgentResult:
         ),
             reverse=True
         )
+        print(self.__block_structures)
         self.__initial_state = initial_state
         self.__initialize_block_structure()
 
@@ -92,6 +94,7 @@ class SedaroAgentResult:
             with open(f"{tmpdir}/meta.json", "w") as fp:
                 json.dump({
                     'name': self.__name,
+                    'structure': self.__structure,
                     'initial_state': self.__initial_state,
                     'block_structures': self.__block_structures,
                 }, fp)
@@ -136,6 +139,7 @@ class SedaroAgentResult:
             with open(f"{tmpdir}/meta.json", "r") as fp:
                 meta = json.load(fp)
                 name = meta['name']
+                structure = meta['structure']
                 block_structures = meta['block_structures']
                 initial_state = meta['initial_state']
             engines = {}
@@ -145,7 +149,7 @@ class SedaroAgentResult:
                 engines[agent.replace(' ', '/')] = df
         except Exception as e:
             raise e
-        return SedaroAgentResult(name, block_structures, engines, initial_state)
+        return SedaroAgentResult(name, block_structures, engines, structure, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

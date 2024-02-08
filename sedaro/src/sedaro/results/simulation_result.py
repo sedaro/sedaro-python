@@ -103,7 +103,7 @@ class SimulationResult:
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__agent_ids[agent_id], agent_dataframes, initial_state=initial_state)
+        return SedaroAgentResult(name, self.__agent_ids[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
 
     def save(self, filename: Union[str, Path]):
         success = False
