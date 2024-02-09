@@ -1,4 +1,4 @@
-from dask.dataframe import dd
+import dask.dataframe as dd
 import gzip
 import json
 from functools import cached_property
