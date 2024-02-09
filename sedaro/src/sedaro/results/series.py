@@ -1,6 +1,12 @@
+from dask.dataframe import dd
 import gzip
 import json
 from functools import cached_property
+import os
+from pathlib import Path
+import shutil
+from typing import Union
+import uuid6
 
 from scipy.interpolate import interp1d
 
@@ -16,7 +22,7 @@ from .utils import HFILL, _get_series_type, bsearch, hfill
 
 class SedaroSeries:
 
-    def __init__(self, name, time, series):
+    def __init__(self, name, data):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -138,20 +144,53 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def to_file(self, filename, verbose=True):
-        '''Save series to compressed JSON file.'''
-        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {'name': self.__name, 'time': self.__mjd, 'series': self.__series}
-            json.dump(contents, json_file)
-            if verbose:
-                print(f"💾 Successfully saved to {filename}")
+    def save(self, filename: Union[str, Path]):
+        success = False
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            os.mkdir(tmpdir)
+            with open(f"{tmpdir}/name.json", "w") as fp:
+                json.dump({'name': self.__name}, fp)
+            self.__series.to_parquet(f"{tmpdir}/data.parquet")
+            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
+            curr_zip_base = ''
+            # if the path is to another directory, make that directory if nonexistent, and move the zip there
+            if len(path_split := filename.split('/')) > 1:
+                path_dirs = '/'.join(path_split[:-1])
+                Path(path_dirs).mkdir(parents=True, exist_ok=True)
+                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
+                zip_desired_name = path_split[-1]
+            else:
+                zip_desired_name = filename
+            # rename zip to specified name
+            if len(curr_zip_base) > 0:
+                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
+                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
+            else:
+                zip_new_path = zip_desired_name
+                curr_zip_name = tmpzip
+            shutil.move(f"{curr_zip_name}.zip", f"{zip_new_path}.zip")
+            # remove tmpdir
+            os.system(f"rm -r {tmpdir}")
+            success = True
+            print(f"Successfully archived at {zip_new_path}")
+        except Exception as e:
+            raise e
+        finally:
+            if not success:
+                os.system(f"rm -r {tmpdir}")
 
     @classmethod
-    def from_file(cls, filename):
-        '''Load series from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return cls(contents['name'], contents['time'], contents['series'])
+    def load(cls, filename: Union[str, Path]):
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            shutil.unpack_archive(filename, tmpdir, 'zip')
+            with open(f"{tmpdir}/name.json", "r") as fp:
+                name = json.load(fp)['name']
+            data = dd.read_parquet(f"{tmpdir}/data.parquet")
+        except Exception as e:
+            raise e
+        return SedaroSeries(name, data)
 
     def summarize(self):
         hfill()

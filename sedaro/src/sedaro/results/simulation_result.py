@@ -116,9 +116,9 @@ class SimulationResult:
                 json.dump(self.__data['meta'], fp)
             os.mkdir(f"{tmpdir}/data")
             for agent in self.__data['series']:
-                path = f"{tmpdir}/data/{agent}"
+                path = f"{tmpdir}/data/{agent.replace('/', ' ')}"
                 df : dd = self.__data['series'][agent]
-                df.to_parquet(path.replace('/', ' '))
+                df.to_parquet(path)
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
             curr_zip_base = ''
             # if the path is to another directory, make that directory if nonexistent, and move the zip there

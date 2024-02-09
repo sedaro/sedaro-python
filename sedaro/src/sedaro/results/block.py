@@ -101,9 +101,9 @@ class SedaroBlockResult:
                 json.dump(self.__structure, fp)
             os.mkdir(f"{tmpdir}/data")
             for engine in self.__series:
-                path = f"{tmpdir}/data/{engine}"
+                path = f"{tmpdir}/data/{engine.replace('/', ' ')}"
                 df : dd = self.__series[engine]
-                df.to_parquet(path.replace('/', ' '))
+                df.to_parquet(path)
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
             curr_zip_base = ''
             # if the path is to another directory, make that directory if nonexistent, and move the zip there
