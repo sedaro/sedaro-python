@@ -68,11 +68,17 @@ class SedaroSeries:
         '''
         if not self.__has_subseries:
             raise ValueError('This series has no subseries.')
-        elif subseries_name in self.__series:
-            new_series_name = f'{self.__name}.{subseries_name}'
-            return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name])
         else:
-            raise ValueError(f"Subseries '{subseries_name}' not found.")
+            matching_columns = [column for column in self.__series.columns.tolist() if column.split('.')[0] == subseries_name]
+            if len(matching_columns) == 0:
+                raise ValueError(f"Subseries '{subseries_name}' not found.")
+            else:
+                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series[matching_columns])
+        # elif subseries_name in self.__series:
+        #     new_series_name = f'{self.__name}.{subseries_name}'
+        #     return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name])
+        # else:
+        #     raise ValueError(f"Subseries '{subseries_name}' not found.")
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -92,7 +98,7 @@ class SedaroSeries:
 
     @property
     def values(self):
-        return self.__series.compute()
+        return self.__series.values.compute().tolist()
 
     @cached_property
     def values_interpolant(self):
@@ -135,7 +141,7 @@ class SedaroSeries:
         try:
             if height is not None:
                 plt.rcParams['figure.figsize'] = [plt.rcParams['figure.figsize'][0], height]
-            plt.plot((self.__elapsed_time if elapsed_time else self.__mjd), self.__series, **kwargs)
+            plt.plot((self.__elapsed_time if elapsed_time else self.__mjd), self.values, **kwargs)
             if 'label' in kwargs:
                 plt.legend(loc='upper left')
             plt.xlabel('Elapsed Time (s)' if elapsed_time else 'Time (MJD)')
