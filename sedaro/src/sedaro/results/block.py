@@ -51,14 +51,13 @@ class SedaroBlockResult:
         of SedaroBlockResult.
         '''
         for module in self.__series:
+            selected_columns = []
             for column_name in self.__series[module].columns.tolist():
-                selected_columns = []
                 if column_name.split('.')[0] == name:
-                    # this is the module containing the variable
                     selected_columns.append(column_name)
-                if len(selected_columns) > 0:
-                    variable_dataframe = self.__series[module][selected_columns]
-                    return SedaroSeries(name, variable_dataframe)
+            if len(selected_columns) > 0:
+                variable_dataframe = self.__series[module][selected_columns]
+                return SedaroSeries(name, variable_dataframe)
         else:
             raise ValueError(f'Variable "{name}" not found.')
 

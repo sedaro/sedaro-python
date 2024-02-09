@@ -92,7 +92,7 @@ class SedaroSeries:
 
     @property
     def values(self):
-        return self.__series
+        return self.__series.compute()
 
     @cached_property
     def values_interpolant(self):
