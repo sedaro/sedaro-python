@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, HFILL, hfill
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
 
 
 class SedaroBlockResult:
@@ -23,7 +23,12 @@ class SedaroBlockResult:
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
-        self.__variables = [variable for data in self.__series.values() for variable in data['series']]
+        # self.__variables = [variable for data in self.__series.values() for variable in data['series']]
+        self.__variables = set()
+        for module in self.__series:
+            for column_name in self.__series[module].columns.tolist():
+                self.__variables.add(column_name.split('.')[0])
+        self.__variables = sorted(list(self.__variables))
 
     def __getattr__(self, name: str) -> SedaroSeries:
         '''Get a particular variable by name.
@@ -96,7 +101,7 @@ class SedaroBlockResult:
 
         print("🧩 Simulated Modules")
         for module in self.modules:
-            print(f'    • {ENGINE_EXPANSION[module]}')
+            print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
 
         print("\n📋 Variables Available")
         for variable in self.variables:
