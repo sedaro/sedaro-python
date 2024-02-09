@@ -1,7 +1,11 @@
+import dask.dataframe as dd
 import gzip
 import json
+import os
 from pathlib import Path
+import shutil
 from typing import Generator, Union
+import uuid6
 
 from .series import SedaroSeries
 from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
@@ -88,20 +92,61 @@ class SedaroBlockResult:
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
-        '''Save block result to compressed JSON file.'''
-        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {'structure': self.__structure, 'series': self.__series}
-            json.dump(contents, json_file)
-            if verbose:
-                print(f"💾 Successfully saved to {filename}")
+    def save(self, filename: Union[str, Path]):
+        success = False
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            os.mkdir(tmpdir)
+            with open(f"{tmpdir}/structure.json", "w") as fp:
+                json.dump(self.__structure, fp)
+            os.mkdir(f"{tmpdir}/data")
+            for engine in self.__series:
+                path = f"{tmpdir}/data/{engine}"
+                df : dd = self.__series[engine]
+                df.to_parquet(path.replace('/', ' '))
+            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
+            curr_zip_base = ''
+            # if the path is to another directory, make that directory if nonexistent, and move the zip there
+            if len(path_split := filename.split('/')) > 1:
+                path_dirs = '/'.join(path_split[:-1])
+                Path(path_dirs).mkdir(parents=True, exist_ok=True)
+                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
+                zip_desired_name = path_split[-1]
+            else:
+                zip_desired_name = filename
+            # rename zip to specified name
+            if len(curr_zip_base) > 0:
+                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
+                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
+            else:
+                zip_new_path = zip_desired_name
+                curr_zip_name = tmpzip
+            shutil.move(f"{curr_zip_name}.zip", f"{zip_new_path}.zip")
+            # remove tmpdir
+            os.system(f"rm -r {tmpdir}")
+            success = True
+            print(f"Successfully archived at {zip_new_path}")
+        except Exception as e:
+            raise e
+        finally:
+            if not success:
+                os.system(f"rm -r {tmpdir}")
 
     @classmethod
-    def from_file(cls, filename: Union[str, Path]):
-        '''Load block result from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return cls(contents['structure'], contents['series'])
+    def load(cls, filename: Union[str, Path]):
+        try:
+            tmpdir = f".{uuid6.uuid7()}"
+            shutil.unpack_archive(filename, tmpdir, 'zip')
+            with open(f"{tmpdir}/structure.json", "r") as fp:
+                structure = json.load(fp)
+            engines = {}
+            parquets = os.listdir(f"{tmpdir}/data/")
+            for agent in parquets:
+                df = dd.read_parquet(f"{tmpdir}/data/{agent}")
+                engines[agent.replace(' ', '/')] = df
+        except Exception as e:
+            raise e
+        return SedaroBlockResult(structure, engines)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
