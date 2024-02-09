@@ -120,7 +120,7 @@ class SedaroBlockResult:
             else:
                 zip_new_path = zip_desired_name
                 curr_zip_name = tmpzip
-            shutil.move(f"{curr_zip_name}.zip", f"{zip_new_path}.zip")
+            shutil.move(f"{curr_zip_name}.zip", zip_new_path)
             # remove tmpdir
             os.system(f"rm -r {tmpdir}")
             success = True
