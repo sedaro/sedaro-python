@@ -23,11 +23,24 @@ class SedaroBlockResult:
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
-        # self.__variables = [variable for data in self.__series.values() for variable in data['series']]
+        
         self.__variables = set()
         for module in self.__series:
+            to_rename = {}
             for column_name in self.__series[module].columns.tolist():
-                self.__variables.add(column_name.split('.')[0])
+                print(f"module {module}, column_name {column_name}")
+                if column_name.split('.')[0] == module:
+                    print(f"column_name == module")
+                    # rename to engine name
+                    module_name = ENGINE_EXPANSION[ENGINE_MAP[module.split('/')[1]]]
+                    self.__variables.add(module_name)
+                    new_column_name = f"{module_name}.{'.'.join(column_name.split('.')[1:])}"
+                    to_rename[column_name] = new_column_name
+                else:
+                    self.__variables.add(column_name.split('.')[0])
+            if len(to_rename) > 0:
+                print(f"in module {module}, to_rename {to_rename}")
+                self.__series[module] = self.__series[module].rename(columns=to_rename)
         self.__variables = sorted(list(self.__variables))
 
     def __getattr__(self, name: str) -> SedaroSeries:
