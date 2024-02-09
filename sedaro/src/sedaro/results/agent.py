@@ -26,6 +26,7 @@ class SedaroAgentResult:
                 if column != 'time':
                     assert column not in column_mapping
                     column_mapping[column] = module
+        return column_mapping
 
     def __init__(self, name: str, block_structures: dict, series: dict, structure: dict, initial_state: dict = None):
         '''Initialize a new agent result.
@@ -54,7 +55,7 @@ class SedaroAgentResult:
             reverse=True
         )
         self.__initial_state = initial_state
-        self.__initialize_block_structure()
+        self.column_mapping = self.__initialize_block_structure()
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
