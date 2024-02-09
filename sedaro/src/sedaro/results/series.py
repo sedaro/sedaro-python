@@ -30,7 +30,7 @@ class SedaroSeries:
         this class.
         '''
         self.__name = name
-        self.__mjd = data.index.values
+        self.__mjd = data.index.values.compute()
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data
         self.__has_subseries = len(self.__series.columns.tolist()) > 1
