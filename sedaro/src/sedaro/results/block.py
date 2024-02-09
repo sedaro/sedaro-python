@@ -28,9 +28,7 @@ class SedaroBlockResult:
         for module in self.__series:
             to_rename = {}
             for column_name in self.__series[module].columns.tolist():
-                print(f"module {module}, column_name {column_name}")
                 if column_name.split('.')[0] == module:
-                    print(f"column_name == module")
                     # rename to engine name
                     module_name = ENGINE_EXPANSION[ENGINE_MAP[module.split('/')[1]]]
                     self.__variables.add(module_name)
@@ -39,7 +37,6 @@ class SedaroBlockResult:
                 else:
                     self.__variables.add(column_name.split('.')[0])
             if len(to_rename) > 0:
-                print(f"in module {module}, to_rename {to_rename}")
                 self.__series[module] = self.__series[module].rename(columns=to_rename)
         self.__variables = sorted(list(self.__variables))
 
