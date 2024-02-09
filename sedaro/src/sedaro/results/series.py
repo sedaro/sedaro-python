@@ -74,11 +74,6 @@ class SedaroSeries:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
                 return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series[matching_columns])
-        # elif subseries_name in self.__series:
-        #     new_series_name = f'{self.__name}.{subseries_name}'
-        #     return SedaroSeries(new_series_name, self.__mjd, self.__series[subseries_name])
-        # else:
-        #     raise ValueError(f"Subseries '{subseries_name}' not found.")
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -133,10 +128,19 @@ class SedaroSeries:
     #     show = kwargs.pop('show', True)
     #     self.__plot(plt.scatter, show, kwargs)
 
+    def __all_subseries_are_numeric(self):
+        subseries = self.__series.columns.tolist()
+        for column in subseries:
+            for ch in column:
+                if ch not in '0123456789.':
+                    return False
+        else:
+            return True
+
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
-        if self.__has_subseries:
+        if self.__has_subseries and not self.__all_subseries_are_numeric():
             raise ValueError('Select a specific subseries to plot.')
         try:
             if height is not None:
