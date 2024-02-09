@@ -55,7 +55,7 @@ class SedaroAgentResult:
             reverse=True
         )
         self.__initial_state = initial_state
-        self.column_mapping = self.__initialize_block_structure()
+        self.__column_mapping = self.__initialize_block_structure()
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
