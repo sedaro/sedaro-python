@@ -30,14 +30,14 @@ class SedaroSeries:
         this class.
         '''
         self.__name = name
-        self.__mjd = time
+        self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__series = series
-        self.__has_subseries = isinstance(self.__series, dict)
+        self.__series = data
+        self.__has_subseries = len(self.__series.columns.tolist()) > 1
         if self.__has_subseries:
-            self.__dtype = {key: _get_series_type(subseries) for key, subseries in self.__series.items()}
+            self.__dtype = self.__series.dtypes
         else:
-            self.__dtype = _get_series_type(series)
+            self.__dtype = self.__series.dtypes[0]
 
     def __repr__(self):
         return f"Series({self.name})"
