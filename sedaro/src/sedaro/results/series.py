@@ -32,7 +32,8 @@ class SedaroSeries:
         self.__name = name
         self.__mjd = data.index.values.compute()
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__series = data
+        self.__static_series = data
+        self.__series = data.copy()
         self.__has_subseries = len(self.__series.columns.tolist()) > 1
         if self.__has_subseries:
             # rename columns to remove top-level name
@@ -167,7 +168,7 @@ class SedaroSeries:
             os.mkdir(tmpdir)
             with open(f"{tmpdir}/name.json", "w") as fp:
                 json.dump({'name': self.__name}, fp)
-            self.__series.to_parquet(f"{tmpdir}/data.parquet")
+            self.__static_series.to_parquet(f"{tmpdir}/data.parquet")
             shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
             curr_zip_base = ''
             # if the path is to another directory, make that directory if nonexistent, and move the zip there
