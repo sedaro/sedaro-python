@@ -35,8 +35,14 @@ class SedaroSeries:
         self.__series = data
         self.__has_subseries = len(self.__series.columns.tolist()) > 1
         if self.__has_subseries:
+            # rename columns to remove top-level name
+            renamed_columns = {}
+            for column_name in self.__series.columns.tolist():
+                renamed_columns[column_name] = '.'.join(column_name.split('.')[1:])
+            self.__series = self.__series.rename(columns=renamed_columns)
             self.__dtype = self.__series.dtypes
         else:
+            self.__column_name = self.__series.columns.tolist()[0]
             self.__dtype = self.__series.dtypes[0]
 
     def __repr__(self):
@@ -49,7 +55,7 @@ class SedaroSeries:
         '''
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to iterate over.')
-        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series))
+        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series[self.__column_name].compute()))
 
     def __len__(self) -> int:
         return len(self.mjd)
