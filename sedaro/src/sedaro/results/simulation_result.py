@@ -32,7 +32,7 @@ class SimulationResult:
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        self.__agent_ids = _get_agent_mapping(raw_series, agent_id_name_map)
+        self.__agent_ids, self.__block_structures = _get_agent_mapping(raw_series, agent_id_name_map, self.__meta)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
@@ -103,7 +103,7 @@ class SimulationResult:
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__agent_ids[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
+        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
 
     def save(self, filename: Union[str, Path]):
         success = False

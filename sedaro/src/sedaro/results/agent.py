@@ -85,13 +85,18 @@ class SedaroAgentResult:
             else:
                 raise ValueError(f'Found multiple matching IDs for {id_}: {matching_id}.')
 
+        column_block_lists = {}
+        for column in self.__column_mapping:
+            if (id_ != 'root' and column.split('.')[0] == id_) or (id_ == 'root' and column.split('.')[0] not in self.__block_uuids):
+                column_dataframe = self.__column_mapping[column]
+                if column_dataframe not in column_block_lists:
+                    column_block_lists[column_dataframe] = []
+                column_block_lists[column_dataframe].append(column)
+
         block_data = {}
         for module in self.__series:
-            if id_ in self.__series[module]['series']:
-                if module not in block_data:
-                    block_data[module] = {}
-                block_data[module]['time'] = self.__series[module]['time']
-                block_data[module]['series'] = self.__series[module]['series'][id_]
+            if module in column_block_lists:
+                block_data[module] = self.__series[module][column_block_lists[module]]
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
