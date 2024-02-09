@@ -97,6 +97,9 @@ class SedaroAgentResult:
         for module in self.__series:
             if module in column_block_lists:
                 block_data[module] = self.__series[module][column_block_lists[module]]
+                if id_ != 'root':
+                    # rename columns, removing first part of the column name
+                    block_data[module] = block_data[module].rename(columns={column: '.'.join(column.split('.')[1:]) for column in column_block_lists[module]})
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
