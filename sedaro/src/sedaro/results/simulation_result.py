@@ -1,4 +1,4 @@
-
+from contextlib import contextmanager
 import dask.dataframe as dd
 import datetime as dt
 import json
@@ -148,8 +148,8 @@ class SimulationResult:
                 shutil.rmtree(tmpdir, ignore_errors=True)
 
     @classmethod
+    @contextmanager
     def load(cls, filename: Union[str, Path]):
-        success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
@@ -163,15 +163,11 @@ class SimulationResult:
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 data['series'][agent.replace(' ', '/')] = df
-            # # remove tmpdir
-            # shutil.rmtree(tmpdir, ignore_errors=True)
-            # success = True
+            yield SimulationResult(simulation, data)
         except Exception as e:
             raise e
-        # finally:
-        #     if not success:
-        #         shutil.rmtree(tmpdir, ignore_errors=True)
-        return SimulationResult(simulation, data)
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

@@ -1,5 +1,5 @@
+from contextlib import contextmanager
 import dask.dataframe as dd
-import gzip
 import json
 import os
 from pathlib import Path
@@ -132,8 +132,8 @@ class SedaroBlockResult:
                 shutil.rmtree(tmpdir, ignore_errors=True)
 
     @classmethod
+    @contextmanager
     def load(cls, filename: Union[str, Path]):
-        success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
@@ -144,15 +144,11 @@ class SedaroBlockResult:
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 engines[agent.replace(' ', '/')] = df
-            # # remove tmpdir
-            # shutil.rmtree(tmpdir, ignore_errors=True)
-            # success = True
+            yield SedaroBlockResult(structure, engines)
         except Exception as e:
             raise e
-        # finally:
-        #     if not success:
-        #         shutil.rmtree(tmpdir, ignore_errors=True)
-        return SedaroBlockResult(structure, engines)
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

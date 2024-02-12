@@ -1,5 +1,5 @@
+from contextlib import contextmanager
 import dask.dataframe as dd
-import gzip
 import json
 from functools import cached_property
 import os
@@ -201,22 +201,20 @@ class SedaroSeries:
                 shutil.rmtree(tmpdir, ignore_errors=True)
 
     @classmethod
+    @contextmanager
     def load(cls, filename: Union[str, Path]):
-        success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
             with open(f"{tmpdir}/name.json", "r") as fp:
                 name = json.load(fp)['name']
             data = dd.read_parquet(f"{tmpdir}/data.parquet")
-            # # remove tmpdir
-            # shutil.rmtree(tmpdir, ignore_errors=True)
-            # success = True
+            yield SedaroSeries(name, data)
         except Exception as e:
             raise e
-        # finally:
-        #     if not success:
-        #         shutil.rmtree(tmpdir, ignore_errors=True)
+        finally:
+            # remove tmpdir
+            shutil.rmtree(tmpdir, ignore_errors=True)
         return SedaroSeries(name, data)
 
     def summarize(self):
