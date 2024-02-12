@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -51,7 +52,7 @@ def _block_type_in_supers(block_type: str, meta_supers: dict, super_type: str = 
         supertypes = meta_supers[block_type]
         if len(supertypes) == 0:
             return False
-        return any(_block_type_in_supers(supertype, meta_supers) for supertype in supertypes)
+        return any(_block_type_in_supers(supertype, meta_supers, super_type=super_type) for supertype in supertypes)
     else:
         return False
 
@@ -145,3 +146,20 @@ def bsearch(ordered_series, value):
     if value < ordered_series[0]:
         return -1
     return _bsearch(0, len(ordered_series) - 1)
+
+
+def to_time_major(series):
+    if type(series) not in [list, dict]:
+        return series
+    elif type(series) == dict:
+        new = {}
+        for k in series:
+            new[k] = to_time_major(series[k])
+        return new
+    else: # type(series) == list
+        np_data = np.array(series)
+        if np_data.ndim > 1:
+            axes = (np_data.ndim - 1,) + tuple(range(np_data.ndim - 1))
+            np_data = np.transpose(np_data, axes=axes)
+        reshaped_data = np_data.tolist()
+        return reshaped_data

@@ -1,11 +1,9 @@
 import concurrent.futures
 import json
-import math
 import os
 import pathlib
 import tempfile
 import time
-import traceback
 from contextlib import contextmanager
 from threading import Lock
 from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
@@ -37,6 +35,79 @@ def serdes(v):
         return [serdes(v) for v in v]
     return v
 
+def concat_stream_data(main, other, len_main, len_other):
+    assert type(main) == dict and type(other) == dict
+    for k in other:
+        if k not in main:
+            main[k] = [None for _ in range(len_main)]
+        main[k].extend(other[k])
+    for k in main:
+        if k not in other:
+            main[k].extend([None for _ in range(len_other)])
+
+def concat_stream(main, other, stream_id):
+    len_main = len(main[0])
+    len_other = len(other[0])
+    main[0].extend(other[0])
+    stream_id_short = stream_id.split('/')[0]
+    concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
+
+def concat_results(main, other):
+    for stream in other:
+        if stream not in main:
+            main[stream] = other[stream]
+        else: # concat stream parts
+            concat_stream(main[stream], other[stream], stream)
+
+def update_metadata(main, other):
+    for k in other['counts']:
+        if k not in main['counts']:
+            main['counts'][k] = 0
+        main['counts'][k] += other['counts'][k]
+
+def set_numeric_as_list(d):
+    if isinstance(d, dict):
+        if all(key.isdigit() for key in d.keys()):  # Check if all keys are array indexes in string form
+            return [set_numeric_as_list(d[key]) for key in sorted(d.keys(), key=int)]
+        else:
+            return {k: set_numeric_as_list(v) for k, v in d.items()}
+    return d
+
+def __set_nested(results):
+    nested = {}
+    for k in sorted(list(results.keys())):
+        v = results[k]
+        try:
+            ptr = nested
+            tokens = k.split('.')
+            for token in tokens[:-1]:
+                if token not in ptr:
+                    ptr[token] = {}
+                ptr = ptr[token]
+            ptr[tokens[-1]] = v
+        except TypeError:
+            ptr = nested
+            for token in tokens[:-1]:
+                if type(ptr[token]) == list:
+                    del ptr[token]
+                    break
+                else:
+                    ptr = ptr[token]
+            ptr = nested
+            for token in tokens[:-1]:
+                if token not in ptr:
+                    ptr[token] = {}
+                ptr = ptr[token]
+            ptr[tokens[-1]] = v
+    return nested
+
+# TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
+def set_nested(results):
+    nested = {}
+    for k in results:
+        kspl = k.split('/')[0]
+        nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
+    return nested
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -169,7 +240,9 @@ class Simulation:
         binWidth: float = None,
         limit: float = None,
         axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        continuationToken: str = None,
     ):
         """Query latest scenario and return results as a plain dictionary from the Data Service with options to
         customize the response. If an `id` is passed, query for corresponding result rather than latest.
@@ -197,7 +270,8 @@ class Simulation:
                 would like to downsample data, use either `limit` or `binWidth`, but not both.
 
             streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the previous section. If no list is provided, data is fetched for all streams.
+                format described in the docstring for the `results` method below. If no list is provided,\
+                data is fetched for all streams.
 
             axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
                 `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
@@ -208,6 +282,10 @@ class Simulation:
         Returns:
             dict: response from the `get` request
         """
+
+        if sampleRate is None and continuationToken is None:
+            sampleRate = 1
+
         if id == None:
             id = self.status()['dataArray']
         url = f'/data/{id}?'
@@ -216,8 +294,10 @@ class Simulation:
         if stop is not None:
             url += f'&stop={stop}'
         if binWidth is not None:
+            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
             url += f'&binWidth={binWidth}'
         elif limit is not None:
+            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
             url += f'&limit={limit}'
         streams = streams or []
         if len(streams) > 0:
@@ -228,16 +308,51 @@ class Simulation:
                 raise ValueError(
                     'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
             url += f'&axisOrder={axisOrder}'
+        if sampleRate is not None:
+            url += f'&sampleRate={sampleRate}'
+        if continuationToken is not None:
+            url += f'&continuationToken={continuationToken}'
         with self.__sedaro.api_client() as api:
-            response = api.call_api(url, 'GET')
+            response = api.call_api(url, 'GET', headers={'Content-Type': 'application/json'})
         _response = None
+        has_nonempty_ctoken = False
         try:
             _response = parse_urllib_response(response)
+            if 'version' in _response['meta'] and _response['meta']['version'] == 3:
+                is_v3 = True
+                if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
+                    has_nonempty_ctoken = True
+                    ctoken = _response['meta']['continuationToken']
+            else:
+                is_v3 = False
             if response.status != 200:
                 raise Exception()
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
+        if is_v3: # keep fetching pages until we get an empty continuation token
+            if has_nonempty_ctoken: # need to fetch more pages
+                result = _response
+                while has_nonempty_ctoken:
+                    # fetch page
+                    request_url = f'/data/{id}?&continuationToken={ctoken}'
+                    page = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
+                    _page = parse_urllib_response(page)
+                    try:
+                        if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
+                            has_nonempty_ctoken = True
+                            ctoken = _page['meta']['continuationToken']
+                        else:
+                            has_nonempty_ctoken = False
+                        if page.status != 200:
+                            raise Exception()
+                    except Exception:
+                        reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
+                        raise SedaroApiException(status=page.status, reason=reason)
+                    concat_results(result['series'], _page['series'])
+                    update_metadata(result['meta'], _page['meta'])
+                _response = result
+            _response['series'] = set_nested(_response['series'])
         return _response
 
     def results(self,
@@ -245,9 +360,7 @@ class Simulation:
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
-                binWidth: float = None,
-                limit: float = None,
-                ) -> SimulationResult:
+                sampleRate: int = None) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -286,14 +399,15 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], binWidth=binWidth, limit=limit)
+        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate)
         return SimulationResult(job, data)
 
     def results_poll(
         self,
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
-        retry_interval: int = 2
+        sampleRate: int = None,
+        retry_interval: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
         corresponding sim results rather than latest. See `results` method for details on using the `streams` kwarg.
@@ -322,7 +436,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [])
+        return self.results(streams=streams or [], sampleRate=sampleRate)
 
     def __download(self, p):
         agents, id, dirname, progress, progress_lock = p
@@ -467,7 +581,9 @@ class SimulationHandle:
         binWidth: float = None,
         limit: float = None,
         axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        continuationToken: bytes = None,
     ):
         """Query simulation results as a plain dictionary from the Data Service with options to
         customize the response.
@@ -510,7 +626,9 @@ class SimulationHandle:
             binWidth=binWidth,
             limit=limit,
             axisOrder=axisOrder,
-            streams=streams
+            streams=streams,
+            sampleRate=sampleRate,
+            continuationToken=continuationToken,
         )
 
     def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
