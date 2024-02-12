@@ -104,6 +104,7 @@ class SedaroAgentResult:
         return SedaroBlockResult(block_structure, block_data)
 
     def to_file(self, filename: Union[str, Path]):
+        '''Save the agent result to a zip archive.'''
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -151,6 +152,7 @@ class SedaroAgentResult:
     @classmethod
     @contextmanager
     def from_file(cls, filename: Union[str, Path]):
+        '''Load an agent result from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')

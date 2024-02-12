@@ -106,6 +106,7 @@ class SimulationResult:
         return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
 
     def to_file(self, filename: Union[str, Path]):
+        '''Save the simulation result to a zip archive.'''
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -150,6 +151,7 @@ class SimulationResult:
     @classmethod
     @contextmanager
     def from_file(cls, filename: Union[str, Path]):
+        '''Load a simulation result from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')

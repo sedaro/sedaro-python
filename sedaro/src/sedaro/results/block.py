@@ -92,6 +92,7 @@ class SedaroBlockResult:
         return self.__getattr__(name)
 
     def to_file(self, filename: Union[str, Path]):
+        '''Save the block result to a zip archive.'''
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -134,6 +135,7 @@ class SedaroBlockResult:
     @classmethod
     @contextmanager
     def from_file(cls, filename: Union[str, Path]):
+        '''Load a block result from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
