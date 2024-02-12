@@ -390,7 +390,7 @@ class Simulation:
                 num_workers: int = 2) -> "dict[str, dask.dataframe]":
 
         metadata = self.__get_metadata(sim_id := job_id['dataArray'])
-        if len(streams) > 0:
+        if streams is not None and len(streams) > 0:
             filtered_streams = self.__get_filtered_streams(streams, metadata)
         else:
             filtered_streams = metadata['streams']
