@@ -49,6 +49,35 @@ class SedaroSeries:
     def __repr__(self):
         return f"Series({self.name})"
 
+    @property
+    def __prepped_nested_series(self):
+        '''Prepare nested series for iteration.'''
+
+        def dict_to_list(d):
+            if isinstance(d, dict):
+                return [dict_to_list(d[i]) for i in sorted(d)]
+            return d
+
+        if not self.__has_subseries:
+            raise ValueError('This series has no subseries.')
+        else:
+            # get column names
+            columns = {}
+            for column_name in self.__series.columns.tolist():
+                columns[column_name] = self.__series[column_name].compute().tolist()
+            result = []
+            for i in range(len(self.__mjd)):
+                this_entry = {}
+                for column in columns:
+                    column_value = columns[column][i]
+                    indices = [int(x) for x in column.split('.')[1:]]
+                    current_level = this_entry
+                    for i in indices[:-1]:
+                        current_level = current_level.setdefault(i, {})
+                    current_level[indices[-1]] = column_value
+                result.append(dict_to_list(this_entry))
+            return result
+
     def __iter__(self):
         '''Iterate through time, value pairs in this series.
 
@@ -58,7 +87,7 @@ class SedaroSeries:
             if not self.__all_subseries_are_numeric:
                 raise ValueError('Select a specific subseries to iterate over.')
             else:
-                NotImplemented
+                return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__prepped_nested_series))
         return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series[self.__column_name].compute()))
 
     def __len__(self) -> int:
