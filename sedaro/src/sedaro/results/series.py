@@ -90,7 +90,7 @@ class SedaroSeries:
 
     @property
     def mjd(self):
-        return self.__mjd
+        return self.__mjd.tolist()
 
     @property
     def values(self):
