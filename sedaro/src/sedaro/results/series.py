@@ -17,7 +17,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, _get_series_type, bsearch, hfill
+from .utils import HFILL, bsearch, hfill
 
 
 class SedaroSeries:
