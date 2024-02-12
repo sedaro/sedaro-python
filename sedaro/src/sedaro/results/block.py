@@ -91,7 +91,7 @@ class SedaroBlockResult:
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def save(self, filename: Union[str, Path]):
+    def to_file(self, filename: Union[str, Path]):
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -133,7 +133,7 @@ class SedaroBlockResult:
 
     @classmethod
     @contextmanager
-    def load(cls, filename: Union[str, Path]):
+    def from_file(cls, filename: Union[str, Path]):
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')

@@ -103,7 +103,7 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def save(self, filename: Union[str, Path]):
+    def to_file(self, filename: Union[str, Path]):
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -150,7 +150,7 @@ class SedaroAgentResult:
 
     @classmethod
     @contextmanager
-    def load(cls, filename: Union[str, Path]):
+    def from_file(cls, filename: Union[str, Path]):
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')

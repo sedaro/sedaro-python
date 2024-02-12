@@ -105,7 +105,7 @@ class SimulationResult:
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
 
-    def save(self, filename: Union[str, Path]):
+    def to_file(self, filename: Union[str, Path]):
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -149,7 +149,7 @@ class SimulationResult:
 
     @classmethod
     @contextmanager
-    def load(cls, filename: Union[str, Path]):
+    def from_file(cls, filename: Union[str, Path]):
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')

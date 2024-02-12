@@ -193,7 +193,7 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def save(self, filename: Union[str, Path]):
+    def to_file(self, filename: Union[str, Path]):
         success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
@@ -231,7 +231,7 @@ class SedaroSeries:
 
     @classmethod
     @contextmanager
-    def load(cls, filename: Union[str, Path]):
+    def from_file(cls, filename: Union[str, Path]):
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
