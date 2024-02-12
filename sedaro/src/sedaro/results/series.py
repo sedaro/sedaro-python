@@ -215,7 +215,6 @@ class SedaroSeries:
         finally:
             # remove tmpdir
             shutil.rmtree(tmpdir, ignore_errors=True)
-        return SedaroSeries(name, data)
 
     def summarize(self):
         hfill()
