@@ -139,17 +139,18 @@ class SedaroAgentResult:
                 curr_zip_name = tmpzip
             shutil.move(f"{curr_zip_name}.zip", zip_new_path)
             # remove tmpdir
-            os.system(f"rm -r {tmpdir}")
+            shutil.rmtree(tmpdir, ignore_errors=True)
             success = True
             print(f"Successfully archived at {zip_new_path}")
         except Exception as e:
             raise e
         finally:
             if not success:
-                os.system(f"rm -r {tmpdir}")
+                shutil.rmtree(tmpdir, ignore_errors=True)
 
     @classmethod
     def load(cls, filename: Union[str, Path]):
+        success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
@@ -164,8 +165,14 @@ class SedaroAgentResult:
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 engines[agent.replace(' ', '/')] = df
+            # remove tmpdir
+            shutil.rmtree(tmpdir, ignore_errors=True)
+            success = True
         except Exception as e:
             raise e
+        finally:
+            if not success:
+                shutil.rmtree(tmpdir, ignore_errors=True)
         return SedaroAgentResult(name, block_structures, engines, structure, initial_state)
 
     def summarize(self) -> None:

@@ -55,7 +55,10 @@ class SedaroSeries:
         Only a series with no subseries is iterable.
         '''
         if self.__has_subseries:
-            raise ValueError('Select a specific subseries to iterate over.')
+            if not self.__all_subseries_are_numeric:
+                raise ValueError('Select a specific subseries to iterate over.')
+            else:
+                NotImplemented
         return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series[self.__column_name].compute()))
 
     def __len__(self) -> int:
@@ -188,25 +191,32 @@ class SedaroSeries:
                 curr_zip_name = tmpzip
             shutil.move(f"{curr_zip_name}.zip", zip_new_path)
             # remove tmpdir
-            os.system(f"rm -r {tmpdir}")
+            shutil.rmtree(tmpdir, ignore_errors=True)
             success = True
             print(f"Successfully archived at {zip_new_path}")
         except Exception as e:
             raise e
         finally:
             if not success:
-                os.system(f"rm -r {tmpdir}")
+                shutil.rmtree(tmpdir, ignore_errors=True)
 
     @classmethod
     def load(cls, filename: Union[str, Path]):
+        success = False
         try:
             tmpdir = f".{uuid6.uuid7()}"
             shutil.unpack_archive(filename, tmpdir, 'zip')
             with open(f"{tmpdir}/name.json", "r") as fp:
                 name = json.load(fp)['name']
             data = dd.read_parquet(f"{tmpdir}/data.parquet")
+            # remove tmpdir
+            shutil.rmtree(tmpdir, ignore_errors=True)
+            success = True
         except Exception as e:
             raise e
+        finally:
+            if not success:
+                shutil.rmtree(tmpdir, ignore_errors=True)
         return SedaroSeries(name, data)
 
     def summarize(self):
