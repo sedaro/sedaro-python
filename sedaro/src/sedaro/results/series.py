@@ -98,7 +98,7 @@ class SedaroSeries:
 
     @cached_property
     def values_interpolant(self):
-        return interp1d(self.__mjd, self.__series)
+        return interp1d(self.__mjd.tolist(), self.__series.iloc[:, 0].compute().tolist())
 
     @property
     def duration(self):
@@ -119,7 +119,7 @@ class SedaroSeries:
                     raise_error()
             else:
                 return self.values_interpolant(mjd)
-            return self.__series[index]
+            return self.__series.head(index + 1).tail(1).values[0][0]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
         self.__plot(show, ylabel, elapsed_time, height, xlim, ylim, **kwargs)
