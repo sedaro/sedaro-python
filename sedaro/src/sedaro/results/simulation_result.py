@@ -163,14 +163,14 @@ class SimulationResult:
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 data['series'][agent.replace(' ', '/')] = df
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
+            # # remove tmpdir
+            # shutil.rmtree(tmpdir, ignore_errors=True)
+            # success = True
         except Exception as e:
             raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+        # finally:
+        #     if not success:
+        #         shutil.rmtree(tmpdir, ignore_errors=True)
         return SimulationResult(simulation, data)
 
     def summarize(self) -> None:

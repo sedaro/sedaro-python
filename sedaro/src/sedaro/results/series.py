@@ -209,14 +209,14 @@ class SedaroSeries:
             with open(f"{tmpdir}/name.json", "r") as fp:
                 name = json.load(fp)['name']
             data = dd.read_parquet(f"{tmpdir}/data.parquet")
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
+            # # remove tmpdir
+            # shutil.rmtree(tmpdir, ignore_errors=True)
+            # success = True
         except Exception as e:
             raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+        # finally:
+        #     if not success:
+        #         shutil.rmtree(tmpdir, ignore_errors=True)
         return SedaroSeries(name, data)
 
     def summarize(self):

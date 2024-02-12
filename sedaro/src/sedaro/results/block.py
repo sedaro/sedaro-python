@@ -144,14 +144,14 @@ class SedaroBlockResult:
             for agent in parquets:
                 df = dd.read_parquet(f"{tmpdir}/data/{agent}")
                 engines[agent.replace(' ', '/')] = df
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
+            # # remove tmpdir
+            # shutil.rmtree(tmpdir, ignore_errors=True)
+            # success = True
         except Exception as e:
             raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+        # finally:
+        #     if not success:
+        #         shutil.rmtree(tmpdir, ignore_errors=True)
         return SedaroBlockResult(structure, engines)
 
     def summarize(self) -> None:
