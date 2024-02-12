@@ -396,7 +396,7 @@ class Simulation:
             filtered_streams = metadata['streams']
         num_workers = min(num_workers, len(filtered_streams))
         workers = [[] for _ in range(num_workers)]
-        for i, stream in enumerate(streams):
+        for i, stream in enumerate(filtered_streams):
             workers[i % num_workers].append(stream)
 
         download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
