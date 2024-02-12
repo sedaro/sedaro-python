@@ -70,10 +70,10 @@ class SedaroSeries:
                 this_entry = {}
                 for column in columns:
                     column_value = columns[column][i]
-                    indices = [int(x) for x in column.split('.')[1:]]
+                    indices = [int(x) for x in column.split('.')]
                     current_level = this_entry
-                    for i in indices[:-1]:
-                        current_level = current_level.setdefault(i, {})
+                    for j in indices[:-1]:
+                        current_level = current_level.setdefault(j, {})
                     current_level[indices[-1]] = column_value
                 result.append(dict_to_list(this_entry))
             return result
