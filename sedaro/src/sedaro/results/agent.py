@@ -109,6 +109,8 @@ class SedaroAgentResult:
         try:
             tmpdir = f".{uuid6.uuid7()}"
             os.mkdir(tmpdir)
+            with open(f"{tmpdir}/class.json", "w") as fp:
+                json.dump({'class': 'SedaroAgentResult'}, fp)
             with open(f"{tmpdir}/meta.json", "w") as fp:
                 json.dump({
                     'name': self.__name,

@@ -97,6 +97,8 @@ class SedaroBlockResult:
         try:
             tmpdir = f".{uuid6.uuid7()}"
             os.mkdir(tmpdir)
+            with open(f"{tmpdir}/class.json", "w") as fp:
+                json.dump({'class': 'SedaroBlockResult'}, fp)
             with open(f"{tmpdir}/structure.json", "w") as fp:
                 json.dump(self.__structure, fp)
             os.mkdir(f"{tmpdir}/data")

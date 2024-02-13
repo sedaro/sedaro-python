@@ -199,6 +199,8 @@ class SedaroSeries:
         try:
             tmpdir = f".{uuid6.uuid7()}"
             os.mkdir(tmpdir)
+            with open(f"{tmpdir}/class.json", "w") as fp:
+                json.dump({'class': 'SedaroSeries'}, fp)
             with open(f"{tmpdir}/name.json", "w") as fp:
                 json.dump({'name': self.__name}, fp)
             self.__static_series.to_parquet(f"{tmpdir}/data.parquet")
