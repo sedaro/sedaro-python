@@ -1,6 +1,5 @@
 from sedaro.branches.scenario_branch.sim_client import \
      __set_nested, set_nested, set_numeric_as_list, update_metadata, concat_results, concat_stream, concat_stream_data
-from sedaro.results.utils import to_time_major
 
 def test_set_nested_and_numeric():
     assert __set_nested({'foo.bar': [1, 2, 3], 'foo.baz': [1, 2, 3]}) == {'foo': {'bar': [1, 2, 3], 'baz': [1, 2, 3]}}
