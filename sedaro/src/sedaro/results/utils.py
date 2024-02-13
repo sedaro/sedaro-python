@@ -129,6 +129,7 @@ def bsearch(ordered_series, value):
     return _bsearch(0, len(ordered_series) - 1)
 
 class FromFileAndToFileAreDeprecated:
+    @classmethod
     def from_file(self, filename: Union[str, Path]):
         print("Warning: `from_file` is deprecated. Use `load` instead. Calling `load`.")
         return self.load(filename)
