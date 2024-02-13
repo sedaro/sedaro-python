@@ -2,9 +2,7 @@ import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-import shutil
 from typing import Generator, Union
-import uuid6
 
 from .series import SedaroSeries
 from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
