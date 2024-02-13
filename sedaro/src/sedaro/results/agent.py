@@ -1,4 +1,3 @@
-from contextlib import contextmanager
 import dask.dataframe as dd
 import json
 import os
@@ -10,10 +9,10 @@ import uuid6
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFileAreDeprecated
 
 
-class SedaroAgentResult:
+class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
     def __initialize_block_structure(self):
         '''Initialize the block structure for this agent.'''
@@ -103,57 +102,30 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def to_file(self, filename: Union[str, Path]):
-        '''Save the agent result to a zip archive.'''
-        success = False
+    def save(self, path: Union[str, Path]):
+        '''Save the agent result to a directory with the specified path.'''
         try:
-            tmpdir = f".{uuid6.uuid7()}"
-            os.mkdir(tmpdir)
-            with open(f"{tmpdir}/class.json", "w") as fp:
-                json.dump({'class': 'SedaroAgentResult'}, fp)
-            with open(f"{tmpdir}/meta.json", "w") as fp:
-                json.dump({
-                    'name': self.__name,
-                    'structure': self.__structure,
-                    'initial_state': self.__initial_state,
-                    'block_structures': self.__block_structures,
-                }, fp)
-            os.mkdir(f"{tmpdir}/data")
-            for engine in self.__series:
-                path = f"{tmpdir}/data/{engine.replace('/', ' ')}"
-                df : dd = self.__series[engine]
-                df.to_parquet(path)
-            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
-            curr_zip_base = ''
-            # if the path is to another directory, make that directory if nonexistent, and move the zip there
-            if len(path_split := filename.split('/')) > 1:
-                path_dirs = '/'.join(path_split[:-1])
-                Path(path_dirs).mkdir(parents=True, exist_ok=True)
-                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
-                zip_desired_name = path_split[-1]
-            else:
-                zip_desired_name = filename
-            # rename zip to specified name
-            if len(curr_zip_base) > 0:
-                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
-                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
-            else:
-                zip_new_path = zip_desired_name
-                curr_zip_name = tmpzip
-            shutil.move(f"{curr_zip_name}.zip", zip_new_path)
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
-            print(f"Successfully archived at {zip_new_path}")
-        except Exception as e:
-            raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+            os.makedirs(path)
+        except FileExistsError:
+            print(f"A directory or file already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': 'SedaroAgentResult'}, fp)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump({
+                'name': self.__name,
+                'structure': self.__structure,
+                'initial_state': self.__initial_state,
+                'block_structures': self.__block_structures,
+            }, fp)
+        os.mkdir(f"{path}/data")
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{engine.replace('/', ' ')}"
+            df : dd = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
+        print(f"Agent result saved to {path}.")
 
     @classmethod
-    @contextmanager
-    def from_file(cls, filename: Union[str, Path]):
+    def load(cls, filename: Union[str, Path]):
         '''Load an agent result from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"

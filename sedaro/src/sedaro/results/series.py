@@ -17,10 +17,10 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, bsearch, hfill
+from .utils import HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
 
 
-class SedaroSeries:
+class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     def __init__(self, name, data):
         '''Initialize a new time series.
@@ -193,7 +193,7 @@ class SedaroSeries:
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def to_file(self, filename: Union[str, Path]):
+    def save(self, filename: Union[str, Path]):
         '''Save the series result to a zip archive.'''
         success = False
         try:
@@ -234,7 +234,7 @@ class SedaroSeries:
 
     @classmethod
     @contextmanager
-    def from_file(cls, filename: Union[str, Path]):
+    def load(cls, filename: Union[str, Path]):
         '''Load a series from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"

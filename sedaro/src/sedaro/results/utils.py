@@ -1,5 +1,7 @@
 import math
 import numpy as np
+from pathlib import Path
+from typing import Union
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -125,3 +127,12 @@ def bsearch(ordered_series, value):
     if value < ordered_series[0]:
         return -1
     return _bsearch(0, len(ordered_series) - 1)
+
+class FromFileAndToFileAreDeprecated:
+    def from_file(self, filename: Union[str, Path]):
+        print("Warning: `from_file` is deprecated. Use `load` instead. Calling `load`.")
+        return self.load(filename)
+
+    def to_file(self, filename: Union[str, Path]):
+        print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
+        return self.save(filename)

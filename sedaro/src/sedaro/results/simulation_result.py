@@ -7,10 +7,10 @@ from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _get_agent_mapping, hfill)
+                    _get_agent_id_name_map, _get_agent_mapping, hfill, FromFileAndToFileAreDeprecated)
 
 
-class SimulationResult:
+class SimulationResult(FromFileAndToFileAreDeprecated):
 
     def __init__(self, simulation: dict, data: dict):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
@@ -102,7 +102,7 @@ class SimulationResult:
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
 
-    def to_file(self, path: Union[str, Path]):
+    def save(self, path: Union[str, Path]):
         '''Save the simulation result to a directory with the specified path.'''
         try:
             os.makedirs(path)
@@ -122,7 +122,7 @@ class SimulationResult:
         print(f"Simulation result saved to {path}.")
 
     @classmethod
-    def from_file(cls, path: Union[str, Path]):
+    def load(cls, path: Union[str, Path]):
         '''Load a simulation result from the specified path.'''
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']

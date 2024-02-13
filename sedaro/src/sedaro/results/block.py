@@ -11,7 +11,7 @@ from .series import SedaroSeries
 from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
 
 
-class SedaroBlockResult:
+class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     def __init__(self, structure, series: dict):
         '''Initialize a new block result.
@@ -91,7 +91,7 @@ class SedaroBlockResult:
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def to_file(self, filename: Union[str, Path]):
+    def save(self, filename: Union[str, Path]):
         '''Save the block result to a zip archive.'''
         success = False
         try:
@@ -136,7 +136,7 @@ class SedaroBlockResult:
 
     @classmethod
     @contextmanager
-    def from_file(cls, filename: Union[str, Path]):
+    def load(cls, filename: Union[str, Path]):
         '''Load a block result from a zip archive.'''
         try:
             tmpdir = f".{uuid6.uuid7()}"
