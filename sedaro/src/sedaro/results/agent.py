@@ -125,27 +125,24 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         print(f"Agent result saved to {path}.")
 
     @classmethod
-    def load(cls, filename: Union[str, Path]):
-        '''Load an agent result from a zip archive.'''
-        try:
-            tmpdir = f".{uuid6.uuid7()}"
-            shutil.unpack_archive(filename, tmpdir, 'zip')
-            with open(f"{tmpdir}/meta.json", "r") as fp:
-                meta = json.load(fp)
-                name = meta['name']
-                structure = meta['structure']
-                block_structures = meta['block_structures']
-                initial_state = meta['initial_state']
-            engines = {}
-            parquets = os.listdir(f"{tmpdir}/data/")
-            for agent in parquets:
-                df = dd.read_parquet(f"{tmpdir}/data/{agent}")
-                engines[agent.replace(' ', '/')] = df
-            yield SedaroAgentResult(name, block_structures, engines, structure, initial_state)
-        except Exception as e:
-            raise e
-        finally:
-            shutil.rmtree(tmpdir, ignore_errors=True)
+    def load(cls, path: Union[str, Path]):
+        '''Load an agent result from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != 'SedaroAgentResult':
+                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
+        with open(f"{path}/meta.json", "r") as fp:
+            meta = json.load(fp)
+            name = meta['name']
+            structure = meta['structure']
+            block_structures = meta['block_structures']
+            initial_state = meta['initial_state']
+        engines = {}
+        parquets = os.listdir(f"{path}/data/")
+        for engine in parquets:
+            df = dd.read_parquet(f"{path}/data/{engine}")
+            engines[engine.replace(' ', '/')] = df
+        return cls(name, block_structures, engines, structure, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
