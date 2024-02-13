@@ -200,7 +200,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             json.dump({'class': 'SedaroSeries'}, fp)
         with open(f"{path}/name.json", "w") as fp:
             json.dump({'name': self.__name}, fp)
-        self.__series.to_parquet(f"{path}/data.parquet")
+        self.__static_series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
 
     @classmethod
