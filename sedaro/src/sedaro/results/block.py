@@ -1,4 +1,3 @@
-from contextlib import contextmanager
 import dask.dataframe as dd
 import json
 import os
@@ -91,68 +90,38 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def save(self, filename: Union[str, Path]):
-        '''Save the block result to a zip archive.'''
-        success = False
+    def save(self, path: Union[str, Path]):
+        '''Save the block result to a directory with the specified path.'''
         try:
-            tmpdir = f".{uuid6.uuid7()}"
-            os.mkdir(tmpdir)
-            with open(f"{tmpdir}/class.json", "w") as fp:
-                json.dump({'class': 'SedaroBlockResult'}, fp)
-            with open(f"{tmpdir}/structure.json", "w") as fp:
-                json.dump(self.__structure, fp)
-            os.mkdir(f"{tmpdir}/data")
-            for engine in self.__series:
-                path = f"{tmpdir}/data/{engine.replace('/', ' ')}"
-                df : dd = self.__series[engine]
-                df.to_parquet(path)
-            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
-            curr_zip_base = ''
-            # if the path is to another directory, make that directory if nonexistent, and move the zip there
-            if len(path_split := filename.split('/')) > 1:
-                path_dirs = '/'.join(path_split[:-1])
-                Path(path_dirs).mkdir(parents=True, exist_ok=True)
-                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
-                zip_desired_name = path_split[-1]
-            else:
-                zip_desired_name = filename
-            # rename zip to specified name
-            if len(curr_zip_base) > 0:
-                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
-                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
-            else:
-                zip_new_path = zip_desired_name
-                curr_zip_name = tmpzip
-            shutil.move(f"{curr_zip_name}.zip", zip_new_path)
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
-            print(f"Successfully archived at {zip_new_path}")
-        except Exception as e:
-            raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+            os.makedirs(path)
+        except FileExistsError:
+            print(f"A directory or file already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': 'SedaroBlockResult'}, fp)
+        with open(f"{path}/structure.json", "w") as fp:
+            json.dump(self.__structure, fp)
+        os.mkdir(f"{path}/data")
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{engine.replace('/', ' ')}"
+            df : dd = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
+        print(f"Block result saved to {path}.")
 
     @classmethod
-    @contextmanager
-    def load(cls, filename: Union[str, Path]):
-        '''Load a block result from a zip archive.'''
-        try:
-            tmpdir = f".{uuid6.uuid7()}"
-            shutil.unpack_archive(filename, tmpdir, 'zip')
-            with open(f"{tmpdir}/structure.json", "r") as fp:
-                structure = json.load(fp)
-            engines = {}
-            parquets = os.listdir(f"{tmpdir}/data/")
-            for agent in parquets:
-                df = dd.read_parquet(f"{tmpdir}/data/{agent}")
-                engines[agent.replace(' ', '/')] = df
-            yield SedaroBlockResult(structure, engines)
-        except Exception as e:
-            raise e
-        finally:
-            shutil.rmtree(tmpdir, ignore_errors=True)
+    def load(cls, path: Union[str, Path]):
+        '''Load a block result from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != 'SedaroBlockResult':
+                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
+        with open(f"{path}/structure.json", "r") as fp:
+            structure = json.load(fp)
+        engines = {}
+        parquets = os.listdir(f"{path}/data/")
+        for agent in parquets:
+            df = dd.read_parquet(f"{path}/data/{agent}")
+            engines[agent.replace(' ', '/')] = df
+        return cls(structure, engines)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
