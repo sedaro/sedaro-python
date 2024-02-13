@@ -1,12 +1,9 @@
-from contextlib import contextmanager
 import dask.dataframe as dd
 import json
 from functools import cached_property
 import os
 from pathlib import Path
-import shutil
 from typing import Union
-import uuid6
 
 from scipy.interpolate import interp1d
 
@@ -193,61 +190,30 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def save(self, filename: Union[str, Path]):
-        '''Save the series result to a zip archive.'''
-        success = False
+    def save(self, path: Union[str, Path]):
+        '''Save the series result to a directory with the specified path.'''
         try:
-            tmpdir = f".{uuid6.uuid7()}"
-            os.mkdir(tmpdir)
-            with open(f"{tmpdir}/class.json", "w") as fp:
-                json.dump({'class': 'SedaroSeries'}, fp)
-            with open(f"{tmpdir}/name.json", "w") as fp:
-                json.dump({'name': self.__name}, fp)
-            self.__static_series.to_parquet(f"{tmpdir}/data.parquet")
-            shutil.make_archive(tmpzip := f".{uuid6.uuid7()}", 'zip', tmpdir)
-            curr_zip_base = ''
-            # if the path is to another directory, make that directory if nonexistent, and move the zip there
-            if len(path_split := filename.split('/')) > 1:
-                path_dirs = '/'.join(path_split[:-1])
-                Path(path_dirs).mkdir(parents=True, exist_ok=True)
-                shutil.move(f"{tmpzip}.zip", f"{(curr_zip_base := path_dirs)}/{tmpzip}.zip")
-                zip_desired_name = path_split[-1]
-            else:
-                zip_desired_name = filename
-            # rename zip to specified name
-            if len(curr_zip_base) > 0:
-                zip_new_path = f"{curr_zip_base}/{zip_desired_name}"
-                curr_zip_name = f"{curr_zip_base}/{tmpzip}"
-            else:
-                zip_new_path = zip_desired_name
-                curr_zip_name = tmpzip
-            shutil.move(f"{curr_zip_name}.zip", zip_new_path)
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
-            success = True
-            print(f"Successfully archived at {zip_new_path}")
-        except Exception as e:
-            raise e
-        finally:
-            if not success:
-                shutil.rmtree(tmpdir, ignore_errors=True)
+            os.makedirs(path)
+        except FileExistsError:
+            print(f"A directory or file already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': 'SedaroSeries'}, fp)
+        with open(f"{path}/name.json", "w") as fp:
+            json.dump({'name': self.__name}, fp)
+        self.__series.to_parquet(f"{path}/data.parquet")
+        print(f"Series result saved to {path}.")
 
     @classmethod
-    @contextmanager
-    def load(cls, filename: Union[str, Path]):
-        '''Load a series from a zip archive.'''
-        try:
-            tmpdir = f".{uuid6.uuid7()}"
-            shutil.unpack_archive(filename, tmpdir, 'zip')
-            with open(f"{tmpdir}/name.json", "r") as fp:
-                name = json.load(fp)['name']
-            data = dd.read_parquet(f"{tmpdir}/data.parquet")
-            yield SedaroSeries(name, data)
-        except Exception as e:
-            raise e
-        finally:
-            # remove tmpdir
-            shutil.rmtree(tmpdir, ignore_errors=True)
+    def load(cls, path: Union[str, Path]):
+        '''Load a series result from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != 'SedaroSeries':
+                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
+        with open(f"{path}/name.json", "r") as fp:
+            name = json.load(fp)['name']
+        data = dd.read_parquet(f"{path}/data.parquet")
+        return cls(name, data)
 
     def summarize(self):
         hfill()
