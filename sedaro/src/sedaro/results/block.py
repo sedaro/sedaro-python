@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFileAreDeprecated
 
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
