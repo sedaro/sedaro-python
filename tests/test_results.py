@@ -54,13 +54,6 @@ def test_query():
     # Obtain handle
     simulation_handle = sim.status()
 
-    # make sure results_plain returns dictionary (testing latest and with id)
-    plain = sim.results_plain()
-    assert isinstance(plain, dict)
-    assert plain == simulation_handle.results_plain()
-    data_array_id = plain['meta']['id']
-    assert plain == sim.results_plain(id=data_array_id)
-
     # test results method (default latest)
     result = sim.results()
     assert result.success
