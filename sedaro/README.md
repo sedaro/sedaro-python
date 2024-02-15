@@ -230,7 +230,6 @@ The following `Simulation` methods are also available on the `SimulationHandle` 
 simulation_handle.status()
 simulation_handle.results_poll()
 simulation_handle.results()
-simulation_handle.results_plain(...)
 simulation_handle.terminate()
 ```
 
