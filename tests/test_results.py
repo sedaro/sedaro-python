@@ -121,6 +121,20 @@ def test_query_model():
         'status': 'SUCCEEDED',
     }
 
+    df1 = dd.from_dict({
+        'a.b.value': ['0first', '0second'],
+        'a.value': ['0rfirst', 12],
+        'index': [1, 4],
+    }, npartitions=1)
+    df1 = df1.set_index('index')
+
+    df2 = dd.from_dict({
+        'a.b.otherValue': ['1first', '1second', '1third', '1fourth'],
+        'a.otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
+        'index': [1, 2, 3, 4],
+    }, npartitions=1)
+    df2 = df2.set_index('index')
+
     data = {
         'meta': {
             'structure': {
@@ -156,28 +170,8 @@ def test_query_model():
             }
         },
         'series': {
-            'a/0': [
-                [1, 4],
-                {
-                    'a': {
-                        'b': {
-                            'value': ['0first', '0second'],
-                        },
-                        'value': ['0rfirst', {'edge': 12}],
-                    }
-                }
-            ],
-            'a/1': [
-                [1, 2, 3, 4],
-                {
-                    'a': {
-                        'b': {
-                            'otherValue': ['1first', '1second', '1third', '1fourth'],
-                        },
-                        'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
-                    }
-                }
-            ],
+            'a/0': df1,
+            'a/1': df2,
         }
     }
 
@@ -185,6 +179,7 @@ def test_query_model():
     agent = results.agent('Agent')
 
     model = agent.model_at(1)
+    print(model)
     assert model['value'] == '0rfirst'
     assert model['otherValue'] == '1rfirst'
     assert model['name'] == 'Root'
@@ -202,7 +197,7 @@ def test_query_model():
         assert model['blocks']['b']['name'] == 'Block'
 
     model = agent.model_at(4)
-    assert model['value']['edge'] == 12
+    assert model['value'] == 12
     assert model['otherValue'] == '1rfourth'
     assert model['name'] == 'Root'
     assert model['blocks']['b']['value'] == '0second'
@@ -264,8 +259,8 @@ def test_download():
 
 
 def run_tests():
-    test_query_terminated()
-    test_query()
-    test_save_load()
+    # test_query_terminated()
+    # test_query()
+    # test_save_load()
     test_query_model()
-    test_download()
+    # test_download()

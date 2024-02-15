@@ -184,7 +184,9 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
 
         # Rough out model
+        self.summarize()
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
+        print(blocks)
         model = {'blocks': blocks, **blocks['root']}
         del blocks['root']
 
