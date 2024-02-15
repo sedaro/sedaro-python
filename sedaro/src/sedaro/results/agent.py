@@ -44,7 +44,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 self.__block_uuids[block_uuid] = self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]['name']
             else:
                 self.__block_uuids[block_uuid] = None
-        print(self.__block_uuids)
         self.__block_ids = sorted(set(
             block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
             for module in self.__series
@@ -52,7 +51,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         ),
             reverse=True
         )
-        print(self.__block_ids)
         self.__initial_state = initial_state
         self.__column_mapping = self.__initialize_block_structure()
 
@@ -186,10 +184,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
 
         # Rough out model
-        for block_id in self.__block_ids:
-            print(block_id)
-            print(self.block(block_id).value_at(mjd))
-            print("----")
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
         model = {'blocks': blocks, **blocks['root']}
         del blocks['root']
