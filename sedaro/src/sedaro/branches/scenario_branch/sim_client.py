@@ -466,6 +466,7 @@ class Simulation:
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
+        num_workers: int = 2,
         retry_interval: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
@@ -495,7 +496,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [], sampleRate=sampleRate)
+        return self.results(streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
     def __get_metadata(self, sim_id: str = None):
         request_url = f'/data/{sim_id}/metadata?'
