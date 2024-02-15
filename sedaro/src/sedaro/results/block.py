@@ -140,4 +140,5 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         print("❓ Query variables with .<VARIABLE_NAME>")
 
     def value_at(self, mjd):
-        return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
+        print(self.variables)
+        return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables[4:]}
