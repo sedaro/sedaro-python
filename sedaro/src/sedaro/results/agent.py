@@ -44,6 +44,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 self.__block_uuids[block_uuid] = self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]['name']
             else:
                 self.__block_uuids[block_uuid] = None
+        print(self.__block_uuids)
         self.__block_ids = sorted(set(
             block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
             for module in self.__series
@@ -51,6 +52,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         ),
             reverse=True
         )
+        print(self.__block_ids)
         self.__initial_state = initial_state
         self.__column_mapping = self.__initialize_block_structure()
 
