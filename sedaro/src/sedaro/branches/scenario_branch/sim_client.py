@@ -15,7 +15,7 @@ import uuid6
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
-from sedaro.branches.scenario_branch.download import ArchiveProgressBar, DownloadWorker, ProgressBar
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import COMMON_API_KWARGS
