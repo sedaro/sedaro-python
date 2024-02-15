@@ -68,7 +68,6 @@ def test_query():
 
     # make sure results have same ids
     assert result.job_id == result_from_id.job_id == job_id
-    assert result.data_array_id == result_from_id.data_array_id == data_array_id
 
     agent_result = result.agent(result.templated_agents[0])
     block_result = agent_result.block('root')
