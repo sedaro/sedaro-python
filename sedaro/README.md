@@ -245,53 +245,16 @@ simulation_handle['status']
 
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
 
-## Fetch Raw Data
+## Saving Downloaded Data
 
-You may also fetch results directly as a plain dictionary with additional arguments to customize the result.
-
-```py
-sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
-
-# Run simulation
-sim.start(wait=True)
-
-# After finished... get raw data
-selected_streams=[
-    ('foo',),
-    ('bar', 'Thermal'),
-    ('bar', 'Power')
-]
-data = sim.results_plain(
-  start=65000,
-  stop=65001,
-  sampleRank=1,
-  streams=selected_streams,
-)
-### alternative:
-data = sim.results_plain(
-  start=65000,
-  stop=65001,
-  sampleRank=8,
-  streams=selected_streams,
-)
-```
-
-See doc string in the `results_plain` for details on use of the arguments.
-
-## Bulk Download
-
-Use the following method to download larger datasets more efficiently. Arguments:
-- filename (required): the path at which the downloaded data should be stored
-- simulation_id (optional): the UUID of the specific simulation for which to download data. If not specified, defaults to the most recently run simulation on the provided scenario.
-- workers (optional): the number of parallel workers that should be used. Defaults to 2.
-- streams (optional): the specific streams for which to download data, following the format in the above section. If not specified, data is downloaded for all streams.
-- overwrite (optional): if True, if a file exists at the specified path, the downloader will overwrite it. If False, it will raise an exception. Defaults to False.
+You may save downloaded simulation data to your machine by the following procedure:
 
 ```py
-sim.download(filename='archive.zip')
+results = simulation_handle.results()
+results.save('path/to/data')
 ```
 
-This will produce a ZIP archive called `archive.zip` (more generally, whatever argument you provide for `filename`) in your working directory. Inside the ZIP archive, there will be one directory for each stream. This directory will contain a Parquet dataset for its corresponding stream. This Parquet dataset may consist of one file, or of multiple files.
+This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to a directory which does not yet exist.
 
 ## Send Requests
 
