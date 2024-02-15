@@ -2,6 +2,7 @@ import dask.dataframe as dd
 import numpy as np
 import os
 from pathlib import Path
+import shutil
 from tempfile import TemporaryDirectory
 
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
@@ -262,11 +263,12 @@ def test_download():
 
     # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
-    sim.download(filename="sedaro.zip", overwrite=True)
+    results = sim.results()
+    results.save("/previously-nonexistent-path/to/some/directory")
     try:
-        assert os.path.exists("sedaro.zip")
+        assert os.path.exists("/previously-nonexistent-path/to/some/directory")
     finally:
-        os.remove("sedaro.zip")
+        shutil.rmtree("/previously-nonexistent-path/to/some/directory")
 
 
 def run_tests():
