@@ -38,10 +38,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             for column_name in self.__series.columns.tolist():
                 renamed_columns[column_name] = '.'.join(column_name.split('.')[1:])
             self.__series = self.__series.rename(columns=renamed_columns)
-            self.__dtype = self.__series.dtypes
+            self.__dtype = self.__series.dtypes.to_dict()
         else:
             self.__column_name = self.__series.columns.tolist()[0]
-            self.__dtype = self.__series.dtypes[0]
+            self.__dtype = self.__series.dtypes.iloc[0]
 
     def __repr__(self):
         return f"Series({self.name})"
@@ -136,7 +136,11 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
         if self.__has_subseries:
-            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__dtype}
+            subseries_prefixes = set()
+            for column in self.__series.columns.tolist():
+                subseries_prefixes.add(column.split('.')[0])
+            subseries_prefixes = list(subseries_prefixes)
+            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in subseries_prefixes}
         else:
             def raise_error():
                 raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
