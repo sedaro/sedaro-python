@@ -102,19 +102,21 @@ def _restructure_data(series, agents, meta):
     data = {}
     blocks = {}
     for series_key in series:
+        print(f"series key: {series_key}")
         agent_id, engine_id = series_key.split("/")
         agent_name = agents[agent_id]
         engine_name = ENGINE_MAP[engine_id]
+        print(f"Processing {agent_name} - {engine_name}")
 
         if agent_name not in data:
             data[agent_name] = {}
 
-        time, sub_series = series[series_key]
+        sub_series = series[series_key]
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
         data[agent_name][engine_name] = {
-            'time': time,
-            'series': _simplify_series(sub_series[agent_id], blocks[agent_id])
+            'time': sub_series.index.values,
+            'series': _simplify_series(sub_series, blocks[agent_id])
         }
     return data, blocks
 
