@@ -1,58 +1,33 @@
-import dask.dataframe as dd
+import gzip
 import json
-import os
 from pathlib import Path
 from typing import Generator, List, Union
 
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFileAreDeprecated
+from .utils import ENGINE_EXPANSION, HFILL, hfill
 
 
-class SedaroAgentResult(FromFileAndToFileAreDeprecated):
+class SedaroAgentResult:
 
-    def __initialize_block_structure(self):
-        '''Initialize the block structure for this agent.'''
-        columns = {}
-        for module in self.__series:
-            columns[module] = self.__series[module].columns.tolist()
-        column_mapping = {}
-        for module in columns:
-            for column in columns[module]:
-                if column != 'time':
-                    assert column not in column_mapping
-                    column_mapping[column] = module
-        return column_mapping
-
-    def __init__(self, name: str, block_structures: dict, series: dict, structure: dict, initial_state: dict = None):
+    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
         SedaroSimulationResult or the .from_file method of this class.
         '''
         self.__name = name
-        for k in series:
-            self.__agent_uuid = k.split('/')[0]
-            break
-        self.__structure = structure
         self.__block_structures = block_structures
         self.__series = series
-        self.__block_uuids = {}
-        for block_uuid in self.__structure['agents'][self.__agent_uuid]['blocks']:
-            if 'name' in self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]:
-                self.__block_uuids[block_uuid] = self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]['name']
-            else:
-                self.__block_uuids[block_uuid] = None
         self.__block_ids = sorted(set(
-            block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
+            block_id
             for module in self.__series
-            for block_id in self.__series[module].columns.tolist()
+            for block_id in self.__series[module]['series']
         ),
             reverse=True
         )
         self.__initial_state = initial_state
-        self.__column_mapping = self.__initialize_block_structure()
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
@@ -82,65 +57,34 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             else:
                 raise ValueError(f'Found multiple matching IDs for {id_}: {matching_id}.')
 
-        column_block_lists = {}
-        for column in self.__column_mapping:
-            if (id_ != 'root' and column.split('.')[0] == id_) or (id_ == 'root' and column.split('.')[0] not in self.__block_uuids):
-                column_dataframe = self.__column_mapping[column]
-                if column_dataframe not in column_block_lists:
-                    column_block_lists[column_dataframe] = []
-                column_block_lists[column_dataframe].append(column)
-
         block_data = {}
         for module in self.__series:
-            if module in column_block_lists:
-                block_data[module] = self.__series[module][column_block_lists[module]]
-                if id_ != 'root':
-                    # rename columns, removing first part of the column name
-                    block_data[module] = block_data[module].rename(columns={column: '.'.join(column.split('.')[1:]) for column in column_block_lists[module]})
+            if id_ in self.__series[module]['series']:
+                if module not in block_data:
+                    block_data[module] = {}
+                block_data[module]['time'] = self.__series[module]['time']
+                block_data[module]['series'] = self.__series[module]['series'][id_]
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def save(self, path: Union[str, Path]):
-        '''Save the agent result to a directory with the specified path.'''
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            print(f"A directory or file already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SedaroAgentResult'}, fp)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({
+    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
+        '''Save agent result to compressed JSON file.'''
+        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
+            contents = {
                 'name': self.__name,
-                'structure': self.__structure,
-                'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
-            }, fp)
-        os.mkdir(f"{path}/data")
-        for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', ' ')}"
-            df : dd = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
-        print(f"Agent result saved to {path}.")
+                'series': self.__series,
+            }
+            json.dump(contents, json_file)
+            if verbose:
+                print(f"💾 Successfully saved to {filename}")
 
     @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load an agent result from the specified path.'''
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SedaroAgentResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
-        with open(f"{path}/meta.json", "r") as fp:
-            meta = json.load(fp)
-            name = meta['name']
-            structure = meta['structure']
-            block_structures = meta['block_structures']
-            initial_state = meta['initial_state']
-        engines = {}
-        parquets = os.listdir(f"{path}/data/")
-        for engine in parquets:
-            df = dd.read_parquet(f"{path}/data/{engine}")
-            engines[engine.replace(' ', '/')] = df
-        return cls(name, block_structures, engines, structure, initial_state)
+    def from_file(cls, filename: Union[str, Path]):
+        '''Load agent result from compressed JSON file.'''
+        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
+            contents = json.load(json_file)
+            return cls(contents['name'], contents['block_structures'], contents['series'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
@@ -151,7 +95,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
         print("🧩 Simulated Modules")
         for module in self.__series:
-            print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
+            print(f'    • {ENGINE_EXPANSION[module]}')
 
         print("\n📦 Available Blocks")
         print('    ' + '-' * 58)
@@ -159,7 +103,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':
-                block_name = self.__block_uuids[block_id]
+                block_name = self.__block_structures[block_id].get('name', None)
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
@@ -184,9 +128,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
 
         # Rough out model
-        self.summarize()
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
-        print(f"blocks: {blocks}")
         model = {'blocks': blocks, **blocks['root']}
         del blocks['root']
 

@@ -1,7 +1,5 @@
 import math
 import numpy as np
-from pathlib import Path
-from typing import Union
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -89,15 +87,36 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
     return data
 
 
-def _get_agent_mapping(series, agents, meta):
-    agent_mapping = {}
-    block_structures = {}
+def _restructure_data(series, agents, meta):
+    '''Build a simplified internal data structure.
+
+    Creates a dictionary with the following key hierarchy:
+
+        Agent Name
+            Engine Name (gnc, cdh, power, thermal)
+                Time
+                Series
+                    Block ID (or root)
+                        Variable Name
+    '''
+    data = {}
+    blocks = {}
     for series_key in series:
-        agent_id = series_key.split("/")[0]
-        agent_mapping[agent_id] = agents[agent_id]
-        if agent_id not in block_structures:
-            block_structures[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
-    return agent_mapping, block_structures
+        agent_id, engine_id = series_key.split("/")
+        agent_name = agents[agent_id]
+        engine_name = ENGINE_MAP[engine_id]
+
+        if agent_name not in data:
+            data[agent_name] = {}
+
+        time, sub_series = series[series_key]
+        if agent_id not in blocks:
+            blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
+        data[agent_name][engine_name] = {
+            'time': time,
+            'series': _simplify_series(sub_series[agent_id], blocks[agent_id])
+        }
+    return data, blocks
 
 
 def _get_series_type(series):
@@ -128,12 +147,19 @@ def bsearch(ordered_series, value):
         return -1
     return _bsearch(0, len(ordered_series) - 1)
 
-class FromFileAndToFileAreDeprecated:
-    @classmethod
-    def from_file(self, filename: Union[str, Path]):
-        print("Warning: `from_file` is deprecated. Use `load` instead. Calling `load`.")
-        return self.load(filename)
 
-    def to_file(self, filename: Union[str, Path]):
-        print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
-        return self.save(filename)
+def to_time_major(series):
+    if type(series) not in [list, dict]:
+        return series
+    elif type(series) == dict:
+        new = {}
+        for k in series:
+            new[k] = to_time_major(series[k])
+        return new
+    else: # type(series) == list
+        np_data = np.array(series)
+        if np_data.ndim > 1:
+            axes = (np_data.ndim - 1,) + tuple(range(np_data.ndim - 1))
+            np_data = np.transpose(np_data, axes=axes)
+        reshaped_data = np_data.tolist()
+        return reshaped_data

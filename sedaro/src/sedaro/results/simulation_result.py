@@ -1,16 +1,16 @@
-import dask.dataframe as dd
+
 import datetime as dt
+import gzip
 import json
-import os
 from pathlib import Path
 from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _get_agent_mapping, hfill, FromFileAndToFileAreDeprecated)
+                    _get_agent_id_name_map, _restructure_data, hfill, to_time_major)
 
 
-class SimulationResult(FromFileAndToFileAreDeprecated):
+class SimulationResult:
 
     def __init__(self, simulation: dict, data: dict):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
@@ -29,7 +29,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        self.__agent_ids, self.__block_structures = _get_agent_mapping(raw_series, agent_id_name_map, self.__meta)
+        self.__simpleseries, self._agent_blocks = _restructure_data(raw_series, agent_id_name_map, self.__meta)
+        try:
+            axis = self.__meta['axis']
+        except KeyError:
+            axis = 'TIME_MAJOR'
+        if axis != 'TIME_MAJOR':
+            assert axis == 'TIME_MINOR'
+            self.__simpleseries = to_time_major(self.__simpleseries)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
@@ -55,7 +62,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         return tuple([
             entry['name'] for id_, entry
             in self.__meta['structure']['scenario']['blocks'].items()
-            if _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers'], super_type='PeripheralAgent') and id_ in self.__agent_ids
+            if _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers'], super_type='PeripheralAgent') and id_ in self._agent_blocks
         ])
 
     @property
@@ -86,7 +93,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
     def __agent_id_from_name(self, name: str) -> str:
         for id_, entry in self.__meta['structure']['scenario']['blocks'].items():
             if name == entry.get('name') and _block_type_in_supers(entry['type'], self.__meta['structure']['scenario']['_supers']):
-                if id_ in self.__agent_ids:
+                if id_ in self._agent_blocks:
                     return id_
         else:
             raise ValueError(f"Agent {name} not found in data set.")
@@ -94,51 +101,23 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
     def agent(self, name: str) -> SedaroAgentResult:
         '''Query results for a particular agent by name.'''
         agent_id = self.__agent_id_from_name(name)
-        agent_dataframes = {}
-        for stream_id in self.__data['series']:
-            if stream_id.startswith(agent_id):
-                agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
+        return SedaroAgentResult(name, self._agent_blocks[agent_id], self.__simpleseries[name], initial_state=initial_state)
 
-    def save(self, path: Union[str, Path]):
-        '''Save the simulation result to a directory with the specified path.'''
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            print(f"A directory or file already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SimulationResult'}, fp)
-        with open(f"{path}/simulation.json", "w") as fp:
-            json.dump(self.__simulation, fp)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump(self.__data['meta'], fp)
-        os.mkdir(f"{path}/data")
-        for agent in self.__data['series']:
-            agent_parquet_path = f"{path}/data/{agent.replace('/', ' ')}"
-            df : dd = self.__data['series'][agent]
-            df.to_parquet(agent_parquet_path)
-        print(f"Simulation result saved to {path}.")
+    def to_file(self, filename: Union[str, Path]) -> None:
+        '''Save simulation result to compressed JSON file.'''
+        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
+            contents = {'data': self.__data, 'simulation': self.__simulation}
+            json.dump(contents, json_file)
+            print(f"💾 Successfully saved to {filename}")
 
     @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load a simulation result from the specified path.'''
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SimulationResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
-        with open(f"{path}/simulation.json", "r") as fp:
-            simulation = json.load(fp)
-        data = {}
-        with open(f"{path}/meta.json", "r") as fp:
-            data['meta'] = json.load(fp)
-        parquets = os.listdir(f"{path}/data/")
-        data['series'] = {}
-        for agent in parquets:
-            df = dd.read_parquet(f"{path}/data/{agent}")
-            data['series'][agent.replace(' ', '/')] = df
-        return cls(simulation, data)
+    def from_file(cls, filename: Union[str, Path]):
+        '''Load simulation result from compressed JSON file.'''
+        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
+            contents = json.load(json_file)
+            return SimulationResult(contents['simulation'], contents['data'])
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
