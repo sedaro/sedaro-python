@@ -186,7 +186,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         # Rough out model
         self.summarize()
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
-        print(blocks)
+        print(f"blocks: {blocks}")
         model = {'blocks': blocks, **blocks['root']}
         del blocks['root']
 
