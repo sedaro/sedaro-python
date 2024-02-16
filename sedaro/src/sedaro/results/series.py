@@ -140,7 +140,15 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             for column in self.__series.columns.tolist():
                 subseries_prefixes.add(column.split('.')[0])
             subseries_prefixes = list(subseries_prefixes)
-            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in subseries_prefixes}
+            if self.__all_subseries_are_numeric():
+                arr_len = max([int(p) for p in subseries_prefixes]) + 1
+                result = [None] * arr_len
+                for i in range(arr_len):
+                    if (p := str(i)) in subseries_prefixes:
+                        result[i] = self.__getattr__(p).value_at(mjd, interpolate=interpolate)
+                return result
+            else:
+                return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in subseries_prefixes}
         else:
             def raise_error():
                 raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
