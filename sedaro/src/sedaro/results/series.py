@@ -29,7 +29,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__name = name
         try:
             self.__mjd = data.index.values.compute()
-        except AttributeError:
+        except AttributeError: # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__static_series = data
@@ -128,7 +128,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def values(self):
         try:
             return self.__series.values.compute().tolist()
-        except AttributeError:
+        except AttributeError: # used for model_at, in which values have already been computed for the row in question
             return self.__series.values.tolist()
 
     @cached_property
