@@ -308,7 +308,7 @@ class Simulation:
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
-
+        
         response = fast_fetcher.get(url)
         _response = None
         has_nonempty_ctoken = False
