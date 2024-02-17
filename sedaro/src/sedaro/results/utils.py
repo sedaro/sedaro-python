@@ -86,6 +86,26 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
             data['root'][key] = value
     return data
 
+class Engine:
+    def __init__(self, time, series):
+        self.__time = time
+        self.__time_is_computed = False
+        self.__series = series
+
+    @property
+    def time(self):
+        if not self.__time_is_computed:
+            print("Computing time")
+            self.__time = list(self.__time.compute())
+            self.__time_is_computed = True
+        return self.__time
+
+    @property
+    def series(self):
+        return self.__series
+
+    def __getitem__(self, key):
+        return self.__getattribute__(key)
 
 def _restructure_data(series, agents, meta):
     '''Build a simplified internal data structure.
@@ -114,10 +134,7 @@ def _restructure_data(series, agents, meta):
         sub_series = series[series_key]
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
-        data[agent_name][engine_name] = {
-            'time': sub_series.index.values,
-            'series': _simplify_series(sub_series, blocks[agent_id])
-        }
+        data[agent_name][engine_name] = Engine(time=sub_series.index.values, series=_simplify_series(sub_series, blocks[agent_id]))
     return data, blocks
 
 

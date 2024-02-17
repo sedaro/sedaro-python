@@ -24,9 +24,14 @@ class SedaroSeries:
         this class.
         '''
         self.__name = name
-        self.__mjd = list(time.compute())
+        self.__mjd = time
+        # if mjd_precomputed:
+        #     self.__mjd = time
+        # else:
+        #     self.__mjd = list(time.compute())
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = series
+        print(f"typeof series: {type(series)}, len: {len(series)}, name: {name}")
         self.__has_subseries = isinstance(self.__series, dict)
         if self.__has_subseries:
             self.__dtype = {key: _get_series_type(subseries) for key, subseries in self.__series.items()}
@@ -105,8 +110,9 @@ class SedaroSeries:
                     raise_error()
             else:
                 return self.values_interpolant(mjd)
-            return self.__series[self.__mjd[index]]
-            # return self.__series.head(index + 1).tail(1).values[0][0]
+            # return self.__series[self.__mjd[index]].compute()[self.__mjd[index]]
+            # return self.__series.head(index + 1).tail(1).compute().iloc[0]
+            return self.__series.loc[self.__mjd[index]].compute()[self.__mjd[index]]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
         self.__plot(show, ylabel, elapsed_time, height, xlim, ylim, **kwargs)
