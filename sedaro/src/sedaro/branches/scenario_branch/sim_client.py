@@ -465,7 +465,6 @@ class Simulation:
         '''Query latest scenario result.'''
         job = self.status(job_id)
         data = self.__results(job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
-        print("successfully fetched data!")
         return SimulationResult(job, data)
 
     def results_poll(
