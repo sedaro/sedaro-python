@@ -122,15 +122,15 @@ def test_query_model():
     }
 
     df1 = dd.from_dict({
-        'a.b.value': ['0first', '0second'],
-        'a.value': ['0rfirst', 12],
+        'b.value': ['0first', '0second'],
+        'value': ['0rfirst', 12],
         'index': [1, 4],
     }, npartitions=1)
     df1 = df1.set_index('index')
 
     df2 = dd.from_dict({
-        'a.b.otherValue': ['1first', '1second', '1third', '1fourth'],
-        'a.otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
+        'b.otherValue': ['1first', '1second', '1third', '1fourth'],
+        'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
         'index': [1, 2, 3, 4],
     }, npartitions=1)
     df2 = df2.set_index('index')
