@@ -563,8 +563,14 @@ class SimulationHandle:
         self.__sim_client.terminate(self.__job['id'])
         return self
 
-    def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
-        """Query simulaiton results.
+    def results(
+            self,
+            start: float = None,
+            stop: float = None,
+            streams: Optional[List[Tuple[str, ...]]] = None,
+            sampleRate: int = None,
+            num_workers: int = 2) -> SimulationResult:
+        """Query simulation results.
 
         If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it
         must be a list of tuples following particular rules:
@@ -589,7 +595,15 @@ class SimulationHandle:
         ```
 
         Args:
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to `None`.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -598,17 +612,25 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], streams=streams)
+        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
 
     def results_poll(
         self,
         streams: List[Tuple[str, ...]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
         retry_interval: int = 2
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
         Args:
-            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
 
         Raises:
@@ -620,6 +642,8 @@ class SimulationHandle:
         return self.__sim_client.results_poll(
             job_id=self.__job['id'],
             streams=streams,
+            sampleRate=sampleRate,
+            num_workers=num_workers,
             retry_interval=retry_interval
         )
 
