@@ -308,7 +308,7 @@ class Simulation:
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
-        
+
         response = fast_fetcher.get(url)
         _response = None
         has_nonempty_ctoken = False
@@ -622,15 +622,6 @@ class SimulationHandle:
             streams=streams,
             retry_interval=retry_interval
         )
-
-    def download(
-        self,
-        streams: List[Tuple[str, ...]] = None,
-        filename: str = None,
-        workers: int = 2,
-        overwrite: bool = False
-    ):
-        return self.__sim_client.download(self.__job['id'], filename=filename, workers=workers, streams=streams, overwrite=overwrite)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:
