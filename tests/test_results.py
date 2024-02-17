@@ -123,7 +123,7 @@ def test_query_model():
 
     df1 = dd.from_dict({
         'b.value': ['0first', '0second'],
-        'value': ['0rfirst', 12],
+        'value': ['0rfirst', '0rsecond'],
         'index': [1, 4],
     }, npartitions=1)
     df1 = df1.set_index('index')
@@ -197,7 +197,7 @@ def test_query_model():
         assert model['blocks']['b']['name'] == 'Block'
 
     model = agent.model_at(4)
-    assert model['value'] == 12
+    assert model['value'] == '0rsecond'
     assert model['otherValue'] == '1rfourth'
     assert model['name'] == 'Root'
     assert model['blocks']['b']['value'] == '0second'
@@ -251,11 +251,11 @@ def test_download():
     # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
     results = sim.results()
-    results.save("/previously-nonexistent-path/to/some/directory")
+    results.save("previously-nonexistent-path/to/some/directory")
     try:
-        assert os.path.exists("/previously-nonexistent-path/to/some/directory")
+        assert os.path.exists("previously-nonexistent-path/to/some/directory")
     finally:
-        shutil.rmtree("/previously-nonexistent-path/to/some/directory")
+        shutil.rmtree("previously-nonexistent-path/to/some/directory")
 
 
 def run_tests():
@@ -263,4 +263,4 @@ def run_tests():
     # test_query()
     # test_save_load()
     test_query_model()
-    # test_download()
+    test_download()

@@ -25,6 +25,7 @@ dependencies = [
     "scipy >= 1.10.1",
     "numpy",
     "orjson",
+    "pyarrow",
     "requests",
 ]
 [[project.authors]]
