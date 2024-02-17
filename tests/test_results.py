@@ -180,7 +180,6 @@ def test_query_model():
     agent = results.agent('Agent')
 
     model = agent.model_at(1)
-    print(model)
     assert model['value'] == '0rfirst'
     assert model['otherValue'] == '1rfirst'
     assert model['name'] == 'Root'
@@ -262,8 +261,8 @@ def test_download():
 
 
 def run_tests():
-    # test_query_terminated()
-    # test_query()
-    # test_save_load()
+    test_query_terminated()
+    test_query()
+    test_save_load()
     test_query_model()
     test_download()
