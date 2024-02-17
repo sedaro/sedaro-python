@@ -58,10 +58,10 @@ def concat_results(main, other):
             concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
-        for k in other['counts']:
-            if k not in main['counts']:
-                main['counts'][k] = 0
-            main['counts'][k] += other['counts'][k]
+    for k in other['counts']:
+        if k not in main['counts']:
+            main['counts'][k] = 0
+        main['counts'][k] += other['counts'][k]
 
 def set_numeric_as_list(d):
     if isinstance(d, dict):
