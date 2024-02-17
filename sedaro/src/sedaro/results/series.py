@@ -27,7 +27,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         this class.
         '''
         self.__name = name
-        self.__mjd = data.index.values.compute()
+        try:
+            self.__mjd = data.index.values.compute()
+        except AttributeError:
+            self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__static_series = data
         self.__series = data.copy()
@@ -123,7 +126,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @property
     def values(self):
-        return self.__series.values.compute().tolist()
+        try:
+            return self.__series.values.compute().tolist()
+        except AttributeError:
+            return self.__series.values.tolist()
 
     @cached_property
     def values_interpolant(self):

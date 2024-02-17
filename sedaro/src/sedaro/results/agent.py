@@ -7,7 +7,7 @@ from typing import Generator, List, Union
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFileAreDeprecated
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
@@ -178,11 +178,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
 
-    def model_at(self, mjd):
-        if not self.__initial_state:
-            raise ValueError(
-                'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
-
+    def __model_at(self, mjd):
         # Rough out model
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
         model = {'blocks': blocks, **blocks['root']}
@@ -191,3 +187,22 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         # Merge with initial state to fill in missing values
         # This order will overwrite any values in the initial state with values from the simulation
         return merge({}, self.__initial_state, model)
+
+
+    def model_at(self, mjd):
+        if not self.__initial_state:
+            raise ValueError(
+                'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
+
+        # find closest MJD for each dataframe
+        trimmed_engines = {}
+        for engine in self.__series:
+            bsearch_index = bsearch(engine_mjds := self.__series[engine].index.values.compute(), mjd)
+            floor = engine_mjds[bsearch_index]
+            try:
+                ceil = engine_mjds[bsearch_index + 1]
+            except IndexError:
+                ceil = floor
+            trimmed_engines[engine] = self.__series[engine].loc[floor:ceil].compute()
+
+        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__structure, self.__initial_state).__model_at(mjd)
