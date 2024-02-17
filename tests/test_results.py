@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 from tempfile import TemporaryDirectory
+import uuid6
 
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
@@ -251,11 +252,13 @@ def test_download():
     # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
     results = sim.results()
-    results.save("previously-nonexistent-path/to/some/directory")
+    root = uuid6.uuid7()
+    path = f"{root}/to/some/directory"
+    results.save(path)
     try:
-        assert os.path.exists("previously-nonexistent-path/to/some/directory")
+        assert os.path.exists(path)
     finally:
-        shutil.rmtree("previously-nonexistent-path/to/some/directory")
+        shutil.rmtree(path)
 
 
 def run_tests():
