@@ -453,7 +453,15 @@ class Simulation:
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to `None`.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -480,7 +488,13 @@ class Simulation:
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
-            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
 
         Raises:
