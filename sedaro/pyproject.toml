@@ -27,7 +27,7 @@ dependencies = [
     "orjson",
     "pyarrow",
     "requests",
-]
+    ]
 [[project.authors]]
 name = "Sedaro"
 email = "support@sedarotech.com"
