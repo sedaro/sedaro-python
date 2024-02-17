@@ -96,7 +96,8 @@ class DownloadWorker:
 
     def finalize(self):
         for _, stream_manager in self.streams.items():
-            stream_manager.dataframe = stream_manager.dataframe.repartition(npartitions=1)
+            # REF 1: https://docs.dask.org/en/stable/dataframe-best-practices.html#repartition-to-reduce-overhead
+            stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB") # REF 1
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
         for k in self.streams:
