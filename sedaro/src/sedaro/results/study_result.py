@@ -117,7 +117,7 @@ class StudyResult:
 
         if result is None:
             print(f'💾 Downloading simulation result id {id_}...', end='')
-            result = Simulation(self.__study._sedaro, self.__study._branch).results(id_, streams,binWidth=self.__binWidth,limit=self.__limit )
+            result = Simulation(self.__study._sedaro, self.__study._branch).results(id_, streams)
             print('done!')
 
         if self.__cache:
@@ -198,8 +198,8 @@ class StudyResult:
 
         hfill()
         print("❓ First set desired results downsampling with:")
-        print("       .set_result_limit(<# of points>) ")
-        print("       .set_result_binWidth( <fraction of overall points> )   ")
+        # print("       .set_result_limit(<# of points>) ")
+        # print("       .set_result_binWidth( <fraction of overall points> )   ")
         hfill()
         print("❓ Query individual simulation results with .sim_result(<ID>)")
         print("❓ Load all Study result data and list Study Agent information with .summarize_agents()")

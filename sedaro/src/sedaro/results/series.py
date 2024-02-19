@@ -188,6 +188,7 @@ class SedaroSeries:
             display(df.describe(include='all').T)
         except:
             print(df.describe(include='all').T)
+        return df.describe(include='all').T
 
     def histogram(self, output_html=False):
         if self.__has_subseries:

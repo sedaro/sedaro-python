@@ -112,10 +112,11 @@ class StudySeries:
 
     def sim_stats(self, job_id):
         if job_id in self._series:
-            self._series[job_id].stats()
+            return self._series[job_id].stats()
         else:
             print(f"Error: Study sim id {job_id} not found.") 
             self._print_sim_ids()
+            return None
 
     def sim_histogram(self, job_id, output_html=False):
         if job_id in self._series:
