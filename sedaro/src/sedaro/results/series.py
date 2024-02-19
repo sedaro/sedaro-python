@@ -254,3 +254,4 @@ class SedaroSeries:
         else:
             print("❓ Call .plot to visualize results")
             print("📊 Display statistics with .stats( output_html=False ) ")
+            print("📊 Display histograms with .histogram(output_html=False)")
