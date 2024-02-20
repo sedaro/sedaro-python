@@ -104,6 +104,10 @@ class SedaroBlockResult:
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
         print("📊 Display all block variables statistics with .stats( output_html=False ) ")
+        print("📊 Display histograms with .histogram(output_html=False)")
+        print("📈📉 Display scatter matrix plot")
+        print("📉📈      with .scatter_matrix( block_variable_list )") 
+        
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
