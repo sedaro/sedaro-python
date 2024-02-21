@@ -213,7 +213,7 @@ class SedaroAgentResult:
         try:
             import sweetviz as sv
         except ImportError:
-            print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+            print( "Histogram plots require the sweetviz library to be imported. (pip install sweetviz)")
         else:
             block_dfs = self.create_dataframe(module, variables)
             sv.config_parser['Layout']['show_logo'] = '0' 
@@ -231,7 +231,7 @@ class SedaroAgentResult:
             pd.set_option('display.max_rows', None)
             pd.set_option('display.max_columns', None)
         except ImportError:
-            raise ValueError('Statistics is disabled because pandas and/or matplotlib could not be imported. (pip install pandas)')
+            raise ValueError('Statistics is disabled because pandas and/or matplotlib could not be imported. (pip install pandas matplotlib)')
 
         block_dfs = self.create_dataframe(module, variables)
         just_numbers = block_dfs.select_dtypes(include=['number'])

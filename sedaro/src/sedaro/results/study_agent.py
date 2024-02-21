@@ -7,6 +7,7 @@ from .study_block import StudyBlockResult
 
 #from .block import SedaroBlockResult
 from .utils import ENGINE_EXPANSION, HFILL, hfill
+from .agent import SedaroAgentResult
 
 
 
@@ -59,23 +60,23 @@ class StudyAgentResult:
 
     def to_files(self, filename_prefix: Union[str, Path], verbose=True) -> None:
         for (simjob_id,agent) in self._simjob_to_agents.items():
-            filename = filename_prefix + '_' + simjob_id + "_agent.json"
+            filename = filename_prefix + '_' + self._name +'_'+ self._study_id +'_' + simjob_id + "_agent.json"
             agent.to_file(filename, verbose)
 
     @classmethod
-    def from_files(self, filename_prefix: Union[str, Path]):
-        pass
+    def from_files(cls, filename_prefix: Union[str, Path]):
         # search directory for files with prefix
-        # listOfFiles = ...
-        # list of simjob_ids ...
-        # simjob_to_agents = {}
-        # for filename in listOfFiles:
-        #    agent_results = SedaroAgentResult.from_file(filename)
-        #    simjob_id = ...filename match
-        #    simjob_to_agents[simjob_id] = agent_results
-        #    name = agent_results.name # will have all the same name
-        # return cls(name, simjob_to_agents)
-
+        import glob
+        simjobID_to_agents = {}
+        for file in glob.glob(filename_prefix + '*_agent.json'):
+            tokens = file.split('_')
+            name = tokens[-4]
+            study_id = tokens[-3]
+            simjob_id = tokens[-2]
+            agent = SedaroAgentResult.from_file(file)
+            simjobID_to_agents[simjob_id] = agent
+            name = agent.name
+        return cls(study_id, name, simjobID_to_agents)
 
     def summarize(self) -> dict:
         hfill()

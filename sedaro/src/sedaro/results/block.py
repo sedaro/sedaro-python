@@ -118,7 +118,7 @@ class SedaroBlockResult:
             import pandas as pd
             import matplotlib.pyplot as plt
         except ImportError:
-            raise ValueError('scatter_matrix is disabled because pandas and/or matplotlib could not be imported. (pip install pandas)')
+            raise ValueError('scatter_matrix is disabled because pandas and/or matplotlib could not be imported. (pip install pandas matplotlib)')
 
         block_dfs = self.create_dataframe(variables) 
         just_numbers = block_dfs.select_dtypes(include=['number'])

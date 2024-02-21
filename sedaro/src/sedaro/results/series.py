@@ -11,7 +11,6 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-
 from .utils import HFILL, _get_series_type, bsearch, hfill
 
 
@@ -199,7 +198,7 @@ class SedaroSeries:
         try:
             import sweetviz as sv
         except ImportError:
-            print( "Histogram plots require the sweetviz library to be imported. (pip import sweetviz)")
+            print( "Histogram plots require the sweetviz library to be imported. (pip install sweetviz)")
         else:
             sv.config_parser['Layout']['show_logo'] = '0' 
             sv_report = sv.analyze(df, pairwise_analysis="off" )

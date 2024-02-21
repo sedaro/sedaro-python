@@ -41,7 +41,7 @@ class Study:
         with self.__jobs_client() as jobs:
             res = jobs.start_study(
                 path_params={'branchId': self._branch.id},
-                query_params={'iterations': iterations, 'override_id': overrides_id},
+                query_params={'iterations': iterations, 'overrideID': overrides_id},
                 **COMMON_API_KWARGS
             )
         return StudyHandle(body_from_res(res), self)
