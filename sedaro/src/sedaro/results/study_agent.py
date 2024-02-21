@@ -126,18 +126,11 @@ class StudyAgentResult:
         print("📈📉 Display block variables scatter matrix plot  ")
         print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 
-
-    def study_stats(self, module:str, variables=None):
-        # todo
-        pass
-
-    def study_histogram(self, module:str, output_html= False, variables=None):
-        # todo
-        pass
-
-    def study_scatter_matrix(self, module:str,  variables=None):
-        pass
-
+    # These methods would generate too much output at an agent level.
+    #   Need an easy filtering mechanism to make them useful.
+    # def study_stats(self, module:str, variables=None):
+    # def study_histogram(self, module:str, output_html= False, variables=None):
+    # def study_scatter_matrix(self, module:str,  variables=None):
 
     def sim_stats(self, module:str,  sim_id: str, variables=None):
         if sim_id in self._simjob_to_agents:
