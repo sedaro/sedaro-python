@@ -1,5 +1,6 @@
 import gzip
 import json
+import glob
 
 from pathlib import Path
 from typing import Generator, List, Union, Dict
@@ -66,7 +67,6 @@ class StudyAgentResult:
     @classmethod
     def from_files(cls, filename_prefix: Union[str, Path]):
         # search directory for files with prefix
-        import glob
         simjobID_to_agents = {}
         for file in glob.glob(filename_prefix + '*_agent.json'):
             tokens = file.split('_')

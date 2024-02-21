@@ -92,7 +92,11 @@ class StudyBlockResult:
         print("📊 Display all block variables histograms for a study simulation with .sim_histogram( sim_id, output_html=False, variables=None )")
         print("📈📉 Display block variables scatter matrix plot  ")
         print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
-
+        hfill()
+        print("📈📉 Display block scatter matrix plot from all sims in study ")
+        print("📉📈      with .study_scatter_matrix(size=10, variables='attitudeError' )") 
+        print("📊 Display block histograms from all study sims with .study_histogram(output_html= False, variables=None)")
+        print("𝛴 Display Block statistics from all study sims with .study_stats() "
 
     def value_at(self, mjd):
         return { sim_id: block.value_at(mjd) for (sim_id, block) in self._blocks.items()}
@@ -118,16 +122,17 @@ class StudyBlockResult:
             print(f"Error: Study sim id {sim_id} not found.") 
             self._print_sim_ids()
 
-    def study_stats(self, module:str, variables=None):
-        # todo
-        pass
+    def study_stats(self):
+        for sim_id, block in self._blocks.items():
+            block.stats()
 
-    def study_histogram(self, module:str, output_html= False, variables=None):
-        # todo
-        pass
+    def study_histogram(self, output_html= False, variables=None):
+        for sim_id, block in self._blocks.items():
+            block.histogram(output_html, variables)
 
-    def study_scatter_matrix(self, module:str,  variables=None):
-        pass
+    def study_scatter_matrix(self, size=10, variables=None):
+        for sim_id, block in self._blocks.items():
+            block.scatter_matrix(size, variables)
 
     def _print_sim_ids(self):
         hfill()
