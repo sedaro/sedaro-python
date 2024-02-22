@@ -123,16 +123,30 @@ class StudyBlockResult:
             self._print_sim_ids()
 
     def study_stats(self):
-        for sim_id, block in self._blocks.items():
-            block.stats()
+        import pandas as pd
+        for block_variable_name in self.variables:
+            block_variable = self.variable(block_variable_name)
+            try:
+                if block_variable.has_subseries:
+                    for key, value in block_variable._first_series._SedaroSeries__dtype.items():
+                        with pd.option_context('display.max_columns', None):
+                            print( block_variable[key].study_stats().to_string() ) 
+                else:
+                    with pd.option_context('display.max_columns', None):
+                        print( block_variable.study_stats().to_string() )
+            except:
+                print(f"Error: Could not generate statistics for {block_variable_name}")
+
 
     def study_histogram(self, output_html= False, variables=None):
-        for sim_id, block in self._blocks.items():
-            block.histogram(output_html, variables)
+        pass
+        # for sim_id, block in self._blocks.items():
+        #     block.histogram(output_html, variables)
 
     def study_scatter_matrix(self, size=10, variables=None):
-        for sim_id, block in self._blocks.items():
-            block.scatter_matrix(size, variables)
+        pass
+        # for sim_id, block in self._blocks.items():
+        #     block.scatter_matrix(size, variables)
 
     def _print_sim_ids(self):
         hfill()

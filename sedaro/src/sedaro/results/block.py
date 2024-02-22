@@ -113,7 +113,7 @@ class SedaroBlockResult:
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
 
 
-    def scatter_matrix(self, variables=None):
+    def scatter_matrix(self, size=10, variables=None):
         try:
             import pandas as pd
             import matplotlib.pyplot as plt
@@ -124,7 +124,7 @@ class SedaroBlockResult:
         just_numbers = block_dfs.select_dtypes(include=['number'])
         no_distint_cols = just_numbers[[c for c in list(just_numbers)
                                                 if len(just_numbers[c].unique()) > 1]]
-        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(12,12), diagonal='kde')
+        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(size,size), diagonal='kde')
         # Change label rotation
         [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
         [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
