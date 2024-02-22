@@ -98,7 +98,7 @@ class Block(Common):
             blocks=[new_block]
         )
 
-        return self._branch.block(res[CRUD][BLOCKS][0])
+        return self._branch.block(res[CRUD][BLOCKS][-1])
 
     def update(self, **fields) -> 'Block':
         """Update attributes of the corresponding Sedaro Block

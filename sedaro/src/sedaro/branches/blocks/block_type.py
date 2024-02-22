@@ -48,7 +48,7 @@ class BlockType:
             fields.pop(kwarg, None)
 
         res = self._branch.crud(blocks=[{**fields, **{TYPE: self.type}}])
-        block_id = res[CRUD][BLOCKS][0]
+        block_id = res[CRUD][BLOCKS][-1]
         return Block(block_id, self)
 
     def get(self, id: Union[str, int]) -> Block:
