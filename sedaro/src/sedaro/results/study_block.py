@@ -96,7 +96,7 @@ class StudyBlockResult:
         print("📈📉 Display block scatter matrix plot from all sims in study ")
         print("📉📈      with .study_scatter_matrix(size=10, variables='attitudeError' )") 
         print("📊 Display block histograms from all study sims with .study_histogram(output_html= False, variables=None)")
-        print("𝛴 Display Block statistics from all study sims with .study_stats() "
+        print("𝛴 Display Block statistics from all study sims with .study_stats() ")
 
     def value_at(self, mjd):
         return { sim_id: block.value_at(mjd) for (sim_id, block) in self._blocks.items()}
