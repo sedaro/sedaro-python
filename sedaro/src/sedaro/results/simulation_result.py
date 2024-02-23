@@ -116,7 +116,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             json.dump(self.__data['meta'], fp)
         os.mkdir(f"{path}/data")
         for agent in self.__data['series']:
-            agent_parquet_path = f"{path}/data/{agent.replace('/', ' ')}"
+            agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
             df : dd = self.__data['series'][agent]
             df.to_parquet(agent_parquet_path)
         print(f"Simulation result saved to {path}.")
@@ -137,7 +137,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         data['series'] = {}
         for agent in parquets:
             df = dd.read_parquet(f"{path}/data/{agent}")
-            data['series'][agent.replace(' ', '/')] = df
+            data['series'][agent.replace('.', '/')] = df
         return cls(simulation, data)
 
     def summarize(self) -> None:

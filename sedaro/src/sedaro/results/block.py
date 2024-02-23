@@ -100,7 +100,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             json.dump(self.__structure, fp)
         os.mkdir(f"{path}/data")
         for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', ' ')}"
+            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
             df : dd = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Block result saved to {path}.")
@@ -118,7 +118,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         parquets = os.listdir(f"{path}/data/")
         for agent in parquets:
             df = dd.read_parquet(f"{path}/data/{agent}")
-            engines[agent.replace(' ', '/')] = df
+            engines[agent.replace('.', '/')] = df
         return cls(structure, engines)
 
     def summarize(self) -> None:

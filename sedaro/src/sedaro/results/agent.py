@@ -116,7 +116,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             }, fp)
         os.mkdir(f"{path}/data")
         for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', ' ')}"
+            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
             df : dd = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Agent result saved to {path}.")
@@ -138,7 +138,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         parquets = os.listdir(f"{path}/data/")
         for engine in parquets:
             df = dd.read_parquet(f"{path}/data/{engine}")
-            engines[engine.replace(' ', '/')] = df
+            engines[engine.replace('.', '/')] = df
         return cls(name, block_structures, engines, structure, initial_state)
 
     def summarize(self) -> None:
