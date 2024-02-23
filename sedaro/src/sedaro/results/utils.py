@@ -68,28 +68,7 @@ def _get_agent_id_name_map(meta):
     }
 
 
-def _simplify_series(engine_data: dict, blocks: dict) -> dict:
-    '''Build a simplified series data structure
-
-    Creates a dictionary with the following hierarchy:
-        Block ID (or root)
-            Variable Name
-    '''
-    data = {'root': {}}
-    for key, value in engine_data.items():
-        if key in blocks:
-            data[key] = {}
-            for subkey, subvalue in value.items():
-                data[key][subkey] = subvalue
-        elif "/" in key:
-            # Ignore engine variables
-            continue
-        else:
-            data['root'][key] = value
-    return data
-
-
-def _get_agent_mapping(series, agents, meta):
+def _restructure_data(series, agents, meta):
     agent_mapping = {}
     blocks = {}
     index = {}
@@ -103,24 +82,25 @@ def _get_agent_mapping(series, agents, meta):
         df = series[series_key]
         columns = df.columns.tolist()
         for column in columns:
-            elements = column.split(".")
-            first_element = elements[0]
-            if first_element not in blocks[agent_id]:
-                block_id = 'root'
-                series = elements
-            else:
-                block_id = first_element
-                series = elements[1:]
-            if block_id not in index[agent_id]:
-                index[agent_id][block_id] = {}
-            this_block_index = index[agent_id][block_id]
-            if series_key not in this_block_index:
-                this_block_index[series_key] = {}
-            ptr = this_block_index[series_key]
-            for element in series:
-                if element not in ptr:
-                    ptr[element] = {}
-                ptr = ptr[element]
+            if '/' not in column: # ignore engine variables
+                elements = column.split(".")
+                first_element = elements[0]
+                if first_element not in blocks[agent_id]:
+                    block_id = 'root'
+                    series = elements
+                else:
+                    block_id = first_element
+                    series = elements[1:]
+                if block_id not in index[agent_id]:
+                    index[agent_id][block_id] = {}
+                this_block_index = index[agent_id][block_id]
+                if series_key not in this_block_index:
+                    this_block_index[series_key] = {}
+                ptr = this_block_index[series_key]
+                for element in series:
+                    if element not in ptr:
+                        ptr[element] = {}
+                    ptr = ptr[element]
 
     return agent_mapping, blocks, index
 

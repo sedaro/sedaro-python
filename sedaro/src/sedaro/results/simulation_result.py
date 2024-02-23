@@ -7,7 +7,7 @@ from typing import Dict, List, Union
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, _block_type_in_supers,
-                    _get_agent_id_name_map, _get_agent_mapping, hfill, FromFileAndToFileAreDeprecated)
+                    _get_agent_id_name_map, _restructure_data, hfill, FromFileAndToFileAreDeprecated)
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
@@ -29,7 +29,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        self.__agent_ids, self.__block_structures, self.__column_index = _get_agent_mapping(raw_series, agent_id_name_map, self.__meta)
+        self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(raw_series, agent_id_name_map, self.__meta)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
