@@ -288,7 +288,7 @@ results = simulation_handle.results()
 results.save('path/to/data')
 ```
 
-This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to a directory which does not yet exist.
+This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to an empty directory, or a directory which does not yet exist.
 
 ## Send Requests
 
