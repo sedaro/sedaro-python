@@ -72,6 +72,7 @@ def _restructure_data(series, agents, meta):
     agent_mapping = {}
     blocks = {}
     index = {}
+
     for series_key in series:
         agent_id = series_key.split("/")[0]
         agent_mapping[agent_id] = agents[agent_id]
@@ -80,6 +81,7 @@ def _restructure_data(series, agents, meta):
         if agent_id not in index:
             index[agent_id] = {}
         df = series[series_key]
+
         columns = df.columns.tolist()
         for column in columns:
             if '/' not in column: # ignore engine variables
@@ -87,17 +89,17 @@ def _restructure_data(series, agents, meta):
                 first_element = elements[0]
                 if first_element not in blocks[agent_id]:
                     block_id = 'root'
-                    series = elements
+                    path_components = elements
                 else:
                     block_id = first_element
-                    series = elements[1:]
+                    path_components = elements[1:]
                 if block_id not in index[agent_id]:
                     index[agent_id][block_id] = {}
                 this_block_index = index[agent_id][block_id]
                 if series_key not in this_block_index:
                     this_block_index[series_key] = {}
                 ptr = this_block_index[series_key]
-                for element in series:
+                for element in path_components:
                     if element not in ptr:
                         ptr[element] = {}
                     ptr = ptr[element]
