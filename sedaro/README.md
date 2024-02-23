@@ -262,7 +262,7 @@ must be a list of tuples following particular rules:
 
 - Each tuple in the list can contain either 1 or 2 items.
 - If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
-    will be fetched. Remember that a 1-item tuple is written like `(foo,)`, NOT like `(foo)`.
+    will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
 - If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the\
     following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
     agent of this engine will be fetched.
