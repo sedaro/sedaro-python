@@ -18,9 +18,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         SedaroSimulationResult or the .from_file method of this class.
         '''
         self.__name = name
-        for k in series:
-            self.__agent_uuid = k.split('/')[0]
-            break
         self.__column_index = column_index
         self.__block_structures = block_structures
         self.__series = series
