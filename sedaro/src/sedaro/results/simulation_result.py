@@ -127,7 +127,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SimulationResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
+                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         with open(f"{path}/simulation.json", "r") as fp:
             simulation = json.load(fp)
         data = {}
