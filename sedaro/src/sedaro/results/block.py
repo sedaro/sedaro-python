@@ -38,14 +38,10 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         Typically invoked by calling .<VARIABLE_NAME> on an instance
         of SedaroBlockResult.
         '''
-        for module in self.__series:
-            selected_columns = []
-            for column_name in self.__series[module].columns.tolist():
-                if column_name.split('.')[0] == name:
-                    selected_columns.append(column_name)
-            if len(selected_columns) > 0:
-                variable_dataframe = self.__series[module][selected_columns]
-                return SedaroSeries(name, variable_dataframe)
+        prefix = f"{self.__prefix}{name}"
+        for stream in self.__column_index:
+            if name in self.__column_index[stream]:
+                return SedaroSeries(name, self.__series[stream], prefix)
         else:
             raise ValueError(f'Variable "{name}" not found.')
 
