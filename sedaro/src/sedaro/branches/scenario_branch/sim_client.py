@@ -385,14 +385,14 @@ class Simulation:
         return response_dict
 
     def __results(self,
-                job_id: str = None,
+                job: 'SimulationHandle' = None,
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
                 num_workers: int = 2) -> "dict[str, dask.dataframe]":
 
-        metadata = self.__get_metadata(sim_id := job_id['dataArray'])
+        metadata = self.__get_metadata(sim_id := job['dataArray'])
         if streams is not None and len(streams) > 0:
             filtered_streams = self.__get_filtered_streams(streams, metadata)
         else:
