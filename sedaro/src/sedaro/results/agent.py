@@ -128,7 +128,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroAgentResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Use {archive_type}.from_file to load this result.")
+                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         with open(f"{path}/meta.json", "r") as fp:
             meta = json.load(fp)
             name = meta['name']
