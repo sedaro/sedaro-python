@@ -11,20 +11,6 @@ from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFile
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
-
-    def __initialize_block_structure(self):
-        '''Initialize the block structure for this agent.'''
-        columns = {}
-        for module in self.__series:
-            columns[module] = self.__series[module].columns.tolist()
-        column_mapping = {}
-        for module in columns:
-            for column in columns[module]:
-                if column != 'time':
-                    assert column not in column_mapping
-                    column_mapping[column] = module
-        return column_mapping
-
     def __init__(self, name: str, block_structures: dict, series: dict, structure: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
@@ -53,6 +39,19 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         )
         self.__initial_state = initial_state
         self.__column_mapping = self.__initialize_block_structure()
+
+    def __initialize_block_structure(self):
+        '''Initialize the block structure for this agent.'''
+        columns = {}
+        for module in self.__series:
+            columns[module] = self.__series[module].columns.tolist()
+        column_mapping = {}
+        for module in columns:
+            for column in columns[module]:
+                if column != 'time':
+                    assert column not in column_mapping
+                    column_mapping[column] = module
+        return column_mapping
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
