@@ -213,7 +213,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         try:
             os.makedirs(path)
         except FileExistsError:
-            print(f"A directory or file already exists at {path}. Please specify a different path.")
+            if not (os.path.isdir(path) and any(os.scandir(path))):
+                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroSeries'}, fp)
         with open(f"{path}/name.json", "w") as fp:
