@@ -49,7 +49,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for module in columns:
             for column in columns[module]:
                 if column != 'time':
-                    assert column not in column_mapping
                     column_mapping[column] = module
         return column_mapping
 
