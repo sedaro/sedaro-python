@@ -81,6 +81,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'name': self.__name,
                 'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
+                'column_index': self.__column_index,
             }, fp)
         os.mkdir(f"{path}/data")
         for engine in self.__series:
@@ -101,12 +102,13 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             name = meta['name']
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
+            column_index = meta['column_index']
         engines = {}
         parquets = os.listdir(f"{path}/data/")
         for engine in parquets:
             df = dd.read_parquet(f"{path}/data/{engine}")
             engines[engine.replace('.', '/')] = df
-        return cls(name, block_structures, engines, initial_state)
+        return cls(name, block_structures, engines, column_index, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
