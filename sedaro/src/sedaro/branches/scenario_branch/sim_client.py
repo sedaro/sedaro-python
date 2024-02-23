@@ -473,9 +473,9 @@ class Simulation:
 
     def results_poll(
         self,
+        job_id: str = None,
         start: float = None,
         stop: float = None,
-        job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
@@ -516,7 +516,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
