@@ -10,7 +10,7 @@ from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFile
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict):
+    def __init__(self, structure, series: dict, column_index: dict, prefix: str):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -24,21 +24,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
-        
-        self.__variables = set()
-        for module in self.__series:
-            to_rename = {}
-            for column_name in self.__series[module].columns.tolist():
-                if column_name.split('.')[0] == module:
-                    # rename to engine name
-                    module_name = ENGINE_EXPANSION[ENGINE_MAP[module.split('/')[1]]]
-                    self.__variables.add(module_name)
-                    new_column_name = f"{module_name}.{'.'.join(column_name.split('.')[1:])}"
-                    to_rename[column_name] = new_column_name
-                else:
-                    self.__variables.add(column_name.split('.')[0])
-            if len(to_rename) > 0:
-                self.__series[module] = self.__series[module].rename(columns=to_rename)
+        self.__column_index = column_index
+        self.__prefix = prefix
+        self.__variables = []
+        for stream in self.__column_index:
+            for variable in self.__column_index[stream]:
+                self.__variables.append(variable)
         self.__variables = sorted(list(self.__variables))
 
     def __getattr__(self, name: str) -> SedaroSeries:
