@@ -59,23 +59,9 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             else:
                 raise ValueError(f'Found multiple matching IDs for {id_}: {matching_id}.')
 
-        column_block_lists = {}
-        for column in self.__column_mapping:
-            if (id_ != 'root' and column.split('.')[0] == id_) or (id_ == 'root' and column.split('.')[0] not in self.__block_uuids):
-                column_dataframe = self.__column_mapping[column]
-                if column_dataframe not in column_block_lists:
-                    column_block_lists[column_dataframe] = []
-                column_block_lists[column_dataframe].append(column)
-
-        block_data = {}
-        for module in self.__series:
-            if module in column_block_lists:
-                block_data[module] = self.__series[module][column_block_lists[module]]
-                if id_ != 'root':
-                    # rename columns, removing first part of the column name
-                    block_data[module] = block_data[module].rename(columns={column: '.'.join(column.split('.')[1:]) for column in column_block_lists[module]})
+        prefix = '' if id_ == 'root' else id_ + '.'
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
-        return SedaroBlockResult(block_structure, block_data)
+        return SedaroBlockResult(block_structure, self.__series[id_], prefix)
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''
