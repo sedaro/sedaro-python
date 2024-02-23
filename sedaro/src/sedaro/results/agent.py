@@ -61,7 +61,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
         prefix = '' if id_ == 'root' else id_ + '.'
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
-        return SedaroBlockResult(block_structure, self.__series[id_], prefix)
+        block_streams = {}
+        for stream in self.__series:
+            if stream in self.__column_index[id_]:
+                block_streams[stream] = self.__series[stream]
+        return SedaroBlockResult(block_structure, block_streams, self.__column_index[id_], prefix)
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''
