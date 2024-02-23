@@ -281,7 +281,7 @@ results = sim.results(streams=selected_streams)
 
 ## Saving Downloaded Data
 
-You may save downloaded simulation data to your machine by the following procedure:
+You may save downloaded simulation data to your machine via the following procedure:
 
 ```py
 results = simulation_handle.results()
