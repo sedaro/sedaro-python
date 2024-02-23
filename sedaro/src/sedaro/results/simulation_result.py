@@ -100,7 +100,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__meta['structure'], initial_state=initial_state)
+        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index, initial_state=initial_state)
 
     def save(self, path: Union[str, Path]):
         '''Save the simulation result to a directory with the specified path.'''

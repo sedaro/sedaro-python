@@ -11,7 +11,7 @@ from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFile
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
-    def __init__(self, name: str, block_structures: dict, series: dict, structure: dict, initial_state: dict = None):
+    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -21,15 +21,10 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for k in series:
             self.__agent_uuid = k.split('/')[0]
             break
-        self.__structure = structure
+        self.__column_index = column_index
         self.__block_structures = block_structures
         self.__series = series
-        self.__block_uuids = {}
-        for block_uuid in self.__structure['agents'][self.__agent_uuid]['blocks']:
-            if 'name' in self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]:
-                self.__block_uuids[block_uuid] = self.__structure['agents'][self.__agent_uuid]['blocks'][block_uuid]['name']
-            else:
-                self.__block_uuids[block_uuid] = None
+        self.__block_uuids = [k for k in self.__column_index]
         self.__block_ids = sorted(set(
             block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
             for module in self.__series
@@ -38,19 +33,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             reverse=True
         )
         self.__initial_state = initial_state
-        self.__column_mapping = self.__initialize_block_structure()
-
-    def __initialize_block_structure(self):
-        '''Initialize the block structure for this agent.'''
-        columns = {}
-        for module in self.__series:
-            columns[module] = self.__series[module].columns.tolist()
-        column_mapping = {}
-        for module in columns:
-            for column in columns[module]:
-                if column != 'time':
-                    column_mapping[column] = module
-        return column_mapping
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
@@ -110,7 +92,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
                 'name': self.__name,
-                'structure': self.__structure,
                 'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
             }, fp)
@@ -131,7 +112,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/meta.json", "r") as fp:
             meta = json.load(fp)
             name = meta['name']
-            structure = meta['structure']
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
         engines = {}
@@ -139,7 +119,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for engine in parquets:
             df = dd.read_parquet(f"{path}/data/{engine}")
             engines[engine.replace('.', '/')] = df
-        return cls(name, block_structures, engines, structure, initial_state)
+        return cls(name, block_structures, engines, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
@@ -158,7 +138,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':
-                block_name = self.__block_uuids[block_id]
+                block_name = self.__block_structures[block_id].get('name', None)
                 block_id_col = f"{block_id[:26]}"
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
@@ -204,4 +184,4 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 ceil = floor
             trimmed_engines[engine] = self.__series[engine].loc[floor:ceil].compute()
 
-        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__structure, self.__initial_state).__model_at(mjd)
+        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__initial_state).__model_at(mjd)
