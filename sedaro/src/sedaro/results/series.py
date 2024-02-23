@@ -19,7 +19,7 @@ from .utils import HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data):
+    def __init__(self, name, data, column_index, prefix):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -27,6 +27,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         this class.
         '''
         self.__name = name
+        self.__column_index = column_index
+        self.__prefix = prefix
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError: # used for model_at, in which mjd has already been computed
