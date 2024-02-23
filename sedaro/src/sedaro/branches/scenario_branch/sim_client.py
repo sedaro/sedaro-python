@@ -336,6 +336,7 @@ class Simulation:
                     page = fast_fetcher.get(request_url)
                     _page = page.parse()
                     download_manager.ingest(_page['series'])
+                    download_manager.update_metadata(_page['meta'])
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
@@ -347,7 +348,6 @@ class Simulation:
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
-                    download_manager.update_metadata(_page['meta'])
         download_manager.finalize()
 
     def __get_filtered_streams(self, requested_streams: list, metadata: dict):
