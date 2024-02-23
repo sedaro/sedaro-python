@@ -473,6 +473,8 @@ class Simulation:
 
     def results_poll(
         self,
+        start: float = None,
+        stop: float = None,
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
@@ -484,6 +486,8 @@ class Simulation:
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
             sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
                 The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
@@ -512,7 +516,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        return self.results(start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -616,6 +620,8 @@ class SimulationHandle:
 
     def results_poll(
         self,
+        start: float = None,
+        stop: float = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
@@ -624,6 +630,8 @@ class SimulationHandle:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
         Args:
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
             sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
                 The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
@@ -641,6 +649,8 @@ class SimulationHandle:
         """
         return self.__sim_client.results_poll(
             job_id=self.__job['id'],
+            start=start,
+            stop=stop,
             streams=streams,
             sampleRate=sampleRate,
             num_workers=num_workers,

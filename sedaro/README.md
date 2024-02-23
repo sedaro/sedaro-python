@@ -249,8 +249,8 @@ Any object in the results API will provide a descriptive summary of its contents
 
 The `results` and `results_poll` methods take a number of arguments. These arguments can be used to specify which segments of the data should be downloaded, the resolution of the downloaded data, and more.
 
-- `start` (only in `results`): start time of the data to fetch, in MJD. Defaults to the start of the simulation.
-- `stop` (only in `results`): end time of the data to fetch, in MJD. Defaults to the end of the simulation.
+- `start`: start time of the data to fetch, in MJD. Defaults to the start of the simulation.
+- `stop`: end time of the data to fetch, in MJD. Defaults to the end of the simulation.
 - `streams`: a list of streams to fetch, following the format specified below. If no argument is provided, all streams are fetched.
 - `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on.  If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
 - num_workers: `results` and `results_poll` use parallel downloaders to accelerate data fetching. The default number of downloaders is 2, but you can use this argument to set a different number.
