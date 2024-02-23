@@ -91,13 +91,38 @@ def _simplify_series(engine_data: dict, blocks: dict) -> dict:
 
 def _get_agent_mapping(series, agents, meta):
     agent_mapping = {}
-    block_structures = {}
+    blocks = {}
+    index = {}
     for series_key in series:
         agent_id = series_key.split("/")[0]
         agent_mapping[agent_id] = agents[agent_id]
-        if agent_id not in block_structures:
-            block_structures[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
-    return agent_mapping, block_structures
+        if agent_id not in blocks:
+            blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
+        if agent_id not in index:
+            index[agent_id] = {}
+        df = series[series_key]
+        columns = df.columns.tolist()
+        for column in columns:
+            elements = column.split(".")
+            first_element = elements[0]
+            if first_element not in blocks[agent_id]:
+                block_id = 'root'
+                series = elements
+            else:
+                block_id = first_element
+                series = elements[1:]
+            if block_id not in index[agent_id]:
+                index[agent_id][block_id] = {}
+            this_block_index = index[agent_id][block_id]
+            if series_key not in this_block_index:
+                this_block_index[series_key] = {}
+            ptr = this_block_index[series_key]
+            for element in series:
+                if element not in ptr:
+                    ptr[element] = {}
+                ptr = ptr[element]
+
+    return agent_mapping, blocks, index
 
 
 def _get_series_type(series):
