@@ -217,7 +217,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroSeries'}, fp)
-        with open(f"{path}/name.json", "w") as fp:
+        with open(f"{path}/meta.json", "w") as fp:
             json.dump({'name': self.__name}, fp)
         self.__static_series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
@@ -229,7 +229,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroSeries':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/name.json", "r") as fp:
+        with open(f"{path}/meta.json", "r") as fp:
             name = json.load(fp)['name']
         data = dd.read_parquet(f"{path}/data.parquet")
         return cls(name, data)

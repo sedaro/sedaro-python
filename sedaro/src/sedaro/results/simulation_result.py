@@ -111,10 +111,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                 raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SimulationResult'}, fp)
-        with open(f"{path}/simulation.json", "w") as fp:
-            json.dump(self.__simulation, fp)
         with open(f"{path}/meta.json", "w") as fp:
-            json.dump(self.__data['meta'], fp)
+            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation}, fp)
         os.mkdir(f"{path}/data")
         for agent in self.__data['series']:
             agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
@@ -129,11 +127,11 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             archive_type = json.load(fp)['class']
             if archive_type != 'SimulationResult':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/simulation.json", "r") as fp:
-            simulation = json.load(fp)
         data = {}
-        with open(f"{path}/meta.json", "r") as fp:
-            data['meta'] = json.load(fp)
+        with open(f"{path}/simulation.json", "r") as fp:
+            contents = json.load(fp)
+            simulation = contents['simulation']
+            data['meta'] = contents['meta']
         parquets = os.listdir(f"{path}/data/")
         data['series'] = {}
         for agent in parquets:

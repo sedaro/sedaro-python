@@ -97,7 +97,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroBlockResult'}, fp)
-        with open(f"{path}/structure.json", "w") as fp:
+        with open(f"{path}/meta.json", "w") as fp:
             json.dump(self.__structure, fp)
         os.mkdir(f"{path}/data")
         for engine in self.__series:
@@ -113,7 +113,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroBlockResult':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/structure.json", "r") as fp:
+        with open(f"{path}/meta.json", "r") as fp:
             structure = json.load(fp)
         engines = {}
         parquets = os.listdir(f"{path}/data/")
