@@ -371,11 +371,14 @@ class Simulation:
         return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager):
-        start = params['start']
-        stop = params['stop']
-        sampleRate = params['sampleRate']
-        streams_fmt = [tuple(stream.split('.')) for stream in streams]
-        self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+        try:
+            start = params['start']
+            stop = params['stop']
+            sampleRate = params['sampleRate']
+            streams_fmt = [tuple(stream.split('.')) for stream in streams]
+            self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+        except Exception as e:
+            return e
 
     def __get_metadata(self, sim_id: str = None):
         request_url = f'/data/{sim_id}/metadata?'
@@ -406,8 +409,11 @@ class Simulation:
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers)
+            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers)
             executor.shutdown(wait=True)
+        for e in exceptions:
+            if e is not None:
+                raise e
         download_bar.complete()
 
         stream_results = {}
