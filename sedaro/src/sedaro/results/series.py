@@ -14,7 +14,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
+from .utils import HFILL, bsearch, gather, hfill, FromFileAndToFileAreDeprecated
 
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
@@ -34,8 +34,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         except AttributeError: # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__static_series = data
-        self.__series = data.copy()
+        self.__series = data[gather(self.__column_index, self.__prefix)]
         self.__has_subseries = len(self.__column_index) > 0
         if self.__has_subseries:
             self.__dtype = self.__series.dtypes.to_dict()
@@ -206,7 +205,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             json.dump({'class': 'SedaroSeries'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'name': self.__name}, fp)
-        self.__static_series.to_parquet(f"{path}/data.parquet")
+        self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
 
     @classmethod

@@ -135,6 +135,33 @@ def bsearch(ordered_series, value):
         return -1
     return _bsearch(0, len(ordered_series) - 1)
 
+
+def gather(column_index, prefix):
+    """
+    For example:
+        column_index = {'body_eci': {'0': {}, '1': {}, '2': {}, '3': {}}, 'body_ecef': {'0': {}, '1': {}, '2': {}, '3': {}}}
+        prefix = 'attitude'
+    Returns:
+        [
+            'attitude.body_eci.0',
+            'attitude.body_eci.1',
+            'attitude.body_eci.2',
+            'attitude.body_eci.3',
+            'attitude.body_ecef.0',
+            'attitude.body_ecef.1',
+            'attitude.body_ecef.2',
+            'attitude.body_ecef.3'
+        ]
+    """
+    if len(column_index) == 0:
+        return [prefix]
+    else:
+        columns = []
+        for key in column_index:
+            columns.extend(gather(column_index[key], f"{prefix}.{key}"))
+        return columns
+
+
 class FromFileAndToFileAreDeprecated:
     @classmethod
     def from_file(self, filename: Union[str, Path]):
