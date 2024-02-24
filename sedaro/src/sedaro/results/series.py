@@ -229,10 +229,11 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("\n📑 This series has subseries.")
             print(f"\n🗂️ Value data types are:")
             for key, value in self.__dtype.items():
+                name_without_prefix = key[len(self.__prefix)+1:]
                 if value == 'None':
-                    print(f"    - '{key}': All entries in this subseries are None")
+                    print(f"    - '{name_without_prefix}': All entries in this subseries are None")
                 else:
-                    print(f"    - '{key}': '{value}'")
+                    print(f"    - '{name_without_prefix}': '{value}'")
 
         else:
             if self.__dtype == 'None':
