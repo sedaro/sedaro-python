@@ -28,13 +28,14 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         '''
         self.__name = name
         self.__column_index = column_index
+        self.__column_names = gather(self.__column_index, self.__prefix)
         self.__prefix = prefix
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError: # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
-        self.__series = data[gather(self.__column_index, self.__prefix)]
+        self.__series = data[self.__column_names]
         self.__has_subseries = len(self.__column_index) > 0
         if self.__has_subseries:
             self.__dtype = self.__series.dtypes.to_dict()
@@ -43,6 +44,13 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     def __repr__(self):
         return f"Series({self.name})"
+
+    def __is_singleton_or_vector(self):
+        for column_name in self.__column_names:
+            for ch in column_name:
+                if ch not in '0123456789.':
+                    return False
+        return True
 
     @property
     def __prepped_nested_series(self):
@@ -79,7 +87,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         Only a series with no subseries is iterable.
         '''
         if self.__has_subseries:
-            if not self.__all_subseries_are_numeric:
+            if not self.__is_singleton_or_vector:
                 raise ValueError('Select a specific subseries to iterate over.')
             else:
                 return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__prepped_nested_series))
@@ -137,19 +145,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
         if self.__has_subseries:
-            subseries_prefixes = set()
-            for column in self.__series.columns.tolist():
-                subseries_prefixes.add(column.split('.')[0])
-            subseries_prefixes = list(subseries_prefixes)
-            if self.__all_subseries_are_numeric():
-                arr_len = max([int(p) for p in subseries_prefixes]) + 1
-                result = [None] * arr_len
-                for i in range(arr_len):
-                    if (p := str(i)) in subseries_prefixes:
-                        result[i] = self.__getattr__(p).value_at(mjd, interpolate=interpolate)
-                return result
-            else:
-                return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in subseries_prefixes}
+            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__column_index}
         else:
             def raise_error():
                 raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
@@ -174,7 +170,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         if not PLOTTING_ENABLED:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
-        if self.__has_subseries and not self.__all_subseries_are_numeric():
+        if self.__has_subseries and not self.__is_singleton_or_vector():
             raise ValueError('Select a specific subseries to plot.')
         try:
             if height is not None:
