@@ -27,24 +27,18 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         this class.
         '''
         self.__name = name
-        self.__column_index = column_index
-        self.__column_names = gather(self.__column_index, self.__prefix)
         self.__prefix = prefix
+        self.__column_index = column_index
+        self.__has_subseries = len(self.__column_index) > 0
+        self.__column_names = gather(self.__column_index, self.__prefix)
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError: # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data[self.__column_names]
-        self.__has_subseries = len(self.__column_index) > 0
         if self.__has_subseries:
-            self.__dtype = {}
-            for item in self.__column_index:
-                series_dtypes = self.__series.dtypes.to_dict()
-                if f"{self.__prefix}.{item}" in self.__column_names:
-                    self.__dtype[item] = series_dtypes[f"{self.__prefix}.{item}"]
-                else:
-                    self.__dtype[item] = 
+            self.__dtype = self.__series.dtypes.to_dict()
         else:
             self.__dtype = self.__series.dtypes.iloc[0]
 
@@ -111,13 +105,14 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         if not self.__has_subseries:
             raise ValueError('This series has no subseries.')
         else:
-            matching_columns = [column for column in self.__series.columns.tolist() if column.split('.')[0] == subseries_name]
-            if len(matching_columns) == 0:
+            if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series[matching_columns])
+                # return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series[matching_columns])
+                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
 
     def __getattr__(self, subseries_name: str):
+        print(f"trying to get {subseries_name}...")
         '''Get a particular subseries by name as an attribute.'''
         return self[subseries_name]
 
