@@ -85,7 +85,11 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroBlockResult'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
-            json.dump(self.__structure, fp)
+            json.dump({
+                'structure': self.__structure,
+                'column_index': self.__column_index,
+                'prefix': self.__prefix
+            }, fp)
         os.mkdir(f"{path}/data")
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
@@ -101,13 +105,16 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             if archive_type != 'SedaroBlockResult':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         with open(f"{path}/meta.json", "r") as fp:
-            structure = json.load(fp)
+            meta = json.load(fp)
+            structure = meta['structure']
+            column_index = meta['column_index']
+            prefix = meta['prefix']
         engines = {}
         parquets = os.listdir(f"{path}/data/")
         for agent in parquets:
             df = dd.read_parquet(f"{path}/data/{agent}")
             engines[agent.replace('.', '/')] = df
-        return cls(structure, engines)
+        return cls(structure, engines, column_index, prefix)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

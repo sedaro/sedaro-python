@@ -38,7 +38,13 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__series = data[self.__column_names]
         self.__has_subseries = len(self.__column_index) > 0
         if self.__has_subseries:
-            self.__dtype = self.__series.dtypes.to_dict()
+            self.__dtype = {}
+            for item in self.__column_index:
+                series_dtypes = self.__series.dtypes.to_dict()
+                if f"{self.__prefix}.{item}" in self.__column_names:
+                    self.__dtype[item] = series_dtypes[f"{self.__prefix}.{item}"]
+                else:
+                    self.__dtype[item] = 
         else:
             self.__dtype = self.__series.dtypes.iloc[0]
 
