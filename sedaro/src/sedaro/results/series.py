@@ -36,16 +36,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__static_series = data
         self.__series = data.copy()
-        self.__has_subseries = len(self.__series.columns.tolist()) > 1
+        self.__has_subseries = len(self.__column_index) > 0
         if self.__has_subseries:
-            # rename columns to remove top-level name
-            renamed_columns = {}
-            for column_name in self.__series.columns.tolist():
-                renamed_columns[column_name] = '.'.join(column_name.split('.')[1:])
-            self.__series = self.__series.rename(columns=renamed_columns)
             self.__dtype = self.__series.dtypes.to_dict()
         else:
-            self.__column_name = self.__series.columns.tolist()[0]
             self.__dtype = self.__series.dtypes.iloc[0]
 
     def __repr__(self):
@@ -177,15 +171,6 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     #     # TODO: Does not work with 2D value arrays
     #     show = kwargs.pop('show', True)
     #     self.__plot(plt.scatter, show, kwargs)
-
-    def __all_subseries_are_numeric(self):
-        subseries = self.__series.columns.tolist()
-        for column in subseries:
-            for ch in column:
-                if ch not in '0123456789.':
-                    return False
-        else:
-            return True
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
         if not PLOTTING_ENABLED:
