@@ -212,7 +212,11 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroSeries'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
-            json.dump({'name': self.__name}, fp)
+            json.dump({
+                'name': self.__name,
+                'column_index': self.__column_index,
+                'prefix': self.__prefix,
+            }, fp)
         self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
 
@@ -224,9 +228,12 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if archive_type != 'SedaroSeries':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         with open(f"{path}/meta.json", "r") as fp:
-            name = json.load(fp)['name']
+            meta = json.load(fp)
+            name = meta['name']
+            column_index = meta['column_index']
+            prefix = meta['prefix']
         data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data)
+        return cls(name, data, column_index, prefix)
 
     def summarize(self):
         hfill()
