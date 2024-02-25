@@ -47,7 +47,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     def __is_singleton_or_vector(self):
         for column_name in self.__column_names:
-            for ch in column_name:
+            for ch in column_name[len(self.__prefix):]:
                 if ch not in '0123456789.':
                     return False
         return True
