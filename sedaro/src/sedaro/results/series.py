@@ -108,7 +108,6 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                # return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series[matching_columns])
                 return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
 
     def __getattr__(self, subseries_name: str):
