@@ -128,7 +128,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             if archive_type != 'SimulationResult':
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         data = {}
-        with open(f"{path}/simulation.json", "r") as fp:
+        with open(f"{path}/meta.json", "r") as fp:
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
