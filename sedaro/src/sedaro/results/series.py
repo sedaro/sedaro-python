@@ -52,46 +52,15 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                     return False
         return True
 
-    @property
-    def __prepped_nested_series(self):
-        '''Prepare nested series for iteration.'''
-
-        def dict_to_list(d):
-            if isinstance(d, dict):
-                return [dict_to_list(d[i]) for i in sorted(d)]
-            return d
-
-        if not self.__has_subseries:
-            raise ValueError('This series has no subseries.')
-        else:
-            # get column names
-            columns = {}
-            for column_name in self.__series.columns.tolist():
-                columns[column_name[len(self.__prefix):]] = self.__series[column_name].compute().tolist()
-            result = []
-            for i in range(len(self.__mjd)):
-                this_entry = {}
-                for column in columns:
-                    column_value = columns[column][i]
-                    indices = [int(x) for x in column.split('.')]
-                    current_level = this_entry
-                    for j in indices[:-1]:
-                        current_level = current_level.setdefault(j, {})
-                    current_level[indices[-1]] = column_value
-                result.append(dict_to_list(this_entry))
-            return result
-
     def __iter__(self):
         '''Iterate through time, value pairs in this series.
 
         Only a series with no subseries is iterable.
         '''
-        if self.__has_subseries:
-            if not self.__is_singleton_or_vector:
-                raise ValueError('Select a specific subseries to iterate over.')
-            else:
-                return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__prepped_nested_series))
-        return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.__series[self.__column_name].compute()))
+        if (self.__has_subseries and not self.__is_singleton_or_vector()):
+            raise ValueError('Select a specific subseries to iterate over.')
+        else:
+            return (entry for entry in zip(self.__mjd, self.__elapsed_time, self.values))
 
     def __len__(self) -> int:
         return len(self.mjd)
@@ -150,7 +119,6 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if not self.__is_singleton_or_vector():
                 return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__column_index}
             else:
-                # return self.__prepped_nested_series[bsearch(self.__mjd, mjd)]
                 arr_len = max([int(i) for i in self.__column_index]) + 1
                 result = [None] * arr_len
                 for i in range(arr_len):
