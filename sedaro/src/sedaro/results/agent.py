@@ -156,7 +156,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         # This order will overwrite any values in the initial state with values from the simulation
         return merge({}, self.__initial_state, model)
 
-
     def model_at(self, mjd):
         if not self.__initial_state:
             raise ValueError(
