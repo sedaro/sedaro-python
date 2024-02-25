@@ -129,10 +129,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @property
     def values(self):
-        try:
+        if not (self.__has_subseries and not self.__is_singleton_or_vector()):
             return self.__series.values.compute().tolist()
-        except AttributeError: # used for model_at, in which values have already been computed for the row in question
-            return self.__series.values.tolist()
+        else:
+            raise ValueError('Select a specific subseries for which to get values.')
 
     @cached_property
     def values_interpolant(self):
