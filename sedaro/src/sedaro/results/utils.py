@@ -136,7 +136,7 @@ def bsearch(ordered_series, value):
     return _bsearch(0, len(ordered_series) - 1)
 
 
-def gather(column_index, prefix):
+def get_column_names(column_index, prefix):
     """
     For example:
         column_index = {'body_eci': {'0': {}, '1': {}, '2': {}, '3': {}}, 'body_ecef': {'0': {}, '1': {}, '2': {}, '3': {}}}

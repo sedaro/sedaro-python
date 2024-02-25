@@ -14,7 +14,7 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, bsearch, gather, hfill, FromFileAndToFileAreDeprecated
+from .utils import HFILL, bsearch, get_column_names, hfill, FromFileAndToFileAreDeprecated
 
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
@@ -30,7 +30,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__prefix = prefix
         self.__column_index = column_index
         self.__has_subseries = len(self.__column_index) > 0
-        self.__column_names = gather(self.__column_index, self.__prefix)
+        self.__column_names = get_column_names(self.__column_index, self.__prefix)
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError: # used for model_at, in which mjd has already been computed
