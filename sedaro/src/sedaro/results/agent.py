@@ -173,4 +173,4 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 ceil = floor
             trimmed_engines[engine] = self.__series[engine].loc[floor:ceil].compute()
 
-        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__initial_state).__model_at(mjd)
+        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__column_index, self.__initial_state).__model_at(mjd)

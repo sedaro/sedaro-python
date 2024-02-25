@@ -67,7 +67,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             # get column names
             columns = {}
             for column_name in self.__series.columns.tolist():
-                columns[column_name] = self.__series[column_name].compute().tolist()
+                columns[column_name[len(self.__prefix):]] = self.__series[column_name].compute().tolist()
             result = []
             for i in range(len(self.__mjd)):
                 this_entry = {}
