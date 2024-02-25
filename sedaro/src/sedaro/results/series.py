@@ -130,7 +130,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     @property
     def values(self):
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
-            return self.__series.values.compute().tolist()
+            if self.__has_subseries:
+                return self.__series.values.compute().tolist()
+            else:
+                return self.__series[self.__column_names[0]].compute().tolist()
         else:
             raise ValueError('Select a specific subseries for which to get values.')
 
