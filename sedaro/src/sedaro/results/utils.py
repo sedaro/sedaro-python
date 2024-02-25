@@ -158,7 +158,7 @@ def get_column_names(column_index, prefix):
     else:
         columns = []
         for key in column_index:
-            columns.extend(gather(column_index[key], f"{prefix}.{key}"))
+            columns.extend(get_column_names(column_index[key], f"{prefix}.{key}"))
         return columns
 
 
