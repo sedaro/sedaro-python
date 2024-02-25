@@ -112,7 +112,6 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
 
     def __getattr__(self, subseries_name: str):
-        print(f"trying to get {subseries_name}...")
         '''Get a particular subseries by name as an attribute.'''
         return self[subseries_name]
 
@@ -146,7 +145,16 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
         if self.__has_subseries:
-            return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__column_index}
+            if not self.__is_singleton_or_vector():
+                return {key: self.__getattr__(key).value_at(mjd, interpolate=interpolate) for key in self.__column_index}
+            else:
+                # return self.__prepped_nested_series[bsearch(self.__mjd, mjd)]
+                arr_len = max([int(i) for i in self.__column_index]) + 1
+                result = [None] * arr_len
+                for i in range(arr_len):
+                    if (k := str(i)) in self.__column_index: # in case it has 0, 1, 3, but not 2, etc.
+                        result[i] = self.__getattr__(k).value_at(mjd, interpolate=interpolate)
+                return result
         else:
             def raise_error():
                 raise ValueError(f"MJD {mjd} not found in series with bounds [{self.__mjd[0]}, {self.__mjd[-1]}].")
@@ -157,7 +165,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 if index < 0:
                     raise_error()
             else:
-                return self.values_interpolant(mjd)
+                return self.values_interpolant(mjd).tolist() # casts from nparr(x) to x
             return self.__series.head(index + 1).tail(1).values[0][0]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
