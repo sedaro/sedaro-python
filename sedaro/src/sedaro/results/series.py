@@ -103,7 +103,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             else:
                 return self.__series[self.__column_names[0]].compute().tolist()
         else:
-            raise ValueError('Select a specific subseries for which to get values. Call `summarize()` for available options.')
+            return {key: self.__getattr__(key).values for key in self.__column_index}
 
     @cached_property
     def values_interpolant(self):
