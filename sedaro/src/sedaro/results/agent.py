@@ -1,29 +1,31 @@
-import gzip
+import dask.dataframe as dd
 import json
+import os
 from pathlib import Path
 from typing import Generator, List, Union
 
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, HFILL, hfill
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
 
 
-class SedaroAgentResult:
-
-    def __init__(self, name: str, block_structures: dict, series: dict, initial_state: dict = None):
+class SedaroAgentResult(FromFileAndToFileAreDeprecated):
+    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
         SedaroSimulationResult or the .from_file method of this class.
         '''
         self.__name = name
+        self.__column_index = column_index
         self.__block_structures = block_structures
         self.__series = series
+        self.__block_uuids = [k for k in self.__column_index]
         self.__block_ids = sorted(set(
-            block_id
+            block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
             for module in self.__series
-            for block_id in self.__series[module]['series']
+            for block_id in self.__series[module].columns.tolist()
         ),
             reverse=True
         )
@@ -57,34 +59,56 @@ class SedaroAgentResult:
             else:
                 raise ValueError(f'Found multiple matching IDs for {id_}: {matching_id}.')
 
-        block_data = {}
-        for module in self.__series:
-            if id_ in self.__series[module]['series']:
-                if module not in block_data:
-                    block_data[module] = {}
-                block_data[module]['time'] = self.__series[module]['time']
-                block_data[module]['series'] = self.__series[module]['series'][id_]
+        prefix = '' if id_ == 'root' else id_ + '.'
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
-        return SedaroBlockResult(block_structure, block_data)
+        block_streams = {}
+        for stream in self.__series:
+            if stream in self.__column_index[id_]:
+                block_streams[stream] = self.__series[stream]
+        return SedaroBlockResult(block_structure, block_streams, self.__column_index[id_], prefix)
 
-    def to_file(self, filename: Union[str, Path], verbose=True) -> None:
-        '''Save agent result to compressed JSON file.'''
-        with gzip.open(filename, 'xt', encoding='UTF-8') as json_file:
-            contents = {
+    def save(self, path: Union[str, Path]):
+        '''Save the agent result to a directory with the specified path.'''
+        try:
+            os.makedirs(path)
+        except FileExistsError:
+            if not (os.path.isdir(path) and any(os.scandir(path))):
+                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': 'SedaroAgentResult'}, fp)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump({
                 'name': self.__name,
+                'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
-                'series': self.__series,
-            }
-            json.dump(contents, json_file)
-            if verbose:
-                print(f"💾 Successfully saved to {filename}")
+                'column_index': self.__column_index,
+            }, fp)
+        os.mkdir(f"{path}/data")
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
+            df : dd = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
+        print(f"Agent result saved to {path}.")
 
     @classmethod
-    def from_file(cls, filename: Union[str, Path]):
-        '''Load agent result from compressed JSON file.'''
-        with gzip.open(filename, 'rt', encoding='UTF-8') as json_file:
-            contents = json.load(json_file)
-            return cls(contents['name'], contents['block_structures'], contents['series'])
+    def load(cls, path: Union[str, Path]):
+        '''Load an agent result from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != 'SedaroAgentResult':
+                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
+        with open(f"{path}/meta.json", "r") as fp:
+            meta = json.load(fp)
+            name = meta['name']
+            block_structures = meta['block_structures']
+            initial_state = meta['initial_state']
+            column_index = meta['column_index']
+        engines = {}
+        parquets = os.listdir(f"{path}/data/")
+        for engine in parquets:
+            df = dd.read_parquet(f"{path}/data/{engine}")
+            engines[engine.replace('.', '/')] = df
+        return cls(name, block_structures, engines, column_index, initial_state)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
@@ -95,7 +119,7 @@ class SedaroAgentResult:
 
         print("🧩 Simulated Modules")
         for module in self.__series:
-            print(f'    • {ENGINE_EXPANSION[module]}')
+            print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
 
         print("\n📦 Available Blocks")
         print('    ' + '-' * 58)
@@ -122,11 +146,7 @@ class SedaroAgentResult:
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
 
-    def model_at(self, mjd):
-        if not self.__initial_state:
-            raise ValueError(
-                'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
-
+    def __model_at(self, mjd):
         # Rough out model
         blocks = {block_id: self.block(block_id).value_at(mjd) for block_id in self.__block_ids}
         model = {'blocks': blocks, **blocks['root']}
@@ -135,3 +155,21 @@ class SedaroAgentResult:
         # Merge with initial state to fill in missing values
         # This order will overwrite any values in the initial state with values from the simulation
         return merge({}, self.__initial_state, model)
+
+    def model_at(self, mjd):
+        if not self.__initial_state:
+            raise ValueError(
+                'A time-variable model is not available for this agent. This is likely because the Agent is peripheral in the simulation.')
+
+        # find closest MJD for each dataframe
+        trimmed_engines = {}
+        for engine in self.__series:
+            bsearch_index = bsearch(engine_mjds := self.__series[engine].index.values.compute(), mjd)
+            floor = engine_mjds[bsearch_index]
+            try:
+                ceil = engine_mjds[bsearch_index + 1]
+            except IndexError:
+                ceil = floor
+            trimmed_engines[engine] = self.__series[engine].loc[floor:ceil].compute()
+
+        return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__column_index, self.__initial_state).__model_at(mjd)

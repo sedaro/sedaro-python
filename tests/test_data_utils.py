@@ -1,6 +1,5 @@
 from sedaro.branches.scenario_branch.sim_client import \
      __set_nested, set_nested, set_numeric_as_list, update_metadata, concat_results, concat_stream, concat_stream_data
-from sedaro.results.utils import to_time_major
 
 def test_set_nested_and_numeric():
     assert __set_nested({'foo.bar': [1, 2, 3], 'foo.baz': [1, 2, 3]}) == {'foo': {'bar': [1, 2, 3], 'baz': [1, 2, 3]}}
@@ -82,17 +81,9 @@ def test_concat_ragged():
         'c': [[None, None, None, None, None, 6, 7, 8, 9, 10] for _ in range(3)]
     }})}
 
-def test_to_time_major():
-    assert to_time_major(True) == True # items other than lists or dicts are returned as is
-    assert to_time_major([1, 2, 3]) == [1, 2, 3]
-    assert to_time_major([[1, 2], [3, 4], [5, 6]]) == ([[1, 3, 5], [2, 4, 6]])
-    assert to_time_major([[[1, 5, 9], [2, 6, 10]], [[3, 7, 11], [4, 8, 12]]]) == \
-         [[[1, 2], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]]
-
 def run_tests():
     test_set_nested_and_numeric()
     test_concat_and_update()
     test_concat_ragged()
-    test_to_time_major()
 
 run_tests()

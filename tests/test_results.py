@@ -1,10 +1,16 @@
+import dask.dataframe as dd
+import numpy as np
+import os
 from pathlib import Path
+import shutil
 from tempfile import TemporaryDirectory
+import uuid6
 
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
+from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
@@ -49,13 +55,6 @@ def test_query():
     # Obtain handle
     simulation_handle = sim.status()
 
-    # make sure results_plain returns dictionary (testing latest and with id)
-    plain = sim.results_plain()
-    assert isinstance(plain, dict)
-    assert plain == simulation_handle.results_plain()
-    data_array_id = plain['meta']['id']
-    assert plain == sim.results_plain(id=data_array_id)
-
     # test results method (default latest)
     result = sim.results()
     assert result.success
@@ -70,7 +69,6 @@ def test_query():
 
     # make sure results have same ids
     assert result.job_id == result_from_id.job_id == job_id
-    assert result.data_array_id == result_from_id.data_array_id == data_array_id
 
     agent_result = result.agent(result.templated_agents[0])
     block_result = agent_result.block('root')
@@ -92,23 +90,23 @@ def test_save_load():
 
     with TemporaryDirectory() as temp_dir:
         file_path = Path(temp_dir) / "sim.bak"
-        result.to_file(file_path)
-        new_result = SimulationResult.from_file(file_path)
+        result.save(file_path)
+        new_result = SimulationResult.load(file_path)
 
         file_path = Path(temp_dir) / "agent.bak"
         agent_result = new_result.agent(new_result.templated_agents[0])
-        agent_result.to_file(file_path)
-        new_agent_result = SedaroAgentResult.from_file(file_path)
+        agent_result.save(file_path)
+        new_agent_result = SedaroAgentResult.load(file_path)
 
         file_path = Path(temp_dir) / "block.bak"
         block_result = new_agent_result.block('root')
-        block_result.to_file(file_path)
-        new_block_result = SedaroBlockResult.from_file(file_path)
+        block_result.save(file_path)
+        new_block_result = SedaroBlockResult.load(file_path)
 
         file_path = Path(temp_dir) / "series.bak"
         series_result = new_block_result.position.ecef
-        series_result.to_file(file_path)
-        new_series_result = SedaroSeries.from_file(file_path)
+        series_result.save(file_path)
+        new_series_result = SedaroSeries.load(file_path)
 
         ref_series_result = new_result.agent(
             result.templated_agents[0]).block('root').position.ecef
@@ -123,6 +121,20 @@ def test_query_model():
         'dateModified': '2021-08-05T18:00:00.000Z',
         'status': 'SUCCEEDED',
     }
+
+    df1 = dd.from_dict({
+        'b.value': ['0first', '0second'],
+        'value': ['0rfirst', '0rsecond'],
+        'index': [1, 4],
+    }, npartitions=1)
+    df1 = df1.set_index('index')
+
+    df2 = dd.from_dict({
+        'b.otherValue': ['1first', '1second', '1third', '1fourth'],
+        'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
+        'index': [1, 2, 3, 4],
+    }, npartitions=1)
+    df2 = df2.set_index('index')
 
     data = {
         'meta': {
@@ -159,28 +171,8 @@ def test_query_model():
             }
         },
         'series': {
-            'a/0': [
-                [1, 4],
-                {
-                    'a': {
-                        'b': {
-                            'value': ['0first', '0second'],
-                        },
-                        'value': ['0rfirst', {'edge': 12}],
-                    }
-                }
-            ],
-            'a/1': [
-                [1, 2, 3, 4],
-                {
-                    'a': {
-                        'b': {
-                            'otherValue': ['1first', '1second', '1third', '1fourth'],
-                        },
-                        'otherValue': ['1rfirst', '1rsecond', '1rthird', '1rfourth'],
-                    }
-                }
-            ],
+            'a/0': df1,
+            'a/1': df2,
         }
     }
 
@@ -205,17 +197,67 @@ def test_query_model():
         assert model['blocks']['b']['name'] == 'Block'
 
     model = agent.model_at(4)
-    assert model['value']['edge'] == 12
+    assert model['value'] == '0rsecond'
     assert model['otherValue'] == '1rfourth'
     assert model['name'] == 'Root'
     assert model['blocks']['b']['value'] == '0second'
     assert model['blocks']['b']['otherValue'] == '1fourth'
     assert model['blocks']['b']['name'] == 'Block'
 
+class MockDownloadBar:
+    def __init__(self):
+        pass
+    def update(self, *args, **kwargs):
+        pass
+
+def compare_with_nans(a, b):
+    assert len(a) == len(b)
+    for i in range(len(a)):
+        if np.isnan(a[i]):
+            assert np.isnan(b[i])
+        else:
+            assert a[i] == b[i]
 
 def test_download():
+    # test download internals
+    download_worker = StreamManager(None)
+    download_worker.keys = set(['position', 'position.x', 'positionx', 'time', 'timeStep', 'timeStep.s'])
+    to_remove = download_worker.select_columns_to_remove()
+    assert set(to_remove) == set(['position', 'timeStep'])
+
+    # test some insertions
+    download_worker = StreamManager(MockDownloadBar())
+    dict_1 = {'a': [1, 2, 3], 'b': [1, 2, 3], 'time': [1, 2, 3]}
+    download_worker.ingest_core_data('foo', dict_1)
+    assert download_worker.keys == set(['a', 'b', 'time'])
+    assert set(download_worker.dataframe.columns) == set(['a', 'b', 'time'])
+    c = download_worker.dataframe.compute()
+    assert list(c['a']) == [1, 2, 3]
+    assert list(c['b']) == [1, 2, 3]
+    assert list(c['time']) == [1, 2, 3]
+
+    dict_2 = {'a': [4, 5, 6], 'c': [4, 5, 6], 'time': [4, 5, 6]}
+    download_worker.ingest_core_data('foo', dict_2)
+    assert download_worker.keys == set(['a', 'b', 'c', 'time'])
+    assert set(download_worker.dataframe.columns) == set(['a', 'b', 'c', 'time'])
+    download_worker.dataframe = download_worker.dataframe.repartition(npartitions=1)
+    download_worker.dataframe = download_worker.dataframe.reset_index(drop=True)
+    c = download_worker.dataframe.compute()
+    assert list(c['a']) == [1, 2, 3, 4, 5, 6]
+    compare_with_nans(list(c['b']), [1.0, 2.0, 3.0, float('nan'), float('nan'), float('nan')])
+    compare_with_nans(list(c['c']), [float('nan'), float('nan'), float('nan'), 4.0, 5.0, 6.0])
+    assert list(c['time']) == [1, 2, 3, 4, 5, 6]
+
+    # test that download succeeds
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
-    sim.download(overwrite=True)
+    results = sim.results()
+    root = uuid6.uuid7()
+    path = f"{root}/to/some/directory"
+    results.save(path)
+    try:
+        assert os.path.exists(path)
+    finally:
+        shutil.rmtree(path)
 
 
 def run_tests():

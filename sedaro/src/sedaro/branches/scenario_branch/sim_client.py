@@ -1,21 +1,17 @@
-import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
+import dask.dataframe
 import json
 import msgpack
-import os
-import pathlib
 import requests
-import tempfile
 import time
 from contextlib import contextmanager
-from threading import Lock
-from typing import (TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple,
+from typing import (TYPE_CHECKING, Any, Generator, List, Optional, Tuple,
                     Union)
-from zipfile import ZIP_DEFLATED, ZipFile
 
 import numpy as np
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
-
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import COMMON_API_KWARGS
@@ -270,7 +266,7 @@ class Simulation:
                 **COMMON_API_KWARGS
             )
 
-    def results_plain(
+    def __fetch(
         self,
         *,
         id: str = None,
@@ -278,55 +274,16 @@ class Simulation:
         stop: float = None,
         binWidth: float = None,
         limit: float = None,
-        axisOrder: str = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
+        download_manager: DownloadWorker = None,
     ):
-        """Query latest scenario and return results as a plain dictionary from the Data Service with options to
-        customize the response. If an `id` is passed, query for corresponding result rather than latest.
-
-        Args:
-            id (str, optional): `id` of the data array to fetch (found on `dataArray` attribute on a response from the\
-                `status` or `start` methods)
-
-            start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
-                simulation.
-
-            stop (float, optional): the end time of the data to fetch, in MJD format. Defaults to the end of the\
-                simulation.
-
-            limit (int, optional): the maximum number of points in time for which to fetch data for any stream. If not
-                specified, there is no limit and data is fetched at full resolution. If a limit is specified, the\
-                duration of the time from `start` to `stop` is divided into the specified number of bins of equal\
-                duration, and data is selected from at most one point in time within each bin. Not that it is not\
-                guaranteed that you will receive exactly as many points in time as the limit you specify; you may\
-                receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps\
-                through the simulation.
-
-            binWidth (float, optional): the width of the bins used in downsampling data, as described for `limit`. Note\
-                that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you\
-                would like to downsample data, use either `limit` or `binWidth`, but not both.
-
-            streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the docstring for the `results` method below. If no list is provided,\
-                data is fetched for all streams.
-
-            axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
-                `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
-
-        Raises:
-            NoSimResultsError: if no simulation has been started.
-
-        Returns:
-            dict: response from the `get` request
-        """
+        if sampleRate is None and continuationToken is None:
+            sampleRate = 1
 
         with self.__sedaro.api_client() as api:
             fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
-
-        if sampleRate is None and continuationToken is None:
-            sampleRate = 1
 
         if id == None:
             id = self.status()['dataArray']
@@ -345,17 +302,13 @@ class Simulation:
         if len(streams) > 0:
             encodedStreams = ','.join(['.'.join(x) for x in streams])
             url += f'&streams={encodedStreams}'
-        if axisOrder is not None:
-            if axisOrder not in {'TIME_MAJOR',  'TIME_MINOR'}:
-                raise ValueError(
-                    'axisOrder must be either "TIME_MAJOR" or "TIME_MINOR"')
-            url += f'&axisOrder={axisOrder}'
+        url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
         if continuationToken is not None:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
-        
+
         response = fast_fetcher.get(url)
         _response = None
         has_nonempty_ctoken = False
@@ -363,6 +316,8 @@ class Simulation:
             _response = response.parse()
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
+                download_manager.ingest(_response['series'])
+                download_manager.add_metadata(_response['meta'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
@@ -375,12 +330,13 @@ class Simulation:
             raise SedaroApiException(status=response.status, reason=reason)
         if is_v3: # keep fetching pages until we get an empty continuation token
             if has_nonempty_ctoken: # need to fetch more pages
-                result = _response
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
                     _page = page.parse()
+                    download_manager.ingest(_page['series'])
+                    download_manager.update_metadata(_page['meta'])
                     try:
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
@@ -392,18 +348,86 @@ class Simulation:
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
-                    concat_results(result['series'], _page['series'])
-                    update_metadata(result['meta'], _page['meta'])
-                _response = result
-            _response['series'] = set_nested(_response['series'])
-        return _response
+        download_manager.finalize()
+
+    def __get_filtered_streams(self, requested_streams: list, metadata: dict):
+        streams_raw = metadata['streams']
+        streams_true = {}
+        for stream in streams_raw:
+            stream_parts = stream.split('.')
+            if stream_parts[0] not in streams_true:
+                streams_true[stream_parts[0]] = []
+            streams_true[stream_parts[0]].append(stream_parts[1])
+        filtered_streams = []
+        for stream in requested_streams:
+            if stream[0] in streams_true:
+                if len(stream) == 1:
+                    for v in streams_true[stream[0]]:
+                        filtered_streams.append((stream[0], v))
+                else:
+                    if stream[0] in streams_true:
+                        if stream[1] in streams_true[stream[0]]:
+                            filtered_streams.append(stream[0], stream[1])
+        return filtered_streams
+
+    def __downloadInParallel(self, sim_id, streams, params, download_manager):
+        try:
+            start = params['start']
+            stop = params['stop']
+            sampleRate = params['sampleRate']
+            streams_fmt = [tuple(stream.split('.')) for stream in streams]
+            self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+        except Exception as e:
+            return e
+
+    def __get_metadata(self, sim_id: str = None):
+        request_url = f'/data/{sim_id}/metadata?'
+        with self.__sedaro.api_client() as api:
+            response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
+        response_dict = json.loads(response.data)
+        return response_dict
+
+    def __results(self,
+                job: 'SimulationHandle' = None,
+                start: float = None,
+                stop: float = None,
+                streams: Optional[List[Tuple[str, ...]]] = None,
+                sampleRate: int = None,
+                num_workers: int = 2) -> "dict[str, dask.dataframe]":
+
+        metadata = self.__get_metadata(sim_id := job['dataArray'])
+        if streams is not None and len(streams) > 0:
+            filtered_streams = self.__get_filtered_streams(streams, metadata)
+        else:
+            filtered_streams = metadata['streams']
+        num_workers = min(num_workers, len(filtered_streams))
+        workers = [[] for _ in range(num_workers)]
+        for i, stream in enumerate(filtered_streams):
+            workers[i % num_workers].append(stream)
+
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
+        params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers)
+            executor.shutdown(wait=True)
+        for e in exceptions:
+            if e is not None:
+                raise e
+        download_bar.complete()
+
+        stream_results = {}
+        for download_manager in download_managers:
+            stream_results.update(download_manager.streams)
+        return {'meta': download_managers[0].finalize_metadata(download_managers[1:]), 'series': stream_results}
 
     def results(self,
                 job_id: str = None,
                 start: float = None,
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
-                sampleRate: int = None) -> SimulationResult:
+                sampleRate: int = None,
+                num_workers: int = 2) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
@@ -431,7 +455,15 @@ class Simulation:
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to `None`.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -442,14 +474,17 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.results_plain(id=job['dataArray'], start=start, stop=stop, streams=streams or [], sampleRate=sampleRate)
+        data = self.__results(job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
         return SimulationResult(job, data)
 
     def results_poll(
         self,
         job_id: str = None,
+        start: float = None,
+        stop: float = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
+        num_workers: int = 2,
         retry_interval: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
@@ -457,7 +492,15 @@ class Simulation:
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
-            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
 
         Raises:
@@ -479,94 +522,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(streams=streams or [], sampleRate=sampleRate)
-
-    def __download(self, p):
-        agents, id, dirname, progress, progress_lock = p
-        MAX_ATTEMPTS = 3
-        for agent in agents:
-            attempts = MAX_ATTEMPTS
-            while attempts > 0:
-                agentData = self.results_plain(
-                    id=id,
-                    limit=None,
-                    streams=[(agent,)],
-                )
-                if 'series' in agentData:
-                    break
-                else:
-                    print('Data retrieval failed. Retrying...')
-                    attempts -= 1
-            else:
-                raise Exception(
-                    f"Data retrieval for agent {agent} failed after {MAX_ATTEMPTS} attempts")
-            with open(f'{dirname}/{agent}.json', 'w') as fd:
-                progress_lock.acquire()
-                try:
-                    progress['count'] += 1
-                    progress_bar(
-                        (float(progress['count'] / progress['total'])) * 100.0)
-                finally:
-                    progress_lock.release()
-                json.dump(agentData, fd, indent=2)
-        return agents
-
-    def download(self, data_array_id: str = None, filename: str = 'sedaro.zip', agent_ids: List[str] = None, overwrite: bool = False):
-        if not overwrite and pathlib.Path(filename).exists():
-            raise FileExistsError(
-                f'The file {filename} already exists. Please delete it or provide a different filename via the `filename` argument.')
-
-        # create temp directory in which to build zip
-        archive = ZipFile(filename, 'w')
-        with tempfile.TemporaryDirectory() as dirname:
-            try:
-                # Eventually this should be updated to get the Agents from the model snapshot saved alongside the
-                # data in case the model changes prior to download.
-                agent_ids = agent_ids or self.__branch.Agent.get_all_ids()
-                if not data_array_id:
-                    data_array_id = self.status()['dataArray']
-
-                # get data for one agent at a time
-                MAX_CHUNKS = 4
-                if len(agent_ids) < MAX_CHUNKS:
-                    NUM_CHUNKS = len(agent_ids)
-                else:
-                    NUM_CHUNKS = MAX_CHUNKS
-                chunks = []
-                for _ in range(NUM_CHUNKS):
-                    chunks.append([])
-                for i in range(len(agent_ids)):
-                    chunks[i % NUM_CHUNKS].append(agent_ids[i])
-                progress = {'count': 0, 'total': len(agent_ids)}
-                progress_bar(
-                    (float(progress['count'] / progress['total'])) * 100.0)
-
-                with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_CHUNKS) as executor:
-                    shared = (data_array_id, dirname, progress, Lock())
-                    done = executor.map(
-                        self.__download,
-                        [(c, *shared) for c in chunks]
-                    )
-                print(f'\nBuilding {filename}...')
-                for chunk in done:
-                    for agent in chunk:
-                        archive.write(f'{dirname}/{agent}.json',
-                                      f'{agent}.json', ZIP_DEFLATED)
-
-                # save zip file
-                archive.close()
-                print(f'Done. Created: {filename}')
-                print('See https://sedaro.github.io/openapi/#tag/Data for details on the data format of each individual JSON file in the archive.')
-
-            except Exception:
-                try:
-                    archive.close()
-                except Exception:
-                    pass
-                if pathlib.Path(filename).exists():
-                    os.remove(filename)
-                raise Exception("Unable to download data and build archive.")
-
+        return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -617,65 +573,14 @@ class SimulationHandle:
         self.__sim_client.terminate(self.__job['id'])
         return self
 
-    def results_plain(
-        self,
-        start: float = None,
-        stop: float = None,
-        binWidth: float = None,
-        limit: float = None,
-        axisOrder: str = None,
-        streams: Optional[List[Tuple[str, ...]]] = None,
-        sampleRate: int = None,
-        continuationToken: bytes = None,
-    ):
-        """Query simulation results as a plain dictionary from the Data Service with options to
-        customize the response.
-
-        Args:
-            start (float, optional): the start time of the data to fetch, in MJD format. Defaults to the start of the\
-                simulation.
-
-            stop (float, optional): the end time of the data to fetch, in MJD format. Defaults to the end of the\
-                simulation.
-
-            limit (int, optional): the maximum number of points in time for which to fetch data for any stream. If not
-                specified, there is no limit and data is fetched at full resolution. If a limit is specified, the\
-                duration of the time from `start` to `stop` is divided into the specified number of bins of equal\
-                duration, and data is selected from at most one point in time within each bin. Not that it is not\
-                guaranteed that you will receive exactly as many points in time as the limit you specify; you may\
-                receive fewer, depending on the length of a data stream and/or the distribution of data point timestamps\
-                through the simulation.
-
-            binWidth (float, optional): the width of the bins used in downsampling data, as described for `limit`. Note\
-                that `binWidth` and `limit` are not meant to be used together; undefined behavior may occur. If you\
-                would like to downsample data, use either `limit` or `binWidth`, but not both.
-
-            streams (list, optional): specify which data streams you would like to fetch data for, according to the\
-                format described in the previous section. If no list is provided, data is fetched for all streams.
-
-            axisOrder (enum, optional): the shape of each series in the response. Options: `'TIME_MAJOR'` and\
-                `'TIME_MINOR'`. Default value, if not specified, is `'TIME_MAJOR'`.
-
-        Raises:
-            NoSimResultsError: if no simulation has been started.
-
-        Returns:
-            dict: response from the `get` request
-        """
-        return self.__sim_client.results_plain(
-            id=self.__job['dataArray'],
-            start=start,
-            stop=stop,
-            binWidth=binWidth,
-            limit=limit,
-            axisOrder=axisOrder,
-            streams=streams,
-            sampleRate=sampleRate,
-            continuationToken=continuationToken,
-        )
-
-    def results(self, streams: Optional[List[Tuple[str, ...]]] = None) -> SimulationResult:
-        """Query simulaiton results.
+    def results(
+            self,
+            start: float = None,
+            stop: float = None,
+            streams: Optional[List[Tuple[str, ...]]] = None,
+            sampleRate: int = None,
+            num_workers: int = 2) -> SimulationResult:
+        """Query simulation results.
 
         If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it
         must be a list of tuples following particular rules:
@@ -700,7 +605,15 @@ class SimulationHandle:
         ```
 
         Args:
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
             streams (Optional[List[Tuple[str, ...]]], optional): Streams to query for. Defaults to `None`.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -709,17 +622,29 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], streams=streams)
+        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
 
     def results_poll(
         self,
+        start: float = None,
+        stop: float = None,
         streams: List[Tuple[str, ...]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
         retry_interval: int = 2
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
         Args:
-            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
 
         Raises:
@@ -730,7 +655,11 @@ class SimulationHandle:
         """
         return self.__sim_client.results_poll(
             job_id=self.__job['id'],
+            start=start,
+            stop=stop,
             streams=streams,
+            sampleRate=sampleRate,
+            num_workers=num_workers,
             retry_interval=retry_interval
         )
 
