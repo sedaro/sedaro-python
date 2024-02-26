@@ -1,6 +1,7 @@
 import dask.dataframe as dd
 import json
 from functools import cached_property
+import numpy as np
 import os
 from pathlib import Path
 from typing import Union
@@ -101,7 +102,20 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if self.__has_subseries:
                 return self.__series.values.compute().tolist()
             else:
-                return self.__series[self.__column_names[0]].compute().tolist()
+                computed_columns = {column_name: self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
+                vals = []
+                for column in computed_columns:
+                    indexes = [int(x) for x in column.split('.')]
+                    ptr = vals
+                    for index in indexes:
+                        if len(ptr) == index:
+                            ptr.append([])
+                        elif len(ptr) < index:
+                            ptr.extend([[] for _ in range(index - len(ptr))])
+                        ptr = ptr[index]
+                    ptr.extend(computed_columns[column])
+                return np.transpose(vals, axes=None).tolist()
+
         else:
             return {key: self.__getattr__(key).values for key in self.__column_index}
 
