@@ -62,7 +62,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     @property
     def data(self) -> Dict[str, dd.DataFrame]:
-        '''Get the raw DataFrames for this block.'''
+        '''Get the raw Dask DataFrames for this block.'''
         # only include columns in this block, not columns in the dataframes that are for other blocks
         scoped_data = {}
         for stream in self.__series:

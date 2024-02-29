@@ -41,7 +41,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
     @property
     def data(self) -> Dict[str, dd.DataFrame]:
-        '''Get the raw data for this agent.'''
+        '''Get the raw Dask DataFrames for this agent.'''
         return self.__series
 
     @property
