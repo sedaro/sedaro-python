@@ -1,13 +1,13 @@
-import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
 from typing import Generator, List, Union
 
+import dask.dataframe as dd
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, bsearch, hfill
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
@@ -44,6 +44,10 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         return self.__name
 
     @property
+    def dataframe(self):
+        return self.__series
+
+    @property
     def blocks(self) -> List[str]:
         return self.__block_ids
 
@@ -73,7 +77,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             os.makedirs(path)
         except FileExistsError:
             if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroAgentResult'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
@@ -86,7 +91,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df : dd = self.__series[engine]
+            df: dd = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Agent result saved to {path}.")
 
