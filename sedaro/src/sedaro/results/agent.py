@@ -39,7 +39,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         '''Check if this agent result contains a certain block ID.'''
         return id_ in self.__block_ids
 
-    @property:
+    @property
     def data(self) -> Dict[str, dd.DataFrame]:
         '''Get the raw data for this agent.'''
         return self.__series
