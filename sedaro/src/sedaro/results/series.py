@@ -86,6 +86,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @property
     def data(self) -> dd.DataFrame:
+        '''Get the raw DataFrame for this series.'''
         return self.__series
 
     @property

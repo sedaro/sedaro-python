@@ -60,6 +60,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     @property
     def data(self) -> Dict[str, dd.DataFrame]:
+        '''Get the raw DataFrames for this SimulationResult.'''
         return self.__data['series']
 
     @property
