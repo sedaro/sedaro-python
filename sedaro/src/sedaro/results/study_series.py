@@ -1,8 +1,12 @@
 import gzip
 import json
+import os
 from functools import cached_property
+from pathlib import Path
+from typing import Union
 
 from scipy.interpolate import interp1d
+from .series import SedaroSeries
 
 try:
     import matplotlib.pyplot as plt
@@ -186,15 +190,25 @@ class StudySeries:
         [s.set_yticks(()) for s in sm.reshape(-1)]
         plt.show()     
 
-
-
-
-    def to_file(self, filename, verbose=True):
-        pass
+    def save(self, path: Union[str, Path]):
+        for sim_id, series in self._series.items():
+            dirpath = f"{path}/{self._name}_{self._study_id}_{sim_id}_studyseries"
+            series.save(dirpath)
 
     @classmethod
-    def from_file(cls, filename):
-        pass
+    def load(cls, path: Union[str, Path]):
+        series = {}
+        for (dirpath, dirnames, filenames) in os.walk(path):
+            for dir in dirnames:
+                tokens = dir.split('_')
+                name = tokens[-4]
+                study_id = tokens[-3]
+                simjob_id = tokens[-2]
+                save_type = tokens[-1]
+                if save_type == 'studyseries':
+                    series[simjob_id] = SedaroSeries.load(os.path.join(dirpath, dir))
+        return cls(study_id, name, series)
+
 
     def _print_sim_ids(self):
         hfill()

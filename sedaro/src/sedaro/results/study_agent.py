@@ -1,6 +1,7 @@
 import gzip
 import json
 import glob
+import os
 
 from pathlib import Path
 from typing import Generator, List, Union, Dict
@@ -59,24 +60,28 @@ class StudyAgentResult:
         blocks =  {simjob_id: agent.blockname(name) for (simjob_id,agent) in self._simjob_to_agents.items()}
         return StudyBlockResult(self._study_id, name, blocks)
 
-    def to_files(self, filename_prefix: Union[str, Path], verbose=True) -> None:
-        for (simjob_id,agent) in self._simjob_to_agents.items():
-            filename = filename_prefix + '_' + self._name +'_'+ self._study_id +'_' + simjob_id + "_agent.json"
-            agent.to_file(filename, verbose)
 
     @classmethod
-    def from_files(cls, filename_prefix: Union[str, Path]):
+    def load(cls, path: Union[str, Path]):
         # search directory for files with prefix
         simjobID_to_agents = {}
-        for file in glob.glob(filename_prefix + '*_agent.json'):
-            tokens = file.split('_')
-            name = tokens[-4]
-            study_id = tokens[-3]
-            simjob_id = tokens[-2]
-            agent = SedaroAgentResult.from_file(file)
-            simjobID_to_agents[simjob_id] = agent
-            name = agent.name
+
+        for (dirpath, dirnames, filenames) in os.walk(path):
+            for dir in dirnames:
+                tokens = dir.split('_')
+                name = tokens[-4]
+                study_id = tokens[-3]
+                simjob_id = tokens[-2]
+                save_type = tokens[-1]
+                if save_type == 'studyagent':
+                    simjobID_to_agents[simjob_id] = SedaroAgentResult.load(os.path.join(dirpath, dir))
         return cls(study_id, name, simjobID_to_agents)
+
+
+    def save(self, path: Union[str, Path]):
+        for (simjob_id,agent) in self._simjob_to_agents.items():
+            dirpath = f"{path}/{self._name}_{self._study_id}_{simjob_id}_studyagent"
+            agent.save(dirpath)
 
     def summarize(self) -> dict:
         hfill()

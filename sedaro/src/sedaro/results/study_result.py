@@ -1,8 +1,9 @@
 import datetime as dt
 import numpy as np
 import pandas as pd
+import os
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 from sedaro.branches.scenario_branch.sim_client import Simulation
 from sedaro.results.simulation_result import SimulationResult
@@ -25,8 +26,6 @@ class StudyResult:
         self.__cache = True
         self.__cache_dir = None
         self.__cached_sim_results = {}
-        self.__limit = None
-        self.__binWidth = None
         
 
     def __repr__(self) -> str:
@@ -71,12 +70,6 @@ class StudyResult:
     @property
     def iterations(self) -> int:
         return len(self.__metadata['jobs'])
-
-    def set_result_limit(self, limit:float):
-        self.__limit = limit
-
-    def set_result_binWidth(self, binWidth:float):
-        self.__binWidth = binWidth
 
     def set_cache(self, cache: bool = True, cache_dir: str = None) -> None:
         '''Set caching options for this study result.
@@ -254,3 +247,38 @@ class StudyResult:
                                       
         return agent_engine_df
 
+    def save(self, path: Union[str, Path]):
+        for cache_string, results in self.__cached_sim_results.items():
+            dirpath = f"{path}/{self.__study.name}_{self.__study.id}_{cache_string}_studyresults"
+            results.save(dirpath)
+        with open(f"{Path}/study_metadata.txt", "w") as file:
+            file.write(f"{self.__metadata}")
+        with open(f"{Path}/study_info.txt", "w") as file:
+            file.write(f"{self.__study}")
+
+    @classmethod
+    def load(cls, path: Union[str, Path]):
+        series_results = {}
+        for (dirpath, dirnames, filenames) in os.walk(path):
+            for dir in dirnames:
+                tokens = dir.split('_')
+                name = tokens[-4]
+                study_id = tokens[-3]
+                cache_string = tokens[-2]
+                save_type = tokens[-1]
+                if save_type == 'studyresults':
+                    series_results[cache_string] = SimulationResult.load(os.path.join(dirpath, dir))
+            for file in filenames:
+                if file == 'study_metadata.txt':
+                    with open(os.path.join(dirpath, file), "r") as file:
+                        metadata = file.read()
+                if file == 'study_info.txt':
+                    with open(os.path.join(dirpath, file), "r") as file:
+                        study = file.read()
+
+        new_study_result = cls(study, metadata)
+        new_study_result.__cached_sim_results = series_results
+        new_study_result.__cache = True
+        new_study_result.__cache_dir = None
+
+        return new_study_result

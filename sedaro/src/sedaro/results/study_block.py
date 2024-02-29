@@ -1,11 +1,14 @@
 import gzip
 import json
+import os
+
 from pathlib import Path
 from typing import Generator, Union
 
 from .series import SedaroSeries
 from .utils import ENGINE_EXPANSION, HFILL, hfill
 from .study_series import StudySeries
+from .agent import SedaroBlockResult
 
 
 # What is the difference between StudyBlockResult and StudySeries?
@@ -58,15 +61,24 @@ class StudyBlockResult:
         series = { sim_id: block.__getattr__(name) for (sim_id,block) in self._blocks.items() }
         return StudySeries(self._study_id, name, series)
 
-
-    def to_file(self, filename_prefix: Union[str, Path], verbose=True) -> None:
-        for (simjob_id,block) in self._blocks.items():
-            filename = filename_prefix + '_' + simjob_id + "_block.json"
-            block.to_file(filename, verbose)
+    def save(self, path: Union[str, Path]):
+        for sim_id, block in self._block.items():
+            dirpath = f"{path}/{self._name}_{self._study_id}_{sim_id}_studyblock"
+            block.save(dirpath)
 
     @classmethod
-    def from_file(cls, filename: Union[str, Path]):
-        pass
+    def load(cls, path: Union[str, Path]):
+        blocks = {}
+        for (dirpath, dirnames, filenames) in os.walk(path):
+            for dir in dirnames:
+                tokens = dir.split('_')
+                name = tokens[-4]
+                study_id = tokens[-3]
+                simjob_id = tokens[-2]
+                save_type = tokens[-1]
+                if save_type == 'studyblock':
+                    blocks[simjob_id] = SedaroBlockResult.load(os.path.join(dirpath, dir))
+        return cls(study_id, name, blocks)
 
     def summarize(self) -> None:
         hfill()
