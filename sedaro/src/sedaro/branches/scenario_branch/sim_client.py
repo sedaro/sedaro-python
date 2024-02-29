@@ -365,11 +365,11 @@ class Simulation:
             if stream[0] in streams_true:
                 if len(stream) == 1:
                     for v in streams_true[stream[0]]:
-                        filtered_streams.append('.'.join([stream[0], v]))
+                        filtered_streams.append((stream[0], v))
                 else:
                     if stream[0] in streams_true:
                         if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append('.'.join(stream))
+                            filtered_streams.append(stream)
         return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager):
@@ -377,7 +377,13 @@ class Simulation:
             start = params['start']
             stop = params['stop']
             sampleRate = params['sampleRate']
-            self.__fetch(id=sim_id, streams=streams, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+            streams_formatted = []
+            for stream in streams:
+                if type(stream) == tuple:
+                    streams_formatted.append(stream)
+                else:
+                    streams_formatted.append('.'.join(stream))
+            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
         except Exception as e:
             return e
 
