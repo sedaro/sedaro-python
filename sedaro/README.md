@@ -230,7 +230,6 @@ The following `Simulation` methods are also available on the `SimulationHandle` 
 simulation_handle.status()
 simulation_handle.results_poll()
 simulation_handle.results()
-simulation_handle.results_plain(...)
 simulation_handle.terminate()
 ```
 
@@ -246,48 +245,50 @@ simulation_handle['status']
 
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
 
-## Fetch Raw Data
+## Selecting Results to Download
 
-You may also fetch results directly as a plain dictionary with additional arguments to customize the result.
+The `results` and `results_poll` methods take a number of arguments. These arguments can be used to specify which segments of the data should be downloaded, the resolution of the downloaded data, and more.
+
+- `start`: start time of the data to fetch, in MJD. Defaults to the start of the simulation.
+- `stop`: end time of the data to fetch, in MJD. Defaults to the end of the simulation.
+- `streams`: a list of streams to fetch, following the format specified below. If no argument is provided, all streams are fetched.
+- `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on.  If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
+- num_workers: `results` and `results_poll` use parallel downloaders to accelerate data fetching. The default number of downloaders is 2, but you can use this argument to set a different number.
+
+### Format of `streams`
+
+If you pass an argument to `streams`, it
+must be a list of tuples following particular rules:
+
+- Each tuple in the list can contain either 1 or 2 items.
+- If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
+    will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
+- If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the\
+    following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
+    agent of this engine will be fetched.
+
+For example, with the following code, `results` will only contain data for all engines of agent `foo` and the
+`Power` and `Thermal` engines of agent `bar`.
 
 ```py
-sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
-
-# Run simulation
-sim.start(wait=True)
-
-# After finished... get raw data
 selected_streams=[
     ('foo',),
     ('bar', 'Thermal'),
     ('bar', 'Power')
 ]
-data = sim.results_plain(
-  start=65000,
-  stop=65001,
-  sampleRank=1,
-  streams=selected_streams,
-)
-### alternative:
-data = sim.results_plain(
-  start=65000,
-  stop=65001,
-  sampleRank=8,
-  streams=selected_streams,
-)
+results = sim.results(streams=selected_streams)
 ```
 
-See doc string in the `results_plain` for details on use of the arguments.
+## Saving Downloaded Data
 
-## Bulk Download
-
-Use the following method to download larger datasets more efficiently. See the doc string for details on use of the arguments.
+You may save downloaded simulation data to your machine via the following procedure:
 
 ```py
-sim.download()
+results = simulation_handle.results()
+results.save('path/to/data')
 ```
 
-This will produce a ZIP archive called `data.zip` in your working directory. Inside the ZIP archive, there will be one JSON file for each Agent, with the name `<agent UUID>.json`.
+This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to an empty directory, or a directory which does not yet exist.
 
 ## Send Requests
 
