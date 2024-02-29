@@ -168,10 +168,22 @@ def test_run_studies():
     assert test_study['status'] in  [ 'RUNNING', 'PENDING' ]
 
     # Wait for the study to finish
-    print('Waiting for study to finish')
+    print('Running 2 simjob study')
+
+
+    start_time = time.perf_counter()
+    max_seconds = 30*60
     while test_study['status'] in ['RUNNING', 'PENDING']:
         time.sleep(10)
         test_study = sedaroAPI.simulation.study(test_study['id']).status()
+        study_simjob_statuses = getStudySimJobsStatus(WILDFIRE_SCENARIO_ID, test_study.id)
+        print(study_simjob_statuses)
+        if time.perf_counter() - start_time > max_seconds:
+            raise TimeoutError(f'Simulation did not start within {max_seconds} seconds')
+
+
+
+    
     
     assert test_study['status'] == 'COMPLETED'
 
@@ -214,7 +226,8 @@ def test_run_studies():
 
 
 
-
+def run_tests():
+    test_run_studies()
     
 
            

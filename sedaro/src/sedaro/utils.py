@@ -1,7 +1,7 @@
 import importlib
 import inspect
 import json
-import orjson
+
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict
 
