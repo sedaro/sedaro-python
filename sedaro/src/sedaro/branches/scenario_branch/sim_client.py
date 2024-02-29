@@ -382,7 +382,7 @@ class Simulation:
                 if type(stream) == tuple:
                     streams_formatted.append(stream)
                 else:
-                    streams_formatted.append('.'.join(stream))
+                    streams_formatted.append(tuple(stream.split('.')))
             self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
         except Exception as e:
             return e
