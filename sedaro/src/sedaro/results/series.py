@@ -85,6 +85,11 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         return self[subseries_name]
 
     @property
+    def dataframe(self) -> dd.DataFrame:
+        '''Get the raw Dask DataFrame for this series.'''
+        return self.__series
+
+    @property
     def name(self):
         return self.__name
 

@@ -2,10 +2,10 @@ import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Generator, Union
+from typing import Dict, Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, hfill, FromFileAndToFileAreDeprecated
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, get_column_names, hfill, FromFileAndToFileAreDeprecated
 
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
@@ -59,6 +59,16 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
     @property
     def name(self):
         return self.__name
+
+    @property
+    def dataframe(self) -> Dict[str, dd.DataFrame]:
+        '''Get the raw Dask DataFrames for this block.'''
+        # only include columns in this block, not columns in the dataframes that are for other blocks
+        scoped_data = {}
+        for stream in self.__series:
+            column_names = get_column_names(self.__column_index[stream], self.__prefix)
+            scoped_data[stream] = self.__series[stream][column_names]
+        return scoped_data
 
     @property
     def modules(self):

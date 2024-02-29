@@ -2,7 +2,7 @@ import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Generator, List, Union
+from typing import Dict, Generator, List, Union
 
 from pydash import merge
 
@@ -38,6 +38,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
     def __contains__(self, id_: str) -> bool:
         '''Check if this agent result contains a certain block ID.'''
         return id_ in self.__block_ids
+
+    @property
+    def dataframe(self) -> Dict[str, dd.DataFrame]:
+        '''Get the raw Dask DataFrames for this agent.'''
+        return self.__series
 
     @property
     def name(self) -> str:

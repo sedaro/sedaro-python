@@ -59,6 +59,11 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         ])
 
     @property
+    def dataframe(self) -> Dict[str, dd.DataFrame]:
+        '''Get the raw Dask DataFrames for this SimulationResult.'''
+        return self.__data['series']
+
+    @property
     def status(self) -> str:
         return str(self.__simulation['status'])
 
