@@ -23,7 +23,7 @@ def _wait_until_passed_pending(simulation_handle):
 
 
 def _check_job_status_running(job):
-    assert (job['status'] in ['RUNNING', 'PENDING'])
+    assert job['status'] == 'RUNNING'
     if job['status'] == 'RUNNING':
         print('-', job['status'], '-', round(
             job['progress']['percentComplete'], 2), '%')

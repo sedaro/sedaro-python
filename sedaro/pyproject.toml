@@ -20,9 +20,11 @@ dependencies = [
     "urllib3 ~= 1.26.7",
     "pydash >= 5.1.1",
     "scipy >= 1.10.1",
-    "numpy >= 1.24.3",
+    "numpy",
     "orjson",
     "requests",
+    "pandas",
+    "sweetviz",
     ]
 [[project.authors]]
 name = "Sedaro"

@@ -2,6 +2,7 @@ import gzip
 import json
 from pathlib import Path
 from typing import Generator, List, Union, Dict
+from functools import lru_cache, cached_property
 
 from pydash import merge
 
@@ -45,12 +46,12 @@ class SedaroAgentResult:
     def blocks(self) -> List[str]:
         return self.__block_ids
 
-    @property
-    def blockNameToID(self) -> Dict[str, str]:
+    @cached_property
+    def block_name_to_id(self) -> Dict[str, str]:
         return { self.__block_structures[block_id].get('name', None): block_id for block_id in self.__block_ids if block_id in self.__block_structures }
 
-    @property
-    def blockIdToName(self) -> Dict[str, str]:
+    @cached_property
+    def block_id_to_name(self) -> Dict[str, str]:
         return { block_id: self.__block_structures[block_id].get('name', None) for block_id in self.__block_ids if block_id in self.__block_structures }
 
 
@@ -76,7 +77,7 @@ class SedaroAgentResult:
         block_structure = self.__block_structures[id_] if id_ != 'root' else id_
         return SedaroBlockResult(block_structure, block_data)
 
-    def blockname(self, name:str) -> SedaroBlockResult:
+    def block_name(self, name:str) -> SedaroBlockResult:
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
@@ -148,6 +149,7 @@ class SedaroAgentResult:
         print("📉📈      for a study simulation with .sim_scatter_matrix( sim_id, variables=None )") 
 
 
+    @lru_cache
     def create_dataframe(self, module, variables=None):
         try:
             import pandas as pd
@@ -213,7 +215,7 @@ class SedaroAgentResult:
         try:
             import sweetviz as sv
         except ImportError:
-            print( "Histogram plots require the sweetviz library to be imported. (pip install sweetviz)")
+            print( "Histogram plots require the sweetviz library to be installed. (pip install sweetviz)")
         else:
             block_dfs = self.create_dataframe(module, variables)
             sv.config_parser['Layout']['show_logo'] = '0' 
