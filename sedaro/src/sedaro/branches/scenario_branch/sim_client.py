@@ -367,7 +367,7 @@ class Simulation:
                 else:
                     if stream[0] in streams_true:
                         if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append(stream[0], stream[1])
+                            filtered_streams.append((stream[0], stream[1]))
         return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager):
