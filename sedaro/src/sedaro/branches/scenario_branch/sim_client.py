@@ -116,7 +116,8 @@ class FastFetcherResponse:
             self.type = 'application/msgpack'
             self.data = response.content
         else:
-            raise Exception("Unexpected MIME type")
+            raise Exception(
+                f"Unexpected MIME type: {response.headers['Content-Type']}.  Response content: {response.content}. Status Code: {response.status_code}")
         self.status = response.status_code
         self.response = response
 
@@ -129,7 +130,8 @@ class FastFetcherResponse:
         elif self.type == 'application/msgpack':
             return msgpack.unpackb(self.data)
         else:
-            raise Exception("Unexpected MIME type")
+            raise Exception(
+                f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
 
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
@@ -363,11 +365,12 @@ class Simulation:
             if stream[0] in streams_true:
                 if len(stream) == 1:
                     for v in streams_true[stream[0]]:
-                        filtered_streams.append((stream[0], v))
+                        filtered_streams.append('.'.join([stream[0], v]))
                 else:
                     if stream[0] in streams_true:
                         if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append((stream[0], stream[1]))
+                            print(f"appending stream: {stream}")
+                            filtered_streams.append('.'.join(stream))
         return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager):
@@ -375,8 +378,9 @@ class Simulation:
             start = params['start']
             stop = params['stop']
             sampleRate = params['sampleRate']
-            streams_fmt = [tuple(stream.split('.')) for stream in streams]
-            self.__fetch(id=sim_id, streams=streams_fmt, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+            print(f"STREAMS: {streams}")
+            # streams_fmt = [tuple(stream.split('.')) for stream in streams]
+            self.__fetch(id=sim_id, streams=streams, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
         except Exception as e:
             return e
 
