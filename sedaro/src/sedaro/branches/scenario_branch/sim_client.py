@@ -369,7 +369,6 @@ class Simulation:
                 else:
                     if stream[0] in streams_true:
                         if stream[1] in streams_true[stream[0]]:
-                            print(f"appending stream: {stream}")
                             filtered_streams.append('.'.join(stream))
         return filtered_streams
 
@@ -378,8 +377,6 @@ class Simulation:
             start = params['start']
             stop = params['stop']
             sampleRate = params['sampleRate']
-            print(f"STREAMS: {streams}")
-            # streams_fmt = [tuple(stream.split('.')) for stream in streams]
             self.__fetch(id=sim_id, streams=streams, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
         except Exception as e:
             return e
