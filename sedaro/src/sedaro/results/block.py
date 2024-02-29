@@ -61,6 +61,11 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         return self.__name
 
     @property
+    def data(self):
+        # only include columns in this block, not columns in the dataframes that are for other blocks
+        return {stream: self.__series[stream][self.__column_index[stream].values()] for stream in self.__series}
+
+    @property
     def modules(self):
         return self.__series.keys()
 
