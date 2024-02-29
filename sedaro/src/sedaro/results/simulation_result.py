@@ -41,10 +41,6 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         return self.__simulation['id']
 
     @property
-    def dataframe(self):
-        return self.__data['series']
-
-    @property
     def data_array_id(self):
         return self.__meta.get('id', None)
 

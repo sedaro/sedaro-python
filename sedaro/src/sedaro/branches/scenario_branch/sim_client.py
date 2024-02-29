@@ -324,9 +324,7 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
-        print('fetching first page')
         response = fast_fetcher.get(url)
-        print('done.')
         _response = None
         has_nonempty_ctoken = False
         try:
@@ -350,9 +348,7 @@ class Simulation:
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    print('fetching another page')
                     page = fast_fetcher.get(request_url)
-                    print('done.')
                     _page = page.parse()
                     download_manager.ingest(_page['series'])
                     download_manager.update_metadata(_page['meta'])

@@ -44,10 +44,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         return self.__name
 
     @property
-    def dataframe(self):
-        return self.__series
-
-    @property
     def blocks(self) -> List[str]:
         return self.__block_ids
 
