@@ -2,7 +2,7 @@ import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Generator, Union
+from typing import Dict, Generator, Union
 
 from .series import SedaroSeries
 from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, get_column_names, hfill, FromFileAndToFileAreDeprecated
@@ -61,7 +61,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         return self.__name
 
     @property
-    def data(self):
+    def data(self) -> Dict[str, dd.DataFrame]:
         # only include columns in this block, not columns in the dataframes that are for other blocks
         scoped_data = {}
         for stream in self.__series:
