@@ -59,6 +59,10 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         ])
 
     @property
+    def data(self) -> Dict[str, dd]:
+        return self.__data['series']
+
+    @property
     def status(self) -> str:
         return str(self.__simulation['status'])
 
