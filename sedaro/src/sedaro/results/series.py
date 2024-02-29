@@ -85,6 +85,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         return self[subseries_name]
 
     @property
+    def data(self) -> dd.DataFrame:
+        return self.__series
+
+    @property
     def name(self):
         return self.__name
 
