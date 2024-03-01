@@ -41,6 +41,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         return id_ in self.__block_ids
 
     @property
+    def dataframe(self) -> Dict[str, dd.DataFrame]:
+        '''Get the raw Dask DataFrames for this agent.'''
+        return self.__series
+
+    @property
     def name(self) -> str:
         return self.__name
 
