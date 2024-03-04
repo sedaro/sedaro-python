@@ -60,8 +60,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Cooler: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    CooperativeTransmitInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     DataBus: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     DataInterface: BlockType
@@ -120,8 +118,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     PassivePointingMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    PassiveTransmitInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     PermanentDipoleMagnet: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     PhotovoltaicPowerProcessor: BlockType
@@ -135,8 +131,6 @@ class AgentTemplateBranch(Branch):
     QuasiRegDetPowerProcessor: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     ReactionWheel: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    ReceiveInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     RectangularFieldOfView: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -242,15 +236,9 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     MagneticDetumblingAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    GeoAreaDateTimeGroup: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    CloudFractionGroup: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     UnresponsiveReactionWheelFailureMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     SensorFailureMode: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    CloudFractionGroupToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     FieldOfViewArticulationMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -289,4 +277,14 @@ class AgentTemplateBranch(Branch):
     Routine: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     StaticAttitudeInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    MemsAngularVelocitySensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ImpulsiveDeltaVAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    LineOfSightReceiveInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PassiveLineOfSightTransmitInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    CooperativeLineOfSightTransmitInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""

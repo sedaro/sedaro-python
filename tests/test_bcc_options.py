@@ -19,7 +19,7 @@ def test_block_type_options():
         branch = get_method(branch_id)
         branch_block_names = sorted(branch.data['_blockNames'])
         # CHECK: lists above are correct
-        assert expected_block_names == branch_block_names, f'Extra: {set(expected_block_names) - set(branch_block_names)}, Missing: {set(branch_block_names) - set(expected_block_names)}'
+        assert expected_block_names == branch_block_names, f'\n\nExtra: {set(expected_block_names) - set(branch_block_names)}\n\nMissing: {set(branch_block_names) - set(expected_block_names)}\n'
 
         annotations_dict = inspect.get_annotations(branch.__class__)
 
