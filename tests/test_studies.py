@@ -139,53 +139,53 @@ def runStudy(scenario_branch_id, iterations, overridesID):
                                                 })
     return new_studyjob
 
-def create_override():
-    wildfire_scenario_branch = sedaroAPI.scenario(WILDFIRE_SCENARIO_ID)
+def create_override(wildfire_scenario_branch):
     overrides_block = wildfire_scenario_branch.OverrideSet.create(**tradespace_overrides_dict)
 
     return overrides_block
 
 def test_run_studies():
     iterations = 2
-    overrides = create_override()
+    wildfire_scenario_branch = sedaroAPI.scenario(WILDFIRE_SCENARIO_ID)
+    wildfire_agent_branch   = sedaroAPI.agent_template(WILDFIRE_A_T_ID)
+
+    overrides = create_override(wildfire_scenario_branch)
     assert overrides != None
     assert overrides.name == "Test Example"
+    print(f"Override id: {overrides.id}")
     
     assert len(overrides.variables) == 7
-    assert overrides.variables[0].name == "Baseline_mass"
+    assert overrides.variables[0]["name"] == "Baseline_mass"
     
     assert len(overrides.overrides) == 4
-    assert overrides.overrides[0].path == "Wildfire/root/mass"
+    assert overrides.overrides[0]["path"] == "Wildfire/root/mass"
 
-    wildfire_agent_paths = AgentModelParametersOverridePaths(WILDFIRE_SCENARIO_ID, WILDFIRE_A_T_ID, agent_name='Wildfire')
+    wildfire_agent_paths = AgentModelParametersOverridePaths(wildfire_scenario_branch, wildfire_agent_branch, agent_name='Wildfire')
     assert wildfire_agent_paths != None
     assert len(wildfire_agent_paths.listPaths()) > 0
     assert wildfire_agent_paths.findBestPathMatch('mass') == 'Wildfire/root/mass'
     assert len(wildfire_agent_paths.findPathMatches('inertia', 3)) == 3
 
-    test_study = runStudy(WILDFIRE_SCENARIO_ID, iterations, overrides)
+    test_study = runStudy(WILDFIRE_SCENARIO_ID, iterations, overrides.id)
+    print(f"Study id: {test_study['id']}")
     assert test_study != None
-    assert test_study['status'] in  [ 'RUNNING', 'PENDING' ]
-
-    # Wait for the study to finish
-    print('Running 2 simjob study')
+    assert test_study["status"] in  [ 'RUNNING', 'PENDING' ]
+    
+    print('Wait for the study to finish')
 
 
     start_time = time.perf_counter()
     max_seconds = 30*60
-    while test_study['status'] in ['RUNNING', 'PENDING']:
+    while test_study.status() in ['RUNNING', 'PENDING']:
         time.sleep(10)
-        test_study = sedaroAPI.simulation.study(test_study['id']).status()
+        test_study = wildfire_scenario_branch.study.results(test_study['id'])
         study_simjob_statuses = getStudySimJobsStatus(WILDFIRE_SCENARIO_ID, test_study.id)
         print(study_simjob_statuses)
         if time.perf_counter() - start_time > max_seconds:
             raise TimeoutError(f'Simulation did not start within {max_seconds} seconds')
 
-
-
     
-    
-    assert test_study['status'] == 'COMPLETED'
+    assert test_study.status() == 'COMPLETED'
 
     study_simjob_statuses = getStudySimJobsStatus(WILDFIRE_SCENARIO_ID, test_study.id)
     assert len(study_simjob_statuses) == iterations
