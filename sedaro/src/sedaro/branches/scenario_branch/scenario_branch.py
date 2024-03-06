@@ -88,3 +88,5 @@ class ScenarioBranch(Branch):
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     TemplatedAgent: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
+    AuxiliaryService: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
