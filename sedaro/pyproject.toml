@@ -27,6 +27,8 @@ dependencies = [
     "orjson",
     "pyarrow",
     "requests",
+    "pandas",
+    "sweetviz",
     ]
 [[project.authors]]
 name = "Sedaro"

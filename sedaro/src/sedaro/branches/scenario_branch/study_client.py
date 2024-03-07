@@ -32,7 +32,7 @@ class Study:
         with self._sedaro.api_client() as api:
             yield jobs_api.JobsApi(api)
 
-    def start(self, iterations: int) -> 'StudyHandle':
+    def start(self, iterations: int, overrides_id: str = None) -> 'StudyHandle':
         """Starts study corresponding to the respective Sedaro Scenario Branch id.
 
         Returns:
@@ -41,7 +41,7 @@ class Study:
         with self.__jobs_client() as jobs:
             res = jobs.start_study(
                 path_params={'branchId': self._branch.id},
-                query_params={'iterations': iterations},
+                query_params={'iterations': iterations, 'overrideID': overrides_id},
                 **COMMON_API_KWARGS
             )
         return StudyHandle(body_from_res(res), self)
@@ -125,7 +125,7 @@ class Study:
             SedaroApiException: if no study has completed.
 
         Returns:
-            SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
+            StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
         return StudyResult(self, job)
@@ -234,3 +234,6 @@ class StudyHandle:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
         return self.__study_client.results_poll(job_id=self.__job['id'],retry_interval=retry_interval)
+
+
+
