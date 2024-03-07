@@ -15,11 +15,24 @@ from .utils import body_from_res
 class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
-    def __init__(self, api_key, host='https://api.sedaro.com'):
+    def __init__(self, api_key=None, host='https://api.sedaro.com', *, auth_handle=None):
+        '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
+
+        Args:
+            api_key (str, optional): API key to authenticate with the Sedaro API
+            host (str, optional): URL of the Sedaro API
+            auth_handle (str, optional): Authentication handle to authenticate with the Sedaro API
+        '''
+
+        if (api_key and auth_handle) or not (api_key or auth_handle):
+            raise ValueError('Either provide an `api_key` or an `auth_handle` and not both.')
+
         if host[-1] == '/':
             host = host[:-1]  # remove trailing forward slash
+
         self._api_key = api_key
         self._api_host = host
+        self._auth_handle = auth_handle
 
     @contextmanager
     def api_client(self) -> Generator[ApiClient, Any, None]:
@@ -28,10 +41,17 @@ class SedaroApiClient(ApiClient):
         Yields:
             Generator[ApiClient, Any, None]: ApiClient
         """
+        if self._auth_handle is not None:
+            header_name = 'X_AUTH_HANDLE'
+            header_value = self._auth_handle
+        else:
+            header_name = 'X_API_KEY'
+            header_value = self._api_key
+
         with ApiClient(
             configuration=Configuration(host=self._api_host),
-            header_name='X_API_KEY',
-            header_value=self._api_key
+            header_name=header_name,
+            header_value=header_value
         ) as api:
             yield api
 
