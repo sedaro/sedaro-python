@@ -1,17 +1,20 @@
-from concurrent.futures import ThreadPoolExecutor
-import dask.dataframe
 import json
-import msgpack
-import requests
 import time
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from typing import (TYPE_CHECKING, Any, Generator, List, Optional, Tuple,
-                    Union)
+from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
+import dask.dataframe
+import msgpack
 import numpy as np
-from sedaro.results.simulation_result import SimulationResult
+import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
-from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from urllib3.response import HTTPResponse
+
+from sedaro.branches.scenario_branch.download import (DownloadWorker,
+                                                      ProgressBar)
+from sedaro.results.simulation_result import SimulationResult
+
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import COMMON_API_KWARGS
