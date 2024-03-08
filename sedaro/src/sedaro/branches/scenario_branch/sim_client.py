@@ -111,17 +111,15 @@ def set_nested(results):
     return nested
 
 class FastFetcherResponse:
-    def __init__(self, response: requests.Response):
-        if response.headers['Content-Type'] == 'application/json':
-            self.type = 'application/json'
-            self.data = response.text
-        elif response.headers['Content-Type'] == 'application/msgpack':
-            self.type = 'application/msgpack'
-            self.data = response.content
-        else:
+    def __init__(self, response: HTTPResponse):
+        self.type = response.headers['Content-Type']
+
+        if self.type not in ('application/json', 'application/msgpack'):
             raise Exception(
-                f"Unexpected MIME type: {response.headers['Content-Type']}.  Response content: {response.content}. Status Code: {response.status_code}")
-        self.status = response.status_code
+                f"Unexpected MIME type: {self.type}.  Response content: {response.data}. Status Code: {response.status}")
+
+        self.data = response.data
+        self.status = response.status
         self.response = response
 
     def __getattr__(self, key):
@@ -137,17 +135,14 @@ class FastFetcherResponse:
                 f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
 
 class FastFetcher:
-    """Accelerated request handler for data page fetching."""
-    def __init__(self, api_key, host):
-        self.headers = {
-            'X_API_KEY': api_key,
-            'User-Agent': 'OpenAPI-Generator/1.0.0/python',
-            'Content-Type': 'application/json',
-        }
-        self.host = host
+    """Custom request handler for data page fetching."""
+
+    def __init__(self, sedaro_api: 'SedaroApiClient'):
+        self.sedaro_api = sedaro_api
 
     def get(self, url):
-        return FastFetcherResponse(requests.get(url=self.host + url, headers=self.headers))
+        return FastFetcherResponse(self.sedaro_api.request.get(url, raw=True))
+
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -287,8 +282,7 @@ class Simulation:
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
-        with self.__sedaro.api_client() as api:
-            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
+        fast_fetcher = FastFetcher(self.__sedaro)
 
         if id == None:
             id = self.status()['dataArray']
