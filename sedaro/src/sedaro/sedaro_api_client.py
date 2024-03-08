@@ -55,12 +55,7 @@ class SedaroApiClient(ApiClient):
         Yields:
             Generator[ApiClient, Any, None]: ApiClient
         """
-        if self._auth_handle is not None:
-            header_name = 'X_AUTH_HANDLE'
-            header_value = self._auth_handle
-        else:
-            header_name = 'X_API_KEY'
-            header_value = self._api_key
+        header_name, header_value = self.__auth_header()
 
         configuration = Configuration(host=self._api_host)
         configuration.proxy = self._proxy_url
@@ -72,6 +67,13 @@ class SedaroApiClient(ApiClient):
             header_value=header_value
         ) as api:
             yield api
+
+    def __auth_header(self) -> tuple[str, str]:
+        """Get the auth header name and value for the Sedaro API"""
+        if self._auth_handle is not None:
+            return 'X_AUTH_HANDLE', self._auth_handle
+        else:
+            return 'X_API_KEY', self._api_key
 
     def __get_branch(self, branch_id: str) -> Dict:
         """Get Sedaro `Branch` with given `branch_id` from `host`
