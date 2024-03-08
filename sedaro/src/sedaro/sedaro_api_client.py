@@ -15,13 +15,23 @@ from .utils import body_from_res
 class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
-    def __init__(self, api_key=None, host='https://api.sedaro.com', *, auth_handle=None):
+    def __init__(
+        self,
+        api_key: 'str' = None,
+        host='https://api.sedaro.com',
+        *,
+        auth_handle: 'str' = None,
+        proxy_url: str = None,
+        proxy_headers: Dict[str, str] = None
+    ):
         '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
 
         Args:
             api_key (str, optional): API key to authenticate with the Sedaro API
             host (str, optional): URL of the Sedaro API
             auth_handle (str, optional): Authentication handle to authenticate with the Sedaro API
+            proxy_url (str, optional): URL of the proxy server
+            proxy_headers (Dict[str, str], optional): Headers to send to the proxy server
         '''
 
         if (api_key and auth_handle) or not (api_key or auth_handle):
@@ -30,9 +40,13 @@ class SedaroApiClient(ApiClient):
         if host[-1] == '/':
             host = host[:-1]  # remove trailing forward slash
 
-        self._api_key = api_key
         self._api_host = host
+
+        self._api_key = api_key
         self._auth_handle = auth_handle
+
+        self._proxy_url = proxy_url
+        self._proxy_headers = proxy_headers
 
     @contextmanager
     def api_client(self) -> Generator[ApiClient, Any, None]:
@@ -48,8 +62,12 @@ class SedaroApiClient(ApiClient):
             header_name = 'X_API_KEY'
             header_value = self._api_key
 
+        configuration = Configuration(host=self._api_host)
+        configuration.proxy = self._proxy_url
+        configuration.proxy_headers = self._proxy_headers
+
         with ApiClient(
-            configuration=Configuration(host=self._api_host),
+            configuration=configuration,
             header_name=header_name,
             header_value=header_value
         ) as api:
