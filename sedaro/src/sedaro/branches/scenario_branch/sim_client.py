@@ -135,7 +135,7 @@ class FastFetcherResponse:
                 f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
 
 class FastFetcher:
-    """Custom request handler for data page fetching."""
+    """Faster request handler for data page fetching."""
 
     def __init__(self, sedaro_api: 'SedaroApiClient'):
         self.sedaro_api = sedaro_api
