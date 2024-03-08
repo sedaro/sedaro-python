@@ -57,7 +57,7 @@ def concat_results(main, other):
     for stream in other:
         if stream not in main:
             main[stream] = other[stream]
-        else: # concat stream parts
+        else:  # concat stream parts
             concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
@@ -333,8 +333,8 @@ class Simulation:
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3: # keep fetching pages until we get an empty continuation token
-            if has_nonempty_ctoken: # need to fetch more pages
+        if is_v3:  # keep fetching pages until we get an empty continuation token
+            if has_nonempty_ctoken:  # need to fetch more pages
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
