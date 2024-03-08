@@ -32,6 +32,8 @@ class SedaroApiClient(ApiClient):
             auth_handle (str, optional): Authentication handle to authenticate with the Sedaro API
             proxy_url (str, optional): URL of the proxy server
             proxy_headers (Dict[str, str], optional): Headers to send to the proxy server
+
+        Note: for proxy kwargs, refer to https://urllib3.readthedocs.io/en/stable/reference/urllib3.poolmanager.html#urllib3.ProxyManager
         '''
 
         if (api_key and auth_handle) or not (api_key or auth_handle):
