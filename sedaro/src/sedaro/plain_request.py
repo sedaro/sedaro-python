@@ -1,6 +1,7 @@
 import json
 from typing import TYPE_CHECKING, Dict, Literal, Optional, Union, overload
 
+import requests
 from urllib3.response import HTTPResponse
 
 from .utils import parse_urllib_response
@@ -26,32 +27,19 @@ class PlainRequest:
         Returns:
             Dict: dictionary from the response body
         """
-        # headers = {}
-        aut_header_name, auth_header_value = self.__sedaro._auth_header()
-        headers = {aut_header_name: auth_header_value}
-
-        if self.__sedaro._csrf_token:
-            headers['X-CSRFToken'] = self.__sedaro._csrf_token
+        headers = {}
 
         if body is not None:
             body = json.dumps(body)
             headers['Content-Type'] = 'application/json'
 
         with self.__sedaro.api_client() as api:
-            res = api.request(
+            res = api.call_api(
+                resource_path,
                 method,
-                api.configuration.host + resource_path,
                 headers=headers,
                 body=body
             )
-
-            # # in the case below, don't have to manually set auth/CSRF headers:
-            # res = api.call_api(
-            #     resource_path,
-            #     method,
-            #     headers=headers,
-            #     body=body
-            # )
         if raw:
             return res
 
@@ -69,6 +57,24 @@ class PlainRequest:
         `HTTPResponse`.
         """
         return self.__request(resource_path, 'GET', raw=raw)
+
+    def requests_lib_get(self, url):
+
+        auth_header_name, auth_header_value = self.__sedaro._auth_header()
+
+        kwargs = {
+            'url': f'{self.__sedaro._api_host}{url}',
+            'headers': {auth_header_name: auth_header_value}
+        }
+
+        if self.__sedaro._csrf_token:
+            kwargs['headers']['X-CSRFToken'] = self.__sedaro._csrf_token
+
+        if self.__sedaro._proxy_url:
+            kwargs['proxies'] = {'http': self.__sedaro._proxy_url, 'https': self.__sedaro._proxy_url}
+            kwargs['headers'] |= self.__sedaro._proxy_headers
+
+        return requests.get(**kwargs)
 
     @overload
     def post(self, resource_path: str, body: Dict, *, raw: Literal[True]) -> HTTPResponse: ...
