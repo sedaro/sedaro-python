@@ -406,7 +406,10 @@ class Simulation:
         if streams is not None and len(streams) > 0:
             filtered_streams = self.__get_filtered_streams(streams, metadata)
         else:
-            filtered_streams = metadata['streams']
+            try:
+                filtered_streams = metadata['streams']
+            except KeyError:
+                raise Exception(f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
         num_workers = min(num_workers, len(filtered_streams))
         workers = [[] for _ in range(num_workers)]
         for i, stream in enumerate(filtered_streams):
