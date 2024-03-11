@@ -50,6 +50,8 @@ class SedaroApiClient(ApiClient):
         self._proxy_url = proxy_url
         self._proxy_headers = proxy_headers
 
+        self._csrf_token = None
+
     @contextmanager
     def api_client(self) -> Generator[ApiClient, Any, None]:
         """Instantiate ApiClient from sedaro_base_client
@@ -57,7 +59,7 @@ class SedaroApiClient(ApiClient):
         Yields:
             Generator[ApiClient, Any, None]: ApiClient
         """
-        header_name, header_value = self.__auth_header()
+        header_name, header_value = self._auth_header()
 
         configuration = Configuration(host=self._api_host)
         configuration.proxy = self._proxy_url
@@ -70,7 +72,7 @@ class SedaroApiClient(ApiClient):
         ) as api:
             yield api
 
-    def __auth_header(self) -> tuple[str, str]:
+    def _auth_header(self) -> tuple[str, str]:
         """Get the auth header name and value for the Sedaro API"""
         if self._auth_handle is not None:
             return 'X_AUTH_HANDLE', self._auth_handle
@@ -92,6 +94,13 @@ class SedaroApiClient(ApiClient):
             # return Branch(res.body, self)
             res = branches_api_instance.get_branch(
                 path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
+
+            res_: HTTPResponse = res.response
+            for cookie in res_.headers.get_all('Set-Cookie'):
+                if 'csrf' in cookie:
+                    self._csrf_token = cookie.split(';')[0].split('=')[1]
+                    break
+
             return body_from_res(res)
 
     def agent_template(self, branch_id: str) -> AgentTemplateBranch:
