@@ -66,7 +66,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated, StatFunctions):
     @property
     def name(self):
         return self.__name
-
+    
     @property
     def dataframe(self) -> Dict[str, dd.DataFrame]:
         '''Get the raw Dask DataFrames for this block.'''
@@ -142,8 +142,8 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated, StatFunctions):
             print(f"'{self.name}'".center(HFILL))
         hfill()
 
-        print("🧩 Simulated Modules")
-        print( self.modules)
+        #print("🧩 Simulated Modules")
+        #print( self.modules)
         # for module in self.modules:
         #     print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
 

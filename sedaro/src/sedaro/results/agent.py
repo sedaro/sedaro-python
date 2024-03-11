@@ -90,7 +90,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated, StatFunctions):
                 block_streams[stream] = self.__series[stream]
         return SedaroBlockResult(block_structure, block_streams, self.__column_index[id_], prefix)
 
-    def block_name(self, name:str) -> SedaroBlockResult:
+    def blockname(self, name:str) -> SedaroBlockResult:
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)

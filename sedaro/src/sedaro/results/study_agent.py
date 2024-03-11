@@ -60,8 +60,8 @@ class StudyAgentResult(StudyStats):
         blocks =  {simjob_id: agent.block(id_) for (simjob_id,agent) in self._simjob_to_agents.items()}
         return StudyBlockResult(self._study_id, id_, blocks)
 
-    def block_names(self, name:str) -> StudyBlockResult:
-        blocks =  {simjob_id: agent.block_name(name) for (simjob_id,agent) in self._simjob_to_agents.items()}
+    def blocknames(self, name:str) -> StudyBlockResult:
+        blocks =  {simjob_id: agent.blockname(name) for (simjob_id,agent) in self._simjob_to_agents.items()}
         return StudyBlockResult(self._study_id, name, blocks)
 
 
@@ -122,7 +122,7 @@ class StudyAgentResult(StudyStats):
             print(f"\n    {no_data_blocks} block(s) with no associated data")
 
         hfill()
-        print("❓ Query block results from all study simulations with .blocks(<ID>) or .blocks(<PARTIAL_ID>) or .block_names(<name>)")
+        print("❓ Query block results from all study simulations with .blocks(<ID>) or .blocks(<PARTIAL_ID>) or .blocknames(<name>)")
         print("｛｝ Get a dict of block name to block_id with .blockNameToID")
         print("｛｝ Get a dict of block ID's to block name with .blockIdToName")
         print("［］ Get a list of block ID's  with .blockList()")

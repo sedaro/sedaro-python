@@ -1,5 +1,6 @@
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from functools import lru_cache
 from .utils import ENGINE_MAP, stats, histogram, scatter_matrix, compare_sims
@@ -39,6 +40,33 @@ class StudyStats:
             sim_df.columns = [f"{sim_id}_{col}" for col in sim_df.columns]
             dfs.append(sim_df)
         return pd.concat(dfs)
+    
+    def study_subplots(self,  size=10, cols=1, ylabel= "", module:str=None, filter_string=None):
+        thisDF = self.study_dataframe(module=module,filter_string=filter_string)
+        rows = len(thisDF.columns)
+        rows = rows // cols if rows % cols == 0 else rows // cols + 1
+        
+        fig = plt.figure(figsize=(size, size))
+        gs = fig.add_gridspec(rows, cols) 
+        plots = gs.subplots(sharex=True, sharey=True)
+        fig.suptitle(f'Study ID: {self._study_id} - {self.name}')
+        for row in range(rows):
+            for col in range(cols):
+                index = row*cols+col
+                if index >= len(thisDF.columns):
+                    break
+                sim_id = thisDF.columns[index]
+                this_plot = plots[row,col] if rows > 1 and cols > 1 else plots[index]      
+                sim_id = thisDF.columns[index]
+                this_plot.set_title(f'{sim_id}')
+                this_plot.set_xlabel('Time (s)')
+                this_plot.set_ylabel(ylabel)
+                this_plot.grid(True)   
+                this_plot.plot( thisDF[ sim_id ].values, label=sim_id,linestyle='', marker='D', markersize=2 )
+
+        for ax in plots.flat:
+            ax.label_outer()
+        plt.show()
     
     def study_summarize(self):
         print("📊 Display all agent block variables statistics with .study_stats( module, filter_string ) ")

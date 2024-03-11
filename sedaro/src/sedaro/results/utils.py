@@ -207,7 +207,8 @@ def get_column_names(column_index, prefix):
     else:
         # don't add a dot if prefix is empty (this is the case for the root block)
         if len(prefix) > 0:
-            prefix = f"{prefix}."
+            if prefix[-1] != '.':
+                prefix = f"{prefix}."
         columns = []
         for key in column_index:
             columns.extend(get_column_names(column_index[key], f"{prefix}{key}"))
