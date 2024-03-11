@@ -114,9 +114,13 @@ class FastFetcherResponse:
     def __init__(self, response: requests.Response):
         self.type = response.headers['Content-Type']
 
-        if self.type not in ('application/json', 'application/msgpack'):
+        if self.type == 'application/json':
+            self.data = response.text
+        elif self.type == 'application/msgpack':
+            self.data = response.content
+        else:
             raise Exception(
-                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")
+                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")    
 
         self.data = response.content
         self.status = response.status_code
