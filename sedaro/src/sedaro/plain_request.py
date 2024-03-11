@@ -50,7 +50,7 @@ class PlainRequest:
     @overload
     def get(self, resource_path: str, *, raw: Literal[False]) -> Dict: ...
 
-    def get(self, resource_path: str, *, raw: 'bool' = False) -> Union[Dict, HTTPResponse]:
+    def get(self, resource_path: str, *, raw: bool = False) -> Union[Dict, HTTPResponse]:
         """Send a 'GET' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`
@@ -82,7 +82,7 @@ class PlainRequest:
     @overload
     def post(self, resource_path: str, body: Dict, *, raw: Literal[False]) -> Dict: ...
 
-    def post(self, resource_path: str, body: Dict, *, raw: 'bool' = False) -> Union[Dict, HTTPResponse]:
+    def post(self, resource_path: str, body: Dict, *, raw: bool = False) -> Union[Dict, HTTPResponse]:
         """Send a 'POST' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`
@@ -95,7 +95,7 @@ class PlainRequest:
     @overload
     def put(self, resource_path: str, body: Dict, *, raw: Literal[False]) -> Dict: ...
 
-    def put(self, resource_path: str, body: Dict, *, raw: 'bool' = False) -> Union[Dict, HTTPResponse]:
+    def put(self, resource_path: str, body: Dict, *, raw: bool = False) -> Union[Dict, HTTPResponse]:
         """Send a 'PUT' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`
@@ -108,7 +108,7 @@ class PlainRequest:
     @overload
     def patch(self, resource_path: str, body: Dict, *, raw: Literal[False]) -> Dict: ...
 
-    def patch(self, resource_path: str, body: Dict, *, raw: 'bool' = False) -> Union[Dict, HTTPResponse]:
+    def patch(self, resource_path: str, body: Dict, *, raw: bool = False) -> Union[Dict, HTTPResponse]:
         """Send a 'PATCH' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`
@@ -121,7 +121,7 @@ class PlainRequest:
     @overload
     def delete(self, resource_path: str, *, raw: Literal[False]) -> Dict: ...
 
-    def delete(self, resource_path: str, *, raw: 'bool' = False) -> Union[Dict, HTTPResponse]:
+    def delete(self, resource_path: str, *, raw: bool = False) -> Union[Dict, HTTPResponse]:
         """Send a 'DELETE' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`
