@@ -4,6 +4,7 @@ from typing import Any, Dict, Generator
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
+from urllib3.response import HTTPResponse
 
 from sedaro.plain_request import PlainRequest
 
