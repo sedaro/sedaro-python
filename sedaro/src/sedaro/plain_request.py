@@ -58,7 +58,8 @@ class PlainRequest:
         """
         return self.__request(resource_path, 'GET', raw=raw)
 
-    def requests_lib_get(self, url):
+    def requests_lib_get(self, url: str) -> requests.Response:
+        '''Get request using the requests library'''
 
         auth_header_name, auth_header_value = self.__sedaro._auth_header()
 
