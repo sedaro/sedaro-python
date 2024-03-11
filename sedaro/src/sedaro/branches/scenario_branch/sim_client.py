@@ -122,7 +122,6 @@ class FastFetcherResponse:
             raise Exception(
                 f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")    
 
-        self.data = response.content
         self.status = response.status_code
         self.response = response
 
