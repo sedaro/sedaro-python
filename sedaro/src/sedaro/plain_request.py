@@ -1,5 +1,4 @@
 import json
-from email import header
 from typing import TYPE_CHECKING, Dict, Literal, Optional, Union, overload
 
 from urllib3.response import HTTPResponse
