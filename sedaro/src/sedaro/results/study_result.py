@@ -189,8 +189,8 @@ class StudyResult:
         else:
             print("❓ Agent data not yet loaded. Load with .summarize_agents()")
 
-        hfill()
-        print("❓ First set desired results downsampling with:")
+        #hfill()
+        #print("❓ First set desired results downsampling with:")
         # print("       .set_result_limit(<# of points>) ")
         # print("       .set_result_binWidth( <fraction of overall points> )   ")
         hfill()

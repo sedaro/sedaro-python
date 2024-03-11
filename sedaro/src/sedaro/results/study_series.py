@@ -7,6 +7,7 @@ from typing import Union
 
 from scipy.interpolate import interp1d
 from .series import SedaroSeries
+from .study_stats import StudyStats
 
 try:
     import matplotlib.pyplot as plt
@@ -20,12 +21,13 @@ from .utils import HFILL, _get_series_type, bsearch, hfill
 
 
 
-class StudySeries:
+class StudySeries(StudyStats):
 
     def __init__(self, study_id, name,series):
         self._study_id = study_id
         self._name = name
         self._series = series
+        self._simid_to_results = series
         self._first_sim_id, self._first_series = next(iter(series.items()))
 
     def __repr__(self):
@@ -129,67 +131,6 @@ class StudySeries:
             print(f"Error: Study sim id {job_id} not found.") 
             self._print_sim_ids()
 
-    def make_study_dataframe(self):
-        try:
-            import pandas as pd
-            pd.set_option('display.max_rows', None)
-            pd.set_option('display.max_columns', None)
-        except ImportError:
-            raise ValueError('Statistics is disabled because pandas could not be imported. (pip install pandas)')
-
-        series_dataframes = { sim_id: series.create_dataframe() for (sim_id, series) in self._series.items()}
-        return pd.concat(series_dataframes, axis=1)
-    
-    def study_stats(self):
-        thisDF = self.make_study_dataframe()
-        return thisDF.describe().T
-
-    def study_histogram(self, size=10, bins=10):
-        thisDF = self.make_study_dataframe()
-        return thisDF.hist(figsize=(size,size), bins=bins)
-    
-    def study_subplots(self,  size=10, cols=1):
-        thisDF = self.make_study_dataframe()
-        rows = len(thisDF.columns)
-        rows = rows // cols if rows % cols == 0 else rows // cols + 1
-        
-        fig = plt.figure(figsize=(size, size))
-        gs = fig.add_gridspec(rows, cols) 
-        plots = gs.subplots(sharex=True, sharey=True)
-        fig.suptitle(f'Study ID: {self._study_id} - {self.name}')
-        for row in range(rows):
-            for col in range(cols):
-                index = row*cols+col
-                if index >= len(thisDF.columns):
-                    break
-                sim_id = thisDF.columns[index]
-                this_plot = plots[row,col] if rows > 1 and cols > 1 else plots[index]      
-                sim_id = thisDF.columns[index]
-                this_plot.set_title(f'{sim_id[0]}')
-                this_plot.set_xlabel('Time (s)')
-                this_plot.grid(True)   
-                this_plot.plot( thisDF[ sim_id ].values, label=sim_id,linestyle='', marker='D', markersize=2 )
-
-        for ax in plots.flat:
-            ax.label_outer()
-        plt.show()
-
-    def study_scatter_matrix(self, size=10):
-        import pandas as pd
-        thisDF = self.make_study_dataframe()
-        # breaks with Nones so strip them 
-        just_numbers = thisDF.select_dtypes(include=['number'])
-        no_distint_cols = just_numbers[[c for c in list(just_numbers)
-                                                if len(just_numbers[c].unique()) > 1]]
-        sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(size,size), diagonal='kde')
-        # Change label rotation
-        [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
-        [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
-        [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
-        [s.set_xticks(()) for s in sm.reshape(-1)]
-        [s.set_yticks(()) for s in sm.reshape(-1)]
-        plt.show()     
-
     def save(self, path: Union[str, Path]):
         for sim_id, series in self._series.items():
             dirpath = f"{path}/{self._name}_{self._study_id}_{sim_id}_studyseries"
@@ -258,10 +199,8 @@ class StudySeries:
             print("-----Compare results with other simulations in study-----")
             print("📈📉 Display scatter matrix plot  ")
             print("📉📈      with .study_scatter_matrix( size=10 )") 
-            print("📊 Display histograms with other study values with .study_histogram(size=10, bins=10)")
-            print("🀕 Create subplots with .study_subplots(size=10, cols=1)")
-            print("𝛴 Display statistics with .study_stats() ")
-            print("🐼 Return a pandas dataframe with .make_study_dataframe() ")
+            hfill()
+            self.study_summarize()
 
 
 

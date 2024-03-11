@@ -2,6 +2,10 @@ import math
 import numpy as np
 from pathlib import Path
 from typing import Union
+import sweetviz as sv
+import pandas as pd
+import matplotlib.pyplot as plt
+from functools import lru_cache, cached_property
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -9,6 +13,12 @@ ENGINE_MAP = {
     '1': 'cdh',
     '2': 'power',
     '3': 'thermal',
+}
+ENGINE_NAME_TO_INDEX = {
+    'gnc': 0,
+    'cdh': 1,
+    'power': 2,
+    'thermal': 3,
 }
 ENGINE_EXPANSION = {
     'gnc': 'Guidance, Navigation, & Control',
@@ -27,6 +37,45 @@ STATUS_ICON_MAP = {
 }
 HFILL = 75
 
+
+def stats(df):
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.expand_frame_repr', False)
+    pd.set_option('max_colwidth', None)
+    return df.describe().T
+
+def histogram(df, output_html= False):   
+    sv_report = sv.analyze(df, pairwise_analysis="on" )
+    if output_html:
+        sv_report.show_html(filepath=f'Histogram_Report.html')
+    else:
+        sv_report.show_notebook(w="90%", h="full", layout='vertical') 
+
+def scatter_matrix(df, size=10):
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+
+    just_numbers = df.select_dtypes(include=['number'])
+    no_distint_cols = just_numbers[[c for c in list(just_numbers)
+                                            if len(just_numbers[c].unique()) > 1]]
+    sm = pd.plotting.scatter_matrix(no_distint_cols, alpha=0.2, figsize=(size,size), diagonal='kde')
+    # Change label rotation
+    [s.xaxis.label.set_rotation(90) for s in sm.reshape(-1)]
+    [s.yaxis.label.set_rotation(0) for s in sm.reshape(-1)]
+    [s.get_yaxis().set_label_coords(-2.0,0.5) for s in sm.reshape(-1)]
+    [s.set_xticks(()) for s in sm.reshape(-1)]
+    [s.set_yticks(()) for s in sm.reshape(-1)]
+    plt.show()
+
+def compare_sims(sim_1_df, sim_2_df, output_html, sim_id_1_label, sim_id_2_label):
+
+    compare_report = sv.compare([sim_1_df, sim_id_1_label], [sim_2_df, sim_id_2_label])
+    if output_html:
+        compare_report.show_html(filepath=f'compare_{sim_id_1_label}_{sim_id_2_label}_Report.html')
+    else:
+        compare_report.show_notebook(w="90%", h="full", layout='vertical')  
 
 def hfill(char="-", len=HFILL):
     print(char * len)
@@ -174,3 +223,46 @@ class FromFileAndToFileAreDeprecated:
     def to_file(self, filename: Union[str, Path]):
         print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
         return self.save(filename)
+    
+
+class StatFunctions:
+
+    @lru_cache(maxsize=10)
+    def create_pandas_dataframe(self, module:str=None, filter_string=None):
+        if type(self.dataframe) == dict:
+            var_dfs = []
+            for module_name in self.dataframe.keys():
+                module_index =  module_name.split("/")[1]
+                if ENGINE_MAP[module_index] == module or module == None:
+                    new_df = self.dataframe[module_name].compute()
+                    if filter_string:
+                        new_df = new_df.filter(like=filter_string)
+                    if new_df.count().sum().sum() == 0:
+                        continue
+                    var_dfs.append(new_df)
+            dfs = pd.concat(var_dfs, axis=1)
+            return dfs
+        else:
+            new_df = self.dataframe().compute()
+            if filter_string:
+                new_df = new_df.filter(like=filter_string)
+            return new_df
+        
+    def scatter_matrix(self, size=10, module:str=None, filter_string=None):
+        block_df = self.create_pandas_dataframe(module=module, filter_string=filter_string) 
+        scatter_matrix(block_df, size)
+
+    def stats(self, module:str=None,filter_string=None):
+        block_df = self.create_pandas_dataframe(module=module,filter_string=filter_string) 
+        return stats(block_df)
+
+    def histogram(self, module:str=None, filter_string=None, output_html=False):
+
+        block_df = self.create_pandas_dataframe(module=module,filter_string=filter_string)
+        histogram(block_df, output_html)
+
+    def print_stats_section(self):
+        print("𝛴 Display statistics with .stats( output_html=False ) ")
+        print("📊 Display histograms with .histogram(output_html=False)")
+        print("📈📉 ")
+        print("📉📈 Display scatter matrix with .scatter_matrix(output_html=False)")

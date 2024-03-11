@@ -5,6 +5,7 @@ import numpy as np
 import os
 from pathlib import Path
 from typing import Union
+from functools import lru_cache, cached_property
 
 from scipy.interpolate import interp1d
 
@@ -15,10 +16,12 @@ except ImportError:
 else:
     PLOTTING_ENABLED = True
 
-from .utils import HFILL, bsearch, get_column_names, hfill, FromFileAndToFileAreDeprecated
+from .utils import (HFILL, bsearch, get_column_names, hfill, 
+                    FromFileAndToFileAreDeprecated, 
+                    StatFunctions)# stats, histogram, scatter_matrix
 
 
-class SedaroSeries(FromFileAndToFileAreDeprecated):
+class SedaroSeries(FromFileAndToFileAreDeprecated, StatFunctions):
 
     def __init__(self, name, data, column_index, prefix):
         '''Initialize a new time series.
@@ -75,6 +78,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         if not self.__has_subseries:
             raise ValueError('This series has no subseries.')
         else:
+            if type(subseries_name) == int:
+                subseries_name = str(subseries_name)
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
@@ -107,11 +112,12 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     @property
     def values(self):
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
-            if self.__has_subseries:
-                return self.__series.values.compute().tolist()
+            if not self.__has_subseries:
+                return self.__series[self.__column_names[0]].compute().tolist()
             else:
                 computed_columns = {column_name: self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
                 vals = []
+                print(computed_columns)
                 for column in computed_columns:
                     indexes = [int(x) for x in column.split('.')]
                     ptr = vals
@@ -203,59 +209,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         if self.__has_subseries:
             raise ValueError('Select a specific subseries to generate statitics.')
 
-        try:
-            import pandas as pd
-            pd.set_option('display.max_rows', None)
-            pd.set_option('display.max_columns', None)
-        except ImportError:
-            STATS_ENABLED = False
-        else:
-            STATS_ENABLED = True
-
-        if not STATS_ENABLED:
-            raise ValueError('Statistics is disabled because pandas and/or sweetviz could not be imported')
-
-        columns       = [self.name]
-        variable_data = [ data for data in self.__series if data is not None ]
-        first_value   = variable_data[0] if len(variable_data) > 0 else None
-        if first_value is None:
-            return pd.DataFrame([])
-
-        if type(first_value) is list:
-                list_len = len(first_value)
-                columns = [ f'{self.name}.{index}' for index in range(list_len)]
-
-        df = pd.DataFrame(variable_data, columns=columns )
-        return df
-
-    def stats(self, output_html=False):
-
-        df = self.create_dataframe()
-        try:
-            from IPython.display import display
-            display(df.describe(include='all').T)
-        except:
-            print(df.describe(include='all').T)
-        return df.describe(include='all').T
-
-    def histogram(self, output_html=False):
-        if self.__has_subseries:
-            raise ValueError('Select a specific subseries to generate statitics.')
-
-        df = self.create_dataframe()
-
-        try:
-            import sweetviz as sv
-        except ImportError:
-            print( "Histogram plots require the sweetviz library to be imported. (pip install sweetviz)")
-        else:
-            sv.config_parser['Layout']['show_logo'] = '0'
-            sv_report = sv.analyze(df, pairwise_analysis="off" )
-
-            if output_html:
-                sv_report.show_html(filepath=f'{self.name}_Report.html')
-            else:
-                sv_report.show_notebook(w="90%", h="full", layout='vertical')
+        return self.dataframe().compute()
 
     def save(self, path: Union[str, Path]):
         '''Save the series result to a directory with the specified path.'''
@@ -319,5 +273,5 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
         else:
             print("❓ Call .plot to visualize results")
-            print("📊 Display statistics with .stats( output_html=False ) ")
-            print("📊 Display histograms with .histogram(output_html=False)")
+            hfill()
+            self.print_stats_section()
