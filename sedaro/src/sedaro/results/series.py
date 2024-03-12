@@ -117,8 +117,11 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             else:
                 computed_columns = {nonprefixed_column_name(column_name): self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
                 vals = []
+                num_indexes = -1
                 for column in computed_columns:
-                    indexes = [int(x) for x in column.split('.')][::-1]
+                    indexes = [int(x) for x in column.split('.')]
+                    if num_indexes == -1:
+                        num_indexes = len(indexes)
                     ptr = vals
                     for index in indexes:
                         if len(ptr) == index:
@@ -127,7 +130,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                             ptr.extend([[] for _ in range(index - len(ptr))])
                         ptr = ptr[index]
                     ptr.extend(computed_columns[column])
-                return np.transpose(vals, axes=None).tolist()
+                rotated_indexes = tuple([num_indexes] + list(range(num_indexes)))
+                return np.transpose(vals, rotated_indexes).tolist()
 
         else:
             return {key: self.__getattr__(key).values for key in self.__column_index}
