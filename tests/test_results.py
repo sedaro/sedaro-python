@@ -284,7 +284,6 @@ def test_series_values():
 
     ser = SedaroSeries('pref', df, col_ind, 'pref')
 
-    print(ser.values)
     assert ser.values == {
         'a': [[0, 0], [1, 5], [2, 10], [3, 15], [4, 20], [5, 25]],
         'b': [0, 2, 4, 6, 8, 10],
