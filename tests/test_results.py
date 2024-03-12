@@ -295,6 +295,19 @@ def test_series_values():
         'd': {'a': [0, 10, 20, 30, 40, 50]},
     }
 
+    df2 = df[['pref.c.baz.0.0', 'pref.c.baz.0.1', 'pref.c.baz.1.0', 'pref.c.baz.1.1']]
+
+    col_ind2 = col_ind['c']['baz']
+    ser2 = SedaroSeries('pref.c.baz', df2, col_ind2, 'pref.c.baz')
+    assert ser2.values == [
+        [[0, 0], [0, 0]],
+        [[6, 7], [8, 9]],
+        [[12, 14], [16, 18]],
+        [[18, 21], [24, 27]],
+        [[24, 28], [32, 36]],
+        [[30, 35], [40, 45]],
+    ]
+
 
 def run_tests():
     test_query_terminated()
