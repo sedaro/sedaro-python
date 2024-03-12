@@ -53,14 +53,15 @@ class StudySeries(StudyStats):
         '''
         if not self._first_series.has_subseries:
             raise ValueError('This series has no subseries.')
-        elif subseries_name in self._first_series._SedaroSeries__series:
-            new_series_name = f'{self._name}.{subseries_name}'
-
-            sub_subseries = { sim_id: series[subseries_name] for (sim_id,series) in self._series.items()}
-
-            return StudySeries(self._study_id, new_series_name, sub_subseries)
         else:
-            raise ValueError(f"Subseries '{subseries_name}' not found.")
+            if type(subseries_name) is int:
+                subseries_name = str(subseries_name)
+            if subseries_name not in self._first_series._SedaroSeries__column_index:
+                raise ValueError(f"Subseries '{subseries_name}' not found.")
+            else:
+                new_series_name = f'{self._first_series._SedaroSeries__name}.{subseries_name}'
+                sub_subseries = { sim_id: series[subseries_name] for (sim_id,series) in self._series.items()}
+                return StudySeries(self._study_id, new_series_name, sub_subseries)
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -178,10 +179,11 @@ class StudySeries(StudyStats):
             print("\n📑 This series has subseries.")
             print(f"\n🗂️ Value data types are:")
             for key, value in self._first_series._SedaroSeries__dtype.items():
+                name_without_prefix = key[len(self._first_series._SedaroSeries__prefix)+1:]
                 if value == 'None':
-                    print(f"    - '{key}': All entries in this subseries are None")
+                    print(f"    - '{name_without_prefix}': All entries in this subseries are None")
                 else:
-                    print(f"    - '{key}': '{value}'")
+                    print(f"    - '{name_without_prefix}': '{value}'")
 
         else:
             if self._first_series._SedaroSeries__dtype == 'None':

@@ -9,18 +9,18 @@ from .utils import ENGINE_MAP, stats, histogram, scatter_matrix, compare_sims
 class StudyStats:
 
     def study_stats(self, module:str=None, filter_string=None):
-        study_df = self.study_dataframe(module,filter_string )
+        study_df = self.study_dataframe(module=module,filter_string=filter_string, use_keys=True, use_prefix=False)
         return stats(study_df)
 
 
     def study_histogram(self, module:str=None, filter_string=None, output_html= False):
     
-        study_df = self.study_dataframe(module=module,filter_string=filter_string )
+        study_df = self.study_dataframe(module=module,filter_string=filter_string,use_prefix=True,use_keys=False )
         histogram(study_df, output_html)
 
     def study_scatter_matrix(self, module:str=None,  filter_string=None, size=10):
 
-        study_df = self.study_dataframe(module=module,filter_string=filter_string)
+        study_df = self.study_dataframe(module=module,filter_string=filter_string,use_keys=True, use_prefix=False)
         scatter_matrix(study_df, size)
 
 
@@ -33,16 +33,26 @@ class StudyStats:
         sim_2_df = self._simid_to_results[sim_id_2].create_pandas_dataframe(module, filter_string)
         compare_sims(sim_1_df, sim_2_df, output_html, sim_id_1_label, sim_id_2_label)
 
-    def study_dataframe(self, module:str=None, filter_string=None):
+    def study_dataframe(self, use_keys=False, use_prefix=True, module:str=None, filter_string=None):
         dfs = []
         for (sim_id, results) in self._simid_to_results.items():
             sim_df = results.create_pandas_dataframe(module, filter_string)
-            sim_df.columns = [f"{sim_id}_{col}" for col in sim_df.columns]
+            if use_prefix:
+                sim_df.columns = [f"{sim_id}_{col}" for col in sim_df.columns]
+            else:
+                sim_df.columns = sim_df.columns
             dfs.append(sim_df)
-        return pd.concat(dfs)
+        if use_keys:
+            concat_df = pd.concat(dfs,keys=self._simid_to_results.keys(), axis=1)
+        else:
+            concat_df = pd.concat(dfs, axis=1)
+        concat_df.sort_index(axis=0, inplace=True)
+        return concat_df
     
     def study_subplots(self,  size=10, cols=1, ylabel= "", module:str=None, filter_string=None):
-        thisDF = self.study_dataframe(module=module,filter_string=filter_string)
+        thisDF = self.study_dataframe(module=module,use_keys=True, use_prefix=False, filter_string=filter_string)
+
+
         rows = len(thisDF.columns)
         rows = rows // cols if rows % cols == 0 else rows // cols + 1
         
