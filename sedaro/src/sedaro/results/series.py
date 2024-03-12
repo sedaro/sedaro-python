@@ -75,6 +75,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         if not self.__has_subseries:
             raise ValueError('This series has no subseries.')
         else:
+            if type(subseries_name) is int:
+                subseries_name = str(subseries_name)
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
@@ -104,8 +106,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     @property
     def values(self):
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
-            if self.__has_subseries:
-                return self.__series.values.compute().tolist()
+            if not self.__has_subseries:
+                return self.__series[self.__column_names[0]].compute().tolist()
             else:
                 computed_columns = {column_name: self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
                 vals = []
