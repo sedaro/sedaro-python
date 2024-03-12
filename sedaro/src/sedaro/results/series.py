@@ -105,13 +105,21 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @property
     def values(self):
+        def nonprefixed_column_name(column_name):
+            if len(self.__prefix) > 0:
+                return column_name[len(self.__prefix)+1:]
+            else:
+                return column_name
+
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
             if not self.__has_subseries:
                 return self.__series[self.__column_names[0]].compute().tolist()
             else:
-                computed_columns = {column_name: self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
+                computed_columns = {nonprefixed_column_name(column_name): self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
+                # print([k for k in computed_columns])
                 vals = []
                 for column in computed_columns:
+                    # print(f"column: {column}, prefix: {self.__prefix}")
                     indexes = [int(x) for x in column.split('.')]
                     ptr = vals
                     for index in indexes:
