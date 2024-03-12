@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Any, Dict, Generator
+from typing import Any, Dict, Generator, Tuple
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
@@ -73,7 +73,7 @@ class SedaroApiClient(ApiClient):
         ) as api:
             yield api
 
-    def _auth_header(self) -> tuple[str, str]:
+    def _auth_header(self) -> Tuple[str, str]:
         """Get the auth header name and value for the Sedaro API"""
         if self._auth_handle is not None:
             return 'X_AUTH_HANDLE', self._auth_handle
