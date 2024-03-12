@@ -116,11 +116,9 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 return self.__series[self.__column_names[0]].compute().tolist()
             else:
                 computed_columns = {nonprefixed_column_name(column_name): self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
-                # print([k for k in computed_columns])
                 vals = []
                 for column in computed_columns:
-                    # print(f"column: {column}, prefix: {self.__prefix}")
-                    indexes = [int(x) for x in column.split('.')]
+                    indexes = [int(x) for x in column.split('.')][::-1]
                     ptr = vals
                     for index in indexes:
                         if len(ptr) == index:

@@ -259,6 +259,43 @@ def test_download():
     finally:
         shutil.rmtree(path)
 
+def test_series_values():
+    df = dd.from_dict({
+        'time': [0, 1, 2, 3, 4, 5],
+        'pref.a.0': [0, 1, 2, 3, 4, 5],
+        'pref.a.1': [0, 5, 10, 15, 20, 25],
+        'pref.b': [0, 2, 4, 6, 8, 10],
+        'pref.c.foo': [0, 3, 6, 9, 12, 15],
+        'pref.c.bar': [0, 4, 8, 12, 16, 20],
+        'pref.c.baz.0.0': [0, 6, 12, 18, 24, 30],
+        'pref.c.baz.0.1': [0, 7, 14, 21, 28, 35],
+        'pref.c.baz.1.0': [0, 8, 16, 24, 32, 40],
+        'pref.c.baz.1.1': [0, 9, 18, 27, 36, 45],
+        'pref.d.a': [0, 10, 20, 30, 40, 50],
+    }, npartitions=1)
+    df = df.set_index('time')
+
+    col_ind = {
+        'a': {'0': {}, '1': {}},
+        'b': {},
+        'c': {'foo': {}, 'bar': {}, 'baz': {'0': {'0': {}, '1': {}}, '1': {'0': {}, '1': {}}}},
+        'd': {'a': {}},
+    }
+
+    ser = SedaroSeries('pref', df, col_ind, 'pref')
+
+    print(ser.values)
+    assert ser.values == {
+        'a': [[0, 0], [1, 5], [2, 10], [3, 15], [4, 20], [5, 25]],
+        'b': [0, 2, 4, 6, 8, 10],
+        'c': {
+            'foo': [0, 3, 6, 9, 12, 15],
+            'bar': [0, 4, 8, 12, 16, 20],
+            'baz': [[[0, 0], [0, 0]], [[6, 7], [8, 9]], [[12, 14], [16, 18]], [[18, 21], [24, 27]], [[24, 28], [32, 36]], [[30, 35], [40, 45]]],
+        },
+        'd': {'a': [0, 10, 20, 30, 40, 50]},
+    }
+
 
 def run_tests():
     test_query_terminated()
@@ -266,3 +303,4 @@ def run_tests():
     test_save_load()
     test_query_model()
     test_download()
+    test_series_values()
