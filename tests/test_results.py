@@ -1,11 +1,11 @@
+import os
+import shutil
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 import dask.dataframe as dd
 import numpy as np
-import os
-from pathlib import Path
-import shutil
-from tempfile import TemporaryDirectory
 import uuid6
-
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
@@ -204,11 +204,14 @@ def test_query_model():
     assert model['blocks']['b']['otherValue'] == '1fourth'
     assert model['blocks']['b']['name'] == 'Block'
 
+
 class MockDownloadBar:
     def __init__(self):
         pass
+
     def update(self, *args, **kwargs):
         pass
+
 
 def compare_with_nans(a, b):
     assert len(a) == len(b)
@@ -217,6 +220,7 @@ def compare_with_nans(a, b):
             assert np.isnan(b[i])
         else:
             assert a[i] == b[i]
+
 
 def test_download():
     # test download internals

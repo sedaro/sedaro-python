@@ -19,7 +19,7 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
     try:
         return orjson.loads(response.data)
-    except Exception:
+    except:
         return json.loads(response.data.decode('utf-8'))
 
 
