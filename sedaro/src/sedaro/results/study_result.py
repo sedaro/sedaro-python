@@ -126,10 +126,6 @@ class StudyResult:
     def study_results_dict(self):
         return { job_id: self.sim_result(job_id) for job_id in self.job_ids }
 
-    def compare_agent_block(self, agent, block):
-        return
-
-
     def clear_cache(self) -> None:
         self.__cached_sim_results = {}
         if self.__cache_dir is not None:

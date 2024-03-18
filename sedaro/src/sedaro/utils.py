@@ -1,6 +1,7 @@
 import importlib
 import inspect
 import json
+import orjson
 
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict
@@ -18,7 +19,7 @@ if TYPE_CHECKING:
 def parse_urllib_response(response: HTTPResponse) -> Dict:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
     try:
-        return json.loads(response.data)
+        return orjson.loads(response.data)
     except Exception:
         return json.loads(response.data.decode('utf-8'))
 

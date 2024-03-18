@@ -91,11 +91,10 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated, StatFunctions):
         return SedaroBlockResult(block_structure, block_streams, self.__column_index[id_], prefix)
 
     def blockname(self, name:str) -> SedaroBlockResult:
-        for block_id in self.__block_ids:
-            if block_id != 'root':
-                block_name = self.__block_structures[block_id].get('name', None)
-                if name == block_name:
-                    return self.block(block_id)
+        if name == 'root':
+            return self.block('root')
+        if name in self.block_name_to_id:
+            return self.block(self.block_name_to_id[name])
         raise ValueError(f"Block name '{name}' not found.")
 
     def save(self, path: Union[str, Path]):
