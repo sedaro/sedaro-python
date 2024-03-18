@@ -71,8 +71,9 @@ class PlainRequest:
         if self.__sedaro._csrf_token:
             kwargs['headers']['X-CSRFToken'] = self.__sedaro._csrf_token
 
-        if self.__sedaro._proxy_url:
-            kwargs['proxies'] = {'http': self.__sedaro._proxy_url, 'https': self.__sedaro._proxy_url}
+        if self.__sedaro._proxy_url and self.__sedaro._proxy_url.startswith('http'):
+            protocol = self.__sedaro._proxy_url.split('://')[0]
+            kwargs['proxies'] = {protocol: self.__sedaro._proxy_url}
             kwargs['headers'] |= self.__sedaro._proxy_headers
 
         return requests.get(**kwargs)

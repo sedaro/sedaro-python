@@ -65,6 +65,7 @@ class SedaroApiClient(ApiClient):
         configuration = Configuration(host=self._api_host)
         configuration.proxy = self._proxy_url
         configuration.proxy_headers = self._proxy_headers
+        configuration.verify_ssl = (self._proxy_url or '').startswith('https')
 
         with ApiClient(
             configuration=configuration,
