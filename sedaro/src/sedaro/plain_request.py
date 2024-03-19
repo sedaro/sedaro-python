@@ -74,7 +74,7 @@ class PlainRequest:
         if self.__sedaro._proxy_url and self.__sedaro._proxy_url.startswith('http'):
             protocol = self.__sedaro._proxy_url.split('://')[0]
             kwargs['proxies'] = {protocol: self.__sedaro._proxy_url}
-            kwargs['headers'] |= self.__sedaro._proxy_headers
+            kwargs['headers'] |= (self.__sedaro._proxy_headers or {})
 
         return requests.get(**kwargs)
 
