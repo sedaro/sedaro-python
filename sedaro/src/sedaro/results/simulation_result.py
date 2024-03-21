@@ -98,11 +98,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             raise ValueError(f"Agent {name} not found in data set.")
 
     def agent(self, id_or_name: str) -> SedaroAgentResult:
-        '''Query results for a particular agent by name or ID.'''
+        '''Query results for a particular agent by name or ID. In the event that an agent's name is the same as another agent's ID, the agent with the ID that matches the given string will be used.'''
         if id_or_name in self.__agent_ids:
             agent_id, name = id_or_name, self.__agent_ids[id_or_name]
         else:
-            agent_id, name = self.__agent_id_from_name(id_or_name), id_or_name
+            try:
+                agent_id, name = self.__agent_id_from_name(id_or_name), id_or_name
+            except ValueError:
+                raise ValueError(f"Agent with `id` or `name` '{id_or_name}' not found in data set.")
         agent_dataframes = {}
         for stream_id in self.__data['series']:
             if stream_id.startswith(agent_id):
