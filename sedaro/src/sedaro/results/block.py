@@ -91,7 +91,8 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             os.makedirs(path)
         except FileExistsError:
             if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroBlockResult'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
@@ -103,7 +104,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df : dd = self.__series[engine]
+            df: dd = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Block result saved to {path}.")
 
