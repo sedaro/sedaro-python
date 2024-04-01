@@ -7,7 +7,7 @@ from typing import Dict, Generator, List, Union
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, bsearch, hfill, FromFileAndToFileAreDeprecated
+from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, bsearch, get_parquets, hfill
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
@@ -109,8 +109,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             initial_state = meta['initial_state']
             column_index = meta['column_index']
         engines = {}
-        parquets = os.listdir(f"{path}/data/")
-        for engine in parquets:
+        for engine in get_parquets(f"{path}/data/"):
             df = dd.read_parquet(f"{path}/data/{engine}")
             engines[engine.replace('.', '/')] = df
         return cls(name, block_structures, engines, column_index, initial_state)
