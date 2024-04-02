@@ -29,7 +29,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__meta: Dict = data['meta']
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
-        self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(raw_series, agent_id_name_map, self.__meta)
+        self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(
+            raw_series, agent_id_name_map, self.__meta)
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
@@ -113,7 +114,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             os.makedirs(path)
         except FileExistsError:
             if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SimulationResult'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
@@ -121,7 +123,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for agent in self.__data['series']:
             agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
-            df : dd = self.__data['series'][agent]
+            df: dd = self.__data['series'][agent]
             df.to_parquet(agent_parquet_path)
         print(f"Simulation result saved to {path}.")
 

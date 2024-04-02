@@ -84,7 +84,7 @@ def _restructure_data(series, agents, meta):
 
         columns = df.columns.tolist()
         for column in columns:
-            if '/' not in column: # ignore engine variables
+            if '/' not in column:  # ignore engine variables
                 elements = column.split(".")
                 first_element = elements[0]
                 if first_element not in blocks[agent_id]:
@@ -128,7 +128,7 @@ def bsearch(ordered_series, value):
         if ordered_series[mid] == value:
             return mid
         elif ordered_series[mid] > value:
-            return _bsearch(low, mid-1)
+            return _bsearch(low, mid - 1)
         else:
             return _bsearch(mid, high)
     if value < ordered_series[0]:
