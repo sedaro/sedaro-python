@@ -35,15 +35,13 @@ def hfill(char="-", len=HFILL):
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}
-    for entry in agent_data.values():
-        if isinstance(entry, dict):
-            for id_, value in entry.items():
-                if 'id' in value:
-                    if id_ in out:
-                        raise ValueError(f"Duplicate ID {id_}")
-                    else:
-                        out[id_] = value
-
+    if 'blocks' in agent_data:
+        for id_, value in agent_data['blocks'].items():
+            if 'id' in value:
+                if id_ in out:
+                    raise ValueError(f"Duplicate ID {id_}")
+                else:
+                    out[id_] = value
     return out
 
 
