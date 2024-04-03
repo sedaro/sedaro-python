@@ -76,6 +76,12 @@ class PlainRequest:
             kwargs['proxies'] = {protocol: self.__sedaro._proxy_url}
             kwargs['headers'] |= (self.__sedaro._proxy_headers or {})
 
+        print('-'*100)
+        print('Proxy Definition:', kwargs.get('proxies'))
+        print('Proxy URL:', self.__sedaro._proxy_url)
+        print('API Host:', self.__sedaro._api_host)
+        print('-'*100)
+
         return requests.get(**kwargs)
 
     @overload
