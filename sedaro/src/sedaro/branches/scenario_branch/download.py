@@ -100,6 +100,7 @@ class DownloadWorker:
             stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB") # REF 1
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
+            stream_manager.dataframe = stream_manager.dataframe.persist()
         for k in self.streams:
             self.streams[k] = self.streams[k].finalize()
 
