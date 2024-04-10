@@ -34,7 +34,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__column_names = get_column_names(self.__column_index, self.__prefix)
         try:
             self.__mjd = data.index.values.compute()
-        except AttributeError: # used for model_at, in which mjd has already been computed
+        except AttributeError:  # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data[self.__column_names]
@@ -105,14 +105,24 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @property
     def values(self):
+        def nonprefixed_column_name(column_name):
+            if len(self.__prefix) > 0:
+                return column_name[len(self.__prefix) + 1:]
+            else:
+                return column_name
+
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
             if not self.__has_subseries:
                 return self.__series[self.__column_names[0]].compute().tolist()
             else:
-                computed_columns = {column_name: self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
+                computed_columns = {nonprefixed_column_name(
+                    column_name): self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
                 vals = []
+                num_indexes = -1
                 for column in computed_columns:
                     indexes = [int(x) for x in column.split('.')]
+                    if num_indexes == -1:
+                        num_indexes = len(indexes)
                     ptr = vals
                     for index in indexes:
                         if len(ptr) == index:
@@ -121,14 +131,15 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                             ptr.extend([[] for _ in range(index - len(ptr))])
                         ptr = ptr[index]
                     ptr.extend(computed_columns[column])
-                return np.transpose(vals, axes=None).tolist()
+                rotated_indexes = tuple([num_indexes] + list(range(num_indexes)))
+                return np.transpose(vals, rotated_indexes).tolist()
 
         else:
             return {key: self.__getattr__(key).values for key in self.__column_index}
 
     @cached_property
     def values_interpolant(self):
-        return interp1d(self.__mjd.tolist(), self.__series.iloc[:, 0].compute().tolist())
+        return interp1d(self.mjd, np.asarray(self.values).T)
 
     @property
     def duration(self):
@@ -143,7 +154,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 arr_len = max([int(i) for i in self.__column_index]) + 1
                 result = [None] * arr_len
                 for i in range(arr_len):
-                    if (k := str(i)) in self.__column_index: # in case it has 0, 1, 3, but not 2, etc.
+                    if (k := str(i)) in self.__column_index:  # in case it has 0, 1, 3, but not 2, etc.
                         result[i] = self.__getattr__(k).value_at(mjd, interpolate=interpolate)
                 return result
         else:
@@ -156,7 +167,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 if index < 0:
                     raise_error()
             else:
-                return self.values_interpolant(mjd).tolist() # casts from nparr(x) to x
+                return self.values_interpolant(mjd).tolist()  # casts from nparr(x) to x
             return self.__series.head(index + 1).tail(1).values[0][0]
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
@@ -196,7 +207,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             os.makedirs(path)
         except FileExistsError:
             if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroSeries'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
@@ -235,7 +247,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("\n📑 This series has subseries.")
             print(f"\n🗂️ Value data types are:")
             for key, value in self.__dtype.items():
-                name_without_prefix = key[len(self.__prefix)+1:]
+                name_without_prefix = key[len(self.__prefix) + 1:]
                 if value == 'None':
                     print(f"    - '{name_without_prefix}': All entries in this subseries are None")
                 else:

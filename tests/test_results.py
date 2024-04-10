@@ -8,8 +8,7 @@ import numpy as np
 import uuid6
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
-from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
-                    SedaroSeries, SimulationResult)
+from sedaro import SedaroAgentResult, SedaroApiClient, SedaroBlockResult, SedaroSeries, SimulationResult
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 
@@ -50,7 +49,8 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+    scenario = sedaro.scenario(SIMPLESAT_SCENARIO_ID)
+    sim = scenario.simulation
 
     # Obtain handle
     simulation_handle = sim.status()
@@ -77,6 +77,11 @@ def test_query():
     for _, elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
+    
+    # Assert agent lookup by 'id` and `name`
+    agent_result_by_name = result.agent(scenario.Agent.get_first().name)
+    agent_result_by_id = result.agent(scenario.Agent.get_first().id)
+    assert agent_result_by_name.name == scenario.Agent.get_first().name == agent_result_by_id.name
 
 
 def test_save_load():
@@ -263,6 +268,55 @@ def test_download():
     finally:
         shutil.rmtree(path)
 
+def test_series_values():
+    df = dd.from_dict({
+        'time': [0, 1, 2, 3, 4, 5],
+        'pref.a.0': [0, 1, 2, 3, 4, 5],
+        'pref.a.1': [0, 5, 10, 15, 20, 25],
+        'pref.b': [0, 2, 4, 6, 8, 10],
+        'pref.c.foo': [0, 3, 6, 9, 12, 15],
+        'pref.c.bar': [0, 4, 8, 12, 16, 20],
+        'pref.c.baz.0.0': [0, 6, 12, 18, 24, 30],
+        'pref.c.baz.0.1': [0, 7, 14, 21, 28, 35],
+        'pref.c.baz.1.0': [0, 8, 16, 24, 32, 40],
+        'pref.c.baz.1.1': [0, 9, 18, 27, 36, 45],
+        'pref.d.a': [0, 10, 20, 30, 40, 50],
+    }, npartitions=1)
+    df = df.set_index('time')
+
+    col_ind = {
+        'a': {'0': {}, '1': {}},
+        'b': {},
+        'c': {'foo': {}, 'bar': {}, 'baz': {'0': {'0': {}, '1': {}}, '1': {'0': {}, '1': {}}}},
+        'd': {'a': {}},
+    }
+
+    ser = SedaroSeries('pref', df, col_ind, 'pref')
+
+    assert ser.values == {
+        'a': [[0, 0], [1, 5], [2, 10], [3, 15], [4, 20], [5, 25]],
+        'b': [0, 2, 4, 6, 8, 10],
+        'c': {
+            'foo': [0, 3, 6, 9, 12, 15],
+            'bar': [0, 4, 8, 12, 16, 20],
+            'baz': [[[0, 0], [0, 0]], [[6, 7], [8, 9]], [[12, 14], [16, 18]], [[18, 21], [24, 27]], [[24, 28], [32, 36]], [[30, 35], [40, 45]]],
+        },
+        'd': {'a': [0, 10, 20, 30, 40, 50]},
+    }
+
+    df2 = df[['pref.c.baz.0.0', 'pref.c.baz.0.1', 'pref.c.baz.1.0', 'pref.c.baz.1.1']]
+
+    col_ind2 = col_ind['c']['baz']
+    ser2 = SedaroSeries('pref.c.baz', df2, col_ind2, 'pref.c.baz')
+    assert ser2.values == [
+        [[0, 0], [0, 0]],
+        [[6, 7], [8, 9]],
+        [[12, 14], [16, 18]],
+        [[18, 21], [24, 27]],
+        [[24, 28], [32, 36]],
+        [[30, 35], [40, 45]],
+    ]
+
 
 def run_tests():
     test_query_terminated()
@@ -270,3 +324,4 @@ def run_tests():
     test_save_load()
     test_query_model()
     test_download()
+    test_series_values()
