@@ -139,7 +139,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @cached_property
     def values_interpolant(self):
-        return interp1d(self.__mjd.tolist(), self.__series.iloc[:, 0].compute().tolist())
+        return interp1d(self.mjd, np.asarray(self.values).T)
 
     @property
     def duration(self):
