@@ -35,15 +35,13 @@ def hfill(char="-", len=HFILL):
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}
-    for entry in agent_data.values():
-        if isinstance(entry, dict):
-            for id_, value in entry.items():
-                if 'id' in value:
-                    if id_ in out:
-                        raise ValueError(f"Duplicate ID {id_}")
-                    else:
-                        out[id_] = value
-
+    if 'blocks' in agent_data:
+        for id_, value in agent_data['blocks'].items():
+            if 'id' in value:
+                if id_ in out:
+                    raise ValueError(f"Duplicate ID {id_}")
+                else:
+                    out[id_] = value
     return out
 
 
@@ -84,7 +82,7 @@ def _restructure_data(series, agents, meta):
 
         columns = df.columns.tolist()
         for column in columns:
-            if '/' not in column: # ignore engine variables
+            if '/' not in column:  # ignore engine variables
                 elements = column.split(".")
                 first_element = elements[0]
                 if first_element not in blocks[agent_id]:
@@ -128,7 +126,7 @@ def bsearch(ordered_series, value):
         if ordered_series[mid] == value:
             return mid
         elif ordered_series[mid] > value:
-            return _bsearch(low, mid-1)
+            return _bsearch(low, mid - 1)
         else:
             return _bsearch(mid, high)
     if value < ordered_series[0]:

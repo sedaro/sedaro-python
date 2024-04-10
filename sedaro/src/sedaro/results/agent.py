@@ -78,7 +78,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             os.makedirs(path)
         except FileExistsError:
             if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroAgentResult'}, fp)
         with open(f"{path}/meta.json", "w") as fp:
@@ -91,7 +92,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df : dd = self.__series[engine]
+            df: dd = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Agent result saved to {path}.")
 
@@ -127,7 +128,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
         print("\n📦 Available Blocks")
         print('    ' + '-' * 58)
-        print('    |' + 'id'.center(38) + 'name'.center(30-12) + '|')
+        print('    |' + 'id'.center(38) + 'name'.center(30 - 12) + '|')
         print('    ' + '-' * 58)
         for block_id in self.__block_ids:
             if block_id != 'root':

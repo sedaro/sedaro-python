@@ -1,15 +1,14 @@
+import os
+import shutil
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 import dask.dataframe as dd
 import numpy as np
-import os
-from pathlib import Path
-import shutil
-from tempfile import TemporaryDirectory
 import uuid6
-
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
-from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
-                    SedaroSeries, SimulationResult)
+from sedaro import SedaroAgentResult, SedaroApiClient, SedaroBlockResult, SedaroSeries, SimulationResult
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 
@@ -50,7 +49,8 @@ def test_query():
     Requires that SimpleSat has run successfully on the host.
     '''
     _make_sure_simplesat_done()
-    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+    scenario = sedaro.scenario(SIMPLESAT_SCENARIO_ID)
+    sim = scenario.simulation
 
     # Obtain handle
     simulation_handle = sim.status()
@@ -77,6 +77,11 @@ def test_query():
     for _, elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
+    
+    # Assert agent lookup by 'id` and `name`
+    agent_result_by_name = result.agent(scenario.Agent.get_first().name)
+    agent_result_by_id = result.agent(scenario.Agent.get_first().id)
+    assert agent_result_by_name.name == scenario.Agent.get_first().name == agent_result_by_id.name
 
 
 def test_save_load():
