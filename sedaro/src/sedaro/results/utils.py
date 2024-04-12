@@ -1,5 +1,5 @@
 import math
-import numpy as np
+from os import listdir
 from pathlib import Path
 from typing import Union
 
@@ -161,6 +161,11 @@ def get_column_names(column_index, prefix):
         for key in column_index:
             columns.extend(get_column_names(column_index[key], f"{prefix}{key}"))
         return columns
+
+
+def get_parquets(path: str):
+    paths = listdir(path)
+    return [parquet for parquet in paths if not parquet.startswith('.')]
 
 
 class FromFileAndToFileAreDeprecated:

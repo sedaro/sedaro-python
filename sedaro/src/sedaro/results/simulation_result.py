@@ -8,7 +8,7 @@ import dask.dataframe as dd
 
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, hfill)
+                    _get_agent_id_name_map, _restructure_data, get_parquets, hfill)
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
@@ -146,9 +146,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
-        parquets = os.listdir(f"{path}/data/")
         data['series'] = {}
-        for agent in parquets:
+        for agent in get_parquets(f"{path}/data/"):
             df = dd.read_parquet(f"{path}/data/{agent}")
             data['series'][agent.replace('.', '/')] = df
         return cls(simulation, data)

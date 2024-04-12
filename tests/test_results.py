@@ -96,21 +96,26 @@ def test_save_load():
     with TemporaryDirectory() as temp_dir:
         file_path = Path(temp_dir) / "sim.bak"
         result.save(file_path)
+        # test that .DS_STORE, etc. doesn't interfere with loading
+        os.system(f"touch {temp_dir}/.DS_STORE")
         new_result = SimulationResult.load(file_path)
 
         file_path = Path(temp_dir) / "agent.bak"
         agent_result = new_result.agent(new_result.templated_agents[0])
         agent_result.save(file_path)
+        os.system(f"touch {temp_dir}/.DS_STORE")
         new_agent_result = SedaroAgentResult.load(file_path)
 
         file_path = Path(temp_dir) / "block.bak"
         block_result = new_agent_result.block('root')
         block_result.save(file_path)
+        os.system(f"touch {temp_dir}/.DS_STORE")
         new_block_result = SedaroBlockResult.load(file_path)
 
         file_path = Path(temp_dir) / "series.bak"
         series_result = new_block_result.position.ecef
         series_result.save(file_path)
+        os.system(f"touch {temp_dir}/.DS_STORE")
         new_series_result = SedaroSeries.load(file_path)
 
         ref_series_result = new_result.agent(

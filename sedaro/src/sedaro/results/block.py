@@ -5,7 +5,8 @@ from pathlib import Path
 from typing import Dict, Generator, Union
 
 from .series import SedaroSeries
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, get_column_names, hfill, FromFileAndToFileAreDeprecated
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, get_column_names, get_parquets,
+                    hfill)
 
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
@@ -121,8 +122,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             column_index = meta['column_index']
             prefix = meta['prefix']
         engines = {}
-        parquets = os.listdir(f"{path}/data/")
-        for agent in parquets:
+        for agent in get_parquets(f"{path}/data/"):
             df = dd.read_parquet(f"{path}/data/{agent}")
             engines[agent.replace('.', '/')] = df
         return cls(structure, engines, column_index, prefix)
