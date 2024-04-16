@@ -285,7 +285,6 @@ class Simulation:
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
-
         with self.__sedaro.api_client() as api:
             fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
 
