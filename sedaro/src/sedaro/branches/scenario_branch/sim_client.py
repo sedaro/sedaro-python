@@ -54,7 +54,7 @@ def concat_results(main, other):
     for stream in other:
         if stream not in main:
             main[stream] = other[stream]
-        else:  # concat stream parts
+        else: # concat stream parts
             concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
@@ -135,7 +135,6 @@ class FastFetcherResponse:
 
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
-
     def __init__(self, api_key, host):
         self.headers = {
             'X_API_KEY': api_key,
@@ -335,8 +334,8 @@ class Simulation:
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3:  # keep fetching pages until we get an empty continuation token
-            if has_nonempty_ctoken:  # need to fetch more pages
+        if is_v3: # keep fetching pages until we get an empty continuation token
+            if has_nonempty_ctoken: # need to fetch more pages
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
@@ -385,14 +384,13 @@ class Simulation:
             streams_formatted = []
             if usesStreamTokens:
                 streams_formatted = streams
-            else:  # not usesStreamTokens
+            else: # not usesStreamTokens
                 for stream in streams:
                     if type(stream) == tuple:
                         streams_formatted.append(stream)
                     else:
                         streams_formatted.append(tuple(stream.split('.')))
-            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start,
-                         stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
+            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
         except Exception as e:
             return e
 
@@ -407,12 +405,12 @@ class Simulation:
         return response_dict
 
     def __results(self,
-                  job: 'SimulationHandle' = None,
-                  start: float = None,
-                  stop: float = None,
-                  streams: Optional[List[Tuple[str, ...]]] = None,
-                  sampleRate: int = None,
-                  num_workers: int = 2) -> "dict[str, dask.dataframe]":
+                job: 'SimulationHandle' = None,
+                start: float = None,
+                stop: float = None,
+                streams: Optional[List[Tuple[str, ...]]] = None,
+                sampleRate: int = None,
+                num_workers: int = 2) -> "dict[str, dask.dataframe]":
 
         if streams is not None and len(streams) > 0:
             usesTokens = False
@@ -428,19 +426,15 @@ class Simulation:
             try:
                 filtered_streams = metadata['streamsTokens']
             except KeyError:
-                raise Exception(
-                    f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-            # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
-            num_workers = len(filtered_streams)
+                raise Exception(f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
+            num_workers = len(filtered_streams) # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
             workers = filtered_streams
 
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(
-            metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(self.__downloadInParallel, [
-                                      sim_id] * num_workers, workers, [params] * num_workers, download_managers, [usesTokens] * num_workers)
+            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers, [usesTokens] * num_workers)
             executor.shutdown(wait=True)
         for e in exceptions:
             if e is not None:
@@ -505,8 +499,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.__results(job, start=start, stop=stop, streams=streams,
-                              sampleRate=sampleRate, num_workers=num_workers)
+        data = self.__results(job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
         return SimulationResult(job, data)
 
     def results_poll(
