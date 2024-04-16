@@ -285,6 +285,7 @@ class Simulation:
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
+
         with self.__sedaro.api_client() as api:
             fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
 
@@ -382,11 +383,14 @@ class Simulation:
             stop = params['stop']
             sampleRate = params['sampleRate']
             streams_formatted = []
-            for stream in streams:
-                if type(stream) == tuple:
-                    streams_formatted.append(stream)
-                else:
-                    streams_formatted.append(tuple(stream.split('.')))
+            if usesStreamTokens:
+                streams_formatted = streams
+            else: # not usesStreamTokens
+                for stream in streams:
+                    if type(stream) == tuple:
+                        streams_formatted.append(stream)
+                    else:
+                        streams_formatted.append(tuple(stream.split('.')))
             self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
         except Exception as e:
             return e
