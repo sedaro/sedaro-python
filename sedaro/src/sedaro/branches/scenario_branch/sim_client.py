@@ -391,11 +391,11 @@ class Simulation:
         except Exception as e:
             return e
 
-    def __get_metadata(self, sim_id: str = None, num_workers: int | None = None):
+    def __get_metadata(self, sim_id: str = None, num_workers: int = None):
         if num_workers is None:
             request_url = f'/data/{sim_id}/metadata'
         else:
-            request_url = f'/data/{sim_id}/metadata?num_workers={num_workers}'
+            request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
         with self.__sedaro.api_client() as api:
             response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
         response_dict = json.loads(response.data)
@@ -421,17 +421,17 @@ class Simulation:
             usesTokens = True
             metadata = self.__get_metadata(sim_id := job['dataArray'], num_workers)
             try:
-                filtered_streams = metadata['streamTokens']
+                filtered_streams = metadata['streamsTokens']
             except KeyError:
                 raise Exception(f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
             num_workers = len(filtered_streams) # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
             workers = filtered_streams
 
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers, usesTokens)
+            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers, [usesTokens] * num_workers)
             executor.shutdown(wait=True)
         for e in exceptions:
             if e is not None:
