@@ -1,9 +1,10 @@
 from contextlib import contextmanager
-from typing import Any, Dict, Generator
+from typing import Any, Dict, Generator, Tuple
 
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
+from urllib3.response import HTTPResponse
 
 from sedaro.plain_request import PlainRequest
 
@@ -15,11 +16,42 @@ from .utils import body_from_res
 class SedaroApiClient(ApiClient):
     """A client to interact with the Sedaro API"""
 
-    def __init__(self, api_key, host='https://api.sedaro.com'):
+    def __init__(
+        self,
+        api_key: 'str' = None,
+        host='https://api.sedaro.com',
+        *,
+        auth_handle: 'str' = None,
+        proxy_url: str = None,
+        proxy_headers: Dict[str, str] = None
+    ):
+        '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
+
+        Args:
+            api_key (str, optional): API key to authenticate with the Sedaro API
+            host (str, optional): URL of the Sedaro API
+            auth_handle (str, optional): Authentication handle to authenticate with the Sedaro API
+            proxy_url (str, optional): URL of the proxy server
+            proxy_headers (Dict[str, str], optional): Headers to send to the proxy server
+
+        Note: for proxy kwargs, refer to https://urllib3.readthedocs.io/en/stable/reference/urllib3.poolmanager.html#urllib3.ProxyManager
+        '''
+
+        if (api_key and auth_handle) or not (api_key or auth_handle):
+            raise ValueError('Either provide an `api_key` or an `auth_handle` and not both.')
+
         if host[-1] == '/':
             host = host[:-1]  # remove trailing forward slash
-        self._api_key = api_key
+
         self._api_host = host
+
+        self._api_key = api_key
+        self._auth_handle = auth_handle
+
+        self._proxy_url = proxy_url
+        self._proxy_headers = proxy_headers
+
+        self._csrf_token = None
 
     @contextmanager
     def api_client(self) -> Generator[ApiClient, Any, None]:
@@ -28,12 +60,26 @@ class SedaroApiClient(ApiClient):
         Yields:
             Generator[ApiClient, Any, None]: ApiClient
         """
+        header_name, header_value = self._auth_header()
+
+        configuration = Configuration(host=self._api_host)
+        configuration.proxy = self._proxy_url
+        configuration.proxy_headers = self._proxy_headers
+        configuration.verify_ssl = (self._proxy_url or '').startswith('https')
+
         with ApiClient(
-            configuration=Configuration(host=self._api_host),
-            header_name='X_API_KEY',
-            header_value=self._api_key
+            configuration=configuration,
+            header_name=header_name,
+            header_value=header_value
         ) as api:
             yield api
+
+    def _auth_header(self) -> Tuple[str, str]:
+        """Get the auth header name and value for the Sedaro API"""
+        if self._auth_handle is not None:
+            return 'X_AUTH_HANDLE', self._auth_handle
+        else:
+            return 'X_API_KEY', self._api_key
 
     def __get_branch(self, branch_id: str) -> Dict:
         """Get Sedaro `Branch` with given `branch_id` from `host`
@@ -50,6 +96,13 @@ class SedaroApiClient(ApiClient):
             # return Branch(res.body, self)
             res = branches_api_instance.get_branch(
                 path_params={'branchId': branch_id}, **COMMON_API_KWARGS)
+
+            res_: HTTPResponse = res.response
+            for cookie in res_.headers.get_all('Set-Cookie'):
+                if 'csrf' in cookie:
+                    self._csrf_token = cookie.split(';')[0].split('=')[1]
+                    break
+
             return body_from_res(res)
 
     def agent_template(self, branch_id: str) -> AgentTemplateBranch:
