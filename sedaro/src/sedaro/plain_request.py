@@ -32,6 +32,7 @@ class PlainRequest:
         if body is not None:
             body = json.dumps(body)
             headers['Content-Type'] = 'application/json'
+            headers['Accept'] = 'application/json' # Required for Sedaro firewall
 
         with self.__sedaro.api_client() as api:
             res = api.call_api(
@@ -65,7 +66,10 @@ class PlainRequest:
 
         kwargs = {
             'url': f'{self.__sedaro._api_host}{url}',
-            'headers': {auth_header_name: auth_header_value}
+            'headers': {
+                auth_header_name: auth_header_value,
+                'Accept': 'application/json' # Required for Sedaro firewall
+            }
         }
 
         if self.__sedaro._csrf_token:
@@ -75,12 +79,6 @@ class PlainRequest:
             protocol = self.__sedaro._api_host.split('://')[0]
             kwargs['proxies'] = {protocol: self.__sedaro._proxy_url}
             kwargs['headers'] |= (self.__sedaro._proxy_headers or {})
-
-        print('-'*100)
-        print('Proxy Definition:', kwargs.get('proxies'))
-        print('Proxy URL:', self.__sedaro._proxy_url)
-        print('API Host:', self.__sedaro._api_host)
-        print('-'*100)
 
         return requests.get(**kwargs)
 

@@ -11,12 +11,10 @@ import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import (DownloadWorker,
-                                                      ProgressBar)
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
@@ -388,7 +386,10 @@ class Simulation:
     def __get_metadata(self, sim_id: str = None):
         request_url = f'/data/{sim_id}/metadata?'
         with self.__sedaro.api_client() as api:
-            response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
+            response = api.call_api(request_url, 'GET', headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json', # Required for Sedaro firewall
+            })
         response_dict = json.loads(response.data)
         return response_dict
 

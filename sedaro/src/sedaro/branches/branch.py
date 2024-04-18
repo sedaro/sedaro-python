@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 from pydash import is_empty
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import BLOCKS, RELATIONSHIPS, ROOT, TYPE
 from ..utils import check_for_res_error, enforce_id_in_branch
@@ -109,7 +108,7 @@ class Branch(Common):
                 'root': root,
                 'blocks': blocks,
                 'delete': delete
-            }
+            },
         )
 
         check_for_res_error(res)
