@@ -1,19 +1,20 @@
-from concurrent.futures import ThreadPoolExecutor
-import dask.dataframe
 import json
-import msgpack
-import requests
 import time
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from typing import (TYPE_CHECKING, Any, Generator, List, Optional, Tuple,
-                    Union)
+from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
+import dask.dataframe
+import msgpack
 import numpy as np
-from sedaro.results.simulation_result import SimulationResult
+import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
+from urllib3.response import HTTPResponse
+
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
+from sedaro.results.simulation_result import SimulationResult
+
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
@@ -54,7 +55,7 @@ def concat_results(main, other):
     for stream in other:
         if stream not in main:
             main[stream] = other[stream]
-        else: # concat stream parts
+        else:  # concat stream parts
             concat_stream(main[stream], other[stream], stream)
 
 def update_metadata(main, other):
@@ -109,15 +110,16 @@ def set_nested(results):
 
 class FastFetcherResponse:
     def __init__(self, response: requests.Response):
-        if response.headers['Content-Type'] == 'application/json':
-            self.type = 'application/json'
+        self.type = response.headers['Content-Type']
+
+        if self.type == 'application/json':
             self.data = response.text
-        elif response.headers['Content-Type'] == 'application/msgpack':
-            self.type = 'application/msgpack'
+        elif self.type == 'application/msgpack':
             self.data = response.content
         else:
             raise Exception(
-                f"Unexpected MIME type: {response.headers['Content-Type']}.  Response content: {response.content}. Status Code: {response.status_code}")
+                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")    
+
         self.status = response.status_code
         self.response = response
 
@@ -132,19 +134,14 @@ class FastFetcherResponse:
         else:
             raise Exception(
                 f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
-
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
-    def __init__(self, api_key, host):
-        self.headers = {
-            'X_API_KEY': api_key,
-            'User-Agent': 'OpenAPI-Generator/1.0.0/python',
-            'Content-Type': 'application/json',
-        }
-        self.host = host
+
+    def __init__(self, sedaro_api: 'SedaroApiClient'):
+        self.sedaro_api = sedaro_api
 
     def get(self, url):
-        return FastFetcherResponse(requests.get(url=self.host + url, headers=self.headers))
+        return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -285,8 +282,7 @@ class Simulation:
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
-        with self.__sedaro.api_client() as api:
-            fast_fetcher = FastFetcher(self.__sedaro._api_key, api.configuration.host)
+        fast_fetcher = FastFetcher(self.__sedaro)
 
         if id == None:
             id = self.status()['dataArray']
@@ -334,8 +330,8 @@ class Simulation:
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3: # keep fetching pages until we get an empty continuation token
-            if has_nonempty_ctoken: # need to fetch more pages
+        if is_v3:  # keep fetching pages until we get an empty continuation token
+            if has_nonempty_ctoken:  # need to fetch more pages
                 while has_nonempty_ctoken:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
@@ -400,7 +396,10 @@ class Simulation:
         else:
             request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
         with self.__sedaro.api_client() as api:
-            response = api.call_api(request_url, 'GET', headers={'Content-Type': 'application/json'})
+            response = api.call_api(request_url, 'GET', headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json', # Required for Sedaro firewall
+            })
         response_dict = json.loads(response.data)
         return response_dict
 
