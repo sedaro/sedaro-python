@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import VEHICLE_TEMPLATES
 from .blocks import BlockType
@@ -42,8 +41,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     BodyFrameVector: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    BodyInFovCondition: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     BusRegulator: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     CelestialTarget: BlockType
@@ -61,8 +58,6 @@ class AgentTemplateBranch(Branch):
     Cooler: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     DataBus: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    DataInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     DataMode: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -287,4 +282,24 @@ class AgentTemplateBranch(Branch):
     PassiveLineOfSightTransmitInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     CooperativeLineOfSightTransmitInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    CooperativeLineOfSightTransmitInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    OpticsPayload: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TargetRadarSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    VariableThrustRelativeManeuverAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ThrusterGroup: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ImpulsiveRelativeManeuverAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TargetFiducialAngleToScalarCondition: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TargetFiducial: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TargetLidarSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FixedThrustRelativeManeuverAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""

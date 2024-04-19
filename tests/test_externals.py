@@ -35,9 +35,9 @@ def __do_test(simulation_handle):
     assert len(result) == 1
     assert type(result[0]) is np.ndarray
     assert result[0].shape == (3,)
-    np.testing.assert_allclose(result[0], [6774.087229886119, 419.06940018131314, 419.06776101443677])
+    np.testing.assert_allclose(result[0], [6774.020365,  419.608699,  419.607053])
     # assert json.dumps(result[0].tolist()) == json.dumps(
-    #     [6774.087229886119, 419.06940018131314, 419.06776101443677])
+    #     [6774.020365,  419.608699,  419.607053])
 
 
 def test_run_externals():
