@@ -276,6 +276,7 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
+        usesStreamTokens: bool = False,
         download_manager: DownloadWorker = None,
     ):
         if sampleRate is None and continuationToken is None:
@@ -296,10 +297,13 @@ class Simulation:
         elif limit is not None:
             print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
             url += f'&limit={limit}'
-        streams = streams or []
-        if len(streams) > 0:
-            encodedStreams = ','.join(['.'.join(x) for x in streams])
-            url += f'&streams={encodedStreams}'
+        if not usesStreamTokens:
+            streams = streams or []
+            if len(streams) > 0:
+                encodedStreams = ','.join(['.'.join(x) for x in streams])
+                url += f'&streams={encodedStreams}'
+        else:
+            url += f'&streamsToken={streams}'
         url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
@@ -368,23 +372,29 @@ class Simulation:
                             filtered_streams.append(stream)
         return filtered_streams
 
-    def __downloadInParallel(self, sim_id, streams, params, download_manager):
+    def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
         try:
             start = params['start']
             stop = params['stop']
             sampleRate = params['sampleRate']
             streams_formatted = []
-            for stream in streams:
-                if type(stream) == tuple:
-                    streams_formatted.append(stream)
-                else:
-                    streams_formatted.append(tuple(stream.split('.')))
-            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, download_manager=download_manager)
+            if usesStreamTokens:
+                streams_formatted = streams
+            else: # not usesStreamTokens
+                for stream in streams:
+                    if type(stream) == tuple:
+                        streams_formatted.append(stream)
+                    else:
+                        streams_formatted.append(tuple(stream.split('.')))
+            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
         except Exception as e:
             return e
 
-    def __get_metadata(self, sim_id: str = None):
-        request_url = f'/data/{sim_id}/metadata?'
+    def __get_metadata(self, sim_id: str = None, num_workers: int = None):
+        if num_workers is None:
+            request_url = f'/data/{sim_id}/metadata'
+        else:
+            request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
         with self.__sedaro.api_client() as api:
             response = api.call_api(request_url, 'GET', headers={
                 'Content-Type': 'application/json',
@@ -401,24 +411,29 @@ class Simulation:
                 sampleRate: int = None,
                 num_workers: int = 2) -> "dict[str, dask.dataframe]":
 
-        metadata = self.__get_metadata(sim_id := job['dataArray'])
         if streams is not None and len(streams) > 0:
+            usesTokens = False
+            metadata = self.__get_metadata(sim_id := job['dataArray'])
             filtered_streams = self.__get_filtered_streams(streams, metadata)
+            num_workers = min(num_workers, len(filtered_streams))
+            workers = [[] for _ in range(num_workers)]
+            for i, stream in enumerate(filtered_streams):
+                workers[i % num_workers].append(stream)
         else:
+            usesTokens = True
+            metadata = self.__get_metadata(sim_id := job['dataArray'], num_workers)
             try:
-                filtered_streams = metadata['streams']
+                filtered_streams = metadata['streamsTokens']
             except KeyError:
                 raise Exception(f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-        num_workers = min(num_workers, len(filtered_streams))
-        workers = [[] for _ in range(num_workers)]
-        for i, stream in enumerate(filtered_streams):
-            workers[i % num_workers].append(stream)
+            num_workers = len(filtered_streams) # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
+            workers = filtered_streams
 
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams']), "Downloading...")
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers)
+            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers, [usesTokens] * num_workers)
             executor.shutdown(wait=True)
         for e in exceptions:
             if e is not None:
