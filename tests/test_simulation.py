@@ -8,7 +8,7 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _job_status_is_pending(job):
-    return job['status'] == 'PENDING'
+    return job['status'] == 'PENDING' or job['status'] == 'PROVISIONING' or job['status'] == 'CONFIGURING' or job['status'] == 'BUILDING'
 
 
 def _wait_until_passed_pending(simulation_handle):
