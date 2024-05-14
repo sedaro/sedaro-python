@@ -22,6 +22,9 @@ STATUS_ICON_MAP = {
     "TERMINATED": "❌",
     "PAUSED": "⏸️",
     "PENDING": "⌛",
+    "PROVISIONING": "⌛",
+    "CONFIGURING": "⌛",
+    "BUILDING": "⌛",
     "RUNNING": "⌛",
     "ERROR": "❌"
 }

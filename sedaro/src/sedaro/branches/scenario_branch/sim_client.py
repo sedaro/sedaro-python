@@ -188,7 +188,7 @@ class Simulation:
 
         t = 0
         while t < (timeout or float('inf')):
-            if (handle := handle.status())['status'] in {'PENDING', 'QUEUED'}:
+            if (handle := handle.status())['status'] in {'PENDING', 'QUEUED', 'PROVISIONING', 'CONFIGURING', 'BUILDING'}:
                 time.sleep(0.1)
                 t += 0.1
             elif handle['status'] in {'FAILED', 'ERROR'}:
@@ -534,12 +534,12 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        options = {'QUEUED', 'PENDING', 'RUNNING'}
+        options = {'QUEUED', 'PENDING', 'RUNNING', 'PROVISIONING', 'CONFIGURING', 'BUILDING'}
 
         while job['status'] in options:
             if job['status'] == 'QUEUED':
                 print('Simulation is queued...', end='\r')
-            if job['status'] == 'PENDING':
+            if job['status'] == 'PENDING' or job['status'] == 'PROVISIONING' or job['status'] == 'CONFIGURING' or job['status'] == 'BUILDING':
                 print('Simulation is building...', end='\r')
             else:
                 progress_bar(job['progress']['percentComplete'])
