@@ -125,13 +125,15 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SimulationResult'}, fp)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation}, fp)
         os.mkdir(f"{path}/data")
+        parquet_files = []
         for agent in self.__data['series']:
-            agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
+            agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
+            parquet_files.append(pname)
             df: dd = self.__data['series'][agent]
             df.to_parquet(agent_parquet_path)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation, 'parquet_files': parquet_files}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
@@ -147,9 +149,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             simulation = contents['simulation']
             data['meta'] = contents['meta']
         data['series'] = {}
-        for agent in get_parquets(f"{path}/data/"):
-            df = dd.read_parquet(f"{path}/data/{agent}")
-            data['series'][agent.replace('.', '/')] = df
+        try:
+            for agent in contents['parquet_files']:
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                data['series'][agent.replace('.', '/')] = df
+        except KeyError:
+            for agent in get_parquets(f"{path}/data/"):
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                data['series'][agent.replace('.', '/')] = df
         return cls(simulation, data)
 
     def summarize(self) -> None:

@@ -82,18 +82,21 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroAgentResult'}, fp)
+        os.mkdir(f"{path}/data")
+        parquet_files = []
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+            parquet_files.append(pname)
+            df: dd = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
                 'name': self.__name,
                 'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
                 'column_index': self.__column_index,
+                'parquet_files': parquet_files,
             }, fp)
-        os.mkdir(f"{path}/data")
-        for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df: dd = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
         print(f"Agent result saved to {path}.")
 
     @classmethod
@@ -110,9 +113,14 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             initial_state = meta['initial_state']
             column_index = meta['column_index']
         engines = {}
-        for engine in get_parquets(f"{path}/data/"):
-            df = dd.read_parquet(f"{path}/data/{engine}")
-            engines[engine.replace('.', '/')] = df
+        try:
+            for engine in meta['parquet_files']:
+                df = dd.read_parquet(f"{path}/data/{engine}")
+                engines[engine.replace('.', '/')] = df
+        except KeyError:
+            for engine in get_parquets(f"{path}/data/"):
+                df = dd.read_parquet(f"{path}/data/{engine}")
+                engines[engine.replace('.', '/')] = df
         return cls(name, block_structures, engines, column_index, initial_state)
 
     def summarize(self) -> None:
