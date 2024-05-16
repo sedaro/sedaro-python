@@ -363,6 +363,7 @@ def test_multiblock_crud_with_ref_ids():
 def run_tests():
     test_get()
     test_keying_into_root_attrs()
+    test_updating_root_attrs()
     test_get_blocks_all_and_single()
     test_create_update_and_delete_block()
     test_update_rel_and_cascade_delete()
@@ -370,6 +371,7 @@ def run_tests():
     test_block_client_equality()
     test_block_client_clone()
     test_some_errors()
+    test_ignore_id_and_type_in_create()
     test_active_comm_interfaces_tuple()
     test_attitude_solution_error_tuple()
     test_power_command_tuple()
