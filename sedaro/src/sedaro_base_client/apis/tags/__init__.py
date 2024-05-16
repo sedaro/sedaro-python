@@ -8,7 +8,7 @@ import enum
 class TagValues(str, enum.Enum):
     BRANCHES = "Branches"
     DATA = "Data"
-    META_MODELS = "MetaModels"
+    METAMODELS = "Metamodels"
     EXTERNALS = "Externals"
     JOBS = "Jobs"
     REPOSITORIES = "Repositories"

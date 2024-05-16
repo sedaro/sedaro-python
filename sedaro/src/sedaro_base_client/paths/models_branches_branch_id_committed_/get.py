@@ -26,6 +26,7 @@ import frozendict  # noqa: F401
 from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.metamodel import Metamodel
 
 from . import path
 
@@ -55,7 +56,7 @@ request_path_branch_id = api_client.PathParameter(
     schema=BranchIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = Metamodel
 
 
 @dataclass
