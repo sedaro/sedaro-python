@@ -1,4 +1,3 @@
-import dask.dataframe as dd
 from tqdm import tqdm
 from tqdm import TqdmWarning
 import warnings
@@ -42,6 +41,7 @@ class StreamManager:
         self.download_bar = download_bar
 
     def ingest_core_data(self, stream_id, core_data):
+        import dask.dataframe as dd
         if self.dataframe is None:
             self.dataframe = dd.from_dict(core_data, npartitions=1)
         else:
