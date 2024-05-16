@@ -1,13 +1,15 @@
-import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Dict, Generator, Union
+from typing import TYPE_CHECKING, Dict, Generator, Union
 
 from .series import SedaroSeries
-from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, get_column_names, get_parquets,
-                    hfill)
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
+                    FromFileAndToFileAreDeprecated, get_column_names,
+                    get_parquets, hfill)
 
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
@@ -62,7 +64,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         return self.__name
 
     @property
-    def dataframe(self) -> Dict[str, dd.DataFrame]:
+    def dataframe(self) -> 'Dict[str, dd.DataFrame]':
         '''Get the raw Dask DataFrames for this block.'''
         # only include columns in this block, not columns in the dataframes that are for other blocks
         scoped_data = {}
@@ -105,13 +107,15 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df: dd = self.__series[engine]
+            df: 'dd' = self.__series[engine]
             df.to_parquet(engine_parquet_path)
         print(f"Block result saved to {path}.")
 
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load a block result from the specified path.'''
+        import dask.dataframe as dd
+
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroBlockResult':
