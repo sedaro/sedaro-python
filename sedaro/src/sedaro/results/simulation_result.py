@@ -2,13 +2,15 @@ import datetime as dt
 import json
 import os
 from pathlib import Path
-from typing import Dict, List, Union
-
-import dask.dataframe as dd
+from typing import TYPE_CHECKING, Dict, List, Union
 
 from .agent import SedaroAgentResult
-from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, get_parquets, hfill)
+from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
+                    _block_type_in_supers, _get_agent_id_name_map,
+                    _restructure_data, get_parquets, hfill)
+
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
@@ -61,7 +63,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         ])
 
     @property
-    def dataframe(self) -> Dict[str, dd.DataFrame]:
+    def dataframe(self) -> 'Dict[str, dd.DataFrame]':
         '''Get the raw Dask DataFrames for this SimulationResult.'''
         return self.__data['series']
 
@@ -130,13 +132,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         os.mkdir(f"{path}/data")
         for agent in self.__data['series']:
             agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
-            df: dd = self.__data['series'][agent]
+            df: 'dd' = self.__data['series'][agent]
             df.to_parquet(agent_parquet_path)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load a simulation result from the specified path.'''
+        import dask.dataframe as dd
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SimulationResult':
