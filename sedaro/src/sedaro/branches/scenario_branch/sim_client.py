@@ -9,10 +9,12 @@ import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.branches.scenario_branch.download import (DownloadWorker,
+                                                      ProgressBar)
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...exceptions import (NoSimResultsError, SedaroApiException,
+                           SimInitializationError)
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
@@ -119,7 +121,7 @@ class FastFetcherResponse:
             self.data = response.content
         else:
             raise Exception(
-                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")    
+                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")
 
         self.status = response.status_code
         self.response = response
