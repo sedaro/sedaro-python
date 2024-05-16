@@ -1,6 +1,5 @@
 import json
 
-import numpy as np
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
@@ -9,6 +8,8 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def __do_test(simulation_handle):
+    import numpy as np
+
     agent_id = 'NSghFfVT8ieam0ydeZGX-'
     block_id = 'NZ2SHUkS95z1GtmMZ0CTk'
 
