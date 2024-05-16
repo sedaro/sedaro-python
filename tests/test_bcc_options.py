@@ -21,7 +21,7 @@ def test_block_type_options():
         # CHECK: lists above are correct
         assert expected_block_names == branch_block_names, f'\n\nExtra: {set(expected_block_names) - set(branch_block_names)}\n\nMissing: {set(branch_block_names) - set(expected_block_names)}\n'
 
-        annotations_dict = inspect.get_annotations(branch.__class__)
+        annotations_dict = branch.__class__.__annotations__
 
         for block_name in branch_block_names:
             block_type: BlockType = getattr(branch, block_name)
