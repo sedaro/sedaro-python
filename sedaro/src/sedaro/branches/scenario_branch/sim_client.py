@@ -182,6 +182,7 @@ class Simulation:
         """
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
+                {},
                 path_params={'branchId': self.__branch_id},
                 **COMMON_API_KWARGS
             )
