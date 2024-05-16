@@ -24,3 +24,6 @@ def test_crud_using_auth_handle():
     subsystem.update(name=_random_str())
 
     subsystem.delete()
+
+def run_tests():
+    test_crud_using_auth_handle()

@@ -1,6 +1,7 @@
 import platform
 import time
 
+import test_auth_handle
 import test_bcc_options
 import test_crud_and_traversal
 import test_data_utils
@@ -15,13 +16,14 @@ from config import HOST
 
 
 imported_test_files = [
+    test_auth_handle,
     test_bcc_options,
     test_crud_and_traversal,
     test_data_utils,
-    test_plain_requests,
-    test_simulation,
-    test_results,
     test_externals,
+    test_plain_requests,
+    test_results,
+    test_simulation,
 ]
 ############################################################
 
