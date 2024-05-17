@@ -1,13 +1,17 @@
-import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Dict, Generator, List, Union
+from typing import TYPE_CHECKING, Dict, Generator, List, Union
 
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, bsearch, get_parquets, hfill
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
+                    FromFileAndToFileAreDeprecated, bsearch, get_parquets,
+                    hfill)
+
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
@@ -40,7 +44,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         return id_ in self.__block_ids
 
     @property
-    def dataframe(self) -> Dict[str, dd.DataFrame]:
+    def dataframe(self) -> 'Dict[str, dd.DataFrame]':
         '''Get the raw Dask DataFrames for this agent.'''
         return self.__series
 
@@ -74,6 +78,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''
+        import dask.dataframe as dd
+
         try:
             os.makedirs(path)
         except FileExistsError:
@@ -102,6 +108,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load an agent result from the specified path.'''
+        import dask.dataframe as dd
+
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroAgentResult':

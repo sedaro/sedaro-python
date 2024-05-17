@@ -4,26 +4,29 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
-import dask.dataframe
 import msgpack
-import numpy as np
 import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.branches.scenario_branch.download import (DownloadWorker,
+                                                      ProgressBar)
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...exceptions import (NoSimResultsError, SedaroApiException,
+                           SimInitializationError)
 from ...settings import COMMON_API_KWARGS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
+    import dask.dataframe as dd
+
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
 
 def serdes(v):
+    import numpy as np
     if type(v) is dict and 'ndarray' in v:
         return np.array(v['ndarray'])
     if type(v) is np.ndarray:
@@ -118,7 +121,7 @@ class FastFetcherResponse:
             self.data = response.content
         else:
             raise Exception(
-                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")    
+                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")
 
         self.status = response.status_code
         self.response = response
@@ -179,6 +182,7 @@ class Simulation:
         """
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
+                {},
                 path_params={'branchId': self.__branch_id},
                 **COMMON_API_KWARGS
             )
@@ -409,7 +413,7 @@ class Simulation:
                 stop: float = None,
                 streams: Optional[List[Tuple[str, ...]]] = None,
                 sampleRate: int = None,
-                num_workers: int = 2) -> "dict[str, dask.dataframe]":
+                num_workers: int = 2) -> "dict[str, dd.DataFrame]":
 
         if streams is not None and len(streams) > 0:
             usesTokens = False

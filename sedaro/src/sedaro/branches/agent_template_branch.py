@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import \
+    SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import VEHICLE_TEMPLATES
 from .blocks import BlockType
@@ -297,9 +298,27 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     TargetFiducialAngleToScalarCondition: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    TargetFiducial: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     TargetLidarSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     FixedThrustRelativeManeuverAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    StaticRelativeAttitudeInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    Clock: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PointFiducial: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    OrientedFiducial: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RelativeAttitudeMekfAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GenericRelativeOrbitDeterminationAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RelativeOrbitEkfAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    TargetFiducialSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PriorKnowledgeRelativeOrbitInitializer: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GenericRelativeAttitudeDeterminationAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""

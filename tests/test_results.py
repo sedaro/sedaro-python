@@ -4,12 +4,11 @@ import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-import dask.dataframe as dd
-import numpy as np
 import uuid6
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
-from sedaro import SedaroAgentResult, SedaroApiClient, SedaroBlockResult, SedaroSeries, SimulationResult
+from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
+                    SedaroSeries, SimulationResult)
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 
@@ -78,7 +77,7 @@ def test_query():
     for _, elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
-    
+
     # Assert agent lookup by 'id` and `name`
     agent_result_by_name = result.agent(scenario.Agent.get_first().name)
     agent_result_by_id = result.agent(scenario.Agent.get_first().id)
@@ -161,6 +160,8 @@ def test_save_load():
 
 
 def test_query_model():
+    import dask.dataframe as dd
+
     simulation_job = {
         'branch': 'test_id',
         'dateCreated': '2021-08-05T18:00:00.000Z',
@@ -260,6 +261,8 @@ class MockDownloadBar:
 
 
 def compare_with_nans(a, b):
+    import numpy as np
+
     assert len(a) == len(b)
     for i in range(len(a)):
         if np.isnan(a[i]):
@@ -310,6 +313,8 @@ def test_download():
         shutil.rmtree(path)
 
 def test_series_values():
+    import dask.dataframe as dd
+
     df = dd.from_dict({
         'time': [0, 1, 2, 3, 4, 5],
         'pref.a.0': [0, 1, 2, 3, 4, 5],

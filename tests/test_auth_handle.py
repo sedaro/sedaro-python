@@ -11,7 +11,8 @@ def test_crud_using_auth_handle():
     except ImportError:
         raise ImportError('Test failed because AUTH_HANDLE not found in config.py. Please add AUTH_HANDLE to config.py')
 
-    from tests.test_crud_and_traversal import _random_str
+    import test_crud_and_traversal
+    _random_str = test_crud_and_traversal._random_str
 
     sedaro = SedaroApiClient(host=HOST, auth_handle=AUTH_HANDLE)
 
@@ -24,3 +25,6 @@ def test_crud_using_auth_handle():
     subsystem.update(name=_random_str())
 
     subsystem.delete()
+
+def run_tests():
+    test_crud_using_auth_handle()

@@ -27,6 +27,7 @@ from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.branch_update import BranchUpdate
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
+from sedaro_base_client.model.branch_res import BranchRes
 
 # Path params
 BranchIdSchema = schemas.StrSchema
@@ -65,7 +66,7 @@ request_body_branch_update = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = BranchRes
 
 
 @dataclass
