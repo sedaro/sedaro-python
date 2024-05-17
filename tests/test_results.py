@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 from pathlib import Path
@@ -96,25 +97,60 @@ def test_save_load():
         file_path = Path(temp_dir) / "sim.bak"
         result.save(file_path)
         # test that .DS_STORE, etc. doesn't interfere with loading
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_result = SimulationResult.load(file_path)
+
+        file_path = Path(temp_dir) / "sim2.bak"
+        result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_result = SimulationResult.load(file_path)
 
         file_path = Path(temp_dir) / "agent.bak"
         agent_result = new_result.agent(new_result.templated_agents[0])
         agent_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_agent_result = SedaroAgentResult.load(file_path)
+
+        file_path = Path(temp_dir) / "agent2.bak"
+        agent_result = new_result.agent(new_result.templated_agents[0])
+        agent_result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_agent_result = SedaroAgentResult.load(file_path)
 
         file_path = Path(temp_dir) / "block.bak"
         block_result = new_agent_result.block('root')
         block_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_block_result = SedaroBlockResult.load(file_path)
+
+        file_path = Path(temp_dir) / "block2.bak"
+        block_result = new_agent_result.block('root')
+        block_result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_block_result = SedaroBlockResult.load(file_path)
 
         file_path = Path(temp_dir) / "series.bak"
         series_result = new_block_result.position.ecef
         series_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
         new_series_result = SedaroSeries.load(file_path)
 
         ref_series_result = new_result.agent(

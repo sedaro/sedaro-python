@@ -11,6 +11,7 @@ from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
 if TYPE_CHECKING:
     import dask.dataframe as dd
 
+
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     def __init__(self, structure, series: dict, column_index: dict, prefix: str):
@@ -98,17 +99,20 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroBlockResult'}, fp)
+        os.mkdir(f"{path}/data")
+        parquet_files = []
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+            parquet_files.append(pname)
+            df: 'dd' = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
                 'structure': self.__structure,
                 'column_index': self.__column_index,
-                'prefix': self.__prefix
+                'prefix': self.__prefix,
+                'parquet_files': parquet_files,
             }, fp)
-        os.mkdir(f"{path}/data")
-        for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df: 'dd' = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
         print(f"Block result saved to {path}.")
 
     @classmethod
@@ -126,9 +130,14 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             column_index = meta['column_index']
             prefix = meta['prefix']
         engines = {}
-        for agent in get_parquets(f"{path}/data/"):
-            df = dd.read_parquet(f"{path}/data/{agent}")
-            engines[agent.replace('.', '/')] = df
+        try:
+            for agent in meta['parquet_files']:
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                engines[agent.replace('.', '/')] = df
+        except KeyError:
+            for agent in get_parquets(f"{path}/data/"):
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                engines[agent.replace('.', '/')] = df
         return cls(structure, engines, column_index, prefix)
 
     def summarize(self) -> None:
