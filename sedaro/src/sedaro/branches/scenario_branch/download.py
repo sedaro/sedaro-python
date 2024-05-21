@@ -1,10 +1,11 @@
-from tqdm import tqdm
-from tqdm import TqdmWarning
 import warnings
+
+from tqdm import TqdmWarning, tqdm
 
 # imprecision of float math sometimes forces Tqdm to clamp a number to a range
 # this suppresses the warning that prints each time that happens
 warnings.filterwarnings('ignore', category=TqdmWarning)
+
 
 class ProgressBar:
     def __init__(self, start, stop, num_streams, desc):
@@ -30,9 +31,10 @@ class ProgressBar:
 
     def complete(self):
         # set the progress bar to EXACTLY 100% and close it
-        self.bar.update(self.num_streams - self.bar.n) # see https://github.com/tqdm/tqdm/issues/1264
+        self.bar.update(self.num_streams - self.bar.n)  # see https://github.com/tqdm/tqdm/issues/1264
         self.bar.refresh()
         self.bar.close()
+
 
 class StreamManager:
     def __init__(self, download_bar):
@@ -67,10 +69,13 @@ class StreamManager:
     def filter_columns(self):
         """Remove columns whose name is a parent of another column's name."""
         columns_to_remove = self.select_columns_to_remove()
+        if not columns_to_remove:
+            return
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
 
     def finalize(self):
         return self.dataframe.set_index('time')
+
 
 def prep_stream_id(stream_id):
     engines = {
@@ -82,6 +87,7 @@ def prep_stream_id(stream_id):
     split_base = stream_id.split('/')
     prepped_stream_id = f"{split_base[0]}.{engines[split_base[1]]}"
     return prepped_stream_id
+
 
 class DownloadWorker:
     def __init__(self, download_bar):
@@ -97,7 +103,7 @@ class DownloadWorker:
     def finalize(self):
         for _, stream_manager in self.streams.items():
             # REF 1: https://docs.dask.org/en/stable/dataframe-best-practices.html#repartition-to-reduce-overhead
-            stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB") # REF 1
+            stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB")  # REF 1
             stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
             stream_manager.filter_columns()
             stream_manager.dataframe = stream_manager.dataframe.persist()
