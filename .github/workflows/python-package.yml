@@ -5,7 +5,7 @@ name: Python package
 
 on:
   push:
-    branches: ['main']
+    branches: ['main', '2024-05-21-ci-pipeline'] # FIXME
   pull_request:
     branches: ['main']
 
