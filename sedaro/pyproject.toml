@@ -7,8 +7,8 @@ name = "sedaro"
 version = "4.11.36"
 description = "A python client to interact with the Sedaro API."
 readme = "README.md"
-requires-python = ">=3.8"
-classifiers = [ "Programming Language :: Python :: 3.8", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Operating System :: OS Independent", "Topic :: Software Development",]
+requires-python = ">=3.9"
+classifiers = [ "Programming Language :: Python :: 3.9", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Operating System :: OS Independent", "Topic :: Software Development",]
 dependencies = [
   "certifi >= 14.5.14",
   "dask[dataframe] ~= 2023.5",
