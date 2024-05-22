@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
           echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
-          echo "AUTH_HANDLE = ':/'" >> tests/config.py
+          echo "AUTH_HANDLE = '${{ secrets.AUTH_HANDLE }}'" >> tests/config.py
 
           echo "SIMPLESAT_A_T_ID = '${{ secrets.SIMPLESAT_A_T_ID }}'" >> tests/config.py
           echo "SIMPLESAT_SCENARIO_ID = '${{ secrets.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
@@ -50,4 +50,6 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest -n auto
+          pytest
+        # run: |
+        #   pytest -n auto
