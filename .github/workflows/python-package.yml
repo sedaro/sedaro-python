@@ -52,4 +52,4 @@ jobs:
         run: |
           pytest
         # run: |
-        #   pytest -n auto
+        #   pytest -n auto # FIXME, remove pytest-xdist if don't use this
