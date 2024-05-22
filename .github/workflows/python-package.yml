@@ -16,6 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11']
+      # run only one at a time, becuase the tests run on the same branches, and they mess each other up in parallel
+      max-parallel: 1
 
     steps:
       - uses: actions/checkout@v4
