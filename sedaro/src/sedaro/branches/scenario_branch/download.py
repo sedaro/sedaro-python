@@ -88,6 +88,7 @@ class StreamManager:
     def filter_columns(self):
         """Remove columns whose name is a parent of another column's name."""
         columns_to_remove = self.select_columns_to_remove()
+        print(f"Removing columns: {columns_to_remove}")
         if not columns_to_remove:
             return
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
