@@ -37,6 +37,7 @@ def serdes(v):
         return [serdes(v) for v in v]
     return v
 
+
 def concat_stream_data(main, other, len_main, len_other):
     assert type(main) == dict and type(other) == dict
     for k in other:
@@ -47,12 +48,14 @@ def concat_stream_data(main, other, len_main, len_other):
         if k not in other:
             main[k].extend([None for _ in range(len_other)])
 
+
 def concat_stream(main, other, stream_id):
     len_main = len(main[0])
     len_other = len(other[0])
     main[0].extend(other[0])
     stream_id_short = stream_id.split('/')[0]
     concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
+
 
 def concat_results(main, other):
     for stream in other:
@@ -61,11 +64,13 @@ def concat_results(main, other):
         else:  # concat stream parts
             concat_stream(main[stream], other[stream], stream)
 
+
 def update_metadata(main, other):
     for k in other['counts']:
         if k not in main['counts']:
             main['counts'][k] = 0
         main['counts'][k] += other['counts'][k]
+
 
 def set_numeric_as_list(d):
     if isinstance(d, dict):
@@ -74,6 +79,7 @@ def set_numeric_as_list(d):
         else:
             return {k: set_numeric_as_list(v) for k, v in d.items()}
     return d
+
 
 def __set_nested(results):
     nested = {}
@@ -103,6 +109,7 @@ def __set_nested(results):
             ptr[tokens[-1]] = v
     return nested
 
+
 # TODO: edge case where one page has all nones for a SV, then the next page has a bunch of vectors for it
 def set_nested(results):
     nested = {}
@@ -110,6 +117,7 @@ def set_nested(results):
         kspl = k.split('/')[0]
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
+
 
 class FastFetcherResponse:
     def __init__(self, response: requests.Response):
@@ -137,6 +145,8 @@ class FastFetcherResponse:
         else:
             raise Exception(
                 f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
+
+
 class FastFetcher:
     """Accelerated request handler for data page fetching."""
 
@@ -145,6 +155,7 @@ class FastFetcher:
 
     def get(self, url):
         return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
+
 
 class Simulation:
     """A client to interact with the Sedaro API simulation (jobs) routes"""
@@ -384,13 +395,14 @@ class Simulation:
             streams_formatted = []
             if usesStreamTokens:
                 streams_formatted = streams
-            else: # not usesStreamTokens
+            else:  # not usesStreamTokens
                 for stream in streams:
                     if type(stream) == tuple:
                         streams_formatted.append(stream)
                     else:
                         streams_formatted.append(tuple(stream.split('.')))
-            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start, stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
+            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start,
+                         stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
         except Exception as e:
             return e
 
@@ -402,18 +414,20 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             response = api.call_api(request_url, 'GET', headers={
                 'Content-Type': 'application/json',
-                'Accept': 'application/json', # Required for Sedaro firewall
+                'Accept': 'application/json',  # Required for Sedaro firewall
             })
         response_dict = json.loads(response.data)
         return response_dict
 
-    def __results(self,
-                job: 'SimulationHandle' = None,
-                start: float = None,
-                stop: float = None,
-                streams: Optional[List[Tuple[str, ...]]] = None,
-                sampleRate: int = None,
-                num_workers: int = 2) -> "dict[str, dd.DataFrame]":
+    def __results(
+        self,
+        job: 'SimulationHandle' = None,
+        start: float = None,
+        stop: float = None,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2
+    ) -> "dict[str, dd.DataFrame]":
 
         if streams is not None and len(streams) > 0:
             usesTokens = False
@@ -429,15 +443,21 @@ class Simulation:
             try:
                 filtered_streams = metadata['streamsTokens']
             except KeyError:
-                raise Exception(f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-            num_workers = len(filtered_streams) # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
+                raise Exception(
+                    f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
+            # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
+            num_workers = len(filtered_streams)
             workers = filtered_streams
 
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
+        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(
+            metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(self.__downloadInParallel, [sim_id] * num_workers, workers, [params] * num_workers, download_managers, [usesTokens] * num_workers)
+            exceptions = executor.map(
+                self.__downloadInParallel, [sim_id] * num_workers, workers,
+                [params] * num_workers, download_managers, [usesTokens] * num_workers
+            )
             executor.shutdown(wait=True)
         for e in exceptions:
             if e is not None:
@@ -502,7 +522,9 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.__results(job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
+        data = self.__results(
+            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
+        )
         return SimulationResult(job, data)
 
     def results_poll(
@@ -551,6 +573,7 @@ class Simulation:
             time.sleep(retry_interval)
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
