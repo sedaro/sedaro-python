@@ -23,21 +23,30 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install pytest pytest-xdist
           pip install sedaro
+
       - name: Create config.py
         run: |
-          echo "HOST = 'https://api.astage.sedaro.com'" >> tests/config.py
-          echo "API_KEY = 'NXR00peRmTlUus5bHEbm-.emj76yc49ZYdfvPWuAkJPQKF8hzwC2RJi3zkN4hggvhvHg5qeS5wVPPkx4zUE340JltXUrJSM3z8HPywcsUxRA'" >> tests/config.py
+          echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
+          echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
           echo "AUTH_HANDLE = ':/'" >> tests/config.py
 
-          echo "SIMPLESAT_A_T_ID = '/'" >> tests/config.py
-          echo "SIMPLESAT_SCENARIO_ID = '/'" >> tests/config.py
-          echo "WILDFIRE_A_T_ID = 'PMZrzP6XdMx9hDYWLMxdQ4'" >> tests/config.py
-          echo "WILDFIRE_SCENARIO_ID = 'PMZrzPc6FSHCsNRDKBlzbM'" >> tests/config.py
+          echo "SIMPLESAT_A_T_ID = '${{ secrets.SIMPLESAT_A_T_ID }}'" >> tests/config.py
+          echo "SIMPLESAT_SCENARIO_ID = '${{ secrets.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
+          echo "WILDFIRE_A_T_ID = '${{ secrets.WILDFIRE_A_T_ID }}'" >> tests/config.py
+          echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
 
       # - name: Install dependencies
       #   run: |
