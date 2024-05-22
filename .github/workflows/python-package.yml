@@ -27,7 +27,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.cache/pip # Cache pip dependencies
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-{hashFiles('**/pyproject.toml')}
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-{hashFiles('**/sedaro/pyproject.toml')}
           restore-keys: |
             ${{ runner.os }}-pip-${{ matrix.python-version }}-
 
