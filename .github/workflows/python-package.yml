@@ -51,7 +51,9 @@ jobs:
           echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
 
       - name: Test with pytest
-        run: |
-          pytest
         # run: |
-        #   pytest -n auto # FIXME, remove pytest-xdist if don't use this
+        #   pytest
+
+        # FIXME, remove pytest-xdist if don't use this
+        run: |
+          pytest -n auto
