@@ -6,9 +6,17 @@ from sedaro import SedaroApiClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
+PENDING_STATUSES = {
+    'PENDING',
+    'PROVISIONING',
+    'CONFIGURING',
+    'BUILDING',
+    'QUEUED'
+}
+
 
 def _job_status_is_pending(job):
-    return job['status'] == 'PENDING' or job['status'] == 'PROVISIONING' or job['status'] == 'CONFIGURING' or job['status'] == 'BUILDING'
+    return job['status'] in PENDING_STATUSES
 
 
 def _wait_until_passed_pending(simulation_handle):
