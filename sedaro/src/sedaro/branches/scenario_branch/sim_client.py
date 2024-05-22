@@ -469,13 +469,15 @@ class Simulation:
             stream_results.update(download_manager.streams)
         return {'meta': download_managers[0].finalize_metadata(download_managers[1:]), 'series': stream_results}
 
-    def results(self,
-                job_id: str = None,
-                start: float = None,
-                stop: float = None,
-                streams: Optional[List[Tuple[str, ...]]] = None,
-                sampleRate: int = None,
-                num_workers: int = 2) -> SimulationResult:
+    def results(
+        self,
+        job_id: str = None,
+        start: float = None,
+        stop: float = None,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2
+    ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
 
