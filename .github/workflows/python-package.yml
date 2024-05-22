@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.11', '3.10', '3.9']
       # run only one at a time, becuase the tests run on the same branches, and they mess each other up in parallel
       max-parallel: 1
 
