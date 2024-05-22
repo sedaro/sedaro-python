@@ -6,9 +6,29 @@ import warnings
 # this suppresses the warning that prints each time that happens
 warnings.filterwarnings('ignore', category=TqdmWarning)
 
+class FakeProgressBar:
+    def __init__(self, *args, **kwargs):
+        print("Creating fake progress bar!")
+        self.n = 0
+        pass
+
+    def update(self, *args, **kwargs):
+        pass
+
+    def refresh(self):
+        pass
+
+    def close(self):
+        pass
+
+    def complete(self):
+        pass
+
+
 class ProgressBar:
     def __init__(self, start, stop, num_streams, desc):
-        self.bar = tqdm(range(num_streams), desc=desc,  bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
+        # self.bar = tqdm(range(num_streams), desc=desc,  bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
+        self.bar = FakeProgressBar()
         self.num_streams = num_streams
         self.start = start
         self.stop = stop
