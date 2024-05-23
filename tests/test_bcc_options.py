@@ -1,5 +1,3 @@
-import inspect
-
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
