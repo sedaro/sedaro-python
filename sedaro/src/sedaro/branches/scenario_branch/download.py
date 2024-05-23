@@ -1,14 +1,14 @@
-import warnings
+# import warnings
 
-from tqdm import TqdmWarning, tqdm
+# from tqdm import TqdmWarning, tqdm
 
 # imprecision of float math sometimes forces Tqdm to clamp a number to a range
 # this suppresses the warning that prints each time that happens
-warnings.filterwarnings('ignore', category=TqdmWarning)
+# warnings.filterwarnings('ignore', category=TqdmWarning)
 
 class FakeProgressBar:
     def __init__(self, *args, **kwargs):
-        print("Creating fake progress bar!")
+        print("Downloading...")
         self.n = 0
         pass
 
@@ -22,7 +22,7 @@ class FakeProgressBar:
         pass
 
     def complete(self):
-        pass
+        print("...download complete!")
 
 
 class ProgressBar:
@@ -88,7 +88,6 @@ class StreamManager:
     def filter_columns(self):
         """Remove columns whose name is a parent of another column's name."""
         columns_to_remove = self.select_columns_to_remove()
-        print(f"Removing columns: {columns_to_remove}")
         if not columns_to_remove:
             return
         self.dataframe = self.dataframe.drop(columns_to_remove, axis=1)
