@@ -2,8 +2,6 @@
 name: Test Python Package
 
 on:
-  push:
-    branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, change branches to just main
   # trigger manually
   workflow_dispatch:
 
