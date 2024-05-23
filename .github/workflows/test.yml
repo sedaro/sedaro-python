@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Run tests
-        uses: ./.github/actions/test-action
+        uses: ./.github/actions/test-action/
         with:
           python-versions: ${{ matrix.python-version }}
 
