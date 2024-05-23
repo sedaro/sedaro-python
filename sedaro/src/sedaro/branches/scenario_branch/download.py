@@ -1,15 +1,31 @@
-import warnings
+# import warnings
 
-from tqdm import TqdmWarning, tqdm
+# from tqdm import TqdmWarning, tqdm
 
 # imprecision of float math sometimes forces Tqdm to clamp a number to a range
 # this suppresses the warning that prints each time that happens
-warnings.filterwarnings('ignore', category=TqdmWarning)
+# warnings.filterwarnings('ignore', category=TqdmWarning)
+
+class NonTqdmProgressBar:
+    def __init__(self, *args, **kwargs):
+        print("Downloading...")
+        self.n = 0
+        pass
+
+    def update(self, *args, **kwargs):
+        pass
+
+    def refresh(self):
+        pass
+
+    def close(self):
+        print("...download complete!")
 
 
 class ProgressBar:
     def __init__(self, start, stop, num_streams, desc):
-        self.bar = tqdm(range(num_streams), desc=desc,  bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
+        # self.bar = tqdm(range(num_streams), desc=desc,  bar_format='{l_bar}{bar}[{elapsed}<{remaining}]')
+        self.bar = NonTqdmProgressBar()
         self.num_streams = num_streams
         self.start = start
         self.stop = stop
