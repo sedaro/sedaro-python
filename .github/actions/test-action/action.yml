@@ -6,8 +6,26 @@ inputs:
   python-versions:
     description: 'Python version to test'
     required: true
-  secrets-json:
-    description: 'JSON string containing secrets'
+  host:
+    description: 'Host secret'
+    required: true
+  api-key:
+    description: 'API Key secret'
+    required: true
+  auth-handle:
+    description: 'Auth Handle secret'
+    required: true
+  simplesat-a-t-id:
+    description: 'SIMPLESAT A_T_ID secret'
+    required: true
+  simplesat-scenario-id:
+    description: 'SIMPLESAT SCENARIO ID secret'
+    required: true
+  wildfire-a-t-id:
+    description: 'WILDFIRE A_T_ID secret'
+    required: true
+  wildfire-scenario-id:
+    description: 'WILDFIRE SCENARIO ID secret'
     required: true
 
 runs:
@@ -42,14 +60,14 @@ runs:
     - name: Create config.py
       shell: bash
       run: |
-        echo "HOST = '${{ SECRETS.HOST }}'" >> tests/config.py
-        echo "API_KEY = '${{ SECRETS.API_KEY }}'" >> tests/config.py
-        echo "AUTH_HANDLE = '${{ SECRETS.AUTH_HANDLE }}'" >> tests/config.py
+        echo "HOST = '${{ inputs.host }}'" >> tests/config.py
+        echo "API_KEY = '${{ inputs.api-key }}'" >> tests/config.py
+        echo "AUTH_HANDLE = '${{ inputs.auth-handle }}'" >> tests/config.py
 
-        echo "SIMPLESAT_A_T_ID = '${{ SECRETS.SIMPLESAT_A_T_ID }}'" >> tests/config.py
-        echo "SIMPLESAT_SCENARIO_ID = '${{ SECRETS.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
-        echo "WILDFIRE_A_T_ID = '${{ SECRETS.WILDFIRE_A_T_ID }}'" >> tests/config.py
-        echo "WILDFIRE_SCENARIO_ID = '${{ SECRETS.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
+        echo "SIMPLESAT_A_T_ID = '${{ inputs.simplesat-a-t-id }}'" >> tests/config.py
+        echo "SIMPLESAT_SCENARIO_ID = '${{ inputs.simplesat-scenario-id }}'" >> tests/config.py
+        echo "WILDFIRE_A_T_ID = '${{ inputs.wildfire-a-t-id }}'" >> tests/config.py
+        echo "WILDFIRE_SCENARIO_ID = '${{ inputs.wildfire-scenario-id }}'" >> tests/config.py
 
     - name: Test with pytest
       shell: bash
