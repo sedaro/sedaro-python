@@ -2,6 +2,8 @@
 name: Test Python Package
 
 on:
+  push:
+    branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, change branches to just main
   # trigger manually
   workflow_dispatch:
 
@@ -12,39 +14,44 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.11', '3.10', '3.9']
-      # run only one at a time, b/c tests run on same scenario/spacecraft branches; they mess each other up in parallel
       max-parallel: 1
 
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Run tests
+        uses: ./.github/actions/test-action.yml
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          python-versions: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install pytest
+    # steps:
+    #   - name: Check out the code
+    #     uses: actions/checkout@v4
 
-      - name: Install local Sedaro package
-        run: |
-          pip install ./sedaro
+    #   - name: Set up Python
+    #     uses: actions/setup-python@v5
+    #     with:
+    #       python-version: ${{ matrix.python-version }}
+    #       cache: 'pip'
 
-      - name: Create config.py
-        run: |
-          echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
-          echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
-          echo "AUTH_HANDLE = '${{ secrets.AUTH_HANDLE }}'" >> tests/config.py
+    #   - name: Install dependencies
+    #     run: |
+    #       python -m pip install --upgrade pip
+    #       python -m pip install pytest
 
-          echo "SIMPLESAT_A_T_ID = '${{ secrets.SIMPLESAT_A_T_ID }}'" >> tests/config.py
-          echo "SIMPLESAT_SCENARIO_ID = '${{ secrets.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
-          echo "WILDFIRE_A_T_ID = '${{ secrets.WILDFIRE_A_T_ID }}'" >> tests/config.py
-          echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
+    #   - name: Install local Sedaro package
+    #     run: |
+    #       pip install ./sedaro
 
-      - name: Test with pytest
-        run: |
-          pytest
+    #   - name: Create config.py
+    #     run: |
+    #       echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
+    #       echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
+    #       echo "AUTH_HANDLE = '${{ secrets.AUTH_HANDLE }}'" >> tests/config.py
+
+    #       echo "SIMPLESAT_A_T_ID = '${{ secrets.SIMPLESAT_A_T_ID }}'" >> tests/config.py
+    #       echo "SIMPLESAT_SCENARIO_ID = '${{ secrets.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
+    #       echo "WILDFIRE_A_T_ID = '${{ secrets.WILDFIRE_A_T_ID }}'" >> tests/config.py
+    #       echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
+
+    #   - name: Test with pytest
+    #     run: |
+    #       pytest
