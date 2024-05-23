@@ -54,5 +54,3 @@ jobs:
         # FIXME, remove pytest-xdist if don't use this
         # run: |
         #   pytest -n auto
-
-        # FIXME: I believe the pipeline is running on the wrong branch... maybe main?
