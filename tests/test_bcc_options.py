@@ -1,3 +1,6 @@
+import os
+
+import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
@@ -6,7 +9,10 @@ from sedaro.branches.blocks import Block, BlockType
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
+IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
 
+
+@pytest.mark.skipif(IN_GITHUB_ACTIONS, reason="Block classes are too frequenly updated to test in CI against prod.")
 def test_block_type_options():
     for get_method, branch_id, TemplateBranch in [
         [sedaro.agent_template, SIMPLESAT_A_T_ID, AgentTemplateBranch],
