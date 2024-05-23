@@ -34,7 +34,7 @@ jobs:
 
       - name: Install local Sedaro package
         run: |
-          pip install .
+          pip install ./sedaro
 
       - name: Create config.py
         run: |
