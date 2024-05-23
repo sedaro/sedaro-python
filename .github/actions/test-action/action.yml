@@ -6,6 +6,9 @@ inputs:
   python-versions:
     description: 'Python version to test'
     required: true
+  secrets-json:
+    description: 'JSON string containing secrets'
+    required: true
 
 runs:
   using: 'composite'
@@ -29,6 +32,11 @@ runs:
       shell: bash
       run: |
         pip install ./sedaro
+
+    - name: Parse and use secrets
+      run: |
+        SECRETS=$(echo '${{ inputs.secrets-json }}' | jq -r '. | to_entries[] | "\(.key)=\"\(.value)\""')
+        eval $SECRETS # Export secrets as environment variables
 
     - name: Create config.py
       shell: bash

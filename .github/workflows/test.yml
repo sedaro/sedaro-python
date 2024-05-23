@@ -24,6 +24,8 @@ jobs:
         uses: ./.github/actions/test-action
         with:
           python-versions: ${{ matrix.python-version }}
+          secrets-json: '${{ toJson(secrets) }}' # Convert secrets to JSON
+
 
     # steps:
     #   - name: Check out the code
