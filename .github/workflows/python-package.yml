@@ -4,10 +4,11 @@
 name: Python package
 
 on:
-  push:
-    branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, branches to just main
-  pull_request:
-    branches: ['main']
+  [push]
+  # push:
+  #   branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, branches to just main
+  # pull_request:
+  #   branches: ['main']
 
 jobs:
   test:
@@ -51,3 +52,5 @@ jobs:
         # FIXME, remove pytest-xdist if don't use this
         # run: |
         #   pytest -n auto
+
+        # FIXME: I believe the pipeline is running on the wrong branch... maybe main?
