@@ -42,14 +42,14 @@ runs:
     - name: Create config.py
       shell: bash
       run: |
-        echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
-        echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
-        echo "AUTH_HANDLE = '${{ secrets.AUTH_HANDLE }}'" >> tests/config.py
+        echo "HOST = '${{ SECRETS.HOST }}'" >> tests/config.py
+        echo "API_KEY = '${{ SECRETS.API_KEY }}'" >> tests/config.py
+        echo "AUTH_HANDLE = '${{ SECRETS.AUTH_HANDLE }}'" >> tests/config.py
 
-        echo "SIMPLESAT_A_T_ID = '${{ secrets.SIMPLESAT_A_T_ID }}'" >> tests/config.py
-        echo "SIMPLESAT_SCENARIO_ID = '${{ secrets.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
-        echo "WILDFIRE_A_T_ID = '${{ secrets.WILDFIRE_A_T_ID }}'" >> tests/config.py
-        echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
+        echo "SIMPLESAT_A_T_ID = '${{ SECRETS.SIMPLESAT_A_T_ID }}'" >> tests/config.py
+        echo "SIMPLESAT_SCENARIO_ID = '${{ SECRETS.SIMPLESAT_SCENARIO_ID }}'" >> tests/config.py
+        echo "WILDFIRE_A_T_ID = '${{ SECRETS.WILDFIRE_A_T_ID }}'" >> tests/config.py
+        echo "WILDFIRE_SCENARIO_ID = '${{ SECRETS.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
 
     - name: Test with pytest
       shell: bash
