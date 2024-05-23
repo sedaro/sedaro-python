@@ -4,11 +4,10 @@
 name: Python package
 
 on:
-  [push]
-  # push:
-  #   branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, branches to just main
-  # pull_request:
-  #   branches: ['main']
+  push:
+    branches: ['main', '2024-05-21-ci-pipeline'] # FIXME, branches to just main
+  pull_request:
+    branches: ['main']
 
 jobs:
   test:
@@ -32,7 +31,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pytest pytest-xdist
-          pip install sedaro
+
+      - name: Install local Sedaro package
+        run: |
+          pip install .
 
       - name: Create config.py
         run: |
