@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest pytest-xdist
+          python -m pip install pytest
 
       - name: Install local Sedaro package
         run: |
@@ -48,9 +48,5 @@ jobs:
           echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
 
       - name: Test with pytest
-        # run: |
-        #   pytest
-
-        # FIXME, remove pytest-xdist if don't use this
         run: |
-          pytest -n auto
+          pytest
