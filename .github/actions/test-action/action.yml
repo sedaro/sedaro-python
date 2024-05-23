@@ -71,4 +71,5 @@ runs:
 
     - name: Test with pytest
       shell: bash
-      run: pytest
+      run: |
+        pytest
