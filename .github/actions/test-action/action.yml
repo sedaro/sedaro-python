@@ -26,10 +26,12 @@ runs:
         python -m pip install pytest
 
     - name: Install local Sedaro package
+      shell: bash
       run: |
         pip install ./sedaro
 
     - name: Create config.py
+      shell: bash
       run: |
         echo "HOST = '${{ secrets.HOST }}'" >> tests/config.py
         echo "API_KEY = '${{ secrets.API_KEY }}'" >> tests/config.py
@@ -41,4 +43,5 @@ runs:
         echo "WILDFIRE_SCENARIO_ID = '${{ secrets.WILDFIRE_SCENARIO_ID }}'" >> tests/config.py
 
     - name: Test with pytest
+      shell: bash
       run: pytest
