@@ -34,6 +34,7 @@ runs:
         pip install ./sedaro
 
     - name: Parse and use secrets
+      shell: bash
       run: |
         SECRETS=$(echo '${{ inputs.secrets-json }}' | jq -r '. | to_entries[] | "\(.key)=\"\(.value)\""')
         eval $SECRETS # Export secrets as environment variables
