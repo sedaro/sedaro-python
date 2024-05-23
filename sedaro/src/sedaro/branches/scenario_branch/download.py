@@ -19,9 +19,6 @@ class FakeProgressBar:
         pass
 
     def close(self):
-        pass
-
-    def complete(self):
         print("...download complete!")
 
 
