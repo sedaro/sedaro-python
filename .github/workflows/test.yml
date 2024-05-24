@@ -18,6 +18,14 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
 
+      - name: Echo simplesat AT id surrounded by new lines
+        run: |
+          echo
+          echo
+          echo ${{ secrets.SIMPLESAT_A_T_ID }}
+          echo
+          echo
+
       - name: Run tests
         uses: ./.github/actions/test-action
         with:
