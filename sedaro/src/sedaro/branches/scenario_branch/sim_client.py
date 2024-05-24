@@ -452,8 +452,12 @@ class Simulation:
             num_workers = len(filtered_streams)
             workers = filtered_streams
 
-        download_bar = ProgressBar(metadata['start'], metadata['stop'], len(
-            metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']), "Downloading...")
+        download_bar = ProgressBar(
+            metadata['start'],
+            metadata['stop'],
+            len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']),
+            "Downloading..."
+        )
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
