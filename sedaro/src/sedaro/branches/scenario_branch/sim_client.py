@@ -15,7 +15,8 @@ from sedaro.results.simulation_result import SimulationResult
 
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
-from ...settings import COMMON_API_KWARGS
+from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
+                         QUEUED, RUNNING, STATUS)
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
@@ -203,10 +204,10 @@ class Simulation:
 
         t = 0
         while t < (timeout or float('inf')):
-            if (handle := handle.status())['status'] in {'PENDING', 'QUEUED', 'PROVISIONING', 'CONFIGURING', 'BUILDING'}:
+            if (handle := handle.status())[STATUS] in PRE_RUN_STATUSES:
                 time.sleep(0.1)
                 t += 0.1
-            elif handle['status'] in {'FAILED', 'ERROR'}:
+            elif handle[STATUS] in BAD_STATUSES:
                 raise SimInitializationError(handle['message'])
             else:
                 return handle
@@ -562,12 +563,12 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        options = {'QUEUED', 'PENDING', 'RUNNING', 'PROVISIONING', 'CONFIGURING', 'BUILDING'}
+        options = PRE_RUN_STATUSES | {RUNNING}
 
-        while job['status'] in options:
-            if job['status'] == 'QUEUED':
+        while job[STATUS] in options:
+            if job[STATUS] == QUEUED:
                 print('Simulation is queued...', end='\r')
-            if job['status'] == 'PENDING' or job['status'] == 'PROVISIONING' or job['status'] == 'CONFIGURING' or job['status'] == 'BUILDING':
+            elif job[STATUS] in PRE_RUN_STATUSES:
                 print('Simulation is building...', end='\r')
             else:
                 progress_bar(job['progress']['percentComplete'])

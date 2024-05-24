@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Union
 
+from ..settings import STATUS, SUCCEEDED
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
                     _block_type_in_supers, _get_agent_id_name_map,
@@ -25,7 +26,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
-            'status': str(simulation['status']),
+            STATUS: str(simulation[STATUS]),
         }
         self.__branch = simulation['branch']
         self.__data = data
@@ -69,7 +70,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     @property
     def status(self) -> str:
-        return str(self.__simulation['status'])
+        return str(self.__simulation[STATUS])
 
     @property
     def start_time(self) -> dt.datetime:
@@ -85,7 +86,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     @property
     def success(self) -> bool:
-        return str(self.__simulation['status']) == 'SUCCEEDED'
+        return str(self.__simulation[STATUS]) == SUCCEEDED
 
     def __assert_success(self) -> None:
         if not self.success:

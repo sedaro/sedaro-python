@@ -1,15 +1,15 @@
 import importlib
 import inspect
 import json
-import orjson
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict
 
+import orjson
 from sedaro_base_client.api_client import ApiResponse
 from urllib3.response import HTTPResponse
 
 from .exceptions import SedaroApiException
-from .settings import BLOCKS, COMMON_API_KWARGS
+from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
 if TYPE_CHECKING:
     from .branches.branch import Branch
@@ -34,7 +34,7 @@ def check_for_res_error(response: ApiResponse):
     """
     err = response.get('error', None)
     if err is not None:
-        raise SedaroApiException(status=err['status'], reason=f"{err['code']}: {err['message']}")
+        raise SedaroApiException(status=err[STATUS], reason=f"{err['code']}: {err['message']}")
 
 
 def enforce_id_in_branch(branch: 'Branch', id: str):

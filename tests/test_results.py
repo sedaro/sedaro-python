@@ -11,6 +11,7 @@ from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
+from sedaro.settings import STATUS, SUCCEEDED
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -166,7 +167,7 @@ def test_query_model():
         'branch': 'test_id',
         'dateCreated': '2021-08-05T18:00:00.000Z',
         'dateModified': '2021-08-05T18:00:00.000Z',
-        'status': 'SUCCEEDED',
+        STATUS: SUCCEEDED,
     }
 
     df1 = dd.from_dict({
@@ -311,6 +312,7 @@ def test_download():
         assert os.path.exists(path)
     finally:
         shutil.rmtree(path)
+
 
 def test_series_values():
     import dask.dataframe as dd
