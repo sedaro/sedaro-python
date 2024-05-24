@@ -402,8 +402,10 @@ class Simulation:
                         streams_formatted.append(stream)
                     else:
                         streams_formatted.append(tuple(stream.split('.')))
-            self.__fetch(id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start,
-                         stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager)
+            self.__fetch(
+                id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start,
+                stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager
+            )
         except Exception as e:
             return e
 
