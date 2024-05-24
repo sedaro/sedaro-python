@@ -1,0 +1,31 @@
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: Test Python Package
+
+on:
+  workflow_dispatch: # trigger manually
+
+jobs:
+  test: # NOTE: keep test in sync with publish.yml
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.10', '3.9']
+      max-parallel: 1
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        uses: ./.github/actions/test-action
+        with:
+          python-versions: ${{ matrix.python-version }}
+          # pass secrets b/c action can't access them
+          host: ${{ secrets.HOST }}
+          api-key: ${{ secrets.API_KEY }}
+          auth-handle: ${{ secrets.AUTH_HANDLE }}
+          simplesat-a-t-id: ${{ secrets.SIMPLESAT_A_T_ID }}
+          simplesat-scenario-id: ${{ secrets.SIMPLESAT_SCENARIO_ID }}
+          wildfire-a-t-id: ${{ secrets.WILDFIRE_A_T_ID }}
+          wildfire-scenario-id: ${{ secrets.WILDFIRE_SCENARIO_ID }}

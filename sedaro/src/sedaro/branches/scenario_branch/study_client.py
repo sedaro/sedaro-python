@@ -6,7 +6,7 @@ from sedaro_base_client.apis.tags import jobs_api
 
 from ...exceptions import NoSimResultsError
 from ...results import StudyResult
-from ...settings import COMMON_API_KWARGS
+from ...settings import COMMON_API_KWARGS, PENDING, RUNNING, STATUS
 from ...utils import body_from_res
 
 if TYPE_CHECKING:
@@ -145,9 +145,9 @@ class Study:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        options = {'PENDING', 'RUNNING'}
+        options = {PENDING, RUNNING}
 
-        while job['status'] in options:
+        while job[STATUS] in options:
             job = self.status()
             time.sleep(retry_interval)
 
@@ -233,4 +233,4 @@ class StudyHandle:
         Returns:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
-        return self.__study_client.results_poll(job_id=self.__job['id'],retry_interval=retry_interval)
+        return self.__study_client.results_poll(job_id=self.__job['id'], retry_interval=retry_interval)

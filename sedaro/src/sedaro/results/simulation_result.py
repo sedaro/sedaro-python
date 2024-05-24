@@ -2,13 +2,16 @@ import datetime as dt
 import json
 import os
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 
-import dask.dataframe as dd
-
+from ..settings import STATUS, SUCCEEDED
 from .agent import SedaroAgentResult
-from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated, _block_type_in_supers,
-                    _get_agent_id_name_map, _restructure_data, get_parquets, hfill)
+from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
+                    _block_type_in_supers, _get_agent_id_name_map,
+                    _restructure_data, get_parquets, hfill)
+
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
@@ -23,7 +26,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             'branch': simulation['branch'],
             'dateCreated': simulation['dateCreated'],
             'dateModified': simulation['dateModified'],
-            'status': str(simulation['status']),
+            STATUS: str(simulation[STATUS]),
         }
         self.__branch = simulation['branch']
         self.__data = data
@@ -61,13 +64,13 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         ])
 
     @property
-    def dataframe(self) -> Dict[str, dd.DataFrame]:
+    def dataframe(self) -> 'Dict[str, dd.DataFrame]':
         '''Get the raw Dask DataFrames for this SimulationResult.'''
         return self.__data['series']
 
     @property
     def status(self) -> str:
-        return str(self.__simulation['status'])
+        return str(self.__simulation[STATUS])
 
     @property
     def start_time(self) -> dt.datetime:
@@ -83,7 +86,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     @property
     def success(self) -> bool:
-        return str(self.__simulation['status']) == 'SUCCEEDED'
+        return str(self.__simulation[STATUS]) == SUCCEEDED
 
     def __assert_success(self) -> None:
         if not self.success:
@@ -125,18 +128,22 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SimulationResult'}, fp)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation}, fp)
         os.mkdir(f"{path}/data")
+        parquet_files = []
         for agent in self.__data['series']:
-            agent_parquet_path = f"{path}/data/{agent.replace('/', '.')}"
-            df: dd = self.__data['series'][agent]
+            agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
+            parquet_files.append(pname)
+            df: 'dd' = self.__data['series'][agent]
             df.to_parquet(agent_parquet_path)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
+                      'parquet_files': parquet_files}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load a simulation result from the specified path.'''
+        import dask.dataframe as dd
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SimulationResult':
@@ -147,9 +154,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             simulation = contents['simulation']
             data['meta'] = contents['meta']
         data['series'] = {}
-        for agent in get_parquets(f"{path}/data/"):
-            df = dd.read_parquet(f"{path}/data/{agent}")
-            data['series'][agent.replace('.', '/')] = df
+        try:
+            for agent in contents['parquet_files']:
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                data['series'][agent.replace('.', '/')] = df
+        except KeyError:
+            for agent in get_parquets(f"{path}/data/"):
+                df = dd.read_parquet(f"{path}/data/{agent}")
+                data['series'][agent.replace('.', '/')] = df
         return cls(simulation, data)
 
     def summarize(self) -> None:

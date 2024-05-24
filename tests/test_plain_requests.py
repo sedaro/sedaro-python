@@ -22,7 +22,7 @@ def test_plain_get_branch():
         f'/models/branches/{SIMPLESAT_A_T_ID}',
     )
     keys = res.keys()
-    for string in ['data', 'name', 'description', 'repository', 'tier2issues', 'workspace']:
+    for string in ['data', 'name', 'description', 'repository', 'workspace']:
         assert string in keys
 
 

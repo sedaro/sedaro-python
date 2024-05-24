@@ -25,10 +25,8 @@ import frozendict  # noqa: F401
 
 from sedaro_base_client import schemas  # noqa: F401
 
-from sedaro_base_client.model.scenario_model_update_interface import ScenarioModelUpdateInterface
-from sedaro_base_client.model.spacecraft_model_update_interface import SpacecraftModelUpdateInterface
+from sedaro_base_client.model.metamodel_update_interface import MetamodelUpdateInterface
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
-from sedaro_base_client.model.terrestrial_vehicle_update_interface import TerrestrialVehicleUpdateInterface
 from sedaro_base_client.model.model_crud_res import ModelCrudRes
 
 from . import path
@@ -60,53 +58,20 @@ request_path_branch_id = api_client.PathParameter(
     required=True,
 )
 # body param
+SchemaForRequestBodyApplicationJson = MetamodelUpdateInterface
 
 
-class SchemaForRequestBodyApplicationJson(
-    schemas.ComposedSchema,
-):
-
-
-    class MetaOapg:
-        
-        @classmethod
-        @functools.lru_cache()
-        def any_of(cls):
-            # we need this here to make our import statements work
-            # we must store _composed_schemas in here so the code is only run
-            # when we invoke this method. If we kept this at the class
-            # level we would get an error because the class level
-            # code would be run when this module is imported, and these composed
-            # classes don't exist yet because their module has not finished
-            # loading
-            return [
-                SpacecraftModelUpdateInterface,
-                TerrestrialVehicleUpdateInterface,
-                ScenarioModelUpdateInterface,
-            ]
-
-
-    def __new__(
-        cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-    ) -> 'SchemaForRequestBodyApplicationJson':
-        return super().__new__(
-            cls,
-            *_args,
-            _configuration=_configuration,
-            **kwargs,
-        )
-
-
-request_body_any_type = api_client.RequestBody(
+request_body_metamodel_update_interface = api_client.RequestBody(
     content={
         'application/json': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
     },
     required=True,
 )
+_auth = [
+    'api_key_header_auth_handle',
+    'api_key_header_api_key',
+]
 SchemaFor200ResponseBodyApplicationJson = ModelCrudRes
 
 
@@ -158,7 +123,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _crud_template_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -172,7 +137,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _crud_template_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -187,7 +152,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _crud_template_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -199,7 +164,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _crud_template_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -213,7 +178,7 @@ class BaseApi(api_client.Api):
 
     def _crud_template_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -222,7 +187,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Update a MetaModel
+        Update a Metamodel
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -254,7 +219,7 @@ class BaseApi(api_client.Api):
                 'The required body parameter has an invalid value of: unset. Set a valid value instead')
         _fields = None
         _body = None
-        serialized_data = request_body_any_type.serialize(body, content_type)
+        serialized_data = request_body_metamodel_update_interface.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -266,6 +231,7 @@ class BaseApi(api_client.Api):
             headers=_headers,
             fields=_fields,
             body=_body,
+            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
@@ -295,7 +261,7 @@ class CrudTemplate(BaseApi):
     @typing.overload
     def crud_template(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -309,7 +275,7 @@ class CrudTemplate(BaseApi):
     @typing.overload
     def crud_template(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -324,7 +290,7 @@ class CrudTemplate(BaseApi):
     @typing.overload
     def crud_template(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -336,7 +302,7 @@ class CrudTemplate(BaseApi):
     @typing.overload
     def crud_template(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -350,7 +316,7 @@ class CrudTemplate(BaseApi):
 
     def crud_template(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -375,7 +341,7 @@ class ApiForpatch(BaseApi):
     @typing.overload
     def patch(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -389,7 +355,7 @@ class ApiForpatch(BaseApi):
     @typing.overload
     def patch(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -404,7 +370,7 @@ class ApiForpatch(BaseApi):
     @typing.overload
     def patch(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -416,7 +382,7 @@ class ApiForpatch(BaseApi):
     @typing.overload
     def patch(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -430,7 +396,7 @@ class ApiForpatch(BaseApi):
 
     def patch(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,

@@ -1,13 +1,17 @@
-import dask.dataframe as dd
 import json
 import os
 from pathlib import Path
-from typing import Dict, Generator, List, Union
+from typing import TYPE_CHECKING, Dict, Generator, List, Union
 
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import ENGINE_EXPANSION, ENGINE_MAP, HFILL, FromFileAndToFileAreDeprecated, bsearch, get_parquets, hfill
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
+                    FromFileAndToFileAreDeprecated, bsearch, get_parquets,
+                    hfill)
+
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
@@ -40,7 +44,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         return id_ in self.__block_ids
 
     @property
-    def dataframe(self) -> Dict[str, dd.DataFrame]:
+    def dataframe(self) -> 'Dict[str, dd.DataFrame]':
         '''Get the raw Dask DataFrames for this agent.'''
         return self.__series
 
@@ -74,6 +78,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''
+        import dask.dataframe as dd
+
         try:
             os.makedirs(path)
         except FileExistsError:
@@ -82,23 +88,28 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroAgentResult'}, fp)
+        os.mkdir(f"{path}/data")
+        parquet_files = []
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+            parquet_files.append(pname)
+            df: dd = self.__series[engine]
+            df.to_parquet(engine_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
                 'name': self.__name,
                 'initial_state': self.__initial_state,
                 'block_structures': self.__block_structures,
                 'column_index': self.__column_index,
+                'parquet_files': parquet_files,
             }, fp)
-        os.mkdir(f"{path}/data")
-        for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{engine.replace('/', '.')}"
-            df: dd = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
         print(f"Agent result saved to {path}.")
 
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load an agent result from the specified path.'''
+        import dask.dataframe as dd
+
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroAgentResult':
@@ -110,9 +121,14 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             initial_state = meta['initial_state']
             column_index = meta['column_index']
         engines = {}
-        for engine in get_parquets(f"{path}/data/"):
-            df = dd.read_parquet(f"{path}/data/{engine}")
-            engines[engine.replace('.', '/')] = df
+        try:
+            for engine in meta['parquet_files']:
+                df = dd.read_parquet(f"{path}/data/{engine}")
+                engines[engine.replace('.', '/')] = df
+        except KeyError:
+            for engine in get_parquets(f"{path}/data/"):
+                df = dd.read_parquet(f"{path}/data/{engine}")
+                engines[engine.replace('.', '/')] = df
         return cls(name, block_structures, engines, column_index, initial_state)
 
     def summarize(self) -> None:

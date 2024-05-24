@@ -1,16 +1,17 @@
+import json
 import os
 import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-import dask.dataframe as dd
-import numpy as np
 import uuid6
 from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
-from sedaro import SedaroAgentResult, SedaroApiClient, SedaroBlockResult, SedaroSeries, SimulationResult
+from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
+                    SedaroSeries, SimulationResult)
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
+from sedaro.settings import STATUS, SUCCEEDED
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -77,7 +78,7 @@ def test_query():
     for _, elapsed_time, _ in block_result.position.eci:
         if elapsed_time > 10:
             break
-    
+
     # Assert agent lookup by 'id` and `name`
     agent_result_by_name = result.agent(scenario.Agent.get_first().name)
     agent_result_by_id = result.agent(scenario.Agent.get_first().id)
@@ -97,25 +98,60 @@ def test_save_load():
         file_path = Path(temp_dir) / "sim.bak"
         result.save(file_path)
         # test that .DS_STORE, etc. doesn't interfere with loading
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_result = SimulationResult.load(file_path)
+
+        file_path = Path(temp_dir) / "sim2.bak"
+        result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_result = SimulationResult.load(file_path)
 
         file_path = Path(temp_dir) / "agent.bak"
         agent_result = new_result.agent(new_result.templated_agents[0])
         agent_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_agent_result = SedaroAgentResult.load(file_path)
+
+        file_path = Path(temp_dir) / "agent2.bak"
+        agent_result = new_result.agent(new_result.templated_agents[0])
+        agent_result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_agent_result = SedaroAgentResult.load(file_path)
 
         file_path = Path(temp_dir) / "block.bak"
         block_result = new_agent_result.block('root')
         block_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
+        os.system(f"touch {file_path}/data/foobar.parquet")
+        new_block_result = SedaroBlockResult.load(file_path)
+
+        file_path = Path(temp_dir) / "block2.bak"
+        block_result = new_agent_result.block('root')
+        block_result.save(file_path)
+        os.system(f"touch {file_path}/.DS_STORE")
+        with open(f"{file_path}/meta.json", "r") as f:
+            meta = json.load(f)
+        del meta['parquet_files']
+        with open(f"{file_path}/meta.json", "w") as f:
+            json.dump(meta, f)
         new_block_result = SedaroBlockResult.load(file_path)
 
         file_path = Path(temp_dir) / "series.bak"
         series_result = new_block_result.position.ecef
         series_result.save(file_path)
-        os.system(f"touch {temp_dir}/.DS_STORE")
+        os.system(f"touch {file_path}/.DS_STORE")
         new_series_result = SedaroSeries.load(file_path)
 
         ref_series_result = new_result.agent(
@@ -125,11 +161,13 @@ def test_save_load():
 
 
 def test_query_model():
+    import dask.dataframe as dd
+
     simulation_job = {
         'branch': 'test_id',
         'dateCreated': '2021-08-05T18:00:00.000Z',
         'dateModified': '2021-08-05T18:00:00.000Z',
-        'status': 'SUCCEEDED',
+        STATUS: SUCCEEDED,
     }
 
     df1 = dd.from_dict({
@@ -224,6 +262,8 @@ class MockDownloadBar:
 
 
 def compare_with_nans(a, b):
+    import numpy as np
+
     assert len(a) == len(b)
     for i in range(len(a)):
         if np.isnan(a[i]):
@@ -273,7 +313,10 @@ def test_download():
     finally:
         shutil.rmtree(path)
 
+
 def test_series_values():
+    import dask.dataframe as dd
+
     df = dd.from_dict({
         'time': [0, 1, 2, 3, 4, 5],
         'pref.a.0': [0, 1, 2, 3, 4, 5],

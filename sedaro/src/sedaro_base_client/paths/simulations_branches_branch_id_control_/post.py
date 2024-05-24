@@ -26,36 +26,11 @@ import frozendict  # noqa: F401
 from sedaro_base_client import schemas  # noqa: F401
 
 from sedaro_base_client.model.simulation_job import SimulationJob
+from sedaro_base_client.model.start_simulation_body import StartSimulationBody
 from sedaro_base_client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
-# Query params
-SeedSchema = schemas.IntSchema
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
-    {
-    }
-)
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
-    {
-        'seed': typing.Union[SeedSchema, decimal.Decimal, int, ],
-    },
-    total=False
-)
-
-
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
-    pass
-
-
-request_query_seed = api_client.QueryParameter(
-    name="seed",
-    style=api_client.ParameterStyle.FORM,
-    schema=SeedSchema,
-    explode=True,
-)
 # Path params
 BranchIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
@@ -80,6 +55,52 @@ request_path_branch_id = api_client.PathParameter(
     name="branchId",
     style=api_client.ParameterStyle.SIMPLE,
     schema=BranchIdSchema,
+    required=True,
+)
+# body param
+
+
+class SchemaForRequestBodyApplicationJson(
+    schemas.ComposedSchema,
+):
+
+
+    class MetaOapg:
+        
+        @classmethod
+        @functools.lru_cache()
+        def all_of(cls):
+            # we need this here to make our import statements work
+            # we must store _composed_schemas in here so the code is only run
+            # when we invoke this method. If we kept this at the class
+            # level we would get an error because the class level
+            # code would be run when this module is imported, and these composed
+            # classes don't exist yet because their module has not finished
+            # loading
+            return [
+                StartSimulationBody,
+            ]
+
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+    ) -> 'SchemaForRequestBodyApplicationJson':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
+
+
+request_body_any_type = api_client.RequestBody(
+    content={
+        'application/json': api_client.MediaType(
+            schema=SchemaForRequestBodyApplicationJson),
+    },
     required=True,
 )
 SchemaFor200ResponseBodyApplicationJson = SimulationJob
@@ -133,7 +154,8 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _start_simulation_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -146,8 +168,24 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _start_simulation_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
+
+    @typing.overload
+    def _start_simulation_oapg(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -157,7 +195,8 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _start_simulation_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -170,7 +209,8 @@ class BaseApi(api_client.Api):
 
     def _start_simulation_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -183,7 +223,6 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
@@ -200,29 +239,29 @@ class BaseApi(api_client.Api):
         for k, v in _path_params.items():
             used_path = used_path.replace('{%s}' % k, v)
 
-        prefix_separator_iterator = None
-        for parameter in (
-            request_query_seed,
-        ):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
-
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
         if accept_content_types:
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
+        if body is schemas.unset:
+            raise exceptions.ApiValueError(
+                'The required body parameter has an invalid value of: unset. Set a valid value instead')
+        _fields = None
+        _body = None
+        serialized_data = request_body_any_type.serialize(body, content_type)
+        _headers.add('Content-Type', content_type)
+        if 'fields' in serialized_data:
+            _fields = serialized_data['fields']
+        elif 'body' in serialized_data:
+            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
             method='post'.upper(),
             headers=_headers,
+            fields=_fields,
+            body=_body,
             stream=stream,
             timeout=timeout,
         )
@@ -252,7 +291,8 @@ class StartSimulation(BaseApi):
     @typing.overload
     def start_simulation(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -265,8 +305,24 @@ class StartSimulation(BaseApi):
     @typing.overload
     def start_simulation(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
+
+    @typing.overload
+    def start_simulation(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -276,7 +332,8 @@ class StartSimulation(BaseApi):
     @typing.overload
     def start_simulation(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -289,7 +346,8 @@ class StartSimulation(BaseApi):
 
     def start_simulation(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -297,8 +355,9 @@ class StartSimulation(BaseApi):
         skip_deserialization: bool = False,
     ):
         return self._start_simulation_oapg(
-            query_params=query_params,
+            body=body,
             path_params=path_params,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -312,7 +371,8 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -325,8 +385,24 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
+
+    @typing.overload
+    def post(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -336,7 +412,8 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -349,7 +426,8 @@ class ApiForpost(BaseApi):
 
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[SchemaForRequestBodyApplicationJson,dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/json',
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -357,8 +435,9 @@ class ApiForpost(BaseApi):
         skip_deserialization: bool = False,
     ):
         return self._start_simulation_oapg(
-            query_params=query_params,
+            body=body,
             path_params=path_params,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

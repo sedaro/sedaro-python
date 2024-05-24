@@ -5,6 +5,7 @@ from typing import List
 from sedaro.branches.scenario_branch.sim_client import Simulation
 from sedaro.results.simulation_result import SimulationResult
 from sedaro.results.utils import HFILL, STATUS_ICON_MAP, hfill
+from sedaro.settings import STATUS
 
 
 class StudyResult:
@@ -47,7 +48,7 @@ class StudyResult:
 
     @property
     def status(self) -> str:
-        return self.__metadata['status']
+        return self.__metadata[STATUS]
 
     @property
     def date_created(self) -> dt.datetime:

@@ -3,12 +3,13 @@ import time
 from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
 
 from sedaro import SedaroApiClient
+from sedaro.settings import PRE_RUN_STATUSES, RUNNING, STATUS, TERMINATED
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _job_status_is_pending(job):
-    return job['status'] == 'PENDING'
+    return job[STATUS] in PRE_RUN_STATUSES
 
 
 def _wait_until_passed_pending(simulation_handle):
@@ -23,8 +24,8 @@ def _wait_until_passed_pending(simulation_handle):
 
 
 def _check_job_status_running(job):
-    assert job['status'] == 'RUNNING'
-    print('-', job['status'], '-', round(
+    assert job[STATUS] == RUNNING
+    print('-', job[STATUS], '-', round(
         job['progress']['percentComplete'], 2), '%')
 
 
@@ -71,7 +72,7 @@ def test_run_simulation():
     simulation_handle.terminate()
 
     # Test that handle is still useable
-    assert simulation_handle.status()['status'] == 'TERMINATED'
+    assert simulation_handle.status()[STATUS] == TERMINATED
     simulation_handle.results()
 
 

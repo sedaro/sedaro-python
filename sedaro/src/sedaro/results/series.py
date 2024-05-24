@@ -1,22 +1,14 @@
-import dask.dataframe as dd
 import json
-from functools import cached_property
-import numpy as np
 import os
+from functools import cached_property
 from pathlib import Path
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
-from scipy.interpolate import interp1d
+from .utils import (HFILL, FromFileAndToFileAreDeprecated, bsearch,
+                    get_column_names, hfill)
 
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    PLOTTING_ENABLED = False
-else:
-    PLOTTING_ENABLED = True
-
-from .utils import HFILL, bsearch, get_column_names, hfill, FromFileAndToFileAreDeprecated
-
+if TYPE_CHECKING:
+    import dask.dataframe as dd
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
@@ -87,7 +79,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         return self[subseries_name]
 
     @property
-    def dataframe(self) -> dd.DataFrame:
+    def dataframe(self) -> 'dd.DataFrame':
         '''Get the raw Dask DataFrame for this series.'''
         return self.__series
 
@@ -132,6 +124,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                         ptr = ptr[index]
                     ptr.extend(computed_columns[column])
                 rotated_indexes = tuple([num_indexes] + list(range(num_indexes)))
+                import numpy as np
                 return np.transpose(vals, rotated_indexes).tolist()
 
         else:
@@ -139,6 +132,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     @cached_property
     def values_interpolant(self):
+        import numpy as np
+        from scipy.interpolate import interp1d
         return interp1d(self.mjd, np.asarray(self.values).T)
 
     @property
@@ -179,7 +174,9 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     #     self.__plot(plt.scatter, show, kwargs)
 
     def __plot(self, show, ylabel, elapsed_time, height, xlim, ylim, **kwargs):
-        if not PLOTTING_ENABLED:
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         if self.__has_subseries and not self.__is_singleton_or_vector():
             raise ValueError('Select a specific subseries to plot.')
@@ -223,6 +220,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     @classmethod
     def load(cls, path: Union[str, Path]):
         '''Load a series result from the specified path.'''
+        import dask.dataframe as dd
+
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']
             if archive_type != 'SedaroSeries':
