@@ -3,6 +3,8 @@ name: Test Python Package
 
 on:
   workflow_dispatch: # trigger manually
+  pull_request:
+    types: [opened, ready_for_review]
 
 jobs:
   test: # NOTE: keep test in sync with publish.yml
