@@ -2,10 +2,7 @@
 name: Test Python Package
 
 on:
-  push:
-    branches: ['main', '2024-05-21-ci-pipeline']
-  # trigger manually
-  workflow_dispatch:
+  workflow_dispatch: # trigger manually
 
 jobs:
   test: # NOTE: keep test in sync with publish.yml
