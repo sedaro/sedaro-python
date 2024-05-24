@@ -60,6 +60,11 @@ runs:
     - name: Create config.py
       shell: bash
       run: |
+        echo
+        echo
+        echo ${{ inputs.simplesat-a-t-id }}
+        echo
+        echo
         echo "HOST = '${{ inputs.host }}'" >> tests/config.py
         echo "API_KEY = '${{ inputs.api-key }}'" >> tests/config.py
         echo "AUTH_HANDLE = '${{ inputs.auth-handle }}'" >> tests/config.py
