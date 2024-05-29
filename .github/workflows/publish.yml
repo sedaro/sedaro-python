@@ -6,30 +6,30 @@ on:
       - '[0-9]+.[0-9]+.[0-9]+' # Matches version tags like 1.0.0, 2.1.0, etc.
 
 jobs:
-  test: # NOTE: keep test in sync with test.yml
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.10', '3.9']
-      max-parallel: 1
+  # test: # NOTE: keep test in sync with test.yml
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       python-version: ['3.11', '3.10', '3.9']
+  #     max-parallel: 1
 
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Check out the code
+  #       uses: actions/checkout@v4
 
-      - name: Run tests
-        uses: ./.github/actions/test-action
-        with:
-          python-versions: ${{ matrix.python-version }}
-          # pass secrets b/c action can't access them
-          host: ${{ secrets.HOST }}
-          api-key: ${{ secrets.API_KEY }}
-          auth-handle: ${{ secrets.AUTH_HANDLE }}
-          simplesat-a-t-id: ${{ secrets.SIMPLESAT_A_T_ID }}
-          simplesat-scenario-id: ${{ secrets.SIMPLESAT_SCENARIO_ID }}
-          wildfire-a-t-id: ${{ secrets.WILDFIRE_A_T_ID }}
-          wildfire-scenario-id: ${{ secrets.WILDFIRE_SCENARIO_ID }}
+  #     - name: Run tests
+  #       uses: ./.github/actions/test-action
+  #       with:
+  #         python-versions: ${{ matrix.python-version }}
+  #         # pass secrets b/c action can't access them
+  #         host: ${{ secrets.HOST }}
+  #         api-key: ${{ secrets.API_KEY }}
+  #         auth-handle: ${{ secrets.AUTH_HANDLE }}
+  #         simplesat-a-t-id: ${{ secrets.SIMPLESAT_A_T_ID }}
+  #         simplesat-scenario-id: ${{ secrets.SIMPLESAT_SCENARIO_ID }}
+  #         wildfire-a-t-id: ${{ secrets.WILDFIRE_A_T_ID }}
+  #         wildfire-scenario-id: ${{ secrets.WILDFIRE_SCENARIO_ID }}
 
   publish:
     runs-on: ubuntu-latest
@@ -46,6 +46,7 @@ jobs:
 
       - name: Replace version in pyproject.toml
         run: |
+          cd sedaro
           TAG=${GITHUB_REF#refs/tags/}
           sed -i "s/version = \"0.0.0\"/version = \"$TAG\"/g" pyproject.toml
 
@@ -56,7 +57,6 @@ jobs:
 
       - name: Build the package
         run: |
-          cd sedaro
           python -m build
 
       - name: Publish to PyPI
