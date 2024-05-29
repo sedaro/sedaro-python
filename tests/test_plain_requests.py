@@ -36,7 +36,7 @@ def test_plain_request_CRUD_blocks():
             }]
         }
     )
-    sun_id = res[CRUD][BLOCKS][0]
+    sun_id = res[CRUD][BLOCKS][-1]
 
     res = sedaro.request.patch(
         f'/models/branches/{SIMPLESAT_A_T_ID}/template/',
