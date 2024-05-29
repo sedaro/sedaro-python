@@ -46,9 +46,8 @@ jobs:
 
       - name: Replace version in pyproject.toml
         run: |
-          cd sedaro
           TAG=${GITHUB_REF#refs/tags/}
-          sed -i "s/version = \"0.0.0\"/version = \"$TAG\"/g" pyproject.toml
+          sed -i "s/version = \"0.0.0\"/version = \"$TAG\"/g" sedaro/pyproject.toml
 
       - name: Install dependencies
         run: |
@@ -57,12 +56,11 @@ jobs:
 
       - name: Build the package
         run: |
-          cd sedaro
-          python -m build
+          python -m build sedaro
 
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          python -m twine upload dist/*
+          python -m twine upload sedaro/dist/*
