@@ -2,7 +2,7 @@ import datetime
 
 import numpy as np
 import pytest
-import spiceypy as spice  # type: ignore
+import spiceypy as spice
 
 from sedaro import modsim as ms
 
