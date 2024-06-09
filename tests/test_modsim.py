@@ -1,8 +1,10 @@
 import datetime
+import os
 
 import numpy as np
 import pytest
 import spiceypy as spice
+from pytz import timezone
 
 from sedaro import modsim as ms
 
@@ -11,7 +13,7 @@ def test_time_conversions():
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60390.0190162037
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 22, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60391.0190162037
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 20, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60389.0190162037
-    assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 20, 27, 23, tzinfo=datetime.timezone('EST'))) == 60391.0190162037
+    assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 19, 27, 23, tzinfo=timezone('EST'))) == 60391.0190162037
 
     assert ms.mjd_to_datetime(60390.0190162037) == datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)
     assert ms.mjd_to_datetime(60391.0190162037) == datetime.datetime(2024, 3, 22, 0, 27, 23, tzinfo=datetime.timezone.utc)
@@ -21,22 +23,24 @@ def test_time_conversions():
         ms.datetime_to_mjd(datetime.datetime(2024, 3, 20, 0, 27, 23))
 
 def test_read_csv_time_series():
-    data = ms.read_csv_time_series('./assets/test.csv')
-    assert data['x'] == [1, 4, 7]
-    assert data['y'] == [2, 5, 8]
-    assert data['z'] == [3, 6, 9]
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 18, tzinfo=datetime.timezone.utc)
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 19, tzinfo=datetime.timezone.utc)
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 20, tzinfo=datetime.timezone.utc)
+    path = os.path.dirname(os.path.abspath(__file__))
+    data = ms.read_csv_time_series(f'{path}/assets/test.csv')
+    assert data['x'].tolist() == [1, 4, 7]
+    assert data['y'].tolist() == [2, 5, 8]
+    assert data['z'].tolist() == [3, 6, 9]
+    assert data['time'][0].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 18, tzinfo=datetime.timezone.utc)
+    assert data['time'][1].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 19, tzinfo=datetime.timezone.utc)
+    assert data['time'][2].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 20, tzinfo=datetime.timezone.utc)
 
 def test_read_excel_time_series():
-    data = ms.read_csv_time_series('./assets/test.csv')
-    assert data['x'] == [1, 4, 7]
-    assert data['y'] == [2, 5, 8]
-    assert data['z'] == [3, 6, 9]
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 18, tzinfo=datetime.timezone.utc)
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 19, tzinfo=datetime.timezone.utc)
-    assert data['time'] == datetime.datetime(2024, 6, 8, 15, 14, 20, tzinfo=datetime.timezone.utc)
+    path = os.path.dirname(os.path.abspath(__file__))
+    data = ms.read_excel_time_series(f'{path}/assets/test.xlsx')
+    assert data['x'].tolist() == [1, 4, 7]
+    assert data['y'].tolist() == [2, 5, 8]
+    assert data['z'].tolist() == [3, 6, 9]
+    assert data['time'][0].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 18, tzinfo=datetime.timezone.utc)
+    assert data['time'][1].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 19, tzinfo=datetime.timezone.utc)
+    assert data['time'][2].to_pydatetime() == datetime.datetime(2024, 6, 8, 15, 14, 20, tzinfo=datetime.timezone.utc)
 
 def test_search_time_series():
     assert ms.search_time_series([1, 2, 2, 3], 2) == 3

@@ -3,6 +3,7 @@ import math
 
 import numpy as np
 import pandas as pd
+import pytz
 from dateutil import parser
 
 EPSILON = 1e-6
@@ -22,7 +23,7 @@ def mjd_to_datetime(mjd: float):
 
 def read_csv_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
     '''
-    Read a CSV file with a time column and return a pandas DataFrame with datetime UTC objects for the time column.
+    Read a CSV file with a time column and return a pandas DataFrame with datetime objects for the time column.
 
     Args:
         file_path: Path to the CSV file.
@@ -30,16 +31,20 @@ def read_csv_time_series(file_path: str, time_column_header: str = 'time', **kwa
         **kwargs: Additional keyword arguments to pass to pandas.read_csv.
     
     Returns:
-        pandas.DataFrame: DataFrame with datetime UTC objects for the time column.
+        pandas.DataFrame: DataFrame with datetime objects for the time column.
     '''   
     data = pd.read_csv(file_path, **kwargs)
-    data[time_column_header] = [parser.parse(t) for t in data[time_column_header]]
+    datetimes = [parser.parse(t) for t in data[time_column_header]]
+    for i, dt in enumerate(datetimes):
+        if dt.tzinfo is None:
+            datetimes[i] = pytz.utc.localize(dt)
+    data[time_column_header] = datetimes
     return data
 
 
 def read_excel_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
     '''
-    Read a Excel file with a time column and return a pandas DataFrame with datetime UTC objects for the time column.
+    Read a Excel file with a time column and return a pandas DataFrame with datetime objects for the time column.
 
     Args:
         file_path: Path to the Excel file.
@@ -47,10 +52,21 @@ def read_excel_time_series(file_path: str, time_column_header: str = 'time', **k
         **kwargs: Additional keyword arguments to pass to pandas.read_csv.
     
     Returns:
-        pandas.DataFrame: DataFrame with datetime UTC objects for the time column.
+        pandas.DataFrame: DataFrame with datetime objects for the time column.
     '''   
     data = pd.read_excel(file_path, **kwargs)
-    data[time_column_header] = [parser.parse(t) for t in data[time_column_header]]
+    datetimes = []
+    for dt in data[time_column_header]:
+        if type(dt) is pd.Timestamp:
+            datetimes.append(dt.to_pydatetime())
+        elif type(dt) is datetime.datetime:
+            datetimes.append(dt)
+        else:
+            datetimes.append(parser.parse(dt))
+    for i, dt in enumerate(datetimes):
+        if dt.tzinfo is None:
+            datetimes[i] = pytz.utc.localize(dt)
+    data[time_column_header] = datetimes
     return data
 
 

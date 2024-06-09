@@ -9,7 +9,7 @@ jobs:
   test: # NOTE: keep test in sync with test.yml
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         python-version: ['3.11', '3.10', '3.9']
       max-parallel: 1

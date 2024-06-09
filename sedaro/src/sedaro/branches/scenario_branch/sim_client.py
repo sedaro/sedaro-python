@@ -604,7 +604,7 @@ class SimulationHandle:
 
     def __getitem__(self, key): return self.__job[key]
     def get(self, key, default=None): return self.__job.get(key, default)
-    def __enter__(self): pass
+    def __enter__(self): return self
     def __exit__(self, *args): 
         try:
             self.terminate()

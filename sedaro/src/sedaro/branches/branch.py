@@ -135,7 +135,13 @@ class Branch(Common):
             getattr(self, self.data[BLOCKS][id][TYPE])
         )
 
-    def update(self, blocks=None, delete=None, include_response=False, **fields) -> 'Branch':
+    def update(
+            self, 
+            blocks: 'List[Dict]' = None, 
+            delete: 'List[str]' = None, 
+            include_response=False, 
+            **fields
+    ) -> 'Branch':
         '''
         Method to perform updates to a model with support for bulk update operations.
 
@@ -158,5 +164,5 @@ class Branch(Common):
             Branch: updated `Branch` (Note: the previous `Branch` reference is also updated) if include_response is falsey, else the response dictionary
         '''
 
-        res = self._branch.crud(root=fields, blocks=blocks, delete=delete)
+        res = self._branch.crud(root=dict(fields), blocks=blocks, delete=delete)
         return self if not include_response else res
