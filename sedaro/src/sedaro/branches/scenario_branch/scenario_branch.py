@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ...settings import SCENARIO_TEMPLATE
 from ..blocks import BlockType
@@ -38,6 +37,10 @@ class ScenarioBranch(Branch):
         """
         from .study_client import Study
         return Study(self._sedaro, self)
+    
+    def delete_all_external_state_blocks(self):
+        if existing_externals := self.ExternalState.get_all_ids():
+            self.crud(delete=existing_externals)
 
     # ==============================================================================================================
     # For intellisense

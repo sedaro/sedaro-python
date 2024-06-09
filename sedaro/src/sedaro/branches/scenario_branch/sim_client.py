@@ -9,14 +9,11 @@ import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import (DownloadWorker,
-                                                      ProgressBar)
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
-from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
-                         QUEUED, RUNNING, STATUS)
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
@@ -583,7 +580,6 @@ class Simulation:
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
-
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
     def get(self, key, default=None): return self.__job.get(key, default)
@@ -608,6 +604,12 @@ class SimulationHandle:
 
     def __getitem__(self, key): return self.__job[key]
     def get(self, key, default=None): return self.__job.get(key, default)
+    def __enter__(self): pass
+    def __exit__(self, *args): 
+        try:
+            self.terminate()
+        except:
+            pass
 
     def status(self, err_if_empty: bool = True):
         """Refreshes the local simulation status.
