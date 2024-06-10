@@ -1,5 +1,6 @@
 import datetime
 import math
+import typing
 
 import numpy as np
 import pandas as pd
@@ -70,7 +71,7 @@ def read_excel_time_series(file_path: str, time_column_header: str = 'time', **k
     return data
 
 
-def search_time_series(time_dimension: np.ndarray | list, timestamp: float | datetime.datetime) -> int:
+def search_time_series(time_dimension: typing.Union[np.ndarray, list], timestamp: typing.Union[float, datetime.datetime]) -> int:
     '''
     Proxy for [np.searchsorted](https://numpy.org/doc/stable/reference/generated/numpy.searchsorted.html).
     
@@ -202,7 +203,7 @@ def quaternion_dot(q1: np.ndarray, q2: np.ndarray) -> np.ndarray:
 def random_orthogonal_rotation(
     vector: np.ndarray,
     angle_1sigma: float,
-    random: np.random.RandomState | None = None,
+    random: typing.Optional[np.random.RandomState] = None,
 ) -> np.ndarray:
     '''Calculate a random rotation orthogonal to an input vector.
 
