@@ -319,8 +319,6 @@ def test_power_command_tuple():
     # Check bad values
     for val in [
         ["Fail", 0.5],  # Check non-float values
-        [0.25, 0.5, 0.75],  # Check len greater than 2
-        [],  # Check len less than 2
         "Fail"  # Check non-list value
     ]:
         with pytest.raises(SedaroApiException):

@@ -164,5 +164,5 @@ class Branch(Common):
             Branch: updated `Branch` (Note: the previous `Branch` reference is also updated) if include_response is falsey, else the response dictionary
         '''
 
-        res = self._branch.crud(root=dict(fields), blocks=blocks, delete=delete)
+        res = self._branch.crud(root=fields, blocks=blocks, delete=delete)
         return self if not include_response else res
