@@ -37,7 +37,7 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 ## Modeling
 
-Models in Sedaro can be modified via the `AgentTemplateBranch` and `ScenarioBranch` interfaces. Blocks of a particular type are created and retrieved via the following pattern, where `branch` is an instance of `AgentTemplateBranch` or `ScenarioBranch`:
+[Models](https://docs.sedaro.com/models) in Sedaro can be modified via the `AgentTemplateBranch` and `ScenarioBranch` interfaces. Blocks of a particular type are created and retrieved via the following pattern, where `branch` is an instance of `AgentTemplateBranch` or `ScenarioBranch`:
 
 ```py
 branch.BatteryCell
@@ -328,7 +328,7 @@ Note that requests sent this way to create, read, update, or delete Sedaro Block
 
 ## External Simulation State Dependencies
 
-The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).
+The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).  For detailed documentation on our Models, their Blocks, at the attributes and relationships of each, see our [model docs](https://docs.sedaro.com/models).
 
 **Warning:** The following documentation is a work in progress as we continue to evolve this feature. It is recommended that you reach out to Sedaro Application Engineering for assistance using this capability while we mature the documentation for it.
 
