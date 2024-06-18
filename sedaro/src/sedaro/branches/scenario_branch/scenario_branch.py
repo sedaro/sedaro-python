@@ -1,12 +1,12 @@
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
+from ... import modsim as ms
 from ...settings import SCENARIO_TEMPLATE
 from ..blocks import BlockType
 from ..branch import Branch
-import ...modsim as ms
-from datetime import datetime, UTC
 
 if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
@@ -47,7 +47,7 @@ class ScenarioBranch(Branch):
 
     def set_start_time_to_now(self, elapsed_time_seconds):
         """Set the start time of the scenario to the current time and the stop time to the current time plus the passed elapsed time in seconds."""
-        start_time_mjd = ms.datetime_to_mjd(datetime.datetime.now(UTC))
+        start_time_mjd = ms.datetime_to_mjd(datetime.now(UTC))
         return self.clockConfig.update(
             startTime=start_time_mjd,
             stopTime=start_time_mjd+(elapsed_time_seconds/86400)

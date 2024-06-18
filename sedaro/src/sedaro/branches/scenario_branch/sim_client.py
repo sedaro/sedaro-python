@@ -179,19 +179,39 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
-    def start(self, wait=False, timeout=None) -> 'SimulationHandle':
+    def start(
+        self, 
+        wait=False, 
+        timeout=None, 
+        label=None,
+        capacity=None,
+        seed=None,
+        **kwargs,
+    ) -> 'SimulationHandle':
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
 
         Args:
             wait (bool, optional): Triggers waiting for simulation to deploy and transition to `RUNNING` before returning. Defaults to `False`.
             timeout (int, optional): Seconds to wait for simulation to deploy and transition to `RUNNING` before raising an error. Defaults to `None`.
+            label (str, optional): A label to assign to the simulation job. Defaults to `None`.
+            capacity (int, optional): The capacity to allocate to the simulation. Defaults to using the lesser of the Workspace capacity and the number of Agents in the Scenario.
+            seed (int, optional): The pseudorandom seed to use for the simulation. Defaults to the Simulation Service's default.
+            **kwargs: Additional keyword arguments to pass to the simulation job as part of the HTTP request body.
 
         Returns:
             SimulationHandle
         """
+        body = {**kwargs}
+        if label is not None:
+            body['label'] = label
+        if capacity is not None:
+            body['capacity'] = capacity
+        if seed is not None:
+            body['seed'] = seed
+            
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
-                {},
+                body,
                 path_params={'branchId': self.__branch_id},
                 **COMMON_API_KWARGS
             )
