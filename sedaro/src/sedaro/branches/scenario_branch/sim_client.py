@@ -12,6 +12,7 @@ from urllib3.response import HTTPResponse
 from sedaro.branches.scenario_branch.download import (DownloadWorker,
                                                       ProgressBar)
 from sedaro.results.simulation_result import SimulationResult
+from sedaro.stats.stats import SimulationStats
 
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
@@ -582,6 +583,21 @@ class Simulation:
             time.sleep(retry_interval)
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+
+    def stats(
+        self,
+        job_id: str = None,
+        streams: List[Tuple[str, ...]] = None,
+    ) -> SimulationStats:
+        pass
+
+    def stats_poll(
+        self,
+        job_id: str = None,
+        streams: List[Tuple[str, ...]] = None,
+        retry_interval: int = 2,
+    ) -> SimulationStats:
+        pass
 
 
 class SimulationJob:

@@ -5,7 +5,12 @@ class AgentStats:
     pass
 
 class BlockStats:
-    pass
+    def __init__(self, block_name, stats):
+        self.__block_name = block_name
+        self.__stats = stats
+
+    def series(self, series_name):
+        return SeriesStats(series_name, self.__stats[series_name])
 
 class SeriesStats:
     def __init__(self, series, stats):
