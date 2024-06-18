@@ -340,6 +340,8 @@ class Simulation:
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
+                if 'stats' in _response:
+                    download_manager.update_stats(_response['stats'])
             else:
                 is_v3 = False
             if response.status != 200:
@@ -357,6 +359,8 @@ class Simulation:
                     download_manager.ingest(_page['series'])
                     download_manager.update_metadata(_page['meta'])
                     try:
+                        if 'stats' in _page:
+                            download_manager.update_stats(_page['stats'])
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
                             ctoken = _page['meta']['continuationToken']
@@ -475,7 +479,11 @@ class Simulation:
         stream_results = {}
         for download_manager in download_managers:
             stream_results.update(download_manager.streams)
-        return {'meta': download_managers[0].finalize_metadata(download_managers[1:]), 'series': stream_results}
+        return {
+            'meta': download_managers[0].finalize_metadata(download_managers[1:]),
+            'stats': download_managers[0].finalize_stats(download_managers[1:]),
+            'series': stream_results
+        }
 
     def results(
         self,
@@ -625,7 +633,7 @@ class Simulation:
         streams: List[Tuple[str, ...]] = None,
         retry_interval: int = 2,
     ) -> SimulationStats:
-        pass
+        NotImplemented
 
 
 class SimulationJob:
