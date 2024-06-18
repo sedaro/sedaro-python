@@ -131,7 +131,10 @@ class DownloadWorker:
         self.stats = stats
 
     def update_stats(self, new_stats: dict):
-        self.stats.update(new_stats)
+        for stream in new_stats:
+            if stream not in self.stats:
+                self.stats[stream] = {}
+            self.stats[stream].update(new_stats[stream])
 
     def finalize_stats(self, others: "list[DownloadWorker]"):
         for other in others:
