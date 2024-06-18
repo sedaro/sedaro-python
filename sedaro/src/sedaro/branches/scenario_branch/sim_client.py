@@ -584,12 +584,40 @@ class Simulation:
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
+    def __stats(
+        self,
+        job: 'SimulationHandle',
+        streams: List[Tuple[str, ...]] = None,
+    ) -> SimulationStats:
+        sim_id = job['dataArray']
+        sim_metadata = self.__get_metadata(sim_id)
+        if streams is not None:
+            streams = self.__get_filtered_streams(streams, sim_metadata)
+
+        stats = {}
+        request_url = f'/data/{sim_id}/stats/'
+        if streams:
+            request_url += f"?streams={streams}"
+
+        # get first page
+        fast_fetcher = FastFetcher(self.__sedaro)
+        response = fast_fetcher.get(request_url).parse()
+        stats.update(response['stats'])
+        while 'continuationToken' in response['meta']:
+            token = response['meta']['continuationToken']
+            request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
+            response = fast_fetcher.get(request_url).parse()
+            stats.update(response['stats'])
+
+        return SimulationStats(stats)
+
     def stats(
         self,
         job_id: str = None,
         streams: List[Tuple[str, ...]] = None,
     ) -> SimulationStats:
-        pass
+        job = self.status(job_id)
+        return self.__stats(job, streams=streams)
 
     def stats_poll(
         self,
