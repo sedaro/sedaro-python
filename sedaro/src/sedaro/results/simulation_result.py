@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Union
 
 from ..settings import STATUS, SUCCEEDED
+from ..stats.stats import SimulationStats
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
                     _block_type_in_supers, _get_agent_id_name_map,
@@ -30,7 +31,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         }
         self.__branch = simulation['branch']
         self.__data = data
-        self.__meta: Dict = data['meta']
+        self.__meta: dict = data['meta']
+        self.stats: SimulationStats = SimulationStats(data['stats'])
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(

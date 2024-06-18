@@ -482,7 +482,7 @@ class Simulation:
         return {
             'meta': download_managers[0].finalize_metadata(download_managers[1:]),
             'stats': download_managers[0].finalize_stats(download_managers[1:]),
-            'series': stream_results
+            'series': stream_results,
         }
 
     def results(
