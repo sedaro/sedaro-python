@@ -434,8 +434,8 @@ The following modeling and simuation utility methods are available for convenien
 ```python
 from sedaro import modsim as ms
 
-ms.datetime_to_mjd(dt: datetime.datetime):
-ms.mjd_to_datetime(mjd: float):
+ms.datetime_to_mjd(dt: datetime.datetime) -> float:
+ms.mjd_to_datetime(mjd: float) -> datetime.datetime:
 ms.read_csv_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
 ms.read_excel_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
 ms.search_time_series(time_dimension: np.ndarray | list, timestamp: float | datetime.datetime) -> int:
@@ -449,9 +449,11 @@ ms.quaternion_dot(q1: np.ndarray, q2: np.ndarray) -> np.ndarray:
 ms.random_orthogonal_rotation(vector: np.ndarray, angle_1sigma: float, random: np.random.RandomState | None = None) -> np.ndarray:
 ms.euler_axis_angle2quaternion(axis, angle):
 ms.vectors2angle(vector1: np.ndarray, vector2: np.ndarray) -> float:
+ms.eci_vector_to_body(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
+ms.body_vector_to_eci(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
 ms.quaternion_conjugate(quaternion: np.ndarray) -> np.ndarray:
 ms.rotmat2quaternion(rot_mat: np.ndarray) -> np.ndarray:
-ms.quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float):
+ms.quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float) -> np.ndarray:
 ms.invert3(m: np.ndarray) -> np.ndarray:
 ms.unit3(vec: np.ndarray) -> np.ndarray:
 ```

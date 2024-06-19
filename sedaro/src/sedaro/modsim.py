@@ -11,13 +11,13 @@ EPSILON = 1e-6
 REF_DATETIME = datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)
 
 
-def datetime_to_mjd(dt: datetime.datetime):
+def datetime_to_mjd(dt: datetime.datetime) -> float:
     '''Convert a UTC datetime.datetime to a Modified Julian Date float.'''
     assert dt.tzinfo is not None, "Datetime must have a timezone. You can define UTC datetimes via the `tzinfo=datetime.timezone.utc` argument."
     return 60390.0190162037 + (dt - REF_DATETIME).total_seconds() / 86400
 
 
-def mjd_to_datetime(mjd: float):
+def mjd_to_datetime(mjd: float) -> datetime.datetime:
     '''Convert Modified Julian Date float to a UTC datetime.datetime.'''
     return REF_DATETIME + datetime.timedelta(seconds=((mjd - 60390.0190162037)*86400))
 
@@ -254,6 +254,18 @@ def vectors2angle(vector1: np.ndarray, vector2: np.ndarray) -> float:
     return angle
 
 
+def eci_vector_to_body(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
+    '''Rotate a vector from ECI into the body frame given a `body_eci` quaternion'''
+    rotation = quaternion2attitude_mat(attitude_body_eci)
+    return rotation.dot(vector_eci)
+
+
+def body_vector_to_eci(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
+    '''Rotate a vector from the body frame into ECI given a `body_eci` quaternion'''
+    rotation = quaternion2attitude_mat(attitude_body_eci).T
+    return rotation.dot(vector_eci)
+
+
 def quaternion_conjugate(quaternion: np.ndarray) -> np.ndarray:
     quaternion_conj = np.array(-quaternion)
     quaternion_conj[3] = -quaternion_conj[3]
@@ -283,7 +295,7 @@ def rotmat2quaternion(rot_mat: np.ndarray) -> np.ndarray:
     return quaternion / np.linalg.norm(quaternion)
 
 
-def quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float):
+def quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float) -> np.ndarray:
     '''
     Source: https://mariogc.com/post/angular-velocity-quaternions/
     Updated for our quaternion convention
