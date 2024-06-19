@@ -4,8 +4,8 @@ class SimulationStats:
     def __reorganize_stats(stats, metadata):
         pass
 
-    def __init__(self, stats, metadata):
-        self.__stats = self.__reorganize_stats(stats, metadata)
+    def __init__(self, stats, metadata=None, preorganized=False):
+        self.__stats = self.__reorganize_stats(stats, metadata) if not preorganized else stats
 
     def agent(self, id_or_name: str):
         return AgentStats(agent_name, self.__stats[agent_name])
@@ -23,7 +23,7 @@ class SimulationStats:
     @classmethod
     def load(cls, path: str):
         with open(path, 'r') as f:
-            return cls(json.load(f))
+            return cls(json.load(f), preorganized=True)
 
 
 class AgentStats:
