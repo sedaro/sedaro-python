@@ -32,7 +32,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        self.stats: SimulationStats = SimulationStats(data['stats'])
+        self.stats: SimulationStats = SimulationStats(data['stats'], self.__meta)
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(

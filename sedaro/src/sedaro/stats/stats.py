@@ -1,11 +1,14 @@
 import json
 
 class SimulationStats:
-    def __init__(self, stats):
-        self.__stats = stats
+    def __reorganize_stats(stats, metadata):
+        pass
+
+    def __init__(self, stats, metadata):
+        self.__stats = self.__reorganize_stats(stats, metadata)
 
     def agent(self, id_or_name: str):
-        NotImplemented
+        return AgentStats(agent_name, self.__stats[agent_name])
 
     def summarize(self):
         NotImplemented

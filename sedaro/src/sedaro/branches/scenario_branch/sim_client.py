@@ -611,13 +611,15 @@ class Simulation:
         fast_fetcher = FastFetcher(self.__sedaro)
         response = fast_fetcher.get(request_url).parse()
         stats.update(response['stats'])
+        metadata = response['meta']
+        # get additional pages
         while 'continuationToken' in response['meta']:
             token = response['meta']['continuationToken']
             request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
             response = fast_fetcher.get(request_url).parse()
             stats.update(response['stats'])
 
-        return SimulationStats(stats)
+        return SimulationStats(stats, metadata)
 
     def stats(
         self,
