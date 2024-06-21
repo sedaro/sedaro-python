@@ -147,7 +147,12 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
     def stats(self, *args):
         if not self.__has_subseries:
-            return tuple(self.__stats[self.__prefix][k] for k in args)
+            if len(args) == 0:
+                return self.__stats[self.__prefix]
+            elif len(args) == 1:
+                return self.__stats[self.__prefix][args[0]]
+            else:
+                return tuple(self.__stats[self.__prefix][k] for k in args)
         else:
             NotImplemented
 
