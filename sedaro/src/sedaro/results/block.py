@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str):
+    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str, stp: list):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -39,6 +39,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for variable in self.__column_index[stream]:
                 self.__variables.append(variable)
         self.__variables = sorted(list(self.__variables))
+        self.stats_to_plot = stp
 
     def __getattr__(self, name: str) -> SedaroSeries:
         '''Get a particular variable by name.
@@ -53,7 +54,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 for engine in self.__stats:
                     for k in self.__stats[engine]:
                         flattened_stats[k] = self.__stats[engine][k]
-                return SedaroSeries(name, self.__series[stream], flattened_stats, self.__column_index[stream][name], prefix)
+                return SedaroSeries(name, self.__series[stream], flattened_stats, self.__column_index[stream][name], prefix, self.stats_to_plot)
         else:
             raise ValueError(f'Variable "{name}" not found.')
 

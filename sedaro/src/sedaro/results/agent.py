@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
-    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None, stats: dict = None):
+    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None, stats: dict = None, stp: list = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -35,6 +35,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             reverse=True
         )
         self.__initial_state = initial_state
+        self.stats_to_plot = stp
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
@@ -75,7 +76,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for stream in self.__series:
             if stream in self.__column_index[id_]:
                 block_streams[stream] = self.__series[stream]
-        return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_], prefix)
+        return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_], prefix, self.stats_to_plot)
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''

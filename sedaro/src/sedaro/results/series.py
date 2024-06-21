@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data, stats, column_index, prefix):
+    def __init__(self, name, data, stats, column_index, prefix, stp: list):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -38,6 +38,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             self.__dtype = self.__series.dtypes.to_dict()
         else:
             self.__dtype = self.__series.dtypes.iloc[0]
+        self.stats_to_plot = stp
 
     def __repr__(self):
         return f"Series({self.name})"
@@ -76,7 +77,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
+                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}', self.stats_to_plot)
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -149,6 +150,39 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             return tuple(self.__stats[self.__prefix][k] for k in args)
         else:
             NotImplemented
+
+    def plot_stats(self, show=True, xlabel=None):
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            raise ValueError('Plotting is disabled because matplotlib could not be imported.')
+        try:
+            if self.__has_subseries:
+                NotImplemented # FIXME
+            else:
+                if not self.__stats:
+                    raise ValueError('No statistics available to plot.')
+                else:
+                    position = len(self.stats_to_plot)
+                    self.stats_to_plot.append({
+                        'label': xlabel if xlabel is not None else self.__prefix,
+                        'min': self.__stats[self.__prefix]['min'],
+                        'max': self.__stats[self.__prefix]['max'],
+                        'avg': self.__stats[self.__prefix]['average'],
+                        'pos': position,
+                    })
+                    if show:
+                        for box in self.stats_to_plot:
+                            plt.plot([box['pos'], box['pos']], [box['min'], box['max']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['min'], box['min']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['max'], box['max']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']], color='red', linewidth=1.5)
+                        plt.xticks([box['pos'] for box in self.stats_to_plot], [box['label'] for box in self.stats_to_plot], rotation=15)
+                        plt.tight_layout()
+                        plt.show()
+                        self.stats_to_plot.clear()
+        except:
+            raise ValueError('The data of this series do not have the necessary statistics to plot.')
 
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
