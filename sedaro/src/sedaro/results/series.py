@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data, column_index, prefix):
+    def __init__(self, name, data, stats, column_index, prefix):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -30,6 +30,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data[self.__column_names]
+        self.__stats = {}
+        for k in stats:
+            if k == prefix or k.startswith(prefix + '.'):
+                self.__stats[k] = stats[k]
         if self.__has_subseries:
             self.__dtype = self.__series.dtypes.to_dict()
         else:
@@ -72,7 +76,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
+                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''

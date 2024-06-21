@@ -49,7 +49,11 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         prefix = f"{self.__prefix}{name}"
         for stream in self.__column_index:
             if name in self.__column_index[stream]:
-                return SedaroSeries(name, self.__series[stream], self.__column_index[stream][name], prefix)
+                flattened_stats = {}
+                for engine in self.__stats:
+                    for k in self.__stats[engine]:
+                        flattened_stats[k] = self.__stats[engine][k]
+                return SedaroSeries(name, self.__series[stream], flattened_stats, self.__column_index[stream][name], prefix)
         else:
             raise ValueError(f'Variable "{name}" not found.')
 
