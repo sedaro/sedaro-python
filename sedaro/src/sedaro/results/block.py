@@ -170,7 +170,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
         print("❓ Query statistics with .<VARIABLE_NAME>.stats.<STAT_NAME>.")
-        print("📊 Variables with stats available are marked with a \033[1;31m*\033[0;0m.")
+        print("📊 Variables with statistics available are marked with a \033[1;31m*\033[0;0m.")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
