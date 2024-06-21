@@ -1,5 +1,7 @@
 import json
 
+STATS_AVAILABLE = ['max', 'min', 'negativeMax', 'positiveMax', 'integral', 'average', 'absAvg']
+
 class SimulationStats:
     def __reorganize_stats(stats, metadata):
         pass

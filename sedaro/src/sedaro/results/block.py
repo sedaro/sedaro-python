@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Generator, Union
 
+from ..stats.stats import STATS_AVAILABLE
 from .series import SedaroSeries
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, get_column_names,
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict, column_index: dict, prefix: str):
+    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -28,6 +29,9 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
+        self.__stats = {}
+        for k in stats:
+            self.__stats[k] = {kk: vv for kk, vv in stats[k].items() if kk.startswith(prefix)}
         self.__column_index = column_index
         self.__prefix = prefix
         self.__variables = []
@@ -140,6 +144,13 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 engines[agent.replace('.', '/')] = df
         return cls(structure, engines, column_index, prefix)
 
+    def __has_stats(self, variable: str) -> bool:
+        for engine in self.__stats:
+            for series in self.__stats[engine]:
+                if series.startswith(self.__prefix + variable):
+                    return True
+        return False
+
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
         hfill()
@@ -154,9 +165,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
         print("\n📋 Variables Available")
         for variable in self.variables:
-            print(f'    • {variable}')
+            stats_marker = '\033[1;31m*\033[0;0m' if self.__has_stats(variable) else ' '
+            print(f'    • {stats_marker} {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
+        print("❓ Query statistics with .<VARIABLE_NAME>.stats.<STAT_NAME>.")
+        print("📊 Variables with stats available are marked with a \033[1;31m*\033[0;0m.")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}

@@ -75,7 +75,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for stream in self.__series:
             if stream in self.__column_index[id_]:
                 block_streams[stream] = self.__series[stream]
-        return SedaroBlockResult(block_structure, block_streams, self.__column_index[id_], prefix)
+        return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_], prefix)
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''

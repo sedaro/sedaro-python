@@ -117,7 +117,6 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             if stream_id.startswith(agent_id):
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
-        print(f"Filtering by agent id: {agent_id}")
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         filtered_stats = {k: v for k, v in self.__stats.items() if k.startswith(agent_id)}
         return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index[agent_id], initial_state=initial_state, stats=filtered_stats)
