@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
-    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None):
+    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None, stats: dict = None):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -25,6 +25,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         self.__column_index = column_index
         self.__block_structures = block_structures
         self.__series = series
+        self.__stats = stats
         self.__block_uuids = [k for k in self.__column_index]
         self.__block_ids = sorted(set(
             block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'

@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Union
 
 from ..settings import STATUS, SUCCEEDED
-from ..stats.stats import SimulationStats
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
                     _block_type_in_supers, _get_agent_id_name_map,
@@ -32,7 +31,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        self.stats: SimulationStats = SimulationStats(data['stats'], self.__meta)
+        # self.stats: SimulationStats = SimulationStats(data['stats'], self.__meta)
+        self.__stats = data['stats'] if 'stats' in data else {}
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(
@@ -117,8 +117,10 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             if stream_id.startswith(agent_id):
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
+        print(f"Filtering by agent id: {agent_id}")
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index[agent_id], initial_state=initial_state)
+        filtered_stats = {k: v for k, v in self.__stats.items() if k.startswith(agent_id)}
+        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index[agent_id], initial_state=initial_state, stats=filtered_stats)
 
     def save(self, path: Union[str, Path]):
         '''Save the simulation result to a directory with the specified path.'''

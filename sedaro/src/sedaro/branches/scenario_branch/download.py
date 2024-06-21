@@ -141,6 +141,9 @@ class DownloadWorker:
             self.update_stats(other.stats)
         return self.stats
 
+    def add_metadata(self, metadata: dict):
+        self.metadata = metadata
+
     def update_metadata(self, new_metadata):
         for k in new_metadata['counts']:
             if k not in self.metadata['counts']:
