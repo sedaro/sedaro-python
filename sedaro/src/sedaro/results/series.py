@@ -144,6 +144,12 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def duration(self):
         return (self.mjd[-1] - self.mjd[0]) * 86400
 
+    def stats(self, *args):
+        if not self.__has_subseries:
+            return tuple(self.__stats[self.__prefix][k] for k in args)
+        else:
+            NotImplemented
+
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
         if self.__has_subseries:
@@ -250,20 +256,28 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("\n📑 This series has subseries.")
             print(f"\n🗂️ Value data types are:")
             for key, value in self.__dtype.items():
+                stats_marker = '\033[0;32m*\033[0;0m' if key in self.__stats else ' '
                 name_without_prefix = key[len(self.__prefix) + 1:]
                 if value == 'None':
-                    print(f"    - '{name_without_prefix}': All entries in this subseries are None")
+                    print(f"    - {stats_marker} '{name_without_prefix}': All entries in this subseries are None")
                 else:
-                    print(f"    - '{name_without_prefix}': '{value}'")
+                    print(f"    - {stats_marker} '{name_without_prefix}': '{value}'")
 
         else:
             if self.__dtype == 'None':
                 print('\n⛔ All entries in this series are None')
             else:
                 print(f"\n🗂️ Value data type is '{self.__dtype}'")
+            if self.__stats:
+                print('\n📊 Statistics:')
+                for k in self.__stats[self.__prefix]:
+                    print(f"    - {k}: {self.__stats[self.__prefix][k]}")
 
         hfill()
         if self.__has_subseries:
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
+            print("❓ Query statistics with [<SUBSERIES_NAME>].stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
+            print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
+            print("📊 Available statistics: max, min, negativeMax, positiveMax, integral, average, absAvg")
         else:
             print("❓ Call .plot to visualize results")
