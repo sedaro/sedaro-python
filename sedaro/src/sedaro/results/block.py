@@ -165,12 +165,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
         print("\n📋 Variables Available")
         for variable in self.variables:
-            stats_marker = '\033[1;31m*\033[0;0m' if self.__has_stats(variable) else ' '
+            stats_marker = '\033[0;32m*\033[0;0m' if self.__has_stats(variable) else ' '
             print(f'    • {stats_marker} {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
         print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
-        print("📊 Variables with statistics available are marked with a \033[1;31m*\033[0;0m")
+        print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
         print(f"📊 Available statistics: {', '.join(STATS_AVAILABLE)}")
 
     def value_at(self, mjd):
