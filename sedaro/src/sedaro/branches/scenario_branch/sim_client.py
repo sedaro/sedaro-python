@@ -492,7 +492,8 @@ class Simulation:
         stop: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        num_workers: int = 2
+        num_workers: int = 2,
+        include: List[str] = ['series', 'stats'],
     ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
@@ -543,6 +544,9 @@ class Simulation:
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
+        # FIXME:
+        if 'stats' not in include:
+            del data['stats']
         return SimulationResult(job, data)
 
     def results_poll(
@@ -688,12 +692,14 @@ class SimulationHandle:
         return self
 
     def results(
-            self,
-            start: float = None,
-            stop: float = None,
-            streams: Optional[List[Tuple[str, ...]]] = None,
-            sampleRate: int = None,
-            num_workers: int = 2) -> SimulationResult:
+        self,
+        start: float = None,
+        stop: float = None,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
+        include: List[str] = ['series', 'stats']
+    ) -> SimulationResult:
         """Query simulation results.
 
         If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it
@@ -736,7 +742,7 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
+        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers, include=include)
 
     def results_poll(
         self,

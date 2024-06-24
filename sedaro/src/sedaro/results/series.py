@@ -285,7 +285,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             prefix = meta['prefix']
             stats = meta['stats'] if 'stats' in meta else {}
         data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data, column_index, prefix)
+        return cls(name, data, column_index, prefix, stats)
 
     def summarize(self):
         hfill()
