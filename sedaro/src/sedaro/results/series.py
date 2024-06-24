@@ -332,3 +332,4 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
         else:
             print("❓ Call .plot to visualize results")
+            print("❓ Call .plot_stats to visualize statistics")
