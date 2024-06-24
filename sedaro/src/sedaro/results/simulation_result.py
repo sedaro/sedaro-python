@@ -141,7 +141,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             df.to_parquet(agent_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-                      'parquet_files': parquet_files}, fp)
+                      'stats': self.__stats, 'parquet_files': parquet_files}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
@@ -157,6 +157,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
+            data['stats'] = contents['stats']
         data['series'] = {}
         try:
             for agent in contents['parquet_files']:

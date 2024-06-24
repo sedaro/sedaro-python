@@ -121,6 +121,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
                 'parquet_files': parquet_files,
+                'stats': self.__stats,
             }, fp)
         print(f"Block result saved to {path}.")
 
@@ -138,6 +139,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             structure = meta['structure']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            stats = meta['stats'] if 'stats' in meta else {}
         engines = {}
         try:
             for agent in meta['parquet_files']:
@@ -147,7 +149,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for agent in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, column_index, prefix)
+        return cls(structure, engines, column_index, prefix, stats)
 
     def __has_stats(self, variable: str) -> bool:
         for engine in self.__stats:
@@ -176,7 +178,6 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         print("❓ Query variables with .<VARIABLE_NAME>")
         print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
         print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
-        print(f"📊 Available statistics: {', '.join(STATS_AVAILABLE)}")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}

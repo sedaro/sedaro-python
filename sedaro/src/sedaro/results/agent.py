@@ -104,6 +104,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'block_structures': self.__block_structures,
                 'column_index': self.__column_index,
                 'parquet_files': parquet_files,
+                'stats': self.__stats,
             }, fp)
         print(f"Agent result saved to {path}.")
 
@@ -122,6 +123,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
             column_index = meta['column_index']
+            stats = meta['stats'] if 'stats' in meta else {}
         engines = {}
         try:
             for engine in meta['parquet_files']:
@@ -131,7 +133,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             for engine in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{engine}")
                 engines[engine.replace('.', '/')] = df
-        return cls(name, block_structures, engines, column_index, initial_state)
+        return cls(name, block_structures, engines, column_index, initial_state, stats)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

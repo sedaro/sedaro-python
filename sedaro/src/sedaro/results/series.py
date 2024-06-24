@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 from functools import cached_property
@@ -30,6 +31,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data[self.__column_names]
+        self.__initial_stats = copy.deepcopy(stats)
         self.__stats = {}
         for k in stats:
             if k == prefix or k.startswith(prefix + '.'):
@@ -262,6 +264,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 'name': self.__name,
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
+                'stats': self.__initial_stats,
             }, fp)
         self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
@@ -280,6 +283,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             name = meta['name']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            stats = meta['stats'] if 'stats' in meta else {}
         data = dd.read_parquet(f"{path}/data.parquet")
         return cls(name, data, column_index, prefix)
 
@@ -317,6 +321,5 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
             print("❓ Query statistics with [<SUBSERIES_NAME>].stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
             print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
-            print("📊 Available statistics: max, min, negativeMax, positiveMax, integral, average, absAvg")
         else:
             print("❓ Call .plot to visualize results")
