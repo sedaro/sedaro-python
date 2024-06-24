@@ -156,7 +156,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             else:
                 return tuple(self.__stats[self.__prefix][k] for k in args)
         else:
-            NotImplemented
+            if len(args) == 0:
+                return {self.name + '.' + self.prefix: self.__getattr__(k).stats() for k in self.__stats}
 
     def plot_stats(self, show=True, xlabel=None):
         try:

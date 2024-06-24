@@ -12,7 +12,6 @@ from urllib3.response import HTTPResponse
 from sedaro.branches.scenario_branch.download import (DownloadWorker,
                                                       ProgressBar)
 from sedaro.results.simulation_result import SimulationResult
-from sedaro.stats.stats import SimulationStats
 
 from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
@@ -546,7 +545,7 @@ class Simulation:
         )
         # FIXME:
         if 'stats' not in include:
-            del data['stats']
+            data['stats'] = {}
         return SimulationResult(job, data)
 
     def results_poll(
@@ -596,50 +595,50 @@ class Simulation:
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
-    def __stats(
-        self,
-        job: 'SimulationHandle',
-        streams: List[Tuple[str, ...]] = None,
-    ) -> SimulationStats:
-        sim_id = job['dataArray']
-        sim_metadata = self.__get_metadata(sim_id)
-        if streams is not None:
-            streams = self.__get_filtered_streams(streams, sim_metadata)
+    # def __stats(
+    #     self,
+    #     job: 'SimulationHandle',
+    #     streams: List[Tuple[str, ...]] = None,
+    # ) -> SimulationStats:
+    #     sim_id = job['dataArray']
+    #     sim_metadata = self.__get_metadata(sim_id)
+    #     if streams is not None:
+    #         streams = self.__get_filtered_streams(streams, sim_metadata)
 
-        stats = {}
-        request_url = f'/data/{sim_id}/stats/'
-        if streams:
-            request_url += f"?streams={streams}"
+    #     stats = {}
+    #     request_url = f'/data/{sim_id}/stats/'
+    #     if streams:
+    #         request_url += f"?streams={streams}"
 
-        # get first page
-        fast_fetcher = FastFetcher(self.__sedaro)
-        response = fast_fetcher.get(request_url).parse()
-        stats.update(response['stats'])
-        metadata = response['meta']
-        # get additional pages
-        while 'continuationToken' in response['meta']:
-            token = response['meta']['continuationToken']
-            request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
-            response = fast_fetcher.get(request_url).parse()
-            stats.update(response['stats'])
+    #     # get first page
+    #     fast_fetcher = FastFetcher(self.__sedaro)
+    #     response = fast_fetcher.get(request_url).parse()
+    #     stats.update(response['stats'])
+    #     metadata = response['meta']
+    #     # get additional pages
+    #     while 'continuationToken' in response['meta']:
+    #         token = response['meta']['continuationToken']
+    #         request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
+    #         response = fast_fetcher.get(request_url).parse()
+    #         stats.update(response['stats'])
 
-        return SimulationStats(stats, metadata)
+    #     return SimulationStats(stats, metadata)
 
-    def stats(
-        self,
-        job_id: str = None,
-        streams: List[Tuple[str, ...]] = None,
-    ) -> SimulationStats:
-        job = self.status(job_id)
-        return self.__stats(job, streams=streams)
+    # def stats(
+    #     self,
+    #     job_id: str = None,
+    #     streams: List[Tuple[str, ...]] = None,
+    # ) -> SimulationStats:
+    #     job = self.status(job_id)
+    #     return self.__stats(job, streams=streams)
 
-    def stats_poll(
-        self,
-        job_id: str = None,
-        streams: List[Tuple[str, ...]] = None,
-        retry_interval: int = 2,
-    ) -> SimulationStats:
-        NotImplemented
+    # def stats_poll(
+    #     self,
+    #     job_id: str = None,
+    #     streams: List[Tuple[str, ...]] = None,
+    #     retry_interval: int = 2,
+    # ) -> SimulationStats:
+    #     NotImplemented
 
 
 class SimulationJob:

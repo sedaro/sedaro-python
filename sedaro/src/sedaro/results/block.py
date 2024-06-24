@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Generator, Union
 
-from ..stats.stats import STATS_AVAILABLE
 from .series import SedaroSeries
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, get_column_names,
@@ -68,6 +67,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     def __repr__(self) -> str:
         return f'SedaroBlockResult({self.name})'
+
+    def subst_name(self, key):
+        if self.__name == '<Unnamed Block>':
+            return key
+        else:
+            return '.'.join([self.__name] + key.split('.')[1:])
 
     @property
     def name(self):
@@ -181,3 +186,26 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
+
+    def stats(self, *args):
+        if len(args) == 0:
+            cleaned_stats = {}
+            for agent in self.__stats:
+                for key in self.__stats[agent]:
+                    cleaned_stats[self.subst_name(key)] = self.__stats[agent][key]
+            return cleaned_stats
+        elif len(args) == 1:
+            cleaned_stats = {}
+            for agent in self.__stats:
+                for key in self.__stats[agent]:
+                    cleaned_stats[self.subst_name(key)] = self.__stats[agent][key][args[0]]
+            return cleaned_stats
+        else:
+            dicts_to_return = []
+            for arg in args:
+                cleaned_stats = {}
+                for agent in self.__stats:
+                    for key in self.__stats[agent]:
+                        cleaned_stats[self.subst_name(key)] = self.__stats[agent][key][arg]
+                dicts_to_return.append(cleaned_stats)
+            return tuple(dicts_to_return)
