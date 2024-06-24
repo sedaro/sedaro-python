@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data, stats, column_index, prefix, stp: list):
+    def __init__(self, name, data, stats, column_index, prefix, stp: list, block_name=None):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -25,6 +25,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__column_index = column_index
         self.__has_subseries = len(self.__column_index) > 0
         self.__column_names = get_column_names(self.__column_index, self.__prefix)
+        self.__block_name = block_name if block_name != '<Unnamed Block>' else None
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError:  # used for model_at, in which mjd has already been computed
@@ -79,7 +80,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}', self.stats_to_plot)
+                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}', self.stats_to_plot, block_name=self.__block_name)
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -147,6 +148,12 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     def duration(self):
         return (self.mjd[-1] - self.mjd[0]) * 86400
 
+    def subst_name(self, key):
+        if self.__block_name is None:
+            return key
+        else:
+            return '.'.join([self.__block_name] + key.split('.')[1:])
+
     def stats(self, *args):
         if not self.__has_subseries:
             if len(args) == 0:
@@ -181,7 +188,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 else:
                     position = len(self.stats_to_plot)
                     self.stats_to_plot.append({
-                        'label': xlabel if xlabel is not None else self.__prefix,
+                        'label': xlabel if xlabel is not None else self.subst_name(self.__prefix),
                         'min': self.__stats[self.__prefix]['min'],
                         'max': self.__stats[self.__prefix]['max'],
                         'avg': self.__stats[self.__prefix]['average'],
@@ -274,6 +281,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
                 'stats': self.__initial_stats,
+                'block_name': self.__block_name,
             }, fp)
         self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
@@ -293,8 +301,9 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             column_index = meta['column_index']
             prefix = meta['prefix']
             stats = meta['stats'] if 'stats' in meta else {}
+            block_name = meta['block_name'] if 'block_name' in meta else None
         data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data, column_index, prefix, stats)
+        return cls(name, data, column_index, prefix, stats, block_name=block_name)
 
     def summarize(self):
         hfill()

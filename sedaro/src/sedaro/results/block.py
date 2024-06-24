@@ -53,7 +53,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 for engine in self.__stats:
                     for k in self.__stats[engine]:
                         flattened_stats[k] = self.__stats[engine][k]
-                return SedaroSeries(name, self.__series[stream], flattened_stats, self.__column_index[stream][name], prefix, self.stats_to_plot)
+                return SedaroSeries(name, self.__series[stream], flattened_stats, self.__column_index[stream][name], prefix, self.stats_to_plot, self.__name)
         else:
             raise ValueError(f'Variable "{name}" not found.')
 
