@@ -156,8 +156,16 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             else:
                 return tuple(self.__stats[self.__prefix][k] for k in args)
         else:
+            cutoff_len = len(self.__prefix) + 1
             if len(args) == 0:
-                return {self.name + '.' + self.prefix: self.__getattr__(k).stats() for k in self.__stats}
+                return {k[cutoff_len:]: self.__stats[k] for k in self.__stats}
+            elif len(args) == 1:
+                return {k[cutoff_len:]: self.__stats[k][args[0]] for k in self.__stats}
+            else:
+                dicts_to_return = []
+                for arg in args:
+                    dicts_to_return.append({k[cutoff_len:]: self.__stats[k][arg] for k in self.__stats})
+                return tuple(dicts_to_return)
 
     def plot_stats(self, show=True, xlabel=None):
         try:
