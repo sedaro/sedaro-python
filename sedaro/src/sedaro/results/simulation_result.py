@@ -2,9 +2,11 @@ import datetime as dt
 import json
 import os
 from pathlib import Path
+import time
 from typing import TYPE_CHECKING, Dict, List, Union
 
 from ..settings import STATUS, SUCCEEDED
+from ..branches.scenario_branch.utils import _get_stats_for_sim_id
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
                     _block_type_in_supers, _get_agent_id_name_map,
@@ -12,11 +14,12 @@ from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
+    from ..sedaro_api_client import SedaroApiClient
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, simulation: dict, data: dict):
+    def __init__(self, simulation: dict, data: dict, _sedaro: 'SedaroApiClient' = None):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
 
         See the `from_file` class method on this class for alternate initialization.
@@ -28,6 +31,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             'dateModified': simulation['dateModified'],
             STATUS: str(simulation[STATUS]),
         }
+        self.__sedaro = _sedaro
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
@@ -51,7 +55,25 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         If `wait` is True, this method will block until the stats are ready.
         '''
         if self.__stats_fetched:
+            print("Stats already fetched.")
             return
+        if self.__sedaro is None:
+            raise Exception("Fetching summary stats after loading from save is not currently supported.")
+        result, success = _get_stats_for_sim_id(self.__meta['id'], self.__meta, self.__sedaro)
+        if success:
+            self.__stats = result
+            self.__stats_fetched = True
+        else:
+            if wait:
+                POLLING_INTERVAL = 2.0
+                while not success:
+                    time.sleep(POLLING_INTERVAL)
+                    result, success = _get_stats_for_sim_id(self.__meta['id'], self.__meta, self.__sedaro)
+                self.__stats = result
+                self.__stats_fetched = True
+            else:
+                raise Exception("Failed to fetch summary stats for simulation. Stats are not yet ready.")
+        print("Stats fetched.")
 
     @property
     def job_id(self):

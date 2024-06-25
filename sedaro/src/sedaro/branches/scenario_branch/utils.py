@@ -80,14 +80,21 @@ def _get_stats_for_sim_id(
 
     # get first page
     fast_fetcher = FastFetcher(_sedaro)
-    response = fast_fetcher.get(request_url).parse()
-    stats.update(response['stats'])
+    response = fast_fetcher.get(request_url)
+    if response.status != 200:
+        if response.status == 503: # stats not yet available
+            return None, False
+        else:
+            raise Exception(f"Failed to get stats for sim_id {sim_id}.  Status code: {response.status}.  Response: {response.data}")
+    contents = response.parse()
+    stats.update(contents)
 
     # get additional pages (if applicable)
     while 'continuationToken' in response['meta']:
         token = response['meta']['continuationToken']
         request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
-        response = fast_fetcher.get(request_url).parse()
-        stats.update(response['stats'])
+        response = fast_fetcher.get(request_url)
+        contents = response.parse()
+        stats.update(contents)
 
-    return stats
+    return stats, True
