@@ -35,9 +35,6 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        for k in self.__meta:
-            if k != 'structure':
-                print(f" {k}: {self.__meta[k]}")
         self.__stats_fetched = 'stats' in data
         self.__stats = data['stats'] if 'stats' in data else {}
         self.stats_to_plot = []

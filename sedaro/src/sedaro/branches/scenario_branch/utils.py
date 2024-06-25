@@ -46,7 +46,7 @@ class FastFetcher:
         return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 
-def _get_metadata(self, _sedaro: 'SedaroApiClient', sim_id: str = None, num_workers: int = None):
+def _get_metadata(_sedaro: 'SedaroApiClient', sim_id: str = None, num_workers: int = None):
     if num_workers is None:
         request_url = f'/data/{sim_id}/metadata'
     else:
@@ -59,7 +59,7 @@ def _get_metadata(self, _sedaro: 'SedaroApiClient', sim_id: str = None, num_work
     response_dict = json.loads(response.data)
     return response_dict
 
-def _get_filtered_streams(self, requested_streams: list, metadata: dict):
+def _get_filtered_streams(requested_streams: list, metadata: dict):
     streams_raw = metadata['streams']
     streams_true = {}
     for stream in streams_raw:
@@ -101,14 +101,14 @@ def _get_stats_for_sim_id(
         else:
             raise Exception(f"Failed to get stats for sim_id {sim_id}.  Status code: {response.status}.  Response: {response.data}")
     contents = response.parse()
-    stats.update(contents)
+    stats.update(contents['stats'])
 
     # get additional pages (if applicable)
-    while 'continuationToken' in response['meta']:
-        token = response['meta']['continuationToken']
+    while contents['continuationToken'] is not None:
+        token = contents['continuationToken']
         request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
         response = fast_fetcher.get(request_url)
         contents = response.parse()
-        stats.update(contents)
+        stats.update(contents['stats'])
 
     return stats, True

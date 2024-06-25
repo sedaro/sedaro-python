@@ -472,7 +472,7 @@ class Simulation:
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
-        return SimulationResult(job, data)
+        return SimulationResult(job, data, self.__sedaro)
 
     def results_poll(
         self,
@@ -531,7 +531,7 @@ class Simulation:
                     data['stats'] = result
                     break
                 time.sleep(retry_interval)
-        return SimulationResult(job, data)
+        return SimulationResult(job, data, self.__sedaro)
 
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
