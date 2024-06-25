@@ -199,7 +199,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                             plt.plot([box['pos'], box['pos']], [box['min'], box['max']], color='black', linewidth=1.5)
                             plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['min'], box['min']], color='black', linewidth=1.5)
                             plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['max'], box['max']], color='black', linewidth=1.5)
-                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']], color='red', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']], color='#2D56A0', linestyle='dotted', linewidth=1.5)
                         plt.xticks([box['pos'] for box in self.stats_to_plot], [box['label'] for box in self.stats_to_plot], rotation=15)
                         plt.tight_layout()
                         plt.show()
