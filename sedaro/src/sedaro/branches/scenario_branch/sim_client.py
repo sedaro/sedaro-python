@@ -356,19 +356,6 @@ class Simulation:
         except Exception as e:
             return e
 
-    # def __get_metadata(self, sim_id: str = None, num_workers: int = None):
-    #     if num_workers is None:
-    #         request_url = f'/data/{sim_id}/metadata'
-    #     else:
-    #         request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
-    #     with self.__sedaro.api_client() as api:
-    #         response = api.call_api(request_url, 'GET', headers={
-    #             'Content-Type': 'application/json',
-    #             'Accept': 'application/json',  # Required for Sedaro firewall
-    #         })
-    #     response_dict = json.loads(response.data)
-    #     return response_dict
-
     def __results(
         self,
         job: 'SimulationHandle' = None,
