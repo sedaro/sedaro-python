@@ -80,7 +80,15 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__stats, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}', self.stats_to_plot, block_name=self.__block_name)
+                return SedaroSeries(
+                    f'{self.__name}.{subseries_name}',
+                    self.__series,
+                    self.__stats,
+                    self.__column_index[subseries_name],
+                    f'{self.__prefix}.{subseries_name}',
+                    stats_to_plot=self.stats_to_plot,
+                    block_name=self.__block_name
+                )
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -303,7 +311,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             stats = meta['stats'] if 'stats' in meta else {}
             block_name = meta['block_name'] if 'block_name' in meta else None
         data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data, column_index, prefix, stats, block_name=block_name)
+        return cls(name, data, stats, column_index, prefix, block_name=block_name)
 
     def summarize(self):
         hfill()

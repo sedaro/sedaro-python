@@ -216,12 +216,13 @@ def test_query_model():
                         'otherValue': '0rotherZero',
                     }
                 }
-            }
+            },
+            'stats_fetched': True,
         },
         'series': {
             'a/0': df1,
             'a/1': df2,
-        }
+        },
     }
 
     results = SimulationResult(simulation_job, data)
@@ -339,7 +340,7 @@ def test_series_values():
         'd': {'a': {}},
     }
 
-    ser = SedaroSeries('pref', df, col_ind, 'pref')
+    ser = SedaroSeries('pref', df, {}, col_ind, 'pref')
 
     assert ser.values == {
         'a': [[0, 0], [1, 5], [2, 10], [3, 15], [4, 20], [5, 25]],
@@ -355,7 +356,7 @@ def test_series_values():
     df2 = df[['pref.c.baz.0.0', 'pref.c.baz.0.1', 'pref.c.baz.1.0', 'pref.c.baz.1.1']]
 
     col_ind2 = col_ind['c']['baz']
-    ser2 = SedaroSeries('pref.c.baz', df2, col_ind2, 'pref.c.baz')
+    ser2 = SedaroSeries('pref.c.baz', df2, {}, col_ind2, 'pref.c.baz')
     assert ser2.values == [
         [[0, 0], [0, 0]],
         [[6, 7], [8, 9]],

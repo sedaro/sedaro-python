@@ -29,6 +29,8 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         self.__structure = structure
         self.__series = series
         self.__stats = {}
+        if stats is None:
+            stats = {}
         for k in stats:
             self.__stats[k] = {kk: vv for kk, vv in stats[k].items() if kk.startswith(prefix)}
         self.__column_index = column_index
