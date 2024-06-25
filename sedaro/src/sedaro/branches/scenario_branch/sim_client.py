@@ -561,7 +561,7 @@ class Simulation:
                         return result
                     time.sleep(retry_interval)
             else:
-                raise NoSimResultsError(
+                raise NoSimResultsError(reason=
                     'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
                 )
 
