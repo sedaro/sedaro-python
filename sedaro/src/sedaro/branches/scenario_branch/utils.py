@@ -1,3 +1,4 @@
+import json
 import msgpack
 import requests
 from typing import List, Tuple, TYPE_CHECKING
@@ -45,6 +46,19 @@ class FastFetcher:
         return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 
+def _get_metadata(self, _sedaro: 'SedaroApiClient', sim_id: str = None, num_workers: int = None):
+    if num_workers is None:
+        request_url = f'/data/{sim_id}/metadata'
+    else:
+        request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
+    with _sedaro.api_client() as api:
+        response = api.call_api(request_url, 'GET', headers={
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',  # Required for Sedaro firewall
+        })
+    response_dict = json.loads(response.data)
+    return response_dict
+
 def _get_filtered_streams(self, requested_streams: list, metadata: dict):
     streams_raw = metadata['streams']
     streams_true = {}
@@ -66,13 +80,13 @@ def _get_filtered_streams(self, requested_streams: list, metadata: dict):
     return filtered_streams
 
 def _get_stats_for_sim_id(
-    sim_id: str,
-    metadata: dict,
     _sedaro: 'SedaroApiClient',
+    sim_id: str,
     streams: List[Tuple[str, ...]] = None
 ):
     request_url = f'/data/{sim_id}/stats/'
     if streams is not None:
+        metadata = _get_metadata(_sedaro, sim_id)
         filtered_streams = _get_filtered_streams(streams, metadata)
         encoded_streams = ','.join(['.'.join(x) for x in filtered_streams])
         request_url += f"?streams={encoded_streams}"

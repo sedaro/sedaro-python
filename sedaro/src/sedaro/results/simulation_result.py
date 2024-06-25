@@ -59,7 +59,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             return
         if self.__sedaro is None:
             raise Exception("Fetching summary stats after loading from save is not currently supported.")
-        result, success = _get_stats_for_sim_id(self.__meta['id'], self.__meta, self.__sedaro)
+        result, success = _get_stats_for_sim_id(self.__sedaro, self.__meta['id'])
         if success:
             self.__stats = result
             self.__stats_fetched = True
@@ -68,7 +68,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                 POLLING_INTERVAL = 2.0
                 while not success:
                     time.sleep(POLLING_INTERVAL)
-                    result, success = _get_stats_for_sim_id(self.__meta['id'], self.__meta, self.__sedaro)
+                    result, success = _get_stats_for_sim_id(self.__sedaro, self.__meta['id'])
                 self.__stats = result
                 self.__stats_fetched = True
             else:

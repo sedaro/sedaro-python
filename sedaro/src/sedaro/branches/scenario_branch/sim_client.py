@@ -18,7 +18,7 @@ from ...exceptions import (NoSimResultsError, SedaroApiException,
 from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
                          QUEUED, RUNNING, STATUS)
 from ...utils import body_from_res, parse_urllib_response, progress_bar
-from .utils import FastFetcher, _get_filtered_streams, _get_stats_for_sim_id
+from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -356,18 +356,18 @@ class Simulation:
         except Exception as e:
             return e
 
-    def __get_metadata(self, sim_id: str = None, num_workers: int = None):
-        if num_workers is None:
-            request_url = f'/data/{sim_id}/metadata'
-        else:
-            request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
-        with self.__sedaro.api_client() as api:
-            response = api.call_api(request_url, 'GET', headers={
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',  # Required for Sedaro firewall
-            })
-        response_dict = json.loads(response.data)
-        return response_dict
+    # def __get_metadata(self, sim_id: str = None, num_workers: int = None):
+    #     if num_workers is None:
+    #         request_url = f'/data/{sim_id}/metadata'
+    #     else:
+    #         request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
+    #     with self.__sedaro.api_client() as api:
+    #         response = api.call_api(request_url, 'GET', headers={
+    #             'Content-Type': 'application/json',
+    #             'Accept': 'application/json',  # Required for Sedaro firewall
+    #         })
+    #     response_dict = json.loads(response.data)
+    #     return response_dict
 
     def __results(
         self,
@@ -381,7 +381,7 @@ class Simulation:
 
         if streams is not None and len(streams) > 0:
             usesTokens = False
-            metadata = self.__get_metadata(sim_id := job['dataArray'])
+            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
             filtered_streams = _get_filtered_streams(streams, metadata)
             num_workers = min(num_workers, len(filtered_streams))
             workers = [[] for _ in range(num_workers)]
@@ -389,7 +389,7 @@ class Simulation:
                 workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            metadata = self.__get_metadata(sim_id := job['dataArray'], num_workers)
+            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
             try:
                 filtered_streams = metadata['streamsTokens']
             except KeyError:
@@ -539,15 +539,44 @@ class Simulation:
         if wait_on_stats and not data['stats']:
             success = False
             while not success:
-                result, success = _get_stats_for_sim_id(job['id'], data['meta'], self.__sedaro, streams=streams)
+                result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
                 if success:
                     data['stats'] = result
                     break
                 time.sleep(retry_interval)
         return SimulationResult(job, data)
 
-        # return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers, wait_on_stats=wait_on_stats)
+    def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
+        """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
 
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch stats. Defaults to `None`.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            wait (bool, optional): If `True`, wait for stats to be available. If `False`, raise
+                an exception if stats are not available. Defaults to `False`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            dict: a dictionary of stats for the sim.
+        """
+        job = self.status(job_id)
+        result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
+        if success:
+            return result
+        else:
+            if wait:
+                retry_interval = 2
+                while not success:
+                    result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
+                    if success:
+                        return result
+                    time.sleep(retry_interval)
+            else:
+                raise NoSimResultsError(
+                    'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
+                )
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
