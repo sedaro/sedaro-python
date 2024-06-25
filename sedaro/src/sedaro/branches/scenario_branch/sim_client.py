@@ -435,7 +435,6 @@ class Simulation:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
-        include: List[str] = ['series', 'stats'],
     ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
@@ -486,9 +485,6 @@ class Simulation:
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
-        # FIXME:
-        if 'stats' not in include:
-            data['stats'] = {}
         return SimulationResult(job, data)
 
     def results_poll(
@@ -500,6 +496,7 @@ class Simulation:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
         corresponding sim results rather than latest. See `results` method for details on using the `streams` kwarg.
@@ -536,7 +533,20 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        data = self.__results(
+            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
+        )
+        if wait_on_stats and not data['stats']:
+            success = False
+            while not success:
+                result, success = _get_stats_for_sim_id(job['id'], data['meta'], self.__sedaro, streams=streams)
+                if success:
+                    data['stats'] = result
+                    break
+                time.sleep(retry_interval)
+        return SimulationResult(job, data)
+
+        # return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers, wait_on_stats=wait_on_stats)
 
 
 class SimulationJob:
@@ -595,7 +605,6 @@ class SimulationHandle:
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
-        include: List[str] = ['series', 'stats']
     ) -> SimulationResult:
         """Query simulation results.
 
@@ -639,7 +648,7 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers, include=include)
+        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
 
     def results_poll(
         self,
@@ -648,7 +657,8 @@ class SimulationHandle:
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
-        retry_interval: int = 2
+        retry_interval: int = 2,
+        wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
@@ -677,7 +687,8 @@ class SimulationHandle:
             streams=streams,
             sampleRate=sampleRate,
             num_workers=num_workers,
-            retry_interval=retry_interval
+            retry_interval=retry_interval,
+            wait_on_stats=wait_on_stats,
         )
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
