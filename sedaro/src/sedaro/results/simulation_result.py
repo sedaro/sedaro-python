@@ -31,7 +31,10 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        # self.stats: SimulationStats = SimulationStats(data['stats'], self.__meta)
+        for k in self.__meta:
+            if k != 'structure':
+                print(f" {k}: {self.__meta[k]}")
+        self.__stats_fetched = 'stats' in data
         self.__stats = data['stats'] if 'stats' in data else {}
         self.stats_to_plot = []
         raw_series = data['series']
@@ -41,6 +44,14 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
+
+    def fetch_stats(self, wait=False):
+        '''Fetch the stats for this SimulationResult.
+
+        If `wait` is True, this method will block until the stats are ready.
+        '''
+        if self.__stats_fetched:
+            return
 
     @property
     def job_id(self):

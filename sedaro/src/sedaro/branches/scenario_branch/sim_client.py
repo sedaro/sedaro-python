@@ -18,6 +18,7 @@ from ...exceptions import (NoSimResultsError, SedaroApiException,
 from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
                          QUEUED, RUNNING, STATUS)
 from ...utils import body_from_res, parse_urllib_response, progress_bar
+from .utils import FastFetcher, _get_filtered_streams, _get_stats_for_sim_id
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -118,44 +119,6 @@ def set_nested(results):
         kspl = k.split('/')[0]
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
-
-
-class FastFetcherResponse:
-    def __init__(self, response: requests.Response):
-        self.type = response.headers['Content-Type']
-
-        if self.type == 'application/json':
-            self.data = response.text
-        elif self.type == 'application/msgpack':
-            self.data = response.content
-        else:
-            raise Exception(
-                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")
-
-        self.status = response.status_code
-        self.response = response
-
-    def __getattr__(self, key):
-        return self.response[key]
-
-    def parse(self):
-        if self.type == 'application/json':
-            return parse_urllib_response(self)
-        elif self.type == 'application/msgpack':
-            return msgpack.unpackb(self.data)
-        else:
-            raise Exception(
-                f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
-
-
-class FastFetcher:
-    """Accelerated request handler for data page fetching."""
-
-    def __init__(self, sedaro_api: 'SedaroApiClient'):
-        self.sedaro_api = sedaro_api
-
-    def get(self, url):
-        return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 
 class Simulation:
@@ -372,26 +335,6 @@ class Simulation:
                         raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()
 
-    def __get_filtered_streams(self, requested_streams: list, metadata: dict):
-        streams_raw = metadata['streams']
-        streams_true = {}
-        for stream in streams_raw:
-            stream_parts = stream.split('.')
-            if stream_parts[0] not in streams_true:
-                streams_true[stream_parts[0]] = []
-            streams_true[stream_parts[0]].append(stream_parts[1])
-        filtered_streams = []
-        for stream in requested_streams:
-            if stream[0] in streams_true:
-                if len(stream) == 1:
-                    for v in streams_true[stream[0]]:
-                        filtered_streams.append((stream[0], v))
-                else:
-                    if stream[0] in streams_true:
-                        if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append(stream)
-        return filtered_streams
-
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
         try:
             start = params['start']
@@ -439,7 +382,7 @@ class Simulation:
         if streams is not None and len(streams) > 0:
             usesTokens = False
             metadata = self.__get_metadata(sim_id := job['dataArray'])
-            filtered_streams = self.__get_filtered_streams(streams, metadata)
+            filtered_streams = _get_filtered_streams(streams, metadata)
             num_workers = min(num_workers, len(filtered_streams))
             workers = [[] for _ in range(num_workers)]
             for i, stream in enumerate(filtered_streams):
@@ -594,51 +537,6 @@ class Simulation:
             time.sleep(retry_interval)
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
-
-    # def __stats(
-    #     self,
-    #     job: 'SimulationHandle',
-    #     streams: List[Tuple[str, ...]] = None,
-    # ) -> SimulationStats:
-    #     sim_id = job['dataArray']
-    #     sim_metadata = self.__get_metadata(sim_id)
-    #     if streams is not None:
-    #         streams = self.__get_filtered_streams(streams, sim_metadata)
-
-    #     stats = {}
-    #     request_url = f'/data/{sim_id}/stats/'
-    #     if streams:
-    #         request_url += f"?streams={streams}"
-
-    #     # get first page
-    #     fast_fetcher = FastFetcher(self.__sedaro)
-    #     response = fast_fetcher.get(request_url).parse()
-    #     stats.update(response['stats'])
-    #     metadata = response['meta']
-    #     # get additional pages
-    #     while 'continuationToken' in response['meta']:
-    #         token = response['meta']['continuationToken']
-    #         request_url = f'/data/{sim_id}/stats/?continuationToken={token}'
-    #         response = fast_fetcher.get(request_url).parse()
-    #         stats.update(response['stats'])
-
-    #     return SimulationStats(stats, metadata)
-
-    # def stats(
-    #     self,
-    #     job_id: str = None,
-    #     streams: List[Tuple[str, ...]] = None,
-    # ) -> SimulationStats:
-    #     job = self.status(job_id)
-    #     return self.__stats(job, streams=streams)
-
-    # def stats_poll(
-    #     self,
-    #     job_id: str = None,
-    #     streams: List[Tuple[str, ...]] = None,
-    #     retry_interval: int = 2,
-    # ) -> SimulationStats:
-    #     NotImplemented
 
 
 class SimulationJob:
