@@ -76,6 +76,10 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         print("Stats fetched.")
 
     @property
+    def stats_fetched(self) -> bool:
+        return self.__stats_fetched
+
+    @property
     def job_id(self):
         return self.__simulation['id']
 
