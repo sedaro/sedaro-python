@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data, stats, column_index, prefix, stp: list, block_name=None):
+    def __init__(self, name, data, stats, column_index, prefix, stats_to_plot: list = None, block_name: str = None):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -41,7 +41,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             self.__dtype = self.__series.dtypes.to_dict()
         else:
             self.__dtype = self.__series.dtypes.iloc[0]
-        self.stats_to_plot = stp
+        self.stats_to_plot = stats_to_plot if stats_to_plot is not None else []
 
     def __repr__(self):
         return f"Series({self.name})"

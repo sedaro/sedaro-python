@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, simulation: dict, data: dict, _sedaro: 'SedaroApiClient' = None):
+    def __init__(self, simulation: dict, data: dict, _sedaro: 'SedaroApiClient' = None, stats_fetched: bool = False):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
 
         See the `from_file` class method on this class for alternate initialization.
@@ -35,7 +35,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        self.__stats_fetched = 'stats' in data
+        self.__stats_fetched = data['meta']['stats_fetched'] or ('stats' in data and data['stats'])
         self.__stats = data['stats'] if 'stats' in data else {}
         self.stats_to_plot = []
         raw_series = data['series']
@@ -154,7 +154,15 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         filtered_stats = {k: v for k, v in self.__stats.items() if k.startswith(agent_id)}
-        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index[agent_id], initial_state=initial_state, stats=filtered_stats, stp=self.stats_to_plot)
+        return SedaroAgentResult(
+            name,
+            self.__block_structures[agent_id],
+            agent_dataframes,
+            self.__column_index[agent_id],
+            initial_state=initial_state,
+            stats=filtered_stats,
+            stats_to_plot=self.stats_to_plot
+        )
 
     def save(self, path: Union[str, Path]):
         '''Save the simulation result to a directory with the specified path.'''

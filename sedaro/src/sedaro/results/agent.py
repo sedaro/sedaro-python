@@ -15,7 +15,16 @@ if TYPE_CHECKING:
 
 
 class SedaroAgentResult(FromFileAndToFileAreDeprecated):
-    def __init__(self, name: str, block_structures: dict, series: dict, column_index: dict, initial_state: dict = None, stats: dict = None, stp: list = None):
+    def __init__(
+            self,
+            name: str,
+            block_structures: dict,
+            series: dict,
+            column_index: dict,
+            initial_state: dict = None,
+            stats: dict = None,
+            stats_to_plot: list = None
+        ):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -35,7 +44,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             reverse=True
         )
         self.__initial_state = initial_state
-        self.stats_to_plot = stp
+        self.stats_to_plot = stats_to_plot if stats_to_plot is not None else []
 
     def __iter__(self) -> Generator:
         '''Iterate through blocks on this agent.'''
