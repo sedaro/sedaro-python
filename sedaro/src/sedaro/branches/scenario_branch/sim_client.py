@@ -526,7 +526,7 @@ class Simulation:
         if wait_on_stats and not data['stats']:
             success = False
             while not success:
-                result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
+                result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
                 if success:
                     data['stats'] = result
                     break
@@ -549,14 +549,14 @@ class Simulation:
             dict: a dictionary of stats for the sim.
         """
         job = self.status(job_id)
-        result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
+        result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
         if success:
             return result
         else:
             if wait:
                 retry_interval = 2
                 while not success:
-                    result, success = _get_stats_for_sim_id(self.__sedaro, job['id'], streams=streams)
+                    result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
                     if success:
                         return result
                     time.sleep(retry_interval)
