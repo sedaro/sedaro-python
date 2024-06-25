@@ -162,7 +162,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for agent in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, column_index, prefix, stats)
+        return cls(structure, engines, stats, column_index, prefix)
 
     def __has_stats(self, variable: str) -> bool:
         for engine in self.__stats:
