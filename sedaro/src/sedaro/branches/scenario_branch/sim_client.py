@@ -719,6 +719,9 @@ class SimulationHandle:
             retry_interval=retry_interval,
             wait_on_stats=wait_on_stats,
         )
+    
+    def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
+        return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:
