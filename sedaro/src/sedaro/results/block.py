@@ -119,6 +119,8 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
     def load(cls, path: Union[str, Path]):
         '''Load a block result from the specified path.'''
         import dask.dataframe as dd
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
 
         with open(f"{path}/class.json", "r") as fp:
             archive_type = json.load(fp)['class']

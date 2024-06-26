@@ -60,6 +60,9 @@ class StreamManager:
 
     def ingest_core_data(self, stream_id, core_data):
         import dask.dataframe as dd
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
+
         if self.dataframe is None:
             self.dataframe = dd.from_dict(core_data, npartitions=1)
         else:
