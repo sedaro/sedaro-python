@@ -89,11 +89,23 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroAgentResult'}, fp)
         os.mkdir(f"{path}/data")
+
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
+        object_columns = {}
+        for engine in self.__series:
+            object_columns[engine] = []
+            for column in self.__series[engine].columns:
+                if str(self.__series[engine][column].dtype) == 'object':
+                    object_columns[engine].append(column)
+
         parquet_files = []
         for engine in self.__series:
             engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
             parquet_files.append(pname)
-            df: dd = self.__series[engine]
+            df: 'dd' = self.__series[engine].copy(deep=False)
+            for column in object_columns[engine]:
+                df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
             df.to_parquet(engine_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
@@ -122,15 +134,22 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
             column_index = meta['column_index']
+            object_columns = meta['object_columns'] if 'object_columns' in meta else {}
         engines = {}
         try:
             for engine in meta['parquet_files']:
                 df = dd.read_parquet(f"{path}/data/{engine}")
-                engines[engine.replace('.', '/')] = df
+                ename = engine.replace('.', '/')
+                for column in object_columns.get(ename, []):
+                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+                engines[ename] = df
         except KeyError:
             for engine in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{engine}")
-                engines[engine.replace('.', '/')] = df
+                ename = engine.replace('.', '/')
+                for column in object_columns.get(ename, []):
+                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+                engines[ename] = df
         return cls(name, block_structures, engines, column_index, initial_state)
 
     def summarize(self) -> None:

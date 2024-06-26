@@ -111,26 +111,22 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                     object_columns[engine].append(column)
 
         parquet_files = []
-        try:
-            # dask_config.set({'dataframe.convert-string': True})
-            for engine in self.__series:
-                engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-                parquet_files.append(pname)
-                df: 'dd' = self.__series[engine].copy(deep=False)
-                for column in object_columns[engine]:
-                    df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
-                df.to_parquet(engine_parquet_path)
-            with open(f"{path}/meta.json", "w") as fp:
-                json.dump({
-                    'structure': self.__structure,
-                    'column_index': self.__column_index,
-                    'prefix': self.__prefix,
-                    'parquet_files': parquet_files,
-                    'object_columns': object_columns,
-                }, fp)
-            print(f"Block result saved to {path}.")
-        finally:
-            dask_config.set({'dataframe.convert-string': False})
+        for engine in self.__series:
+            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+            parquet_files.append(pname)
+            df: 'dd' = self.__series[engine].copy(deep=False)
+            for column in object_columns[engine]:
+                df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
+            df.to_parquet(engine_parquet_path)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump({
+                'structure': self.__structure,
+                'column_index': self.__column_index,
+                'prefix': self.__prefix,
+                'parquet_files': parquet_files,
+                'object_columns': object_columns,
+            }, fp)
+        print(f"Block result saved to {path}.")
 
     @classmethod
     def load(cls, path: Union[str, Path]):
@@ -152,15 +148,15 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         engines = {}
         try:
             for agent in meta['parquet_files']:
-                ename = agent.replace('.', '/')
                 df = dd.read_parquet(f"{path}/data/{agent}")
+                ename = agent.replace('.', '/')
                 for column in object_columns.get(ename, []):
                     df[column] = df[column].apply(json.loads, meta=(column, 'object'))
                 engines[ename] = df
         except KeyError:
             for agent in get_parquets(f"{path}/data/"):
-                ename = agent.replace('.', '/')
                 df = dd.read_parquet(f"{path}/data/{agent}")
+                ename = agent.replace('.', '/')
                 for column in object_columns.get(ename, []):
                     df[column] = df[column].apply(json.loads, meta=(column, 'object'))
                 engines[ename] = df
