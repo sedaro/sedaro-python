@@ -6,7 +6,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uuid6
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
+from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID, SUPERDOVE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
@@ -430,6 +430,19 @@ def test_stats():
     assert series.stats('min', 'max') == (-1, 5)
 
     # test waiting on stats from results_poll
+    scenario = sedaro.scenario(SUPERDOVE_SCENARIO_ID)
+    sim = scenario.simulation
+    sim.start()
+    res = sim.results_poll(wait_on_stats=True)
+    empty = ['NT-KoZFSELKK8eomP3lkV/0', 'NT-KoZFSELKK8eomP3lkV/1']
+    has_rain_stats = ['NT-LKoFSJLenjoFP9FXAV/0', 'NT-LuTrRCydjLgnmceboV/0', 'NT-LgloSzu8F-V4MtzkHV/0', 'NT-L_VwTrXTMQUapcAoJk/0', 'NT-M0sqRR5WTIHKtB4ylF/0', 'NT-LoCYRnPamzh3QTTedF/0']
+    assert res._SimulationResult__stats_fetched
+    assert len(res._SimulationResult__stats) == len(empty) + len(has_rain_stats)
+    for agent_id in empty:
+        assert res._SimulationResult__stats[agent_id] == {}
+    for agent_id in has_rain_stats:
+        assert list(res._SimulationResult__stats[agent_id].keys()) == ['rainData.rainProbability']
+
 
 
 def run_tests():
