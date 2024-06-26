@@ -448,10 +448,10 @@ def test_stats():
 
 
 def run_tests():
-    # test_query_terminated()
-    # test_query()
-    # test_save_load()
+    test_query_terminated()
+    test_query()
+    test_save_load()
     test_query_model()
-    # test_download()
-    # test_series_values()
+    test_download()
+    test_series_values()
     test_stats()
