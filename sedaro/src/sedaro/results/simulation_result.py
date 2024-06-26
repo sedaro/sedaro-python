@@ -129,15 +129,27 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SimulationResult'}, fp)
         os.mkdir(f"{path}/data")
+
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
+        object_columns = {}
+        for engine in self.__series:
+            object_columns[engine] = []
+            for column in self.__series[engine].columns:
+                if str(self.__series[engine][column].dtype) == 'object':
+                    object_columns[engine].append(column)
+
         parquet_files = []
         for agent in self.__data['series']:
             agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
             parquet_files.append(pname)
-            df: 'dd' = self.__data['series'][agent]
+            df: 'dd' = self.__series[agent].copy(deep=False)
+            for column in object_columns[agent]:
+                df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
             df.to_parquet(agent_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-                      'parquet_files': parquet_files}, fp)
+                      'parquet_files': parquet_files, 'object_columns': object_columns}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
@@ -156,15 +168,18 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
+            object_columns = contents['object_columns'] if 'object_columns' in contents else {}
         data['series'] = {}
         try:
-            for agent in contents['parquet_files']:
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                data['series'][agent.replace('.', '/')] = df
+            agents = [agent for agent in contents['parquet_files']]
         except KeyError:
-            for agent in get_parquets(f"{path}/data/"):
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                data['series'][agent.replace('.', '/')] = df
+            agents = get_parquets(f"{path}/data/")
+        for agent in agents:
+            df = dd.read_parquet(f"{path}/data/{agent}")
+            ename = agent.replace('.', '/')
+            for column in object_columns.get(ename, []):
+                df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+            data['series'][agent.replace('.', '/')] = df
         return cls(simulation, data)
 
     def summarize(self) -> None:

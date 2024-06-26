@@ -114,6 +114,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'block_structures': self.__block_structures,
                 'column_index': self.__column_index,
                 'parquet_files': parquet_files,
+                'object_columns': object_columns
             }, fp)
         print(f"Agent result saved to {path}.")
 
