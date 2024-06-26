@@ -188,8 +188,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         except ImportError:
             raise ValueError('Plotting is disabled because matplotlib could not be imported.')
         try:
-            if self.__has_subseries:
-                NotImplemented # FIXME
+            if self.__has_subseries and not self.__is_singleton_or_vector():
+                raise ValueError('Select a specific subseries to plot.')
             else:
                 if not self.__stats:
                     raise ValueError('No statistics available to plot.')
