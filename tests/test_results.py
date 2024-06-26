@@ -1,3 +1,4 @@
+import dask.dataframe as dd
 import json
 import os
 import shutil
@@ -160,16 +161,7 @@ def test_save_load():
         assert ref_series_result.values == new_series_result.values
 
 
-def test_query_model():
-    import dask.dataframe as dd
-
-    simulation_job = {
-        'branch': 'test_id',
-        'dateCreated': '2021-08-05T18:00:00.000Z',
-        'dateModified': '2021-08-05T18:00:00.000Z',
-        STATUS: SUCCEEDED,
-    }
-
+def sample_model_and_data():
     df1 = dd.from_dict({
         'b.value': ['0first', '0second'],
         'value': ['0rfirst', '0rsecond'],
@@ -184,7 +176,7 @@ def test_query_model():
     }, npartitions=1)
     df2 = df2.set_index('index')
 
-    data = {
+    return {
         'meta': {
             'structure': {
                 'scenario': {
@@ -217,13 +209,22 @@ def test_query_model():
                     }
                 }
             },
-            'stats_fetched': True,
         },
         'series': {
             'a/0': df1,
             'a/1': df2,
         },
     }
+
+def test_query_model():
+    simulation_job = {
+        'branch': 'test_id',
+        'dateCreated': '2021-08-05T18:00:00.000Z',
+        'dateModified': '2021-08-05T18:00:00.000Z',
+        STATUS: SUCCEEDED,
+    }
+
+    data = sample_model_and_data()
 
     results = SimulationResult(simulation_job, data)
     agent = results.agent('Agent')
@@ -367,10 +368,75 @@ def test_series_values():
     ]
 
 
+def fake_stats(factor):
+    return {
+        'min': -1 * factor,
+        'max': 5 * factor,
+        'average': 2 * factor,
+        'integral': 10 * factor,
+        'absAvg': 3 * factor,
+        'negativeMax': None,
+        'positiveMax': 5 * factor,
+    }
+
+
+def test_stats():
+    # test propagation of stats down to Series level, as well as certain functions at Block and Series level
+    simulation_job = {
+        'branch': 'test_id',
+        'dateCreated': '2021-08-05T18:00:00.000Z',
+        'dateModified': '2021-08-05T18:00:00.000Z',
+        STATUS: SUCCEEDED,
+    }
+
+    data = sample_model_and_data()
+    all_stats = data['stats'] = {
+        'a/0': {
+            'b.value': fake_stats(1),
+            'value': fake_stats(10),
+        },
+        'a/1': {
+            'b.otherValue': fake_stats(100),
+            'otherValue': fake_stats(1000),
+        },
+    }
+
+    results = SimulationResult(simulation_job, data)
+    agent = results.agent('Agent')
+    assert agent._SedaroAgentResult__stats == all_stats
+    block = agent.block('b')
+    assert block._SedaroBlockResult__stats == {
+        'a/0': { 'b.value': fake_stats(1), },
+        'a/1': { 'b.otherValue': fake_stats(100), },
+    }
+    assert block.stats() == {
+        'Block.value': fake_stats(1),
+        'Block.otherValue': fake_stats(100),
+    }
+    assert block.stats('min') == {
+        'Block.value': -1,
+        'Block.otherValue': -100,
+    }
+    assert block.stats('min', 'max') == ({
+        'Block.value': -1,
+        'Block.otherValue': -100,
+    }, {
+        'Block.value': 5,
+        'Block.otherValue': 500,
+    })
+    series = block.value
+    assert series.stats() == fake_stats(1)
+    assert series.stats('min') == -1
+    assert series.stats('min', 'max') == (-1, 5)
+
+    # test waiting on stats from results_poll
+
+
 def run_tests():
-    test_query_terminated()
-    test_query()
-    test_save_load()
+    # test_query_terminated()
+    # test_query()
+    # test_save_load()
     test_query_model()
-    test_download()
-    test_series_values()
+    # test_download()
+    # test_series_values()
+    test_stats()
