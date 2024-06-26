@@ -442,6 +442,8 @@ def test_stats():
         assert res._SimulationResult__stats[agent_id] == {}
     for agent_id in has_rain_stats:
         assert list(res._SimulationResult__stats[agent_id].keys()) == ['rainData.rainProbability']
+    stats_from_endpoint = sim.stats()
+    assert stats_from_endpoint == res._SimulationResult__stats
 
 
 
