@@ -292,7 +292,7 @@ This will save the data in a directory whose path is indicated by the argument t
 
 ### Statistics
 
-Summary statistics are calculated for certain state variables.
+Summary statistics are calculated for certain state variables. They become available shortly after a simulation finishes running.
 
 To fetch the statistics for a simulation, use `stats`:
 
