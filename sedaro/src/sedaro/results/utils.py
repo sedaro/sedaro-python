@@ -157,8 +157,8 @@ def get_column_names(column_index, prefix):
     if len(column_index) == 0:
         return [prefix]
     else:
-        # don't add a dot if prefix is empty (this is the case for the root block)
-        if len(prefix) > 0:
+        # don't add a dot if prefix is empty (this is the case for the root block) or already ends with a dot
+        if len(prefix) > 0 and prefix[-1] != '.':
             prefix = f"{prefix}."
         columns = []
         for key in column_index:

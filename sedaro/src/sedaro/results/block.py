@@ -100,20 +100,37 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroBlockResult'}, fp)
         os.mkdir(f"{path}/data")
-        parquet_files = []
+
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
+        object_columns = {}
         for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-            parquet_files.append(pname)
-            df: 'dd' = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({
-                'structure': self.__structure,
-                'column_index': self.__column_index,
-                'prefix': self.__prefix,
-                'parquet_files': parquet_files,
-            }, fp)
-        print(f"Block result saved to {path}.")
+            object_columns[engine] = []
+            for column in self.__series[engine].columns:
+                if str(self.__series[engine][column].dtype) == 'object':
+                    object_columns[engine].append(column)
+
+        parquet_files = []
+        try:
+            # dask_config.set({'dataframe.convert-string': True})
+            for engine in self.__series:
+                engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+                parquet_files.append(pname)
+                df: 'dd' = self.__series[engine].copy(deep=False)
+                for column in object_columns[engine]:
+                    df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
+                df.to_parquet(engine_parquet_path)
+            with open(f"{path}/meta.json", "w") as fp:
+                json.dump({
+                    'structure': self.__structure,
+                    'column_index': self.__column_index,
+                    'prefix': self.__prefix,
+                    'parquet_files': parquet_files,
+                    'object_columns': object_columns,
+                }, fp)
+            print(f"Block result saved to {path}.")
+        finally:
+            dask_config.set({'dataframe.convert-string': False})
 
     @classmethod
     def load(cls, path: Union[str, Path]):
@@ -131,15 +148,22 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             structure = meta['structure']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            object_columns = meta['object_columns'] if 'object_columns' in meta else {}
         engines = {}
         try:
             for agent in meta['parquet_files']:
+                ename = agent.replace('.', '/')
                 df = dd.read_parquet(f"{path}/data/{agent}")
-                engines[agent.replace('.', '/')] = df
+                for column in object_columns.get(ename, []):
+                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+                engines[ename] = df
         except KeyError:
             for agent in get_parquets(f"{path}/data/"):
+                ename = agent.replace('.', '/')
                 df = dd.read_parquet(f"{path}/data/{agent}")
-                engines[agent.replace('.', '/')] = df
+                for column in object_columns.get(ename, []):
+                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+                engines[ename] = df
         return cls(structure, engines, column_index, prefix)
 
     def summarize(self) -> None:
