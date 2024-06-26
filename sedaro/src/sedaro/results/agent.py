@@ -104,8 +104,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
             parquet_files.append(pname)
             df: 'dd' = self.__series[engine].copy(deep=False)
+            print(f"doing transformations")
             for column in object_columns[engine]:
                 df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
+            print(f"done transformations")
+            print(f"trying to save {engine_parquet_path}...")
             df.to_parquet(engine_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({

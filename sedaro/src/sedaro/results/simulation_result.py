@@ -133,19 +133,20 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         from dask import config as dask_config
         dask_config.set({'dataframe.convert-string': False})
         object_columns = {}
-        for engine in self.__series:
+        for engine in self.__data['series']:
             object_columns[engine] = []
-            for column in self.__series[engine].columns:
-                if str(self.__series[engine][column].dtype) == 'object':
+            for column in self.__data['series'][engine].columns:
+                if str(self.__data['series'][engine][column].dtype) == 'object':
                     object_columns[engine].append(column)
 
         parquet_files = []
         for agent in self.__data['series']:
             agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
             parquet_files.append(pname)
-            df: 'dd' = self.__series[agent].copy(deep=False)
+            df: 'dd' = self.__data['series'][agent].copy(deep=False)
             for column in object_columns[agent]:
                 df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
+            print(f"trying to save {agent_parquet_path}...")
             df.to_parquet(agent_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
