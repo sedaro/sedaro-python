@@ -245,7 +245,7 @@ simulation_handle['status']
 
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
 
-## Selecting Results to Download
+### Selecting Results to Download
 
 The `results` and `results_poll` methods take a number of arguments. These arguments can be used to specify which segments of the data should be downloaded, the resolution of the downloaded data, and more.
 
@@ -279,7 +279,7 @@ selected_streams=[
 results = sim.results(streams=selected_streams)
 ```
 
-## Saving Downloaded Data
+### Saving Downloaded Data
 
 You may save downloaded simulation data to your machine via the following procedure:
 
@@ -289,6 +289,33 @@ results.save('path/to/data')
 ```
 
 This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to an empty directory, or a directory which does not yet exist.
+
+### Statistics
+
+Summary statistics are calculated for certain state variables. They become available shortly after a simulation finishes running.
+
+To fetch the statistics for a simulation, use `stats`:
+
+```py
+stats = simulation_handle.stats()
+```
+
+The above will raise an exception if the sim's stats are not yet ready. Use the optional `wait=True` argument to block until the stats are ready:
+
+```py
+stats = simulation_handle.stats(wait=True)
+```
+
+To fetch statistics only for certain streams, use the `streams` argument in the format previously described:
+
+```py
+selected_streams=[
+    ('foo',),
+    ('bar', 'Thermal'),
+    ('bar', 'Power')
+]
+stats = sim.stats(streams=selected_streams)
+```
 
 ## Send Requests
 
