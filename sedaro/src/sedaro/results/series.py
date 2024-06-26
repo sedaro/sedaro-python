@@ -208,12 +208,21 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': 'SedaroSeries'}, fp)
+
+        from dask import config as dask_config
+        dask_config.set({'dataframe.convert-string': False})
+        object_columns = [column for column in self.__series.columns if str(self.__series[column].dtype) == 'object']
+
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({
                 'name': self.__name,
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
+                'object_columns': object_columns,
             }, fp)
+        df = self.__series.copy(deep=False)
+        for column in object_columns:
+            df[column] = df[column].apply(json.dumps, meta=(column, 'object'))
         self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
 
@@ -233,7 +242,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             name = meta['name']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            object_columns = meta['object_columns'] if 'object_columns' in meta else []
         data = dd.read_parquet(f"{path}/data.parquet")
+        for column in object_columns:
+            data[column] = data[column].apply(json.loads, meta=(column, 'object'))
         return cls(name, data, column_index, prefix)
 
     def summarize(self):
