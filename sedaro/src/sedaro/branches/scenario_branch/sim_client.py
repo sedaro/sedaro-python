@@ -1,11 +1,8 @@
-import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
-import msgpack
-import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
@@ -17,7 +14,7 @@ from ...exceptions import (NoSimResultsError, SedaroApiException,
                            SimInitializationError)
 from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
                          QUEUED, RUNNING, STATUS)
-from ...utils import body_from_res, parse_urllib_response, progress_bar
+from ...utils import body_from_res, progress_bar
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
 if TYPE_CHECKING:

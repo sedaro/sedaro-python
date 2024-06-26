@@ -1,4 +1,3 @@
-import dask.dataframe as dd
 import json
 import os
 import shutil
@@ -162,6 +161,8 @@ def test_save_load():
 
 
 def sample_model_and_data():
+    import dask.dataframe as dd
+
     df1 = dd.from_dict({
         'b.value': ['0first', '0second'],
         'value': ['0rfirst', '0rsecond'],
