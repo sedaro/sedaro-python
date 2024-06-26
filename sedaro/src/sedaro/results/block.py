@@ -147,19 +147,15 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             object_columns = meta['object_columns'] if 'object_columns' in meta else {}
         engines = {}
         try:
-            for agent in meta['parquet_files']:
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                ename = agent.replace('.', '/')
-                for column in object_columns.get(ename, []):
-                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
-                engines[ename] = df
+            agents = [agent for agent in meta['parquet_files']]
         except KeyError:
-            for agent in get_parquets(f"{path}/data/"):
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                ename = agent.replace('.', '/')
-                for column in object_columns.get(ename, []):
-                    df[column] = df[column].apply(json.loads, meta=(column, 'object'))
-                engines[ename] = df
+            agents = get_parquets(f"{path}/data/")
+        for agent in agents:
+            df = dd.read_parquet(f"{path}/data/{agent}")
+            ename = agent.replace('.', '/')
+            for column in object_columns.get(ename, []):
+                df[column] = df[column].apply(json.loads, meta=(column, 'object'))
+            engines[ename] = df
         return cls(structure, engines, column_index, prefix)
 
     def summarize(self) -> None:
