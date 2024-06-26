@@ -500,6 +500,8 @@ class Simulation:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -689,6 +691,8 @@ class SimulationHandle:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
