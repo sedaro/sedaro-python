@@ -345,8 +345,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         hfill()
         if self.__has_subseries:
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
-            print("❓ Query statistics with [<SUBSERIES_NAME>].stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
-            print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
+            if self.__stats:
+                print("❓ Query statistics with [<SUBSERIES_NAME>].stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
+                print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
         else:
             print("❓ Call .plot to visualize results")
-            print("❓ Call .plot_stats to visualize statistics")
+            if self.__stats:
+                print("❓ Call .plot_stats to visualize statistics")

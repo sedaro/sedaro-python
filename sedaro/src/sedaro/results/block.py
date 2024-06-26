@@ -191,8 +191,9 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             print(f'    • {stats_marker} {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
-        print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
-        print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
+        if self.__stats:
+            print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
+            print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
