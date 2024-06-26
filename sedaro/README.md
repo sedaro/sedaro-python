@@ -292,7 +292,7 @@ This will save the data in a directory whose path is indicated by the argument t
 
 ## Loading Saved Data
 
-Once data has been saved as above, it can be loaded again by using the `load` class method of its class. For instance, `results` above, a SimulationResult, is loaded as follows:
+Once data has been saved as above, it can be loaded again by using the `load` method of its class. For instance, `results` above, a SimulationResult, is loaded as follows:
 
 ```py
 from sedaro.results.simulation_result import SimulationResult
@@ -300,6 +300,8 @@ results = SimulationResult.load('path/to/data')
 ```
 
 Once loaded, the results can be interacted with as before.
+
+To load a agent, block, or series result, one would use the `load` method of the `SedaroAgentResult`, `SedaroBlockResult`, or `SedaroSeries` class respectively.
 
 ## Send Requests
 
