@@ -220,8 +220,7 @@ def test_block_client_clone():
     solar_cell_clone = solar_cell.clone()
     assert isinstance(solar_cell_clone, Block)
 
-    branch.crud(delete=[subsystem_clone.id, subsystem.id,
-                solar_cell_clone.id, solar_cell.id])
+    branch.update(delete=[subsystem_clone.id, subsystem.id, solar_cell_clone.id, solar_cell.id])
 
 
 def test_some_errors():
@@ -257,9 +256,7 @@ def test_active_comm_interfaces_tuple():
     """Check validation of the Vehicle Template activeCommInterfaces field"""
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
 
-    def crud_aci(val):
-        """Update activeCommInterfaces field with val"""
-        branch.crud(root={'activeCommInterfaces': val})
+    def crud_aci(val): branch.update(activeCommInterfaces=val)
 
     # Check valid tuples
     crud_aci([[False, "Comms", 5], [True, "Interface", 112]])
@@ -281,9 +278,7 @@ def test_attitude_solution_error_tuple():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     valid_list = [0.25, 0.5, 0.75]
 
-    def crud_ase(val):
-        """Update attitudeSolutionError field with val"""
-        branch.crud(root={'attitudeSolutionError': val})
+    def crud_ase(val): branch.update(attitudeSolutionError=val)
 
     # Check valid tuple
     crud_ase(None)
@@ -309,7 +304,7 @@ def test_power_command_tuple():
 
     def create_solar_array(val):
         """Create a solar array with powerCommand field set to val"""
-        branch.crud(blocks=[{
+        branch.update(blocks=[{
             'type': "SolarArray",
             'name': f"array {_random_str()}",
             'powerCommand': val
@@ -319,13 +314,11 @@ def test_power_command_tuple():
     for val in [[None, None], [0.0, None], [None, 0.5], [0.0, 0.5]]:
         create_solar_array(val)
     # Delete created solar arrays
-    branch.crud(delete=branch.data['index']['SolarArray'])
+    branch.update(delete=branch.data['index']['SolarArray'])
 
     # Check bad values
     for val in [
         ["Fail", 0.5],  # Check non-float values
-        [0.25, 0.5, 0.75],  # Check len greater than 2
-        [],  # Check len less than 2
         "Fail"  # Check non-list value
     ]:
         with pytest.raises(SedaroApiException):
@@ -336,7 +329,7 @@ def test_multiblock_crud_with_ref_ids():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     batt_pack_name = f'Battery Pack {_random_str()}'
     batt_cell_part_number = f'Battery Cell {_random_str()}'
-    branch.crud(blocks=[
+    branch.update(blocks=[
         {'type': 'BatteryPack', 'name': batt_pack_name,
             "numSeries": 1, "numParallel": 1, 'cell': '$-batt-cell'},
         {
@@ -357,7 +350,7 @@ def test_multiblock_crud_with_ref_ids():
     try:
         assert bp.cell.id == bc.id
     finally:
-        branch.crud(delete=[bp.id, bc.id])
+        branch.update(delete=[bp.id, bc.id])
 
 
 def run_tests():

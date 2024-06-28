@@ -9,14 +9,11 @@ import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import (DownloadWorker,
-                                                      ProgressBar)
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
-from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
-                         QUEUED, RUNNING, STATUS)
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
 from ...utils import body_from_res, parse_urllib_response, progress_bar
 
 if TYPE_CHECKING:
@@ -182,19 +179,39 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
-    def start(self, wait=False, timeout=None) -> 'SimulationHandle':
+    def start(
+        self, 
+        wait=False, 
+        timeout=None, 
+        label=None,
+        capacity=None,
+        seed=None,
+        **kwargs,
+    ) -> 'SimulationHandle':
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
 
         Args:
             wait (bool, optional): Triggers waiting for simulation to deploy and transition to `RUNNING` before returning. Defaults to `False`.
             timeout (int, optional): Seconds to wait for simulation to deploy and transition to `RUNNING` before raising an error. Defaults to `None`.
+            label (str, optional): A label to assign to the simulation job. Defaults to `None`.
+            capacity (int, optional): The capacity to allocate to the simulation. Defaults to using the lesser of the Workspace capacity and the number of Agents in the Scenario.
+            seed (int, optional): The pseudorandom seed to use for the simulation. Defaults to the Simulation Service's default.
+            **kwargs: Additional keyword arguments to pass to the simulation job as part of the HTTP request body.
 
         Returns:
             SimulationHandle
         """
+        body = {**kwargs}
+        if label is not None:
+            body['label'] = label
+        if capacity is not None:
+            body['capacity'] = capacity
+        if seed is not None:
+            body['seed'] = seed
+            
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
-                {},
+                body,
                 path_params={'branchId': self.__branch_id},
                 **COMMON_API_KWARGS
             )
@@ -583,7 +600,6 @@ class Simulation:
 
         return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
 
-
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
     def get(self, key, default=None): return self.__job.get(key, default)
@@ -608,6 +624,12 @@ class SimulationHandle:
 
     def __getitem__(self, key): return self.__job[key]
     def get(self, key, default=None): return self.__job.get(key, default)
+    def __enter__(self): return self
+    def __exit__(self, *args): 
+        try:
+            self.terminate()
+        except:
+            pass
 
     def status(self, err_if_empty: bool = True):
         """Refreshes the local simulation status.

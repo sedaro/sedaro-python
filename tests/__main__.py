@@ -6,8 +6,10 @@ import test_bcc_options
 import test_crud_and_traversal
 import test_data_utils
 import test_externals
+import test_modsim
 import test_plain_requests
 import test_results
+import test_scenario
 import test_simulation
 from config import HOST
 
@@ -24,6 +26,8 @@ imported_test_files = [
     test_plain_requests,
     test_results,
     test_simulation,
+    test_modsim,
+    test_scenario,
 ]
 ############################################################
 

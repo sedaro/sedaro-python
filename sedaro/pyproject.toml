@@ -27,6 +27,8 @@ dependencies = [
   "orjson",
   "pyarrow",
   "requests",
+  "spiceypy",
+  "openpyxl",
 ]
 [[project.authors]]
 name = "Sedaro"
