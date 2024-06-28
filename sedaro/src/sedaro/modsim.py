@@ -11,6 +11,14 @@ EPSILON = 1e-6
 REF_DATETIME = datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)
 
 
+def datetime_now_utc() -> datetime.datetime:
+    '''Python version agnostic way to get the current UTC datetime.'''
+    try:
+        return datetime.now(datetime.UTC)
+    except ImportError:
+        return datetime.datetime.utcnow() # now deprecated
+
+
 def datetime_to_mjd(dt: datetime.datetime) -> float:
     '''Convert a UTC datetime.datetime to a Modified Julian Date float.
 
