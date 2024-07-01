@@ -156,22 +156,28 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             print(f'    • {ENGINE_EXPANSION[ENGINE_MAP[module.split("/")[1]]]}')
 
         print("\n📦 Available Blocks")
-        print('    ' + '-' * 58)
-        print('    |' + 'id'.center(38) + 'name'.center(30 - 12) + '|')
-        print('    ' + '-' * 58)
+        print('    ' + '-' * 91)
+        print('    |' + 'id'.center(30) + 'type'.center(24)+ 'name'.center(35) + '|')
+        print('    ' + '-' * 91)
         for block_id in self.__block_ids:
             if block_id != 'root':
                 block_name = self.__block_structures[block_id].get('name', None)
                 block_id_col = f"{block_id[:26]}"
+                block_type = self.__block_structures[block_id].get('type', None)
                 if block_name is not None:
                     name_id_col = f'{block_name[:25]}'
                 else:
                     name_id_col = f'<Unnamed Block>'
+                if block_type is not None:
+                    type_id_col = f'{block_type[:30]}'
+                else:
+                    type_id_col = f'<Untyped Block>'
             else:
                 block_id_col = f"root"
                 name_id_col = ''
-            print(f"    | {block_id_col:26s} | {name_id_col:25s} |")
-        print('    ' + '-' * 58)
+                type_id_col = ''
+            print(f"    | {block_id_col:26s} | {type_id_col:30s} | {name_id_col:25s} |")
+        print('    ' + '-' * 91)
 
         no_data_blocks = len(self.__block_structures) - len(self.__block_ids)
         if no_data_blocks > 0:

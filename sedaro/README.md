@@ -35,9 +35,9 @@ HOST = 'url-to-my-sedaro-instance.com'
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 ```
 
-## Block CRUD
+## Modeling
 
-Use the `AgentTemplateBranch` or `ScenarioBranch` to instantiate and utilize the `BlockType` class. A `BlockType` object is used to create and access Sedaro Blocks of the respective class.
+[Models](https://docs.sedaro.com/models) in Sedaro can be modified via the `AgentTemplateBranch` and `ScenarioBranch` interfaces. Blocks of a particular type are created and retrieved via the following pattern, where `branch` is an instance of `AgentTemplateBranch` or `ScenarioBranch`:
 
 ```py
 branch.BatteryCell
@@ -46,7 +46,7 @@ branch.Subsystem
 # ...etc.
 ```
 
-- Valid `BlockType`s for Agent Template Branches and Scenario Branches can be found in our redocs [OpenAPI Specification](https://sedaro.github.io/openapi/), by viewing the valid classes in the `blocks` key for the `Template` `PATCH` route. In code editors that support it, intellisense will suggest names for `BlockTypes`.
+- Valid `BlockType`s for Agent Template Branches and Scenario Branches can be found in our [Model Docs](https://docs.sedaro.com/models). In code editors that support it, intellisense will suggest names for `BlockTypes`.
 
 A `BlockType` has several methods:
 
@@ -153,12 +153,12 @@ except NonexistantBlockError as e:
     assert str(e) == f'The referenced Block with ID: {sc_id} no longer exists.'
 ```
 
-### Multi-Block CRUD
+### Multi-Block Updates and Deletions
 
-The `crud` method is also available for performing operations on multiple Sedaro blocks and/or root at the same time using kwargs as follows:
+The `update` method is also available for performing operations on multiple Sedaro blocks and/or root at the same time using kwargs as follows:
 
-- `root`: update fields on the root by passing a dictionary
-- `blocks`: create/update 1+ blocks by passing a list of dictionaries. If an `id` is present, the corresponding block will be updated. If an `id` isn't present, a new block will be created. The `type` is always required.
+- Update any number of fields on the root of the Model by passing the fields directly as additional kwargs to `update`
+- `blocks`: create/update 1+ blocks by passing a list of dictionaries. If an `id` is present in a dictionary, the corresponding block will be updated in Sedaro. If an `id` isn't present, a new block will be created. The `type` is always required.
 - `delete`: delete 1+ blocks by passing a list of their block `id`s.
 
 In this method, relationship fields can point at existing `BlockID`'s or "ref id"s. A "ref id" is similar to a
@@ -170,8 +170,9 @@ json "reference" and is used as follows:
 - All instances of the "ref id" will be resolved to the corresponding created `Block`'s id.
 
 ```py
-branch.crud(
-    root={ "field": "value" }, # update fields on root
+branch.update(
+    name="value", # update fields on root
+    mass=12.1 # update fields on root
     blocks=[
         { "id": "NXKzb4gSdLyThwudHSR4k", "type": "Modem", "field": "value" }, # update block
         { "type": "SolarCell",  "field": "value", ... }, # create block
@@ -180,17 +181,17 @@ branch.crud(
 )
 ```
 
-The response from this method is used to update the blocks in the `Branch` the method was called on. The content of the response is also returned, as follows:
+And additional truthy keyword argument `include_response` can be passed to `update` to return the response from the update operation, as follows:
 
 ```py
 {
     "crud": {
-      "blocks": [], # ids of all Blocks created or updated
-      "delete": [], # ids of all Blocks deleted
-  },
+        "blocks": [], # ids of all Blocks created or updated
+        "delete": [], # ids of all Blocks deleted
+    },
     "branch": {
-      # whole branch dictionary
-  }
+        # whole branch dictionary
+    }
 }
 ```
 
@@ -202,12 +203,11 @@ Access a `Simulation` via the `simulation` attribute on a `ScenarioBranch`.
 sim = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 
 # Start simulation
-simulation_handle = sim.start() # This will return imediately after queueing the simulation job
-# To instead wait for simulation to enter the RUNNING state, pass `wait=True`
-# simulation_handle = sim.start(wait=True)
+simulation_handle = sim.start(wait=True) # To wait for the simulation to enter the RUNNING state, pass `wait=True`
+# simulation_handle = sim.start() # Alternatively, this will return immediately after the simulation job is queued for execution
 
 # See simulation status
-simulation_handle = sim.status()
+simulation_handle = sim.status() # simulation_handle can also be obtained by calling sim.status()
 
 # Poll simulation, and return results when complete (progress will be printed until ready)
 results = sim.results_poll()
@@ -241,6 +241,16 @@ simulation_handle['status']
 ...
 ```
 
+### Context Manager
+
+The `SimulationHandle` object can be used as a context manager to automatically terminate the simulation when the context is exited.
+
+```py
+with sim.start(wait=True) as simulation_handle:
+    # Do something with the simulation
+    pass
+```
+
 ## Results
 
 Any object in the results API will provide a descriptive summary of its contents when the `.summarize` method is called. See the `results_api_demo` notebook in the [modsim notebooks](https://github.com/sedaro/modsim-notebooks) repository for more examples.
@@ -252,20 +262,20 @@ The `results` and `results_poll` methods take a number of arguments. These argum
 - `start`: start time of the data to fetch, in MJD. Defaults to the start of the simulation.
 - `stop`: end time of the data to fetch, in MJD. Defaults to the end of the simulation.
 - `streams`: a list of streams to fetch, following the format specified below. If no argument is provided, all streams are fetched.
-- `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on.  If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
+- `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on. If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
 - num_workers: `results` and `results_poll` use parallel downloaders to accelerate data fetching. The default number of downloaders is 2, but you can use this argument to set a different number.
 
-### Format of `streams`
+#### Format of `streams`
 
 If you pass an argument to `streams`, it
 must be a list of tuples following particular rules:
 
 - Each tuple in the list can contain either 1 or 2 items.
 - If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
-    will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
+   will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
 - If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the\
-    following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
-    agent of this engine will be fetched.
+   following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
+   agent of this engine will be fetched.
 
 For example, with the following code, `results` will only contain data for all engines of agent `foo` and the
 `Power` and `Thermal` engines of agent `bar`.
@@ -317,6 +327,19 @@ selected_streams=[
 stats = sim.stats(streams=selected_streams)
 ```
 
+## Loading Saved Data
+
+Once data has been saved as above, it can be loaded again by using the `load` method of its class. For instance, `results` above, a SimulationResult, is loaded as follows:
+
+```py
+from sedaro.results.simulation_result import SimulationResult
+results = SimulationResult.load('path/to/data')
+```
+
+Once loaded, the results can be interacted with as before.
+
+To load a agent, block, or series result, one would use the `load` method of the `SedaroAgentResult`, `SedaroBlockResult`, or `SedaroSeries` class respectively.
+
 ## Send Requests
 
 Use the built-in method to send custom requests to the host. See [OpenAPI Specification](https://sedaro.github.io/openapi/) for documentation on resource paths and body params.
@@ -341,11 +364,11 @@ sedaro.request.patch(
 )
 ```
 
-Note that requests sent this way to CRUD Sedaro Blocks won't automatically update already instantiated `Branch` or `Block` objects.
+Note that requests sent this way to create, read, update, or delete Sedaro Blocks won't automatically update already instantiated `Branch` or `Block` objects.
 
 ## External Simulation State Dependencies
 
-The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).
+The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals). For detailed documentation on our Models, their Blocks, at the attributes and relationships of each, see our [model docs](https://docs.sedaro.com/models).
 
 **Warning:** The following documentation is a work in progress as we continue to evolve this feature. It is recommended that you reach out to Sedaro Application Engineering for assistance using this capability while we mature the documentation for it.
 
@@ -375,6 +398,14 @@ Define `ExternalState` block(s) on a `Scenario` to facilitate in-the-loop connec
 }
 ```
 
+#### Deleting External State Blocks
+
+If you'd like to clear/delete the `ExternalState` Blocks on a `Scenario` model, a shortcut method `delete_all_external_state_blocks` is available on any `ScenarioBranch`.
+
+```python
+scenario_branch.delete_all_external_state_blocks()
+```
+
 ### Deploy (i.e. Initialize)
 
 ```python
@@ -384,24 +415,25 @@ sim_client = sedaro.scenario('NShL7J0Rni63llTcEUp4F').simulation
 # Note that when `sim_client.start()` returns, the simulation job has entered your Workspace queue to be built and run.
 # Passing `wait=True` to start() will wait until the simulation has entered the RUNNING state before returning.
 # At this time, the simulation is ready for external state production/consumption
-simulation_handle = sim_client.start(wait=True)
+with sim_client.start(wait=True) as simulation_handle:
+  # External cosimulation transactions go here
 ```
 
 ### Consume
 
 ```python
-agent_id = ... # The ID of the relevant simulation Agent
-per_round_external_state_id = ... # The ID of the relevant ExternalState block
-spontaneous_external_state_id = ... # The ID of the relevant ExternalState block
-time = 60050.0137 # Time in MJD
+  agent_id = ... # The ID of the relevant simulation Agent
+  per_round_external_state_id = ... # The ID of the relevant ExternalState block
+  spontaneous_external_state_id = ... # The ID of the relevant ExternalState block
+  time = 60050.0137 # Time in MJD
 
-# Query the simulation for the state defined on the ExternalState block at the optionally given time
-# This blocks until the state is available from the simulation
-state = simulasimulation_handletion.consume(agent_id, per_round_external_state_id)
-print(state)
+  # Query the simulation for the state defined on the ExternalState block at the optionally given time
+  # This blocks until the state is available from the simulation
+  state = simulation_handle.consume(agent_id, per_round_external_state_id)
+  print(state)
 
-state = simulation_handle.consume(agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
-print(state)
+  state = simulation_handle.consume(agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
+  print(state)
 ```
 
 **Note:** Calling `consume` with a `time` value that the simulation hasn't reached yet will block until the simulation catches up. This is currently subject to a 10 minute timeout. If the request fails after 10 minutes, it is recommended that it be reattempted.
@@ -411,18 +443,18 @@ Similarly, calling `consume` with a `time` that too far lags the current simulat
 ### Produce
 
 ```python
-state = (
-  [7000, 0, 0], # Position as ECI (km)
-  [12, 0, 14.1, 14.3, 7, 0], # Thruster thrusts
-)
-simulation_handle.produce(agent_id, per_round_external_state_id, state)
+  state = (
+    [7000, 0, 0], # Position as ECI (km)
+    [12, 0, 14.1, 14.3, 7, 0], # Thruster thrusts
+  )
+  simulation_handle.produce(agent_id, per_round_external_state_id, state)
 
-state = (
-  [0, 0, 0, 1], # Commanded Attitude as Quaternion
-)
-simulation_handle.produce(agent_id, spontaneous_external_state_id, state, timestamp=60050.2)
-# `timestamp` is optional.  If not provided, the `time` at which the simulation receives the spontaneous state is used
-# Note: `timestamp` can be used to intentionally inject latency between the time a command is sent and when it is to take effect.  This allows for more accurately modeling communications latency on various comms buses.
+  state = (
+    [0, 0, 0, 1], # Commanded Attitude as Quaternion
+  )
+  simulation_handle.produce(agent_id, spontaneous_external_state_id, state, timestamp=60050.2)
+  # `timestamp` is optional.  If not provided, the `time` at which the simulation receives the spontaneous state is used
+  # Note: `timestamp` can be used to intentionally inject latency between the time a command is sent and when it is to take effect.  This allows for more accurately modeling communications latency on various comms buses.
 ```
 
 ### Teardown
@@ -430,7 +462,40 @@ simulation_handle.produce(agent_id, spontaneous_external_state_id, state, timest
 A simulation that terminates on its own will clean up all external state interfaces. Manually terminating the simulation will do the same:
 
 ```python
-simulation_handle.terminate()
+  simulation_handle.terminate()
+
+  # Or if using the context manager, simply exit the context
+```
+
+## Modeling and Simulation Utilities
+
+The following modeling and simuation utility methods are available for convenience. See the docstrings for each method for more information and usage.
+
+```python
+from sedaro import modsim as ms
+
+ms.datetime_to_mjd(dt: datetime.datetime) -> float:
+ms.mjd_to_datetime(mjd: float) -> datetime.datetime:
+ms.read_csv_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
+ms.read_excel_time_series(file_path: str, time_column_header: str = 'time', **kwargs):
+ms.search_time_series(time_dimension: np.ndarray | list, timestamp: float | datetime.datetime) -> int:
+ms.quaternion2attitude_mat(quaternion: np.ndarray) -> np.ndarray:
+ms.quaternion_rotate_frame(vectorIn: np.ndarray, quaternion: np.ndarray) -> np.ndarray:
+ms.angle_between_quaternion(q1: np.ndarray, q2: np.ndarray) -> np.ndarray:
+ms.difference_quaternion(q1: np.ndarray, q2: np.ndarray) -> np.ndarray:
+ms.quaternion2rotmat(quaternion: np.ndarray) -> np.ndarray:
+ms.orthogonal_vector(vector: np.ndarray) -> np.ndarray:
+ms.quaternion_dot(q1: np.ndarray, q2: np.ndarray) -> np.ndarray:
+ms.random_orthogonal_rotation(vector: np.ndarray, angle_1sigma: float, random: np.random.RandomState | None = None) -> np.ndarray:
+ms.euler_axis_angle2quaternion(axis, angle):
+ms.vectors2angle(vector1: np.ndarray, vector2: np.ndarray) -> float:
+ms.eci_vector_to_body(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
+ms.body_vector_to_eci(vector_eci: np.ndarray, attitude_body_eci: np.ndarray) -> np.ndarray:
+ms.quaternion_conjugate(quaternion: np.ndarray) -> np.ndarray:
+ms.rotmat2quaternion(rot_mat: np.ndarray) -> np.ndarray:
+ms.quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float) -> np.ndarray:
+ms.invert3(m: np.ndarray) -> np.ndarray:
+ms.unit3(vec: np.ndarray) -> np.ndarray:
 ```
 
 ## Sedaro Base Client

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
+from ... import modsim as ms
 from ...settings import SCENARIO_TEMPLATE
 from ..blocks import BlockType
 from ..branch import Branch
@@ -31,13 +31,26 @@ class ScenarioBranch(Branch):
 
     @property
     def study(self):
-        """A `Sttudy` instance to interact with a study connected to this scenario branch.
+        """A `Study` instance to interact with a study connected to this scenario branch.
 
         Returns:
             Study: a `Study`
         """
         from .study_client import Study
         return Study(self._sedaro, self)
+    
+    def delete_all_external_state_blocks(self):
+        """Delete all ExternalState blocks in the scenario branch."""
+        if existing_externals := self.ExternalState.get_all_ids():
+            self.crud(delete=existing_externals)
+
+    def set_start_time_to_now(self, elapsed_time_seconds):
+        """Set the start time of the scenario to the current time and the stop time to the current time plus the passed elapsed time in seconds."""
+        start_time_mjd = ms.datetime_to_mjd(ms.datetime_now_utc())
+        return self.clockConfig.update(
+            startTime=start_time_mjd,
+            stopTime=start_time_mjd+(elapsed_time_seconds/86400)
+        )
 
     # ==============================================================================================================
     # For intellisense

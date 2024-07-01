@@ -1,6 +1,6 @@
 import time
 
-from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID
+from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
 from sedaro import SedaroApiClient
 from sedaro.settings import PRE_RUN_STATUSES, RUNNING, STATUS, TERMINATED
@@ -75,6 +75,21 @@ def test_run_simulation():
     assert simulation_handle.status()[STATUS] == TERMINATED
     simulation_handle.results()
 
+def test_start_as_contextmanager():
+    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+
+    try:
+        with sim.start(wait=True) as simulation_handle:
+            sim_id = simulation_handle['id']
+            assert simulation_handle.status()[STATUS] == RUNNING
+            raise ValueError('Intentional error') # intentionally raise error
+    except ValueError as e:
+        if str(e) != 'Intentional error':
+            raise
+
+    assert sim.status(job_id=sim_id)[STATUS] == TERMINATED
+
 
 def run_tests():
     test_run_simulation()
+    test_start_as_contextmanager()
