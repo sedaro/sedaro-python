@@ -96,7 +96,7 @@ def _get_stats_for_sim_id(
     fast_fetcher = FastFetcher(_sedaro)
     response = fast_fetcher.get(request_url)
     if response.status != 200:
-        if response.status == 503: # stats not yet available
+        if response.status == 409: # stats not yet available
             return None, False
         else:
             raise Exception(f"Failed to get stats for sim_id {sim_id}.  Status code: {response.status}.  Response: {response.data}")
