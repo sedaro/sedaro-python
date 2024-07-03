@@ -179,13 +179,13 @@ VLLS = [
 ]
 
 def values_from_df(values, name=None):
-    if name in VLLS:
+    if name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
         return [json.loads(value) for value in values]
     else:
         return values
 
 def value_from_df(value, name=None):
-    if name in VLLS:
+    if name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
         return json.loads(value)
     else:
         return value

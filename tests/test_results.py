@@ -329,6 +329,7 @@ def test_series_values():
         'pref.c.baz.1.0': [0, 8, 16, 24, 32, 40],
         'pref.c.baz.1.1': [0, 9, 18, 27, 36, 45],
         'pref.d.a': [0, 10, 20, 30, 40, 50],
+        'pref.visibleEarthArea': [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]],
     }, npartitions=1)
     df = df.set_index('time')
 
@@ -337,6 +338,7 @@ def test_series_values():
         'b': {},
         'c': {'foo': {}, 'bar': {}, 'baz': {'0': {'0': {}, '1': {}}, '1': {'0': {}, '1': {}}}},
         'd': {'a': {}},
+        'visibleEarthArea': {},
     }
 
     ser = SedaroSeries('pref', df, col_ind, 'pref')
@@ -350,6 +352,7 @@ def test_series_values():
             'baz': [[[0, 0], [0, 0]], [[6, 7], [8, 9]], [[12, 14], [16, 18]], [[18, 21], [24, 27]], [[24, 28], [32, 36]], [[30, 35], [40, 45]]],
         },
         'd': {'a': [0, 10, 20, 30, 40, 50]},
+        'visibleEarthArea': [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]],
     }
 
     df2 = df[['pref.c.baz.0.0', 'pref.c.baz.0.1', 'pref.c.baz.1.0', 'pref.c.baz.1.1']]
