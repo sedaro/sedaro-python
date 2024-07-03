@@ -105,10 +105,14 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
 
         if not (self.__has_subseries and not self.__is_singleton_or_vector()):
             if not self.__has_subseries:
-                return self.__series[self.__column_names[0]].compute().tolist()
+                column_name = self.__column_names[0]
+                return values_from_df(self.__series[column_name].compute().tolist(), name=column_name)
             else:
                 computed_columns = {nonprefixed_column_name(
-                    column_name): self.__series[column_name].compute().tolist() for column_name in self.__series.columns}
+                    column_name): values_from_df(
+                        self.__series[column_name].compute().tolist(), name=column_name
+                    ) for column_name in self.__series.columns
+                }
                 vals = []
                 num_indexes = -1
                 for column in computed_columns:
