@@ -1,3 +1,4 @@
+import json
 import math
 from os import listdir
 from pathlib import Path
@@ -170,6 +171,24 @@ def get_parquets(path: str):
     paths = listdir(path)
     return [parquet for parquet in paths if not parquet.startswith('.')]
 
+VLLS = [
+    'visibleEarthArea',
+    'activeRoutines',
+    'availableTransmitters',
+    'pseudoranges',
+]
+
+def values_from_df(values, name=None):
+    if name in VLLS:
+        return [json.loads(value) for value in values]
+    else:
+        return values
+
+def value_from_df(value, name=None):
+    if name in VLLS:
+        return json.loads(value)
+    else:
+        return value
 
 class FromFileAndToFileAreDeprecated:
     @classmethod
