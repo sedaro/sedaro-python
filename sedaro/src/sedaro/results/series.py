@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 from functools import cached_property
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 
 class SedaroSeries(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, name, data, column_index, prefix):
+    def __init__(self, name, data, stats, column_index, prefix, stats_to_plot: list = None, block_name: str = None):
         '''Initialize a new time series.
 
         Series are typically created through the .<VARIABLE_NAME> attribute or
@@ -24,16 +25,23 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
         self.__column_index = column_index
         self.__has_subseries = len(self.__column_index) > 0
         self.__column_names = get_column_names(self.__column_index, self.__prefix)
+        self.__block_name = block_name if block_name != '<Unnamed Block>' else None
         try:
             self.__mjd = data.index.values.compute()
         except AttributeError:  # used for model_at, in which mjd has already been computed
             self.__mjd = data.index.values
         self.__elapsed_time = [86400 * (entry - self.__mjd[0]) for entry in self.__mjd]
         self.__series = data[self.__column_names]
+        self.__initial_stats = copy.deepcopy(stats)
+        self.__stats = {}
+        for k in stats:
+            if k == prefix or k.startswith(prefix + '.'):
+                self.__stats[k] = stats[k]
         if self.__has_subseries:
             self.__dtype = self.__series.dtypes.to_dict()
         else:
             self.__dtype = self.__series.dtypes.iloc[0]
+        self.stats_to_plot = stats_to_plot if stats_to_plot is not None else []
 
     def __repr__(self):
         return f"Series({self.name})"
@@ -72,7 +80,15 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             if subseries_name not in self.__column_index:
                 raise ValueError(f"Subseries '{subseries_name}' not found.")
             else:
-                return SedaroSeries(f'{self.__name}.{subseries_name}', self.__series, self.__column_index[subseries_name], f'{self.__prefix}.{subseries_name}')
+                return SedaroSeries(
+                    f'{self.__name}.{subseries_name}',
+                    self.__series,
+                    self.__stats,
+                    self.__column_index[subseries_name],
+                    f'{self.__prefix}.{subseries_name}',
+                    stats_to_plot=self.stats_to_plot,
+                    block_name=self.__block_name
+                )
 
     def __getattr__(self, subseries_name: str):
         '''Get a particular subseries by name as an attribute.'''
@@ -143,6 +159,65 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
     @property
     def duration(self):
         return (self.mjd[-1] - self.mjd[0]) * 86400
+
+    def subst_name(self, key):
+        if self.__block_name is None:
+            return key
+        else:
+            return '.'.join([self.__block_name] + key.split('.')[1:])
+
+    def stats(self, *args):
+        if not self.__has_subseries:
+            if len(args) == 0:
+                return self.__stats[self.__prefix]
+            elif len(args) == 1:
+                return self.__stats[self.__prefix][args[0]]
+            else:
+                return tuple(self.__stats[self.__prefix][k] for k in args)
+        else:
+            cutoff_len = len(self.__prefix) + 1
+            if len(args) == 0:
+                return {k[cutoff_len:]: self.__stats[k] for k in self.__stats}
+            elif len(args) == 1:
+                return {k[cutoff_len:]: self.__stats[k][args[0]] for k in self.__stats}
+            else:
+                dicts_to_return = []
+                for arg in args:
+                    dicts_to_return.append({k[cutoff_len:]: self.__stats[k][arg] for k in self.__stats})
+                return tuple(dicts_to_return)
+
+    def plot_stats(self, show=True, xlabel=None):
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            raise ValueError('Plotting is disabled because matplotlib could not be imported.')
+        try:
+            if self.__has_subseries and not self.__is_singleton_or_vector():
+                raise ValueError('Select a specific subseries to plot.')
+            else:
+                if not self.__stats:
+                    raise ValueError('No statistics available to plot.')
+                else:
+                    position = len(self.stats_to_plot)
+                    self.stats_to_plot.append({
+                        'label': xlabel if xlabel is not None else self.subst_name(self.__prefix),
+                        'min': self.__stats[self.__prefix]['min'],
+                        'max': self.__stats[self.__prefix]['max'],
+                        'avg': self.__stats[self.__prefix]['average'],
+                        'pos': position,
+                    })
+                    if show:
+                        for box in self.stats_to_plot:
+                            plt.plot([box['pos'], box['pos']], [box['min'], box['max']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['min'], box['min']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['max'], box['max']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']], color='#2D56A0', linestyle='dotted', linewidth=1.5)
+                        plt.xticks([box['pos'] for box in self.stats_to_plot], [box['label'] for box in self.stats_to_plot], rotation=15)
+                        plt.tight_layout()
+                        plt.show()
+                        self.stats_to_plot.clear()
+        except:
+            raise ValueError('The data of this series do not have the necessary statistics to plot.')
 
     def value_at(self, mjd, interpolate=False):
         '''Get the value of this series at a particular time in mjd.'''
@@ -217,6 +292,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 'name': self.__name,
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
+                'stats': self.__initial_stats,
+                'block_name': self.__block_name,
             }, fp)
         self.__series.to_parquet(f"{path}/data.parquet")
         print(f"Series result saved to {path}.")
@@ -235,8 +312,10 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             name = meta['name']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            stats = meta['stats'] if 'stats' in meta else {}
+            block_name = meta['block_name'] if 'block_name' in meta else None
         data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data, column_index, prefix)
+        return cls(name, data, stats, column_index, prefix, block_name=block_name)
 
     def summarize(self):
         hfill()
@@ -250,20 +329,30 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             print("\n📑 This series has subseries.")
             print(f"\n🗂️ Value data types are:")
             for key, value in self.__dtype.items():
+                stats_marker = '\033[0;32m*\033[0;0m' if key in self.__stats else ' '
                 name_without_prefix = key[len(self.__prefix) + 1:]
                 if value == 'None':
-                    print(f"    - '{name_without_prefix}': All entries in this subseries are None")
+                    print(f"    - {stats_marker} '{name_without_prefix}': All entries in this subseries are None")
                 else:
-                    print(f"    - '{name_without_prefix}': '{value}'")
+                    print(f"    - {stats_marker} '{name_without_prefix}': '{value}'")
 
         else:
             if self.__dtype == 'None':
                 print('\n⛔ All entries in this series are None')
             else:
                 print(f"\n🗂️ Value data type is '{self.__dtype}'")
+            if self.__stats:
+                print('\n📊 Statistics:')
+                for k in self.__stats[self.__prefix]:
+                    print(f"    - {k}: {self.__stats[self.__prefix][k]}")
 
         hfill()
         if self.__has_subseries:
             print("❓ Index [<SUBSERIES_NAME>] to select a subseries")
+            if self.__stats:
+                print("❓ Query statistics with [<SUBSERIES_NAME>].stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
+                print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
         else:
             print("❓ Call .plot to visualize results")
+            if self.__stats:
+                print("❓ Call .plot_stats to visualize statistics")

@@ -262,7 +262,7 @@ The `results` and `results_poll` methods take a number of arguments. These argum
 - `start`: start time of the data to fetch, in MJD. Defaults to the start of the simulation.
 - `stop`: end time of the data to fetch, in MJD. Defaults to the end of the simulation.
 - `streams`: a list of streams to fetch, following the format specified below. If no argument is provided, all streams are fetched.
-- `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on.  If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
+- `sampleRate`: the resolution at which to fetch the data. Must be a positive integer power of two, or 0. The value `n` provided, if not 0, corresponds to data at `1/n` resolution. For instance, `1` means data is fetched at full resolution, `2` means every second data point is fetched, `4` means every fourth data point is fetched, and so on. If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data is fetched at full resolution (sampleRate 1).
 - num_workers: `results` and `results_poll` use parallel downloaders to accelerate data fetching. The default number of downloaders is 2, but you can use this argument to set a different number.
 
 #### Format of `streams`
@@ -272,10 +272,10 @@ must be a list of tuples following particular rules:
 
 - Each tuple in the list can contain either 1 or 2 items.
 - If a tuple contains 1 item, that item must be the agent ID, as a string. Data for all engines of this agent\
-    will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
+   will be fetched. Remember that a 1-item tuple is written as `(foo,)`, not as `(foo)`.
 - If a tuple contains 2 items, the first item must be the same as above. The second item must be one of the\
-    following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
-    agent of this engine will be fetched.
+   following strings, specifying an engine: `'GNC`, `'CDH'`, `'Thermal'`, `'Power'`. Data for the specified\
+   agent of this engine will be fetched.
 
 For example, with the following code, `results` will only contain data for all engines of agent `foo` and the
 `Power` and `Thermal` engines of agent `bar`.
@@ -299,6 +299,33 @@ results.save('path/to/data')
 ```
 
 This will save the data in a directory whose path is indicated by the argument to `results.save()`. The path given must be to an empty directory, or a directory which does not yet exist.
+
+### Statistics
+
+Summary statistics are calculated for certain state variables. They become available shortly after a simulation finishes running.
+
+To fetch the statistics for a simulation, use `stats`:
+
+```py
+stats = simulation_handle.stats()
+```
+
+The above will raise an exception if the sim's stats are not yet ready. Use the optional `wait=True` argument to block until the stats are ready:
+
+```py
+stats = simulation_handle.stats(wait=True)
+```
+
+To fetch statistics only for certain streams, use the `streams` argument in the format previously described:
+
+```py
+selected_streams=[
+    ('foo',),
+    ('bar', 'Thermal'),
+    ('bar', 'Power')
+]
+stats = sim.stats(streams=selected_streams)
+```
 
 ## Loading Saved Data
 
@@ -341,7 +368,7 @@ Note that requests sent this way to create, read, update, or delete Sedaro Block
 
 ## External Simulation State Dependencies
 
-The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals).  For detailed documentation on our Models, their Blocks, at the attributes and relationships of each, see our [model docs](https://docs.sedaro.com/models).
+The following API is exposed to enable the integration of external software with a Sedaro simulation during runtime. Read more about "Cosimulation" in Sedaro [here](https://sedaro.github.io/openapi/#tag/Externals). For detailed documentation on our Models, their Blocks, at the attributes and relationships of each, see our [model docs](https://docs.sedaro.com/models).
 
 **Warning:** The following documentation is a work in progress as we continue to evolve this feature. It is recommended that you reach out to Sedaro Application Engineering for assistance using this capability while we mature the documentation for it.
 
@@ -442,7 +469,7 @@ A simulation that terminates on its own will clean up all external state interfa
 
 ## Modeling and Simulation Utilities
 
-The following modeling and simuation utility methods are available for convenience.  See the docstrings for each method for more information and usage.
+The following modeling and simuation utility methods are available for convenience. See the docstrings for each method for more information and usage.
 
 ```python
 from sedaro import modsim as ms

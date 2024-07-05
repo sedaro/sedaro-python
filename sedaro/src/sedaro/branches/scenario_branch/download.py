@@ -109,6 +109,7 @@ class DownloadWorker:
     def __init__(self, download_bar):
         self.download_bar = download_bar
         self.streams = {}
+        self.stats = {}
 
     def ingest(self, page):
         for stream_id, stream_data in page.items():
@@ -126,7 +127,21 @@ class DownloadWorker:
         for k in self.streams:
             self.streams[k] = self.streams[k].finalize()
 
-    def add_metadata(self, metadata):
+    def add_stats(self, stats: dict):
+        self.stats = stats
+
+    def update_stats(self, new_stats: dict):
+        for stream in new_stats:
+            if stream not in self.stats:
+                self.stats[stream] = {}
+            self.stats[stream].update(new_stats[stream])
+
+    def finalize_stats(self, others: "list[DownloadWorker]"):
+        for other in others:
+            self.update_stats(other.stats)
+        return self.stats
+
+    def add_metadata(self, metadata: dict):
         self.metadata = metadata
 
     def update_metadata(self, new_metadata):

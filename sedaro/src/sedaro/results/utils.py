@@ -35,7 +35,6 @@ HFILL = 75
 def hfill(char="-", len=HFILL):
     print(char * len)
 
-
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict, column_index: dict, prefix: str):
+    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str, stats_to_plot: list = None):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -28,6 +28,11 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             self.__name = '<Unnamed Block>'
         self.__structure = structure
         self.__series = series
+        self.__stats = {}
+        if stats is None:
+            stats = {}
+        for k in stats:
+            self.__stats[k] = {kk: vv for kk, vv in stats[k].items() if kk.startswith(prefix)}
         self.__column_index = column_index
         self.__prefix = prefix
         self.__variables = []
@@ -35,6 +40,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for variable in self.__column_index[stream]:
                 self.__variables.append(variable)
         self.__variables = sorted(list(self.__variables))
+        self.stats_to_plot = stats_to_plot if stats_to_plot is not None else []
 
     def __getattr__(self, name: str) -> SedaroSeries:
         '''Get a particular variable by name.
@@ -45,7 +51,19 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         prefix = f"{self.__prefix}{name}"
         for stream in self.__column_index:
             if name in self.__column_index[stream]:
-                return SedaroSeries(name, self.__series[stream], self.__column_index[stream][name], prefix)
+                flattened_stats = {}
+                for engine in self.__stats:
+                    for k in self.__stats[engine]:
+                        flattened_stats[k] = self.__stats[engine][k]
+                return SedaroSeries(
+                    name,
+                    self.__series[stream],
+                    flattened_stats,
+                    self.__column_index[stream][name],
+                    prefix,
+                    self.stats_to_plot,
+                    self.__name
+                )
         else:
             raise ValueError(f'Variable "{name}" not found.')
 
@@ -59,6 +77,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
     def __repr__(self) -> str:
         return f'SedaroBlockResult({self.name})'
+
+    def subst_name(self, key):
+        if self.__name == '<Unnamed Block>':
+            return key
+        else:
+            return '.'.join([self.__name] + key.split('.')[1:])
 
     @property
     def name(self):
@@ -112,6 +136,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 'column_index': self.__column_index,
                 'prefix': self.__prefix,
                 'parquet_files': parquet_files,
+                'stats': self.__stats,
             }, fp)
         print(f"Block result saved to {path}.")
 
@@ -129,6 +154,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             structure = meta['structure']
             column_index = meta['column_index']
             prefix = meta['prefix']
+            stats = meta['stats'] if 'stats' in meta else {}
         engines = {}
         try:
             for agent in meta['parquet_files']:
@@ -138,7 +164,14 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for agent in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, column_index, prefix)
+        return cls(structure, engines, stats, column_index, prefix)
+
+    def __has_stats(self, variable: str) -> bool:
+        for engine in self.__stats:
+            for series in self.__stats[engine]:
+                if series.startswith(self.__prefix + variable):
+                    return True
+        return False
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
@@ -154,9 +187,36 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
         print("\n📋 Variables Available")
         for variable in self.variables:
-            print(f'    • {variable}')
+            stats_marker = '\033[0;32m*\033[0;0m' if self.__has_stats(variable) else ' '
+            print(f'    • {stats_marker} {variable}')
         hfill()
         print("❓ Query variables with .<VARIABLE_NAME>")
+        if self.__stats:
+            print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
+            print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
+
+    def stats(self, *args):
+        if len(args) == 0:
+            cleaned_stats = {}
+            for agent in self.__stats:
+                for key in self.__stats[agent]:
+                    cleaned_stats[self.subst_name(key)] = self.__stats[agent][key]
+            return cleaned_stats
+        elif len(args) == 1:
+            cleaned_stats = {}
+            for agent in self.__stats:
+                for key in self.__stats[agent]:
+                    cleaned_stats[self.subst_name(key)] = self.__stats[agent][key][args[0]]
+            return cleaned_stats
+        else:
+            dicts_to_return = []
+            for arg in args:
+                cleaned_stats = {}
+                for agent in self.__stats:
+                    for key in self.__stats[agent]:
+                        cleaned_stats[self.subst_name(key)] = self.__stats[agent][key][arg]
+                dicts_to_return.append(cleaned_stats)
+            return tuple(dicts_to_return)

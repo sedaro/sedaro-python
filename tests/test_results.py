@@ -5,7 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uuid6
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID
+from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID, SUPERDOVE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
@@ -160,15 +160,8 @@ def test_save_load():
         assert ref_series_result.values == new_series_result.values
 
 
-def test_query_model():
+def sample_model_and_data():
     import dask.dataframe as dd
-
-    simulation_job = {
-        'branch': 'test_id',
-        'dateCreated': '2021-08-05T18:00:00.000Z',
-        'dateModified': '2021-08-05T18:00:00.000Z',
-        STATUS: SUCCEEDED,
-    }
 
     df1 = dd.from_dict({
         'b.value': ['0first', '0second'],
@@ -184,7 +177,7 @@ def test_query_model():
     }, npartitions=1)
     df2 = df2.set_index('index')
 
-    data = {
+    return {
         'meta': {
             'structure': {
                 'scenario': {
@@ -216,13 +209,23 @@ def test_query_model():
                         'otherValue': '0rotherZero',
                     }
                 }
-            }
+            },
         },
         'series': {
             'a/0': df1,
             'a/1': df2,
-        }
+        },
     }
+
+def test_query_model():
+    simulation_job = {
+        'branch': 'test_id',
+        'dateCreated': '2021-08-05T18:00:00.000Z',
+        'dateModified': '2021-08-05T18:00:00.000Z',
+        STATUS: SUCCEEDED,
+    }
+
+    data = sample_model_and_data()
 
     results = SimulationResult(simulation_job, data)
     agent = results.agent('Agent')
@@ -341,7 +344,7 @@ def test_series_values():
         'visibleEarthArea': {},
     }
 
-    ser = SedaroSeries('pref', df, col_ind, 'pref')
+    ser = SedaroSeries('pref', df, {}, col_ind, 'pref')
 
     assert ser.values == {
         'a': [[0, 0], [1, 5], [2, 10], [3, 15], [4, 20], [5, 25]],
@@ -358,7 +361,7 @@ def test_series_values():
     df2 = df[['pref.c.baz.0.0', 'pref.c.baz.0.1', 'pref.c.baz.1.0', 'pref.c.baz.1.1']]
 
     col_ind2 = col_ind['c']['baz']
-    ser2 = SedaroSeries('pref.c.baz', df2, col_ind2, 'pref.c.baz')
+    ser2 = SedaroSeries('pref.c.baz', df2, {}, col_ind2, 'pref.c.baz')
     assert ser2.values == [
         [[0, 0], [0, 0]],
         [[6, 7], [8, 9]],
@@ -369,6 +372,85 @@ def test_series_values():
     ]
 
 
+def fake_stats(factor):
+    return {
+        'min': -1 * factor,
+        'max': 5 * factor,
+        'average': 2 * factor,
+        'integral': 10 * factor,
+        'absAvg': 3 * factor,
+        'negativeMax': None,
+        'positiveMax': 5 * factor,
+    }
+
+
+def test_stats():
+    # test propagation of stats down to Series level, as well as certain functions at Block and Series level
+    simulation_job = {
+        'branch': 'test_id',
+        'dateCreated': '2021-08-05T18:00:00.000Z',
+        'dateModified': '2021-08-05T18:00:00.000Z',
+        STATUS: SUCCEEDED,
+    }
+
+    data = sample_model_and_data()
+    all_stats = data['stats'] = {
+        'a/0': {
+            'b.value': fake_stats(1),
+            'value': fake_stats(10),
+        },
+        'a/1': {
+            'b.otherValue': fake_stats(100),
+            'otherValue': fake_stats(1000),
+        },
+    }
+
+    results = SimulationResult(simulation_job, data)
+    agent = results.agent('Agent')
+    assert agent._SedaroAgentResult__stats == all_stats
+    block = agent.block('b')
+    assert block._SedaroBlockResult__stats == {
+        'a/0': { 'b.value': fake_stats(1), },
+        'a/1': { 'b.otherValue': fake_stats(100), },
+    }
+    assert block.stats() == {
+        'Block.value': fake_stats(1),
+        'Block.otherValue': fake_stats(100),
+    }
+    assert block.stats('min') == {
+        'Block.value': -1,
+        'Block.otherValue': -100,
+    }
+    assert block.stats('min', 'max') == ({
+        'Block.value': -1,
+        'Block.otherValue': -100,
+    }, {
+        'Block.value': 5,
+        'Block.otherValue': 500,
+    })
+    series = block.value
+    assert series.stats() == fake_stats(1)
+    assert series.stats('min') == -1
+    assert series.stats('min', 'max') == (-1, 5)
+
+    # test waiting on stats from results_poll
+    scenario = sedaro.scenario(SUPERDOVE_SCENARIO_ID)
+    sim = scenario.simulation
+    sim.start()
+    res = sim.results_poll(wait_on_stats=True)
+    empty = ['NT-KoZFSELKK8eomP3lkV/0', 'NT-KoZFSELKK8eomP3lkV/1']
+    has_rain_stats = ['NT-LKoFSJLenjoFP9FXAV/0', 'NT-LuTrRCydjLgnmceboV/0', 'NT-LgloSzu8F-V4MtzkHV/0', 'NT-L_VwTrXTMQUapcAoJk/0', 'NT-M0sqRR5WTIHKtB4ylF/0', 'NT-LoCYRnPamzh3QTTedF/0']
+    assert res._SimulationResult__stats_fetched
+    assert len(res._SimulationResult__stats) == len(empty) + len(has_rain_stats)
+    for agent_id in empty:
+        assert res._SimulationResult__stats[agent_id] == {}
+    for agent_id in has_rain_stats:
+        assert list(res._SimulationResult__stats[agent_id].keys()) == ['rainData.rainProbability']
+    stats_from_endpoint = sim.stats()
+    assert stats_from_endpoint == res._SimulationResult__stats
+
+
+
 def run_tests():
     test_query_terminated()
     test_query()
@@ -376,3 +458,4 @@ def run_tests():
     test_query_model()
     test_download()
     test_series_values()
+    test_stats()

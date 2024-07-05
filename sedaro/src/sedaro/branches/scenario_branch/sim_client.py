@@ -1,20 +1,20 @@
-import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
-import msgpack
-import requests
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
-from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
-from ...utils import body_from_res, parse_urllib_response, progress_bar
+from ...exceptions import (NoSimResultsError, SedaroApiException,
+                           SimInitializationError)
+from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
+                         QUEUED, RUNNING, STATUS)
+from ...utils import body_from_res, progress_bar
+from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -115,44 +115,6 @@ def set_nested(results):
         kspl = k.split('/')[0]
         nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
     return nested
-
-
-class FastFetcherResponse:
-    def __init__(self, response: requests.Response):
-        self.type = response.headers['Content-Type']
-
-        if self.type == 'application/json':
-            self.data = response.text
-        elif self.type == 'application/msgpack':
-            self.data = response.content
-        else:
-            raise Exception(
-                f"Unexpected MIME type: {self.type}.  Response content: {response.content}. Status Code: {response.status_code}")
-
-        self.status = response.status_code
-        self.response = response
-
-    def __getattr__(self, key):
-        return self.response[key]
-
-    def parse(self):
-        if self.type == 'application/json':
-            return parse_urllib_response(self)
-        elif self.type == 'application/msgpack':
-            return msgpack.unpackb(self.data)
-        else:
-            raise Exception(
-                f"Unexpected MIME type: {self.response.headers['Content-Type']}.  Response content: {self.data}. Status Code: {self.response.status_code}")
-
-
-class FastFetcher:
-    """Accelerated request handler for data page fetching."""
-
-    def __init__(self, sedaro_api: 'SedaroApiClient'):
-        self.sedaro_api = sedaro_api
-
-    def get(self, url):
-        return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 
 class Simulation:
@@ -356,6 +318,8 @@ class Simulation:
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
                     ctoken = _response['meta']['continuationToken']
+                if 'stats' in _response:
+                    download_manager.update_stats(_response['stats'])
             else:
                 is_v3 = False
             if response.status != 200:
@@ -373,6 +337,8 @@ class Simulation:
                     download_manager.ingest(_page['series'])
                     download_manager.update_metadata(_page['meta'])
                     try:
+                        if 'stats' in _page:
+                            download_manager.update_stats(_page['stats'])
                         if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                             has_nonempty_ctoken = True
                             ctoken = _page['meta']['continuationToken']
@@ -384,26 +350,6 @@ class Simulation:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                         raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()
-
-    def __get_filtered_streams(self, requested_streams: list, metadata: dict):
-        streams_raw = metadata['streams']
-        streams_true = {}
-        for stream in streams_raw:
-            stream_parts = stream.split('.')
-            if stream_parts[0] not in streams_true:
-                streams_true[stream_parts[0]] = []
-            streams_true[stream_parts[0]].append(stream_parts[1])
-        filtered_streams = []
-        for stream in requested_streams:
-            if stream[0] in streams_true:
-                if len(stream) == 1:
-                    for v in streams_true[stream[0]]:
-                        filtered_streams.append((stream[0], v))
-                else:
-                    if stream[0] in streams_true:
-                        if stream[1] in streams_true[stream[0]]:
-                            filtered_streams.append(stream)
-        return filtered_streams
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
         try:
@@ -426,19 +372,6 @@ class Simulation:
         except Exception as e:
             return e
 
-    def __get_metadata(self, sim_id: str = None, num_workers: int = None):
-        if num_workers is None:
-            request_url = f'/data/{sim_id}/metadata'
-        else:
-            request_url = f'/data/{sim_id}/metadata?numTokens={num_workers}'
-        with self.__sedaro.api_client() as api:
-            response = api.call_api(request_url, 'GET', headers={
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',  # Required for Sedaro firewall
-            })
-        response_dict = json.loads(response.data)
-        return response_dict
-
     def __results(
         self,
         job: 'SimulationHandle' = None,
@@ -451,15 +384,15 @@ class Simulation:
 
         if streams is not None and len(streams) > 0:
             usesTokens = False
-            metadata = self.__get_metadata(sim_id := job['dataArray'])
-            filtered_streams = self.__get_filtered_streams(streams, metadata)
+            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
+            filtered_streams = _get_filtered_streams(streams, metadata)
             num_workers = min(num_workers, len(filtered_streams))
             workers = [[] for _ in range(num_workers)]
             for i, stream in enumerate(filtered_streams):
                 workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            metadata = self.__get_metadata(sim_id := job['dataArray'], num_workers)
+            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
             try:
                 filtered_streams = metadata['streamsTokens']
             except KeyError:
@@ -491,7 +424,11 @@ class Simulation:
         stream_results = {}
         for download_manager in download_managers:
             stream_results.update(download_manager.streams)
-        return {'meta': download_managers[0].finalize_metadata(download_managers[1:]), 'series': stream_results}
+        return {
+            'meta': download_managers[0].finalize_metadata(download_managers[1:]),
+            'stats': download_managers[0].finalize_stats(download_managers[1:]),
+            'series': stream_results,
+        }
 
     def results(
         self,
@@ -500,7 +437,7 @@ class Simulation:
         stop: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        num_workers: int = 2
+        num_workers: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
@@ -551,7 +488,7 @@ class Simulation:
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
-        return SimulationResult(job, data)
+        return SimulationResult(job, data, self.__sedaro)
 
     def results_poll(
         self,
@@ -562,6 +499,7 @@ class Simulation:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
         corresponding sim results rather than latest. See `results` method for details on using the `streams` kwarg.
@@ -578,6 +516,8 @@ class Simulation:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -598,7 +538,50 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return self.results(job_id=job_id, start=start, stop=stop, streams=streams or [], sampleRate=sampleRate, num_workers=num_workers)
+        data = self.__results(
+            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
+        )
+        if wait_on_stats and not data['stats']:
+            success = False
+            while not success:
+                result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                if success:
+                    data['stats'] = result
+                    break
+                time.sleep(retry_interval)
+        return SimulationResult(job, data, self.__sedaro)
+
+    def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
+        """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch stats. Defaults to `None`.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`.
+            wait (bool, optional): If `True`, wait for stats to be available. If `False`, raise
+                an exception if stats are not available. Defaults to `False`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            dict: a dictionary of stats for the sim.
+        """
+        job = self.status(job_id)
+        result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+        if success:
+            return result
+        else:
+            if wait:
+                retry_interval = 2
+                while not success:
+                    result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                    if success:
+                        return result
+                    time.sleep(retry_interval)
+            else:
+                raise NoSimResultsError(reason=
+                    'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
+                )
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -656,12 +639,13 @@ class SimulationHandle:
         return self
 
     def results(
-            self,
-            start: float = None,
-            stop: float = None,
-            streams: Optional[List[Tuple[str, ...]]] = None,
-            sampleRate: int = None,
-            num_workers: int = 2) -> SimulationResult:
+        self,
+        start: float = None,
+        stop: float = None,
+        streams: Optional[List[Tuple[str, ...]]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
+    ) -> SimulationResult:
         """Query simulation results.
 
         If no argument is provided for `streams`, all data will be fetched. If you pass an argument to `streams`, it
@@ -713,7 +697,8 @@ class SimulationHandle:
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
         num_workers: int = 2,
-        retry_interval: int = 2
+        retry_interval: int = 2,
+        wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
@@ -728,6 +713,8 @@ class SimulationHandle:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -742,8 +729,12 @@ class SimulationHandle:
             streams=streams,
             sampleRate=sampleRate,
             num_workers=num_workers,
-            retry_interval=retry_interval
+            retry_interval=retry_interval,
+            wait_on_stats=wait_on_stats,
         )
+    
+    def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
+        return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
         with self.__sim_client.externals_client() as externals_client:

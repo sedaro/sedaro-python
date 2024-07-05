@@ -2,9 +2,11 @@ import datetime as dt
 import json
 import os
 from pathlib import Path
+import time
 from typing import TYPE_CHECKING, Dict, List, Union
 
 from ..settings import STATUS, SUCCEEDED
+from ..branches.scenario_branch.utils import _get_stats_for_sim_id
 from .agent import SedaroAgentResult
 from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
                     _block_type_in_supers, _get_agent_id_name_map,
@@ -12,11 +14,12 @@ from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
+    from ..sedaro_api_client import SedaroApiClient
 
 
 class SimulationResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, simulation: dict, data: dict):
+    def __init__(self, simulation: dict, data: dict, _sedaro: 'SedaroApiClient' = None, stats_fetched: bool = False):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
 
         See the `from_file` class method on this class for alternate initialization.
@@ -28,9 +31,13 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             'dateModified': simulation['dateModified'],
             STATUS: str(simulation[STATUS]),
         }
+        self.__sedaro = _sedaro
         self.__branch = simulation['branch']
         self.__data = data
-        self.__meta: Dict = data['meta']
+        self.__meta: dict = data['meta']
+        self.__stats_fetched = ('stats_fetched' in data and data['meta']['stats_fetched']) or ('stats' in data and data['stats'])
+        self.__stats = data['stats'] if 'stats' in data else {}
+        self.stats_to_plot = []
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
         self.__agent_ids, self.__block_structures, self.__column_index = _restructure_data(
@@ -38,6 +45,36 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
 
     def __repr__(self) -> str:
         return f'SedaroSimulationResult(branch={self.__branch}, status={self.status})'
+
+    def fetch_stats(self, wait=False):
+        '''Fetch the stats for this SimulationResult.
+
+        If `wait` is True, this method will block until the stats are ready.
+        '''
+        if self.__stats_fetched:
+            print("Stats already fetched.")
+            return
+        if self.__sedaro is None:
+            raise Exception("Fetching summary stats after loading from save is not currently supported.")
+        result, success = _get_stats_for_sim_id(self.__sedaro, self.__meta['id'])
+        if success:
+            self.__stats = result
+            self.__stats_fetched = True
+        else:
+            if wait:
+                POLLING_INTERVAL = 2.0
+                while not success:
+                    time.sleep(POLLING_INTERVAL)
+                    result, success = _get_stats_for_sim_id(self.__sedaro, self.__meta['id'])
+                self.__stats = result
+                self.__stats_fetched = True
+            else:
+                raise Exception("Failed to fetch summary stats for simulation. Stats are not yet ready.")
+        print("Stats fetched.")
+
+    @property
+    def stats_fetched(self) -> bool:
+        return self.__stats_fetched
 
     @property
     def job_id(self):
@@ -116,7 +153,16 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
                 agent_dataframes[stream_id] = self.__data['series'][stream_id]
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
-        return SedaroAgentResult(name, self.__block_structures[agent_id], agent_dataframes, self.__column_index[agent_id], initial_state=initial_state)
+        filtered_stats = {k: v for k, v in self.__stats.items() if k.startswith(agent_id)}
+        return SedaroAgentResult(
+            name,
+            self.__block_structures[agent_id],
+            agent_dataframes,
+            self.__column_index[agent_id],
+            initial_state=initial_state,
+            stats=filtered_stats,
+            stats_to_plot=self.stats_to_plot
+        )
 
     def save(self, path: Union[str, Path]):
         '''Save the simulation result to a directory with the specified path.'''
@@ -137,7 +183,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             df.to_parquet(agent_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-                      'parquet_files': parquet_files}, fp)
+                      'stats': self.__stats, 'parquet_files': parquet_files}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
@@ -153,6 +199,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
+            data['stats'] = contents['stats']
         data['series'] = {}
         try:
             for agent in contents['parquet_files']:
