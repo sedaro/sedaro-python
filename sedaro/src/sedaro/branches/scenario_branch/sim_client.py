@@ -551,7 +551,6 @@ class Simulation:
                 time.sleep(retry_interval)
         return SimulationResult(job, data, self.__sedaro)
 
-<<<<<<< HEAD
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
 
@@ -584,8 +583,6 @@ class Simulation:
                     'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
                 )
 
-=======
->>>>>>> main
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
     def get(self, key, default=None): return self.__job.get(key, default)
