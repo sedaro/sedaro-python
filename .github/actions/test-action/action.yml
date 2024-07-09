@@ -27,6 +27,9 @@ inputs:
   wildfire-scenario-id:
     description: 'WILDFIRE SCENARIO ID secret'
     required: true
+  superdove-scenario-id:
+    description: 'SUPERDOVE SCENARIO ID secret'
+    required: true
 
 runs:
   using: 'composite'
@@ -62,6 +65,7 @@ runs:
         echo "SIMPLESAT_SCENARIO_ID = '${{ inputs.simplesat-scenario-id }}'" >> tests/config.py
         echo "WILDFIRE_A_T_ID = '${{ inputs.wildfire-a-t-id }}'" >> tests/config.py
         echo "WILDFIRE_SCENARIO_ID = '${{ inputs.wildfire-scenario-id }}'" >> tests/config.py
+        echo "SUPERDOVE_SCENARIO_ID = '${{ inputs.superdove-scenario-id }}'" >> tests/config.py
 
     - name: Test with pytest
       shell: bash
