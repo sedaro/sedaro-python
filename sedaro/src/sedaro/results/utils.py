@@ -76,7 +76,10 @@ def _restructure_data(series, agents, meta):
 
     for series_key in series:
         agent_id = series_key.split("/")[0]
-        agent_mapping[agent_id] = agents[agent_id]
+        try:
+            agent_mapping[agent_id] = agents[agent_id]
+        except KeyError: # agent_id corresponding to coupling is not in the metamodel
+            continue
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
         if agent_id not in index:
