@@ -1,7 +1,8 @@
 import json
+from typing import TYPE_CHECKING, List, Optional, Tuple
+
 import msgpack
 import requests
-from typing import List, Tuple, TYPE_CHECKING
 
 from ...utils import parse_urllib_response
 
@@ -46,7 +47,7 @@ class FastFetcher:
         return FastFetcherResponse(self.sedaro_api.request.requests_lib_get(url))
 
 
-def _get_metadata(_sedaro: 'SedaroApiClient', sim_id: str = None, num_workers: int = None):
+def _get_metadata(_sedaro: 'SedaroApiClient', sim_id: str = None, num_workers: Optional[int] = None):
     if num_workers is None:
         request_url = f'/data/{sim_id}/metadata'
     else:

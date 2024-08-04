@@ -79,6 +79,14 @@ class PlainRequest:
             protocol = self.__sedaro._api_host.split('://')[0]
             kwargs['proxies'] = {protocol: self.__sedaro._proxy_url}
             kwargs['headers'] |= (self.__sedaro._proxy_headers or {})
+            if not self.__sedaro._verify_ssl:
+                kwargs['verify'] = False
+
+        print('Making fast request:', url)
+        print('Headers:', kwargs.get('headers'))
+        print('Proxies:', kwargs.get('proxies'))
+        print('Proxy URL from client:', self.__sedaro._proxy_url)
+        print('Verify:', self.__sedaro._verify_ssl)
 
         return requests.get(**kwargs)
 
