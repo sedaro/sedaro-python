@@ -298,7 +298,7 @@ class Simulation:
                 encodedStreams = ','.join(['.'.join(x) for x in streams])
                 url += f'&streams={encodedStreams}'
         elif streams is not None:
-                url += f'&streamsToken={streams}'
+            url += f'&streamsToken={streams}'
         url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
@@ -325,7 +325,6 @@ class Simulation:
             if response.status != 200:
                 raise Exception()
         except:
-            print("In exception block")
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         if is_v3:  # keep fetching pages until we get an empty continuation token
