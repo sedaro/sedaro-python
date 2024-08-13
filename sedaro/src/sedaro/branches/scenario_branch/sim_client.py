@@ -297,8 +297,7 @@ class Simulation:
             if len(streams) > 0:
                 encodedStreams = ','.join(['.'.join(x) for x in streams])
                 url += f'&streams={encodedStreams}'
-        else:
-            if streams is not None:
+        elif streams is not None:
                 url += f'&streamsToken={streams}'
         url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
@@ -307,18 +306,11 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
-        print(f"URL: {url}")
-
         response = fast_fetcher.get(url)
-        print("GOT PAGE")
         _response = None
         has_nonempty_ctoken = False
         try:
-            print("About to parse!")
             _response = response.parse()
-            print("Parsed!")
-            print(f"response meta: {[k for k in _response['meta']]}")
-            print("Foo")
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 download_manager.ingest(_response['series'])
@@ -342,7 +334,6 @@ class Simulation:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
-                    print("GOT PAGE")
                     _page = page.parse()
                     download_manager.ingest(_page['series'])
                     download_manager.update_metadata(_page['meta'])
