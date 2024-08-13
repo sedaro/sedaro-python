@@ -142,7 +142,6 @@ class DownloadWorker:
         return self.stats
 
     def add_metadata(self, metadata: dict):
-        print("Adding metadata!")
         self.metadata = metadata
 
     def update_metadata(self, new_metadata):
