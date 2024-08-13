@@ -298,7 +298,8 @@ class Simulation:
                 encodedStreams = ','.join(['.'.join(x) for x in streams])
                 url += f'&streams={encodedStreams}'
         else:
-            url += f'&streamsToken={streams}'
+            if streams is not None:
+                url += f'&streamsToken={streams}'
         url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
             url += f'&sampleRate={sampleRate}'
@@ -306,11 +307,18 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
+        print(f"URL: {url}")
+
         response = fast_fetcher.get(url)
+        print("GOT PAGE")
         _response = None
         has_nonempty_ctoken = False
         try:
+            print("About to parse!")
             _response = response.parse()
+            print("Parsed!")
+            print(f"response meta: {[k for k in _response['meta']]}")
+            print("Foo")
             if 'version' in _response['meta'] and _response['meta']['version'] == 3:
                 is_v3 = True
                 download_manager.ingest(_response['series'])
@@ -325,6 +333,7 @@ class Simulation:
             if response.status != 200:
                 raise Exception()
         except:
+            print("In exception block")
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         if is_v3:  # keep fetching pages until we get an empty continuation token
@@ -333,6 +342,7 @@ class Simulation:
                     # fetch page
                     request_url = f'/data/{id}?&continuationToken={ctoken}'
                     page = fast_fetcher.get(request_url)
+                    print("GOT PAGE")
                     _page = page.parse()
                     download_manager.ingest(_page['series'])
                     download_manager.update_metadata(_page['meta'])
@@ -392,15 +402,18 @@ class Simulation:
                 workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
-            try:
-                filtered_streams = metadata['streamsTokens']
-            except KeyError:
-                raise Exception(
-                    f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-            # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
-            num_workers = len(filtered_streams)
-            workers = filtered_streams
+            if num_workers > 1:
+                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
+                try:
+                    filtered_streams = metadata['streamsTokens']
+                except KeyError:
+                    raise Exception(
+                        f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
+                # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
+                num_workers = len(filtered_streams)
+                workers = filtered_streams
+            else:
+                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
 
         download_bar = ProgressBar(
             metadata['start'],
@@ -410,15 +423,18 @@ class Simulation:
         )
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(
-                self.__downloadInParallel, [sim_id] * num_workers, workers,
-                [params] * num_workers, download_managers, [usesTokens] * num_workers
-            )
-            executor.shutdown(wait=True)
-        for e in exceptions:
-            if e is not None:
-                raise e
+        if num_workers > 1:
+            with ThreadPoolExecutor(max_workers=num_workers) as executor:
+                exceptions = executor.map(
+                    self.__downloadInParallel, [sim_id] * num_workers, workers,
+                    [params] * num_workers, download_managers, [usesTokens] * num_workers
+                )
+                executor.shutdown(wait=True)
+            for e in exceptions:
+                if e is not None:
+                    raise e
+        else:
+            self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
         download_bar.complete()
 
         stream_results = {}
