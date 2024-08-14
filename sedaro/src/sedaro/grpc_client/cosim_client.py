@@ -2,8 +2,6 @@ from concurrent.futures import ThreadPoolExecutor
 import logging
 import threading
 from typing import Iterator
-import time
-import asyncio
 import grpc
 from google.protobuf.json_format import MessageToJson
 from . import cosim_pb2 
@@ -11,7 +9,7 @@ from . import cosim_pb2_grpc
 import json
 import numpy as np
 import requests
-import os
+import settings
 
 
 def deser(v):
@@ -114,9 +112,9 @@ class MessageGenerator:
                 raise Exception("Authentication failed")
         return value
 
-    def authenticate(self, api_key, address, job_id):
+    def authenticate(self, api_key, address, job_id, host):
         self._variable_blocker["auth"] = threading.Event()
-        res = requests.get(f"http://localhost/simulations/jobs/{job_id}/authorization?audience={"SimBed"}&permission=RUN_SIMULATION", headers={"X_API_KEY": api_key})
+        res = requests.get(f"http://{host}/simulations/jobs/{job_id}/authorization?audience={"SimBed"}&permission=RUN_SIMULATION", headers={"X_API_KEY": api_key})
         print(res.json())
         self._send(cosim_pb2.CosimRequest(
             auth_token=cosim_pb2.AuthMETA(api_key=api_key, auth_token=res.json()['jwt']), action=cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE, cluster_handle_address=address, job_id=job_id))
@@ -155,10 +153,12 @@ class CosimRunner:
         self._error = None
         
     def _open(self, api_key, address, job_id):
-        print("Loading ca.pem") 
-        ca_cert = "./ca.pem"
         try:
-            root_certs = open(ca_cert, "rb").read()
+            root_certs = settings.CLIENT_ROOT_CERT
+            if not root_certs:
+                self._error = e
+                self._hold_stream.set()
+                raise Exception("No root certificate provided")
             credentials = grpc.ssl_channel_credentials(root_certs)
         except Exception as e:
             print("Error loading CA certificate: " + str(e))
