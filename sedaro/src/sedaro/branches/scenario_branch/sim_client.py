@@ -15,6 +15,7 @@ from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
                          QUEUED, RUNNING, STATUS)
 from ...utils import body_from_res, progress_bar
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
+import sedaro.grpc_client as grpc_client
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -52,7 +53,8 @@ def concat_stream(main, other, stream_id):
     len_other = len(other[0])
     main[0].extend(other[0])
     stream_id_short = stream_id.split('/')[0]
-    concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
+    concat_stream_data(main[1][stream_id_short], other[1]
+                       [stream_id_short], len_main, len_other)
 
 
 def concat_results(main, other):
@@ -72,7 +74,8 @@ def update_metadata(main, other):
 
 def set_numeric_as_list(d):
     if isinstance(d, dict):
-        if all(key.isdigit() for key in d.keys()):  # Check if all keys are array indexes in string form
+        # Check if all keys are array indexes in string form
+        if all(key.isdigit() for key in d.keys()):
             return [set_numeric_as_list(d[key]) for key in sorted(d.keys(), key=int)]
         else:
             return {k: set_numeric_as_list(v) for k, v in d.items()}
@@ -113,7 +116,8 @@ def set_nested(results):
     nested = {}
     for k in results:
         kspl = k.split('/')[0]
-        nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
+        nested[k] = (results[k][0], {kspl: set_numeric_as_list(
+            __set_nested(results[k][1][kspl]))})
     return nested
 
 
@@ -141,10 +145,13 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
+    def get_sedaro(self):
+        return self.__sedaro
+
     def start(
-        self, 
-        wait=False, 
-        timeout=None, 
+        self,
+        wait=False,
+        timeout=None,
         label=None,
         capacity=None,
         seed=None,
@@ -170,7 +177,7 @@ class Simulation:
             body['capacity'] = capacity
         if seed is not None:
             body['seed'] = seed
-            
+
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
                 body,
@@ -190,7 +197,8 @@ class Simulation:
                 raise SimInitializationError(handle['message'])
             else:
                 return handle
-        raise TimeoutError(f'Simulation did not deploy before timeout of {timeout}.')
+        raise TimeoutError(
+            f'Simulation did not deploy before timeout of {timeout}.')
 
     def status(self, job_id: str = None, *, err_if_empty: bool = True) -> 'SimulationHandle':
         """Gets the latest simulation corresponding to the respective Sedaro Scenario Branch id. This can return a
@@ -220,7 +228,8 @@ class Simulation:
             if err_if_empty:
                 raise NoSimResultsError(
                     status=404,
-                    reason=f'Could not find any simulations for scenario: {self.__branch_id}'
+                    reason=f'Could not find any simulations for scenario: {
+                        self.__branch_id}'
                 )
             return SimulationHandle(None, self)
 
@@ -287,10 +296,12 @@ class Simulation:
         if stop is not None:
             url += f'&stop={stop}'
         if binWidth is not None:
-            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
+            print(
+                "WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
             url += f'&binWidth={binWidth}'
         elif limit is not None:
-            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
+            print(
+                "WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
             url += f'&limit={limit}'
         if not usesStreamTokens:
             streams = streams or []
@@ -348,7 +359,8 @@ class Simulation:
                             raise Exception()
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                        raise SedaroApiException(status=page.status, reason=reason)
+                        raise SedaroApiException(
+                            status=page.status, reason=reason)
         download_manager.finalize()
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
@@ -392,7 +404,8 @@ class Simulation:
                 workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
+            metadata = _get_metadata(
+                self.__sedaro, sim_id := job['dataArray'], num_workers)
             try:
                 filtered_streams = metadata['streamsTokens']
             except KeyError:
@@ -405,10 +418,12 @@ class Simulation:
         download_bar = ProgressBar(
             metadata['start'],
             metadata['stop'],
-            len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']),
+            len(metadata['streams']
+                if 'streams' in metadata else metadata['streamsTokens']),
             "Downloading..."
         )
-        download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
+        download_managers = [DownloadWorker(
+            download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         with ThreadPoolExecutor(max_workers=num_workers) as executor:
             exceptions = executor.map(
@@ -544,7 +559,8 @@ class Simulation:
         if wait_on_stats and not data['stats']:
             success = False
             while not success:
-                result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                result, success = _get_stats_for_sim_id(
+                    self.__sedaro, job['dataArray'], streams=streams)
                 if success:
                     data['stats'] = result
                     break
@@ -567,21 +583,23 @@ class Simulation:
             dict: a dictionary of stats for the sim.
         """
         job = self.status(job_id)
-        result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+        result, success = _get_stats_for_sim_id(
+            self.__sedaro, job['dataArray'], streams=streams)
         if success:
             return result
         else:
             if wait:
                 retry_interval = 2
                 while not success:
-                    result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                    result, success = _get_stats_for_sim_id(
+                        self.__sedaro, job['dataArray'], streams=streams)
                     if success:
                         return result
                     time.sleep(retry_interval)
             else:
-                raise NoSimResultsError(reason=
-                    'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
-                )
+                raise NoSimResultsError(reason='No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
+                                        )
+
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -604,11 +622,13 @@ class SimulationHandle:
     def __init__(self, job: Union[dict, None], sim_client: Simulation):
         self.__job = SimulationJob(job)
         self.__sim_client = sim_client
+        self.__message_generator = None
 
     def __getitem__(self, key): return self.__job[key]
     def get(self, key, default=None): return self.__job.get(key, default)
     def __enter__(self): return self
-    def __exit__(self, *args): 
+
+    def __exit__(self, *args):
         try:
             self.terminate()
         except:
@@ -732,7 +752,7 @@ class SimulationHandle:
             retry_interval=retry_interval,
             wait_on_stats=wait_on_stats,
         )
-    
+
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
 
@@ -767,3 +787,46 @@ class SimulationHandle:
                 **COMMON_API_KWARGS,
             )
         return tuple(serdes(v) for v in body_from_res(response))
+
+    def open_cosim(self):
+        print(dir(self.__sim_client))
+        api_key = self.__sim_client.get_sedaro()._api_key
+        try:
+            address = self.__sim_client.status().get(
+                "clusterAddr")
+            job_id = self.__sim_client.status().get("id")
+            runner = grpc_client.CosimRunner()
+            runner.open(api_key, address, job_id)
+            self.__message_generator = runner.message_generator
+        except Exception as e:
+            raise e
+    
+    def close_cosim(self):
+        if self.__message_generator:
+            self.__message_generator.terminate()
+            self.__message_generator = None
+        else:
+            raise Exception('No message generator has been set.')
+
+    def consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
+        if not self.__message_generator:
+            raise Exception('No message generator has been set.')
+        else:
+            res = self.__message_generator.consume(external_state_id, agent_id)
+        return tuple(res)
+
+    def produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
+        if not self.__message_generator:
+            raise Exception('No message generator has been set.')
+        else:
+            res = self.__message_generator.produce(
+                external_state_id, agent_id, values)
+        return tuple(res)
+    
+    def async_run(self, fn_string: str | list, args: list):
+        if type(fn_string) is list:
+            fns = fn_string    
+        else:
+            fns = [(self.consume_cosim if a == "c" else self.produce_cosim) for a in fn_string]
+        fh = grpc_client.FunctionHandler(ThreadPoolExecutor(max_workers=5))
+        return fh.gather(fns, args)
