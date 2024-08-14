@@ -14,7 +14,7 @@ enum CosimActionType {
     COSIM_ACTION_AUTHENTICATE = 3;
 }
 
-message AuthMETA {
+message AuthMeta {
     string user = 1;
     string api_key = 2;
     string auth_token = 3;
@@ -22,7 +22,7 @@ message AuthMETA {
 }
 
 message CosimRequest {
-    AuthMETA auth_token = 1;
+    AuthMeta auth_token = 1;
     CosimActionType action = 2;
     string cluster_handle_address = 3;
     string job_id = 4;
