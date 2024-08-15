@@ -152,7 +152,7 @@ class CosimRunner:
         self._hold_stream = threading.Event()
         self._error = None
         
-    def _open(self, api_key, address, job_id):
+    def _open(self, api_key, address, job_id, host):
         try:
             root_certs = settings.CLIENT_ROOT_CERT
             if not root_certs:
@@ -172,7 +172,7 @@ class CosimRunner:
                 message_generator.open_stream()
                 print("Stream opened")
                 success = message_generator.authenticate(
-                    api_key, address, job_id)
+                    api_key, address, job_id, host)
                 if not success:
                     print("Authentication failed")
                     message_generator.terminate()
@@ -186,9 +186,9 @@ class CosimRunner:
             raise Exception("Error opening stream: " + str(e))
             
             
-    def open(self, api_key, address, job_id):
+    def open(self, api_key, address, job_id, host):
         try:
-            ThreadPoolExecutor(max_workers=5).submit(self._open, api_key, address, job_id)
+            ThreadPoolExecutor(max_workers=5).submit(self._open, api_key, address, job_id, host)
             self._hold_stream.wait()
             return
         except Exception as e:

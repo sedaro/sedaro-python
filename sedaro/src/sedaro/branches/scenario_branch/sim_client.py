@@ -789,14 +789,14 @@ class SimulationHandle:
         return tuple(serdes(v) for v in body_from_res(response))
 
     def open_cosim(self):
-        print(dir(self.__sim_client))
         api_key = self.__sim_client.get_sedaro()._api_key
+        host = self.__sim_client.get_sedaro()._api_host
         try:
             address = self.__sim_client.status().get(
                 "clusterAddr")
             job_id = self.__sim_client.status().get("id")
             runner = grpc_client.CosimRunner()
-            runner.open(api_key, address, job_id)
+            runner.open(api_key, address, job_id, host)
             self.__message_generator = runner.message_generator
         except Exception as e:
             raise e
