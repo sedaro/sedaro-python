@@ -297,7 +297,7 @@ class Simulation:
             if len(streams) > 0:
                 encodedStreams = ','.join(['.'.join(x) for x in streams])
                 url += f'&streams={encodedStreams}'
-        else:
+        elif streams is not None:
             url += f'&streamsToken={streams}'
         url += f'&axisOrder=TIME_MINOR'
         if sampleRate is not None:
@@ -392,15 +392,18 @@ class Simulation:
                 workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
-            try:
-                filtered_streams = metadata['streamsTokens']
-            except KeyError:
-                raise Exception(
-                    f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-            # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
-            num_workers = len(filtered_streams)
-            workers = filtered_streams
+            if num_workers > 1:
+                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
+                try:
+                    filtered_streams = metadata['streamsTokens']
+                except KeyError:
+                    raise Exception(
+                        f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
+                # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
+                num_workers = len(filtered_streams)
+                workers = filtered_streams
+            else:
+                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
 
         download_bar = ProgressBar(
             metadata['start'],
@@ -410,15 +413,18 @@ class Simulation:
         )
         download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
-            exceptions = executor.map(
-                self.__downloadInParallel, [sim_id] * num_workers, workers,
-                [params] * num_workers, download_managers, [usesTokens] * num_workers
-            )
-            executor.shutdown(wait=True)
-        for e in exceptions:
-            if e is not None:
-                raise e
+        if num_workers > 1:
+            with ThreadPoolExecutor(max_workers=num_workers) as executor:
+                exceptions = executor.map(
+                    self.__downloadInParallel, [sim_id] * num_workers, workers,
+                    [params] * num_workers, download_managers, [usesTokens] * num_workers
+                )
+                executor.shutdown(wait=True)
+            for e in exceptions:
+                if e is not None:
+                    raise e
+        else:
+            self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
         download_bar.complete()
 
         stream_results = {}
