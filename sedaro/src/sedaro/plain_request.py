@@ -82,12 +82,6 @@ class PlainRequest:
             if not self.__sedaro._verify_ssl:
                 kwargs['verify'] = False
 
-        print('Making fast request:', url)
-        print('Headers:', kwargs.get('headers'))
-        print('Proxies:', kwargs.get('proxies'))
-        print('Proxy URL from client:', self.__sedaro._proxy_url)
-        print('Verify:', self.__sedaro._verify_ssl)
-
         return requests.get(**kwargs)
 
     @overload
