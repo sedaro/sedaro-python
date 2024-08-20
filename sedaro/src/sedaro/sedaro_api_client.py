@@ -1,9 +1,11 @@
 from contextlib import contextmanager
 from typing import Any, Dict, Generator, Tuple
 
+import requests
 from sedaro_base_client import Configuration
 from sedaro_base_client.api_client import ApiClient
 from sedaro_base_client.apis.tags import branches_api
+from urllib3.exceptions import InsecureRequestWarning
 from urllib3.response import HTTPResponse
 
 from sedaro.plain_request import PlainRequest
@@ -23,7 +25,8 @@ class SedaroApiClient(ApiClient):
         *,
         auth_handle: 'str' = None,
         proxy_url: str = None,
-        proxy_headers: Dict[str, str] = None
+        proxy_headers: Dict[str, str] = None,
+        suppress_insecure_transport_warnings: bool = False,
     ):
         '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
 
@@ -49,7 +52,14 @@ class SedaroApiClient(ApiClient):
         self._auth_handle = auth_handle
 
         self._proxy_url = proxy_url
-        self._proxy_headers = proxy_headers
+        self._proxy_headers = proxy_headers 
+        self._verify_ssl = True
+        if self._proxy_url and not self._proxy_url.startswith('https'):
+            self._verify_ssl = False
+
+        # Optionally suppress insecure transport warning if a proxy is being used
+        if not self._verify_ssl and suppress_insecure_transport_warnings:
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
         self._csrf_token = None
 
@@ -66,7 +76,7 @@ class SedaroApiClient(ApiClient):
         configuration.proxy = self._proxy_url
         configuration.proxy_headers = self._proxy_headers
         if self._proxy_url:
-            configuration.verify_ssl = self._proxy_url.startswith('https')
+            configuration.verify_ssl = self._verify_ssl
 
         with ApiClient(
             configuration=configuration,
