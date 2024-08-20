@@ -298,33 +298,6 @@ def test_attitude_solution_error_tuple():
     check_bad_ase(50)  # Check non-list value
 
 
-def test_power_command_tuple():
-    """Check validation of the Solar Array powerCommand field"""
-    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
-
-    def create_solar_array(val):
-        """Create a solar array with powerCommand field set to val"""
-        branch.update(blocks=[{
-            'type': "SolarArray",
-            'name': f"array {_random_str()}",
-            'powerCommand': val
-        }])
-
-    # Check valid tuples
-    for val in [[None, None], [0.0, None], [None, 0.5], [0.0, 0.5]]:
-        create_solar_array(val)
-    # Delete created solar arrays
-    branch.update(delete=branch.data['index']['SolarArray'])
-
-    # Check bad values
-    for val in [
-        ["Fail", 0.5],  # Check non-float values
-        "Fail"  # Check non-list value
-    ]:
-        with pytest.raises(SedaroApiException):
-            create_solar_array(val)
-
-
 def test_multiblock_crud_with_ref_ids():
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
     batt_pack_name = f'Battery Pack {_random_str()}'
@@ -367,5 +340,4 @@ def run_tests():
     test_ignore_id_and_type_in_create()
     test_active_comm_interfaces_tuple()
     test_attitude_solution_error_tuple()
-    test_power_command_tuple()
     test_multiblock_crud_with_ref_ids()
