@@ -16,6 +16,7 @@ from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
 from ...utils import body_from_res, progress_bar
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 import sedaro.grpc_client as grpc_client
+from ...utils import serdes 
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -24,17 +25,6 @@ if TYPE_CHECKING:
     from ...sedaro_api_client import SedaroApiClient
 
 
-def serdes(v):
-    import numpy as np
-    if type(v) is dict and 'ndarray' in v:
-        return np.array(v['ndarray'])
-    if type(v) is np.ndarray:
-        return {'ndarray': v.tolist()}
-    if type(v) is dict:
-        return {k: serdes(v) for k, v in v.items()}
-    if type(v) in {list, tuple}:
-        return [serdes(v) for v in v]
-    return v
 
 
 def concat_stream_data(main, other, len_main, len_other):
@@ -804,7 +794,7 @@ class SimulationHandle:
                 "clusterAddr")
             job_id = self.__sim_client.status().get("id")
             runner = grpc_client.CosimRunner()
-            runner.open(api_key, address, job_id, host, "localhost:50049")
+            runner.open(api_key, address, job_id, host, "localhost:50031")
             self.__message_generator = runner.message_generator
         except Exception as e:
             raise e
