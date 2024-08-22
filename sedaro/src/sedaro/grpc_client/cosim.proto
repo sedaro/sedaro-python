@@ -15,8 +15,6 @@ enum CosimActionType {
 }
 
 message AuthMeta {
-    string user = 1;
-    string api_key = 2;
     string auth_token = 3;
     string auth_handle = 4;
 }
@@ -29,17 +27,14 @@ message CosimRequest {
     string agent_id = 5;
     string external_state_block_id = 6;
     string value = 7;
-    string type = 8;
-    optional double time = 9;
+    optional double time = 8;
 }
 
 message CosimResponse {
     double time = 1;
-    string type = 2;
     string state = 3;
     string value = 4;
-    int32 other = 5;
-    CosimActionType action = 6;
-    string external_state_block_id = 7;
+    CosimActionType action = 5;
+    string external_state_block_id = 6;
 }
 
