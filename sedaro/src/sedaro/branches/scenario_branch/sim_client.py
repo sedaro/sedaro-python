@@ -623,6 +623,7 @@ class SimulationHandle:
         self.__job = SimulationJob(job)
         self.__sim_client = sim_client
         self.__message_generator = None
+        self.__thread_executor = ThreadPoolExecutor(max_workers=10)
 
     def __getitem__(self, key): return self.__job[key]
     def get(self, key, default=None): return self.__job.get(key, default)
@@ -790,43 +791,55 @@ class SimulationHandle:
 
     def open_cosim(self):
         api_key = self.__sim_client.get_sedaro()._api_key
+      
         host = self.__sim_client.get_sedaro()._api_host
+
         try:
             address = self.__sim_client.status().get(
                 "clusterAddr")
             job_id = self.__sim_client.status().get("id")
             runner = grpc_client.CosimRunner()
-            runner.open(api_key, address, job_id, host)
+            runner.open(api_key, address, job_id, host, "localhost:50049")
             self.__message_generator = runner.message_generator
         except Exception as e:
             raise e
+        
     
     def close_cosim(self):
         if self.__message_generator:
             self.__message_generator.terminate()
             self.__message_generator = None
         else:
-            raise Exception('No message generator has been set.')
+            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
 
-    def consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
+    def _consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
         if not self.__message_generator:
-            raise Exception('No message generator has been set.')
+            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
         else:
-            res = self.__message_generator.consume(external_state_id, agent_id)
+            res = self.__message_generator.consume(external_state_id, agent_id, time)
         return tuple(res)
+    
 
-    def produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
+    def _produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
         if not self.__message_generator:
-            raise Exception('No message generator has been set.')
+            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
         else:
             res = self.__message_generator.produce(
-                external_state_id, agent_id, values)
+                external_state_id, agent_id, values, timestamp)
         return tuple(res)
+    
+    def consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
+        fut = self.__thread_executor.submit(self._consume_cosim, agent_id, external_state_id, time)
+        return fut
+    
+    def produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
+        fut = self.__thread_executor.submit(self._produce_cosim, agent_id, external_state_id, timestamp)
+        return fut 
     
     def async_run(self, fn_string: str | list, args: list):
         if type(fn_string) is list:
             fns = fn_string    
         else:
-            fns = [(self.consume_cosim if a == "c" else self.produce_cosim) for a in fn_string]
+            fns = [(self._consume_cosim if a == "c" else self._produce_cosim) for a in fn_string]
         fh = grpc_client.FunctionHandler(ThreadPoolExecutor(max_workers=5))
         return fh.gather(fns, args)
