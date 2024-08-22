@@ -10,24 +10,11 @@ import json
 import numpy as np
 import os
 import requests
-from sedaro.branches.scenario_branch.sim_client import serdes as serdes
+from ..utils import serdes
 
 
 def deser(v):
     return json.loads(v)["payload"]
-
-
-def serdes(v):
-    if type(v) is dict and 'ndarray' in v:
-        return np.array(v['ndarray'])
-    if type(v) is np.ndarray:
-        return {'ndarray': v.tolist()}
-    if type(v) is dict:
-        return {k: serdes(v) for k, v in v.items()}
-    if type(v) is list or type(v) is tuple:
-        return [serdes(v) for v in v]
-    return v
-
 
 class MessageGenerator:
 
@@ -167,29 +154,37 @@ class CosimRunner:
             self._hold_stream.set()
             raise Exception("Error loading CA certificate: " + str(e))
         try:
-            with grpc.secure_channel(grpc_host, credentials) as channel:
-                message_generator = MessageGenerator(
-                    ThreadPoolExecutor(max_workers=10), channel)
-                message_generator.open_stream()
-                logging.debug("Stream opened")
-                success = message_generator.authenticate(
-                    api_key, address, job_id, host)
-                if not success:
-                    logging.debug("Authentication failed")
-                    message_generator.terminate()
-                    raise Exception("Authentication failed")
-                self.message_generator = message_generator
-                self._hold_stream.set()
-                message_generator.close_stream.wait(timeout=None)
+            if grpc_host == "localhost:50031":
+                print("this ran")
+                with grpc.insecure_channel("localhost:50031") as channel:
+                    message_generator = MessageGenerator(
+                        ThreadPoolExecutor(max_workers=10), channel) 
+            else:
+                with grpc.secure_channel(grpc_host, credentials) as channel:
+                    message_generator = MessageGenerator(
+                        ThreadPoolExecutor(max_workers=10), channel)
+            message_generator.open_stream()
+            print("stram opened")
+            logging.debug("Stream opened")
+            success = message_generator.authenticate(api_key, address, job_id, host)
+            if not success:
+                logging.debug("Authentication failed")
+                message_generator.terminate()
+                raise Exception("Authentication failed")
+            self.message_generator = message_generator
+            self._hold_stream.set()
+            message_generator.close_stream.wait(timeout=None)
         except Exception as e:
+            print(e)
             self._error = e
             self._hold_stream.set()
             raise Exception("Error opening stream: " + str(e))
             
             
-    def open(self, api_key, address, job_id, host):
+    def open(self, api_key, address, job_id, host, grpc_host):
         try:
-            ThreadPoolExecutor(max_workers=5).submit(self._open, api_key, address, job_id, host)
+            self._hold_stream.clear()
+            ThreadPoolExecutor(max_workers=5).submit(self._open, api_key, address, job_id, host, grpc_host)
             self._hold_stream.wait()
             return
         except Exception as e:
