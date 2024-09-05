@@ -162,13 +162,13 @@ class Study:
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
-            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
 
         Raises:
-            NoSimResultsError: if no simulation has been started.
+            NoSimResultsError: if no study has been started.
 
         Returns:
-            str: the ultimate status of the simulation.
+            str: the ultimate status of the study.
         """
         job = self.status(job_id)
         options = {PENDING, RUNNING}
@@ -193,13 +193,13 @@ class Study:
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
-            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
 
         Raises:
-            NoSimResultsError: if no simulation has been started.
+            NoSimResultsError: if no study has been started.
 
         Returns:
-            str: the ultimate status of the simulation.
+            str: the ultimate status of the study.
         """
         job = self.status(job_id)
         options = {PENDING, RUNNING}
@@ -305,13 +305,13 @@ class StudyHandle:
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
-            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
 
         Raises:
-            NoSimResultsError: if no simulation has been started.
+            NoSimResultsError: if no study has been started.
 
         Returns:
-            str: the ultimate status of the simulation.
+            str: the ultimate status of the study.
         """
         return self.__study_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
     
