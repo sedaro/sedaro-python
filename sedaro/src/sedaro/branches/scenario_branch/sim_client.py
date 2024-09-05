@@ -584,7 +584,7 @@ class Simulation:
 
         return job[STATUS]
 
-    async def async_poll(
+    async def poll_async(
         self,
         job_id: str = None,
         timeout: int = None,
@@ -827,7 +827,7 @@ class SimulationHandle:
         """
         return self.__sim_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
     
-    async def async_poll(
+    async def poll_async(
         self,
         timeout: int = None,
         retry_interval: int = 2,
@@ -847,7 +847,7 @@ class SimulationHandle:
         Returns:
             str: the ultimate status of the simulation.
         """
-        return await self.__sim_client.async_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+        return await self.__sim_client.poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
  
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)

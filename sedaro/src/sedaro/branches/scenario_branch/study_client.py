@@ -180,7 +180,7 @@ class Study:
 
         return job[STATUS]
     
-    async def async_poll(
+    async def poll_async(
         self,
         job_id: str = None,
         retry_interval: int = 2,
@@ -315,7 +315,7 @@ class StudyHandle:
         """
         return self.__study_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
     
-    async def async_poll(
+    async def poll_async(
         self,
         timeout: int = None,
         retry_interval: int = 2,
@@ -335,4 +335,4 @@ class StudyHandle:
         Returns:
             str: the ultimate status of the study.
         """
-        return await self.__sim_client.async_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+        return await self.__sim_client.poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
