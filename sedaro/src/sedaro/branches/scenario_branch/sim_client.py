@@ -560,6 +560,42 @@ class Simulation:
                 time.sleep(retry_interval)
         return SimulationResult(job, data, self.__sedaro)
 
+    def poll(
+        self,
+        job_id: str = None,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> str:
+        """
+        Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        job = self.status(job_id)
+        options = PRE_RUN_STATUSES | {RUNNING}
+        start_time = time.time()
+
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
+            if job[STATUS] == QUEUED:
+                print('Simulation is queued...', end='\r')
+            elif job[STATUS] in PRE_RUN_STATUSES:
+                print('Simulation is building...', end='\r')
+            else:
+                progress_bar(job['progress']['percentComplete'])
+            job = self.status()
+            time.sleep(retry_interval)
+
+        return job[STATUS]
+
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
 
@@ -744,7 +780,28 @@ class SimulationHandle:
             timeout=timeout,
             wait_on_stats=wait_on_stats,
         )
-    
+
+    def poll(
+        self,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> str:
+        """
+        Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        return self.__sim_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+ 
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
 

@@ -155,6 +155,36 @@ class Study:
 
         return self.results(job_id=job_id)
 
+    def poll(
+        self,
+        job_id: str = None,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> str:
+        """
+        Wait for study to finish if it's running. If a `job_id` is passed, query for corresponding study rather than 
+        latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        job = self.status(job_id)
+        options = {PENDING, RUNNING}
+        start_time = time.time()
+
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
+            job = self.status()
+            time.sleep(retry_interval)
+
+        return job[STATUS]
 
 class StudyJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -237,3 +267,25 @@ class StudyHandle:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
         return self.__study_client.results_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+
+    def poll(
+        self,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> str:
+        """
+        Wait for study to finish if it's running. If a `job_id` is passed, query for corresponding study rather than 
+        latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        return self.__study_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
