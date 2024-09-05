@@ -1,3 +1,4 @@
+import asyncio
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
@@ -583,6 +584,43 @@ class Simulation:
 
         return job[STATUS]
 
+    async def async_poll(
+        self,
+        job_id: str = None,
+        timeout: int = None,
+        retry_interval: int = 2,
+    ) -> str:
+        """
+        Asynchronously wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim 
+        rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        job = await self.async_status(job_id)
+        options = PRE_RUN_STATUSES | {RUNNING}
+        start_time = time.time()
+
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
+            if job[STATUS] == QUEUED:
+                print('Simulation is queued...', end='\r')
+            elif job[STATUS] in PRE_RUN_STATUSES:
+                print('Simulation is building...', end='\r')
+            else:
+                progress_bar(job['progress']['percentComplete'])
+            job = await self.async_status()
+            await asyncio.sleep(retry_interval)
+
+        return job[STATUS]
+
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
 
@@ -788,6 +826,28 @@ class SimulationHandle:
             str: the ultimate status of the simulation.
         """
         return self.__sim_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+    
+    async def async_poll(
+        self,
+        timeout: int = None,
+        retry_interval: int = 2,
+    ) -> str:
+        """
+        Asynchronously wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim 
+        rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        return await self.__sim_client.async_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
  
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
