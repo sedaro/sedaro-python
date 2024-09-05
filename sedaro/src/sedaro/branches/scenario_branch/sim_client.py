@@ -505,6 +505,7 @@ class Simulation:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        timeout: int = None,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
@@ -522,6 +523,7 @@ class Simulation:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
 
@@ -533,8 +535,9 @@ class Simulation:
         """
         job = self.status(job_id)
         options = PRE_RUN_STATUSES | {RUNNING}
+        start_time = time.time()
 
-        while job[STATUS] in options:
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
             if job[STATUS] == QUEUED:
                 print('Simulation is queued...', end='\r')
             elif job[STATUS] in PRE_RUN_STATUSES:
@@ -704,6 +707,7 @@ class SimulationHandle:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        timeout: int = None,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
@@ -719,6 +723,7 @@ class SimulationHandle:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
 
@@ -736,6 +741,7 @@ class SimulationHandle:
             sampleRate=sampleRate,
             num_workers=num_workers,
             retry_interval=retry_interval,
+            timeout=timeout,
             wait_on_stats=wait_on_stats,
         )
     

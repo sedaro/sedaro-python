@@ -130,13 +130,14 @@ class Study:
         job = self.status(job_id)
         return StudyResult(self, job)
 
-    def results_poll(self, job_id: str = None, retry_interval: int = 2) -> StudyResult:
+    def results_poll(self, job_id: str = None, retry_interval: int = 2, timeout: int = None) -> StudyResult:
         """Query latest scenario study result and wait for sim to finish if it's running. If a `job_id` is passed, query for
         corresponding study results rather than latest. See `results` method for details on using the `streams` kwarg.
 
         Args:
             job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
 
         Raises:
             NoSimResultsError: if no study has been started.
@@ -146,8 +147,9 @@ class Study:
         """
         job = self.status(job_id)
         options = {PENDING, RUNNING}
+        start_time = time.time()
 
-        while job[STATUS] in options:
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
             job = self.status()
             time.sleep(retry_interval)
 
@@ -221,11 +223,12 @@ class StudyHandle:
         """
         return self.__study_client.results(job_id=self.__job['id'])
 
-    def results_poll(self, retry_interval: int = 2) -> StudyResult:
+    def results_poll(self, retry_interval: int = 2, timeout: int = None) -> StudyResult:
         """Query study results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
 
         Args:
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
 
         Raises:
             NoSimResultsError: if no study has been started.
@@ -233,4 +236,4 @@ class StudyHandle:
         Returns:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
-        return self.__study_client.results_poll(job_id=self.__job['id'], retry_interval=retry_interval)
+        return self.__study_client.results_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
