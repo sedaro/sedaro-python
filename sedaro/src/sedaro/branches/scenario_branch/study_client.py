@@ -145,14 +145,7 @@ class Study:
         Returns:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
-        job = self.status(job_id)
-        options = {PENDING, RUNNING}
-        start_time = time.time()
-
-        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
-            job = self.status()
-            time.sleep(retry_interval)
-
+        self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
         return self.results(job_id=job_id)
 
     def poll(

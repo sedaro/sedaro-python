@@ -9,10 +9,8 @@ from urllib3.response import HTTPResponse
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.results.simulation_result import SimulationResult
 
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
-from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
-                         QUEUED, RUNNING, STATUS)
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
 from ...utils import body_from_res, progress_bar
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
@@ -534,19 +532,8 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.status(job_id)
-        options = PRE_RUN_STATUSES | {RUNNING}
-        start_time = time.time()
-
-        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
-            if job[STATUS] == QUEUED:
-                print('Simulation is queued...', end='\r')
-            elif job[STATUS] in PRE_RUN_STATUSES:
-                print('Simulation is building...', end='\r')
-            else:
-                progress_bar(job['progress']['percentComplete'])
-            job = self.status()
-            time.sleep(retry_interval)
-
+        self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
+        
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
