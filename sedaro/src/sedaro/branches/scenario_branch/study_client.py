@@ -149,6 +149,25 @@ class Study:
         self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
         return self.results(job_id=job_id)
 
+    async def results_poll_async(self, job_id: str = None, retry_interval: int = 2, timeout: int = None) -> StudyResult:
+        """Asynchronously query latest scenario study result and wait for sim to finish if it's running. If a `job_id` 
+        is passed, query for corresponding study results rather than latest. See `results` method for details on using 
+        the `streams` kwarg.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no study has been started.
+
+        Returns:
+            StudyResult: a `StudyResult` instance to interact with the results of the sim.
+        """
+        await self.poll_async(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
+        return self.results(job_id=job_id)
+
     def poll(
         self,
         job_id: str = None,
@@ -292,6 +311,22 @@ class StudyHandle:
             StudyResult: a `StudyResult` instance to interact with the results of the sim.
         """
         return self.__study_client.results_poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+
+    async def results_poll_async(self, retry_interval: int = 2, timeout: int = None) -> StudyResult:
+        """Asynchronously query study results but wait for sim to finish if it's running. See `results` method for 
+        details on using the `streams` kwarg.
+
+        Args:
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the study to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no study has been started.
+
+        Returns:
+            StudyResult: a `StudyResult` instance to interact with the results of the sim.
+        """
+        return await self.__study_client.results_poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
 
     def poll(
         self,
