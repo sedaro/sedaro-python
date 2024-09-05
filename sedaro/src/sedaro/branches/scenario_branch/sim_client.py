@@ -659,7 +659,7 @@ class Simulation:
         Returns:
             str: the ultimate status of the simulation.
         """
-        job = await self.async_status(job_id)
+        job = self.status(job_id)
         options = PRE_RUN_STATUSES | {RUNNING}
         start_time = time.time()
 
@@ -670,7 +670,7 @@ class Simulation:
                 print('Simulation is building...', end='\r')
             else:
                 progress_bar(job['progress']['percentComplete'])
-            job = await self.async_status()
+            job = self.status()
             await asyncio.sleep(retry_interval)
 
         return job[STATUS]
