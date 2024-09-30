@@ -532,8 +532,7 @@ class Simulation:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        job = self.status(job_id)
-        self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
+        job = self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
         
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
@@ -607,7 +606,7 @@ class Simulation:
         job_id: str = None,
         retry_interval: int = 2,
         timeout: int = None,
-    ) -> str:
+    ) -> 'SimulationHandle':
         """
         Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
 
@@ -636,7 +635,7 @@ class Simulation:
             job = self.status()
             time.sleep(retry_interval)
 
-        return job[STATUS]
+        return job
 
     async def poll_async(
         self,
@@ -911,7 +910,7 @@ class SimulationHandle:
         self,
         retry_interval: int = 2,
         timeout: int = None,
-    ) -> str:
+    ) -> 'SimulationHandle':
         """
         Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
 

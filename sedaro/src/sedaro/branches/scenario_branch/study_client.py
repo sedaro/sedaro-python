@@ -173,7 +173,7 @@ class Study:
         job_id: str = None,
         retry_interval: int = 2,
         timeout: int = None,
-    ) -> str:
+    ) -> 'StudyHandle':
         """
         Wait for study to finish if it's running. If a `job_id` is passed, query for corresponding study rather than 
         latest.
@@ -197,7 +197,7 @@ class Study:
             job = self.status()
             time.sleep(retry_interval)
 
-        return job[STATUS]
+        return job
     
     async def poll_async(
         self,
@@ -332,7 +332,7 @@ class StudyHandle:
         self,
         retry_interval: int = 2,
         timeout: int = None,
-    ) -> str:
+    ) -> 'StudyHandle':
         """
         Wait for study to finish if it's running. If a `job_id` is passed, query for corresponding study rather than 
         latest.
