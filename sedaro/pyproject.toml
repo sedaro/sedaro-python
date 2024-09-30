@@ -28,7 +28,11 @@ dependencies = [
   "pyarrow",
   "requests",
   "spiceypy",
+  "grpcio",
+  "grpcio-tools",
+  "protobuf",
   "openpyxl",
+  "aiohttp", # FIXMETL double check if I need this
 ]
 [[project.authors]]
 name = "Sedaro"

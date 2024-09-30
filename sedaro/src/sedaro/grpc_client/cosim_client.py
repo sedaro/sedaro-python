@@ -1,45 +1,43 @@
-from concurrent.futures import ThreadPoolExecutor
+import asyncio
+import json
 import logging
-import threading
-from typing import Iterator
+from typing import Dict
+
+import aiohttp  # Asynchronous HTTP client
 import grpc
 from google.protobuf.json_format import MessageToJson
-from . import cosim_pb2 
-from . import cosim_pb2_grpc
-import json
-import numpy as np
-import os
-import requests
+
 from ..utils import serdes
+from . import cosim_pb2, cosim_pb2_grpc
 
 
 def deser(v):
     return json.loads(v)["payload"]
 
-class MessageGenerator:
 
-    def __init__(self, executor, channel):
-        self._executor = executor
+class MessageGenerator:
+    def __init__(self, channel: grpc.aio.Channel):
         self._channel = channel
         self._stub = cosim_pb2_grpc.CosimStub(channel)
-        self.close_stream = threading.Event()
-        self._variable_consume_blocker = {}
-        self._variable_produce_blocker = {}
-        self._variable_blocker = {}
-        self._local_storage = {}
+        self.close_stream = asyncio.Event()
+        self._variable_consume_blocker: Dict[str, asyncio.Event] = {}
+        self._variable_produce_blocker: Dict[str, asyncio.Event] = {}
+        self._variable_blocker: Dict[str, asyncio.Event] = {}
+        self._local_storage: Dict[str, cosim_pb2.CosimResponse] = {}
         self._auth_payload = None
         self._expired = False
-        self.queue = []
+        self.queue = asyncio.Queue()
+        self._response_task = None
 
-    def _response_watcher(self, response_iterator):
-
-        for response in response_iterator:
+    async def _response_watcher(self, response_iterator):
+        async for response in response_iterator:
             if response.action == cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE:
                 logging.info("Received auth response: %s",
-                             MessageToJson(response)
-                             )
+                             MessageToJson(response))
                 self._local_storage["auth"] = response
-                self._variable_blocker["auth"].set()
+                event = self._variable_blocker.get("auth")
+                if event:
+                    event.set()
             else:
                 if response.state == "False":
                     raise Exception("Error: " + response.value)
@@ -49,145 +47,193 @@ class MessageGenerator:
                     self._local_storage[response.external_state_block_id] = response
                     logging.info("Received response: %s",
                                  MessageToJson(response))
-                    self._variable_consume_blocker[response.external_state_block_id].set(
-                    )
+                    event = self._variable_consume_blocker.get(response.external_state_block_id)
+                    if event:
+                        event.set()
                 if response.action == cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE:
                     logging.info("Received response: %s",
                                  MessageToJson(response))
-                    self._variable_produce_blocker[response.external_state_block_id].set(
-                    )
+                    event = self._variable_produce_blocker.get(response.external_state_block_id)
+                    if event:
+                        event.set()
 
-    def consume(self, x, agent_id, time):
+    async def consume(self, x: str, agent_id: str, time: float = None):
         if x not in self._variable_consume_blocker:
-            self._variable_consume_blocker[x] = threading.Event()
+            self._variable_consume_blocker[x] = asyncio.Event()
         else:
             self._variable_consume_blocker[x].clear()
-        if time:
-            self._send(cosim_pb2.CosimRequest(action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
-                                          external_state_block_id=x, agent_id=agent_id, time=time))
-        else:
-            self._send(cosim_pb2.CosimRequest(action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
-                                            external_state_block_id=x, agent_id=agent_id))
-        self._variable_consume_blocker[x].wait()
+
+        request = cosim_pb2.CosimRequest(
+            action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
+            external_state_block_id=x,
+            agent_id=agent_id,
+            time=time
+        )
+        await self._send(request)
+
+        await self._variable_consume_blocker[x].wait()
+
         consumed_value = self._local_storage[x]
         if self._expired:
             if self._auth_payload:
-                refresh = self.authenticate(self._auth_payload["api_key"], self._auth_payload["address"], self._auth_payload["job_id"])
+                refresh = await self.authenticate(
+                    self._auth_payload["api_key"],
+                    self._auth_payload["address"],
+                    self._auth_payload["job_id"],
+                    self._auth_payload["host"]
+                )
                 if refresh:
                     self._expired = False
-                    return self.consume(x, agent_id)
+                    return await self.consume(x, agent_id, time)
                 else:
                     raise Exception("Authentication failed")
             else:
-                    raise Exception("Authentication failed")
+                raise Exception("Authentication failed")
         return serdes(deser(consumed_value.value))
 
-    def produce(self, x, agent_id, value, time):
+    async def produce(self, x: str, agent_id: str, value, time: float = None):
         if x not in self._variable_produce_blocker:
-            self._variable_produce_blocker[x] = threading.Event()
+            self._variable_produce_blocker[x] = asyncio.Event()
         else:
             self._variable_produce_blocker[x].clear()
+
         new_value = json.dumps({"payload": serdes(value)})
-        if time:
-            self._send(cosim_pb2.CosimRequest(action=cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
-                    external_state_block_id=x, agent_id=agent_id, value=new_value, time=time))
-        else:
-            self._send(cosim_pb2.CosimRequest(action=cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
-                    external_state_block_id=x, agent_id=agent_id, value=new_value))
-        self._variable_produce_blocker[x].wait()
+
+        request = cosim_pb2.CosimRequest(
+            action=cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
+            external_state_block_id=x,
+            agent_id=agent_id,
+            value=new_value,
+            time=time if time else 0.0
+        )
+        await self._send(request)
+
+        await self._variable_produce_blocker[x].wait()
+
         if self._expired:
             if self._auth_payload:
-                refresh = self.authenticate(self._auth_payload["api_key"], self._auth_payload["address"], self._auth_payload["job_id"])
+                refresh = await self.authenticate(
+                    self._auth_payload["api_key"],
+                    self._auth_payload["address"],
+                    self._auth_payload["job_id"],
+                    self._auth_payload["host"]
+                )
                 if refresh:
                     self._expired = False
-                    return self.produce(x, agent_id, value)
+                    return await self.produce(x, agent_id, value, time)
                 else:
                     raise Exception("Authentication failed")
             else:
                 raise Exception("Authentication failed")
         return value
 
-    def authenticate(self, api_key, address, job_id, host):
-        self._variable_blocker["auth"] = threading.Event()
-        res = requests.get(f"http://{host}/simulations/jobs/{job_id}/authorization?audience={"SimBed"}&permission=RUN_SIMULATION", headers={"X_API_KEY": api_key})
-        self._send(cosim_pb2.CosimRequest(
-            auth_token=cosim_pb2.AuthMeta(auth_token=res.json()['jwt']), action=cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE, cluster_handle_address=address, job_id=job_id))
-        self._variable_blocker["auth"].wait()
-        success = self._local_storage["auth"]
+    async def authenticate(self, api_key: str, address: str, job_id: str, host: str):
+        self._variable_blocker["auth"] = asyncio.Event()
+        async with aiohttp.ClientSession() as session:
+            url = f"{host}/simulations/jobs/authorization/{job_id}"
+            params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
+            headers = {"X_API_KEY": api_key}
+            print(f"@=-=-=-=-Connecting to {host} to authenticate job {job_id} with url {url} and params {params}")
+            async with session.get(url, params=params, headers=headers) as res:
+                print(f"@=-=-=-=- Response status: {res.status}")
+                if res.status != 200:
+                    logging.error(f"Authentication HTTP request failed with status {res.status}")
+                    return False
+                data = await res.json()
+                jwt_token = data.get('jwt')
+                if not jwt_token:
+                    logging.error("JWT token not found in authentication response")
+                    return False
+
+        request = cosim_pb2.CosimRequest(
+            auth_token=cosim_pb2.AuthMeta(auth_token=jwt_token),
+            action=cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE,
+            cluster_handle_address=address,
+            job_id=job_id
+        )
+        await self._send(request)
+        await self._variable_blocker["auth"].wait()
+
+        success = self._local_storage.get("auth")
+        if not success:
+            logging.error("Authentication response not received")
+            return False
+
         valid = (success.state == "True")
         if valid:
-            self._auth_payload = {"api_key": api_key, "address": address, "job_id": job_id}
+            self._auth_payload = {
+                "api_key": api_key,
+                "address": address,
+                "job_id": job_id,
+                "host": host
+            }
         return valid
-    
-    def terminate(self):
+
+    async def terminate(self):
         self.close_stream.set()
-        self.queue = []
+        while not self.queue.empty():
+            await self.queue.get()
         logging.debug("TERMINATING...")
-        return
 
-    def _send(self, message):
+    async def _send(self, message: cosim_pb2.CosimRequest):
         logging.debug("SENDING")
-        self.queue.append(message)
+        await self.queue.put(message)
 
-    def _stream(self):
+    async def _stream(self):
         while not self.close_stream.is_set():
-            if self.queue:
-                new_message = self.queue.pop(0)
-                yield new_message
+            try:
+                message = await asyncio.wait_for(self.queue.get(), timeout=1.0)
+                yield message
+            except asyncio.TimeoutError:
+                continue
 
-    def open_stream(self):
-        responses = self._stub.CosimCall(self._stream())
-        self._executor.submit(self._response_watcher, responses)
+    async def open_stream(self):
+        response_iterator = self._stub.CosimCall(self._stream())
+        self._response_task = asyncio.create_task(self._response_watcher(response_iterator))
+
 
 class CosimRunner:
     def __init__(self):
-        self.message_generator = None
-        self._hold_stream = threading.Event()
+        self.message_generator: MessageGenerator = None
+        self._hold_stream = asyncio.Event()
         self._error = None
-        
-    def _open(self, api_key, address, job_id, host, grpc_host):
+
+    async def _open(self, api_key: str, address: str, job_id: str, host: str, grpc_host: str):
         try:
-            credentials = grpc.ssl_channel_credentials()
-        except Exception as e:
-            logging.debug("Error loading CA certificate: " + str(e))
-            self._error = e
-            self._hold_stream.set()
-            raise Exception("Error loading CA certificate: " + str(e))
-        try:
-            if grpc_host == "localhost:50031":
-                print("this ran")
-                with grpc.insecure_channel("localhost:50031") as channel:
-                    message_generator = MessageGenerator(
-                        ThreadPoolExecutor(max_workers=10), channel) 
-            else:
-                with grpc.secure_channel(grpc_host, credentials) as channel:
-                    message_generator = MessageGenerator(
-                        ThreadPoolExecutor(max_workers=10), channel)
-            message_generator.open_stream()
-            print("stram opened")
+            logging.info(f"Using insecure channel to connect to {grpc_host}")
+            channel = grpc.aio.insecure_channel(grpc_host)
+            print("Channel created")
+            await channel.channel_ready()
+            print("Channel ready")
+            message_generator = MessageGenerator(channel)
+
+            await message_generator.open_stream()
             logging.debug("Stream opened")
-            success = message_generator.authenticate(api_key, address, job_id, host)
+
+            success = await message_generator.authenticate(api_key, address, job_id, host)
             if not success:
                 logging.debug("Authentication failed")
-                message_generator.terminate()
+                await message_generator.terminate()
                 raise Exception("Authentication failed")
+
             self.message_generator = message_generator
             self._hold_stream.set()
-            message_generator.close_stream.wait(timeout=None)
+
+            await message_generator.close_stream.wait()
         except Exception as e:
-            print(e)
+            logging.error(f"Error opening stream: {e}")
             self._error = e
             self._hold_stream.set()
             raise Exception("Error opening stream: " + str(e))
-            
-            
-    def open(self, api_key, address, job_id, host, grpc_host):
+
+    async def open(self, api_key: str, address: str, job_id: str, host: str, grpc_host: str):
         try:
             self._hold_stream.clear()
-            ThreadPoolExecutor(max_workers=5).submit(self._open, api_key, address, job_id, host, grpc_host)
-            self._hold_stream.wait()
-            return
+            asyncio.create_task(self._open(api_key, address, job_id, host, grpc_host))
+            await self._hold_stream.wait()
         except Exception as e:
             raise e
-    
-        
+
+    async def terminate(self):
+        if self.message_generator:
+            await self.message_generator.terminate()

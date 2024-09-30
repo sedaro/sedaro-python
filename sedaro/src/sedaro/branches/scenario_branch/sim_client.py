@@ -1,30 +1,25 @@
+import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
+import sedaro.grpc_client as grpc_client
+from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
-from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
-from sedaro.results.simulation_result import SimulationResult
-
-from ...exceptions import (NoSimResultsError, SedaroApiException,
-                           SimInitializationError)
-from ...settings import (BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES,
-                         QUEUED, RUNNING, STATUS)
-from ...utils import body_from_res, progress_bar
+from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
+from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
+from ...utils import body_from_res, progress_bar, serdes
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
-import sedaro.grpc_client as grpc_client
-from ...utils import serdes 
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
 
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
-
-
 
 
 def concat_stream_data(main, other, len_main, len_other):
@@ -218,8 +213,7 @@ class Simulation:
             if err_if_empty:
                 raise NoSimResultsError(
                     status=404,
-                    reason=f'Could not find any simulations for scenario: {
-                        self.__branch_id}'
+                    reason=f'Could not find any simulations for scenario: {self.__branch_id}'
                 )
             return SimulationHandle(None, self)
 
@@ -784,57 +778,100 @@ class SimulationHandle:
             )
         return tuple(serdes(v) for v in body_from_res(response))
 
-    def open_cosim(self):
+    async def open_cosim(self, grpc_host):
         api_key = self.__sim_client.get_sedaro()._api_key
-      
         host = self.__sim_client.get_sedaro()._api_host
 
         try:
-            address = self.__sim_client.status().get(
-                "clusterAddr")
+            address = self.__sim_client.status().get("clusterAddr")
             job_id = self.__sim_client.status().get("id")
-            runner = grpc_client.CosimRunner()
-            runner.open(api_key, address, job_id, host, "localhost:50031")
-            self.__message_generator = runner.message_generator
+
+            self.__runner = grpc_client.CosimRunner()
+            await self.__runner.open(api_key, address, job_id, host, grpc_host)
+            self.__message_generator = self.__runner.message_generator
+
+            logging.info("Cosimulation session opened successfully.")
         except Exception as e:
+            logging.error(f"Failed to open cosimulation session: {e}")
             raise e
-        
-    
-    def close_cosim(self):
+
+    async def close_cosim(self):
         if self.__message_generator:
-            self.__message_generator.terminate()
+            await self.__message_generator.terminate()
             self.__message_generator = None
+            self.__runner = None
+            logging.info("Cosimulation session closed successfully.")
         else:
-            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
+            raise Exception(
+                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+            )
 
-    def _consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
+    async def _consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
         if not self.__message_generator:
-            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
+            raise Exception(
+                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+            )
         else:
-            res = self.__message_generator.consume(external_state_id, agent_id, time)
+            print("Awaiting message generator consume...")
+            res = await self.__message_generator.consume(external_state_id, agent_id, time)
+        print(f"Consumed: {res}")
         return tuple(res)
-    
 
-    def _produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
+    async def _produce_cosim(
+        self, agent_id: str, external_state_id: str, values: tuple, timestamp: Optional[float] = None
+    ) -> Tuple:
         if not self.__message_generator:
-            raise Exception('No message generator has been set.   Open a cosimulation session first by calling `open_cosim`.')
+            raise Exception(
+                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+            )
         else:
-            res = self.__message_generator.produce(
-                external_state_id, agent_id, values, timestamp)
+            res = await self.__message_generator.produce(external_state_id, agent_id, values, timestamp)
         return tuple(res)
-    
-    def consume_cosim(self, agent_id: str, external_state_id: str, time: float = None):
-        fut = self.__thread_executor.submit(self._consume_cosim, agent_id, external_state_id, time)
-        return fut
-    
-    def produce_cosim(self, agent_id: str, external_state_id: str, values: tuple, timestamp: float = None):
-        fut = self.__thread_executor.submit(self._produce_cosim, agent_id, external_state_id, timestamp)
-        return fut 
-    
-    def async_run(self, fn_string: str | list, args: list):
-        if type(fn_string) is list:
-            fns = fn_string    
+
+    async def consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
+        """
+        Public method to consume cosimulation data asynchronously.
+        """
+        print(f"Consuming... {agent_id}, {external_state_id}, {time}")
+        return await self._consume_cosim(agent_id, external_state_id, time)
+
+    async def produce_cosim(
+        self, agent_id: str, external_state_id: str, values: tuple, timestamp: Optional[float] = None
+    ) -> Tuple:
+        """
+        Public method to produce cosimulation data asynchronously.
+        """
+        print(f"Producing... {agent_id}, {external_state_id}, {values}, {timestamp}")
+        return await self._produce_cosim(agent_id, external_state_id, values, timestamp)
+
+    async def async_run(self, fn_strings: str | list, args: list) -> list:
+        """
+        Executes a list of consume/produce operations concurrently.
+        """
+        if isinstance(fn_strings, list):
+            fns = fn_strings
         else:
-            fns = [(self._consume_cosim if a == "c" else self._produce_cosim) for a in fn_string]
-        fh = grpc_client.FunctionHandler(ThreadPoolExecutor(max_workers=5))
-        return fh.gather(fns, args)
+            fns = [
+                (self._consume_cosim if a == "c" else self._produce_cosim) for a in fn_strings
+            ]
+
+        # Pair each function with its corresponding arguments
+        paired_fns = []
+        for fn, arg in zip(fns, args):
+            if arg is None:
+                paired_fns.append(fn())
+            elif isinstance(arg, Iterable):
+                paired_fns.append(fn(*arg))
+            else:
+                paired_fns.append(fn(arg))
+
+        # Execute all functions concurrently
+        results = await asyncio.gather(*paired_fns, return_exceptions=True)
+
+        # Handle exceptions if any
+        for result in results:
+            if isinstance(result, Exception):
+                logging.error(f"Function execution failed: {result}")
+                raise result
+
+        return results
