@@ -1,8 +1,9 @@
+import asyncio
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
 
 import sedaro.grpc_client as grpc_client
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
@@ -778,7 +779,10 @@ class SimulationHandle:
             )
         return tuple(serdes(v) for v in body_from_res(response))
 
-    async def open_cosim(self, grpc_host):
+    async def open_cosim(self, grpc_host: str):
+        """
+        Open a cosimulation session using the new CosimClient.
+        """
         api_key = self.__sim_client.get_sedaro()._api_key
         host = self.__sim_client.get_sedaro()._api_host
 
@@ -786,62 +790,78 @@ class SimulationHandle:
             address = self.__sim_client.status().get("clusterAddr")
             job_id = self.__sim_client.status().get("id")
 
-            self.__runner = grpc_client.CosimRunner()
-            await self.__runner.open(api_key, address, job_id, host, grpc_host)
-            self.__message_generator = self.__runner.message_generator
+            self.__cosim_client = grpc_client.CosimClient(grpc_host)
+            await self.__cosim_client.connect()
+            authenticated = await self.__cosim_client.authenticate(api_key, address, job_id, host)
+
+            if not authenticated:
+                raise Exception("Authentication with CosimClient failed.")
 
             logging.info("Cosimulation session opened successfully.")
         except Exception as e:
             logging.error(f"Failed to open cosimulation session: {e}")
+            if self.__cosim_client:
+                await self.__cosim_client.terminate()
+                self.__cosim_client = None
             raise e
 
     async def close_cosim(self):
-        if self.__message_generator:
-            await self.__message_generator.terminate()
-            self.__message_generator = None
-            self.__runner = None
+        """
+        Close the cosimulation session.
+        """
+        if self.__cosim_client:
+            await self.__cosim_client.terminate()
+            self.__cosim_client = None
             logging.info("Cosimulation session closed successfully.")
         else:
             raise Exception(
-                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
             )
 
     async def _consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
-        if not self.__message_generator:
+        """
+        Internal method to consume cosimulation data.
+        """
+        if not self.__cosim_client:
             raise Exception(
-                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
             )
         else:
-            print("Awaiting message generator consume...")
-            res = await self.__message_generator.consume(external_state_id, agent_id, time)
-        print(f"Consumed: {res}")
-        return tuple(res)
+            logging.debug("Awaiting CosimClient consume operation...")
+            res = await self.__cosim_client.consume(external_state_id, agent_id, time)
+            logging.debug(f"Consumed: {res}")
+            return tuple(res)
 
     async def _produce_cosim(
-        self, agent_id: str, external_state_id: str, values: tuple, timestamp: Optional[float] = None
+        self, agent_id: str, external_state_id: str, values: Any, timestamp: Optional[float] = None
     ) -> Tuple:
-        if not self.__message_generator:
+        """
+        Internal method to produce cosimulation data.
+        """
+        if not self.__cosim_client:
             raise Exception(
-                'No message generator has been set. Open a cosimulation session first by calling `open_cosim`.'
+                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
             )
         else:
-            res = await self.__message_generator.produce(external_state_id, agent_id, values, timestamp)
-        return tuple(res)
+            res = await self.__cosim_client.produce(external_state_id, agent_id, values, timestamp)
+            logging.debug(f"Produced: {res}")
+            return tuple(res)
 
     async def consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
         """
         Public method to consume cosimulation data asynchronously.
         """
-        print(f"Consuming... {agent_id}, {external_state_id}, {time}")
+        logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
         return await self._consume_cosim(agent_id, external_state_id, time)
 
     async def produce_cosim(
-        self, agent_id: str, external_state_id: str, values: tuple, timestamp: Optional[float] = None
+        self, agent_id: str, external_state_id: str, values: Any, timestamp: Optional[float] = None
     ) -> Tuple:
         """
         Public method to produce cosimulation data asynchronously.
         """
-        print(f"Producing... {agent_id}, {external_state_id}, {values}, {timestamp}")
+        logging.info(
+            f"Producing... Agent ID: {agent_id}, External State ID: {external_state_id}, Values: {values}, Timestamp: {timestamp}")
         return await self._produce_cosim(agent_id, external_state_id, values, timestamp)
 
     async def async_run(self, fn_strings: str | list, args: list) -> list:
@@ -855,12 +875,11 @@ class SimulationHandle:
                 (self._consume_cosim if a == "c" else self._produce_cosim) for a in fn_strings
             ]
 
-        # Pair each function with its corresponding arguments
         paired_fns = []
         for fn, arg in zip(fns, args):
             if arg is None:
                 paired_fns.append(fn())
-            elif isinstance(arg, Iterable):
+            elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
                 paired_fns.append(fn(*arg))
             else:
                 paired_fns.append(fn(arg))
