@@ -73,6 +73,8 @@ class CosimClient:
                 logging.warning(f"Ignoring response with unmatched ID: {response.external_state_block_id}")
                 continue
 
+            print("response: ", response)
+
             if response.state == "True":
                 logging.info(f"{action_type} successful for ID: {identifier}")
                 return response.value if hasattr(response, 'value') else True
@@ -153,7 +155,8 @@ class CosimClient:
             cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
             identifier=x
         )
-        return serdes(json.loads(response)["payload"])
+        # return serdes(json.loads(response)["payload"])
+        return response, response # FIXMETL 
 
     async def _handle_expiration(self):
         if not self.auth_payload:

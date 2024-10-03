@@ -818,10 +818,11 @@ class SimulationHandle:
                 'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
             )
 
-    async def _consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
+    async def consume_async(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
         """
-        Internal method to consume cosimulation data.
+        Public method to consume cosimulation data asynchronously.
         """
+        logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
         if not self.__cosim_client:
             raise Exception(
                 'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
@@ -832,11 +833,11 @@ class SimulationHandle:
             logging.debug(f"Consumed: {res}")
             return tuple(res)
 
-    async def _produce_cosim(
+    async def produce_async(
         self, agent_id: str, external_state_id: str, values: Any, timestamp: Optional[float] = None
     ) -> Tuple:
         """
-        Internal method to produce cosimulation data.
+        Public method to produce cosimulation data asynchronously.
         """
         if not self.__cosim_client:
             raise Exception(
@@ -847,23 +848,6 @@ class SimulationHandle:
             logging.debug(f"Produced: {res}")
             return tuple(res)
 
-    async def consume_cosim(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
-        """
-        Public method to consume cosimulation data asynchronously.
-        """
-        logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
-        return await self._consume_cosim(agent_id, external_state_id, time)
-
-    async def produce_cosim(
-        self, agent_id: str, external_state_id: str, values: Any, timestamp: Optional[float] = None
-    ) -> Tuple:
-        """
-        Public method to produce cosimulation data asynchronously.
-        """
-        logging.info(
-            f"Producing... Agent ID: {agent_id}, External State ID: {external_state_id}, Values: {values}, Timestamp: {timestamp}")
-        return await self._produce_cosim(agent_id, external_state_id, values, timestamp)
-
     async def async_run(self, fn_strings: str | list, args: list) -> list:
         """
         Executes a list of consume/produce operations concurrently.
@@ -872,7 +856,7 @@ class SimulationHandle:
             fns = fn_strings
         else:
             fns = [
-                (self._consume_cosim if a == "c" else self._produce_cosim) for a in fn_strings
+                (self.consume_async if a == "c" else self.produce_async) for a in fn_strings
             ]
 
         paired_fns = []
@@ -884,10 +868,8 @@ class SimulationHandle:
             else:
                 paired_fns.append(fn(arg))
 
-        # Execute all functions concurrently
         results = await asyncio.gather(*paired_fns, return_exceptions=True)
 
-        # Handle exceptions if any
         for result in results:
             if isinstance(result, Exception):
                 logging.error(f"Function execution failed: {result}")
