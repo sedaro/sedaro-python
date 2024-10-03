@@ -5,8 +5,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
 
-import sedaro.grpc_client as grpc_client
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
@@ -777,119 +777,35 @@ class SimulationHandle:
             )
         return tuple(serdes(v) for v in body_from_res(response))
 
-    class CosimInterface:
-        """
-        Specific interface exposed within the cosimulation context.
-        Only exposes methods related to cosimulation operations.
-        """
-
-        def __init__(self, simulation_handle: 'SimulationHandle'):
-            self._simulation_handle = simulation_handle
-            self._cosim_client = None
-
-        async def open_cosim(self, grpc_host: str):
-            """
-            Open a cosimulation session using the new CosimClient.
-            """
-            sedaro = self._simulation_handle._sim_client.get_sedaro()
-            api_key = sedaro._api_key
-            host = sedaro._api_host
-
-            try:
-                status = self._simulation_handle._sim_client.status()
-                address = status.get("clusterAddr")
-                job_id = status.get("id")
-
-                self._cosim_client = grpc_client.CosimClient(grpc_host)
-                await self._cosim_client.connect()
-                authenticated = await self._cosim_client.authenticate(api_key, address, job_id, host)
-
-                if not authenticated:
-                    raise Exception("Authentication with CosimClient failed.")
-
-                logging.info("Cosimulation session opened successfully.")
-            except Exception as e:
-                logging.error(f"Failed to open cosimulation session: {e}")
-                if self._cosim_client:
-                    await self._cosim_client.terminate()
-                    self._cosim_client = None
-                raise e
-
-        async def close_cosim(self):
-            """
-            Close the cosimulation session.
-            """
-            await self._cosim_client.terminate()
-            logging.info("Cosimulation session closed successfully.")
-
-        async def consume(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
-            """
-            Consume cosimulation data asynchronously.
-            """
-            logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
-            res = await self._cosim_client.consume(external_state_id, agent_id, time)
-            logging.debug(f" @=-=-=- Consumed: {res}")
-            return tuple(res) # FIXMETL clean up return types
-
-        async def produce(
-            self,
-            agent_id: str,
-            external_state_id: str,
-            values: Any,
-            timestamp: Optional[float] = None
-        ) -> Tuple:
-            """
-            Produce cosimulation data asynchronously.
-            """
-            logging.info(
-                f"Producing... Agent ID: {agent_id}, External State ID: {external_state_id}, Timestamp: {timestamp}")
-            res = await self._cosim_client.produce(external_state_id, agent_id, values, timestamp)
-            logging.debug(f"Produced: {res}")
-            return tuple(res) # FIXMETL clean up return types
-
-        async def run(self, fn_strings: str | list, args: list) -> list:
-            """
-            Executes a list of consume/produce operations concurrently.
-            """
-            if isinstance(fn_strings, list):
-                fns = fn_strings
-            else:
-                fns = [
-                    (self.consume if a == "c" else self.produce) for a in fn_strings
-                ]
-
-            paired_fns = []
-            for fn, arg in zip(fns, args):
-                if arg is None:
-                    paired_fns.append(fn())
-                elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
-                    paired_fns.append(fn(*arg))
-                else:
-                    paired_fns.append(fn(arg))
-
-            results = await asyncio.gather(*paired_fns, return_exceptions=True)
-
-            for result in results:
-                if isinstance(result, Exception):
-                    logging.error(f"Function execution failed: {result}")
-                    raise result
-
-            return results
-
-    # FIXMETL this should be a static url known by sim client
     @asynccontextmanager
     async def async_channel(self, grpc_host: str):
         """
         Asynchronous context manager for cosimulation sessions.
-        Automatically opens the cosimulation session on entry and closes it on exit.
+        Automatically opens a cosimulation grpc session on entry and closes it on exit.
 
         Usage:
-            async with simulation_handle.async_channel(grpc_host="your_grpc_host") as cosimer:
-                # Perform cosimulation operations using cosimer
+            async with simulation_handle.async_channel(grpc_host="...") as cosim_client:
+                # ...
         """
-        cosim_interface = self.CosimInterface(self)
-        await cosim_interface.open_cosim(grpc_host)
+        sedaro = self._sim_client.get_sedaro()
+        api_key = sedaro._api_key
+        host = sedaro._api_host
+
+        status = self._sim_client.status()
+        address = status.get("clusterAddr")
+        job_id = status.get("id")
+
+        cosim_client = CosimClient(
+            grpc_host=grpc_host,
+            api_key=api_key,
+            address=address,
+            job_id=job_id,
+            host=host
+        )
+
         try:
-            yield cosim_interface
-        finally:
-            await cosim_interface.close_cosim()
+            async with cosim_client:
+                yield cosim_client
+        except Exception as e:
+            logging.error(f"Cosimulation session encountered an error: {e}")
+            raise e

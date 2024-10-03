@@ -1,33 +1,46 @@
 import asyncio
 import json
 import logging
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
-import aiohttp  # Asynchronous HTTP client
+import aiohttp
 import grpc
-from google.protobuf.json_format import MessageToJson
 
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str):
+    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
         self.grpc_host = grpc_host
+        self.api_key = api_key
+        self.address = address
+        self.job_id = job_id
+        self.host = host
         self.channel: Optional[grpc.aio.Channel] = None
-        self.stub: Optional[cosim_pb2_grpc.CosimStub] = None
+        self.stub: Optional['cosim_pb2_grpc.CosimStub'] = None
         self.auth_payload = None
         self.expired = False
         self._stream_task = None
         self._stream = None
         self._response_queue = asyncio.Queue()
 
+    async def __aenter__(self):
+        await self.connect()
+        authenticated = await self.authenticate()
+        if not authenticated:
+            await self.terminate()
+            raise Exception("Authentication with CosimClient failed.")
+        logging.info("Cosimulation session opened successfully.")
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.terminate()
+
     async def connect(self):
         logging.info(f"Connecting to gRPC server at {self.grpc_host}")
         self.channel = grpc.aio.insecure_channel(self.grpc_host)
-        print("self.channel: ", self.channel)
         await self.channel.channel_ready()
-        print("self.channel.channel_ready")
         self.stub = cosim_pb2_grpc.CosimStub(self.channel)
         self._stream = self.stub.CosimCall()
         self._stream_task = asyncio.create_task(self._receive_messages())
@@ -42,7 +55,7 @@ class CosimClient:
         finally:
             await self._response_queue.put(None)
 
-    async def _send_message(self, message: cosim_pb2.CosimRequest):
+    async def _send_message(self, message: 'cosim_pb2.CosimRequest'):
         if not self._stream:
             raise ConnectionError("Stream is not initialized. Call connect() first.")
         await self._stream.write(message)
@@ -50,8 +63,8 @@ class CosimClient:
 
     async def _send_and_receive(
         self,
-        request: cosim_pb2.CosimRequest,
-        action_type: cosim_pb2.CosimActionType,
+        request: 'cosim_pb2.CosimRequest',
+        action_type: 'cosim_pb2.CosimActionType',
         identifier: Optional[str] = None,
         retry_on_expiry: bool = True
     ) -> Any:
@@ -73,7 +86,7 @@ class CosimClient:
                 logging.warning(f"Ignoring response with unmatched ID: {response.external_state_block_id}")
                 continue
 
-            print("response: ", response)
+            logging.debug(f"Received response: {response}")
 
             if response.state == "True":
                 logging.info(f"{action_type} successful for ID: {identifier}")
@@ -89,11 +102,11 @@ class CosimClient:
                 raise Exception(f"{action_type} failed: {error_msg}")
 
     # FIXMETL This should be extracted into middleware
-    async def authenticate(self, api_key: str, address: str, job_id: str, host: str) -> bool:
+    async def authenticate(self) -> bool:
         async with aiohttp.ClientSession() as session:
-            url = f"{host}/simulations/jobs/authorization/{job_id}"
+            url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
             params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
-            headers = {"X_API_KEY": api_key}
+            headers = {"X_API_KEY": self.api_key}
             logging.info(f"Authenticating with URL: {url} and params: {params}")
 
             async with session.get(url, params=params, headers=headers) as res:
@@ -109,8 +122,8 @@ class CosimClient:
         auth_request = cosim_pb2.CosimRequest(
             auth_token=cosim_pb2.AuthMeta(auth_token=jwt_token),
             action=cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE,
-            cluster_handle_address=address,
-            job_id=job_id
+            cluster_handle_address=self.address,
+            job_id=self.job_id
         )
         response = await self._send_and_receive(
             auth_request,
@@ -118,56 +131,80 @@ class CosimClient:
         )
         if response:
             self.auth_payload = {
-                "api_key": api_key,
-                "address": address,
-                "job_id": job_id,
-                "host": host
+                "api_key": self.api_key,
+                "address": self.address,
+                "job_id": self.job_id,
+                "host": self.host
             }
             logging.info("Authentication successful.")
             return True
         logging.error("Authentication failed.")
         return False
 
-    async def produce(self, x: str, agent_id: str, value: Any, time: float = 0.0):
+    async def produce(self, external_state_id: str, agent_id: str, value: Any, timestamp: float = 0.0) -> Any:
         produce_request = cosim_pb2.CosimRequest(
             action=cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
-            external_state_block_id=x,
+            external_state_block_id=external_state_id,
             agent_id=agent_id,
             value=json.dumps({"payload": serdes(value)}),
-            time=time
+            time=timestamp
         )
         response = await self._send_and_receive(
             produce_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
-            identifier=x
+            identifier=external_state_id
         )
         return response
 
-    async def consume(self, x: str, agent_id: str, time: float = 0.0):
+    async def consume(self, external_state_id: str, agent_id: str, time: float = 0.0) -> Tuple[Any, Any]:
         consume_request = cosim_pb2.CosimRequest(
             action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
-            external_state_block_id=x,
+            external_state_block_id=external_state_id,
             agent_id=agent_id,
             time=time
         )
         response = await self._send_and_receive(
             consume_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
-            identifier=x
+            identifier=external_state_id
         )
-        # return serdes(json.loads(response)["payload"])
-        return response, response # FIXMETL 
+        # return serdes(json.loads(response)["payload"]), response
+        return response, response
+
+    async def run(self, fn_strings: str | list, args: list) -> list:
+        """
+        Executes a list of consume/produce operations concurrently.
+        """
+        if isinstance(fn_strings, list):
+            fns = fn_strings
+        else:
+            fns = [
+                (self.consume if a == "c" else self.produce) for a in fn_strings
+            ]
+
+        paired_fns = []
+        for fn, arg in zip(fns, args):
+            if arg is None:
+                paired_fns.append(fn())
+            elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
+                paired_fns.append(fn(*arg))
+            else:
+                paired_fns.append(fn(arg))
+
+        results = await asyncio.gather(*paired_fns, return_exceptions=True)
+
+        for result in results:
+            if isinstance(result, Exception):
+                logging.error(f"Function execution failed: {result}")
+                raise result
+
+        return results
 
     async def _handle_expiration(self):
         if not self.auth_payload:
             raise Exception("No authentication payload available for re-authentication.")
 
-        success = await self.authenticate(
-            self.auth_payload["api_key"],
-            self.auth_payload["address"],
-            self.auth_payload["job_id"],
-            self.auth_payload["host"]
-        )
+        success = await self.authenticate()
         if not success:
             raise Exception("Re-authentication failed after expiration.")
         self.expired = False
