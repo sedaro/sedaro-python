@@ -2,7 +2,7 @@ import asyncio
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
+from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
 
 import sedaro.grpc_client as grpc_client
@@ -610,13 +610,11 @@ class SimulationJob:
 class SimulationHandle:
 
     def __init__(self, job: Union[dict, None], sim_client: Simulation):
-        self.__job = SimulationJob(job)
-        self.__sim_client = sim_client
-        self.__message_generator = None
-        self.__thread_executor = ThreadPoolExecutor(max_workers=10)
+        self._job = SimulationJob(job)
+        self._sim_client = sim_client
 
-    def __getitem__(self, key): return self.__job[key]
-    def get(self, key, default=None): return self.__job.get(key, default)
+    def __getitem__(self, key): return self._job[key]
+    def get(self, key, default=None): return self._job.get(key, default)
     def __enter__(self): return self
 
     def __exit__(self, *args):
@@ -638,7 +636,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        return (self := self.__sim_client.status(self.__job['id'], err_if_empty=err_if_empty))
+        return (self := self._sim_client.status(self._job['id'], err_if_empty=err_if_empty))
 
     def terminate(self):
         """Terminate the running simulation.
@@ -646,7 +644,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        self.__sim_client.terminate(self.__job['id'])
+        self._sim_client.terminate(self._job['id'])
         return self
 
     def results(
@@ -699,7 +697,7 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
+        return self._sim_client.results(job_id=self._job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
 
     def results_poll(
         self,
@@ -733,8 +731,8 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results_poll(
-            job_id=self.__job['id'],
+        return self._sim_client.results_poll(
+            job_id=self._job['id'],
             start=start,
             stop=stop,
             streams=streams,
@@ -745,13 +743,13 @@ class SimulationHandle:
         )
 
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
-        return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
+        return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
-        with self.__sim_client.externals_client() as externals_client:
+        with self._sim_client.externals_client() as externals_client:
             response = externals_client.get_external(
                 path_params={
-                    'jobId': self.__job['id'],
+                    'jobId': self._job['id'],
                     'agentId': agent_id,
                     'externalStateBlockId': external_state_id,
                 },
@@ -764,10 +762,10 @@ class SimulationHandle:
         if type(values) is not tuple:
             raise TypeError(
                 '`values` must be passed as a tuple of one or more state variable values (ex. `([x, y, z],)` where `[x, y, z]` is the external state]).')
-        with self.__sim_client.externals_client() as externals_client:
+        with self._sim_client.externals_client() as externals_client:
             response = externals_client.put_external(
                 path_params={
-                    'jobId': self.__job['id'],
+                    'jobId': self._job['id'],
                     'agentId': agent_id,
                     'externalStateBlockId': external_state_id,
                 },
@@ -779,100 +777,119 @@ class SimulationHandle:
             )
         return tuple(serdes(v) for v in body_from_res(response))
 
-    async def open_cosim(self, grpc_host: str):
+    class CosimInterface:
         """
-        Open a cosimulation session using the new CosimClient.
+        Specific interface exposed within the cosimulation context.
+        Only exposes methods related to cosimulation operations.
         """
-        api_key = self.__sim_client.get_sedaro()._api_key
-        host = self.__sim_client.get_sedaro()._api_host
 
-        try:
-            address = self.__sim_client.status().get("clusterAddr")
-            job_id = self.__sim_client.status().get("id")
+        def __init__(self, simulation_handle: 'SimulationHandle'):
+            self._simulation_handle = simulation_handle
+            self._cosim_client = None
 
-            self.__cosim_client = grpc_client.CosimClient(grpc_host)
-            await self.__cosim_client.connect()
-            authenticated = await self.__cosim_client.authenticate(api_key, address, job_id, host)
+        async def open_cosim(self, grpc_host: str):
+            """
+            Open a cosimulation session using the new CosimClient.
+            """
+            sedaro = self._simulation_handle._sim_client.get_sedaro()
+            api_key = sedaro._api_key
+            host = sedaro._api_host
 
-            if not authenticated:
-                raise Exception("Authentication with CosimClient failed.")
+            try:
+                status = self._simulation_handle._sim_client.status()
+                address = status.get("clusterAddr")
+                job_id = status.get("id")
 
-            logging.info("Cosimulation session opened successfully.")
-        except Exception as e:
-            logging.error(f"Failed to open cosimulation session: {e}")
-            if self.__cosim_client:
-                await self.__cosim_client.terminate()
-                self.__cosim_client = None
-            raise e
+                self._cosim_client = grpc_client.CosimClient(grpc_host)
+                await self._cosim_client.connect()
+                authenticated = await self._cosim_client.authenticate(api_key, address, job_id, host)
 
-    async def close_cosim(self):
-        """
-        Close the cosimulation session.
-        """
-        if self.__cosim_client:
-            await self.__cosim_client.terminate()
-            self.__cosim_client = None
+                if not authenticated:
+                    raise Exception("Authentication with CosimClient failed.")
+
+                logging.info("Cosimulation session opened successfully.")
+            except Exception as e:
+                logging.error(f"Failed to open cosimulation session: {e}")
+                if self._cosim_client:
+                    await self._cosim_client.terminate()
+                    self._cosim_client = None
+                raise e
+
+        async def close_cosim(self):
+            """
+            Close the cosimulation session.
+            """
+            await self._cosim_client.terminate()
             logging.info("Cosimulation session closed successfully.")
-        else:
-            raise Exception(
-                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
-            )
 
-    async def consume_async(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
-        """
-        Public method to consume cosimulation data asynchronously.
-        """
-        logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
-        if not self.__cosim_client:
-            raise Exception(
-                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
-            )
-        else:
-            logging.debug("Awaiting CosimClient consume operation...")
-            res = await self.__cosim_client.consume(external_state_id, agent_id, time)
-            logging.debug(f"Consumed: {res}")
-            return tuple(res)
+        async def consume(self, agent_id: str, external_state_id: str, time: Optional[float] = None) -> Tuple:
+            """
+            Consume cosimulation data asynchronously.
+            """
+            logging.info(f"Consuming... Agent ID: {agent_id}, External State ID: {external_state_id}, Time: {time}")
+            res = await self._cosim_client.consume(external_state_id, agent_id, time)
+            logging.debug(f" @=-=-=- Consumed: {res}")
+            return tuple(res) # FIXMETL clean up return types
 
-    async def produce_async(
-        self, agent_id: str, external_state_id: str, values: Any, timestamp: Optional[float] = None
-    ) -> Tuple:
-        """
-        Public method to produce cosimulation data asynchronously.
-        """
-        if not self.__cosim_client:
-            raise Exception(
-                'No cosimulation session is active. Open a cosimulation session first by calling `open_cosim`.'
-            )
-        else:
-            res = await self.__cosim_client.produce(external_state_id, agent_id, values, timestamp)
+        async def produce(
+            self,
+            agent_id: str,
+            external_state_id: str,
+            values: Any,
+            timestamp: Optional[float] = None
+        ) -> Tuple:
+            """
+            Produce cosimulation data asynchronously.
+            """
+            logging.info(
+                f"Producing... Agent ID: {agent_id}, External State ID: {external_state_id}, Timestamp: {timestamp}")
+            res = await self._cosim_client.produce(external_state_id, agent_id, values, timestamp)
             logging.debug(f"Produced: {res}")
-            return tuple(res)
+            return tuple(res) # FIXMETL clean up return types
 
-    async def async_run(self, fn_strings: str | list, args: list) -> list:
-        """
-        Executes a list of consume/produce operations concurrently.
-        """
-        if isinstance(fn_strings, list):
-            fns = fn_strings
-        else:
-            fns = [
-                (self.consume_async if a == "c" else self.produce_async) for a in fn_strings
-            ]
-
-        paired_fns = []
-        for fn, arg in zip(fns, args):
-            if arg is None:
-                paired_fns.append(fn())
-            elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
-                paired_fns.append(fn(*arg))
+        async def run(self, fn_strings: str | list, args: list) -> list:
+            """
+            Executes a list of consume/produce operations concurrently.
+            """
+            if isinstance(fn_strings, list):
+                fns = fn_strings
             else:
-                paired_fns.append(fn(arg))
+                fns = [
+                    (self.consume if a == "c" else self.produce) for a in fn_strings
+                ]
 
-        results = await asyncio.gather(*paired_fns, return_exceptions=True)
+            paired_fns = []
+            for fn, arg in zip(fns, args):
+                if arg is None:
+                    paired_fns.append(fn())
+                elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
+                    paired_fns.append(fn(*arg))
+                else:
+                    paired_fns.append(fn(arg))
 
-        for result in results:
-            if isinstance(result, Exception):
-                logging.error(f"Function execution failed: {result}")
-                raise result
+            results = await asyncio.gather(*paired_fns, return_exceptions=True)
 
-        return results
+            for result in results:
+                if isinstance(result, Exception):
+                    logging.error(f"Function execution failed: {result}")
+                    raise result
+
+            return results
+
+    # FIXMETL this should be a static url known by sim client
+    @asynccontextmanager
+    async def async_channel(self, grpc_host: str):
+        """
+        Asynchronous context manager for cosimulation sessions.
+        Automatically opens the cosimulation session on entry and closes it on exit.
+
+        Usage:
+            async with simulation_handle.async_channel(grpc_host="your_grpc_host") as cosimer:
+                # Perform cosimulation operations using cosimer
+        """
+        cosim_interface = self.CosimInterface(self)
+        await cosim_interface.open_cosim(grpc_host)
+        try:
+            yield cosim_interface
+        finally:
+            await cosim_interface.close_cosim()
