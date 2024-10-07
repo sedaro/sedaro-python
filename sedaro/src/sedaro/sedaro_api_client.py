@@ -10,7 +10,7 @@ from urllib3.response import HTTPResponse
 
 from sedaro.plain_request import PlainRequest
 
-from .branches import AgentTemplateBranch, ScenarioBranch
+from .branches import AgentTemplateBranch, Branch, ScenarioBranch
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
 
@@ -52,7 +52,7 @@ class SedaroApiClient(ApiClient):
         self._auth_handle = auth_handle
 
         self._proxy_url = proxy_url
-        self._proxy_headers = proxy_headers 
+        self._proxy_headers = proxy_headers
         self._verify_ssl = True
         if self._proxy_url and not self._proxy_url.startswith('https'):
             self._verify_ssl = False
