@@ -142,7 +142,7 @@ class SedaroApiClient(ApiClient):
         """Instantiate a `Branch` object associated with the Sedaro `Branch` with `branch_id`. The `Branch` object has
         methods and attributes for interacting with the `Block`s and attributes of the Sedaro `Branch`.
 
-        Note that the `agent_template` and `scenario` methods return more specific objects and can be used when the type
+        Note that the `agent_template` and `scenario` methods return more specific objects and may be used when the type
         of the `Branch` is known.
 
         Args:
