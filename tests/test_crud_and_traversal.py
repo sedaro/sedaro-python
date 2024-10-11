@@ -26,7 +26,7 @@ def test_get():
     assert isinstance(
         sedaro.agent_template(SIMPLESAT_A_T_ID), AgentTemplateBranch
     )
-    with pytest.raises(TypeError, match='not "Scenario"'):
+    with pytest.raises(TypeError, match='cannot be of type "Scenario".'):
         sedaro.agent_template(SIMPLESAT_SCENARIO_ID)
 
     # test get scenario
