@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ... import modsim as ms
-from ...settings import SCENARIO_TEMPLATE
+from ...settings import SCENARIO
 from ..blocks import BlockType
 from ..branch import Branch
 
@@ -15,9 +15,9 @@ class ScenarioBranch(Branch):
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
-        if (type_ := self.data['type']) != SCENARIO_TEMPLATE:
+        if (type_ := self.data['type']) != SCENARIO:
             raise TypeError(
-                f'Branch must be of type "{SCENARIO_TEMPLATE}" not "{type_}"')
+                f'Branch must be of type "{SCENARIO}" not "{type_}"')
 
     @property
     def simulation(self):

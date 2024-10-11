@@ -13,7 +13,7 @@ CRUD = 'crud'
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
-SCENARIO_TEMPLATE = 'Scenario'
+SCENARIO = 'Scenario'
 LIBRARY = 'Library'
 
 ROOT = 'root'
