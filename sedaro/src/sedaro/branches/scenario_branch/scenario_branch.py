@@ -38,7 +38,7 @@ class ScenarioBranch(Branch):
         """
         from .study_client import Study
         return Study(self._sedaro, self)
-    
+
     def delete_all_external_state_blocks(self):
         """Delete all ExternalState blocks in the scenario branch."""
         if existing_externals := self.ExternalState.get_all_ids():
