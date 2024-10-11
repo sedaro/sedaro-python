@@ -18,7 +18,7 @@ def test_time_conversions():
     assert ms.mjd_to_datetime(60390.0190162037) == datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)
     assert ms.mjd_to_datetime(60391.0190162037) == datetime.datetime(2024, 3, 22, 0, 27, 23, tzinfo=datetime.timezone.utc)
     assert ms.mjd_to_datetime(60389.0190162037) == datetime.datetime(2024, 3, 20, 0, 27, 23, tzinfo=datetime.timezone.utc)
-    
+
     with pytest.raises(AssertionError, match='Datetime must have a timezone'):
         ms.datetime_to_mjd(datetime.datetime(2024, 3, 20, 0, 27, 23))
 
