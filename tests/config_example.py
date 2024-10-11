@@ -1,4 +1,4 @@
-HOST = 'https://api.sedaro.com'
+HOST = 'https://api.sedaro.com' # or 'http://localhost'
 
 API_KEY = 'your api key here'
 AUTH_HANDLE = 'your auth handle here'
