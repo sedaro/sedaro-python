@@ -800,7 +800,7 @@ class SimulationHandle:
             api_key=api_key,
             address=address,
             job_id=job_id,
-            host=host
+            host=host,
         )
 
         try:

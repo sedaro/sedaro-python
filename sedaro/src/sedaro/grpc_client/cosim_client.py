@@ -2,13 +2,32 @@ import asyncio
 import itertools
 import json
 import logging
-from typing import Any, Optional, Tuple, Coroutine
+import uuid
+from typing import Any, Coroutine, Optional, Tuple
 
 import aiohttp
 import grpc
 
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
+
+
+class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
+    def __init__(self, metadata_to_add):
+        self.metadata_to_add = metadata_to_add
+
+    def _add_metadata(self, client_call_details):
+        if client_call_details.metadata is None:
+            metadata = []
+        else:
+            metadata = list(client_call_details.metadata)
+        metadata.extend(self.metadata_to_add)
+        return client_call_details._replace(metadata=metadata)
+
+    async def intercept_unary_unary(self, continuation, client_call_details, request):
+        new_details = self._add_metadata(client_call_details)
+        return await continuation(new_details, request)
+
 
 class CosimClient:
     def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
@@ -17,12 +36,10 @@ class CosimClient:
         self.address = address
         self.job_id = job_id
         self.host = host
+        self.uuid = uuid.uuid4()
+
         self.channel: Optional[grpc.aio.Channel] = None
         self.stub: Optional['cosim_pb2_grpc.CosimStub'] = None
-        self.auth_payload = None
-        self._stream_task = None
-        self._stream = None
-        self._response_queue = asyncio.Queue()
 
         self._produce_counter = itertools.count(start=1)
         self._consume_counter = itertools.count(start=1)
@@ -40,8 +57,11 @@ class CosimClient:
         await self.terminate()
 
     async def connect(self):
-        logging.info(f"Connecting to gRPC server at {self.grpc_host}")
-        self.channel = grpc.aio.insecure_channel(self.grpc_host)
+        metadata_interceptor = MetadataClientInterceptor([("session-uuid", self.uuid.hex)])
+        # FIXMETL session uuid should be moved into call_credentials_metadata, except that breaks running locally,
+        # since python gRPC silently drops call credentials when on an insecure channel.
+        logging.info(f"Connecting to gRPC server at {self.grpc_host} with session UUID: {self.uuid}")
+        self.channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(metadata_interceptor,))
         await self.channel.channel_ready()
         self.stub = cosim_pb2_grpc.CosimStub(self.channel)
         logging.info("Connected to gRPC server.")
@@ -60,7 +80,7 @@ class CosimClient:
                 logging.info(f"Sending produce request: {request}")
             else:
                 logging.warning(f"Sending request with unknown action type: {request}")
-            
+
             response = await self.stub.CosimCall(request)
 
             if response.action != action_type:
@@ -120,23 +140,16 @@ class CosimClient:
             auth_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE
         )
-        if response:
-            self.auth_payload = {
-                "api_key": self.api_key,
-                "address": self.address,
-                "job_id": self.job_id,
-                "host": self.host
-            }
-            logging.info("Authentication successful.")
-            return True
+        logging.info("Authentication successful.")
+        return True
         logging.error("Authentication failed.")
         return False
 
     def produce(
-        self, 
-        external_state_id: str, 
-        agent_id: str, 
-        value: Any, 
+        self,
+        external_state_id: str,
+        agent_id: str,
+        value: Any,
         timestamp: float = 0.0
     ) -> Coroutine[Any, Any, Any]:
         index = next(self._produce_counter)
@@ -148,7 +161,7 @@ class CosimClient:
             time=timestamp,
             index=index
         )
-        
+
         async def _produce_coroutine():
             try:
                 response = await self._send_and_receive(
@@ -165,9 +178,9 @@ class CosimClient:
         return _produce_coroutine()
 
     def consume(
-        self, 
-        external_state_id: str, 
-        agent_id: str, 
+        self,
+        external_state_id: str,
+        agent_id: str,
         time: float = 0.0
     ) -> Coroutine[Any, Any, Tuple[Any, Any]]:
         index = next(self._consume_counter)
@@ -178,7 +191,7 @@ class CosimClient:
             time=time,
             index=index,
         )
-        
+
         async def _consume_coroutine():
             try:
                 response = await self._send_and_receive(
@@ -195,16 +208,12 @@ class CosimClient:
         return _consume_coroutine()
 
     async def _handle_expiration(self):
-        if not self.auth_payload:
-            raise Exception("No authentication payload available for re-authentication.")
-
         success = await self.authenticate()
         if not success:
             raise Exception("Re-authentication failed after expiration.")
 
     async def terminate(self):
-        if self._stream:
-            await self._stream.done_writing()
+        # FIXMETL should we send a terminate message here to clean up connection info?
         if self.channel:
             await self.channel.close()
             logging.info("gRPC channel closed.")
