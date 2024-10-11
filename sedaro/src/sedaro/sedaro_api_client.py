@@ -10,7 +10,7 @@ from urllib3.response import HTTPResponse
 
 from sedaro.plain_request import PlainRequest
 
-from .branches import AgentTemplateBranch, ScenarioBranch
+from .branches import AgentTemplateBranch, Branch, ScenarioBranch
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
 
@@ -52,7 +52,7 @@ class SedaroApiClient(ApiClient):
         self._auth_handle = auth_handle
 
         self._proxy_url = proxy_url
-        self._proxy_headers = proxy_headers 
+        self._proxy_headers = proxy_headers
         self._verify_ssl = True
         if self._proxy_url and not self._proxy_url.startswith('https'):
             self._verify_ssl = False
@@ -137,6 +137,21 @@ class SedaroApiClient(ApiClient):
             ScenarioBranch: `ScenarioBranch` object
         """
         return ScenarioBranch(self.__get_branch(branch_id), self)
+
+    def branch(self, branch_id: 'str') -> 'Branch':
+        """Instantiate a `Branch` object associated with the Sedaro `Branch` with `branch_id`. The `Branch` object has
+        methods and attributes for interacting with the `Block`s and attributes of the Sedaro `Branch`.
+
+        Note that the `agent_template` and `scenario` methods return more specific objects and may be used when the type
+        of the `Branch` is known.
+
+        Args:
+            branch_id (str): `id` of the Sedaro `Branch` to get
+
+        Returns:
+            Branch: `Branch` object
+        """
+        return Branch(self.__get_branch(branch_id), self)
 
     @property
     def request(self) -> PlainRequest:
