@@ -103,3 +103,5 @@ class ScenarioBranch(Branch):
     """A Sedaro `Block` class on a `ScenarioBranch`"""
     AuxiliaryService: BlockType
     """A Sedaro `Block` class on a `ScenarioBranch`"""
+    DynamicWaypointPath: BlockType
+    """A Sedaro `Block` class on a `ScenarioBranch`"""
