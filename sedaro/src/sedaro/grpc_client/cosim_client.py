@@ -1,14 +1,14 @@
 import asyncio
+import itertools
 import json
 import logging
-from typing import Any, Optional, Tuple
+from typing import Any, Optional, Tuple, Coroutine
 
 import aiohttp
 import grpc
 
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
-
 
 class CosimClient:
     def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
@@ -23,6 +23,9 @@ class CosimClient:
         self._stream_task = None
         self._stream = None
         self._response_queue = asyncio.Queue()
+
+        self._produce_counter = itertools.count(start=1)
+        self._consume_counter = itertools.count(start=1)
 
     async def __aenter__(self):
         await self.connect()
@@ -41,7 +44,7 @@ class CosimClient:
         self.channel = grpc.aio.insecure_channel(self.grpc_host)
         await self.channel.channel_ready()
         self.stub = cosim_pb2_grpc.CosimStub(self.channel)
-        logging.info("Connected and stream task started.")
+        logging.info("Connected to gRPC server.")
 
     async def _send_and_receive(
         self,
@@ -55,6 +58,9 @@ class CosimClient:
                 logging.info(f"Sending consume request: {request}")
             elif action_type == cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE:
                 logging.info(f"Sending produce request: {request}")
+            else:
+                logging.warning(f"Sending request with unknown action type: {request}")
+            
             response = await self.stub.CosimCall(request)
 
             if response.action != action_type:
@@ -68,9 +74,9 @@ class CosimClient:
             if response.state == "True":
                 val = response.value if hasattr(response, 'value') else True
                 if action_type == cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME:
-                    logging.info(f" Consumed ID: {identifier} and got value: {val}")
+                    logging.info(f"Consumed ID: {identifier} and got value: {val}")
                 if action_type == cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE:
-                    logging.info(f" Produced ID: {identifier} and got value: {val}")
+                    logging.info(f"Produced ID: {identifier} and got value: {val}")
                 return val
 
             elif response.state == "EXPIRED" and retry_on_expiry:
@@ -110,12 +116,10 @@ class CosimClient:
             cluster_handle_address=self.address,
             job_id=self.job_id
         )
-        print("auth_request: ", auth_request)
         response = await self._send_and_receive(
             auth_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE
         )
-        print("response: ", response)
         if response:
             self.auth_payload = {
                 "api_key": self.api_key,
@@ -128,66 +132,67 @@ class CosimClient:
         logging.error("Authentication failed.")
         return False
 
-    async def produce(self, external_state_id: str, agent_id: str, value: Any, timestamp: float = 0.0) -> Any:
+    def produce(
+        self, 
+        external_state_id: str, 
+        agent_id: str, 
+        value: Any, 
+        timestamp: float = 0.0
+    ) -> Coroutine[Any, Any, Any]:
+        index = next(self._produce_counter)
         produce_request = cosim_pb2.CosimRequest(
             action=cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
             external_state_block_id=external_state_id,
             agent_id=agent_id,
             value=json.dumps({"payload": serdes(value)}),
-            time=timestamp
+            time=timestamp,
+            index=index
         )
-        response = await self._send_and_receive(
-            produce_request,
-            cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
-            identifier=external_state_id
-        )
-        return response
+        
+        async def _produce_coroutine():
+            try:
+                response = await self._send_and_receive(
+                    produce_request,
+                    cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE,
+                    identifier=external_state_id
+                )
+                logging.info(f"Produced message with index {index}: {value}")
+                return index, response
+            except Exception as e:
+                logging.error(f"Produce operation failed for index {index}: {e}")
+                raise
 
-    async def consume(self, external_state_id: str, agent_id: str, time: float = 0.0, index=0) -> Tuple[Any, Any]:
+        return _produce_coroutine()
+
+    def consume(
+        self, 
+        external_state_id: str, 
+        agent_id: str, 
+        time: float = 0.0
+    ) -> Coroutine[Any, Any, Tuple[Any, Any]]:
+        index = next(self._consume_counter)
         consume_request = cosim_pb2.CosimRequest(
             action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
             external_state_block_id=external_state_id,
             agent_id=agent_id,
             time=time,
+            index=index,
         )
-        response = await self._send_and_receive(
-            consume_request,
-            cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
-            identifier=external_state_id
-        )
-        logging.info(f"completed consume: {index}")
-        # FIXMETL make change this back to use serdes
-        # return serdes(json.loads(response)["payload"]), response
-        return response, response
+        
+        async def _consume_coroutine():
+            try:
+                response = await self._send_and_receive(
+                    consume_request,
+                    cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
+                    identifier=external_state_id,
+                )
+                logging.info(f"Consumed message with index {index}: {external_state_id}")
+                return index, response
+            except Exception as e:
+                logging.error(f"Consume operation failed for index {index}: {e}")
+                raise
 
-    async def run(self, fn_strings: str | list, args: list) -> list:
-        """
-        Executes a list of consume/produce operations concurrently.
-        """
-        if isinstance(fn_strings, list):
-            fns = fn_strings
-        else:
-            fns = [
-                (self.consume if a == "c" else self.produce) for a in fn_strings
-            ]
-
-        paired_fns = []
-        for fn, arg in zip(fns, args):
-            if arg is None:
-                paired_fns.append(fn())
-            elif isinstance(arg, Iterable) and not isinstance(arg, (str, bytes)):
-                paired_fns.append(fn(*arg))
-            else:
-                paired_fns.append(fn(arg))
-
-        results = await asyncio.gather(*paired_fns, return_exceptions=True)
-
-        for result in results:
-            if isinstance(result, Exception):
-                logging.error(f"Function execution failed: {result}")
-                raise result
-
-        return results
+        return _consume_coroutine()
 
     async def _handle_expiration(self):
         if not self.auth_payload:

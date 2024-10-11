@@ -24,21 +24,21 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63osim.proto\x12\x05\x63osim\"3\n\x08\x41uthMeta\x12\x12\n\nauth_token\x18\x03 \x01(\t\x12\x13\n\x0b\x61uth_handle\x18\x04 \x01(\t\"\xe9\x01\n\x0c\x43osimRequest\x12#\n\nauth_token\x18\x01 \x01(\x0b\x32\x0f.cosim.AuthMeta\x12&\n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1e\n\x16\x63luster_handle_address\x18\x03 \x01(\t\x12\x0e\n\x06job_id\x18\x04 \x01(\t\x12\x10\n\x08\x61gent_id\x18\x05 \x01(\t\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t\x12\r\n\x05value\x18\x07 \x01(\t\x12\x11\n\x04time\x18\x08 \x01(\x01H\x00\x88\x01\x01\x42\x07\n\x05_time\"\x84\x01\n\rCosimResponse\x12\x0c\n\x04time\x18\x01 \x01(\x01\x12\r\n\x05state\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\x12&\n\x06\x61\x63tion\x18\x05 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t*\x80\x01\n\x0f\x43osimActionType\x12\x18\n\x14\x43OSIM_ACTION_CONSUME\x10\x00\x12\x18\n\x14\x43OSIM_ACTION_PRODUCE\x10\x01\x12\x1a\n\x16\x43OSIM_ACTION_TERMINATE\x10\x02\x12\x1d\n\x19\x43OSIM_ACTION_AUTHENTICATE\x10\x03\x32\x41\n\x05\x43osim\x12\x38\n\tCosimCall\x12\x13.cosim.CosimRequest\x1a\x14.cosim.CosimResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63osim.proto\x12\x05\x63osim\"3\n\x08\x41uthMeta\x12\x12\n\nauth_token\x18\x03 \x01(\t\x12\x13\n\x0b\x61uth_handle\x18\x04 \x01(\t\"\x87\x02\n\x0c\x43osimRequest\x12#\n\nauth_token\x18\x01 \x01(\x0b\x32\x0f.cosim.AuthMeta\x12&\n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1e\n\x16\x63luster_handle_address\x18\x03 \x01(\t\x12\x0e\n\x06job_id\x18\x04 \x01(\t\x12\x10\n\x08\x61gent_id\x18\x05 \x01(\t\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t\x12\r\n\x05value\x18\x07 \x01(\t\x12\x11\n\x04time\x18\x08 \x01(\x01H\x00\x88\x01\x01\x12\x12\n\x05index\x18\t \x01(\x05H\x01\x88\x01\x01\x42\x07\n\x05_timeB\x08\n\x06_index\"\xa2\x01\n\rCosimResponse\x12\x0c\n\x04time\x18\x01 \x01(\x01\x12\r\n\x05state\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\x12&\n\x06\x61\x63tion\x18\x05 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t\x12\x12\n\x05index\x18\t \x01(\x05H\x00\x88\x01\x01\x42\x08\n\x06_index*\x80\x01\n\x0f\x43osimActionType\x12\x18\n\x14\x43OSIM_ACTION_CONSUME\x10\x00\x12\x18\n\x14\x43OSIM_ACTION_PRODUCE\x10\x01\x12\x1a\n\x16\x43OSIM_ACTION_TERMINATE\x10\x02\x12\x1d\n\x19\x43OSIM_ACTION_AUTHENTICATE\x10\x03\x32\x41\n\x05\x43osim\x12\x38\n\tCosimCall\x12\x13.cosim.CosimRequest\x1a\x14.cosim.CosimResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'cosim_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_COSIMACTIONTYPE']._serialized_start=447
-  _globals['_COSIMACTIONTYPE']._serialized_end=575
+  _globals['_COSIMACTIONTYPE']._serialized_start=507
+  _globals['_COSIMACTIONTYPE']._serialized_end=635
   _globals['_AUTHMETA']._serialized_start=22
   _globals['_AUTHMETA']._serialized_end=73
   _globals['_COSIMREQUEST']._serialized_start=76
-  _globals['_COSIMREQUEST']._serialized_end=309
-  _globals['_COSIMRESPONSE']._serialized_start=312
-  _globals['_COSIMRESPONSE']._serialized_end=444
-  _globals['_COSIM']._serialized_start=577
-  _globals['_COSIM']._serialized_end=642
+  _globals['_COSIMREQUEST']._serialized_end=339
+  _globals['_COSIMRESPONSE']._serialized_start=342
+  _globals['_COSIMRESPONSE']._serialized_end=504
+  _globals['_COSIM']._serialized_start=637
+  _globals['_COSIM']._serialized_end=702
 # @@protoc_insertion_point(module_scope)

@@ -28,6 +28,7 @@ message CosimRequest {
     string external_state_block_id = 6;
     string value = 7;
     optional double time = 8;
+    optional int32 index = 9;
 }
 
 message CosimResponse {
@@ -36,5 +37,6 @@ message CosimResponse {
     string value = 4;
     CosimActionType action = 5;
     string external_state_block_id = 6;
+    optional int32 index = 9;
 }
 
