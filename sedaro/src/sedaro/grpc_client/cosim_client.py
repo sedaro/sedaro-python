@@ -20,7 +20,6 @@ class CosimClient:
         self.channel: Optional[grpc.aio.Channel] = None
         self.stub: Optional['cosim_pb2_grpc.CosimStub'] = None
         self.auth_payload = None
-        self.expired = False
         self._stream_task = None
         self._stream = None
         self._response_queue = asyncio.Queue()
@@ -42,66 +41,52 @@ class CosimClient:
         self.channel = grpc.aio.insecure_channel(self.grpc_host)
         await self.channel.channel_ready()
         self.stub = cosim_pb2_grpc.CosimStub(self.channel)
-        self._stream = self.stub.CosimCall()
-        self._stream_task = asyncio.create_task(self._receive_messages())
         logging.info("Connected and stream task started.")
-
-    async def _receive_messages(self):
-        try:
-            async for response in self._stream:
-                await self._response_queue.put(response)
-        except grpc.aio.AioRpcError as e:
-            logging.error(f"Stream closed with error: {e}")
-        finally:
-            await self._response_queue.put(None)
-
-    async def _send_message(self, message: 'cosim_pb2.CosimRequest'):
-        if not self._stream:
-            raise ConnectionError("Stream is not initialized. Call connect() first.")
-        await self._stream.write(message)
-        logging.debug(f"Sent message: {message}")
 
     async def _send_and_receive(
         self,
-        request: 'cosim_pb2.CosimRequest',
-        action_type: 'cosim_pb2.CosimActionType',
+        request: cosim_pb2.CosimRequest,
+        action_type: cosim_pb2.CosimActionType,
         identifier: Optional[str] = None,
         retry_on_expiry: bool = True
     ) -> Any:
-        await self._send_message(request)
-        logging.info(f"Sent {action_type} request")
+        try:
+            if action_type == cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME:
+                logging.info(f"Sending consume request: {request}")
+            elif action_type == cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE:
+                logging.info(f"Sending produce request: {request}")
+            response = await self.stub.CosimCall(request)
 
-        while True:
-            response = await self._response_queue.get()
-            if response is None:
-                raise ConnectionError("Stream closed unexpectedly.")
-
-            # FIXMETL This shouldn't ever happen
             if response.action != action_type:
                 logging.warning(f"Ignoring unrelated response: {response}")
-                continue
+                raise Exception("Unrelated response received.")
 
-            # FIXMETL This shouldn't ever happen
             if identifier and response.external_state_block_id != identifier:
                 logging.warning(f"Ignoring response with unmatched ID: {response.external_state_block_id}")
-                continue
-
-            logging.debug(f"Received response: {response}")
+                raise Exception("Response ID does not match.")
 
             if response.state == "True":
-                logging.info(f"{action_type} successful for ID: {identifier}")
-                return response.value if hasattr(response, 'value') else True
+                val = response.value if hasattr(response, 'value') else True
+                if action_type == cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME:
+                    logging.info(f" Consumed ID: {identifier} and got value: {val}")
+                if action_type == cosim_pb2.CosimActionType.COSIM_ACTION_PRODUCE:
+                    logging.info(f" Produced ID: {identifier} and got value: {val}")
+                return val
 
-            # FIXMETL This should be extracted with authenticate into middleware
             elif response.state == "EXPIRED" and retry_on_expiry:
-                logging.warning("Session expired. Re-authenticating...")
+                logging.warning("Session expired. Re-authenticating and retrying call...")
                 await self._handle_expiration()
                 return await self._send_and_receive(request, action_type, identifier, retry_on_expiry=False)
             else:
                 error_msg = response.value if hasattr(response, 'value') else "Unknown error"
                 raise Exception(f"{action_type} failed: {error_msg}")
 
+        except grpc.aio.AioRpcError as e:
+            logging.error(f"RPC failed: {e}")
+            raise ConnectionError(f"RPC failed: {e}")
+
     # FIXMETL This should be extracted into middleware
+
     async def authenticate(self) -> bool:
         async with aiohttp.ClientSession() as session:
             url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
@@ -125,10 +110,12 @@ class CosimClient:
             cluster_handle_address=self.address,
             job_id=self.job_id
         )
+        print("auth_request: ", auth_request)
         response = await self._send_and_receive(
             auth_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_AUTHENTICATE
         )
+        print("response: ", response)
         if response:
             self.auth_payload = {
                 "api_key": self.api_key,
@@ -156,18 +143,20 @@ class CosimClient:
         )
         return response
 
-    async def consume(self, external_state_id: str, agent_id: str, time: float = 0.0) -> Tuple[Any, Any]:
+    async def consume(self, external_state_id: str, agent_id: str, time: float = 0.0, index=0) -> Tuple[Any, Any]:
         consume_request = cosim_pb2.CosimRequest(
             action=cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
             external_state_block_id=external_state_id,
             agent_id=agent_id,
-            time=time
+            time=time,
         )
         response = await self._send_and_receive(
             consume_request,
             cosim_pb2.CosimActionType.COSIM_ACTION_CONSUME,
             identifier=external_state_id
         )
+        logging.info(f"completed consume: {index}")
+        # FIXMETL make change this back to use serdes
         # return serdes(json.loads(response)["payload"]), response
         return response, response
 
@@ -207,7 +196,6 @@ class CosimClient:
         success = await self.authenticate()
         if not success:
             raise Exception("Re-authentication failed after expiration.")
-        self.expired = False
 
     async def terminate(self):
         if self._stream:
@@ -215,10 +203,4 @@ class CosimClient:
         if self.channel:
             await self.channel.close()
             logging.info("gRPC channel closed.")
-        if self._stream_task:
-            self._stream_task.cancel()
-            try:
-                await self._stream_task
-            except asyncio.CancelledError:
-                logging.info("Stream task cancelled.")
         logging.info("CosimClient terminated.")

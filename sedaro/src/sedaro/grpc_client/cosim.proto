@@ -3,7 +3,7 @@ syntax = "proto3";
 package cosim;
 
 service Cosim {
-    rpc CosimCall(stream CosimRequest) returns (stream CosimResponse) {};
+    rpc CosimCall(CosimRequest) returns (CosimResponse) {};
 }
 
 
