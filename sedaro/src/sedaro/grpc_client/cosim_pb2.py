@@ -24,21 +24,31 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63osim.proto\x12\x05\x63osim\"3\n\x08\x41uthMeta\x12\x12\n\nauth_token\x18\x03 \x01(\t\x12\x13\n\x0b\x61uth_handle\x18\x04 \x01(\t\"\x87\x02\n\x0c\x43osimRequest\x12#\n\nauth_token\x18\x01 \x01(\x0b\x32\x0f.cosim.AuthMeta\x12&\n\x06\x61\x63tion\x18\x02 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1e\n\x16\x63luster_handle_address\x18\x03 \x01(\t\x12\x0e\n\x06job_id\x18\x04 \x01(\t\x12\x10\n\x08\x61gent_id\x18\x05 \x01(\t\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t\x12\r\n\x05value\x18\x07 \x01(\t\x12\x11\n\x04time\x18\x08 \x01(\x01H\x00\x88\x01\x01\x12\x12\n\x05index\x18\t \x01(\x05H\x01\x88\x01\x01\x42\x07\n\x05_timeB\x08\n\x06_index\"\xa2\x01\n\rCosimResponse\x12\x0c\n\x04time\x18\x01 \x01(\x01\x12\r\n\x05state\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\t\x12&\n\x06\x61\x63tion\x18\x05 \x01(\x0e\x32\x16.cosim.CosimActionType\x12\x1f\n\x17\x65xternal_state_block_id\x18\x06 \x01(\t\x12\x12\n\x05index\x18\t \x01(\x05H\x00\x88\x01\x01\x42\x08\n\x06_index*\x80\x01\n\x0f\x43osimActionType\x12\x18\n\x14\x43OSIM_ACTION_CONSUME\x10\x00\x12\x18\n\x14\x43OSIM_ACTION_PRODUCE\x10\x01\x12\x1a\n\x16\x43OSIM_ACTION_TERMINATE\x10\x02\x12\x1d\n\x19\x43OSIM_ACTION_AUTHENTICATE\x10\x03\x32\x41\n\x05\x43osim\x12\x38\n\tCosimCall\x12\x13.cosim.CosimRequest\x1a\x14.cosim.CosimResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63osim.proto\x12\x05\x63osim\"\xd4\x01\n\x10SimulationAction\x12\x1e\n\x16\x63luster_handle_address\x18\x01 \x01(\t\x12\x0e\n\x06job_id\x18\x02 \x01(\t\x12\x10\n\x08\x61gent_id\x18\x03 \x01(\t\x12\x1f\n\x17\x65xternal_state_block_id\x18\x04 \x01(\t\x12\x0c\n\x04time\x18\x05 \x01(\x01\x12!\n\x07\x63onsume\x18\x06 \x01(\x0b\x32\x0e.cosim.ConsumeH\x00\x12!\n\x07produce\x18\x07 \x01(\x0b\x32\x0e.cosim.ProduceH\x00\x42\t\n\x07request\"\xb3\x01\n\x12SimulationResponse\x12\x1b\n\x05state\x18\x01 \x01(\x0e\x32\x0c.cosim.State\x12\x0c\n\x04time\x18\x02 \x01(\x05\x12\x32\n\x10\x63onsume_response\x18\x03 \x01(\x0b\x32\x16.cosim.ConsumeResponseH\x00\x12\x32\n\x10produce_response\x18\x04 \x01(\x0b\x32\x16.cosim.ProduceResponseH\x00\x42\n\n\x08response\"\x18\n\x07\x43onsume\x12\r\n\x05index\x18\x01 \x01(\x05\"/\n\x0f\x43onsumeResponse\x12\r\n\x05index\x18\x01 \x01(\x01\x12\r\n\x05value\x18\x02 \x01(\t\"\'\n\x07Produce\x12\r\n\x05index\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t\" \n\x0fProduceResponse\x12\r\n\x05index\x18\x01 \x01(\x05\"B\n\x0c\x41uthenticate\x12\x12\n\nauth_token\x18\x01 \x01(\t\x12\x1e\n\x16\x63luster_handle_address\x18\x02 \x01(\t\";\n\x14\x41uthenticateResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x12\n\nsession_id\x18\x02 \x01(\t*!\n\x05State\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01\x32\x93\x01\n\x05\x43osim\x12\x44\n\x0eSimulationCall\x12\x17.cosim.SimulationAction\x1a\x19.cosim.SimulationResponse\x12\x44\n\x10\x41uthenticateCall\x12\x13.cosim.Authenticate\x1a\x1b.cosim.AuthenticateResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'cosim_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_COSIMACTIONTYPE']._serialized_start=507
-  _globals['_COSIMACTIONTYPE']._serialized_end=635
-  _globals['_AUTHMETA']._serialized_start=22
-  _globals['_AUTHMETA']._serialized_end=73
-  _globals['_COSIMREQUEST']._serialized_start=76
-  _globals['_COSIMREQUEST']._serialized_end=339
-  _globals['_COSIMRESPONSE']._serialized_start=342
-  _globals['_COSIMRESPONSE']._serialized_end=504
-  _globals['_COSIM']._serialized_start=637
-  _globals['_COSIM']._serialized_end=702
+  _globals['_STATE']._serialized_start=698
+  _globals['_STATE']._serialized_end=731
+  _globals['_SIMULATIONACTION']._serialized_start=23
+  _globals['_SIMULATIONACTION']._serialized_end=235
+  _globals['_SIMULATIONRESPONSE']._serialized_start=238
+  _globals['_SIMULATIONRESPONSE']._serialized_end=417
+  _globals['_CONSUME']._serialized_start=419
+  _globals['_CONSUME']._serialized_end=443
+  _globals['_CONSUMERESPONSE']._serialized_start=445
+  _globals['_CONSUMERESPONSE']._serialized_end=492
+  _globals['_PRODUCE']._serialized_start=494
+  _globals['_PRODUCE']._serialized_end=533
+  _globals['_PRODUCERESPONSE']._serialized_start=535
+  _globals['_PRODUCERESPONSE']._serialized_end=567
+  _globals['_AUTHENTICATE']._serialized_start=569
+  _globals['_AUTHENTICATE']._serialized_end=635
+  _globals['_AUTHENTICATERESPONSE']._serialized_start=637
+  _globals['_AUTHENTICATERESPONSE']._serialized_end=696
+  _globals['_COSIM']._serialized_start=734
+  _globals['_COSIM']._serialized_end=881
 # @@protoc_insertion_point(module_scope)

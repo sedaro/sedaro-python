@@ -34,17 +34,28 @@ class CosimStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.CosimCall = channel.unary_unary(
-                '/cosim.Cosim/CosimCall',
-                request_serializer=cosim__pb2.CosimRequest.SerializeToString,
-                response_deserializer=cosim__pb2.CosimResponse.FromString,
+        self.SimulationCall = channel.unary_unary(
+                '/cosim.Cosim/SimulationCall',
+                request_serializer=cosim__pb2.SimulationAction.SerializeToString,
+                response_deserializer=cosim__pb2.SimulationResponse.FromString,
+                _registered_method=True)
+        self.AuthenticateCall = channel.unary_unary(
+                '/cosim.Cosim/AuthenticateCall',
+                request_serializer=cosim__pb2.Authenticate.SerializeToString,
+                response_deserializer=cosim__pb2.AuthenticateResponse.FromString,
                 _registered_method=True)
 
 
 class CosimServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def CosimCall(self, request, context):
+    def SimulationCall(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AuthenticateCall(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -53,10 +64,15 @@ class CosimServicer(object):
 
 def add_CosimServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'CosimCall': grpc.unary_unary_rpc_method_handler(
-                    servicer.CosimCall,
-                    request_deserializer=cosim__pb2.CosimRequest.FromString,
-                    response_serializer=cosim__pb2.CosimResponse.SerializeToString,
+            'SimulationCall': grpc.unary_unary_rpc_method_handler(
+                    servicer.SimulationCall,
+                    request_deserializer=cosim__pb2.SimulationAction.FromString,
+                    response_serializer=cosim__pb2.SimulationResponse.SerializeToString,
+            ),
+            'AuthenticateCall': grpc.unary_unary_rpc_method_handler(
+                    servicer.AuthenticateCall,
+                    request_deserializer=cosim__pb2.Authenticate.FromString,
+                    response_serializer=cosim__pb2.AuthenticateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -70,7 +86,7 @@ class Cosim(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def CosimCall(request,
+    def SimulationCall(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +99,36 @@ class Cosim(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/cosim.Cosim/CosimCall',
-            cosim__pb2.CosimRequest.SerializeToString,
-            cosim__pb2.CosimResponse.FromString,
+            '/cosim.Cosim/SimulationCall',
+            cosim__pb2.SimulationAction.SerializeToString,
+            cosim__pb2.SimulationResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AuthenticateCall(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/cosim.Cosim/AuthenticateCall',
+            cosim__pb2.Authenticate.SerializeToString,
+            cosim__pb2.AuthenticateResponse.FromString,
             options,
             channel_credentials,
             insecure,
