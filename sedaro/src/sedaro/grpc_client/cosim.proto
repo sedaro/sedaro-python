@@ -4,7 +4,7 @@ package cosim;
 
 service Cosim {
   rpc SimulationCall(SimulationAction) returns (SimulationResponse);
-  rpc AuthenticateCall(Authenticate) returns (AuthenticateResponse);
+  rpc AuthorizeCall(Authorize) returns (AuthorizeResponse);
 }
 
 enum State {
@@ -30,6 +30,7 @@ message SimulationResponse {
   oneof response {
     ConsumeResponse consume_response = 3;
     ProduceResponse produce_response = 4;
+    FailResponse fail_response = 5;
   }
 }
 
@@ -51,12 +52,16 @@ message ProduceResponse {
   int32 index = 1;
 }
 
-message Authenticate {
+message FailResponse {
+  string message = 1;
+}
+
+message Authorize {
   string auth_token = 1;
   string cluster_handle_address = 2;
 }
 
-message AuthenticateResponse {
+message AuthorizeResponse {
   bool success = 1;
-  string session_id = 2;
+  string session_uuid = 2;
 }

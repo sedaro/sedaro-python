@@ -12,17 +12,24 @@ from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
 
 
+# This attaches the client UUID to the metadata of each gRPC call.
 class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
-    def __init__(self, metadata_to_add):
-        self.metadata_to_add = metadata_to_add
+    def __init__(self):
+        self.metadata_to_add = None
+
+    def set_uuid(self, uuid: str):
+        print(f"Setting UUID: {uuid}")
+        self.metadata_to_add = [("session-uuid", uuid)]
 
     def _add_metadata(self, client_call_details):
         metadata = list(client_call_details.metadata) if client_call_details.metadata else []
-        metadata.extend(self.metadata_to_add)
+        if self.metadata_to_add:
+            metadata.extend(self.metadata_to_add)
         return client_call_details._replace(metadata=metadata)
 
     async def intercept_unary_unary(self, continuation, client_call_details, request):
         new_details = self._add_metadata(client_call_details)
+        print(f"Adding metadata: {new_details.metadata}")
         return await continuation(new_details, request)
 
 
@@ -33,7 +40,6 @@ class CosimClient:
         self.address = address
         self.job_id = job_id
         self.host = host
-        self.uuid = uuid.uuid4()  # FIXMETL this needs to change to a secrets.token_hex call on the server on the first authenticate
 
         self.channel: Optional[grpc.aio.Channel] = None
         self.cosim_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
@@ -42,10 +48,13 @@ class CosimClient:
         self._produce_counter = itertools.count(start=1)
         self._consume_counter = itertools.count(start=1)
 
+        self._metadata_interceptor = MetadataClientInterceptor()
+
     async def __aenter__(self):
         await self.connect()
-        authenticated = await self.authenticate()
-        if not authenticated:
+        authorized, uuid = await self.authorize()
+        self._metadata_interceptor.set_uuid(uuid)
+        if not authorized:
             await self.terminate()
             raise Exception("Authentication with CosimClient failed.")
         logging.info("Cosimulation session opened successfully.")
@@ -55,15 +64,19 @@ class CosimClient:
         await self.terminate()
 
     async def connect(self):
-        metadata_interceptor = MetadataClientInterceptor([("session-uuid", self.uuid.hex)])
-        logging.info(f"Connecting to gRPC server at {self.grpc_host} with session UUID: {self.uuid}")
-        self.channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(metadata_interceptor,))
+        logging.info(f"Connecting to gRPC server at {self.grpc_host}")
+        self.channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
         await self.channel.channel_ready()
         self.cosim_stub = cosim_pb2_grpc.CosimStub(self.channel)
         self.auth_stub = cosim_pb2_grpc.CosimStub(self.channel)
         logging.info("Connected to gRPC server.")
 
-    async def authenticate(self) -> bool:
+    # Get a JWT from the django server and send it to the cosim server to authorize this connection.
+    async def authorize(self) -> bool:
+
+        # NOTE: this should be refactored into a separate area of the code, probably in sedaro_base_client.
+        # And the cosim client should register a callback on the reauthorize loop in there.
+        # That way the token refresh logic could be reused by other clients, such as a potential livesims client.
         async with aiohttp.ClientSession() as session:
             url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
             params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
@@ -73,28 +86,28 @@ class CosimClient:
             async with session.get(url, params=params, headers=headers) as res:
                 if res.status != 200:
                     logging.error(f"Authentication failed with status {res.status}")
-                    return False
+                    return False, None
                 data = await res.json()
                 jwt_token = data.get('jwt')
                 if not jwt_token:
                     logging.error("JWT token not found in authentication response")
-                    return False
+                    return False, None
 
-        auth_request = cosim_pb2.Authenticate(
+        auth_request = cosim_pb2.Authorize(
             auth_token=jwt_token,
             cluster_handle_address=self.address,
         )
         try:
-            response: cosim_pb2.AuthenticateResponse = await self.auth_stub.AuthenticateCall(auth_request)
+            response: cosim_pb2.AuthorizeResponse = await self.auth_stub.AuthorizeCall(auth_request)
             if response.success:
                 logging.info("Authentication successful.")
-                return True
+                return True, response.session_uuid
             else:
                 logging.error(f"Authentication failed: {response.message}")
-                return False
+                return False, None
         except grpc.aio.AioRpcError as e:
             logging.error(f"Authentication RPC failed: {e}")
-            return False
+            return False, None
 
     async def _send_simulation_action(
         self,
@@ -110,7 +123,7 @@ class CosimClient:
                 # FIXMETL remove reauthentication logic from here and put it into a long running task.  This is not async safe.
                 if response.state == cosim_pb2.State.FAILURE and retry_on_expiry and expected_state == cosim_pb2.State.SUCCESS:
                     logging.warning("Session expired. Re-authenticating and retrying call...")
-                    if await self.authenticate():
+                    if await self.authorize():
                         return await self._send_simulation_action(action, expected_state, retry_on_expiry=False)
                 logging.error(f"Unexpected response state: {response.state}")
                 raise Exception("Unexpected response state.")
@@ -135,7 +148,7 @@ class CosimClient:
             logging.error(f"Simulation RPC failed: {e}")
             raise ConnectionError(f"Simulation RPC failed: {e}")
 
-    def produce(
+    async def produce(
         self,
         external_state_id: str,
         agent_id: str,
@@ -156,21 +169,18 @@ class CosimClient:
         )
         simulation_action.produce.CopyFrom(produce_action)
 
-        async def _produce_coroutine():
-            try:
-                response = await self._send_simulation_action(
-                    simulation_action,
-                    expected_state=cosim_pb2.State.SUCCESS
-                )
-                logging.info(f"Produced message with index {index}: {value}")
-                return index, response
-            except Exception as e:
-                logging.error(f"Produce operation failed for index {index}: {e}")
-                raise
+        try:
+            response = await self._send_simulation_action(
+                simulation_action,
+                expected_state=cosim_pb2.State.SUCCESS
+            )
+            logging.info(f"Produced message with index {index}: {value}")
+            return index, response
+        except Exception as e:
+            logging.error(f"Produce operation failed for index {index}: {e}")
+            raise e
 
-        return _produce_coroutine()
-
-    def consume(
+    async def consume(
         self,
         external_state_id: str,
         agent_id: str,
@@ -188,20 +198,16 @@ class CosimClient:
             time=time,
         )
         simulation_action.consume.CopyFrom(consume_action)
-
-        async def _consume_coroutine():  # FIXMETL get around to removing these
-            try:
-                response = await self._send_simulation_action(
-                    simulation_action,
-                    expected_state=cosim_pb2.State.SUCCESS
-                )
-                logging.info(f"Consumed message with index {index}: {response}")
-                return index, response
-            except Exception as e:
-                logging.error(f"Consume operation failed for index {index}: {e}")
-                raise
-
-        return _consume_coroutine()
+        try:
+            response = await self._send_simulation_action(
+                simulation_action,
+                expected_state=cosim_pb2.State.SUCCESS
+            )
+            logging.info(f"Consumed message with index {index}: {response}")
+            return index, response
+        except Exception as e:
+            logging.error(f"Consume operation failed for index {index}: {e}")
+            raise e
 
     async def terminate(self):
         if self.channel:
