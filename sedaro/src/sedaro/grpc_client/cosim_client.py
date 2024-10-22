@@ -1,7 +1,9 @@
 import asyncio
+import base64
 import itertools
 import json
 import logging
+import os
 import uuid
 from typing import Any, Coroutine, Optional, Tuple
 
@@ -63,9 +65,21 @@ class CosimClient:
     async def __aexit__(self, exc_type, exc, tb):
         await self.terminate()
 
+    def create_channel(self):
+        if os.environ.get("SERVER_CERTIFICATE"):
+            logging.info("Using SSL/TLS for gRPC connection.")
+            certificate_chain = base64.b64decode(os.environ['SERVER_CERTIFICATE'])
+            credentials = grpc.ssl_channel_credentials(root_certificates=certificate_chain)
+            print(f"opening channel")
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+        else:
+            logging.warning("Using insecure gRPC connection.")
+            channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+        return channel
+
     async def connect(self):
         logging.info(f"Connecting to gRPC server at {self.grpc_host}")
-        self.channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+        self.channel = self.create_channel()
         await self.channel.channel_ready()
         self.cosim_stub = cosim_pb2_grpc.CosimStub(self.channel)
         self.auth_stub = cosim_pb2_grpc.CosimStub(self.channel)
