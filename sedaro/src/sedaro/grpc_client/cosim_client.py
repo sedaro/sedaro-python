@@ -13,8 +13,9 @@ import grpc
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
 
+REFRESH_INTERVAL = 60 * .5
 
-# This attaches the client UUID to the metadata of each gRPC call.
+
 class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
     def __init__(self):
         self.metadata_to_add = None
@@ -36,12 +37,13 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
+    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str, cert=None):
         self.grpc_host = grpc_host
         self.api_key = api_key
         self.address = address
         self.job_id = job_id
         self.host = host
+        self.cert = cert
 
         self.channel: Optional[grpc.aio.Channel] = None
         self.cosim_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
@@ -51,6 +53,8 @@ class CosimClient:
         self._consume_counter = itertools.count(start=1)
 
         self._metadata_interceptor = MetadataClientInterceptor()
+        self._refresh_task: Optional[asyncio.Task] = None
+        self._stop_refresh = asyncio.Event()
 
     async def __aenter__(self):
         await self.connect()
@@ -59,7 +63,8 @@ class CosimClient:
         if not authorized:
             await self.terminate()
             raise Exception("Authentication with CosimClient failed.")
-        logging.info("Cosimulation session opened successfully.")
+
+        self._refresh_task = asyncio.create_task(self._refresh_loop())
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
@@ -85,27 +90,47 @@ class CosimClient:
         self.auth_stub = cosim_pb2_grpc.CosimStub(self.channel)
         logging.info("Connected to gRPC server.")
 
-    # Get a JWT from the django server and send it to the cosim server to authorize this connection.
-    async def authorize(self) -> bool:
+    async def _refresh_loop(self):
+        while not self._stop_refresh.is_set():
+            try:
+                await asyncio.sleep(self.REFRESH_INTERVAL)
+                if not self._stop_refresh.is_set():
+                    logging.info("Refreshing authorization token...")
+                    authorized, new_uuid = await self.authorize()
+                    if authorized:
+                        self._metadata_interceptor.set_uuid(new_uuid)
+                        logging.info("Authorization token refreshed successfully.")
+                    else:
+                        logging.error("Failed to refresh authorization token.")
+                        self._stop_refresh.set()
+                        self.terminate()
+            except Exception as e:
+                logging.error(f"Error in refresh loop: {e}")
+                # Continue the loop even if there's an error
+                continue
 
-        # NOTE: this should be refactored into a separate area of the code, probably in sedaro_base_client.
-        # And the cosim client should register a callback on the reauthorize loop in there.
-        # That way the token refresh logic could be reused by other clients, such as a potential livesims client.
+    async def get_auth_token(self) -> Optional[str]:
+        """Get a fresh JWT token from the django server."""
         async with aiohttp.ClientSession() as session:
             url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
             params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
             headers = {"X_API_KEY": self.api_key}
-            logging.info(f"Authenticating with URL: {url} and params: {params}")
 
-            async with session.get(url, params=params, headers=headers) as res:
-                if res.status != 200:
-                    logging.error(f"Authentication failed with status {res.status}")
-                    return False, None
-                data = await res.json()
-                jwt_token = data.get('jwt')
-                if not jwt_token:
-                    logging.error("JWT token not found in authentication response")
-                    return False, None
+            try:
+                async with session.get(url, params=params, headers=headers) as res:
+                    if res.status != 200:
+                        logging.error(f"Authentication failed with status {res.status}")
+                        return None
+                    data = await res.json()
+                    return data.get('jwt')
+            except aiohttp.ClientError as e:
+                logging.error(f"Failed to get auth token: {e}")
+                return None
+
+    async def authorize(self) -> Tuple[bool, Optional[str]]:
+        jwt_token = await self.get_auth_token()
+        if not jwt_token:
+            return False, None
 
         auth_request = cosim_pb2.Authorize(
             auth_token=jwt_token,
@@ -126,19 +151,13 @@ class CosimClient:
     async def _send_simulation_action(
         self,
         action: cosim_pb2.SimulationAction,
-        expected_state: cosim_pb2.State,
         retry_on_expiry: bool = True
     ) -> Any:
         try:
             logging.debug(f"Sending SimulationAction: {action}")
             response: cosim_pb2.SimulationResponse = await self.cosim_stub.SimulationCall(action)
 
-            if response.state != expected_state:
-                # FIXMETL remove reauthentication logic from here and put it into a long running task.  This is not async safe.
-                if response.state == cosim_pb2.State.FAILURE and retry_on_expiry and expected_state == cosim_pb2.State.SUCCESS:
-                    logging.warning("Session expired. Re-authenticating and retrying call...")
-                    if await self.authorize():
-                        return await self._send_simulation_action(action, expected_state, retry_on_expiry=False)
+            if response.state != cosim_pb2.State.SUCCESS:
                 logging.error(f"Unexpected response state: {response.state}")
                 raise Exception("Unexpected response state.")
 
@@ -161,6 +180,18 @@ class CosimClient:
         except grpc.aio.AioRpcError as e:
             logging.error(f"Simulation RPC failed: {e}")
             raise ConnectionError(f"Simulation RPC failed: {e}")
+
+    async def terminate(self):
+        """Cleanup resources and stop the refresh loop."""
+        if self._refresh_task is not None:
+            self._stop_refresh.set()
+            await self._refresh_task
+            self._refresh_task = None
+
+        if self.channel:
+            await self.channel.close()
+            logging.info("gRPC channel closed.")
+        logging.info("CosimClient terminated.")
 
     async def produce(
         self,
@@ -186,7 +217,6 @@ class CosimClient:
         try:
             response = await self._send_simulation_action(
                 simulation_action,
-                expected_state=cosim_pb2.State.SUCCESS
             )
             logging.info(f"Produced message with index {index}: {value}")
             return index, response
@@ -215,16 +245,9 @@ class CosimClient:
         try:
             response = await self._send_simulation_action(
                 simulation_action,
-                expected_state=cosim_pb2.State.SUCCESS
             )
             logging.info(f"Consumed message with index {index}: {response}")
             return index, response
         except Exception as e:
             logging.error(f"Consume operation failed for index {index}: {e}")
             raise e
-
-    async def terminate(self):
-        if self.channel:
-            await self.channel.close()
-            logging.info("gRPC channel closed.")
-        logging.info("CosimClient terminated.")
