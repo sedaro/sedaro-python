@@ -351,7 +351,7 @@ class Simulation:
                         raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()
 
-    def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
+    def __download_data(self, sim_id, streams, params, download_manager, usesStreamTokens):
         try:
             start = params['start']
             stop = params['stop']
@@ -379,31 +379,15 @@ class Simulation:
         stop: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        num_workers: int = 2
     ) -> "dict[str, dd.DataFrame]":
 
         if streams is not None and len(streams) > 0:
             usesTokens = False
             metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
             filtered_streams = _get_filtered_streams(streams, metadata)
-            num_workers = min(num_workers, len(filtered_streams))
-            workers = [[] for _ in range(num_workers)]
-            for i, stream in enumerate(filtered_streams):
-                workers[i % num_workers].append(stream)
         else:
             usesTokens = True
-            if num_workers > 1:
-                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'], num_workers)
-                try:
-                    filtered_streams = metadata['streamsTokens']
-                except KeyError:
-                    raise Exception(
-                        f"No series data found for simulation {sim_id}. This indicates that the simulation has just started running. Please try again after a short wait.")
-                # len(filtered_streams) may be less than num_workers if there are fewer streams than that number
-                num_workers = len(filtered_streams)
-                workers = filtered_streams
-            else:
-                metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
+            metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
 
         download_bar = ProgressBar(
             metadata['start'],
@@ -411,28 +395,15 @@ class Simulation:
             len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']),
             "Downloading..."
         )
-        download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
-        if num_workers > 1:
-            with ThreadPoolExecutor(max_workers=num_workers) as executor:
-                exceptions = executor.map(
-                    self.__downloadInParallel, [sim_id] * num_workers, workers,
-                    [params] * num_workers, download_managers, [usesTokens] * num_workers
-                )
-                executor.shutdown(wait=True)
-            for e in exceptions:
-                if e is not None:
-                    raise e
-        else:
-            self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
+        download_manager: DownloadWorker = DownloadWorker(download_bar)
+        self.__download_data(sim_id, None, params, download_manager, usesTokens)
         download_bar.complete()
 
-        stream_results = {}
-        for download_manager in download_managers:
-            stream_results.update(download_manager.streams)
+        stream_results = download_manager.streams
         return {
-            'meta': download_managers[0].finalize_metadata(download_managers[1:]),
-            'stats': download_managers[0].finalize_stats(download_managers[1:]),
+            'meta': download_manager.finalize_metadata([]),
+            'stats': download_manager.finalize_stats([]),
             'series': stream_results,
         }
 
@@ -443,7 +414,6 @@ class Simulation:
         stop: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        num_workers: int = 2,
     ) -> SimulationResult:
         """Query latest scenario result. If a `job_id` is passed, query for corresponding sim results rather than
         latest.
@@ -480,7 +450,6 @@ class Simulation:
                 full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
                 If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
                 is fetched at full resolution (sampleRate 1).
-            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -491,9 +460,7 @@ class Simulation:
         """
         '''Query latest scenario result.'''
         job = self.status(job_id)
-        data = self.__results(
-            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
-        )
+        data = self.__results(job, start=start, stop=stop, streams=streams, sampleRate=sampleRate)
         return SimulationResult(job, data, self.__sedaro)
 
     def results_poll(
@@ -503,7 +470,6 @@ class Simulation:
         stop: float = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
-        num_workers: int = 2,
         retry_interval: int = 2,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
@@ -520,7 +486,6 @@ class Simulation:
                 full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
                 If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
                 is fetched at full resolution (sampleRate 1).
-            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
@@ -545,7 +510,7 @@ class Simulation:
             time.sleep(retry_interval)
 
         data = self.__results(
-            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
+            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate
         )
         if wait_on_stats and not data['stats']:
             success = False
@@ -650,7 +615,6 @@ class SimulationHandle:
         stop: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
-        num_workers: int = 2,
     ) -> SimulationResult:
         """Query simulation results.
 
@@ -685,7 +649,6 @@ class SimulationHandle:
                 full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
                 If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
                 is fetched at full resolution (sampleRate 1).
-            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
 
         Raises:
             NoSimResultsError: if no simulation has been started.
@@ -694,7 +657,7 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
+        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate)
 
     def results_poll(
         self,
@@ -702,7 +665,6 @@ class SimulationHandle:
         stop: float = None,
         streams: List[Tuple[str, ...]] = None,
         sampleRate: int = None,
-        num_workers: int = 2,
         retry_interval: int = 2,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
@@ -717,7 +679,6 @@ class SimulationHandle:
                 full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
                 If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
                 is fetched at full resolution (sampleRate 1).
-            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
@@ -734,7 +695,6 @@ class SimulationHandle:
             stop=stop,
             streams=streams,
             sampleRate=sampleRate,
-            num_workers=num_workers,
             retry_interval=retry_interval,
             wait_on_stats=wait_on_stats,
         )
