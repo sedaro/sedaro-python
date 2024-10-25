@@ -410,6 +410,7 @@ class Simulation:
         return {
             'meta': download_manager.finalize_metadata([]),
             'stats': download_manager.finalize_stats([]),
+            'static': download_manager.finalize_static_data([]),
             'series': stream_results,
         }
 
