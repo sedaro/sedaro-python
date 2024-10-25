@@ -311,8 +311,9 @@ class Simulation:
         has_nonempty_ctoken = False
         try:
             _response = response.parse()
-            if 'version' in _response['meta'] and _response['meta']['version'] == 3:
-                is_v3 = True
+            if response.status != 200:
+                raise Exception()
+            else:
                 download_manager.ingest(_response['series'])
                 download_manager.add_metadata(_response['meta'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
@@ -320,35 +321,30 @@ class Simulation:
                     ctoken = _response['meta']['continuationToken']
                 if 'stats' in _response:
                     download_manager.update_stats(_response['stats'])
-            else:
-                is_v3 = False
-            if response.status != 200:
-                raise Exception()
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
-        if is_v3:  # keep fetching pages until we get an empty continuation token
-            if has_nonempty_ctoken:  # need to fetch more pages
-                while has_nonempty_ctoken:
-                    # fetch page
-                    request_url = f'/data/{id}?&continuationToken={ctoken}'
-                    page = fast_fetcher.get(request_url)
-                    _page = page.parse()
-                    download_manager.ingest(_page['series'])
-                    download_manager.update_metadata(_page['meta'])
-                    try:
-                        if 'stats' in _page:
-                            download_manager.update_stats(_page['stats'])
-                        if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
-                            has_nonempty_ctoken = True
-                            ctoken = _page['meta']['continuationToken']
-                        else:
-                            has_nonempty_ctoken = False
-                        if page.status != 200:
-                            raise Exception()
-                    except Exception:
-                        reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                        raise SedaroApiException(status=page.status, reason=reason)
+        if has_nonempty_ctoken:  # need to fetch more pages
+            while has_nonempty_ctoken:
+                # fetch page
+                request_url = f'/data/{id}?&continuationToken={ctoken}'
+                page = fast_fetcher.get(request_url)
+                _page = page.parse()
+                download_manager.ingest(_page['series'])
+                download_manager.update_metadata(_page['meta'])
+                try:
+                    if 'stats' in _page:
+                        download_manager.update_stats(_page['stats'])
+                    if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
+                        has_nonempty_ctoken = True
+                        ctoken = _page['meta']['continuationToken']
+                    else:
+                        has_nonempty_ctoken = False
+                    if page.status != 200:
+                        raise Exception()
+                except Exception:
+                    reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
+                    raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
