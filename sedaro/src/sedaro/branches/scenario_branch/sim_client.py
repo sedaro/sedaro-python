@@ -324,9 +324,9 @@ class Simulation:
                 if 'derived' in _response:
                     if 'series' in _response['derived']:
                         download_manager.ingest_derived(_response['derived']['series'])
-                    if 'static' in _page['derived']:
+                    if 'static' in _response['derived']:
                         download_manager.update_static_data(_response['derived']['static'])
-        except:
+        except Exception as e:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
         if has_nonempty_ctoken:  # need to fetch more pages
@@ -344,7 +344,7 @@ class Simulation:
                         if 'series' in _page['derived']:
                             download_manager.ingest_derived(_page['derived']['series'])
                         if 'static' in _page['derived']:
-                            download_manager.update_static_data(_response['derived']['static'])
+                            download_manager.update_static_data(_page['derived']['static'])
                     if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                         has_nonempty_ctoken = True
                         ctoken = _page['meta']['continuationToken']
@@ -352,7 +352,7 @@ class Simulation:
                         has_nonempty_ctoken = False
                     if page.status != 200:
                         raise Exception()
-                except Exception:
+                except Exception as e:
                     reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                     raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()

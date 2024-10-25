@@ -125,7 +125,7 @@ class DownloadWorker:
         self.ingest(page, self.derived_streams)
 
     def finalize(self):
-        # finalize regular and derived series data separately
+        # process regular and derived series data separately
         for stream_set in [self.streams, self.derived_streams]:
             for stream_manager in stream_set.values():
                 # REF 1: https://docs.dask.org/en/stable/dataframe-best-practices.html#repartition-to-reduce-overhead
@@ -133,9 +133,16 @@ class DownloadWorker:
                 stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
                 stream_manager.filter_columns()
                 stream_manager.dataframe = stream_manager.dataframe.persist()
-            for k in stream_set:
-                stream_set[k] = stream_set[k].finalize()
-        # TODO: merge the derived data into the regular data
+                stream_manager.dataframe = stream_manager.dataframe.set_index('time')
+        # merge the derived data into the regular data
+        for k in self.derived_streams:
+            if k not in self.streams:
+                self.streams[k] = self.derived_streams[k]
+            else:
+                self.streams[k].dataframe = self.streams[k].dataframe.join(self.derived_streams[k], how='inner')
+        # finalize
+        for k in self.streams:
+            self.streams[k] = self.streams[k].finalize()
 
     def add_static_data(self, static_data: dict):
         self.derived_static = static_data
