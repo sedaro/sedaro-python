@@ -110,12 +110,19 @@ class DownloadWorker:
         self.download_bar = download_bar
         self.streams = {}
         self.stats = {}
+        self.derived_streams = {}
+        self.derived_static = {}
 
-    def ingest(self, page):
+    def ingest(self, page, target: dict | None = None):
+        if target is None:
+            target = self.streams
         for stream_id, stream_data in page.items():
             if stream_id not in self.streams:
                 self.streams[stream_id] = StreamManager(self.download_bar)
             self.streams[stream_id].ingest(stream_id, stream_data)
+
+    def ingest_derived(self, page):
+        self.ingest(page, self.derived_streams)
 
     def finalize(self):
         for _, stream_manager in self.streams.items():
