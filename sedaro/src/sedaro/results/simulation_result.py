@@ -155,6 +155,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         initial_agent_models = self.__meta['structure']['agents']
         initial_state = initial_agent_models[agent_id] if agent_id in initial_agent_models else None
         filtered_stats = {k: v for k, v in self.__stats.items() if k.startswith(agent_id)}
+        filtered_static_data = {k: v for k, v in self.__static_data.items() if k.startswith(agent_id)}
         return SedaroAgentResult(
             name,
             self.__block_structures[agent_id],
@@ -162,7 +163,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             self.__column_index[agent_id],
             initial_state=initial_state,
             stats=filtered_stats,
-            stats_to_plot=self.stats_to_plot
+            stats_to_plot=self.stats_to_plot,
+            static_data=filtered_static_data,
         )
 
     def save(self, path: Union[str, Path]):
@@ -184,7 +186,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             df.to_parquet(agent_parquet_path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-                      'stats': self.__stats, 'parquet_files': parquet_files}, fp)
+                      'stats': self.__stats, 'static': self.__static_data, 'parquet_files': parquet_files}, fp)
         print(f"Simulation result saved to {path}.")
 
     @classmethod
@@ -200,7 +202,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             contents = json.load(fp)
             simulation = contents['simulation']
             data['meta'] = contents['meta']
-            data['stats'] = contents['stats']
+            data['stats'] = contents['stats'] if 'stats' in contents else {}
+            data['static'] = contents['static'] if 'static' in contents else {}
         data['series'] = {}
         try:
             for agent in contents['parquet_files']:
