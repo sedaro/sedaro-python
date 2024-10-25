@@ -23,7 +23,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             column_index: dict,
             initial_state: dict = None,
             stats: dict = None,
-            stats_to_plot: list = None
+            stats_to_plot: list = None,
+            static_data: dict[str: dict] = None,
         ):
         '''Initialize a new agent result.
 
@@ -34,7 +35,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         self.__column_index = column_index
         self.__block_structures = block_structures
         self.__series = series
-        self.__stats = stats
+        self.__stats = stats if stats is not None else {}
+        self.__static_data = static_data if static_data is not None else {}
         self.__block_uuids = [k for k in self.__column_index]
         self.__block_ids = sorted(set(
             block_id.split('.')[0] if block_id.split('.')[0] in self.__block_uuids else 'root'
@@ -85,7 +87,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         for stream in self.__series:
             if stream in self.__column_index[id_]:
                 block_streams[stream] = self.__series[stream]
-        return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_], prefix, self.stats_to_plot)
+        static_data_for_block = {}
+        for stream in self.__static_data:
+            static_data_for_block[stream] = {k: v for k, v in self.__static_data[stream].items() if k.startswith(prefix)}
+        return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_],
+            prefix, self.stats_to_plot, static_data_for_block)
 
     def save(self, path: Union[str, Path]):
         '''Save the agent result to a directory with the specified path.'''
@@ -114,6 +120,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 'column_index': self.__column_index,
                 'parquet_files': parquet_files,
                 'stats': self.__stats,
+                'static': self.__static_data,
             }, fp)
         print(f"Agent result saved to {path}.")
 
@@ -132,7 +139,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
             column_index = meta['column_index']
-            stats = meta['stats'] if 'stats' in meta else {}
+            stats = meta['stats'] if 'stats' in meta else {},
+            static_data = meta['static'] if 'static' in meta else {},
         engines = {}
         try:
             for engine in meta['parquet_files']:
@@ -142,7 +150,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             for engine in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{engine}")
                 engines[engine.replace('.', '/')] = df
-        return cls(name, block_structures, engines, column_index, initial_state, stats)
+        return cls(name, block_structures, engines, column_index, initial_state, stats, static_data=static_data)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
