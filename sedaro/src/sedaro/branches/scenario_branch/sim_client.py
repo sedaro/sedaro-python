@@ -321,6 +321,11 @@ class Simulation:
                     ctoken = _response['meta']['continuationToken']
                 if 'stats' in _response:
                     download_manager.update_stats(_response['stats'])
+                if 'derived' in _response:
+                    if 'series' in _response['derived']:
+                        download_manager.ingest_derived(_response['derived']['series'])
+                    if 'static' in _page['derived']:
+                        NotImplemented
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
@@ -335,6 +340,11 @@ class Simulation:
                 try:
                     if 'stats' in _page:
                         download_manager.update_stats(_page['stats'])
+                    if 'derived' in _page:
+                        if 'series' in _page['derived']:
+                            download_manager.ingest_derived(_page['derived']['series'])
+                        if 'static' in _page['derived']:
+                            NotImplemented
                     if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                         has_nonempty_ctoken = True
                         ctoken = _page['meta']['continuationToken']
