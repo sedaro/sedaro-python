@@ -13,7 +13,7 @@ import grpc
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
 
-REFRESH_INTERVAL = 60 * .5
+REFRESH_INTERVAL = 60 * 4
 
 
 class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
@@ -37,13 +37,12 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str, cert=None):
+    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
         self.grpc_host = grpc_host
         self.api_key = api_key
         self.address = address
         self.job_id = job_id
         self.host = host
-        self.cert = cert
 
         self.channel: Optional[grpc.aio.Channel] = None
         self.cosim_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
@@ -93,7 +92,12 @@ class CosimClient:
     async def _refresh_loop(self):
         while not self._stop_refresh.is_set():
             try:
-                await asyncio.sleep(self.REFRESH_INTERVAL)
+                try:
+                    await asyncio.wait_for(self._stop_refresh.wait(), timeout=REFRESH_INTERVAL)
+                    break
+                except asyncio.TimeoutError:
+                    pass
+
                 if not self._stop_refresh.is_set():
                     logging.info("Refreshing authorization token...")
                     authorized, new_uuid = await self.authorize()
@@ -103,11 +107,11 @@ class CosimClient:
                     else:
                         logging.error("Failed to refresh authorization token.")
                         self._stop_refresh.set()
-                        self.terminate()
+                        await self.terminate()
             except Exception as e:
                 logging.error(f"Error in refresh loop: {e}")
-                # Continue the loop even if there's an error
                 continue
+
 
     async def get_auth_token(self) -> Optional[str]:
         """Get a fresh JWT token from the django server."""

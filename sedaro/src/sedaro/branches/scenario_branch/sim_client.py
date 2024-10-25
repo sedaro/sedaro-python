@@ -801,6 +801,7 @@ class SimulationHandle:
             address=address,
             job_id=job_id,
             host=host,
+            cert=cert,
         )
 
         try:
