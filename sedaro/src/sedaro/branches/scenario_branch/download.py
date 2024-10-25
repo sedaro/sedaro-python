@@ -108,9 +108,9 @@ def prep_stream_id(stream_id):
 class DownloadWorker:
     def __init__(self, download_bar):
         self.download_bar = download_bar
-        self.streams = {}
+        self.streams: dict[str: StreamManager] = {}
         self.stats = {}
-        self.derived_streams = {}
+        self.derived_streams: dict[str: StreamManager] = {}
         self.derived_static = {}
 
     def ingest(self, page, target: dict | None = None):
@@ -125,14 +125,31 @@ class DownloadWorker:
         self.ingest(page, self.derived_streams)
 
     def finalize(self):
-        for _, stream_manager in self.streams.items():
-            # REF 1: https://docs.dask.org/en/stable/dataframe-best-practices.html#repartition-to-reduce-overhead
-            stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB")  # REF 1
-            stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
-            stream_manager.filter_columns()
-            stream_manager.dataframe = stream_manager.dataframe.persist()
-        for k in self.streams:
-            self.streams[k] = self.streams[k].finalize()
+        # finalize regular and derived series data separately
+        for stream_set in [self.streams, self.derived_streams]:
+            for stream_manager in stream_set.values():
+                # REF 1: https://docs.dask.org/en/stable/dataframe-best-practices.html#repartition-to-reduce-overhead
+                stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB")  # REF 1
+                stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
+                stream_manager.filter_columns()
+                stream_manager.dataframe = stream_manager.dataframe.persist()
+            for k in stream_set:
+                stream_set[k] = stream_set[k].finalize()
+        # TODO: merge the derived data into the regular data
+
+    def add_static_data(self, static_data: dict):
+        self.derived_static = static_data
+
+    def update_static_data(self, new_static_data: dict):
+        for k in new_static_data:
+            if k not in self.derived_static:
+                self.derived_static[k] = {}
+            self.derived_static[k].update(new_static_data[k])
+
+    def finalize_static_data(self, others: "list[DownloadWorker]"):
+        for other in others:
+            self.update_static_data(other.derived_static)
+        return self.derived_static
 
     def add_stats(self, stats: dict):
         self.stats = stats
