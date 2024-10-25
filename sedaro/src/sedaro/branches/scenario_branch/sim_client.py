@@ -325,7 +325,7 @@ class Simulation:
                     if 'series' in _response['derived']:
                         download_manager.ingest_derived(_response['derived']['series'])
                     if 'static' in _page['derived']:
-                        NotImplemented
+                        download_manager.update_static_data(_response['derived']['static'])
         except:
             reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
             raise SedaroApiException(status=response.status, reason=reason)
@@ -344,7 +344,7 @@ class Simulation:
                         if 'series' in _page['derived']:
                             download_manager.ingest_derived(_page['derived']['series'])
                         if 'static' in _page['derived']:
-                            NotImplemented
+                            download_manager.update_static_data(_response['derived']['static'])
                     if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
                         has_nonempty_ctoken = True
                         ctoken = _page['meta']['continuationToken']
