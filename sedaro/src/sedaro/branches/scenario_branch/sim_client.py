@@ -381,10 +381,11 @@ class Simulation:
         sampleRate: int = None,
     ) -> "dict[str, dd.DataFrame]":
 
+        params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         if streams is not None and len(streams) > 0:
             usesTokens = False
             metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
-            filtered_streams = _get_filtered_streams(streams, metadata)
+            params['streams'] = _get_filtered_streams(streams, metadata)
         else:
             usesTokens = True
             metadata = _get_metadata(self.__sedaro, sim_id := job['dataArray'])
@@ -395,7 +396,6 @@ class Simulation:
             len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']),
             "Downloading..."
         )
-        params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         download_manager: DownloadWorker = DownloadWorker(download_bar)
         self.__download_data(sim_id, None, params, download_manager, usesTokens)
         download_bar.complete()
