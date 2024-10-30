@@ -210,7 +210,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             hfill()
             print("📦 Static data is available for this block.")
             print("📦 Query with .static_data('<ENGINE_NAME>') for that engine's static data on this block,")
-            print("or .static_data() to get this block's static data for all engines.")
+            print("   or .static_data() to get this block's static data for all engines.")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
