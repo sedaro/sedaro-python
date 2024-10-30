@@ -14,7 +14,16 @@ if TYPE_CHECKING:
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str, stats_to_plot: list = None):
+    def __init__(
+            self,
+            structure,
+            series: dict,
+            stats: dict,
+            column_index: dict,
+            prefix: str,
+            stats_to_plot: list = None,
+            static_data: dict[str: dict] = None,
+        ):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -33,6 +42,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             stats = {}
         for k in stats:
             self.__stats[k] = {kk: vv for kk, vv in stats[k].items() if kk.startswith(prefix)}
+        self.__static_data = static_data if static_data is not None else {}
         self.__column_index = column_index
         self.__prefix = prefix
         self.__variables = []
@@ -137,6 +147,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 'prefix': self.__prefix,
                 'parquet_files': parquet_files,
                 'stats': self.__stats,
+                'static': self.__static_data,
             }, fp)
         print(f"Block result saved to {path}.")
 
@@ -155,6 +166,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             column_index = meta['column_index']
             prefix = meta['prefix']
             stats = meta['stats'] if 'stats' in meta else {}
+            static_data = meta['static'] if 'static' in meta else {}
         engines = {}
         try:
             for agent in meta['parquet_files']:
@@ -164,7 +176,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for agent in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, stats, column_index, prefix)
+        return cls(structure, engines, stats, column_index, prefix, static_data=static_data)
 
     def __has_stats(self, variable: str) -> bool:
         for engine in self.__stats:
