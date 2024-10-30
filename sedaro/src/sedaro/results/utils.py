@@ -11,6 +11,12 @@ ENGINE_MAP = {
     '2': 'power',
     '3': 'thermal',
 }
+ENGINE_MAP_REVERSED = {
+    'gnc': '0',
+    'cdh': '1',
+    'power': '2',
+    'thermal': '3',
+}
 ENGINE_MAP_CASED = {
     'gnc': 'GNC',
     'cdh': 'CDH',
@@ -198,33 +204,22 @@ def value_from_df(value, name=None):
     else:
         return value
 
-def get_static_data(static_data, object_type, engine=None):
+def get_static_data(static_data: dict, object_type: str, engine: str = None):
         if engine is None or static_data is None:
             return static_data
         else:
-            try:
-                return static_data[engine]
-            except KeyError:
-                if len(static_data) == 0:
-                    raise KeyError(f"No static data available for this {object_type}.")
+            if len(static_data) == 0:
+                raise KeyError(f"No static data available for this {object_type}.")
+            else:
+                prefix = list(static_data.keys())[0][:-1]
+                if engine.lower() in ENGINE_MAP_REVERSED.keys():
+                    stream_int = ENGINE_MAP_REVERSED[engine.lower()]
+                    try:
+                        return static_data[f"{prefix}{stream_int}"]
+                    except KeyError:
+                        raise KeyError(f"No static data available for the specified engine for this {object_type}.")
                 else:
-                    prefix = list(engine.keys())[0][:-1]
-                    assert len(ENGINE_EXPANSION) == len(ENGINE_MAP)
-                    for i in range(len(ENGINE_EXPANSION)):
-                        if engine.lower() in [k.lower() for k in [
-                            int(list(ENGINE_MAP.keys())[i]),
-                            list(ENGINE_MAP.keys())[i],
-                            list(ENGINE_MAP.values())[i],
-                            list(ENGINE_EXPANSION.keys())[i],
-                            list(ENGINE_EXPANSION.values())[i],
-                        ]]:
-                            stream_id = prefix + str(i)
-                            try:
-                                return static_data[stream_id]
-                            except KeyError:
-                                raise KeyError(f"No static data available for the specified engine for this {object_type}.")
-                    else:
-                        raise ValueError(f"{engine} is not a valid engine identifier.")
+                    raise ValueError(f"{engine} is not a valid engine identifier.")
 
 def get_static_data_engines(static_data: dict):
     if static_data is None:
