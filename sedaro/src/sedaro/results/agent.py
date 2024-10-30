@@ -193,6 +193,11 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
         hfill()
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
+        if self.__static_data:
+            hfill()
+            print("📦 Static data is available for this agent.")
+            print("📦 Query with .static_data('<ENGINE_NAME>') for that engine's static data on this agent,")
+            print("or .static_data() to get this agent's static data for all engines.")
 
     def __model_at(self, mjd):
         # Rough out model
