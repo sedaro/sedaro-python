@@ -11,6 +11,12 @@ ENGINE_MAP = {
     '2': 'power',
     '3': 'thermal',
 }
+ENGINE_MAP_CASED = {
+    'gnc': 'GNC',
+    'cdh': 'CDH',
+    'power': 'Power',
+    'thermal': 'Thermal',
+}
 ENGINE_EXPANSION = {
     'gnc': 'Guidance, Navigation, & Control',
     'cdh': 'Command & Data Handling',
@@ -193,7 +199,7 @@ def value_from_df(value, name=None):
         return value
 
 def get_static_data(static_data, object_type, engine=None):
-        if engine is None:
+        if engine is None or static_data is None:
             return static_data
         else:
             try:
@@ -219,6 +225,12 @@ def get_static_data(static_data, object_type, engine=None):
                                 raise KeyError(f"No static data available for the specified engine for this {object_type}.")
                     else:
                         raise ValueError(f"{engine} is not a valid engine identifier.")
+
+def get_static_data_engines(static_data: dict):
+    if static_data is None:
+        return []
+    else:
+        return [ENGINE_MAP_CASED[ENGINE_MAP[stream_id[-1]]] for stream_id in static_data.keys()]
 
 
 class FromFileAndToFileAreDeprecated:
