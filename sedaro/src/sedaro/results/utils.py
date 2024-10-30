@@ -205,21 +205,20 @@ def value_from_df(value, name=None):
         return value
 
 def get_static_data(static_data: dict, object_type: str, engine: str = None):
-        if engine is None or static_data is None:
+    if len(static_data) == 0:
+        raise KeyError(f"No static data available for this {object_type}.")
+    elif engine is None:
             return static_data
+    else:
+        prefix = list(static_data.keys())[0][:-1]
+        if engine.lower() in ENGINE_MAP_REVERSED.keys():
+            stream_int = ENGINE_MAP_REVERSED[engine.lower()]
+            try:
+                return static_data[f"{prefix}{stream_int}"]
+            except KeyError:
+                raise KeyError(f"No static data available for the specified engine for this {object_type}.")
         else:
-            if len(static_data) == 0:
-                raise KeyError(f"No static data available for this {object_type}.")
-            else:
-                prefix = list(static_data.keys())[0][:-1]
-                if engine.lower() in ENGINE_MAP_REVERSED.keys():
-                    stream_int = ENGINE_MAP_REVERSED[engine.lower()]
-                    try:
-                        return static_data[f"{prefix}{stream_int}"]
-                    except KeyError:
-                        raise KeyError(f"No static data available for the specified engine for this {object_type}.")
-                else:
-                    raise ValueError(f"{engine} is not a valid engine identifier.")
+            raise ValueError(f"{engine} is not a valid engine identifier.")
 
 def get_static_data_engines(static_data: dict):
     if static_data is None:

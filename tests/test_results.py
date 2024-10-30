@@ -449,6 +449,41 @@ def test_stats():
     stats_from_endpoint = sim.stats()
     assert stats_from_endpoint == res._SimulationResult__stats
 
+def test_utils():
+    from sedaro.results.utils import (
+        get_static_data
+    )
+
+    test_static_data = {
+        'foobar/0': {
+            'foo': 'bar',
+        },
+        'foobar/1': {
+            'qux': 'baz',
+        },
+    }
+
+    assert get_static_data(test_static_data, 'Block') == test_static_data
+    assert get_static_data(test_static_data, 'Block', 'GNC') == {'foo': 'bar'}
+    assert get_static_data(test_static_data, 'Block', 'CDH') == {'qux': 'baz'}
+    assert get_static_data(test_static_data, 'Agent', 'CDH') == {'qux': 'baz'}
+    assert get_static_data(test_static_data, 'slikertuhmdrtybdetvime5vt', 'CDH') == {'qux': 'baz'}
+    try:
+        get_static_data(test_static_data, 'Block', 'Power')
+    except ValueError as e:
+        assert str(e) == "No static data available for the specified engine for this Block."
+    try:
+        get_static_data(test_static_data, 'Agent', 'Power')
+    except ValueError as e:
+        assert str(e) == "No static data available for the specified engine for this Agent."
+    try:
+        get_static_data(test_static_data, 'Agent', 'NotAnEngine')
+    except ValueError as e:
+        assert str(e) == "NotAnEngine is not a valid engine identifier."
+    try:
+        get_static_data({}, 'Agent')
+    except ValueError as e:
+        assert str(e) == "No static data available for this Agent."
 
 
 def run_tests():
@@ -459,3 +494,4 @@ def run_tests():
     test_download()
     test_series_values()
     test_stats()
+    test_utils()
