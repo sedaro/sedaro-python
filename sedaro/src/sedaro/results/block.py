@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, Generator, Union
 from .series import SedaroSeries
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, get_column_names,
-                    get_parquets, hfill)
+                    get_parquets, get_static_data, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -234,29 +234,4 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             return tuple(dicts_to_return)
 
     def static_data(self, engine=None):
-        if engine is None:
-            return self.__static_data
-        else:
-            try:
-                return self.__static_data[engine]
-            except KeyError:
-                if len(self.__static_data) == 0:
-                    raise KeyError(f"No static data available for this block.")
-                else:
-                    prefix = list(engine.keys())[0][:-1]
-                    assert len(ENGINE_EXPANSION) == len(ENGINE_MAP)
-                    for i in range(len(ENGINE_EXPANSION)):
-                        if engine in [
-                            int(list(ENGINE_MAP.keys())[i]),
-                            list(ENGINE_MAP.keys())[i],
-                            list(ENGINE_MAP.values())[i],
-                            list(ENGINE_EXPANSION.keys())[i],
-                            list(ENGINE_EXPANSION.values())[i],
-                        ]:
-                            stream_id = prefix + str(i)
-                            try:
-                                return self.__static_data[stream_id]
-                            except KeyError:
-                                raise KeyError(f"No static data available for the specified engine for this block.")
-                    else:
-                        raise ValueError(f"{engine} is not a valid engine identifier.")
+        return get_static_data(self.__static_data, "Block", engine=engine)
