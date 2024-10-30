@@ -205,13 +205,13 @@ def get_static_data(static_data, object_type, engine=None):
                     prefix = list(engine.keys())[0][:-1]
                     assert len(ENGINE_EXPANSION) == len(ENGINE_MAP)
                     for i in range(len(ENGINE_EXPANSION)):
-                        if engine in [
+                        if engine.lower() in [k.lower() for k in [
                             int(list(ENGINE_MAP.keys())[i]),
                             list(ENGINE_MAP.keys())[i],
                             list(ENGINE_MAP.values())[i],
                             list(ENGINE_EXPANSION.keys())[i],
                             list(ENGINE_EXPANSION.values())[i],
-                        ]:
+                        ]]:
                             stream_id = prefix + str(i)
                             try:
                                 return static_data[stream_id]
