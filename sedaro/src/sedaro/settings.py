@@ -13,7 +13,8 @@ CRUD = 'crud'
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
-VEHICLE_TEMPLATES = {'Spacecraft', 'TerrestrialVehicle', 'Integration', 'LaunchVehicle', 'SpacecraftBus'}
+VEHICLE_TEMPLATES = {'Spacecraft', 'TerrestrialVehicle', 'InterfaceSpecification',
+                     'LaunchMission', 'LaunchVehicle', 'Rideshare', 'SpaceTug', 'SpaceVehicle', 'SpacePayload'}
 SCENARIO_TEMPLATE = 'Scenario'
 
 ROOT = 'root'
