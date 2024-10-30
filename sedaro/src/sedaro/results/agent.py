@@ -8,7 +8,7 @@ from pydash import merge
 from .block import SedaroBlockResult
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, bsearch, get_parquets,
-                    hfill)
+                    get_static_data, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -221,3 +221,6 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             trimmed_engines[engine] = self.__series[engine].loc[floor:ceil].compute()
 
         return SedaroAgentResult(self.__name, self.__block_structures, trimmed_engines, self.__column_index, self.__initial_state).__model_at(mjd)
+
+    def static_data(self, engine=None):
+        return get_static_data(self.__static_data, "Agent", engine=engine)
