@@ -8,7 +8,7 @@ from pydash import merge
 from .block import SedaroBlockResult
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, bsearch, get_parquets,
-                    get_static_data, hfill)
+                    get_static_data, hfill, get_static_data_engines)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -195,7 +195,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
         print("❓ Query block results with .block(<ID>) or .block(<PARTIAL_ID>)")
         if self.__static_data:
             hfill()
-            print("📦 Static data is available for this agent.")
+            engines_as_text = ", ".join(get_static_data_engines(self.__static_data))
+            print(f"📦 Static data is available for this agent in the following engine(s): {engines_as_text}.")
             print("📦 Query with .static_data('<ENGINE_NAME>') for that engine's static data on this agent,")
             print("   or .static_data() to get this agent's static data for all engines.")
 

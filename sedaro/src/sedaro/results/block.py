@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, Generator, Union
 from .series import SedaroSeries
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, get_column_names,
-                    get_parquets, get_static_data, hfill)
+                    get_parquets, get_static_data, get_static_data_engines, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -208,7 +208,8 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
         if self.__static_data:
             hfill()
-            print("📦 Static data is available for this block.")
+            engines_as_text = ", ".join(get_static_data_engines(self.__static_data))
+            print(f"📦 Static data is available for this block in the following engine(s): {engines_as_text}.")
             print("📦 Query with .static_data('<ENGINE_NAME>') for that engine's static data on this block,")
             print("   or .static_data() to get this block's static data for all engines.")
 
