@@ -206,6 +206,11 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         if self.__stats:
             print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
             print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
+        if self.__static_data:
+            hfill()
+            print("📦 Static data is available for this block.")
+            print("📦 Query with .static_data('<ENGINE_NAME>') to get static data for that engine,")
+            print("or .static_data() to get static data for all engines.")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
