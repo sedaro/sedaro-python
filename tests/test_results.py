@@ -450,9 +450,7 @@ def test_stats():
     assert stats_from_endpoint == res._SimulationResult__stats
 
 def test_utils():
-    from sedaro.results.utils import (
-        get_static_data
-    )
+    from sedaro.results.utils import get_static_data
 
     test_static_data = {
         'foobar/0': {
