@@ -37,7 +37,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__meta: dict = data['meta']
         self.__stats_fetched = ('stats_fetched' in data and data['meta']['stats_fetched']) or ('stats' in data and data['stats'])
         self.__stats = data['stats'] if 'stats' in data else {}
-        self.__static_data: dict = data['static']
+        self.__static_data: dict = data['static'] if 'static' in data else {}
         self.stats_to_plot = []
         raw_series = data['series']
         agent_id_name_map = _get_agent_id_name_map(self.__meta)
