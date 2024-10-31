@@ -139,7 +139,7 @@ class DownloadWorker:
             if k not in self.streams:
                 self.streams[k] = self.derived_streams[k]
             else:
-                self.streams[k].dataframe = self.streams[k].dataframe.join(self.derived_streams[k], how='inner')
+                self.streams[k].dataframe = self.streams[k].dataframe.join(self.derived_streams[k], how='left')
         # finalize
         for k in self.streams:
             self.streams[k] = self.streams[k].finalize()
