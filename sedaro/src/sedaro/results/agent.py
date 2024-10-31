@@ -139,8 +139,8 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
             block_structures = meta['block_structures']
             initial_state = meta['initial_state']
             column_index = meta['column_index']
-            stats = meta['stats'] if 'stats' in meta else {},
-            static_data = meta['static'] if 'static' in meta else {},
+            stats = meta['stats'] if 'stats' in meta else {}
+            static_data = meta['static'] if 'static' in meta else {}
         engines = {}
         try:
             for engine in meta['parquet_files']:
