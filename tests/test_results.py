@@ -470,20 +470,20 @@ def test_utils():
     assert get_static_data(test_static_data, 'slikertuhmdrtybdetvime5vt', 'CDH') == {'qux': 'baz'}
     try:
         get_static_data(test_static_data, 'Block', 'Power')
-    except ValueError as e:
-        assert str(e) == "No static data available for the specified engine for this Block."
+    except KeyError as e:
+        assert e.args[0] == "No static data available for the specified engine for this Block."
     try:
         get_static_data(test_static_data, 'Agent', 'Power')
-    except ValueError as e:
-        assert str(e) == "No static data available for the specified engine for this Agent."
+    except KeyError as e:
+        assert e.args[0] == "No static data available for the specified engine for this Agent."
     try:
         get_static_data(test_static_data, 'Agent', 'NotAnEngine')
     except ValueError as e:
-        assert str(e) == "NotAnEngine is not a valid engine identifier."
+        assert e.args[0] == "NotAnEngine is not a valid engine identifier."
     try:
         get_static_data({}, 'Agent')
     except ValueError as e:
-        assert str(e) == "No static data available for this Agent."
+        assert e.args[0] == "No static data available for this Agent."
 
 
 def run_tests():

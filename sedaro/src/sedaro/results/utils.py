@@ -206,7 +206,7 @@ def value_from_df(value, name=None):
 
 def get_static_data(static_data: dict, object_type: str, engine: str = None):
     if len(static_data) == 0:
-        raise KeyError(f"No static data available for this {object_type}.")
+        raise ValueError(f"No static data available for this {object_type}.")
     elif engine is None:
             return static_data
     else:

@@ -113,7 +113,7 @@ class DownloadWorker:
         self.derived_streams: dict[str: StreamManager] = {}
         self.derived_static = {}
 
-    def ingest(self, page, target: dict | None = None):
+    def ingest(self, page, target: dict = None):
         if target is None:
             target = self.streams
         for stream_id, stream_data in page.items():
