@@ -70,9 +70,9 @@ class CosimClient:
         await self.terminate()
 
     def create_channel(self):
-        if os.environ.get("SERVER_CERTIFICATE"):
+        if os.environ.get("COSIM_TLS_CERTIFICATE"):
             logging.info("Using SSL/TLS for gRPC connection.")
-            certificate_chain = base64.b64decode(os.environ['SERVER_CERTIFICATE'])
+            certificate_chain = base64.b64decode(os.environ['COSIM_TLS_CERTIFICATE'])
             credentials = grpc.ssl_channel_credentials(root_certificates=certificate_chain)
             print(f"opening channel")
             channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
