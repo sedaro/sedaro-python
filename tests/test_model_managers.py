@@ -27,7 +27,14 @@ def test_workspace():
     assert (isinstance(w_new2, Workspace))
     assert w_new2.id == w_new.id
 
-    w_new2.delete()
+    w_new.update(name='2')
+    assert w_new.name == '2'
+    assert w_new2.name != w_new.name
+
+    w_new.refresh()
+    assert w_new.name == w_new.name
+
+    w_new.delete()
 
     with pytest.raises(
         SedaroApiException,
