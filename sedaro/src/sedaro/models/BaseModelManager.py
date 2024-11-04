@@ -36,6 +36,7 @@ class BaseModelManager(ABC, Generic[M]):
         )
 
     def create(self, **body) -> 'M':
+        '''Create a new model with the given keyword arguments'''
         w = self._sedaro.request.post(self._BASE_PATH, body)
         return self._MODEL(w, self)
 
