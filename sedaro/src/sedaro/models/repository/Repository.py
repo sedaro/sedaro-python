@@ -1,4 +1,4 @@
-from sedaro.models import BaseModel
+from ..BaseModel import BaseModel
 
 
 class Repository(BaseModel):
