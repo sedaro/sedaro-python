@@ -1,14 +1,14 @@
+import time
+
+import pytest
+from config import API_KEY, HOST
+
+from sedaro import SedaroApiClient
+from sedaro.exceptions import SedaroApiException
+from sedaro.models.workspace.Workspace import Workspace
+
+
 def test_workspace():
-    HOST = 'http://localhost'
-    API_KEY = 'PPM4H8839D26YcC6bk5gVB.5gfD7EMb4x20KlXcnJJkJ2FwHEX9dfjwl5Qdkh3E_zSUpOCaXVHPaK8CW7TOTc5XMwxX58yn4uig-t5nUNqKXA'
-
-    import time
-
-    import pytest
-
-    from sedaro import SedaroApiClient
-    from sedaro.exceptions import SedaroApiException
-    from sedaro.models.workspace.Workspace import Workspace
 
     sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
