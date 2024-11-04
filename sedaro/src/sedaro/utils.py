@@ -2,10 +2,9 @@ import importlib
 import inspect
 import json
 from types import ModuleType
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
 import orjson
-from sedaro_base_client.api_client import ApiResponse
 from urllib3.response import HTTPResponse
 
 from .exceptions import SedaroApiException
@@ -15,7 +14,7 @@ if TYPE_CHECKING:
     from .branches.branch import Branch
 
 
-def parse_urllib_response(response: HTTPResponse) -> Dict:
+def parse_urllib_response(response: HTTPResponse) -> dict | list[dict]:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
     try:
         return orjson.loads(response.data)
