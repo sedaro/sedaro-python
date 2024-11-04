@@ -37,8 +37,9 @@ class BaseModelManager(ABC, Generic[M]):
             self
         )
 
-    # @abstractmethod
-    # def create(cls): ...
+    def create(self, **body) -> 'M':
+        w = self._sedaro.request.post(self._BASE_PATH, body)
+        return self._MODEL(w, self)
 
     # @abstractmethod
     # def update(cls): ...
