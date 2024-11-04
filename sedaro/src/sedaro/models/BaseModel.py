@@ -19,3 +19,9 @@ class BaseModel(ABC):
     @property
     def id(self):
         return self._raw_data[ID]
+
+    def __getattr__(self, name):
+        try:
+            return self._raw_data[name]
+        except KeyError:
+            raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
