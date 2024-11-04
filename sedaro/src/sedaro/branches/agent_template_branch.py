@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import LIBRARY, SCENARIO
 from .blocks import BlockType
@@ -198,8 +197,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     ThermalDesignLayout: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    ThermalInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     ThermalInterfaceMaterial: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Thruster: BlockType
@@ -349,4 +346,16 @@ class AgentTemplateBranch(Branch):
     UkfAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     GenericPositionSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularSunTrackingSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PathLossConfig: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RadiativeThermalInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularVectorTrackingSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularFixedSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ConductiveThermalInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
