@@ -110,7 +110,6 @@ class Branch(Common):
             },
         )
 
-        check_for_res_error(res)
         self.__ingest_branch_res(res['branch'])
 
         return res

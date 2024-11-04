@@ -23,15 +23,17 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
         return json.loads(response.data.decode('utf-8'))
 
 
-def check_for_res_error(response: ApiResponse):
+def check_for_res_error(response: 'dict'):
     """Checks for an 'error' key in the response dictionary and raises that error if present.
 
     Args:
-        response (ApiResponse): response from an api request
+        response (dict): response from an api request after parse_urllib_response
 
     Raises:
         SedaroApiException: if error present
     """
+    if not isinstance(response, dict):
+        return
     err = response.get('error', None)
     if err is not None:
         raise SedaroApiException(status=err[STATUS], reason=f"{err['code']}: {err['message']}")
