@@ -13,6 +13,7 @@ class BaseModelManager(ABC):
     _sedaro: 'SedaroApiClient'
 
     _MODEL: 'ClassVar[type[BaseModel]]'
+    _BASE_PATH: 'str'
 
     @overload
     def get(self) -> 'list[BaseModel]':
