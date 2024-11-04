@@ -4,7 +4,7 @@ from ..BaseModelManager import BaseModelManager
 from .Repository import Repository
 
 
-class WorkspaceManager(BaseModelManager[Repository]):
+class RepositoryManager(BaseModelManager[Repository]):
 
     _BASE_PATH: 'ClassVar[str]' = '/repositories'
     _MODEL: 'ClassVar[type[Repository]]' = Repository
