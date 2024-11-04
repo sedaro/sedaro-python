@@ -32,7 +32,7 @@ class PlainRequest:
         if body is not None:
             body = json.dumps(body)
             headers['Content-Type'] = 'application/json'
-            headers['Accept'] = 'application/json' # Required for Sedaro firewall
+            headers['Accept'] = 'application/json'  # Required for Sedaro firewall
 
         with self.__sedaro.api_client() as api:
             res = api.call_api(
@@ -68,7 +68,7 @@ class PlainRequest:
             'url': f'{self.__sedaro._api_host}{url}',
             'headers': {
                 auth_header_name: auth_header_value,
-                'Accept': 'application/json' # Required for Sedaro firewall
+                'Accept': 'application/json'  # Required for Sedaro firewall
             }
         }
 
