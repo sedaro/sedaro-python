@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Dict, Literal, Optional, Union, overload
 import requests
 from urllib3.response import HTTPResponse
 
-from .utils import parse_urllib_response
+from .utils import check_for_res_error, parse_urllib_response
 
 if TYPE_CHECKING:
     from .sedaro_api_client import SedaroApiClient
@@ -50,7 +50,9 @@ class PlainRequest:
         if raw:
             return res
 
-        return parse_urllib_response(res)
+        res_ = parse_urllib_response(res)
+        check_for_res_error(res_)
+        return res_
 
     @overload
     def get(self, resource_path: str, *, raw: Literal[True]) -> HTTPResponse: ...
@@ -141,11 +143,3 @@ class PlainRequest:
         `HTTPResponse`.
         """
         return self.__request(resource_path, 'DELETE', raw=raw)
-
-
-class RequestError(Exception):
-    def __init__(self, err_dict: 'dict') -> None:
-        self.message = err_dict.get('message', 'No message provided')
-        self.code = err_dict.get('code', 'Unknown error code')
-        self.status = err_dict.get('status', 'Unknown error status')
-        super().__init__(f'{self.status} - {self.code}: {self.message}')
