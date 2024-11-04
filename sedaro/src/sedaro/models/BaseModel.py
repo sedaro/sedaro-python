@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 from sedaro.settings import ID
 
 if TYPE_CHECKING:
-    from ..sedaro_api_client import SedaroApiClient
+    from .BaseModelManager import BaseModelManager
 
 
 @dataclass
 class BaseModel(ABC):
     _raw_data: 'dict'
-    _sedaro: 'SedaroApiClient'
+    _model_manager: 'BaseModelManager'
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id})"
@@ -25,3 +25,7 @@ class BaseModel(ABC):
             return self._raw_data[name]
         except KeyError:
             raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
+
+    def delete(self):
+        mm = self._model_manager
+        mm._sedaro.request.delete(f"{mm._BASE_PATH}/{self.id}")
