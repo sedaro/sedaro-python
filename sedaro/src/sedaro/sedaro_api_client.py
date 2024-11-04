@@ -11,6 +11,7 @@ from urllib3.response import HTTPResponse
 from sedaro.plain_request import PlainRequest
 
 from .branches import AgentTemplateBranch, Branch, ScenarioBranch
+from .models.workspace.WorkspaceManager import WorkspaceManager
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
 
@@ -157,3 +158,11 @@ class SedaroApiClient(ApiClient):
     def request(self) -> PlainRequest:
         """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
         return PlainRequest(self)
+
+    # ==================================================================================================================
+    # Model Managers
+    # ==================================================================================================================
+
+    @property
+    def Workspace(self):
+        return WorkspaceManager(_sedaro=self)
