@@ -18,12 +18,9 @@ class BaseModelManager(ABC, Generic[M]):
     _BASE_PATH: 'ClassVar[str]'
 
     @overload
-    def get(self) -> 'list[M]':
-        ...
-
+    def get(self) -> 'list[M]': ...
     @overload
-    def get(self, id: str) -> 'M':
-        ...
+    def get(self, id: str) -> 'M': ...
 
     def get(self, id: 'str' = None, /) -> 'list[M] | M':
         if id is None:
