@@ -1,29 +1,31 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, ClassVar, overload
+from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, overload
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
     from .BaseModel import BaseModel
 
+M = TypeVar('M', bound='BaseModel')
+
 
 @dataclass
-class BaseModelManager(ABC):
+class BaseModelManager(ABC, Generic[M]):
 
     _sedaro: 'SedaroApiClient'
 
-    _MODEL: 'ClassVar[type[BaseModel]]'
-    _BASE_PATH: 'str'
+    _MODEL: 'ClassVar[type[M]]'
+    _BASE_PATH: 'ClassVar[str]'
 
     @overload
-    def get(self) -> 'list[BaseModel]':
+    def get(self) -> 'list[M]':
         ...
 
     @overload
-    def get(self, id: str) -> 'BaseModel':
+    def get(self, id: str) -> 'M':
         ...
 
-    def get(self, id: 'str' = None, /):
+    def get(self, id: 'str' = None, /) -> 'list[M] | M':
         if id is None:
             return [
                 self._MODEL(w, self) for w in
