@@ -6,5 +6,5 @@ from .Repository import Repository
 
 class RepositoryManager(BaseModelManager[Repository]):
 
-    _BASE_PATH: 'ClassVar[str]' = '/repositories'
+    _BASE_PATH: 'ClassVar[str]' = '/models/repositories'
     _MODEL: 'ClassVar[type[Repository]]' = Repository
