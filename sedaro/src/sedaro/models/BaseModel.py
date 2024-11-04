@@ -26,6 +26,10 @@ class BaseModel(ABC):
         except KeyError:
             raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
 
+    def update(self, **kwargs):
+        mm = self._model_manager
+        self._raw_data = mm._sedaro.request.patch(f"{mm._BASE_PATH}/{self.id}", body=kwargs)
+
     def delete(self):
         mm = self._model_manager
         mm._sedaro.request.delete(f"{mm._BASE_PATH}/{self.id}")
