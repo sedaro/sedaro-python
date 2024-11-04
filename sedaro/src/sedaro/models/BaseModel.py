@@ -31,6 +31,11 @@ class BaseModel(ABC):
         mm = self._model_manager
         self._raw_data = mm._sedaro.request.patch(f"{mm._BASE_PATH}/{self.id}", body=kwargs)
 
+    def refresh(self):
+        '''Refresh the model data from the api.'''
+        mm = self._model_manager
+        self._raw_data = mm._sedaro.request.get(f"{mm._BASE_PATH}/{self.id}")
+
     def delete(self):
         '''Delete the corresponding model.'''
         mm = self._model_manager
