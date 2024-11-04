@@ -14,7 +14,13 @@ class PlainRequest:
     def __init__(self, sedaro: 'SedaroApiClient') -> None:
         self.__sedaro = sedaro
 
-    def __request(self, resource_path: str, method: str, body: Optional[Dict] = None, raw: bool = False):
+    def __request(
+        self,
+        resource_path: str,
+        method: str,
+        body: Optional[Dict] = None,
+        raw: bool = False
+    ):
         """Send a request to the Sedaro server
 
         Args:
