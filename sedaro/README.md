@@ -35,6 +35,25 @@ HOST = 'url-to-my-sedaro-instance.com'
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 ```
 
+### Proxy Configuration
+
+Depending on your networking, some use cases will require that your proxy be configured appropriately. This is done as follows:
+
+```py
+sedaro = SedaroApiClient(api_key=API_KEY, proxy_url='http://my-proxy.com:8080')
+```
+
+If your proxy requires authentication, you can pass the `proxy_headers` argument as follows:
+
+```py
+from urllib3 import make_headers
+
+proxy_headers = make_headers(proxy_basic_auth='username:password')
+sedaro = SedaroApiClient(api_key=API_KEY, proxy_url='http://my-proxy.com:8080', proxy_headers=proxy_headers)
+```
+
+If your proxy is HTTP and not HTTPS (i.e. the URL starts with `http://`), you may need to suppress warnings about insecure transport. This can be done by setting `suppress_insecure_transport_warnings` to `True`.
+
 ## Modeling
 
 [Models](https://docs.sedaro.com/models) in Sedaro can be modified via the `AgentTemplateBranch` and `ScenarioBranch` interfaces. Blocks of a particular type are created and retrieved via the following pattern, where `branch` is an instance of `AgentTemplateBranch` or `ScenarioBranch`:
