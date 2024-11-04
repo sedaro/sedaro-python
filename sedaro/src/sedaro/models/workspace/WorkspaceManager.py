@@ -7,6 +7,7 @@ from .Workspace import Workspace
 class WorkspaceManager(BaseModelManager):
 
     _BASE_PATH: 'ClassVar[str]' = '/workspaces'
+    _MODEL: 'ClassVar[type[Workspace]]' = Workspace
 
     @overload
     def get(self) -> 'list[Workspace]':
@@ -19,11 +20,11 @@ class WorkspaceManager(BaseModelManager):
     def get(self, id: 'str' = None, /):
         if id is None:
             return [
-                Workspace(w, self) for w in
+                self._MODEL(w, self) for w in
                 self._sedaro.request.get(self._BASE_PATH)
             ]
 
-        return Workspace(
+        return self._MODEL(
             self._sedaro.request.get(f'{self._BASE_PATH}/{id}'),
             self
         )
