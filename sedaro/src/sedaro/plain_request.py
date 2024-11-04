@@ -135,3 +135,11 @@ class PlainRequest:
         `HTTPResponse`.
         """
         return self.__request(resource_path, 'DELETE', raw=raw)
+
+
+class RequestError(Exception):
+    def __init__(self, err_dict: 'dict') -> None:
+        self.message = err_dict.get('message', 'No message provided')
+        self.code = err_dict.get('code', 'Unknown error code')
+        self.status = err_dict.get('status', 'Unknown error status')
+        super().__init__(f'{self.status} - {self.code}: {self.message}')
