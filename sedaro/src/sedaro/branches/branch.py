@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Union
+from typing import TYPE_CHECKING, Any
 
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Branch(Common):
-    _data: 'Dict[str, Any]'
+    _data: 'dict[str, Any]'
     id: 'str'
     """Branch `id`"""
 
@@ -31,7 +31,7 @@ class Branch(Common):
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_type_or_attr: str) -> Union[BlockType, Any]:
+    def __getattr__(self, block_type_or_attr: str) -> BlockType | Any:
 
         if block_type_or_attr in self.data['_supers']:
             return BlockType(block_type_or_attr, self)
@@ -48,7 +48,7 @@ class Branch(Common):
         return self.data[TYPE]
 
     @property
-    def data(self) -> 'Dict':
+    def data(self) -> 'dict':
         return self._data
 
     @property
@@ -56,15 +56,15 @@ class Branch(Common):
         return self
 
     @property
-    def _relationship_attrs(self) -> Dict:
+    def _relationship_attrs(self) -> dict:
         return self.data[RELATIONSHIPS][ROOT]
 
     def crud(
         self,
         *,
-        root: 'Dict[str, Any]' = None,
-        blocks: 'List[Dict]' = None,
-        delete: 'List[str]' = None
+        root: 'dict[str, Any]' = None,
+        blocks: 'list[dict]' = None,
+        delete: 'list[str]' = None
     ) -> 'dict':
         """Method to perform multiple CRUD operations at the same time.
 
@@ -114,12 +114,12 @@ class Branch(Common):
 
         return res
 
-    def block(self, id: Union[str, int]):
+    def block(self, id: str | int):
         """A general method to instantiate a `Block` object associated with the Sedaro Block of the given `id`. Use the
         `BlockType` properties on the Branch to instantiate `Block` objects narrowed to a specific type.
 
         Args:
-            id (Union[str, int]): `id` of the desired Sedaro Block
+            id (str | int): `id` of the desired Sedaro Block
 
         Raises:
             KeyError: if no corresponding Block exists in the Branch
@@ -134,11 +134,11 @@ class Branch(Common):
         )
 
     def update(
-            self, 
-            blocks: 'List[Dict]' = None, 
-            delete: 'List[str]' = None, 
-            include_response=False, 
-            **fields
+        self,
+        blocks: 'list[dict]' = None,
+        delete: 'list[str]' = None,
+        include_response: 'bool' = False,
+        **fields
     ) -> 'Branch':
         '''
         Method to perform updates to a model with support for bulk update operations.
