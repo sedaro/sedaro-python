@@ -8,10 +8,10 @@ from sedaro_base_client.apis.tags import branches_api
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3.response import HTTPResponse
 
-from sedaro.plain_request import PlainRequest
-
 from .branches import AgentTemplateBranch, Branch, ScenarioBranch
+from .models.repository import RepositoryManager
 from .models.workspace.WorkspaceManager import WorkspaceManager
+from .plain_request import PlainRequest
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
 
@@ -166,3 +166,7 @@ class SedaroApiClient(ApiClient):
     @property
     def Workspace(self):
         return WorkspaceManager(_sedaro=self)
+
+    @property
+    def Repository(self):
+        return RepositoryManager(_sedaro=self)
