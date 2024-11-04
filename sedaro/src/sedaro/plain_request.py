@@ -19,7 +19,7 @@ class PlainRequest:
         resource_path: str,
         method: str,
         body: Optional[Dict] = None,
-        raw: bool = False
+        raw: bool = False,
     ):
         """Send a request to the Sedaro server
 
