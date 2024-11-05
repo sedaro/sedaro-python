@@ -22,7 +22,7 @@ class SedaroApiClient(ApiClient):
         self,
         api_key: 'str' = None,
         host='https://api.sedaro.com',
-        grpc_host='grpc.sedaro.com:50031',
+        grpc_host=None,
         *,
         auth_handle: 'str' = None,
         proxy_url: str = None,
