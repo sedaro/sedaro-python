@@ -48,7 +48,8 @@ class SedaroApiClient(ApiClient):
             host = host[:-1]  # remove trailing forward slash
 
         self._api_host = host
-        self._grpc_host = grpc_host
+        portless_host, *_ = host.split(':')
+        self._grpc_host = grpc_host or f"{portless_host.replace('//api.', '//grpc.')}:50031"
 
         self._api_key = api_key
         self._auth_handle = auth_handle
