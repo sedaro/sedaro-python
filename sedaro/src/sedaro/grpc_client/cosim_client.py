@@ -55,20 +55,20 @@ class CosimClient:
         self._stop_refresh = asyncio.Event()
 
     async def __aenter__(self):
-        await self.connect()
-        authorized, uuid = await self.authorize()
+        await self._connect()
+        authorized, uuid = await self._authorize()
         self._metadata_interceptor.set_uuid(uuid)
         if not authorized:
-            await self.terminate()
+            await self._terminate()
             raise Exception("Authentication with CosimClient failed.")
 
         self._refresh_task = asyncio.create_task(self._refresh_loop())
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
-        await self.terminate()
+        await self._terminate()
 
-    def create_channel(self):
+    def _create_channel(self):
         if self.insecure:
             logging.warning("Using insecure gRPC connection.")
             return grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
@@ -84,9 +84,9 @@ class CosimClient:
             
         return channel
 
-    async def connect(self):
+    async def _connect(self):
         logging.info(f"Connecting to gRPC server at {self.grpc_host}")
-        self.channel = self.create_channel()
+        self.channel = self._create_channel()
         await self.channel.channel_ready()
         self.cosim_stub = cosim_pb2_grpc.CosimStub(self.channel)
         self.auth_stub = cosim_pb2_grpc.CosimStub(self.channel)
@@ -103,19 +103,19 @@ class CosimClient:
 
                 if not self._stop_refresh.is_set():
                     logging.info("Refreshing authorization token...")
-                    authorized, new_uuid = await self.authorize()
+                    authorized, new_uuid = await self._authorize()
                     if authorized:
                         self._metadata_interceptor.set_uuid(new_uuid)
                         logging.info("Authorization token refreshed successfully.")
                     else:
                         logging.error("Failed to refresh authorization token.")
                         self._stop_refresh.set()
-                        await self.terminate()
+                        await self._terminate()
             except Exception as e:
                 logging.error(f"Error in refresh loop: {e}")
                 continue
 
-    async def get_auth_token(self) -> Optional[str]:
+    async def _get_auth_token(self) -> Optional[str]:
         """Get a fresh JWT token from the django server."""
         async with aiohttp.ClientSession() as session:
             url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
@@ -133,8 +133,8 @@ class CosimClient:
                 logging.error(f"Failed to get auth token: {e}")
                 return None
 
-    async def authorize(self) -> Tuple[bool, Optional[str]]:
-        jwt_token = await self.get_auth_token()
+    async def _authorize(self) -> Tuple[bool, Optional[str]]:
+        jwt_token = await self._get_auth_token()
         if not jwt_token:
             return False, None
 
@@ -157,7 +157,6 @@ class CosimClient:
     async def _send_simulation_action(
         self,
         action: cosim_pb2.SimulationAction,
-        retry_on_expiry: bool = True
     ) -> Any:
         try:
             logging.debug(f"Sending SimulationAction: {action}")
@@ -167,7 +166,6 @@ class CosimClient:
                 logging.error(f"Unexpected response state: {response.state}")
                 raise Exception("Unexpected response state.")
 
-            # TODO-tindell we can assume mismatches won't happen, and panic if they do elsewhere
             if action.WhichOneof("request") == "consume":
                 consume_resp = response.WhichOneof("response")
                 if consume_resp != "consume_response":
@@ -187,7 +185,7 @@ class CosimClient:
             logging.error(f"Simulation RPC failed: {e}")
             raise ConnectionError(f"Simulation RPC failed: {e}")
 
-    async def terminate(self):
+    async def _terminate(self):
         """Cleanup resources and stop the refresh loop."""
         if self._refresh_task is not None:
             self._stop_refresh.set()
