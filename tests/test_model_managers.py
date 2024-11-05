@@ -88,3 +88,4 @@ def test_repository():
 
 def run_tests():
     test_workspace()
+    test_repository()
