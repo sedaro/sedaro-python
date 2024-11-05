@@ -32,7 +32,7 @@ dependencies = [
   "grpcio-tools",
   "protobuf",
   "openpyxl",
-  "aiohttp", # FIXMETL double check if I need this
+  "aiohttp",
 ]
 [[project.authors]]
 name = "Sedaro"

@@ -778,7 +778,7 @@ class SimulationHandle:
         return tuple(serdes(v) for v in body_from_res(response))
 
     @asynccontextmanager
-    async def async_channel(self, grpc_host: str):
+    async def async_channel(self, grpc_host: str = None, insecure=False):
         """
         Asynchronous context manager for cosimulation sessions.
         Automatically opens a cosimulation grpc session on entry and closes it on exit.
@@ -790,6 +790,7 @@ class SimulationHandle:
         sedaro = self._sim_client.get_sedaro()
         api_key = sedaro._api_key
         host = sedaro._api_host
+        grpc_host = grpc_host or sedaro._grpc_host
 
         status = self._sim_client.status()
         address = status.get("clusterAddr")
@@ -801,7 +802,7 @@ class SimulationHandle:
             address=address,
             job_id=job_id,
             host=host,
-            cert=cert,
+            insecure=insecure,
         )
 
         try:

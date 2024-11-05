@@ -21,7 +21,6 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
         self.metadata_to_add = None
 
     def set_uuid(self, uuid: str):
-        print(f"Setting UUID: {uuid}")
         self.metadata_to_add = [("session-uuid", uuid)]
 
     def _add_metadata(self, client_call_details):
@@ -32,17 +31,17 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
 
     async def intercept_unary_unary(self, continuation, client_call_details, request):
         new_details = self._add_metadata(client_call_details)
-        print(f"Adding metadata: {new_details.metadata}")
         return await continuation(new_details, request)
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str):
+    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str, insecure: bool = False):
         self.grpc_host = grpc_host
         self.api_key = api_key
         self.address = address
         self.job_id = job_id
         self.host = host
+        self.insecure = insecure
 
         self.channel: Optional[grpc.aio.Channel] = None
         self.cosim_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
@@ -70,15 +69,19 @@ class CosimClient:
         await self.terminate()
 
     def create_channel(self):
+        if self.insecure:
+            logging.warning("Using insecure gRPC connection.")
+            return grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+        
+        logging.info("Using SSL/TLS for gRPC connection.")
         if os.environ.get("COSIM_TLS_CERTIFICATE"):
-            logging.info("Using SSL/TLS for gRPC connection.")
             certificate_chain = base64.b64decode(os.environ['COSIM_TLS_CERTIFICATE'])
             credentials = grpc.ssl_channel_credentials(root_certificates=certificate_chain)
-            print(f"opening channel")
             channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
         else:
-            logging.warning("Using insecure gRPC connection.")
-            channel = grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+            credentials = grpc.ssl_channel_credentials()
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+            
         return channel
 
     async def connect(self):
@@ -111,7 +114,6 @@ class CosimClient:
             except Exception as e:
                 logging.error(f"Error in refresh loop: {e}")
                 continue
-
 
     async def get_auth_token(self) -> Optional[str]:
         """Get a fresh JWT token from the django server."""
@@ -165,7 +167,7 @@ class CosimClient:
                 logging.error(f"Unexpected response state: {response.state}")
                 raise Exception("Unexpected response state.")
 
-            # FIXMETL we can assume mismatches won't happen, and panic if they do elsewhere
+            # TODO-tindell we can assume mismatches won't happen, and panic if they do elsewhere
             if action.WhichOneof("request") == "consume":
                 consume_resp = response.WhichOneof("response")
                 if consume_resp != "consume_response":

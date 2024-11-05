@@ -22,6 +22,7 @@ class SedaroApiClient(ApiClient):
         self,
         api_key: 'str' = None,
         host='https://api.sedaro.com',
+        grpc_host='grpc.sedaro.com:50031',
         *,
         auth_handle: 'str' = None,
         proxy_url: str = None,
@@ -47,6 +48,7 @@ class SedaroApiClient(ApiClient):
             host = host[:-1]  # remove trailing forward slash
 
         self._api_host = host
+        self._grpc_host = grpc_host
 
         self._api_key = api_key
         self._auth_handle = auth_handle
