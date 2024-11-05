@@ -17,7 +17,7 @@ def test_workspace():
     workspaces1 = sedaro.Workspace.get()
     assert all(isinstance(w, Workspace) for w in workspaces1)
 
-    w_new = sedaro.Workspace.create(name='1')
+    w_new = sedaro.Workspace.create(name='new workspace')
     try:
         assert (isinstance(w_new, Workspace))
 
@@ -30,8 +30,8 @@ def test_workspace():
         assert (isinstance(w_new2, Workspace))
         assert w_new2.id == w_new.id
 
-        w_new.update(name='2')
-        assert w_new.name == '2'
+        w_new.update(name='newer workspace')
+        assert w_new.name == 'newer workspace'
         assert w_new2.name != w_new.name
 
         w_new.refresh()
@@ -50,12 +50,12 @@ def test_workspace():
 def test_repository():
     sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
-    w_new = sedaro.Workspace.create(name='1')
+    w_new = sedaro.Workspace.create(name='new workspace')
 
     try:
         repos = sedaro.Repository.get()
         assert all(isinstance(r, Repository) for r in repos)
-        repo_new = sedaro.Repository.create(name='1', metamodelType=SCENARIO, workspace=w_new.id)
+        repo_new = sedaro.Repository.create(name='new repo', metamodelType=SCENARIO, workspace=w_new.id)
         assert isinstance(repo_new, Repository)
         assert repo_new.metamodelType == SCENARIO
         assert repo_new.workspace['id'] == w_new.id
@@ -64,8 +64,8 @@ def test_repository():
         repo_new2 = sedaro.Repository.get(repo_new.id)
         assert repo_new2.id == repo_new.id
 
-        repo_new.update(name='2')
-        assert repo_new.name == '2'
+        repo_new.update(name='newer repo')
+        assert repo_new.name == 'newer repo'
         assert repo_new2.name != repo_new.name
         repo_new2.refresh()
         assert repo_new2.name == repo_new.name
