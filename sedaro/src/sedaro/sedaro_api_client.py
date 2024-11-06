@@ -170,3 +170,7 @@ class SedaroApiClient(ApiClient):
     @property
     def Repository(self):
         return RepositoryManager(_sedaro=self)
+
+    @property
+    def Project(self):
+        return ProjectManager(_sedaro=self)
