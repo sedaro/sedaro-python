@@ -48,6 +48,38 @@ def test_workspace():
         sedaro.Workspace.get(w_new.id)
 
 
+def test_project():
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+
+    w_new = sedaro.Workspace.create(name='new workspace')
+
+    try:
+        all_projects = sedaro.Project.get()
+        assert all(isinstance(p, Project) for p in all_projects)
+
+        p_new = sedaro.Project.create(name='new project', workspace=w_new.id)
+        assert isinstance(p_new, Project)
+
+        p_new2 = sedaro.Project.get(p_new.id)
+        assert p_new.id == p_new2.id
+
+        p_new.update(name='new project 2')
+        assert p_new.name == 'new project 2'
+        assert p_new2.name != p_new.name
+        p_new2.refresh()
+        assert p_new2.name == p_new.name
+
+        p_new.delete()
+
+        with pytest.raises(
+            SedaroApiException,
+            match="RESOURCE_NOT_FOUND: The requested resource does not exist or is not accessible"
+        ):
+            p_new2.refresh()
+    finally:
+        w_new.delete()
+
+
 def test_repository():
     sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
@@ -87,39 +119,7 @@ def test_repository():
         w_new.delete()
 
 
-def test_project():
-    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
-
-    w_new = sedaro.Workspace.create(name='new workspace')
-
-    try:
-        all_projects = sedaro.Project.get()
-        assert all(isinstance(p, Project) for p in all_projects)
-
-        p_new = sedaro.Project.create(name='new project', workspace=w_new.id)
-        assert isinstance(p_new, Project)
-
-        p_new2 = sedaro.Project.get(p_new.id)
-        assert p_new.id == p_new2.id
-
-        p_new.update(name='new project 2')
-        assert p_new.name == 'new project 2'
-        assert p_new2.name != p_new.name
-        p_new2.refresh()
-        assert p_new2.name == p_new.name
-
-        p_new.delete()
-
-        with pytest.raises(
-            SedaroApiException,
-            match="RESOURCE_NOT_FOUND: The requested resource does not exist or is not accessible"
-        ):
-            p_new2.refresh()
-    finally:
-        w_new.delete()
-
-
 def run_tests():
     test_workspace()
-    test_repository()
     test_project()
+    test_repository()
