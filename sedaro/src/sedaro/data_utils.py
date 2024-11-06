@@ -1,4 +1,10 @@
-def concat_stream_data(main, other, len_main, len_other):
+from typing import Tuple, TypeAlias
+
+StreamData: TypeAlias = dict[str, list]
+Stream: TypeAlias = Tuple[list, dict]
+Streams: TypeAlias = dict[str, Stream]
+
+def concat_stream_data(main: StreamData, other: StreamData, len_main: int, len_other: int):
     assert type(main) == dict and type(other) == dict
     for k in other:
         if k not in main:
@@ -9,7 +15,7 @@ def concat_stream_data(main, other, len_main, len_other):
             main[k].extend([None for _ in range(len_other)])
 
 
-def concat_stream(main, other, stream_id):
+def concat_stream(main: Stream, other: Stream, stream_id: str):
     len_main = len(main[0])
     len_other = len(other[0])
     main[0].extend(other[0])
@@ -17,7 +23,7 @@ def concat_stream(main, other, stream_id):
     concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
 
 
-def concat_results(main, other):
+def concat_results(main: Streams, other: Streams):
     for stream in other:
         if stream not in main:
             main[stream] = other[stream]
