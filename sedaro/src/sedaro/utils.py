@@ -8,7 +8,7 @@ import orjson
 from sedaro_base_client.api_client import ApiResponse
 from urllib3.response import HTTPResponse
 
-from .data_utils import update_metadata
+from .data_utils import concat_results, update_metadata
 from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
@@ -150,3 +150,12 @@ def concat_pages(pages: list[dict]) -> dict:
             first_page = False
         else:
             update_metadata(result['meta'], page['meta'])
+        concat_results(result['series'], page['series'])
+        if 'stats' in page:
+            result['stats'].update(page['stats'])
+        if 'derived' in page:
+            if 'static' in page['derived']:
+                result['derived']['static'].update(page['derived']['static'])
+            if 'series' in page['derived']:
+                concat_results(result['derived']['series'], page['derived']['series'])
+    return result
