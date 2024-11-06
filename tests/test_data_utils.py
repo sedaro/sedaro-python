@@ -1,4 +1,4 @@
-from sedaro.branches.scenario_branch.sim_client import \
+from sedaro.data_utils import \
      __set_nested, set_nested, set_numeric_as_list, update_metadata, concat_results, concat_stream, concat_stream_data
 
 def test_set_nested_and_numeric():
