@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
+from urllib.parse import urlencode
 
 from sedaro.settings import ID
 
