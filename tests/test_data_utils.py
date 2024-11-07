@@ -88,7 +88,7 @@ def as_series(stream_id, time, data):
         time,
         {
             short_stream_name: {
-                'time': time,
+                'time': time.copy(),
                 **data,
             }
         }
@@ -155,7 +155,6 @@ def test_concat_pages():
     ]
 
     result = concat_pages(pages)
-    print(result)
     assert result == {
         'meta': {
             'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000,
