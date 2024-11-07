@@ -72,7 +72,7 @@ class CosimClient:
         if self.insecure:
             logging.warning("Using insecure gRPC connection.")
             return grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
-        
+
         logging.info("Using SSL/TLS for gRPC connection.")
         if os.environ.get("COSIM_TLS_CERTIFICATE"):
             certificate_chain = base64.b64decode(os.environ['COSIM_TLS_CERTIFICATE'])
@@ -81,7 +81,7 @@ class CosimClient:
         else:
             credentials = grpc.ssl_channel_credentials()
             channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
-            
+
         return channel
 
     async def _connect(self):
