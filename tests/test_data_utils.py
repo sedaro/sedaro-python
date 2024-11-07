@@ -1,5 +1,6 @@
 from sedaro.data_utils import \
      __set_nested, set_nested, set_numeric_as_list, update_metadata, concat_results, concat_stream, concat_stream_data
+from sedaro.utils import concat_pages
 
 def test_set_nested_and_numeric():
     assert __set_nested({'foo.bar': [1, 2, 3], 'foo.baz': [1, 2, 3]}) == {'foo': {'bar': [1, 2, 3], 'baz': [1, 2, 3]}}
@@ -81,9 +82,49 @@ def test_concat_ragged():
         'c': [[None, None, None, None, None, 6, 7, 8, 9, 10] for _ in range(3)]
     }})}
 
+def as_series(stream_id, time, data):
+    short_stream_name = stream_id.split('/')[0]
+    return (
+        time,
+        {
+            short_stream_name: {
+                'time': time,
+                **data,
+            }
+        }
+    )
+
+def test_concat_pages():
+    pages = [
+        {
+            'meta': {'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000, 'counts': {
+                'foo/0': 5, 'foo/1': 2,
+            }},
+            'series': {
+                'foo/0': as_series('foo/0', [1, 2, 3, 4, 5],
+                    {'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}),
+                'foo/1': as_series('foo/1', [1, 2], {'a': [1, 2]}),
+            },
+            'stats': {
+                'foo/0': {'a': {'min': 1, 'max': 10}}, 'foo/1': {},
+            },
+            'derived': {
+                'static': {'foo/0': {'c': 5}, 'foo/1': {'c': 2}},
+                'series': {},
+            }
+        },
+        {
+
+        },
+        {
+
+        },
+    ]
+
 def run_tests():
     test_set_nested_and_numeric()
     test_concat_and_update()
     test_concat_ragged()
+    test_concat_pages()
 
 run_tests()
