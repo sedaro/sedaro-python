@@ -205,7 +205,7 @@ class CosimClient:
         agent_id: str,
         value: Any,
         timestamp: float = 0.0
-    ) -> Coroutine[Any, Any, Tuple[int, Any]]:
+    ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
             index=index,
@@ -224,8 +224,8 @@ class CosimClient:
             response = await self._send_simulation_action(
                 simulation_action,
             )
-            logging.info(f"Produced message with index {index}: {value}")
-            return index, response
+            logging.info(f"Produced message with index {index}: {response}")
+            return response
         except Exception as e:
             logging.error(f"Produce operation failed for index {index}: {e}")
             raise e
@@ -235,7 +235,7 @@ class CosimClient:
         external_state_id: str,
         agent_id: str,
         time: float = None
-    ) -> Coroutine[Any, Any, Tuple[int, Any]]:
+    ):
         index = next(self._consume_counter)
         consume_action = cosim_pb2.Consume(
             index=index
@@ -253,7 +253,7 @@ class CosimClient:
                 simulation_action,
             )
             logging.info(f"Consumed message with index {index}: {response}")
-            return index, response
+            return json.loads(response)["payload"]
         except Exception as e:
             logging.error(f"Consume operation failed for index {index}: {e}")
             raise e
