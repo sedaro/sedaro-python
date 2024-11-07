@@ -1,6 +1,7 @@
 import importlib
 import inspect
 import json
+import re
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict
 
@@ -14,6 +15,7 @@ from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 if TYPE_CHECKING:
     from .branches.branch import Branch
 
+
 def serdes(v):
     import numpy as np
     if type(v) is dict and 'ndarray' in v:
@@ -25,6 +27,7 @@ def serdes(v):
     if type(v) in {list, tuple}:
         return [serdes(v) for v in v]
     return v
+
 
 def parse_urllib_response(response: HTTPResponse) -> Dict:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
@@ -132,3 +135,11 @@ def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
         raise AttributeError(err_msg)
 
     return filtered_classes[0][1]
+
+
+def extract_host(url):
+    pattern = r'https?://(?:api\.)?([^:/]+)'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    return None

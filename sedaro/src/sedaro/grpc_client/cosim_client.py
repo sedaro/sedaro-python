@@ -123,6 +123,7 @@ class CosimClient:
             headers = {"X_API_KEY": self.api_key}
 
             try:
+                logging.info(f"Getting auth token from {url}")
                 async with session.get(url, params=params, headers=headers) as res:
                     if res.status != 200:
                         logging.error(f"Authentication failed with status {res.status}")
@@ -138,6 +139,7 @@ class CosimClient:
         if not jwt_token:
             return False, None
 
+        logging.info(f"Authenticating with cosim server.")
         auth_request = cosim_pb2.Authorize(
             auth_token=jwt_token,
             cluster_handle_address=self.address,
