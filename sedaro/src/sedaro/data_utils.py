@@ -1,8 +1,8 @@
-from typing import Tuple, TypeAlias
+from typing import Tuple
 
-StreamData: TypeAlias = dict[str, list]
-Stream: TypeAlias = Tuple[list, dict]
-Streams: TypeAlias = dict[str, Stream]
+StreamData = dict[str, list]
+Stream = Tuple[list, dict]
+Streams = dict[str, Stream]
 
 def concat_stream_data(main: StreamData, other: StreamData, len_main: int, len_other: int):
     assert type(main) == dict and type(other) == dict
