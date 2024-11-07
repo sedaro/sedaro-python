@@ -467,6 +467,38 @@ A simulation that terminates on its own will clean up all external state interfa
   # Or if using the context manager, simply exit the context
 ```
 
+### Asynchronous Interface
+
+You can also communicate asynchronously with a simulation to take advantage of lower latencies and parallelism. 
+
+
+```python
+  agent_id = ... # The ID of the relevant simulation Agent
+  per_round_external_state_id = ... # The ID of the relevant ExternalState block
+  spontaneous_external_state_id = ... # The ID of the relevant ExternalState block
+  time = 60050.0137 # Time in MJD
+
+  async with simulation_handle.async_channel(url) as channel:
+    state = await channel.consume(agent_id, per_round_external_state_id)
+    print(state)
+
+    state = await channel.consume((agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
+    print(state)
+```
+
+Over the async_channel, you can also spawn tasks asynchronously.
+
+```
+  async with simulation_handle.async_channel(url) as channel:
+    tasks = []
+    for i in range(10):
+      tasks.append(asyncio.create_task(channel.consume(agent_id, per_round_external_state_id)))
+
+    asyncio.gather(*tasks)
+```
+
+This code expects the async_channel to be used only within one async run loop.  If you mix async and threaded python, the functionality of the async channel is not defined.
+
 ## Modeling and Simulation Utilities
 
 The following modeling and simuation utility methods are available for convenience. See the docstrings for each method for more information and usage.
