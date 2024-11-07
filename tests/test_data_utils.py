@@ -109,17 +109,85 @@ def test_concat_pages():
                 'foo/0': {'a': {'min': 1, 'max': 10}}, 'foo/1': {},
             },
             'derived': {
-                'static': {'foo/0': {'c': 5}, 'foo/1': {'c': 2}},
+                'static': {'foo/0': {'d': 5}, 'foo/1': {'d': 2}},
                 'series': {},
             }
         },
         {
-
+            'meta': {'shouldnotappear': 4, 'counts': {
+                'foo/0': 5, 'foo/2': 3,
+            }},
+            'series': {
+                'foo/0': as_series('foo/0', [6, 7, 8, 9, 10],
+                    {'b': [6, 7, 8, 9, 10], 'c': [6, 7, 8, 9, 10]}),
+                'foo/2': as_series('foo/2', [1, 2], {'a': [1, 2]}),
+            },
+            'stats': {'foo/2': {}},
+            'derived': {
+                'static': {'foo/2': {'d': 3}},
+                'series': {
+                    'foo/0': as_series('foo/0', [1, 2, 3, 4, 5], {
+                        'e': [10, 20, 30, 40, 50],
+                    })
+                }
+            }
         },
         {
-
+            'meta': {'shouldnotappear2': 5, 'counts': {
+                'foo/0': 5, 'foo/1': 2, 'foo/2': 3,
+            }},
+            'series': {
+                'foo/0': as_series('foo/0', [11, 12, 13, 14, 15],
+                    {'a': [11, 12, 13, 14, 15], 'c': [11, 12, 13, 14, 15]}),
+                'foo/1': as_series('foo/1', [3, 4], {'a': [3, 4]}),
+                'foo/2': as_series('foo/2', [3, 4], {'a': [3, 4]}),
+            },
+            'stats': {},
+            'derived': {
+                'static': {},
+                'series': {
+                    'foo/0': as_series('foo/0', [6, 7, 8, 9, 10, 11, 12, 13, 14, 15], {
+                        'e': [10, 20, 30, 40, 50, None, None, None, None, None],
+                    })
+                }
+            }
         },
     ]
+
+    result = concat_pages(pages)
+    print(result)
+    assert result == {
+        'meta': {
+            'foo': 1, 'bar': 10, 'baz': 100, 'qux': 1000,
+            'counts': {'foo/0': 15, 'foo/1': 4, 'foo/2': 6},
+        },
+        'series': {
+            'foo/0': as_series('foo/0', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], {
+                'a': [1, 2, 3, 4, 5, None, None, None, None, None, 11, 12, 13, 14, 15],
+                'b': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, None, None, None, None, None],
+                'c': [None, None, None, None, None, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            }),
+            'foo/1': as_series('foo/1', [1, 2, 3, 4], {'a': [1, 2, 3, 4]}),
+            'foo/2': as_series('foo/2', [1, 2, 3, 4], {'a': [1, 2, 3, 4]}),
+        },
+        'stats': {
+            'foo/0': {'a': {'min': 1, 'max': 10}},
+            'foo/1': {},
+            'foo/2': {},
+        },
+        'derived': {
+            'static': {
+                'foo/0': {'d': 5},
+                'foo/1': {'d': 2},
+                'foo/2': {'d': 3},
+            },
+            'series': {
+                'foo/0': as_series('foo/0', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], {
+                    'e': [10, 20, 30, 40, 50, 10, 20, 30, 40, 50, None, None, None, None, None],
+                }),
+            }
+        }
+    }
 
 def run_tests():
     test_set_nested_and_numeric()

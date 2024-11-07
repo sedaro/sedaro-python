@@ -143,7 +143,7 @@ def concat_pages(pages: list[dict]) -> dict:
         }
     }
 
-    first_page = False
+    first_page = True
     for page in pages:
         if first_page:
             result['meta'] = page['meta']
