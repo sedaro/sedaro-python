@@ -28,11 +28,11 @@ class BaseModelManager(ABC, Generic[M]):
         if id is None:
             return [
                 self._MODEL(w, self) for w in
-                self._sedaro.request.get(self._BASE_PATH)
+                self._sedaro.request.get(self._req_url())
             ]
 
         return self._MODEL(
-            self._sedaro.request.get(f'{self._BASE_PATH}/{id}'),
+            self._sedaro.request.get(self._req_url(id=id)),
             self
         )
 
