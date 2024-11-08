@@ -91,7 +91,7 @@ def test_repository():
         repo_new = sedaro.Repository.create(name='new repo', metamodelType=SCENARIO, workspace=w_new.id)
         assert isinstance(repo_new, Repository)
         assert repo_new.metamodelType == SCENARIO
-        assert repo_new.workspace['id'] == w_new.id
+        assert repo_new.workspace == w_new.id
         assert repo_new.name == 'new repo'
 
         repo_new2 = sedaro.Repository.get(repo_new.id)
