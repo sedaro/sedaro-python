@@ -5,4 +5,4 @@ class Project(BaseModel):
     pass
 
     def delete(self):
-        self._delete({'delete': 'true'})
+        self._delete(query_params={'delete': 'true'})

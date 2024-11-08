@@ -39,6 +39,6 @@ class BaseModel(ABC):
         '''Delete the corresponding model.'''
         self._delete()
 
-    def _delete(self, query_params: dict = None):
+    def _delete(self, *, query_params: dict = None):
         mm = self._model_manager
         mm._sedaro.request.delete(mm._req_url(id=self.id, query_params=query_params))
