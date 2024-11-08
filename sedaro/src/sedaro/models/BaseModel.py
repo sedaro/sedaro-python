@@ -1,7 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
-from urllib.parse import urlencode
 
 from sedaro.settings import ID
 
@@ -30,18 +29,16 @@ class BaseModel(ABC):
     def update(self, **kwargs):
         '''Update the model with the given keyword arguments.'''
         mm = self._model_manager
-        self._raw_data = mm._sedaro.request.patch(f"{mm._BASE_PATH}/{self.id}", body=kwargs)
+        self._raw_data = mm._sedaro.request.patch(mm._req_url(id=self.id), body=kwargs)
 
     def refresh(self):
         '''Refresh the model data from the api.'''
-        mm = self._model_manager
-        self._raw_data = mm._sedaro.request.get(f"{mm._BASE_PATH}/{self.id}")
+        self._raw_data = self._model_manager.get(self.id)._raw_data
 
     def delete(self):
         '''Delete the corresponding model.'''
         self._delete()
 
     def _delete(self, query_params: dict = None):
-        query_str = f'?{urlencode(query_params)}' if query_params is not None else ""
         mm = self._model_manager
-        mm._sedaro.request.delete(f"{mm._BASE_PATH}/{self.id}{query_str}")
+        mm._sedaro.request.delete(mm._req_url(id=self.id, query_params=query_params))
