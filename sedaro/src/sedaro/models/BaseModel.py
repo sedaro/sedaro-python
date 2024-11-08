@@ -28,8 +28,8 @@ class BaseModel(ABC):
 
     def update(self, **kwargs):
         '''Update the model with the given keyword arguments.'''
-        mm = self._model_manager
-        self._raw_data = mm._sedaro.request.patch(mm._req_url(id=self.id), body=kwargs)
+        mod_man = self._model_manager
+        self._raw_data = mod_man._sedaro.request.patch(mod_man._req_url(id=self.id), body=kwargs)
 
     def refresh(self):
         '''Refresh the model data from the api.'''
@@ -40,5 +40,5 @@ class BaseModel(ABC):
         self._delete()
 
     def _delete(self, *, query_params: dict = None):
-        mm = self._model_manager
-        mm._sedaro.request.delete(mm._req_url(id=self.id, query_params=query_params))
+        mod_man = self._model_manager
+        mod_man._sedaro.request.delete(mod_man._req_url(id=self.id, query_params=query_params))
