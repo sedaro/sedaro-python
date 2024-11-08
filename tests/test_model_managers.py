@@ -40,6 +40,7 @@ def test_workspace():
 
     finally:
         w_new.delete()
+        assert w_new.id not in {w.id for w in sedaro.Workspace.get()}
 
     with pytest.raises(
         SedaroApiException,
@@ -70,6 +71,7 @@ def test_project():
         assert p_new2.name == p_new.name
 
         p_new.delete()
+        assert p_new.id not in {p.id for p in sedaro.Project.get()}
 
         with pytest.raises(
             SedaroApiException,
@@ -103,11 +105,8 @@ def test_repository():
         repo_new2.refresh()
         assert repo_new2.name == repo_new.name
 
-        all_repos = sedaro.Repository.get()
-
         repo_new.delete()
-
-        assert len(sedaro.Repository.get()) == len(all_repos) - 1
+        assert repo_new.id not in {r.id for r in sedaro.Repository.get()}
 
         with pytest.raises(
             SedaroApiException,
