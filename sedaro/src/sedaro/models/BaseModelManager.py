@@ -1,6 +1,7 @@
 from abc import ABC
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar, overload
+from urllib.parse import urlencode
 
 if TYPE_CHECKING:
     from ..sedaro_api_client import SedaroApiClient
