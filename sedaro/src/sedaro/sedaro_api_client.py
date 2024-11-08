@@ -9,6 +9,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib3.response import HTTPResponse
 
 from .branches import AgentTemplateBranch, Branch, ScenarioBranch
+from .models.project.ProjectManager import ProjectManager
 from .models.repository.RepositoryManager import RepositoryManager
 from .models.workspace.WorkspaceManager import WorkspaceManager
 from .plain_request import PlainRequest
