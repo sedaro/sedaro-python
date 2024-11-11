@@ -41,6 +41,60 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 ## Modeling
 
+### Model Management
+
+Workspaces, Projects, Repositories, and Branches can be managed directly on the `SedaroApiClient` object.
+
+```py
+sedaro = SedaroApiClient(api_key=API_KEY)
+
+sedaro.Workspace
+sedaro.Project
+sedaro.Repository
+sedaro.Branch
+```
+
+Each of these attributes has methods for creating instances of the corresponding Sedaro objects.
+
+```py
+workspace = sedaro.Workspace.create(name='My Workspace')
+
+project = sedaro.Project.create(name='My Project', workspace=workspace.id)
+
+repository = sedaro.Repository.create(name='My Repository', metamodelType='Scenario', workspace=workspace.id, project=project.id) # project id is optional
+
+branch = sedaro.Branch.create(branch_from.id, name='My Branch', repository=repository.id)
+```
+Note that other kwargs can also be passed to these methods such as `description`.
+
+Each of these attributes also have methods for retrieving instances of the corresponding Sedaro objects.
+
+```py
+workspaces = sedaro.Workspace.get() # Get all workspaces
+workspaces =  sedaro.Workspace.get_all() # Get all workspaces
+workspace = sedaro.Workspace.get(workspace_id) # Get a single workspace by ID
+
+projects = sedaro.Project.get() # Get all projects
+# ...etc.
+```
+
+Fetching via the `Workspace`, `Project`, and `Repository` attributes, return objects that each have an `update`, `refresh`, and `delete` method. They also allow for keying into relationship attributes and fetching corresponding objects. Note that the retrieved objects are cached until calling the `refresh` method.
+
+```py
+workspace.update(name='New Name') # Update the workspace
+workspace.refresh() # Refresh the workspace object with the latest data from Sedaro
+workspace.delete()  # Delete the workspace
+
+workspace.projects # Fetch all projects in the workspace
+repo.workspace # Fetch the workspace of the repository
+project.repositories # Fetch all repositories in the project
+# ...etc.
+```
+
+The object returned from the `Branch` attribute does not yet support `update`, `refresh`, and `delete` method, nor does it support keying into relationship attributes. These features will be added in a future release. It currently returns a `Branch` object with as described in the next section.
+
+### Agent Modeling
+
 [Models](https://docs.sedaro.com/models) in Sedaro can be modified via the `AgentTemplateBranch` and `ScenarioBranch` interfaces. Blocks of a particular type are created and retrieved via the following pattern, where `branch` is an instance of `AgentTemplateBranch` or `ScenarioBranch`:
 
 ```py
