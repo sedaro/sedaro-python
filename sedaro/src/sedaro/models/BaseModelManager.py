@@ -50,6 +50,10 @@ class BaseModelManager(ABC, Generic[M]):
             self
         )
 
+    def get_all(self) -> 'list[M]':
+        '''Get all accessible models (same as `get()` with no arguments)'''
+        return self.get()
+
     def create(self, **body) -> 'M':
         '''Create a new model with the given keyword arguments'''
         return self._create(**body)
