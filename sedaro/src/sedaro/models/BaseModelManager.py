@@ -52,7 +52,10 @@ class BaseModelManager(ABC, Generic[M]):
 
     def create(self, **body) -> 'M':
         '''Create a new model with the given keyword arguments'''
-        w = self._sedaro.request.post(self._req_url(), body)
+        return self._create(**body)
+
+    def _create(self, *, _id_in_url='', **body) -> 'M':
+        w = self._sedaro.request.post(self._req_url(id=_id_in_url), body)
         return self._MODEL(w, self)
 
     __NO_EXPAND = {'expand': {}}
