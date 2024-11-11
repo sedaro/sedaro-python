@@ -27,6 +27,7 @@ class BaseModel(ABC):
 
     @property
     def id(self):
+        '''The id of the model.'''
         return self._raw_data[ID]
 
     def update(self, **kwargs):
