@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from functools import cache
 from typing import TYPE_CHECKING, TypeVar
 
-from sedaro.settings import BLOCKS, ID
+from sedaro.settings import ID
 
 if TYPE_CHECKING:
     from .BaseModelManager import BaseModelManager
