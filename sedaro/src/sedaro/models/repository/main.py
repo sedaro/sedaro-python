@@ -4,11 +4,18 @@ from ..BaseModel import BaseModel
 from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
+    from ..project import Project
     from ..workspace import Workspace
 
 
 class Repository(BaseModel):
     pass
+
+    @property
+    def project(self) -> 'Project':
+        '''Get the project of the repository.'''
+        from ..project import Project
+        return self._get_rel('project', Project)
 
     @property
     def workspace(self) -> 'Workspace':
