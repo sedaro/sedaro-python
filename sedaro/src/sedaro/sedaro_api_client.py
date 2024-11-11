@@ -149,10 +149,9 @@ class SedaroApiClient(ApiClient):
     # ==================================================================================================================
     # Model Managers
     # ==================================================================================================================
-
     @property
-    def Workspace(self):
-        return WorkspaceManager(_sedaro=self)
+    def Branch(self):
+        return BranchManager(_sedaro=self)
 
     @property
     def Repository(self):
@@ -163,5 +162,5 @@ class SedaroApiClient(ApiClient):
         return ProjectManager(_sedaro=self)
 
     @property
-    def Branch(self):
-        return BranchManager(_sedaro=self)
+    def Workspace(self):
+        return WorkspaceManager(_sedaro=self)
