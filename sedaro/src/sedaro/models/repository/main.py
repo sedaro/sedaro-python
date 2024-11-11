@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING, ClassVar
 
-from sedaro.settings import ID
-
 from ..BaseModel import BaseModel
 from ..BaseModelManager import BaseModelManager
 
