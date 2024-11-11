@@ -4,6 +4,7 @@ import pytest
 from config import API_KEY, HOST
 
 from sedaro import SedaroApiClient
+from sedaro.branches import Branch
 from sedaro.exceptions import SedaroApiException
 from sedaro.models.project import Project
 from sedaro.models.repository import Repository
@@ -153,6 +154,8 @@ def test_relationships():
 
         assert isinstance(r_new.workspace, Workspace)
         assert r_new.workspace.id == w_new.id
+
+        assert all(isinstance(b, Branch) for b in r_new.branches)
 
         # ----------------- equality and identity -----------------
         assert p_new.workspace == r_new.workspace == w_new
