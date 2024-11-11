@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 from abc import ABC
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from functools import cache
 from typing import TYPE_CHECKING, TypeVar
 
-from sedaro.settings import ID
+from sedaro.settings import BLOCKS, ID
 
 if TYPE_CHECKING:
     from .BaseModelManager import BaseModelManager
@@ -14,7 +16,10 @@ if TYPE_CHECKING:
 @dataclass
 class BaseModel(ABC):
     _raw_data: 'dict'
-    _model_manager: 'BaseModelManager'
+    _model_manager: 'BaseModelManager' = field(repr=False)
+
+    def __update_data(self, data: 'dict'):
+        self._raw_data.update(data)
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id})"
@@ -25,6 +30,18 @@ class BaseModel(ABC):
         except KeyError:
             raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
 
+    def __hash__(self):
+        return hash(json.dumps(self._raw_data, sort_keys=True))
+
+    def __eq__(self, other):
+        if not (isinstance(other, self.__class__) and (self.id == other.id)):
+            return False
+
+        if set(self._raw_data) != set(other._raw_data):
+            return False
+
+        return hash(self) == hash(other)
+
     @property
     def id(self):
         '''The id of the model.'''
@@ -33,11 +50,14 @@ class BaseModel(ABC):
     def update(self, **kwargs):
         '''Update the model with the given keyword arguments.'''
         mod_man = self._model_manager
-        self._raw_data = mod_man._sedaro.request.patch(mod_man._req_url(id=self.id), body=kwargs)
+        res = mod_man._sedaro.request.patch(mod_man._req_url(id=self.id), body=kwargs)
+        self.__update_data(res)
 
     def refresh(self):
         '''Refresh the model data from the api.'''
-        self._raw_data = self._model_manager.get(self.id)._raw_data
+        res = self._model_manager.get(self.id)._raw_data
+        self.__update_data(res)
+        self._get_rel.cache_clear()
 
     def delete(self):
         '''Delete the corresponding model.'''
@@ -47,6 +67,7 @@ class BaseModel(ABC):
         mod_man = self._model_manager
         mod_man._sedaro.request.delete(mod_man._req_url(id=self.id, query_params=query_params))
 
+    @cache
     def _get_rel(self, field: 'str', base_model_type: 'type[M]') -> 'M' | list[M]:
         '''Get the related model(s) of the given field.'''
         from .BaseModelManager import BaseModelManager
