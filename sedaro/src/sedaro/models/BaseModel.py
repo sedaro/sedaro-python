@@ -61,8 +61,8 @@ class BaseModel(ABC):
 
     def refresh(self):
         '''Refresh the model data from the api.'''
-        res = self._model_manager.get(self.id)._raw_data
-        self.__update_data(res)
+        res_raw_data = self._model_manager.get(self.id)._raw_data
+        self.__update_data(res_raw_data)
         self._get_rel.cache_clear()
 
     def delete(self):
