@@ -169,6 +169,37 @@ def test_relationships():
         w_new.delete()
 
 
+def test_branching():
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+
+    w_new = sedaro.Workspace.create(name='new workspace')
+
+    try:
+        repo_new = sedaro.Repository.create(name='new repo', metamodelType=SCENARIO, workspace=w_new.id)
+
+        assert len(repo_new.branches) == 1
+
+        num_branchs = 1
+
+        for (name, description, method) in (
+            ('new branch', 'new branch description', sedaro.Branch.create),
+            ('new branch 2', 'new branch description 2', repo_new.branch_from),
+        ):
+            b = method(repo_new.branches[0], name=name, description=description)
+            num_branchs += 1
+
+            assert b.name == name
+            assert b.description == description
+
+            assert b.data == sedaro.Branch.get(repo_new.branches[0]).data
+
+            repo_new.refresh()
+            assert len(repo_new.branches) == num_branchs
+
+    finally:
+        w_new.delete()
+
+
 def run_tests():
     test_workspace()
     test_project()
