@@ -160,7 +160,7 @@ def test_relationships():
         assert r_new.workspace is not w_new
 
         p_new_workspace_b4_refresh = p_new.workspace
-        assert p_new_workspace_b4_refresh is p_new.workspace
+        assert p_new.workspace is p_new_workspace_b4_refresh
         p_new.refresh()
         assert p_new.workspace is not p_new_workspace_b4_refresh
         assert p_new.workspace == p_new_workspace_b4_refresh
