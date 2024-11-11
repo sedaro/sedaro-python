@@ -133,28 +133,37 @@ def test_relationships():
         w_new.refresh()
         p_new.refresh()
 
-        # workspace rels
+        # ----------------- workspace rels -----------------
         assert all(isinstance(p, Project) for p in w_new.projects)
         assert p_new.id in {p.id for p in w_new.projects}
 
         assert all(isinstance(r, Repository) for r in w_new.repositories)
         assert r_new.id in {r.id for r in w_new.repositories}
 
-        # project rels
+        # ----------------- project rels -----------------
         assert all(isinstance(r, Repository) for r in p_new.repositories)
         assert r_new.id in {r.id for r in p_new.repositories}
 
         assert isinstance(p_new.workspace, Workspace)
         assert p_new.workspace.id == w_new.id
 
-        # repository rels
-        r_new_project = r_new.project
-        assert isinstance(r_new_project, Project)
-        assert r_new_project.id == p_new.id
+        # ----------------- repository rels -----------------
+        assert isinstance(r_new.project, Project)
+        assert r_new.project.id == p_new.id
 
-        r_new_workspace = r_new.workspace
-        assert isinstance(r_new_workspace, Workspace)
-        assert r_new_workspace.id == w_new.id
+        assert isinstance(r_new.workspace, Workspace)
+        assert r_new.workspace.id == w_new.id
+
+        # ----------------- equality and identity -----------------
+        assert p_new.workspace == r_new.workspace == w_new
+        assert p_new.workspace is not w_new
+        assert r_new.workspace is not w_new
+
+        p_new_workspace_b4_refresh = p_new.workspace
+        assert p_new_workspace_b4_refresh is p_new.workspace
+        p_new.refresh()
+        assert p_new.workspace is not p_new_workspace_b4_refresh
+        assert p_new.workspace == p_new_workspace_b4_refresh
 
     finally:
         w_new.delete()
