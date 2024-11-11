@@ -167,7 +167,7 @@ def test_relationships():
 
         p_new_workspace_b4_refresh = p_new.workspace
         assert p_new.workspace is p_new_workspace_b4_refresh
-        p_new.refresh()
+        p_new.refresh()  # refreshing clears the cached model objects in relationship fields, so they are re-fetched
         assert p_new.workspace is not p_new_workspace_b4_refresh
         assert p_new.workspace == p_new_workspace_b4_refresh
 
