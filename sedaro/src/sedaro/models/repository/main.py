@@ -26,7 +26,7 @@ class Repository(BaseModel):
 
     def branch_from(self, branch_id: 'str', /, name: 'str', description: 'str' = ''):
         '''Create a new branch from the given branch id.'''
-        return self._sedaro.Branch.create(from_=branch_id, name=name, description=description)
+        return self._sedaro.Branch.create(branch_id, name=name, description=description)
 
 
 class RepositoryManager(BaseModelManager[Repository]):
