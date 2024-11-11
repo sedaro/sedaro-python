@@ -14,11 +14,15 @@ M = TypeVar('M', bound='BaseModel')
 class BaseModelManager(ABC, Generic[M]):
 
     _sedaro: 'SedaroApiClient'
+    '''The SedaroApiClient instance'''
 
     _MODEL: 'ClassVar[type[M]]'
+    '''The model class that this manager manages'''
     _BASE_PATH: 'ClassVar[str]'
+    '''The base path for the model'''
 
     _model_to_model_manager: 'ClassVar[dict[type[BaseModel], type[BaseModelManager]]]' = {}
+    '''Mapping of model to model manager'''
 
     def __init_subclass__(cls):
         if cls._MODEL in cls._model_to_model_manager:
