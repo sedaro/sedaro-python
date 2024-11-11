@@ -494,7 +494,7 @@ Over the async_channel, you can also spawn tasks asynchronously.
     for i in range(10):
       tasks.append(asyncio.create_task(channel.consume(agent_id, per_round_external_state_id)))
 
-    asyncio.gather(*tasks)
+    await asyncio.gather(*tasks)
 ```
 
 This code expects the async_channel to be used only within one async run loop.  If you mix async and threaded python, the functionality of the async channel is not defined.
