@@ -7,7 +7,9 @@ from ..BaseModelManager import BaseModelManager
 # - update Branch model to inherit from BaseModel
 # - update its relationships to return the respective instances
 # - update its `update` method to be consistent with the other BaseModel classes
-# - can also update or remove the `SedaroApiClient` `scenario` and `agent_template` methods
+# - remove the `SedaroApiClient` `scenario` and `agent_template` methods and move
+#   them onto BranchManager
+# - add more git functions, such as `commit` and `merge`
 
 
 class BranchManager(BaseModelManager[Branch]):
