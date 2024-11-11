@@ -58,6 +58,7 @@ def test_project():
     try:
         all_projects = sedaro.Project.get()
         assert all(isinstance(p, Project) for p in all_projects)
+        assert all(isinstance(p, Project) for p in sedaro.Project.get_all())
 
         p_new = sedaro.Project.create(name='new project', workspace=w_new.id)
         assert isinstance(p_new, Project)
@@ -91,6 +92,8 @@ def test_repository():
     try:
         repos = sedaro.Repository.get()
         assert all(isinstance(r, Repository) for r in repos)
+        assert all(isinstance(r, Repository) for r in sedaro.Repository.get_all())
+
         repo_new = sedaro.Repository.create(name='new repo', metamodelType=SCENARIO, workspace=w_new.id)
         assert isinstance(repo_new, Repository)
         assert repo_new.metamodelType == SCENARIO
