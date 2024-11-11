@@ -22,7 +22,7 @@ class BaseModelManager(ABC, Generic[M]):
     '''The base path for the model'''
 
     _model_to_model_manager: 'ClassVar[dict[type[BaseModel], type[BaseModelManager]]]' = {}
-    '''Mapping of model to model manager'''
+    '''Mapping of model to model manager, automatically set by __init_subclass__'''
 
     def __init_subclass__(cls):
         if cls._MODEL in cls._model_to_model_manager:
