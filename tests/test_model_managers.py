@@ -187,17 +187,19 @@ def test_branching():
 
         num_branchs = 1
 
+        main_branch = repo_new.branches[0]
+
         for (name, description, create_method) in (
             ('new branch', 'new branch description', sedaro.Branch.create),
             ('new branch 2', 'new branch description 2', repo_new.branch_from),
         ):
-            b = create_method(repo_new.branches[0].id, name=name, description=description)
+            b = create_method(main_branch.id, name=name, description=description)
             num_branchs += 1
 
             assert b.name == name
             assert b.description == description
 
-            assert b.data == repo_new.branches[0].data
+            assert b.data == main_branch.data
 
             repo_new.refresh()
             assert len(repo_new.branches) == num_branchs
