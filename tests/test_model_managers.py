@@ -134,22 +134,18 @@ def test_relationships():
         p_new.refresh()
 
         # workspace rels
-        w_new_projects = w_new.projects
-        assert all(isinstance(p, Project) for p in w_new_projects)
-        assert p_new.id in {p.id for p in w_new_projects}
+        assert all(isinstance(p, Project) for p in w_new.projects)
+        assert p_new.id in {p.id for p in w_new.projects}
 
-        w_new_repos = w_new.repositories
-        assert all(isinstance(r, Repository) for r in w_new_repos)
-        assert r_new.id in {r.id for r in w_new_repos}
+        assert all(isinstance(r, Repository) for r in w_new.repositories)
+        assert r_new.id in {r.id for r in w_new.repositories}
 
         # project rels
-        p_new_repos = p_new.repositories
-        assert all(isinstance(r, Repository) for r in p_new_repos)
-        assert r_new.id in {r.id for r in p_new_repos}
+        assert all(isinstance(r, Repository) for r in p_new.repositories)
+        assert r_new.id in {r.id for r in p_new.repositories}
 
-        p_new_workspace = p_new.workspace
-        assert isinstance(p_new_workspace, Workspace)
-        assert p_new_workspace.id == w_new.id
+        assert isinstance(p_new.workspace, Workspace)
+        assert p_new.workspace.id == w_new.id
 
         # repository rels
         r_new_project = r_new.project
