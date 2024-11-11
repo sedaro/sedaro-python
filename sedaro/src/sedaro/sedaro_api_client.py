@@ -9,9 +9,10 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib3.response import HTTPResponse
 
 from .branches import AgentTemplateBranch, Branch, ScenarioBranch
-from .models.project.main import ProjectManager
-from .models.repository.main import RepositoryManager
-from .models.workspace.main import WorkspaceManager
+from .models.branch import BranchManager
+from .models.project import ProjectManager
+from .models.repository import RepositoryManager
+from .models.workspace import WorkspaceManager
 from .plain_request import PlainRequest
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res
