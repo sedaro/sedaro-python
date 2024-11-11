@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 
 class Workspace(BaseModel):
-    pass
 
     @property
     def projects(self) -> 'list[Project]':
