@@ -6,11 +6,18 @@ from ..BaseModel import BaseModel
 from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
+    from ...branches import Branch
     from ..project import Project
     from ..workspace import Workspace
 
 
 class Repository(BaseModel):
+
+    @property
+    def branches(self) -> 'list[Branch]':
+        from ...branches import Branch
+        '''Get the branches of the repository.'''
+        return self._get_rel('branches', Branch)
 
     @property
     def project(self) -> 'Project':
