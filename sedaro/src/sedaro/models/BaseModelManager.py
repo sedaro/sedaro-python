@@ -62,14 +62,14 @@ class BaseModelManager(ABC, Generic[M]):
         w = self._sedaro.request.post(self._req_url(id=_id_in_url), body)
         return self._MODEL(w, self)
 
-    __NO_EXPAND = {'expand': {}}
+    __REQ_URL_NO_EXPAND = {'expand': {}}
 
     def _req_url(self, *, id: str = None, query_params: 'dict' = None) -> 'str':
         '''Return the request url for the given id and query parameters'''
         if query_params is None:
-            query_str = f'?{urlencode(self.__NO_EXPAND)}'
+            query_str = f'?{urlencode(self.__REQ_URL_NO_EXPAND)}'
         else:
-            query_str = f'?{urlencode(query_params | self.__NO_EXPAND)}'
+            query_str = f'?{urlencode(query_params | self.__REQ_URL_NO_EXPAND)}'
 
         id_str = f'/{id}' if id is not None else ""
         return f'{self._BASE_PATH}{id_str}{query_str}'
