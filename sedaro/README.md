@@ -61,9 +61,9 @@ workspace = sedaro.Workspace.create(name='My Workspace')
 
 project = sedaro.Project.create(name='My Project', workspace=workspace.id)
 
-repository = sedaro.Repository.create(name='My Repository', metamodelType='Scenario', workspace=workspace.id, project=project.id) # project id is optional
+repository = sedaro.Repository.create(name='My Repository', metamodelType='Scenario', workspace=workspace.id, project=project.id) # creates a single default branch as well; project id is optional
 
-branch = sedaro.Branch.create(branch_from.id, name='My Branch', repository=repository.id)
+branch = sedaro.Branch.create(repository.branches[0].id, name='My Branch') # create a new branch based on the id of the branch passed as the first argument
 ```
 Note that other kwargs can also be passed to these methods such as `description`.
 
