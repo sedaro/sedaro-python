@@ -118,6 +118,52 @@ def test_repository():
         w_new.delete()
 
 
+def test_relationships():
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+
+    w_new = sedaro.Workspace.create(name='new workspace')
+
+    try:
+        p_new = sedaro.Project.create(name='new project', workspace=w_new.id)
+        assert isinstance(p_new, Project)
+
+        r_new = sedaro.Repository.create(name='new repo', metamodelType=SCENARIO, workspace=w_new.id, project=p_new.id)
+        assert isinstance(r_new, Repository)
+
+        w_new.refresh()
+        p_new.refresh()
+
+        # workspace rels
+        w_new_projects = w_new.projects
+        assert all(isinstance(p, Project) for p in w_new_projects)
+        assert p_new.id in {p.id for p in w_new_projects}
+
+        w_new_repos = w_new.repositories
+        assert all(isinstance(r, Repository) for r in w_new_repos)
+        assert r_new.id in {r.id for r in w_new_repos}
+
+        # project rels
+        p_new_repos = p_new.repositories
+        assert all(isinstance(r, Repository) for r in p_new_repos)
+        assert r_new.id in {r.id for r in p_new_repos}
+
+        p_new_workspace = p_new.workspace
+        assert isinstance(p_new_workspace, Workspace)
+        assert p_new_workspace.id == w_new.id
+
+        # repository rels
+        r_new_project = r_new.project
+        assert isinstance(r_new_project, Project)
+        assert r_new_project.id == p_new.id
+
+        r_new_workspace = r_new.workspace
+        assert isinstance(r_new_workspace, Workspace)
+        assert r_new_workspace.id == w_new.id
+
+    finally:
+        w_new.delete()
+
+
 def run_tests():
     test_workspace()
     test_project()
