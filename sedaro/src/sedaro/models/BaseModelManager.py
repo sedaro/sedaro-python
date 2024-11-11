@@ -18,6 +18,16 @@ class BaseModelManager(ABC, Generic[M]):
     _MODEL: 'ClassVar[type[M]]'
     _BASE_PATH: 'ClassVar[str]'
 
+    _model_to_model_manager: 'ClassVar[dict[type[BaseModel], type[BaseModelManager]]]' = {}
+
+    def __init_subclass__(cls):
+        if cls._MODEL in cls._model_to_model_manager:
+            raise ValueError(
+                f'Attempting to have multiple managers ({cls} and {cls._model_to_model_manager[cls._MODEL]}) for the same model: {cls._MODEL}'
+            )
+        cls._model_to_model_manager[cls._MODEL] = cls
+        return super().__init_subclass__()
+
     @overload
     def get(self) -> 'list[M]': ...
     @overload
