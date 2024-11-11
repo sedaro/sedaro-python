@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from ..BaseModel import BaseModel
 
 if TYPE_CHECKING:
-    from ..project.Project import Project
+    from ..project.main import Project
     from ..repository.Repository import Repository
 
 
@@ -13,7 +13,7 @@ class Workspace(BaseModel):
     @property
     def projects(self) -> 'list[Project]':
         '''Get the projects of the workspace.'''
-        from ..project.Project import Project
+        from ..project.main import Project
         return self._get_rel('projects', Project)
 
     @property
