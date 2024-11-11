@@ -1,4 +1,9 @@
+from typing import TYPE_CHECKING
+
 from ..BaseModel import BaseModel
+
+if TYPE_CHECKING:
+    from ..workspace.Workspace import Workspace
 
 
 class Project(BaseModel):
@@ -6,3 +11,8 @@ class Project(BaseModel):
 
     def delete(self):
         self._delete(query_params={'delete': 'true'})
+
+    @property
+    def workspace(self) -> 'Workspace':
+        from ..workspace.Workspace import Workspace
+        return self._get_rel('workspace', Workspace)
