@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 
 class Repository(BaseModel):
-    pass
 
     @property
     def project(self) -> 'Project':
