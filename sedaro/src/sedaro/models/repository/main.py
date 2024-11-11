@@ -29,10 +29,6 @@ class Repository(BaseModel):
         from ..workspace import Workspace
         return self._get_rel('workspace', Workspace)
 
-    def branch_from(self, branch_id: 'str', /, *, name: 'str', description: 'str' = ''):
-        '''Create a new branch from the given branch id.'''
-        return self._sedaro.Branch.create(branch_id, name=name, description=description)
-
 
 class RepositoryManager(BaseModelManager[Repository]):
 
