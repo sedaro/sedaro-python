@@ -4,8 +4,8 @@ from ..BaseModel import BaseModel
 from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
-    from ..project.main import Project
-    from ..repository.main import Repository
+    from ..project import Project
+    from ..repository import Repository
 
 
 class Workspace(BaseModel):
@@ -14,13 +14,13 @@ class Workspace(BaseModel):
     @property
     def projects(self) -> 'list[Project]':
         '''Get the projects of the workspace.'''
-        from ..project.main import Project
+        from ..project import Project
         return self._get_rel('projects', Project)
 
     @property
     def repositories(self) -> 'list[Repository]':
         '''Get the repositories of the workspace.'''
-        from ..repository.main import Repository
+        from ..repository import Repository
         return self._get_rel('repositories', Repository)
 
 

@@ -5,9 +5,9 @@ from config import API_KEY, HOST
 
 from sedaro import SedaroApiClient
 from sedaro.exceptions import SedaroApiException
-from sedaro.models.project.main import Project
-from sedaro.models.repository.main import Repository
-from sedaro.models.workspace.main import Workspace
+from sedaro.models.project import Project
+from sedaro.models.repository import Repository
+from sedaro.models.workspace import Workspace
 from sedaro.settings import SCENARIO
 
 

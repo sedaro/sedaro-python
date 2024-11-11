@@ -4,7 +4,7 @@ from ..BaseModel import BaseModel
 from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
-    from ..workspace.main import Workspace
+    from ..workspace import Workspace
 
 
 class Project(BaseModel):
@@ -16,7 +16,7 @@ class Project(BaseModel):
     @property
     def workspace(self) -> 'Workspace':
         '''Get the workspace of the project.'''
-        from ..workspace.main import Workspace
+        from ..workspace import Workspace
         return self._get_rel('workspace', Workspace)
 
 
