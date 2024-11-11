@@ -168,3 +168,4 @@ def run_tests():
     test_workspace()
     test_project()
     test_repository()
+    test_relationships()
