@@ -19,15 +19,15 @@ class BaseModel(ABC):
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id})"
 
-    @property
-    def id(self):
-        return self._raw_data[ID]
-
     def __getattr__(self, name):
         try:
             return self._raw_data[name]
         except KeyError:
             raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
+
+    @property
+    def id(self):
+        return self._raw_data[ID]
 
     def update(self, **kwargs):
         '''Update the model with the given keyword arguments.'''
