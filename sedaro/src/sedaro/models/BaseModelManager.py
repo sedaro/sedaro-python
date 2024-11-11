@@ -71,5 +71,5 @@ class BaseModelManager(ABC, Generic[M]):
         else:
             query_str = f'?{urlencode(query_params | self.__REQ_URL_NO_EXPAND)}'
 
-        id_str = f'/{id}' if id is not None else ""
+        id_str = f'/{id}' if id not in (None, '') else ''
         return f'{self._BASE_PATH}{id_str}{query_str}'
