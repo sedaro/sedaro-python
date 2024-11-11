@@ -26,4 +26,4 @@ class Workspace(BaseModel):
 class WorkspaceManager(BaseModelManager[Workspace]):
 
     _BASE_PATH: 'ClassVar[str]' = '/workspaces'
-    _MODEL = Workspace
+    _MODEL: 'ClassVar' = Workspace

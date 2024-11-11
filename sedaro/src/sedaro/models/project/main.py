@@ -29,4 +29,4 @@ class Project(BaseModel):
 class ProjectManager(BaseModelManager[Project]):
 
     _BASE_PATH: 'ClassVar[str]' = '/projects'
-    _MODEL = Project
+    _MODEL: 'ClassVar' = Project
