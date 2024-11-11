@@ -38,7 +38,7 @@ class BaseModelManager(ABC, Generic[M]):
     def get(self, id: str) -> 'M': ...
 
     def get(self, id: 'str' = None, /) -> 'list[M] | M':
-        '''Get a all accessible models or a single model by id'''
+        '''Get all accessible models or a single model by id'''
         if id is None:
             return [
                 self._MODEL(w, self) for w in
