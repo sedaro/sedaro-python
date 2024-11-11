@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 from abc import ABC
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 from sedaro.settings import ID
 
 if TYPE_CHECKING:
     from .BaseModelManager import BaseModelManager
+    M = TypeVar('M', bound='BaseModel')
 
 
 @dataclass
