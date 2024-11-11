@@ -14,5 +14,6 @@ class Project(BaseModel):
 
     @property
     def workspace(self) -> 'Workspace':
+        '''Get the workspace of the project.'''
         from ..workspace.Workspace import Workspace
         return self._get_rel('workspace', Workspace)

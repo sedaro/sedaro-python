@@ -11,5 +11,6 @@ class Repository(BaseModel):
 
     @property
     def workspace(self) -> 'Workspace':
+        '''Get the workspace of the repository.'''
         from ..workspace.Workspace import Workspace
         return self._get_rel('workspace', Workspace)
