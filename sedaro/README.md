@@ -29,7 +29,7 @@ agent_template_branch = sedaro.agent_template('PP8kvyVt2DDv6Ds7HX85Ck')
 scenario_branch = sedaro.scenario('PP8kmSz3ktmTChSCPnZl5H')
 
 # Get any kind of branch
-branch = sedaro.branch('PP8kyFpQKrGbwcy4VBcnbQ')
+branch = sedaro.Branch.get('PP8kyFpQKrGbwcy4VBcnbQ')
 
 ```
 
