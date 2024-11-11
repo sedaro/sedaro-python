@@ -5,7 +5,7 @@ from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
     from ..project.main import Project
-    from ..repository.Repository import Repository
+    from ..repository.main import Repository
 
 
 class Workspace(BaseModel):
@@ -20,7 +20,7 @@ class Workspace(BaseModel):
     @property
     def repositories(self) -> 'list[Repository]':
         '''Get the repositories of the workspace.'''
-        from ..repository.Repository import Repository
+        from ..repository.main import Repository
         return self._get_rel('repositories', Repository)
 
 
