@@ -5,7 +5,7 @@ import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
 
 from sedaro import SedaroApiClient
-from sedaro.branches import AgentTemplateBranch, ScenarioBranch, Branch
+from sedaro.branches import AgentTemplateBranch, Branch, ScenarioBranch
 from sedaro.branches.blocks import Block
 from sedaro.exceptions import NonexistantBlockError, SedaroApiException
 from sedaro.settings import ID
@@ -37,7 +37,7 @@ def test_get():
         sedaro.scenario(SIMPLESAT_A_T_ID)
 
     for id_ in (SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID):
-        assert isinstance(sedaro.branch(id_), Branch)
+        assert isinstance(sedaro.Branch.get(id_), Branch)
 
 
 def test_keying_into_root_attrs():
