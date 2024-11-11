@@ -3,6 +3,12 @@ from typing import ClassVar
 from ...branches import Branch
 from ..BaseModelManager import BaseModelManager
 
+# TODO: Need to:
+# - update Branch model to inherit from BaseModel
+# - update its relationships to return the respective instances
+# - update its `update` method to be consistent with the other BaseModel classes
+# - can also update or remove the `SedaroApiClient` `scenario` and `agent_template` methods
+
 
 class BranchManager(BaseModelManager[Branch]):
     _BASE_PATH: 'ClassVar[str]' = '/models/branches'
