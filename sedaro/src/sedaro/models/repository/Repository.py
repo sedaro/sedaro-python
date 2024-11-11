@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from ..BaseModel import BaseModel
 
 if TYPE_CHECKING:
-    from ..workspace.Workspace import Workspace
+    from ..workspace.main import Workspace
 
 
 class Repository(BaseModel):
@@ -12,5 +12,5 @@ class Repository(BaseModel):
     @property
     def workspace(self) -> 'Workspace':
         '''Get the workspace of the repository.'''
-        from ..workspace.Workspace import Workspace
+        from ..workspace.main import Workspace
         return self._get_rel('workspace', Workspace)

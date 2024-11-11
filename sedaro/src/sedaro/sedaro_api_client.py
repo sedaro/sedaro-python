@@ -11,7 +11,7 @@ from urllib3.response import HTTPResponse
 from .branches import AgentTemplateBranch, Branch, ScenarioBranch
 from .models.project.main import ProjectManager
 from .models.repository.RepositoryManager import RepositoryManager
-from .models.workspace.WorkspaceManager import WorkspaceManager
+from .models.workspace.main import WorkspaceManager
 from .plain_request import PlainRequest
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res

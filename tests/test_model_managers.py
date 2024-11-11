@@ -7,7 +7,7 @@ from sedaro import SedaroApiClient
 from sedaro.exceptions import SedaroApiException
 from sedaro.models.project.main import Project
 from sedaro.models.repository.Repository import Repository
-from sedaro.models.workspace.Workspace import Workspace
+from sedaro.models.workspace.main import Workspace
 from sedaro.settings import SCENARIO
 
 

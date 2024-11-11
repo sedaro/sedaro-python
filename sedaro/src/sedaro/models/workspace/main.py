@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from ..BaseModel import BaseModel
+from ..BaseModelManager import BaseModelManager
 
 if TYPE_CHECKING:
     from ..project.main import Project
@@ -21,3 +22,9 @@ class Workspace(BaseModel):
         '''Get the repositories of the workspace.'''
         from ..repository.Repository import Repository
         return self._get_rel('repositories', Repository)
+
+
+class WorkspaceManager(BaseModelManager[Workspace]):
+
+    _BASE_PATH: 'ClassVar[str]' = '/workspaces'
+    _MODEL = Workspace
