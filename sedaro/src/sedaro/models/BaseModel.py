@@ -43,14 +43,20 @@ class BaseModel(ABC):
         return hash(self) == hash(other)
 
     @property
+    def _sedaro(self):
+        '''The SedaroApiClient instance.'''
+        return self._model_manager._sedaro
+
+    @property
     def id(self):
         '''The id of the model.'''
         return self._raw_data[ID]
 
     def update(self, **kwargs):
         '''Update the model with the given keyword arguments.'''
-        mod_man = self._model_manager
-        res = mod_man._sedaro.request.patch(mod_man._req_url(id=self.id), body=kwargs)
+        res = self._sedaro.request.patch(
+            self._model_manager._req_url(id=self.id), body=kwargs
+        )
         self.__update_data(res)
 
     def refresh(self):
@@ -64,8 +70,9 @@ class BaseModel(ABC):
         self._delete()
 
     def _delete(self, *, query_params: dict = None):
-        mod_man = self._model_manager
-        mod_man._sedaro.request.delete(mod_man._req_url(id=self.id, query_params=query_params))
+        self._sedaro.request.delete(
+            self._model_manager._req_url(id=self.id, query_params=query_params)
+        )
 
     @cache
     def _get_rel(self, field: 'str', base_model_type: 'type[M]') -> 'M' | list[M]:
@@ -76,7 +83,7 @@ class BaseModel(ABC):
             return id_or_ids
 
         mod_man_cls = BaseModelManager._model_to_model_manager[base_model_type]
-        mod_man = mod_man_cls(self._model_manager._sedaro)
+        mod_man = mod_man_cls(self._sedaro)
 
         if isinstance(id_or_ids, list):
             return [mod_man.get(id_) for id_ in id_or_ids]
