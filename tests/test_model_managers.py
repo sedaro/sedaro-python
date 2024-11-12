@@ -23,7 +23,8 @@ def test_workspace():
     try:
         assert (isinstance(w_new, Workspace))
 
-        time.sleep(4)  # need time for newly created workspace to be retreivable
+        # need time for newly created workspace to be retreivable
+        time.sleep(4)
 
         workspaces2 = sedaro.Workspace.get()
         assert len(workspaces2) == len(workspaces1) + 1
