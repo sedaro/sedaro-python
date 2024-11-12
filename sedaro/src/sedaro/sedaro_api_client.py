@@ -15,7 +15,7 @@ from .models.repository import RepositoryManager
 from .models.workspace import WorkspaceManager
 from .plain_request import PlainRequest
 from .settings import COMMON_API_KWARGS
-from .utils import body_from_res
+from .utils import body_from_res, extract_host
 
 
 class SedaroApiClient(ApiClient):
@@ -25,6 +25,7 @@ class SedaroApiClient(ApiClient):
         self,
         api_key: 'str' = None,
         host='https://api.sedaro.com',
+        grpc_host=None,
         *,
         auth_handle: 'str' = None,
         proxy_url: str = None,
@@ -50,6 +51,7 @@ class SedaroApiClient(ApiClient):
             host = host[:-1]  # remove trailing forward slash
 
         self._api_host = host
+        self._grpc_host = grpc_host or f"grpc.{extract_host(host)}:50031"
 
         self._api_key = api_key
         self._auth_handle = auth_handle

@@ -68,3 +68,11 @@ Note: this is designed and set up for Sedaro dev's use.
 ```zsh
 python3 client_generator
 ```
+
+## To generate protobufs for cosimulation:
+
+Note: this is designed and set up for Sedaro dev's use.
+
+```zsh
+python3 -m grpc_tools.protoc --proto_path=<PATH_OF_cosim.proto>--python_out=./sedaro/src/sedaro/grpc_client --grpc_python_out=./sedaro/src/sedaro/grpc_client cosim.proto
+```
