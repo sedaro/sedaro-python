@@ -788,7 +788,6 @@ class SimulationHandle:
                 # ...
         """
         sedaro = self._sim_client.get_sedaro()
-        api_key = sedaro._api_key
         host = sedaro._api_host
         grpc_host = grpc_host or sedaro._grpc_host
 
@@ -798,11 +797,11 @@ class SimulationHandle:
 
         cosim_client = CosimClient(
             grpc_host=grpc_host,
-            api_key=api_key,
             address=address,
             job_id=job_id,
             host=host,
             insecure=insecure,
+            sedaro=sedaro,
         )
 
         try:

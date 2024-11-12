@@ -32,7 +32,6 @@ dependencies = [
   "grpcio-tools",
   "protobuf",
   "openpyxl",
-  "aiohttp",
 ]
 [[project.authors]]
 name = "Sedaro"
