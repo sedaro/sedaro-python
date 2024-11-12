@@ -39,6 +39,25 @@ HOST = 'url-to-my-sedaro-instance.com'
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 ```
 
+### Proxy Configuration
+
+Depending on your networking, some use cases will require that your proxy be configured appropriately. This is done as follows:
+
+```py
+sedaro = SedaroApiClient(api_key=API_KEY, proxy_url='http://my-proxy.com:8080')
+```
+
+If your proxy requires authentication, you can pass the `proxy_headers` argument as follows:
+
+```py
+from urllib3 import make_headers
+
+proxy_headers = make_headers(proxy_basic_auth='username:password')
+sedaro = SedaroApiClient(api_key=API_KEY, proxy_url='http://my-proxy.com:8080', proxy_headers=proxy_headers)
+```
+
+If your proxy is HTTP and not HTTPS (i.e. the URL starts with `http://`), you may need to suppress warnings about insecure transport. This can be done by setting `suppress_insecure_transport_warnings` to `True`.
+
 ## Modeling
 
 ### Model Management
@@ -524,6 +543,38 @@ A simulation that terminates on its own will clean up all external state interfa
 
   # Or if using the context manager, simply exit the context
 ```
+
+### Asynchronous Interface
+
+You can also communicate asynchronously with a simulation to take advantage of lower latencies and parallelism. 
+
+
+```python
+  agent_id = ... # The ID of the relevant simulation Agent
+  per_round_external_state_id = ... # The ID of the relevant ExternalState block
+  spontaneous_external_state_id = ... # The ID of the relevant ExternalState block
+  time = 60050.0137 # Time in MJD
+
+  async with simulation_handle.async_channel(url) as channel:
+    state = await channel.consume(agent_id, per_round_external_state_id)
+    print(state)
+
+    state = await channel.consume((agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
+    print(state)
+```
+
+Over the async_channel, you can also spawn tasks asynchronously.
+
+```
+  async with simulation_handle.async_channel(url) as channel:
+    tasks = []
+    for i in range(10):
+      tasks.append(asyncio.create_task(channel.consume(agent_id, per_round_external_state_id)))
+
+    await asyncio.gather(*tasks)
+```
+
+This code expects the async_channel to be used only within one async run loop.  If you mix async and threaded python, the functionality of the async channel is not defined.
 
 ## Modeling and Simulation Utilities
 
