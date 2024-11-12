@@ -35,9 +35,9 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str, insecure: bool = False):
+    def __init__(self, grpc_host: str, auth_headers: Tuple[str, str], address: str, job_id: str, host: str, insecure: bool = False):
         self.grpc_host = grpc_host
-        self.api_key = api_key
+        self.auth_headers = auth_headers
         self.address = address
         self.job_id = job_id
         self.host = host
@@ -120,7 +120,7 @@ class CosimClient:
         async with aiohttp.ClientSession() as session:
             url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
             params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
-            headers = {"X_API_KEY": self.api_key}
+            headers = [self.auth_headers]
 
             try:
                 logging.info(f"Getting auth token from {url}")
