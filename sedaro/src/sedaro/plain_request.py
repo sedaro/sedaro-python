@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING, Literal, Optional, overload
+from typing import TYPE_CHECKING, Literal, Optional, Union, overload
 
 import requests
 from urllib3.response import HTTPResponse
@@ -57,9 +57,9 @@ class PlainRequest:
     @overload
     def get(self, resource_path: str, *, raw: Literal[True]) -> HTTPResponse: ...
     @overload
-    def get(self, resource_path: str, *, raw: Literal[False] = False) -> dict | list[dict]: ...
+    def get(self, resource_path: str, *, raw: Literal[False] = False) -> 'Union[dict, list[dict]]': ...
 
-    def get(self, resource_path: str, *, raw: bool = False) -> 'dict | list[dict] | HTTPResponse':
+    def get(self, resource_path: str, *, raw: bool = False) -> 'Union[dict, list[dict], HTTPResponse]':
         """Send a 'GET' request to the configured Sedaro host.
 
         Returns a dictionary of the response data unless `raw` is set to `True`, in which case it returns a `urllib3`

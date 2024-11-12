@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Union
 
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
@@ -31,7 +31,7 @@ class Branch(Common):
     def __repr__(self):
         return self.__str__()
 
-    def __getattr__(self, block_type_or_attr: str) -> BlockType | Any:
+    def __getattr__(self, block_type_or_attr: str) -> Union[BlockType, Any]:
 
         if block_type_or_attr in self.data['_supers']:
             return BlockType(block_type_or_attr, self)
@@ -114,7 +114,7 @@ class Branch(Common):
 
         return res
 
-    def block(self, id: str | int):
+    def block(self, id: Union[str, int]):
         """A general method to instantiate a `Block` object associated with the Sedaro Block of the given `id`. Use the
         `BlockType` properties on the Branch to instantiate `Block` objects narrowed to a specific type.
 

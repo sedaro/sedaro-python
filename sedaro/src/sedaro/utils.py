@@ -2,7 +2,7 @@ import importlib
 import inspect
 import json
 from types import ModuleType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import orjson
 from urllib3.response import HTTPResponse
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .branches.branch import Branch
 
 
-def parse_urllib_response(response: HTTPResponse) -> dict | list[dict]:
+def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
     try:
         return orjson.loads(response.data)
