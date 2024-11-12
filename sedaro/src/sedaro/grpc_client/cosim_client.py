@@ -4,11 +4,9 @@ import itertools
 import json
 import logging
 import os
-import uuid
-from typing import Any, Coroutine, Optional, Tuple
+from typing import Any, Optional, Tuple
 from urllib.parse import urlencode
 
-import aiohttp
 import grpc
 from sedaro.sedaro_api_client import SedaroApiClient
 
@@ -193,13 +191,13 @@ class CosimClient:
         self,
         external_state_id: str,
         agent_id: str,
-        value: Any,
+        values: Tuple,
         timestamp: float = 0.0
     ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
             index=index,
-            value=json.dumps({"payload": serdes(value)})
+            value=json.dumps({"payload": serdes(values)})
         )
         simulation_action = cosim_pb2.SimulationAction(
             cluster_handle_address=self.address,
