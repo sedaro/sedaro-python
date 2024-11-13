@@ -26,18 +26,27 @@ def _make_sure_wildfire_terminated():
         print("Got results")
         assert results.status == 'TERMINATED'
     except (NoSimResultsError, AssertionError):
+        print("Starting new wildfire")
         sim.start(wait=True)
+        print("After starting new wildfire")
         sim.terminate()
+        print("After terminating wildfire")
 
 
 def _make_sure_simplesat_done():
+    print("Inside make_sure_simplesat_done")
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
     try:
+        print("Getting results")
         results = sim.results()
+        print("Got results")
         assert results.success
     except (NoSimResultsError, AssertionError):
+        print("Starting new simplesat")
         sim.start()
+        print("After starting new simplesat")
         sim.results_poll()
+        print("After polling simplesat results")
 
 
 def test_query_terminated():
