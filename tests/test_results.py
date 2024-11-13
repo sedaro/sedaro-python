@@ -17,10 +17,13 @@ sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def _make_sure_wildfire_terminated():
+    print("Inside make_sure_wildfire_terminated")
     sim = sedaro.scenario(WILDFIRE_SCENARIO_ID).simulation
 
     try:
+        print("Getting results")
         results = sim.results()
+        print("Got results")
         assert results.status == 'TERMINATED'
     except (NoSimResultsError, AssertionError):
         sim.start(wait=True)
@@ -39,7 +42,9 @@ def _make_sure_simplesat_done():
 
 def test_query_terminated():
     '''Test querying of a terminated scenario.'''
+    print("Start of test_query_terminated")
     _make_sure_wildfire_terminated()
+    print("After make_sure_wildfire_terminated")
     assert not sedaro.scenario(
         WILDFIRE_SCENARIO_ID).simulation.results().success
 
