@@ -54,6 +54,7 @@ def test_query():
 
     Requires that SimpleSat has run successfully on the host.
     '''
+    print("Start of test_query")
     _make_sure_simplesat_done()
     scenario = sedaro.scenario(SIMPLESAT_SCENARIO_ID)
     sim = scenario.simulation
@@ -95,6 +96,7 @@ def test_save_load():
 
     Requires that SimpleSat has run successfully on the host.
     '''
+    print("Start of test_save_load")
     _make_sure_simplesat_done()
     result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
     assert result.success
@@ -223,6 +225,7 @@ def sample_model_and_data():
     }
 
 def test_query_model():
+    print("Start of test_query_model")
     simulation_job = {
         'branch': 'test_id',
         'dateCreated': '2021-08-05T18:00:00.000Z',
@@ -281,6 +284,7 @@ def compare_with_nans(a, b):
 
 
 def test_download():
+    print("Start of test_download")
     # test download internals
     download_worker = StreamManager(None)
     download_worker.keys = set(['position', 'position.x', 'positionx', 'time', 'timeStep', 'timeStep.s'])
@@ -323,6 +327,7 @@ def test_download():
 
 
 def test_series_values():
+    print("Start of test_series_values")
     import dask.dataframe as dd
 
     df = dd.from_dict({
@@ -390,6 +395,7 @@ def fake_stats(factor):
 
 
 def test_stats():
+    print("Start of test_stats")
     # test propagation of stats down to Series level, as well as certain functions at Block and Series level
     simulation_job = {
         'branch': 'test_id',
