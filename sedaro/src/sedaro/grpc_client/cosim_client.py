@@ -4,11 +4,11 @@ import itertools
 import json
 import logging
 import os
-import uuid
-from typing import Any, Coroutine, Optional, Tuple
+from typing import Any, Optional, Tuple
+from urllib.parse import urlencode
 
-import aiohttp
 import grpc
+from sedaro.sedaro_api_client import SedaroApiClient
 
 from ..utils import serdes
 from . import cosim_pb2, cosim_pb2_grpc
@@ -35,9 +35,8 @@ class MetadataClientInterceptor(grpc.aio.UnaryUnaryClientInterceptor):
 
 
 class CosimClient:
-    def __init__(self, grpc_host: str, api_key: str, address: str, job_id: str, host: str, insecure: bool = False):
+    def __init__(self, grpc_host: str, address: str, job_id: str, host: str, sedaro: SedaroApiClient, insecure: bool = False):
         self.grpc_host = grpc_host
-        self.api_key = api_key
         self.address = address
         self.job_id = job_id
         self.host = host
@@ -46,7 +45,7 @@ class CosimClient:
         self.channel: Optional[grpc.aio.Channel] = None
         self.cosim_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
         self.auth_stub: Optional['cosim_pb2_grpc.CosimStub'] = None
-
+        self.sedaro = sedaro
         self._produce_counter = itertools.count(start=1)
         self._consume_counter = itertools.count(start=1)
 
@@ -117,22 +116,11 @@ class CosimClient:
 
     async def _get_auth_token(self) -> Optional[str]:
         """Get a fresh JWT token from the django server."""
-        async with aiohttp.ClientSession() as session:
-            url = f"{self.host}/simulations/jobs/authorization/{self.job_id}"
-            params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
-            headers = {"X_API_KEY": self.api_key}
+        params = {"audience": "SimBed", "permission": "RUN_SIMULATION"}
+        url = f"/simulations/jobs/authorization/{self.job_id}?{urlencode(params)}"
+        logging.info(f"Getting auth token from {url}")
+        return self.sedaro.request.get(url).get('jwt')
 
-            try:
-                logging.info(f"Getting auth token from {url}")
-                async with session.get(url, params=params, headers=headers) as res:
-                    if res.status != 200:
-                        logging.error(f"Authentication failed with status {res.status}")
-                        return None
-                    data = await res.json()
-                    return data.get('jwt')
-            except aiohttp.ClientError as e:
-                logging.error(f"Failed to get auth token: {e}")
-                return None
 
     async def _authorize(self) -> Tuple[bool, Optional[str]]:
         jwt_token = await self._get_auth_token()
@@ -203,13 +191,13 @@ class CosimClient:
         self,
         external_state_id: str,
         agent_id: str,
-        value: Any,
+        values: Tuple,
         timestamp: float = 0.0
     ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
             index=index,
-            value=json.dumps({"payload": serdes(value)})
+            value=json.dumps({"payload": serdes(values)})
         )
         simulation_action = cosim_pb2.SimulationAction(
             cluster_handle_address=self.address,
