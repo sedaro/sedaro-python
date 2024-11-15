@@ -5,7 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uuid6
-from config import API_KEY, HOST, SIMPLESAT_SCENARIO_ID, WILDFIRE_SCENARIO_ID, SUPERDOVE_SCENARIO_ID
+from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID, SUPERDOVE_SCENARIO_ID
 
 from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
                     SedaroSeries, SimulationResult)
@@ -27,8 +27,8 @@ def _make_sure_wildfire_terminated():
         sim.terminate()
 
 
-def _make_sure_simplesat_done():
-    sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
+def _make_sure_superdove_done():
+    sim = sedaro.scenario(SUPERDOVE_SCENARIO_ID).simulation
     try:
         results = sim.results()
         assert results.success
@@ -49,8 +49,8 @@ def test_query():
 
     Requires that SimpleSat has run successfully on the host.
     '''
-    _make_sure_simplesat_done()
-    scenario = sedaro.scenario(SIMPLESAT_SCENARIO_ID)
+    _make_sure_superdove_done()
+    scenario = sedaro.scenario(SUPERDOVE_SCENARIO_ID)
     sim = scenario.simulation
 
     # Obtain handle
@@ -90,8 +90,8 @@ def test_save_load():
 
     Requires that SimpleSat has run successfully on the host.
     '''
-    _make_sure_simplesat_done()
-    result = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation.results()
+    _make_sure_superdove_done()
+    result = sedaro.scenario(SUPERDOVE_SCENARIO_ID).simulation.results()
     assert result.success
 
     with TemporaryDirectory() as temp_dir:
@@ -436,7 +436,7 @@ def test_stats():
     # test waiting on stats from results_poll
     scenario = sedaro.scenario(SUPERDOVE_SCENARIO_ID)
     sim = scenario.simulation
-    sim.start()
+    _make_sure_superdove_done()
     res = sim.results_poll(wait_on_stats=True)
     empty = ['NT-KoZFSELKK8eomP3lkV/0', 'NT-KoZFSELKK8eomP3lkV/1']
     has_rain_stats = ['NT-LKoFSJLenjoFP9FXAV/0', 'NT-LuTrRCydjLgnmceboV/0', 'NT-LgloSzu8F-V4MtzkHV/0', 'NT-L_VwTrXTMQUapcAoJk/0', 'NT-M0sqRR5WTIHKtB4ylF/0', 'NT-LoCYRnPamzh3QTTedF/0']
