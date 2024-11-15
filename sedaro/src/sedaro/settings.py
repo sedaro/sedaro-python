@@ -16,8 +16,8 @@ CRUD = 'crud'
 BLOCKS = 'blocks'
 INDEX = 'index'
 RELATIONSHIPS = '_relationships'
-VEHICLE_TEMPLATES = {'Spacecraft', 'TerrestrialVehicle'}
-SCENARIO_TEMPLATE = 'Scenario'
+SCENARIO = 'Scenario'
+LIBRARY = 'Library'
 
 ROOT = 'root'
 
