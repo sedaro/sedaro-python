@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, Generator, Union
 from .series import SedaroSeries
 from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
                     FromFileAndToFileAreDeprecated, get_column_names,
-                    get_parquets, hfill)
+                    get_parquets, get_static_data, get_static_data_engines, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
@@ -14,7 +14,16 @@ if TYPE_CHECKING:
 
 class SedaroBlockResult(FromFileAndToFileAreDeprecated):
 
-    def __init__(self, structure, series: dict, stats: dict, column_index: dict, prefix: str, stats_to_plot: list = None):
+    def __init__(
+            self,
+            structure,
+            series: dict,
+            stats: dict,
+            column_index: dict,
+            prefix: str,
+            stats_to_plot: list = None,
+            static_data: dict[str: dict] = None,
+        ):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -33,6 +42,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             stats = {}
         for k in stats:
             self.__stats[k] = {kk: vv for kk, vv in stats[k].items() if kk.startswith(prefix)}
+        self.__static_data = static_data if static_data is not None else {}
         self.__column_index = column_index
         self.__prefix = prefix
         self.__variables = []
@@ -137,6 +147,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                 'prefix': self.__prefix,
                 'parquet_files': parquet_files,
                 'stats': self.__stats,
+                'static': self.__static_data,
             }, fp)
         print(f"Block result saved to {path}.")
 
@@ -155,6 +166,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             column_index = meta['column_index']
             prefix = meta['prefix']
             stats = meta['stats'] if 'stats' in meta else {}
+            static_data = meta['static'] if 'static' in meta else {}
         engines = {}
         try:
             for agent in meta['parquet_files']:
@@ -164,7 +176,7 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
             for agent in get_parquets(f"{path}/data/"):
                 df = dd.read_parquet(f"{path}/data/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, stats, column_index, prefix)
+        return cls(structure, engines, stats, column_index, prefix, static_data=static_data)
 
     def __has_stats(self, variable: str) -> bool:
         for engine in self.__stats:
@@ -194,6 +206,12 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         if self.__stats:
             print("❓ Query statistics with .<VARIABLE_NAME>.stats('<STAT_NAME_1>', '<STAT_NAME_2>', ...)")
             print("📊 Variables with statistics available are marked with a \033[0;32m*\033[0;0m")
+        if self.__static_data:
+            hfill()
+            engines_as_text = ", ".join(get_static_data_engines(self.__static_data))
+            print(f"📦 Static data is available for this block in the following engine(s): {engines_as_text}.")
+            print("📦 Query with .static_data('<ENGINE_NAME>') for that engine's static data on this block,")
+            print("   or .static_data() to get this block's static data for all engines.")
 
     def value_at(self, mjd):
         return {variable: self.__getattr__(variable).value_at(mjd) for variable in self.variables}
@@ -220,3 +238,6 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
                         cleaned_stats[self.subst_name(key)] = self.__stats[agent][key][arg]
                 dicts_to_return.append(cleaned_stats)
             return tuple(dicts_to_return)
+
+    def static_data(self, engine=None):
+        return get_static_data(self.__static_data, "Block", engine=engine)
