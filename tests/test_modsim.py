@@ -13,9 +13,7 @@ def test_time_conversions():
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60390.0190162037
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 22, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60391.0190162037
     assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 20, 0, 27, 23, tzinfo=datetime.timezone.utc)) == 60389.0190162037
-    # pytz timezone behaves differently starting with release 2024.2. See: https://github.com/stub42/pytz/issues/130
-    # TODO: comment back in when pytz is fixed
-    # assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 19, 27, 23, tzinfo=timezone('EST'))) == 60391.0190162037
+    assert ms.datetime_to_mjd(datetime.datetime(2024, 3, 21, 19, 27, 23, tzinfo=timezone('EST'))) == 60391.0190162037
 
     assert ms.mjd_to_datetime(60390.0190162037) == datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezone.utc)
     assert ms.mjd_to_datetime(60391.0190162037) == datetime.datetime(2024, 3, 22, 0, 27, 23, tzinfo=datetime.timezone.utc)
