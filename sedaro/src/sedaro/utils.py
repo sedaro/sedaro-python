@@ -1,6 +1,7 @@
 import importlib
 import inspect
 import json
+import re
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict
 
@@ -14,6 +15,19 @@ from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
 if TYPE_CHECKING:
     from .branches.branch import Branch
+
+
+def serdes(v):
+    import numpy as np
+    if type(v) is dict and 'ndarray' in v:
+        return np.array(v['ndarray'])
+    if type(v) is np.ndarray:
+        return {'ndarray': v.tolist()}
+    if type(v) is dict:
+        return {k: serdes(v) for k, v in v.items()}
+    if type(v) in {list, tuple}:
+        return [serdes(v) for v in v]
+    return v
 
 
 def parse_urllib_response(response: HTTPResponse) -> Dict:
@@ -159,3 +173,11 @@ def concat_pages(pages: list[dict]) -> dict:
             if 'series' in page['derived']:
                 concat_results(result['derived']['series'], page['derived']['series'])
     return result
+
+
+def extract_host(url):
+    pattern = r'https?://(?:api\.)?([^:/]+)'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    return None
