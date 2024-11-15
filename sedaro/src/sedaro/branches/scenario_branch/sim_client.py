@@ -1,18 +1,20 @@
 import asyncio
+import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
+from contextlib import asynccontextmanager, contextmanager
+from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
 
 from sedaro_base_client.apis.tags import externals_api, jobs_api
 from urllib3.response import HTTPResponse
 
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
+from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
 
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
-from ...utils import body_from_res, progress_bar
+from ...utils import body_from_res, progress_bar, serdes
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
 if TYPE_CHECKING:
@@ -20,19 +22,6 @@ if TYPE_CHECKING:
 
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
-
-
-def serdes(v):
-    import numpy as np
-    if type(v) is dict and 'ndarray' in v:
-        return np.array(v['ndarray'])
-    if type(v) is np.ndarray:
-        return {'ndarray': v.tolist()}
-    if type(v) is dict:
-        return {k: serdes(v) for k, v in v.items()}
-    if type(v) in {list, tuple}:
-        return [serdes(v) for v in v]
-    return v
 
 
 def concat_stream_data(main, other, len_main, len_other):
@@ -51,7 +40,8 @@ def concat_stream(main, other, stream_id):
     len_other = len(other[0])
     main[0].extend(other[0])
     stream_id_short = stream_id.split('/')[0]
-    concat_stream_data(main[1][stream_id_short], other[1][stream_id_short], len_main, len_other)
+    concat_stream_data(main[1][stream_id_short], other[1]
+                       [stream_id_short], len_main, len_other)
 
 
 def concat_results(main, other):
@@ -71,7 +61,8 @@ def update_metadata(main, other):
 
 def set_numeric_as_list(d):
     if isinstance(d, dict):
-        if all(key.isdigit() for key in d.keys()):  # Check if all keys are array indexes in string form
+        # Check if all keys are array indexes in string form
+        if all(key.isdigit() for key in d.keys()):
             return [set_numeric_as_list(d[key]) for key in sorted(d.keys(), key=int)]
         else:
             return {k: set_numeric_as_list(v) for k, v in d.items()}
@@ -112,7 +103,8 @@ def set_nested(results):
     nested = {}
     for k in results:
         kspl = k.split('/')[0]
-        nested[k] = (results[k][0], {kspl: set_numeric_as_list(__set_nested(results[k][1][kspl]))})
+        nested[k] = (results[k][0], {kspl: set_numeric_as_list(
+            __set_nested(results[k][1][kspl]))})
     return nested
 
 
@@ -140,10 +132,13 @@ class Simulation:
         with self.__sedaro.api_client() as api:
             yield externals_api.ExternalsApi(api)
 
+    def get_sedaro(self):
+        return self.__sedaro
+
     def start(
-        self, 
-        wait=False, 
-        timeout=None, 
+        self,
+        wait=False,
+        timeout=None,
         label=None,
         capacity=None,
         seed=None,
@@ -169,7 +164,7 @@ class Simulation:
             body['capacity'] = capacity
         if seed is not None:
             body['seed'] = seed
-            
+
         with self.__jobs_client() as jobs:
             res = jobs.start_simulation(
                 body,
@@ -189,7 +184,8 @@ class Simulation:
                 raise SimInitializationError(handle['message'])
             else:
                 return handle
-        raise TimeoutError(f'Simulation did not deploy before timeout of {timeout}.')
+        raise TimeoutError(
+            f'Simulation did not deploy before timeout of {timeout}.')
 
     def status(self, job_id: str = None, *, err_if_empty: bool = True) -> 'SimulationHandle':
         """Gets the latest simulation corresponding to the respective Sedaro Scenario Branch id. This can return a
@@ -286,10 +282,12 @@ class Simulation:
         if stop is not None:
             url += f'&stop={stop}'
         if binWidth is not None:
-            print("WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
+            print(
+                "WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
             url += f'&binWidth={binWidth}'
         elif limit is not None:
-            print("WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
+            print(
+                "WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
             url += f'&limit={limit}'
         if not usesStreamTokens:
             streams = streams or []
@@ -347,7 +345,8 @@ class Simulation:
                             raise Exception()
                     except Exception:
                         reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                        raise SedaroApiException(status=page.status, reason=reason)
+                        raise SedaroApiException(
+                            status=page.status, reason=reason)
         download_manager.finalize()
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
@@ -407,10 +406,12 @@ class Simulation:
         download_bar = ProgressBar(
             metadata['start'],
             metadata['stop'],
-            len(metadata['streams'] if 'streams' in metadata else metadata['streamsTokens']),
+            len(metadata['streams']
+                if 'streams' in metadata else metadata['streamsTokens']),
             "Downloading..."
         )
-        download_managers = [DownloadWorker(download_bar) for _ in range(num_workers)]
+        download_managers = [DownloadWorker(
+            download_bar) for _ in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         if num_workers > 1:
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
@@ -540,7 +541,8 @@ class Simulation:
         if wait_on_stats and not data['stats']:
             success = False
             while not success:
-                result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                result, success = _get_stats_for_sim_id(
+                    self.__sedaro, job['dataArray'], streams=streams)
                 if success:
                     data['stats'] = result
                     break
@@ -690,21 +692,23 @@ class Simulation:
             dict: a dictionary of stats for the sim.
         """
         job = self.status(job_id)
-        result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+        result, success = _get_stats_for_sim_id(
+            self.__sedaro, job['dataArray'], streams=streams)
         if success:
             return result
         else:
             if wait:
                 retry_interval = 2
                 while not success:
-                    result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                    result, success = _get_stats_for_sim_id(
+                        self.__sedaro, job['dataArray'], streams=streams)
                     if success:
                         return result
                     time.sleep(retry_interval)
             else:
-                raise NoSimResultsError(reason=
-                    'No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
-                )
+                raise NoSimResultsError(reason='No stats available for simulation. Simulation may not have completed yet, or the simulation has completed but stats are still in progress.'
+                                        )
+
 
 class SimulationJob:
     def __init__(self, job: Union[dict, None]): self.__job = job
@@ -725,13 +729,14 @@ class SimulationJob:
 class SimulationHandle:
 
     def __init__(self, job: Union[dict, None], sim_client: Simulation):
-        self.__job = SimulationJob(job)
-        self.__sim_client = sim_client
+        self._job = SimulationJob(job)
+        self._sim_client = sim_client
 
-    def __getitem__(self, key): return self.__job[key]
-    def get(self, key, default=None): return self.__job.get(key, default)
+    def __getitem__(self, key): return self._job[key]
+    def get(self, key, default=None): return self._job.get(key, default)
     def __enter__(self): return self
-    def __exit__(self, *args): 
+
+    def __exit__(self, *args):
         try:
             self.terminate()
         except:
@@ -750,7 +755,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        return (self := self.__sim_client.status(self.__job['id'], err_if_empty=err_if_empty))
+        return (self := self._sim_client.status(self._job['id'], err_if_empty=err_if_empty))
 
     def terminate(self):
         """Terminate the running simulation.
@@ -758,7 +763,7 @@ class SimulationHandle:
         Returns:
             SimulationHandle (self)
         """
-        self.__sim_client.terminate(self.__job['id'])
+        self._sim_client.terminate(self._job['id'])
         return self
 
     def results(
@@ -811,7 +816,7 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results(job_id=self.__job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
+        return self._sim_client.results(job_id=self._job['id'], start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers)
 
     def results_poll(
         self,
@@ -847,8 +852,8 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return self.__sim_client.results_poll(
-            job_id=self.__job['id'],
+        return self._sim_client.results_poll(
+            job_id=self._job['id'],
             start=start,
             stop=stop,
             streams=streams,
@@ -950,13 +955,13 @@ class SimulationHandle:
         return await self.__sim_client.poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
  
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
-        return self.__sim_client.stats(job_id=job_id or self.__job['id'], streams=streams, wait=wait)
+        return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
 
     def consume(self, agent_id: str, external_state_id: str, time: float = None):
-        with self.__sim_client.externals_client() as externals_client:
+        with self._sim_client.externals_client() as externals_client:
             response = externals_client.get_external(
                 path_params={
-                    'jobId': self.__job['id'],
+                    'jobId': self._job['id'],
                     'agentId': agent_id,
                     'externalStateBlockId': external_state_id,
                 },
@@ -969,10 +974,10 @@ class SimulationHandle:
         if type(values) is not tuple:
             raise TypeError(
                 '`values` must be passed as a tuple of one or more state variable values (ex. `([x, y, z],)` where `[x, y, z]` is the external state]).')
-        with self.__sim_client.externals_client() as externals_client:
+        with self._sim_client.externals_client() as externals_client:
             response = externals_client.put_external(
                 path_params={
-                    'jobId': self.__job['id'],
+                    'jobId': self._job['id'],
                     'agentId': agent_id,
                     'externalStateBlockId': external_state_id,
                 },
@@ -983,3 +988,37 @@ class SimulationHandle:
                 **COMMON_API_KWARGS,
             )
         return tuple(serdes(v) for v in body_from_res(response))
+
+    @asynccontextmanager
+    async def async_channel(self, grpc_host: str = None, insecure=False):
+        """
+        Asynchronous context manager for cosimulation sessions.
+        Automatically opens a cosimulation grpc session on entry and closes it on exit.
+
+        Usage:
+            async with simulation_handle.async_channel(grpc_host="...") as cosim_client:
+                # ...
+        """
+        sedaro = self._sim_client.get_sedaro()
+        host = sedaro._api_host
+        grpc_host = grpc_host or sedaro._grpc_host
+
+        status = self._sim_client.status()
+        address = status.get("clusterAddr")
+        job_id = status.get("id")
+
+        cosim_client = CosimClient(
+            grpc_host=grpc_host,
+            address=address,
+            job_id=job_id,
+            host=host,
+            insecure=insecure,
+            sedaro=sedaro,
+        )
+
+        try:
+            async with cosim_client:
+                yield cosim_client
+        except Exception as e:
+            logging.error(f"Cosimulation session encountered an error: {e}")
+            raise e
