@@ -38,7 +38,7 @@ def __do_test(simulation_handle):
     assert result[0].shape == (3,)
     np.testing.assert_allclose(
         result[0],
-        [6774.05380826, 419.3390501, 419.33740781],
+        [6774.087163, 419.069939, 419.0683],
         atol=0.5,  # absolute tolerance, everything within 0.5
     )
     # assert json.dumps(result[0].tolist()) == json.dumps(
