@@ -1,20 +1,23 @@
 from random import randrange
 
+import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID
 
 from sedaro import SedaroApiClient
+from sedaro.exceptions import SedaroApiException
 from sedaro.settings import BLOCKS, CRUD
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
 
 def test_get_non_existant_branch():
-    res = sedaro.request.get(
-        f'/models/branches/999999999999999999999999',
-    )
-
-    assert res.get('error', {}).get(
-        'message', None) == 'The requested endpoint does not exist or is not accessible with your current permissions.'
+    with pytest.raises(
+        SedaroApiException,
+        match='The requested endpoint does not exist or is not accessible with your current permissions.'
+    ):
+        sedaro.request.get(
+            f'/models/branches/999999999999999999999999',
+        )
 
 
 def test_plain_get_branch():
