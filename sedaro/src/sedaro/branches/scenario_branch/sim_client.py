@@ -5,11 +5,12 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
 
+from sedaro_base_client.apis.tags import externals_api, jobs_api
+from urllib3.response import HTTPResponse
+
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
-from sedaro_base_client.apis.tags import externals_api, jobs_api
-from urllib3.response import HTTPResponse
 
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
@@ -504,6 +505,7 @@ class Simulation:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        timeout: int = None,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query latest scenario result and wait for sim to finish if it's running. If a `job_id` is passed, query for
@@ -521,6 +523,7 @@ class Simulation:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
 
@@ -530,19 +533,8 @@ class Simulation:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        job = self.status(job_id)
-        options = PRE_RUN_STATUSES | {RUNNING}
-
-        while job[STATUS] in options:
-            if job[STATUS] == QUEUED:
-                print('Simulation is queued...', end='\r')
-            elif job[STATUS] in PRE_RUN_STATUSES:
-                print('Simulation is building...', end='\r')
-            else:
-                progress_bar(job['progress']['percentComplete'])
-            job = self.status()
-            time.sleep(retry_interval)
-
+        job = self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
+        
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
@@ -556,6 +548,133 @@ class Simulation:
                     break
                 time.sleep(retry_interval)
         return SimulationResult(job, data, self.__sedaro)
+
+    async def results_poll_async(
+        self,
+        job_id: str = None,
+        start: float = None,
+        stop: float = None,
+        streams: List[Tuple[str, ...]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
+        retry_interval: int = 2,
+        timeout: int = None,
+        wait_on_stats: bool = False,
+    ) -> SimulationResult:
+        """Asynchronously query latest scenario result and wait for sim to finish if it's running. If a `job_id` is 
+        passed, query for corresponding sim results rather than latest. See `results` method for details on using the 
+        `streams` kwarg.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
+        """
+        job = self.status(job_id)
+        await self.poll_async(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
+        
+        data = self.__results(
+            job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
+        )
+        if wait_on_stats and not data['stats']:
+            success = False
+            while not success:
+                result, success = _get_stats_for_sim_id(self.__sedaro, job['dataArray'], streams=streams)
+                if success:
+                    data['stats'] = result
+                    break
+                await asyncio.sleep(retry_interval)
+        return SimulationResult(job, data, self.__sedaro)
+
+    def poll(
+        self,
+        job_id: str = None,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> 'SimulationHandle':
+        """
+        Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        job = self.status(job_id)
+        options = PRE_RUN_STATUSES | {RUNNING}
+        start_time = time.time()
+
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
+            if job[STATUS] == QUEUED:
+                print('Simulation is queued...', end='\r')
+            elif job[STATUS] in PRE_RUN_STATUSES:
+                print('Simulation is building...', end='\r')
+            else:
+                progress_bar(job['progress']['percentComplete'])
+            job = self.status()
+            time.sleep(retry_interval)
+
+        return job
+
+    async def poll_async(
+        self,
+        job_id: str = None,
+        timeout: int = None,
+        retry_interval: int = 2,
+    ) -> str:
+        """
+        Asynchronously wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim 
+        rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        job = self.status(job_id)
+        options = PRE_RUN_STATUSES | {RUNNING}
+        start_time = time.time()
+
+        while job[STATUS] in options and (not timeout or time.time() - start_time < timeout):
+            if job[STATUS] == QUEUED:
+                print('Simulation is queued...', end='\r')
+            elif job[STATUS] in PRE_RUN_STATUSES:
+                print('Simulation is building...', end='\r')
+            else:
+                progress_bar(job['progress']['percentComplete'])
+            job = self.status()
+            await asyncio.sleep(retry_interval)
+
+        return job[STATUS]
 
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         """Query latest scenario stats. If a `job_id` is passed, query for corresponding sim stats rather than latest.
@@ -707,6 +826,7 @@ class SimulationHandle:
         sampleRate: int = None,
         num_workers: int = 2,
         retry_interval: int = 2,
+        timeout: int = None,
         wait_on_stats: bool = False,
     ) -> SimulationResult:
         """Query simulation results but wait for sim to finish if it's running. See `results` method for details on using the `streams` kwarg.
@@ -722,6 +842,7 @@ class SimulationHandle:
                 is fetched at full resolution (sampleRate 1).
             num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
             retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
             wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
                 fetch the stats alongside the results. Defaults to `False`.
 
@@ -739,9 +860,100 @@ class SimulationHandle:
             sampleRate=sampleRate,
             num_workers=num_workers,
             retry_interval=retry_interval,
+            timeout=timeout,
             wait_on_stats=wait_on_stats,
         )
 
+    async def results_poll_async(
+        self,
+        start: float = None,
+        stop: float = None,
+        streams: List[Tuple[str, ...]] = None,
+        sampleRate: int = None,
+        num_workers: int = 2,
+        retry_interval: int = 2,
+        timeout: int = None,
+        wait_on_stats: bool = False,
+    ) -> SimulationResult:
+        """Asynchronously query simulation results but wait for sim to finish if it's running. See `results` method for
+        details on using the `streams` kwarg.
+
+        Args:
+            start (float, optional): Start time of the data to fetch. Defaults to `None`, which means the start of the sim.
+            stop (float, optional): End time of the data to fetch. Defaults to `None`, which means the end of the sim.
+            streams (List[Tuple[str, ...]], optional): Streams to query for. Defaults to `None`. See `results` method for details.
+            sampleRate (int, optional): the resolution at which to fetch the data. Must be a positive integer power of two, or 0.\
+                The value n provided, if not 0, corresponds to data at 1/n resolution. For instance, 1 means data is fetched at\
+                full resolution, 2 means every second data point is fetched, 4 means every fourth data point is fetched, and so on.\
+                If the value provided is 0, data is fetched at the lowest resolution available. If no argument is provided, data\
+                is fetched at full resolution (sampleRate 1).
+            num_workers (int, optional): Number of parallel workers to use for downloading data. Defaults to `2`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            wait_on_stats (bool, optional): Wait not just until the sim is done, but also until the stats are available, and then\
+                fetch the stats alongside the results. Defaults to `False`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
+        """
+        return await self.__sim_client.results_poll_async(
+            job_id=self.__job['id'],
+            start=start,
+            stop=stop,
+            streams=streams,
+            sampleRate=sampleRate,
+            num_workers=num_workers,
+            retry_interval=retry_interval,
+            timeout=timeout,
+            wait_on_stats=wait_on_stats,
+        )
+
+    def poll(
+        self,
+        retry_interval: int = 2,
+        timeout: int = None,
+    ) -> 'SimulationHandle':
+        """
+        Wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        return self.__sim_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+    
+    async def poll_async(
+        self,
+        timeout: int = None,
+        retry_interval: int = 2,
+    ) -> str:
+        """
+        Asynchronously wait for sim to finish if it's running. If a `job_id` is passed, query for corresponding sim 
+        rather than latest.
+
+        Args:
+            job_id (str, optional): `id` of the data array from which to fetch results. Defaults to `None`.
+            timeout (int, optional): Maximum time to wait for the simulation to finish. Defaults to `None`.
+            retry_interval (int, optional): Seconds between retries. Defaults to `2`.
+
+        Raises:
+            NoSimResultsError: if no simulation has been started.
+
+        Returns:
+            str: the ultimate status of the simulation.
+        """
+        return await self.__sim_client.poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+ 
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
 
