@@ -3,14 +3,12 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
-from typing import TYPE_CHECKING, Any, Generator, Iterable, List, Optional, Tuple, Union
-
-from sedaro_base_client.apis.tags import externals_api, jobs_api
-from urllib3.response import HTTPResponse
+from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
+from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
@@ -899,8 +897,8 @@ class SimulationHandle:
         Returns:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
-        return await self.__sim_client.results_poll_async(
-            job_id=self.__job['id'],
+        return await self._sim_client.results_poll_async(
+            job_id=self._job['id'],
             start=start,
             stop=stop,
             streams=streams,
@@ -930,7 +928,7 @@ class SimulationHandle:
         Returns:
             str: the ultimate status of the simulation.
         """
-        return self.__sim_client.poll(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+        return self._sim_client.poll(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
     
     async def poll_async(
         self,
@@ -952,7 +950,7 @@ class SimulationHandle:
         Returns:
             str: the ultimate status of the simulation.
         """
-        return await self.__sim_client.poll_async(job_id=self.__job['id'], retry_interval=retry_interval, timeout=timeout)
+        return await self._sim_client.poll_async(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
  
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
