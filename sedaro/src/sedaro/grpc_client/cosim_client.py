@@ -121,7 +121,6 @@ class CosimClient:
         logging.info(f"Getting auth token from {url}")
         return self.sedaro.request.get(url).get('jwt')
 
-
     async def _authorize(self) -> Tuple[bool, Optional[str]]:
         jwt_token = await self._get_auth_token()
         if not jwt_token:
@@ -192,7 +191,7 @@ class CosimClient:
         external_state_id: str,
         agent_id: str,
         values: Tuple,
-        timestamp: None
+        timestamp: Optional[float] = None
     ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
@@ -223,7 +222,7 @@ class CosimClient:
         self,
         external_state_id: str,
         agent_id: str,
-        time: float = None
+        timestamp: Optional[float] = None
     ):
         index = next(self._consume_counter)
         consume_action = cosim_pb2.Consume(
@@ -234,8 +233,9 @@ class CosimClient:
             job_id=self.job_id,
             agent_id=agent_id,
             external_state_block_id=external_state_id,
-            time=time,
+            time=timestamp,
         )
+
         simulation_action.consume.CopyFrom(consume_action)
         try:
             response = await self._send_simulation_action(
