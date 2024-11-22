@@ -205,7 +205,7 @@ class CosimClient:
             external_state_block_id=external_state_id,
         )
         if timestamp is not None:
-            simulation_action.time = timestamp
+            simulation_action.timestamp = timestamp
         simulation_action.produce.CopyFrom(produce_action)
 
         try:
@@ -233,8 +233,11 @@ class CosimClient:
             job_id=self.job_id,
             agent_id=agent_id,
             external_state_block_id=external_state_id,
-            time=timestamp,
         )
+        if timestamp is not None:
+            simulation_action.timestamp = timestamp
+
+        print(f"Consuming message with timestamp {simulation_action.HasField('timestamp')}")
 
         simulation_action.consume.CopyFrom(consume_action)
         try:
