@@ -237,15 +237,13 @@ class CosimClient:
         if timestamp is not None:
             simulation_action.timestamp = timestamp
 
-        print(f"Consuming message with timestamp {simulation_action.HasField('timestamp')}")
-
         simulation_action.consume.CopyFrom(consume_action)
         try:
             response = await self._send_simulation_action(
                 simulation_action,
             )
             logging.info(f"Consumed message with index {index}: {response}")
-            return json.loads(response)["payload"]
+            return tuple(serdes(v) for v in json.loads(response)["payload"])
         except Exception as e:
             logging.error(f"Consume operation failed for index {index}: {e}")
             raise e
