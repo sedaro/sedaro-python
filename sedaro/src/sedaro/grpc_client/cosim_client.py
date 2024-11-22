@@ -192,7 +192,7 @@ class CosimClient:
         external_state_id: str,
         agent_id: str,
         values: Tuple,
-        timestamp: float = 0.0
+        timestamp: None
     ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
@@ -204,8 +204,9 @@ class CosimClient:
             job_id=self.job_id,
             agent_id=agent_id,
             external_state_block_id=external_state_id,
-            time=timestamp,
         )
+        if timestamp is not None:
+            simulation_action.time = timestamp
         simulation_action.produce.CopyFrom(produce_action)
 
         try:
