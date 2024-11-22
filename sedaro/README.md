@@ -559,13 +559,13 @@ You can also communicate asynchronously with a simulation to take advantage of l
     state = await channel.consume(agent_id, per_round_external_state_id)
     print(state)
 
-    state = await channel.consume((agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
+    state = await channel.consume(agent_id, spontaneous_external_state_id, time=time) # Optionally provide time
     print(state)
 ```
 
 Over the async_channel, you can also spawn tasks asynchronously.
 
-```
+```python
   async with simulation_handle.async_channel(url) as channel:
     tasks = []
     for i in range(10):
