@@ -11,6 +11,7 @@ import grpc
 from sedaro.sedaro_api_client import SedaroApiClient
 
 from ..utils import serdes
+from ..settings import GRPC_MAX_MESSAGE_LENGTH
 from . import cosim_pb2, cosim_pb2_grpc
 
 REFRESH_INTERVAL = 60 * 4
@@ -68,18 +69,23 @@ class CosimClient:
         await self._terminate()
 
     def _create_channel(self):
+        options = [
+            ('grpc.max_send_message_length', GRPC_MAX_MESSAGE_LENGTH),
+            ('grpc.max_receive_message_length', GRPC_MAX_MESSAGE_LENGTH)
+        ]
+        
         if self.insecure:
             logging.warning("Using insecure gRPC connection.")
-            return grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+            return grpc.aio.insecure_channel(self.grpc_host, options=options, interceptors=(self._metadata_interceptor,))
 
         logging.info("Using SSL/TLS for gRPC connection.")
         if os.environ.get("COSIM_TLS_CERTIFICATE"):
             certificate_chain = base64.b64decode(os.environ['COSIM_TLS_CERTIFICATE'])
             credentials = grpc.ssl_channel_credentials(root_certificates=certificate_chain)
-            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, options=options, interceptors=(self._metadata_interceptor,))
         else:
             credentials = grpc.ssl_channel_credentials()
-            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, options=options, interceptors=(self._metadata_interceptor,))
 
         return channel
 
