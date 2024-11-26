@@ -146,7 +146,7 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             try:
                 agent_id, name = self.__agent_id_from_name(id_or_name), id_or_name
             except ValueError:
-                raise ValueError(f"Agent with `id` or `name` '{id_or_name}' not found in data set.")
+                raise ValueError(f"Agent with `id` or `name` '{id_or_name}' not found in data set. If an expected agent is missing, the simulation may have terminated early.")
         agent_dataframes = {}
         for stream_id in self.__data['series']:
             if stream_id.startswith(agent_id):
