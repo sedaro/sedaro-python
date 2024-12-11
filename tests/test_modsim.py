@@ -24,6 +24,10 @@ def test_time_conversions():
     with pytest.raises(AssertionError, match='Datetime must have a timezone'):
         ms.datetime_to_mjd(datetime.datetime(2024, 3, 20, 0, 27, 23))
 
+
+def test_datetime_now():
+    assert ms.datetime_now_utc() == datetime.datetime.now(datetime.timezone.utc)
+
 def test_read_csv_time_series():
     path = os.path.dirname(os.path.abspath(__file__))
     data = ms.read_csv_time_series(f'{path}/assets/test.csv')
@@ -92,6 +96,7 @@ def test_rotmat2quaternion():
 
 def run_tests():
     test_time_conversions()
+    test_datetime_now()
     test_read_csv_time_series()
     test_read_excel_time_series()
     test_search_time_series()
