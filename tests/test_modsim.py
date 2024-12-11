@@ -26,7 +26,11 @@ def test_time_conversions():
 
 
 def test_datetime_now():
-    assert ms.datetime_now_utc() == datetime.datetime.now(datetime.timezone.utc)
+    modsim_dt = ms.datetime_now_utc()
+    datetime_dt = datetime.datetime.now(datetime.timezone.utc)
+    assert (datetime_dt - modsim_dt).total_seconds() < 1e-3
+    assert modsim_dt.tzinfo == datetime.timezone.utc
+
 
 def test_read_csv_time_series():
     path = os.path.dirname(os.path.abspath(__file__))
