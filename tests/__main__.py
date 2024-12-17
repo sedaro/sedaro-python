@@ -18,16 +18,16 @@ from config import HOST
 
 
 imported_test_files = [
-    # test_auth_handle,
-    # test_bcc_options,
-    # test_crud_and_traversal,
-    # test_data_utils,
-    # test_externals,
-    # test_plain_requests,
+    test_auth_handle,
+    test_bcc_options,
+    test_crud_and_traversal,
+    test_data_utils,
+    test_externals,
+    test_plain_requests,
     test_results,
-    # test_simulation,
-    # test_modsim,
-    # test_scenario,
+    test_simulation,
+    test_modsim,
+    test_scenario,
 ]
 ############################################################
 
