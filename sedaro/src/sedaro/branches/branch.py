@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Union
 
-from pydash import is_empty
 from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
 from ..settings import BLOCKS, RELATIONSHIPS, ROOT, TYPE
-from ..utils import check_for_res_error, enforce_id_in_branch
+from ..utils import enforce_id_in_branch
 from .blocks import Block, BlockType
 from .common import Common
 
@@ -13,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Branch(Common):
-    _data: 'Dict[str, Any]'
+    _data: 'dict[str, Any]'
     id: 'str'
     """Branch `id`"""
 
@@ -49,7 +48,7 @@ class Branch(Common):
         return self.data[TYPE]
 
     @property
-    def data(self) -> 'Dict':
+    def data(self) -> 'dict':
         return self._data
 
     @property
@@ -57,15 +56,15 @@ class Branch(Common):
         return self
 
     @property
-    def _relationship_attrs(self) -> Dict:
+    def _relationship_attrs(self) -> dict:
         return self.data[RELATIONSHIPS][ROOT]
 
     def crud(
         self,
         *,
-        root: 'Dict[str, Any]' = None,
-        blocks: 'List[Dict]' = None,
-        delete: 'List[str]' = None
+        root: 'dict[str, Any]' = None,
+        blocks: 'list[dict]' = None,
+        delete: 'list[str]' = None
     ) -> 'dict':
         """Method to perform multiple CRUD operations at the same time.
 
@@ -111,7 +110,6 @@ class Branch(Common):
             },
         )
 
-        check_for_res_error(res)
         self.__ingest_branch_res(res['branch'])
 
         return res
@@ -121,7 +119,7 @@ class Branch(Common):
         `BlockType` properties on the Branch to instantiate `Block` objects narrowed to a specific type.
 
         Args:
-            id (Union[str, int]): `id` of the desired Sedaro Block
+            id (str | int): `id` of the desired Sedaro Block
 
         Raises:
             KeyError: if no corresponding Block exists in the Branch
@@ -136,11 +134,11 @@ class Branch(Common):
         )
 
     def update(
-            self, 
-            blocks: 'List[Dict]' = None, 
-            delete: 'List[str]' = None, 
-            include_response=False, 
-            **fields
+        self,
+        blocks: 'list[dict]' = None,
+        delete: 'list[str]' = None,
+        include_response: 'bool' = False,
+        **fields
     ) -> 'Branch':
         '''
         Method to perform updates to a model with support for bulk update operations.

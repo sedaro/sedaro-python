@@ -3,10 +3,9 @@ import inspect
 import json
 import re
 from types import ModuleType
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Union
 
 import orjson
-from sedaro_base_client.api_client import ApiResponse
 from urllib3.response import HTTPResponse
 
 from .data_utils import concat_results, update_metadata
@@ -30,7 +29,7 @@ def serdes(v):
     return v
 
 
-def parse_urllib_response(response: HTTPResponse) -> Dict:
+def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
     try:
         return orjson.loads(response.data)
@@ -38,15 +37,17 @@ def parse_urllib_response(response: HTTPResponse) -> Dict:
         return json.loads(response.data.decode('utf-8'))
 
 
-def check_for_res_error(response: ApiResponse):
+def check_for_res_error(response: 'dict'):
     """Checks for an 'error' key in the response dictionary and raises that error if present.
 
     Args:
-        response (ApiResponse): response from an api request
+        response (dict): response from an api request after parse_urllib_response
 
     Raises:
         SedaroApiException: if error present
     """
+    if not isinstance(response, dict):
+        return
     err = response.get('error', None)
     if err is not None:
         raise SedaroApiException(status=err[STATUS], reason=f"{err['code']}: {err['message']}")

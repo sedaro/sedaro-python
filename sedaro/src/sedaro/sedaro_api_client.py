@@ -8,9 +8,12 @@ from sedaro_base_client.apis.tags import branches_api
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3.response import HTTPResponse
 
-from sedaro.plain_request import PlainRequest
-
-from .branches import AgentTemplateBranch, ScenarioBranch
+from .branches import AgentTemplateBranch, Branch, ScenarioBranch
+from .models.branch import BranchManager
+from .models.project import ProjectManager
+from .models.repository import RepositoryManager
+from .models.workspace import WorkspaceManager
+from .plain_request import PlainRequest
 from .settings import COMMON_API_KWARGS
 from .utils import body_from_res, extract_host
 
@@ -54,7 +57,7 @@ class SedaroApiClient(ApiClient):
         self._auth_handle = auth_handle
 
         self._proxy_url = proxy_url
-        self._proxy_headers = proxy_headers 
+        self._proxy_headers = proxy_headers
         self._verify_ssl = True
         if self._proxy_url and not self._proxy_url.startswith('https'):
             self._verify_ssl = False
@@ -144,3 +147,22 @@ class SedaroApiClient(ApiClient):
     def request(self) -> PlainRequest:
         """API for sending raw `get`, `post`, `put`, `patch`, and `delete` requests to the configured Sedaro host."""
         return PlainRequest(self)
+
+    # ==================================================================================================================
+    # Model Managers
+    # ==================================================================================================================
+    @property
+    def Branch(self):
+        return BranchManager(_sedaro=self)
+
+    @property
+    def Repository(self):
+        return RepositoryManager(_sedaro=self)
+
+    @property
+    def Project(self):
+        return ProjectManager(_sedaro=self)
+
+    @property
+    def Workspace(self):
+        return WorkspaceManager(_sedaro=self)

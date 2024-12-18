@@ -11,6 +11,7 @@ import grpc
 from sedaro.sedaro_api_client import SedaroApiClient
 
 from ..utils import serdes
+from ..settings import GRPC_MAX_MESSAGE_LENGTH
 from . import cosim_pb2, cosim_pb2_grpc
 
 REFRESH_INTERVAL = 60 * 4
@@ -68,18 +69,23 @@ class CosimClient:
         await self._terminate()
 
     def _create_channel(self):
+        options = [
+            ('grpc.max_send_message_length', GRPC_MAX_MESSAGE_LENGTH),
+            ('grpc.max_receive_message_length', GRPC_MAX_MESSAGE_LENGTH)
+        ]
+        
         if self.insecure:
             logging.warning("Using insecure gRPC connection.")
-            return grpc.aio.insecure_channel(self.grpc_host, interceptors=(self._metadata_interceptor,))
+            return grpc.aio.insecure_channel(self.grpc_host, options=options, interceptors=(self._metadata_interceptor,))
 
         logging.info("Using SSL/TLS for gRPC connection.")
         if os.environ.get("COSIM_TLS_CERTIFICATE"):
             certificate_chain = base64.b64decode(os.environ['COSIM_TLS_CERTIFICATE'])
             credentials = grpc.ssl_channel_credentials(root_certificates=certificate_chain)
-            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, options=options, interceptors=(self._metadata_interceptor,))
         else:
             credentials = grpc.ssl_channel_credentials()
-            channel = grpc.aio.secure_channel(self.grpc_host, credentials, interceptors=(self._metadata_interceptor,))
+            channel = grpc.aio.secure_channel(self.grpc_host, credentials, options=options, interceptors=(self._metadata_interceptor,))
 
         return channel
 
@@ -120,7 +126,6 @@ class CosimClient:
         url = f"/simulations/jobs/authorization/{self.job_id}?{urlencode(params)}"
         logging.info(f"Getting auth token from {url}")
         return self.sedaro.request.get(url).get('jwt')
-
 
     async def _authorize(self) -> Tuple[bool, Optional[str]]:
         jwt_token = await self._get_auth_token()
@@ -192,7 +197,7 @@ class CosimClient:
         external_state_id: str,
         agent_id: str,
         values: Tuple,
-        timestamp: float = 0.0
+        timestamp: Optional[float] = None
     ):
         index = next(self._produce_counter)
         produce_action = cosim_pb2.Produce(
@@ -204,8 +209,9 @@ class CosimClient:
             job_id=self.job_id,
             agent_id=agent_id,
             external_state_block_id=external_state_id,
-            time=timestamp,
         )
+        if timestamp is not None:
+            simulation_action.timestamp = timestamp
         simulation_action.produce.CopyFrom(produce_action)
 
         try:
@@ -222,7 +228,7 @@ class CosimClient:
         self,
         external_state_id: str,
         agent_id: str,
-        time: float = None
+        timestamp: Optional[float] = None
     ):
         index = next(self._consume_counter)
         consume_action = cosim_pb2.Consume(
@@ -233,15 +239,17 @@ class CosimClient:
             job_id=self.job_id,
             agent_id=agent_id,
             external_state_block_id=external_state_id,
-            time=time,
         )
+        if timestamp is not None:
+            simulation_action.timestamp = timestamp
+
         simulation_action.consume.CopyFrom(consume_action)
         try:
             response = await self._send_simulation_action(
                 simulation_action,
             )
             logging.info(f"Consumed message with index {index}: {response}")
-            return json.loads(response)["payload"]
+            return tuple(serdes(v) for v in json.loads(response)["payload"])
         except Exception as e:
             logging.error(f"Consume operation failed for index {index}: {e}")
             raise e

@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sedaro_base_client.paths.models_branches_branch_id.get import \
-    SchemaFor200ResponseBodyApplicationJson
+from sedaro_base_client.paths.models_branches_branch_id.get import SchemaFor200ResponseBodyApplicationJson
 
-from ..settings import VEHICLE_TEMPLATES
+from ..settings import LIBRARY, SCENARIO
 from .blocks import BlockType
 from .branch import Branch
 
@@ -15,9 +14,9 @@ class AgentTemplateBranch(Branch):
 
     def __init__(self, body: SchemaFor200ResponseBodyApplicationJson, sedaro: 'SedaroApiClient'):
         super().__init__(body, sedaro)
-        if (type_ := self.data['type']) not in VEHICLE_TEMPLATES:
+        if (type_ := self.data['type']) in {LIBRARY, SCENARIO}:
             raise TypeError(
-                f'Branch must be of type "{VEHICLE_TEMPLATES}" not "{type_}"')
+                f'An AgentTemplate Branch cannot be of type "{type_}".')
 
     # ==============================================================================================================
     # For intellisense
@@ -33,8 +32,6 @@ class AgentTemplateBranch(Branch):
     AreaTarget: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     AveragingAlgorithm: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    Battery: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     BatteryCell: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -107,8 +104,6 @@ class AgentTemplateBranch(Branch):
     MekfAlgorithm: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Modem: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    OpticalAttitudeSensor: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     OrbitalAttitudeDynamics: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
@@ -202,8 +197,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     ThermalDesignLayout: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    ThermalInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     ThermalInterfaceMaterial: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     Thruster: BlockType
@@ -280,12 +273,6 @@ class AgentTemplateBranch(Branch):
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     LineOfSightReceiveInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    PassiveLineOfSightTransmitInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    CooperativeLineOfSightTransmitInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
-    CooperativeLineOfSightTransmitInterface: BlockType
-    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     OpticsPayload: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     TargetRadarSensor: BlockType
@@ -321,4 +308,54 @@ class AgentTemplateBranch(Branch):
     PriorKnowledgeRelativeOrbitInitializer: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
     GenericRelativeAttitudeDeterminationAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GroundSegmentTarget: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    MasslessRevoluteManipulatorSegment: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    DockingPort: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GenericTemperatureSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    DataProtocol: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    StarTracker: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    MasslessPrismaticManipulatorSegment: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GnssReceiver: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GenericOpticalAttitudeSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ManipulatorAssembly: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    DataInterfaceToScalarCondition: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    SeriesPackBattery: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ManipulatedSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    InstantVelocitySetpointActuationMode: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    FuelingPort: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ParallelPackBattery: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    LineOfSightTransmitInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    UkfAlgorithm: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    GenericPositionSensor: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularSunTrackingSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    PathLossConfig: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RadiativeThermalInterface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularVectorTrackingSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    RectangularFixedSurface: BlockType
+    """A Sedaro `Block` class on an `AgentTemplateBranch`"""
+    ConductiveThermalInterface: BlockType
     """A Sedaro `Block` class on an `AgentTemplateBranch`"""
