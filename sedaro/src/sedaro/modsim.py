@@ -14,7 +14,7 @@ REF_DATETIME = datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezon
 def datetime_now_utc() -> datetime.datetime:
     '''Python version agnostic way to get the current UTC datetime.'''
     try:
-        return datetime.datetime.now(datetime.UTC)
+        return datetime.datetime.now(datetime.timezone.utc)
     except ImportError:
         return datetime.datetime.utcnow() # now deprecated
 
