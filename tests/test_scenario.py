@@ -10,7 +10,7 @@ def test_externals_delete():
     try:
         block = scenario.PerRoundExternalState.create(
             agents=[scenario.Agent.get_first().id],
-            engineIndex=2,
+            engine='power',
             produced=['block.a.maxPower'],
             consumed=['block.b.compliance']
         )
