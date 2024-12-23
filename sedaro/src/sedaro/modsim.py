@@ -16,7 +16,7 @@ def datetime_now_utc() -> datetime.datetime:
     try:
         return datetime.datetime.now(datetime.timezone.utc)
     except ImportError:
-        return datetime.datetime.utcnow() # now deprecated
+        return datetime.datetime.utcnow()  # now deprecated
 
 
 def datetime_to_mjd(dt: datetime.datetime) -> float:
