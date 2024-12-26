@@ -578,7 +578,7 @@ This code expects the async_channel to be used only within one async run loop.  
 
 ## Modeling and Simulation Utilities
 
-The following modeling and simuation utility methods are available for convenience. See the docstrings for each method for more information and usage.
+The following modeling and simulation utility methods are available for convenience. See the docstrings for each method for more information and usage.
 
 ```python
 from sedaro import modsim as ms
@@ -605,6 +605,17 @@ ms.rotmat2quaternion(rot_mat: np.ndarray) -> np.ndarray:
 ms.quaternions_to_rates(q1: np.ndarray, q2: np.ndarray, dt: float) -> np.ndarray:
 ms.invert3(m: np.ndarray) -> np.ndarray:
 ms.unit3(vec: np.ndarray) -> np.ndarray:
+```
+
+## Data Utilities
+
+The `concat_pages` method is provided for combining individual fetched pages of data into one object. This is useful for those
+who wish to interact with simulation results data via a Python dict object rather than our Results API.
+
+```python
+from sedaro.utils import concat_pages
+
+concatenated_result_data = concat_pages([page_1, page_2, page_3, ...])
 ```
 
 ## Sedaro Base Client
