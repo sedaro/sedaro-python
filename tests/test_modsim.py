@@ -98,6 +98,28 @@ def test_rotmat2quaternion():
     quat_truth = np.array([quat_truth_raw[1], quat_truth_raw[2], quat_truth_raw[3], quat_truth_raw[0]])
     assert (np.max(np.abs(quat_truth - ms.rotmat2quaternion(rot_mat))) < 1e-5)
 
+test_data_scale_unit_cases = [
+    (0, False, (0, "")),
+    (1, True, (8, "")),
+    (8, True, (8, "")),
+    (2e3, False, (1e3, "k")),
+    (2e3 * 8, True, (1e3 * 8, "k")),
+    (3e6, False, (1e6, "M")),
+    (3e6 * 8, True, (1e6 * 8, "M")),
+    (4e9, False, (1e9, "G")),
+    (4e9 * 8, True, (1e9 * 8, "G")),
+    (5e12, False, (1e12, "T")),
+    (5e12 * 8, True, (1e12 * 8, "T")),
+    (6e15, False, (1e15, "P")),
+    (6e15 * 8, True, (1e15 * 8, "P")),
+    (7e16, False, (1e15, "P")),
+    (7e16 * 8, True, (1e15 * 8, "P")),
+]
+
+@pytest.mark.parametrize("value, bytes, expected", test_data_scale_unit_cases)
+def test_data_scale_unit(value: int, bytes: bool, expected: tuple[float, str]):
+    assert ms.data_scale_unit(value, bytes) == expected
+
 def run_tests():
     test_time_conversions()
     test_datetime_now()
@@ -106,3 +128,5 @@ def run_tests():
     test_search_time_series()
     test_vectors2angle()
     test_rotmat2quaternion()
+    for case in test_data_scale_unit_cases:
+        test_data_scale_unit(*case)
