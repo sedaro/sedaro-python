@@ -112,6 +112,8 @@ test_data_scale_unit_cases = [
     (5e12 * 8, True, (1e12 * 8, "T")),
     (6e15, False, (1e15, "P")),
     (6e15 * 8, True, (1e15 * 8, "P")),
+    (7e16, False, (1e15, "P")),
+    (7e16 * 8, True, (1e15 * 8, "P")),
 ]
 
 @pytest.mark.parametrize("value, bytes, expected", test_data_scale_unit_cases)

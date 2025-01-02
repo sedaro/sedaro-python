@@ -481,7 +481,7 @@ def data_scale_unit(value: int, bytes: bool = False) -> tuple[float, str]:
     if value == 0:
         return value, ""
     value = value if not bytes else value / 8
-    exponent = max(math.floor(math.log10(abs(value)) // 3), 0)
+    exponent = min(max(math.floor(math.log10(abs(value)) // 3), 0), len(units) - 1)
     scale: int = (10 ** (exponent * 3))
     scale = scale if not bytes else scale * 8
     unit = units[exponent]
