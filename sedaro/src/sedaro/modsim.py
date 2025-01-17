@@ -14,9 +14,9 @@ REF_DATETIME = datetime.datetime(2024, 3, 21, 0, 27, 23, tzinfo=datetime.timezon
 def datetime_now_utc() -> datetime.datetime:
     '''Python version agnostic way to get the current UTC datetime.'''
     try:
-        return datetime.datetime.now(datetime.UTC)
+        return datetime.datetime.now(datetime.timezone.utc)
     except ImportError:
-        return datetime.datetime.utcnow() # now deprecated
+        return datetime.datetime.utcnow()  # now deprecated
 
 
 def datetime_to_mjd(dt: datetime.datetime) -> float:
@@ -463,3 +463,26 @@ def unit3(vec: np.ndarray) -> np.ndarray:
     if np.linalg.norm(vec) > EPSILON:
         return vec/np.linalg.norm(vec)
     raise ValueError("Vector cannot be the zero vector.")
+
+
+def data_scale_unit(value: int, bytes: bool = False) -> tuple[float, str]:
+    """
+    Find the appropriate unit to scale the given bit value and return the scale along with the unit string.
+    The input value can be divided by the returned scale to convert it to the returned unit.
+
+    Args:
+        value (float): The value to be scaled.
+        bytes (bool): Whether to convert the value to bytes.
+
+    Returns:
+        tuple: A tuple containing the scale and the unit string.
+    """
+    units = ("", "k", "M", "G", "T", "P")
+    if value == 0:
+        return value, ""
+    value = value if not bytes else value / 8
+    exponent = min(max(math.floor(math.log10(abs(value)) // 3), 0), len(units) - 1)
+    scale: int = (10 ** (exponent * 3))
+    scale = scale if not bytes else scale * 8
+    unit = units[exponent]
+    return scale, unit

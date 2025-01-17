@@ -31,6 +31,7 @@ class SedaroApiClient(ApiClient):
         proxy_url: str = None,
         proxy_headers: Dict[str, str] = None,
         suppress_insecure_transport_warnings: bool = False,
+        additional_headers: Dict[str, str] = None,
     ):
         '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
 
@@ -40,6 +41,8 @@ class SedaroApiClient(ApiClient):
             auth_handle (str, optional): Authentication handle to authenticate with the Sedaro API
             proxy_url (str, optional): URL of the proxy server
             proxy_headers (Dict[str, str], optional): Headers to send to the proxy server
+            suppress_insecure_transport_warnings (bool, optional): Suppress warnings for insecure transport
+            additional_headers (Dict[str, str], optional): Additional headers to send with each request
 
         Note: for proxy kwargs, refer to https://urllib3.readthedocs.io/en/stable/reference/urllib3.poolmanager.html#urllib3.ProxyManager
         '''
@@ -55,6 +58,8 @@ class SedaroApiClient(ApiClient):
 
         self._api_key = api_key
         self._auth_handle = auth_handle
+
+        self._additional_headers = additional_headers
 
         self._proxy_url = proxy_url
         self._proxy_headers = proxy_headers
@@ -88,6 +93,9 @@ class SedaroApiClient(ApiClient):
             header_name=header_name,
             header_value=header_value
         ) as api:
+            if self._additional_headers:
+                for key, value in self._additional_headers.items():
+                    api.set_default_header(key, value)
             yield api
 
     def _auth_header(self) -> Tuple[str, str]:

@@ -4,15 +4,16 @@ from sedaro import SedaroApiClient
 
 sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
 
+
 def test_externals_delete():
     scenario = sedaro.scenario(WILDFIRE_SCENARIO_ID)
     created_blocks = []
     try:
         block = scenario.PerRoundExternalState.create(
             agents=[scenario.Agent.get_first().id],
-            engineIndex=2,
-            produced=['block.a.maxPower'],
-            consumed=['block.b.compliance']
+            engine='power',
+            produced='block!(a).field!(maxPower)',
+            consumed='block!(b).field!(compliance)'
         )
         created_blocks.append(block.id)
 
@@ -28,6 +29,7 @@ def test_externals_delete():
                 scenario.delete_all_external_state_blocks()
             except:
                 scenario.update(delete=created_blocks)
+
 
 def run_tests():
     test_externals_delete()
