@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Union
 import orjson
 from urllib3.response import HTTPResponse
 
+from .data_utils import concat_results, update_metadata
 from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
@@ -136,6 +137,43 @@ def get_class_from_module(module: ModuleType, target_class: str = None) -> type:
         raise AttributeError(err_msg)
 
     return filtered_classes[0][1]
+
+
+def concat_pages(pages: list[dict]) -> dict:
+    """Concatenates a list of Data Service pages into a single dictionary object.
+
+    Args:
+        pages (list[dict]): list of Data Service pages
+
+    Returns:
+        dict: concatenated data from all pages
+    """
+    result = {
+        'meta': {},
+        'series': {},
+        'stats': {},
+        'derived': {
+            'static': {},
+            'series': {},
+        }
+    }
+
+    first_page = True
+    for page in pages:
+        if first_page:
+            result['meta'] = page['meta']
+            first_page = False
+        else:
+            update_metadata(result['meta'], page['meta'])
+        concat_results(result['series'], page['series'])
+        if 'stats' in page:
+            result['stats'].update(page['stats'])
+        if 'derived' in page:
+            if 'static' in page['derived']:
+                result['derived']['static'].update(page['derived']['static'])
+            if 'series' in page['derived']:
+                concat_results(result['derived']['series'], page['derived']['series'])
+    return result
 
 
 def extract_host(url):
