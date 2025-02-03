@@ -92,7 +92,7 @@ class BlockType:
 
         recurse_get_block_dicts(self.type)
 
-        # maintain order and filter out duplicates
+        # maintain order & filter out duplicates
         return list(dict.fromkeys(res))
 
     def get_all(self) -> List['Block']:
