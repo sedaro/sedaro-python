@@ -2,7 +2,7 @@ import string
 from random import choices
 
 import pytest
-from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID
+from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID, WILDFIRE_A_T_ID
 
 from sedaro import SedaroApiClient
 from sedaro.branches import AgentTemplateBranch, Branch, ScenarioBranch
@@ -329,6 +329,16 @@ def test_multiblock_crud_with_ref_ids():
         branch.update(delete=[bp.id, bc.id])
 
 
+def test_no_duplicates_in_get_all():
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+    vehicle = sedaro.agent_template(WILDFIRE_A_T_ID)
+
+    eDIs = vehicle.ExternalDataInterface.get_all()
+
+    # make sure there are no duplicates even w/ double inheritance
+    assert len(set(eDIs)) == len(eDIs) > 0
+
+
 def run_tests():
     test_get()
     test_keying_into_root_attrs()
@@ -344,3 +354,4 @@ def run_tests():
     test_active_comm_interfaces_tuple()
     test_attitude_solution_error_tuple()
     test_multiblock_crud_with_ref_ids()
+    test_get_all_no_duplicates()
