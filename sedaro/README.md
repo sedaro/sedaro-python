@@ -285,6 +285,7 @@ simulation_handle = sim.start(wait=True) # To wait for the simulation to enter t
 
 # See simulation status
 simulation_handle = sim.status() # simulation_handle can also be obtained by calling sim.status()
+# simulation_handle = sim.status(job_id=...) # Optionally, you can pass a job_id to status to get the status of a specific simulation job
 
 # Poll simulation, and return results when complete (progress will be printed until ready)
 results = sim.results_poll()
