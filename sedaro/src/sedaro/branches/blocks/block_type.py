@@ -92,7 +92,8 @@ class BlockType:
 
         recurse_get_block_dicts(self.type)
 
-        return res
+        # maintain order & filter out duplicates
+        return list(dict.fromkeys(res))
 
     def get_all(self) -> List['Block']:
         """Gets a `list` of all `Block` instances corresponding to all Sedaro Blocks of the given type in this
