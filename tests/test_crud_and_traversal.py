@@ -397,3 +397,4 @@ def run_tests():
     test_attitude_solution_error_tuple()
     test_multiblock_crud_with_ref_ids()
     test_no_duplicates_in_get_all()
+    test_get_where_with_relationships()
