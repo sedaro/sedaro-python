@@ -118,7 +118,7 @@ class BlockType:
                 Branch
         """
         return [
-            b_c for b_c in self.get_all() if all(getattr(b_c, k) == v for k, v in fields.items())
+            block for block in self.get_all() if all(getattr(block, k) == v for k, v in fields.items())
         ]
 
     def get_first(self):
