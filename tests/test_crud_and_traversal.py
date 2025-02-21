@@ -354,4 +354,4 @@ def run_tests():
     test_active_comm_interfaces_tuple()
     test_attitude_solution_error_tuple()
     test_multiblock_crud_with_ref_ids()
-    test_get_all_no_duplicates()
+    test_no_duplicates_in_get_all()
