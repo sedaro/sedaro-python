@@ -1,15 +1,12 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, List, Union
-
-from pydash import is_empty
+from typing import TYPE_CHECKING, Any, List, Union
 
 from ...exceptions import NoBlockFoundError
-from ...settings import BLOCKS, CRUD, ID, INDEX, TYPE
+from ...settings import BLOCKS, CRUD, DATA_SIDE, ID, INDEX, MANY_SIDE, ONE_SIDE, TYPE
 from ...utils import enforce_id_in_branch
 from .block import Block
 
 if TYPE_CHECKING:
-    from ...sedaro_api_client import SedaroApiClient
     from ..branch import Branch
 
 
@@ -110,6 +107,9 @@ class BlockType:
         this Branch. Blocks are filtered by property/values passed as kwargs. If there are no corresponding Blocks,
         returns an empty `list`.
 
+        If querying via a relationship field, values can be passed as `Block` instances or `id`s. If querying on a Many
+        side relationship specifically, the value is compared independent of order.
+
         **fields:
             any: keys to check for given values on the Sedaro Blocks
 
@@ -119,8 +119,50 @@ class BlockType:
         """
         return [
             block for block in self.get_all()
-            if all(getattr(block, k) == v for k, v in fields.items())
+            if all(self.__get_where_check_equality(block, k, v) for k, v in fields.items())
         ]
+
+    def __get_where_check_equality(self, block_to_check: 'Block', attr: 'str', expected_val: Any) -> 'bool':
+        '''Checks if the given `block_to_check` has the expected value for the given attribute `attr`. Turn all values
+        into `id`s if they are `Block` instances in relationship fields.'''
+        MISSING = object()
+        # get `actual_val` from `data` rather than the Block itself to avoid rel values turning into Blocks
+        if (actual_val := block_to_check.data.get(attr, MISSING)) is MISSING:
+            return False
+
+        if not block_to_check.is_rel_field(attr):
+            return actual_val == expected_val
+
+        side_type = block_to_check.get_rel_field_type(attr)
+
+        if side_type == MANY_SIDE:
+            if not isinstance(expected_val, list):
+                return False
+            expected_val = [
+                v.id if isinstance(v, Block) else v
+                for v in expected_val
+            ]
+            try:
+                return set(expected_val) == set(actual_val)
+            except:
+                return False
+
+        if side_type == DATA_SIDE:
+            if not isinstance(expected_val, dict):
+                return False
+            expected_val = {
+                k.id if isinstance(k, Block) else k: v
+                for k, v in expected_val.items()
+            }
+            return expected_val == actual_val
+
+        if side_type == ONE_SIDE:
+            expected_val = expected_val.id if isinstance(expected_val, Block) else expected_val
+            return actual_val == expected_val
+
+        raise NotImplementedError(
+            f'Unsupported relationship type on "{self.type}", attribute: "{attr}".'
+        )
 
     def get_first(self):
         """Returns a `Block` associated with the least recently added (lowest `id`) Sedaro Block of the desired
