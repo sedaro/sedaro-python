@@ -1,5 +1,6 @@
 import string
 from random import choices
+from typing import Any
 
 import pytest
 from config import API_KEY, HOST, SIMPLESAT_A_T_ID, SIMPLESAT_SCENARIO_ID, WILDFIRE_A_T_ID
@@ -337,6 +338,47 @@ def test_no_duplicates_in_get_all():
 
     # make sure there are no duplicates even w/ double inheritance
     assert len(set(eDIs)) == len(eDIs) > 0
+
+
+def test_get_where_with_relationships():
+    sedaro = SedaroApiClient(api_key=API_KEY, host=HOST)
+    vehicle = sedaro.agent_template(WILDFIRE_A_T_ID)
+
+    # get blocks and vals to help with test
+    battery = vehicle.Battery.get_first()
+
+    all_battery_packs = vehicle.BatteryPack.get_all()
+    assert len(all_battery_packs) > 0
+
+    sTCA = vehicle.StaticThrustControlAlgorithm.get_first()
+    sTCAThrusters: 'dict[Block, Any]' = sTCA.thrusters
+
+    # test `get_where` with "one side" using Block and ID
+    assert all_battery_packs == \
+        vehicle.BatteryPack.get_where(battery=battery) == \
+        vehicle.BatteryPack.get_where(battery=battery.id)
+
+    # test `get_where` with "many side" using list of Blocks and list of IDs
+    assert vehicle.Battery.get_all() == \
+        vehicle.Battery.get_where(packs=all_battery_packs) == \
+        vehicle.Battery.get_where(packs=[pack.id for pack in all_battery_packs]) == \
+        [battery]
+
+    # test `get_where` with "data side" using dict where keys are Blocks and IDs
+    assert vehicle.StaticThrustControlAlgorithm.get_all() == \
+        vehicle.StaticThrustControlAlgorithm.get_where(thrusters=sTCAThrusters) == \
+        vehicle.StaticThrustControlAlgorithm.get_where(thrusters={k.id: v for k, v in sTCAThrusters.items()}) == \
+        [sTCA]
+
+    # test bad values "one side"
+    assert vehicle.BatteryPack.get_where(battery='not id or battery block') == []
+    assert vehicle.BatteryPack.get_where(battery=['wrong type']) == []
+    # test bad values "many side"
+    assert vehicle.Battery.get_where(packs=['not id or battery pack block']) == []
+    assert vehicle.Battery.get_where(packs={'wrong': 'type'}) == []
+    # test bad values "data side"
+    assert vehicle.StaticThrustControlAlgorithm.get_where(thrusters={'not id': 'or thruster block'}) == []
+    assert vehicle.StaticThrustControlAlgorithm.get_where(thrusters=['wrong type']) == []
 
 
 def run_tests():
