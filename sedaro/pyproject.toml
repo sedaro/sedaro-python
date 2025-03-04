@@ -33,6 +33,7 @@ dependencies = [
   "protobuf",
   "openpyxl",
   "pytz == 2024.1",
+  "duckdb",
 ]
 [[project.authors]]
 name = "Sedaro"

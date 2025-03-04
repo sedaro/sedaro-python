@@ -5,10 +5,11 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
+from sedaro_base_client.apis.tags import externals_api, jobs_api
+
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
-from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
@@ -229,6 +230,8 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
+        pages = []
+
         response = fast_fetcher.get(url)
         _response = None
         has_nonempty_ctoken = False
@@ -238,6 +241,7 @@ class Simulation:
                 raise Exception()
             else:
                 download_manager.ingest(_response['series'])
+                pages.append(_response['series'])
                 download_manager.add_metadata(_response['meta'])
                 if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
                     has_nonempty_ctoken = True
@@ -259,6 +263,7 @@ class Simulation:
                 page = fast_fetcher.get(request_url)
                 _page = page.parse()
                 download_manager.ingest(_page['series'])
+                pages.append(_page['series'])
                 download_manager.update_metadata(_page['meta'])
                 try:
                     if 'stats' in _page:
@@ -279,6 +284,7 @@ class Simulation:
                     reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                     raise SedaroApiException(status=page.status, reason=reason)
         download_manager.finalize()
+        return pages
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
         try:
@@ -294,7 +300,7 @@ class Simulation:
                         streams_formatted.append(stream)
                     else:
                         streams_formatted.append(tuple(stream.split('.')))
-            self.__fetch(
+            return self.__fetch(
                 id=sim_id, streams=streams_formatted, sampleRate=sampleRate, start=start,
                 stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager
             )
@@ -355,18 +361,19 @@ class Simulation:
                 if e is not None:
                     raise e
         else:
-            self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
+            pages = self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
         download_bar.complete()
 
         stream_results = {}
         for download_manager in download_managers:
             stream_results.update(download_manager.streams)
-        return {
-            'meta': download_managers[0].finalize_metadata(download_managers[1:]),
-            'stats': download_managers[0].finalize_stats(download_managers[1:]),
-            'static': download_managers[0].finalize_static_data(download_managers[1:]),
-            'series': stream_results,
-        }
+        return pages
+        # return {
+        #     'meta': download_managers[0].finalize_metadata(download_managers[1:]),
+        #     'stats': download_managers[0].finalize_stats(download_managers[1:]),
+        #     'static': download_managers[0].finalize_static_data(download_managers[1:]),
+        #     'series': stream_results,
+        # }
 
     def results(
         self,
@@ -426,7 +433,8 @@ class Simulation:
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
-        return SimulationResult(job, data, self.__sedaro)
+        # return SimulationResult(job, data, self.__sedaro)
+        return data
 
     def results_poll(
         self,
@@ -466,7 +474,7 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
-        
+
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
@@ -521,7 +529,7 @@ class Simulation:
         """
         job = self.status(job_id)
         await self.poll_async(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
-        
+
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
@@ -863,7 +871,7 @@ class SimulationHandle:
             str: the ultimate status of the simulation.
         """
         return self._sim_client.poll(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
-    
+
     async def poll_async(
         self,
         timeout: int = None,
@@ -885,7 +893,7 @@ class SimulationHandle:
             str: the ultimate status of the simulation.
         """
         return await self._sim_client.poll_async(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
- 
+
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
 
