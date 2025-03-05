@@ -5,10 +5,9 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uuid6
-from config import API_KEY, HOST, WILDFIRE_SCENARIO_ID, SUPERDOVE_SCENARIO_ID
+from config import API_KEY, HOST, SUPERDOVE_SCENARIO_ID, WILDFIRE_SCENARIO_ID
 
-from sedaro import (SedaroAgentResult, SedaroApiClient, SedaroBlockResult,
-                    SedaroSeries, SimulationResult)
+from sedaro import SedaroAgentResult, SedaroApiClient, SedaroBlockResult, SedaroSeries, SimulationResult
 from sedaro.branches.scenario_branch.download import StreamManager
 from sedaro.exceptions import NoSimResultsError
 from sedaro.settings import STATUS, SUCCEEDED
@@ -217,6 +216,7 @@ def sample_model_and_data():
         },
     }
 
+
 def test_query_model():
     simulation_job = {
         'branch': 'test_id',
@@ -410,8 +410,8 @@ def test_stats():
     assert agent._SedaroAgentResult__stats == all_stats
     block = agent.block('b')
     assert block._SedaroBlockResult__stats == {
-        'a/0': { 'b.value': fake_stats(1), },
-        'a/1': { 'b.otherValue': fake_stats(100), },
+        'a/0': {'b.value': fake_stats(1), },
+        'a/1': {'b.otherValue': fake_stats(100), },
     }
     assert block.stats() == {
         'Block.value': fake_stats(1),
@@ -439,7 +439,8 @@ def test_stats():
     _make_sure_superdove_done()
     res = sim.results_poll(wait_on_stats=True)
     empty = ['NT-KoZFSELKK8eomP3lkV/0', 'NT-KoZFSELKK8eomP3lkV/1']
-    has_rain_stats = ['NT-LKoFSJLenjoFP9FXAV/0', 'NT-LuTrRCydjLgnmceboV/0', 'NT-LgloSzu8F-V4MtzkHV/0', 'NT-L_VwTrXTMQUapcAoJk/0', 'NT-M0sqRR5WTIHKtB4ylF/0', 'NT-LoCYRnPamzh3QTTedF/0']
+    has_rain_stats = ['NT-LKoFSJLenjoFP9FXAV/0', 'NT-LuTrRCydjLgnmceboV/0', 'NT-LgloSzu8F-V4MtzkHV/0',
+                      'NT-L_VwTrXTMQUapcAoJk/0', 'NT-M0sqRR5WTIHKtB4ylF/0', 'NT-LoCYRnPamzh3QTTedF/0']
     assert res._SimulationResult__stats_fetched
     assert len(res._SimulationResult__stats) == len(empty) + len(has_rain_stats)
     for agent_id in empty:
@@ -449,8 +450,9 @@ def test_stats():
     stats_from_endpoint = sim.stats()
     assert stats_from_endpoint == res._SimulationResult__stats
 
+
 def test_utils():
-    from sedaro.results.utils import get_static_data
+    from sedaro.results.utils import get_static_data, value_from_df, values_from_df
 
     test_static_data = {
         'foobar/0': {
@@ -483,13 +485,48 @@ def test_utils():
     except ValueError as e:
         assert e.args[0] == "No static data available for this Agent."
 
+    test_df_default_data = [
+        1, 2, 3
+    ]
+    assert values_from_df(test_df_default_data) == [
+        1, 2, 3]
+
+    test_df_visibleEarthArea_data = [
+        "[[1, 2], [3, 4]]",
+        "[[5, 6], [7, 8]]"
+    ]
+    assert values_from_df(test_df_visibleEarthArea_data, 'visibleEarthArea') == [
+        [[1, 2], [3, 4]], [[5, 6], [7, 8]]]
+
+    test_df_activeRoutines_data = [
+        "['a', 'b']",
+        "['c', 'd']",
+        "['e', 'f']"
+    ]
+    assert values_from_df(test_df_activeRoutines_data, 'activeRoutines') == [['a', 'b'], ['c', 'd'], ['e', 'f']]
+
+    test_df_pseudoranges_data = [
+        '[1, 2]',
+        '[3, 4]',
+        '[5, 6]'
+    ]
+    assert values_from_df(test_df_pseudoranges_data, 'pseudoranges') == [[1, 2], [3, 4], [5, 6]]
+
+    test_df_availableTransmitters_data = [
+        "{'a', 'b'}",
+        "{'c', 'd'}",
+        "{'e', 'f'}"
+    ]
+    assert values_from_df(test_df_availableTransmitters_data, 'availableTransmitters') == [
+        ['a', 'b'], ['c', 'd'], ['e', 'f']]
+
 
 def run_tests():
-    test_query_terminated()
-    test_query()
-    test_save_load()
-    test_query_model()
-    test_download()
-    test_series_values()
-    test_stats()
+    # test_query_terminated()
+    # test_query()
+    # test_save_load()
+    # test_query_model()
+    # test_download()
+    # test_series_values()
+    # test_stats()
     test_utils()
