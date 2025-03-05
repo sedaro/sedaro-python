@@ -485,9 +485,11 @@ def test_utils():
     except ValueError as e:
         assert e.args[0] == "No static data available for this Agent."
 
+    # DataFrame tests
     test_df_default_data = [
         1, 2, 3
     ]
+    assert value_from_df(test_df_default_data[0]) == 1
     assert values_from_df(test_df_default_data) == [
         1, 2, 3]
 
@@ -495,6 +497,8 @@ def test_utils():
         "[[1, 2], [3, 4]]",
         "[[5, 6], [7, 8]]"
     ]
+    assert value_from_df(test_df_visibleEarthArea_data[0], 'visibleEarthArea') == [
+        [1, 2], [3, 4]]
     assert values_from_df(test_df_visibleEarthArea_data, 'visibleEarthArea') == [
         [[1, 2], [3, 4]], [[5, 6], [7, 8]]]
 
@@ -503,6 +507,7 @@ def test_utils():
         "['c', 'd']",
         "['e', 'f']"
     ]
+    assert value_from_df(test_df_activeRoutines_data[0], 'activeRoutines') == ['a', 'b']
     assert values_from_df(test_df_activeRoutines_data, 'activeRoutines') == [['a', 'b'], ['c', 'd'], ['e', 'f']]
 
     test_df_pseudoranges_data = [
@@ -510,6 +515,7 @@ def test_utils():
         '[3, 4]',
         '[5, 6]'
     ]
+    assert value_from_df(test_df_pseudoranges_data[0], 'pseudoranges') == [1, 2]
     assert values_from_df(test_df_pseudoranges_data, 'pseudoranges') == [[1, 2], [3, 4], [5, 6]]
 
     test_df_availableTransmitters_data = [
@@ -517,16 +523,17 @@ def test_utils():
         "{'c', 'd'}",
         "{'e', 'f'}"
     ]
+    assert value_from_df(test_df_availableTransmitters_data[0], 'availableTransmitters') == ['a', 'b']
     assert values_from_df(test_df_availableTransmitters_data, 'availableTransmitters') == [
         ['a', 'b'], ['c', 'd'], ['e', 'f']]
 
 
 def run_tests():
-    # test_query_terminated()
-    # test_query()
-    # test_save_load()
-    # test_query_model()
-    # test_download()
-    # test_series_values()
-    # test_stats()
+    test_query_terminated()
+    test_query()
+    test_save_load()
+    test_query_model()
+    test_download()
+    test_series_values()
+    test_stats()
     test_utils()

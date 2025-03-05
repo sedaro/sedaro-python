@@ -203,8 +203,6 @@ def parse_set_string(set_string):
 
 
 def values_from_df(values, name=None):
-    # print(type(values))
-    # print(values[1000:1002])
     if not name:
         return values
     if name == 'availableTransmitters' or ('.' in name and name.split('.')[-1] == 'availableTransmitters'):
@@ -217,7 +215,6 @@ def values_from_df(values, name=None):
 
 
 def value_from_df(value, name=None):
-    print(value)
     if not name:
         return value
     if name == 'availableTransmitters' or ('.' in name and name.split('.')[-1] == 'availableTransmitters'):
