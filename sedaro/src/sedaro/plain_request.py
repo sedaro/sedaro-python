@@ -90,7 +90,18 @@ class PlainRequest:
             if not self.__sedaro._verify_ssl:
                 kwargs['verify'] = False
 
-        return requests.get(**kwargs)
+        TIMEOUT_SECONDS = 180
+        MAX_TIMEOUTS = 5
+        timeout_iterations = 0
+        while True:
+            try:
+                return requests.get(timeout=TIMEOUT_SECONDS, **kwargs)
+            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
+                if timeout_iterations < MAX_TIMEOUTS:
+                    timeout_iterations += 1
+                    print(f"TIMEOUT RETRY #{timeout_iterations}")
+                    continue
+                raise
 
     @overload
     def post(self, resource_path: str, body: dict, *, raw: Literal[True]) -> HTTPResponse: ...
