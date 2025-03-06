@@ -493,15 +493,17 @@ def test_utils():
     assert values_from_df(test_df_default_data) == [
         1, 2, 3]
 
+    # visibleEarthArea data contains floats
     test_df_visibleEarthArea_data = [
-        "[[1, 2], [3, 4]]",
-        "[[5, 6], [7, 8]]"
+        "[[1.0, 2.0], [3.0, 4.0]]",
+        "[[5.0, 6.0], [7.0, 8.0]]"
     ]
     assert value_from_df(test_df_visibleEarthArea_data[0], 'visibleEarthArea') == [
-        [1, 2], [3, 4]]
+        [1.0, 2.0], [3.0, 4.0]]
     assert values_from_df(test_df_visibleEarthArea_data, 'visibleEarthArea') == [
-        [[1, 2], [3, 4]], [[5, 6], [7, 8]]]
+        [[1.0, 2.0], [3.0, 4.0]], [[5.0, 6.0], [7.0, 8.0]]]
 
+    # activeRoutines data contains strings
     test_df_activeRoutines_data = [
         "['a', 'b']",
         "['c', 'd']",
@@ -510,14 +512,16 @@ def test_utils():
     assert value_from_df(test_df_activeRoutines_data[0], 'activeRoutines') == ['a', 'b']
     assert values_from_df(test_df_activeRoutines_data, 'activeRoutines') == [['a', 'b'], ['c', 'd'], ['e', 'f']]
 
+    # pseudoranges data contains floats
     test_df_pseudoranges_data = [
-        '[1, 2]',
-        '[3, 4]',
-        '[5, 6]'
+        '[1.0, 2.0]',
+        '[3.0, 4.0]',
+        '[5.0, 6.0]'
     ]
-    assert value_from_df(test_df_pseudoranges_data[0], 'pseudoranges') == [1, 2]
-    assert values_from_df(test_df_pseudoranges_data, 'pseudoranges') == [[1, 2], [3, 4], [5, 6]]
+    assert value_from_df(test_df_pseudoranges_data[0], 'pseudoranges') == [1.0, 2.0]
+    assert values_from_df(test_df_pseudoranges_data, 'pseudoranges') == [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
 
+    # availableTransmitters data contains strings
     test_df_availableTransmitters_data = [
         "{'a', 'b'}",
         "{'c', 'd'}",
