@@ -99,7 +99,6 @@ class PlainRequest:
             except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
                 if timeout_iterations < MAX_TIMEOUTS:
                     timeout_iterations += 1
-                    print(f"TIMEOUT RETRY #{timeout_iterations}")
                     continue
                 raise
 
