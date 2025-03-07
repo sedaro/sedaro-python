@@ -47,6 +47,7 @@ HFILL = 75
 def hfill(char="-", len=HFILL):
     print(char * len)
 
+
 def _element_id_dict(agent_data):
     '''Break out all blocks into a dict where each key is an ID.'''
     out = {}
@@ -90,7 +91,7 @@ def _restructure_data(series, agents, meta):
         agent_id = series_key.split("/")[0]
         try:
             agent_mapping[agent_id] = agents[agent_id]
-        except KeyError: # agent_id corresponding to coupling is not in the metamodel
+        except KeyError:  # agent_id corresponding to coupling is not in the metamodel
             continue
         if agent_id not in blocks:
             blocks[agent_id] = _element_id_dict(meta['structure']['agents'].get(agent_id, {}))
@@ -185,6 +186,7 @@ def get_parquets(path: str):
     paths = listdir(path)
     return [parquet for parquet in paths if not parquet.startswith('.')]
 
+
 VLLS = [
     'visibleEarthArea',
     'activeRoutines',
@@ -192,23 +194,44 @@ VLLS = [
     'pseudoranges',
 ]
 
+
+def parse_set_string(set_string):
+    if set_string is None:
+        return None
+    # Converts a set represented as a string to a list
+    values = set_string.strip("{}").split(",")
+    return [item.strip().strip("'") for item in values]
+
+
 def values_from_df(values, name=None):
-    if name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
-        return [json.loads(value) for value in values]
+    if not name:
+        return values
+    if name == 'availableTransmitters' or ('.' in name and name.split('.')[-1] == 'availableTransmitters'):
+        # data for availableTransmitters is returned as a list of sets (represented as strings) which is not JSON-serializable
+        return [parse_set_string(s) for s in values]
+    elif name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
+        return [json.loads(item.replace("'", '"')) for item in values]
     else:
         return values
 
+
 def value_from_df(value, name=None):
-    if name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
-        return json.loads(value)
+    if not name:
+        return value
+    if name == 'availableTransmitters' or ('.' in name and name.split('.')[-1] == 'availableTransmitters'):
+        # data for availableTransmitters is returned as a list of sets (represented as strings) which is not JSON-serializable
+        return parse_set_string(value)
+    elif name in VLLS or ('.' in name and name.split('.')[-1] in VLLS):
+        return json.loads(value.replace("'", '"'))
     else:
         return value
+
 
 def get_static_data(static_data: dict, object_type: str, engine: str = None):
     if len(static_data) == 0:
         raise ValueError(f"No static data available for this {object_type}.")
     elif engine is None:
-            return static_data
+        return static_data
     else:
         prefix = list(static_data.keys())[0][:-1]
         if engine.lower() in ENGINE_MAP_REVERSED.keys():
@@ -219,6 +242,7 @@ def get_static_data(static_data: dict, object_type: str, engine: str = None):
                 raise KeyError(f"No static data available for the specified engine for this {object_type}.")
         else:
             raise ValueError(f"{engine} is not a valid engine identifier.")
+
 
 def get_static_data_engines(static_data: dict):
     if static_data is None:
