@@ -196,6 +196,8 @@ VLLS = [
 
 
 def parse_set_string(set_string):
+    if set_string is None:
+        return None
     # Converts a set represented as a string to a list
     values = set_string.strip("{}").split(",")
     return [item.strip().strip("'") for item in values]
