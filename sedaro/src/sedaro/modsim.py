@@ -15,7 +15,7 @@ def datetime_now_utc() -> datetime.datetime:
     '''Python version agnostic way to get the current UTC datetime.'''
     try:
         return datetime.datetime.now(datetime.timezone.utc)
-    except ImportError:
+    except AttributeError:
         return datetime.datetime.utcnow()  # now deprecated
 
 
