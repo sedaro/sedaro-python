@@ -96,7 +96,8 @@ class PlainRequest:
         while True:
             try:
                 return requests.get(timeout=TIMEOUT_SECONDS, **kwargs)
-            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
+            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+                print(F"TIMEOUT ITERATION #{timeout_iterations + 1} (error type: {type(e).__name__})")
                 if timeout_iterations < MAX_TIMEOUTS:
                     timeout_iterations += 1
                     continue

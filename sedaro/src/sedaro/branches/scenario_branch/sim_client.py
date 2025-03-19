@@ -328,7 +328,7 @@ class Simulation:
                 except Exception as e:
                     reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                     raise SedaroApiException(status=page.status, reason=reason)
-        download_manager.finalize()
+        # download_manager.finalize()
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:
@@ -406,13 +406,13 @@ class Simulation:
         download_managers = [DownloadWorker(
             download_bar, i + 1) for i in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
-        # client = None
+        client = None
         if num_workers > 1:
-            # # set up Dask distributed scheduler so the workers don't step on each other's toes and deadlock
-            # if __name__ == '__main__':
-            #     from dask.distributed import Client, LocalCluster
-            #     cluster = LocalCluster(n_workers=num_workers, threads_per_worker=1)
-            #     client = Client(cluster)
+            # set up Dask distributed scheduler so the workers don't step on each other's toes and deadlock
+            if __name__ == '__main__':
+                from dask.distributed import Client, LocalCluster
+                cluster = LocalCluster(n_workers=num_workers, threads_per_worker=1)
+                client = Client(cluster)
 
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
                 try:
@@ -435,6 +435,9 @@ class Simulation:
             self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
         print("PAST THE WORKER POOL!")
         download_bar.complete()
+        print("Processing downloaded data...")
+        for download_manager in download_managers:
+            download_manager.finalize()
 
         stream_results = {}
         for download_manager in download_managers:
@@ -445,8 +448,8 @@ class Simulation:
             'static': download_managers[0].finalize_static_data(download_managers[1:]),
             'series': stream_results,
         }
-        # if client is not None:
-        #     client.close()
+        if client is not None:
+            client.close()
         return result
 
     def results(
