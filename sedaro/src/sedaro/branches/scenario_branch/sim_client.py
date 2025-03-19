@@ -204,7 +204,7 @@ class Simulation:
                 **COMMON_API_KWARGS
             )
 
-    def dmlog(self, download_manager: DownloadWorker | None, msg):
+    def dmlog(self, download_manager: Optional[DownloadWorker], msg):
         if download_manager is not None:
             download_manager.log(msg)
 
