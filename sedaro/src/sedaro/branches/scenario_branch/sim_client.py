@@ -304,7 +304,6 @@ class Simulation:
                 except Exception as e:
                     reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                     raise SedaroApiException(status=page.status, reason=reason)
-        # download_manager.finalize()
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:
