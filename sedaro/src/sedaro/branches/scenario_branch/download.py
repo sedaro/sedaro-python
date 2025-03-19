@@ -145,8 +145,7 @@ class DownloadWorker:
                 stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB")  # REF 1
                 stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
                 stream_manager.filter_columns()
-                stream_manager.dataframe = stream_manager.dataframe.persist(
-                    scheduler='synchronous')  # ...persist(scheduler='synchronous')
+                stream_manager.dataframe = stream_manager.dataframe.persist(scheduler='synchronous')
                 stream_manager.dataframe = stream_manager.dataframe.set_index('time')
         # merge the derived data into the regular data
         for k in self.derived_streams:
