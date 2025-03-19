@@ -20,7 +20,6 @@ from sedaro.results.simulation_result import SimulationResult
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
 from ...utils import body_from_res, progress_bar, serdes
-# from .he_dwells_alone import downloadInParallel
 from .utils import FastFetcher, _get_filtered_streams, _get_metadata, _get_stats_for_sim_id
 
 if TYPE_CHECKING:
@@ -29,14 +28,8 @@ if TYPE_CHECKING:
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
-# allow ProcessPoolExecutor to work even if the user's script is not protected by `if __name__ == '__main__':`
-multiprocessing.set_start_method("spawn", force=True)
-
-# def dump_tracebacks(signalnum, frame):
-#     """Prints stack trace of all threads on SIGINT (Ctrl+C)."""
-#     print("\n=== Dumping all thread tracebacks ===", file=sys.stderr)
-#     faulthandler.dump_traceback(sys.stderr)
-#     sys.exit(1)  # Ensure the program exits after traceback is printed
+# # allow ProcessPoolExecutor to work even if the user's script is not protected by `if __name__ == '__main__':`
+# multiprocessing.set_start_method("spawn", force=True)
 
 def dump_tracebacks(signalnum=None, frame=None):
     """Prints full detailed stack traces of all running threads, including source code lines."""
