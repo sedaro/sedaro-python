@@ -11,7 +11,7 @@ requires-python = ">=3.9"
 classifiers = [ "Programming Language :: Python :: 3.9", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Operating System :: OS Independent", "Topic :: Software Development",]
 dependencies = [
   "certifi >= 14.5.14",
-  "dask[dataframe] ~= 2024.5",
+  "dask[dataframe, distributed] ~= 2024.5",
   "flatdict ~= 4.0.1",
   "frozendict ~= 2.3.4",
   "msgpack ~= 1.0.7",
