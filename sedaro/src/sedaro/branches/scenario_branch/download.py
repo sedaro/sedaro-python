@@ -1,3 +1,5 @@
+from ...settings import FETCH_LOGGING
+
 # import warnings
 
 # from tqdm import TqdmWarning, tqdm
@@ -115,13 +117,14 @@ class DownloadWorker:
         self.derived_static = {}
 
     def log(self, msg):
-        color_start = '\033[91m' if self.uuid == 1 else '\033[92m'
-        color_end = '\033[0m'
+        if FETCH_LOGGING:
+            color_start = '\033[91m' if self.uuid == 1 else '\033[92m'
+            color_end = '\033[0m'
 
-        import datetime
-        current_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            import datetime
+            current_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"{color_start}WORKER #{self.uuid} ({current_timestamp}): {msg}{color_end}")
+            print(f"{color_start}WORKER #{self.uuid} ({current_timestamp}): {msg}{color_end}")
 
     def ingest(self, page, target: dict = None):
         self.log("Ingesting...")

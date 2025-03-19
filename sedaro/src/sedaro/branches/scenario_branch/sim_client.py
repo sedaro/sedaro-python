@@ -1,13 +1,11 @@
 import asyncio
-import faulthandler
 import logging
-import multiprocessing
 import signal
 import sys
 import threading
 import time
 import traceback
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
@@ -28,8 +26,6 @@ if TYPE_CHECKING:
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
-# # allow ProcessPoolExecutor to work even if the user's script is not protected by `if __name__ == '__main__':`
-# multiprocessing.set_start_method("spawn", force=True)
 
 def dump_tracebacks(signalnum=None, frame=None):
     """Prints full detailed stack traces of all running threads, including source code lines."""
@@ -46,7 +42,7 @@ def dump_tracebacks(signalnum=None, frame=None):
     sys.exit(1)  # Ensure program exits after traceback dump
 
 
-# Register SIGINT handler
+# Register SIGINT handler (used to get tracebacks from inside ThreadPoolExecutor threads on KeyboardInterrupt)
 signal.signal(signal.SIGINT, dump_tracebacks)
 
 def serdes(v):
@@ -218,17 +214,12 @@ class Simulation:
         id: str = None,
         start: float = None,
         stop: float = None,
-        binWidth: float = None,
-        limit: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
         usesStreamTokens: bool = False,
         download_manager: DownloadWorker = None,
     ):
-        # if download_manager is not None and streams is not None:
-        #     print(
-        #         f"Started __fetch for download manager {download_manager.uuid} with streams: {streams} (is token ID? {usesStreamTokens})")
         self.dmlog(download_manager, f"Starting __fetch. Streams: {streams} (is token ID? {usesStreamTokens})")
 
         if sampleRate is None and continuationToken is None:
@@ -243,14 +234,6 @@ class Simulation:
             url += f'&start={start}'
         if stop is not None:
             url += f'&stop={stop}'
-        if binWidth is not None:
-            print(
-                "WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
-            url += f'&binWidth={binWidth}'
-        elif limit is not None:
-            print(
-                "WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
-            url += f'&limit={limit}'
         if not usesStreamTokens:
             streams = streams or []
             if len(streams) > 0:
@@ -346,16 +329,6 @@ class Simulation:
             download_manager.log(f"Worker failed: {traceback.format_exc()})")
             return e
 
-    def __downloadInParallelDummy(self, foo):
-        try:
-            pass
-        except Exception as e:
-            return e
-
-    def __dummy(self, *args, **kwargs):
-        print("Inside dummy function!")
-        return None
-
     def __results(
         self,
         job: 'SimulationHandle' = None,
@@ -410,11 +383,8 @@ class Simulation:
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
                 try:
                     exceptions = executor.map(
-                        # self.__dummy,
                         self.__downloadInParallel, [sim_id] * num_workers, workers,
                         [params] * num_workers, download_managers, [usesTokens] * num_workers
-                        # dummyfunc, [3] * num_workers  # [sim_id] * num_workers,  # workers,
-                        # [params] * num_workers, [usesTokens] * num_workers
                     )
                     executor.shutdown(wait=True)
                 except KeyboardInterrupt:
@@ -426,7 +396,6 @@ class Simulation:
                     raise e
         else:
             self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
-        print("PAST THE WORKER POOL!")
         download_bar.complete()
         print("Processing downloaded data...")
         for download_manager in download_managers:
