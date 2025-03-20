@@ -1,3 +1,5 @@
+from ...settings import FETCH_LOGGING
+
 # import warnings
 
 # from tqdm import TqdmWarning, tqdm
@@ -106,25 +108,39 @@ def prep_stream_id(stream_id):
 
 
 class DownloadWorker:
-    def __init__(self, download_bar):
+    def __init__(self, download_bar, uuid):
+        self.uuid = uuid
         self.download_bar = download_bar
         self.streams: dict[str: StreamManager] = {}
         self.stats = {}
         self.derived_streams: dict[str: StreamManager] = {}
         self.derived_static = {}
 
+    def log(self, msg):
+        if FETCH_LOGGING:
+            color_start = '\033[91m' if self.uuid == 1 else '\033[92m'
+            color_end = '\033[0m'
+
+            import datetime
+            current_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            print(f"{color_start}WORKER #{self.uuid} ({current_timestamp}): {msg}{color_end}")
+
     def ingest(self, page, target: dict = None):
+        self.log("Ingesting...")
         if target is None:
             target = self.streams
         for stream_id, stream_data in page.items():
             if stream_id not in self.streams:
                 self.streams[stream_id] = StreamManager(self.download_bar)
             self.streams[stream_id].ingest(stream_id, stream_data)
+        self.log("Ingested.")
 
     def ingest_derived(self, page):
         self.ingest(page, self.derived_streams)
 
     def finalize(self):
+        self.log("Finalizing...")
         # process regular and derived series data separately
         for stream_set in [self.streams, self.derived_streams]:
             for stream_manager in stream_set.values():
@@ -132,7 +148,7 @@ class DownloadWorker:
                 stream_manager.dataframe = stream_manager.dataframe.repartition(partition_size="100MB")  # REF 1
                 stream_manager.dataframe = stream_manager.dataframe.reset_index(drop=True)
                 stream_manager.filter_columns()
-                stream_manager.dataframe = stream_manager.dataframe.persist()
+                stream_manager.dataframe = stream_manager.dataframe.persist(scheduler='synchronous')
                 stream_manager.dataframe = stream_manager.dataframe.set_index('time')
         # merge the derived data into the regular data
         for k in self.derived_streams:
@@ -143,6 +159,7 @@ class DownloadWorker:
         # finalize
         for k in self.streams:
             self.streams[k] = self.streams[k].finalize()
+        self.log("Finalized.")
 
     def add_static_data(self, static_data: dict):
         self.derived_static = static_data
