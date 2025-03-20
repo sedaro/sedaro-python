@@ -371,14 +371,7 @@ class Simulation:
         download_managers = [DownloadWorker(
             download_bar, i + 1) for i in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
-        client = None
         if num_workers > 1:
-            # set up Dask distributed scheduler so the workers don't step on each other's toes and deadlock
-            if __name__ == '__main__':
-                from dask.distributed import Client, LocalCluster
-                cluster = LocalCluster(n_workers=num_workers, threads_per_worker=1)
-                client = Client(cluster)
-
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
                 try:
                     exceptions = executor.map(
@@ -409,8 +402,6 @@ class Simulation:
             'static': download_managers[0].finalize_static_data(download_managers[1:]),
             'series': stream_results,
         }
-        if client is not None:
-            client.close()
         return result
 
     def results(
