@@ -3,6 +3,7 @@ import os
 import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from time import sleep
 
 import uuid6
 from config import API_KEY, HOST, SUPERDOVE_SCENARIO_ID, WILDFIRE_SCENARIO_ID
@@ -23,6 +24,10 @@ def _make_sure_wildfire_terminated():
         assert results.status == 'TERMINATED'
     except (NoSimResultsError, AssertionError):
         sim.start(wait=True, verbose=True, timeout=600)
+
+        # ensure that the sim runs for a bit before terminating, so that there is guaranteed to be data
+        sleep(20)
+
         sim.terminate()
 
 
@@ -32,7 +37,7 @@ def _make_sure_superdove_done():
         results = sim.results()
         assert results.success
     except (NoSimResultsError, AssertionError):
-        sim.start()
+        sim.start(verbose=True, timeout=600)
         sim.results_poll()
 
 
