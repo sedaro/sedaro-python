@@ -22,7 +22,7 @@ def _make_sure_wildfire_terminated():
         results = sim.results()
         assert results.status == 'TERMINATED'
     except (NoSimResultsError, AssertionError):
-        sim.start(wait=True)
+        sim.start(wait=True, verbose=True, timeout=600)
         sim.terminate()
 
 

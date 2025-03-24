@@ -79,10 +79,10 @@ def test_start_as_contextmanager():
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
 
     try:
-        with sim.start(wait=True) as simulation_handle:
+        with sim.start(wait=True, verbose=True, timeout=600) as simulation_handle:
             sim_id = simulation_handle['id']
             assert simulation_handle.status()[STATUS] == RUNNING
-            raise ValueError('Intentional error') # intentionally raise error
+            raise ValueError('Intentional error')  # intentionally raise error
     except ValueError as e:
         if str(e) != 'Intentional error':
             raise
