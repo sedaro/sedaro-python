@@ -25,7 +25,7 @@ def _make_sure_wildfire_terminated():
     except (NoSimResultsError, AssertionError):
         sim.start(wait=True, verbose=True, timeout=600)
 
-        # ensure that the sim runs for a bit before terminating, so that there is guaranteed to be data
+        # ensure that the sim runs for a bit before terminating, to ensure that some data is produced
         sleep(20)
 
         sim.terminate()
