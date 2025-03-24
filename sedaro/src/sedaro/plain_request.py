@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Literal, Optional, Union, overload
 import requests
 from urllib3.response import HTTPResponse
 
+from .settings import FETCH_LOGGING
 from .utils import check_for_res_error, parse_urllib_response
 
 if TYPE_CHECKING:
@@ -96,7 +97,9 @@ class PlainRequest:
         while True:
             try:
                 return requests.get(timeout=TIMEOUT_SECONDS, **kwargs)
-            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
+            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+                if FETCH_LOGGING:
+                    print(F"TIMEOUT ITERATION #{timeout_iterations + 1} (error type: {type(e).__name__})")
                 if timeout_iterations < MAX_TIMEOUTS:
                     timeout_iterations += 1
                     continue

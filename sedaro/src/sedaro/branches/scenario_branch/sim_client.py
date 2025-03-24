@@ -1,14 +1,19 @@
 import asyncio
 import logging
+import signal
+import sys
+import threading
 import time
+import traceback
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager, contextmanager
 from typing import TYPE_CHECKING, Any, Generator, List, Optional, Tuple, Union
 
+from sedaro_base_client.apis.tags import externals_api, jobs_api
+
 from sedaro.branches.scenario_branch.download import DownloadWorker, ProgressBar
 from sedaro.grpc_client import CosimClient
 from sedaro.results.simulation_result import SimulationResult
-from sedaro_base_client.apis.tags import externals_api, jobs_api
 
 from ...exceptions import NoSimResultsError, SedaroApiException, SimInitializationError
 from ...settings import BAD_STATUSES, COMMON_API_KWARGS, PRE_RUN_STATUSES, QUEUED, RUNNING, STATUS
@@ -21,6 +26,24 @@ if TYPE_CHECKING:
     from ...branches import ScenarioBranch
     from ...sedaro_api_client import SedaroApiClient
 
+
+def dump_tracebacks(signalnum=None, frame=None):
+    """Prints full detailed stack traces of all running threads, including source code lines."""
+    print("\n=== Dumping all thread tracebacks ===", file=sys.stderr)
+
+    for thread in threading.enumerate():
+        print(f"\n--- Thread {thread.name} (ID: {thread.ident}) ---", file=sys.stderr)
+        stack = traceback.format_stack(sys._current_frames().get(thread.ident, None))
+        if stack:
+            print("".join(stack), file=sys.stderr)
+        else:
+            print("No stack trace available.", file=sys.stderr)
+
+    sys.exit(1)  # Ensure program exits after traceback dump
+
+
+# Register SIGINT handler (used to get tracebacks from inside ThreadPoolExecutor threads on KeyboardInterrupt)
+signal.signal(signal.SIGINT, dump_tracebacks)
 
 def serdes(v):
     import numpy as np
@@ -181,20 +204,24 @@ class Simulation:
                 **COMMON_API_KWARGS
             )
 
+    def dmlog(self, download_manager: Optional[DownloadWorker], msg):
+        if download_manager is not None:
+            download_manager.log(msg)
+
     def __fetch(
         self,
         *,
         id: str = None,
         start: float = None,
         stop: float = None,
-        binWidth: float = None,
-        limit: float = None,
         streams: Optional[List[Tuple[str, ...]]] = None,
         sampleRate: int = None,
         continuationToken: str = None,
         usesStreamTokens: bool = False,
         download_manager: DownloadWorker = None,
     ):
+        self.dmlog(download_manager, f"Starting __fetch. Streams: {streams} (is token ID? {usesStreamTokens})")
+
         if sampleRate is None and continuationToken is None:
             sampleRate = 1
 
@@ -207,14 +234,6 @@ class Simulation:
             url += f'&start={start}'
         if stop is not None:
             url += f'&stop={stop}'
-        if binWidth is not None:
-            print(
-                "WARNING: the parameter `binWidth` is deprecated and will be removed in a future release.")
-            url += f'&binWidth={binWidth}'
-        elif limit is not None:
-            print(
-                "WARNING: the parameter `limit` is deprecated and will be removed in a future release.")
-            url += f'&limit={limit}'
         if not usesStreamTokens:
             streams = streams or []
             if len(streams) > 0:
@@ -229,11 +248,14 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
+        self.dmlog(download_manager, f"Calling URL: {url}")
         response = fast_fetcher.get(url)
+        self.dmlog(download_manager, f"Got response from {url} -- status: {response.status}. Parsing response...")
         _response = None
         has_nonempty_ctoken = False
         try:
             _response = response.parse()
+            self.dmlog(download_manager, f"Parsed response from {url}")
             if response.status != 200:
                 raise Exception()
             else:
@@ -256,8 +278,12 @@ class Simulation:
             while has_nonempty_ctoken:
                 # fetch page
                 request_url = f'/data/{id}?&continuationToken={ctoken}'
+                self.dmlog(download_manager, f"Calling URL: {request_url}")
                 page = fast_fetcher.get(request_url)
+                self.dmlog(download_manager,
+                           f"Got response from {request_url} -- status: {page.status}. Parsing response...")
                 _page = page.parse()
+                self.dmlog(download_manager, f"Parsed response from {request_url}")
                 download_manager.ingest(_page['series'])
                 download_manager.update_metadata(_page['meta'])
                 try:
@@ -278,9 +304,8 @@ class Simulation:
                 except Exception as e:
                     reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
                     raise SedaroApiException(status=page.status, reason=reason)
-        download_manager.finalize()
 
-    def __downloadInParallel(self, sim_id, streams, params, download_manager, usesStreamTokens):
+    def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:
             start = params['start']
             stop = params['stop']
@@ -299,6 +324,8 @@ class Simulation:
                 stop=stop, usesStreamTokens=usesStreamTokens, download_manager=download_manager
             )
         except Exception as e:
+            import traceback
+            download_manager.log(f"Worker failed: {traceback.format_exc()})")
             return e
 
     def __results(
@@ -342,31 +369,40 @@ class Simulation:
             "Downloading..."
         )
         download_managers = [DownloadWorker(
-            download_bar) for _ in range(num_workers)]
+            download_bar, i + 1) for i in range(num_workers)]
         params = {'start': start, 'stop': stop, 'sampleRate': sampleRate}
         if num_workers > 1:
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
-                exceptions = executor.map(
-                    self.__downloadInParallel, [sim_id] * num_workers, workers,
-                    [params] * num_workers, download_managers, [usesTokens] * num_workers
-                )
-                executor.shutdown(wait=True)
+                try:
+                    exceptions = executor.map(
+                        self.__downloadInParallel, [sim_id] * num_workers, workers,
+                        [params] * num_workers, download_managers, [usesTokens] * num_workers
+                    )
+                    executor.shutdown(wait=True)
+                except KeyboardInterrupt:
+                    print(f"Ctrl-C detected. Shutting down workers...", file=sys.stderr)
+                    executor.shutdown(wait=False)
+                    dump_tracebacks(signal.SIGINT, None)
             for e in exceptions:
                 if e is not None:
                     raise e
         else:
             self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
         download_bar.complete()
+        print("Processing downloaded data...")
+        for download_manager in download_managers:
+            download_manager.finalize()
 
         stream_results = {}
         for download_manager in download_managers:
             stream_results.update(download_manager.streams)
-        return {
+        result = {
             'meta': download_managers[0].finalize_metadata(download_managers[1:]),
             'stats': download_managers[0].finalize_stats(download_managers[1:]),
             'static': download_managers[0].finalize_static_data(download_managers[1:]),
             'series': stream_results,
         }
+        return result
 
     def results(
         self,
@@ -466,7 +502,7 @@ class Simulation:
             SimulationResult: a `SimulationResult` instance to interact with the results of the sim.
         """
         job = self.poll(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
-        
+
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
@@ -521,7 +557,7 @@ class Simulation:
         """
         job = self.status(job_id)
         await self.poll_async(job_id=job_id, retry_interval=retry_interval, timeout=timeout)
-        
+
         data = self.__results(
             job, start=start, stop=stop, streams=streams, sampleRate=sampleRate, num_workers=num_workers
         )
@@ -863,7 +899,7 @@ class SimulationHandle:
             str: the ultimate status of the simulation.
         """
         return self._sim_client.poll(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
-    
+
     async def poll_async(
         self,
         timeout: int = None,
@@ -885,7 +921,7 @@ class SimulationHandle:
             str: the ultimate status of the simulation.
         """
         return await self._sim_client.poll_async(job_id=self._job['id'], retry_interval=retry_interval, timeout=timeout)
- 
+
     def stats(self, job_id: str = None, streams: List[Tuple[str, ...]] = None, wait: bool = False) -> dict:
         return self._sim_client.stats(job_id=job_id or self._job['id'], streams=streams, wait=wait)
 
