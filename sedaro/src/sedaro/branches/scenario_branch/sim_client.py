@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import math
 import signal
 import sys
 import threading
@@ -91,6 +92,7 @@ class Simulation:
         label=None,
         capacity=None,
         seed=None,
+        verbose=False,
         **kwargs,
     ) -> 'SimulationHandle':
         """Starts simulation corresponding to the respective Sedaro Scenario Branch id.
@@ -101,6 +103,7 @@ class Simulation:
             label (str, optional): A label to assign to the simulation job. Defaults to `None`.
             capacity (int, optional): The capacity to allocate to the simulation. Defaults to using the lesser of the Workspace capacity and the number of Agents in the Scenario.
             seed (int, optional): The pseudorandom seed to use for the simulation. Defaults to the Simulation Service's default.
+            verbose (bool, optional): If `True`, periodically print the sim's status to the console while waiting for it to start. Defaults to `False`.
             **kwargs: Additional keyword arguments to pass to the simulation job as part of the HTTP request body.
 
         Returns:
@@ -129,6 +132,8 @@ class Simulation:
             if (handle := handle.status())[STATUS] in PRE_RUN_STATUSES:
                 time.sleep(0.1)
                 t += 0.1
+                if verbose and math.isclose(t % 10.0, 0.0, abs_tol=0.01):
+                    print(f'Current simulation status: {handle[STATUS]}')
             elif handle[STATUS] in BAD_STATUSES:
                 raise SimInitializationError(handle['message'])
             else:

@@ -36,40 +36,44 @@ def test_run_simulation():
     simulation_handle = sim.start()
     print('- Started simulation')
 
-    _wait_until_passed_pending(simulation_handle)
+    try:
+        _wait_until_passed_pending(simulation_handle)
 
-    # Get status (via default latest)
-    _check_job_status_running(
-        sim.status()
-    )
+        # Get status (via default latest)
+        _check_job_status_running(
+            sim.status()
+        )
 
-    # Get status (via id)
-    _check_job_status_running(
-        sim.status(simulation_handle['id'])
-    )
+        # Get status (via id)
+        _check_job_status_running(
+            sim.status(simulation_handle['id'])
+        )
 
-    # Terminate
-    print('- Terminating...')
-    sim.terminate()
+    finally:
+        # Terminate
+        print('- Terminating...')
+        sim.terminate()
 
     # Test control from handle
     simulation_handle = sim.start()
     print('- Started simulation (via handle)')
 
-    _wait_until_passed_pending(simulation_handle)
+    try:
+        _wait_until_passed_pending(simulation_handle)
 
-    # Get status (via handle)
-    _check_job_status_running(
-        simulation_handle := simulation_handle.status()
-    )
-    # Assert idempotency
-    _check_job_status_running(
-        simulation_handle := simulation_handle.status()
-    )
+        # Get status (via handle)
+        _check_job_status_running(
+            simulation_handle := simulation_handle.status()
+        )
+        # Assert idempotency
+        _check_job_status_running(
+            simulation_handle := simulation_handle.status()
+        )
 
-    # Terminate
-    print('- Terminating (via handle)...')
-    simulation_handle.terminate()
+    finally:
+        # Terminate
+        print('- Terminating (via handle)...')
+        simulation_handle.terminate()
 
     # Test that handle is still useable
     assert simulation_handle.status()[STATUS] == TERMINATED
@@ -79,10 +83,10 @@ def test_start_as_contextmanager():
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
 
     try:
-        with sim.start(wait=True) as simulation_handle:
+        with sim.start(wait=True, verbose=True, timeout=600) as simulation_handle:
             sim_id = simulation_handle['id']
             assert simulation_handle.status()[STATUS] == RUNNING
-            raise ValueError('Intentional error') # intentionally raise error
+            raise ValueError('Intentional error')  # intentionally raise error
     except ValueError as e:
         if str(e) != 'Intentional error':
             raise
