@@ -49,21 +49,23 @@ def test_run_externals():
     sim = sedaro.scenario(SIMPLESAT_SCENARIO_ID).simulation
 
     # Start simulation
-    simulation_handle = sim.start(wait=True, verbose=True)
+    simulation_handle = sim.start(wait=True, verbose=True, timeout=600)
     print('- Started simulation')
 
-    __do_test(simulation_handle)
+    try:
+        __do_test(simulation_handle)
 
-    # Test that can communicate after handle refresh
-    simulation_handle.status()
-    __do_test(simulation_handle)
+        # Test that can communicate after handle refresh
+        simulation_handle.status()
+        __do_test(simulation_handle)
 
-    simulation_handle = sim.status()
-    __do_test(simulation_handle)
+        simulation_handle = sim.status()
+        __do_test(simulation_handle)
 
-    # Terminate
-    print('- Terminating...')
-    sim.terminate()
+    finally:
+        # Terminate
+        print('- Terminating...')
+        sim.terminate()
 
 
 def run_tests():
