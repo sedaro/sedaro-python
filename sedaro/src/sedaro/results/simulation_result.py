@@ -169,28 +169,6 @@ class SimulationResult(SedaroResultBase):
             static_data=filtered_static_data,
         )
 
-    # def save(self, path: Union[str, Path]):
-    #     '''Save the simulation result to a directory with the specified path.'''
-    #     try:
-    #         os.makedirs(path)
-    #     except FileExistsError:
-    #         if not (os.path.isdir(path) and any(os.scandir(path))):
-    #             raise FileExistsError(
-    #                 f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-    #     with open(f"{path}/class.json", "w") as fp:
-    #         json.dump({'class': 'SimulationResult'}, fp)
-    #     os.mkdir(f"{path}/data")
-    #     parquet_files = []
-    #     for agent in self.__data['series']:
-    #         agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
-    #         parquet_files.append(pname)
-    #         df: 'dd' = self.__data['series'][agent]
-    #         df.to_parquet(agent_parquet_path)
-    #     with open(f"{path}/meta.json", "w") as fp:
-    #         json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-    #                   'stats': self.__stats, 'static': self.__static_data, 'parquet_files': parquet_files}, fp)
-    #     print(f"Simulation result saved to {path}.")
-
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the simulation result's series data, and returns associated metadata.'''
         os.mkdir(data_subdir_path := self.data_subdir(path))

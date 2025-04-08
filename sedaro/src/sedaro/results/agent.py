@@ -93,37 +93,6 @@ class SedaroAgentResult(SedaroResultBase):
         return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_],
             prefix, self.stats_to_plot, static_data_for_block)
 
-    # def save(self, path: Union[str, Path]):
-    #     '''Save the agent result to a directory with the specified path.'''
-    #     import dask.dataframe as dd
-
-    #     try:
-    #         os.makedirs(path)
-    #     except FileExistsError:
-    #         if not (os.path.isdir(path) and any(os.scandir(path))):
-    #             raise FileExistsError(
-    #                 f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-    #     with open(f"{path}/class.json", "w") as fp:
-    #         json.dump({'class': 'SedaroAgentResult'}, fp)
-    #     os.mkdir(f"{path}/data")
-    #     parquet_files = []
-    #     for engine in self.__series:
-    #         engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-    #         parquet_files.append(pname)
-    #         df: dd = self.__series[engine]
-    #         df.to_parquet(engine_parquet_path)
-    #     with open(f"{path}/meta.json", "w") as fp:
-    #         json.dump({
-    #             'name': self.__name,
-    #             'initial_state': self.__initial_state,
-    #             'block_structures': self.__block_structures,
-    #             'column_index': self.__column_index,
-    #             'parquet_files': parquet_files,
-    #             'stats': self.__stats,
-    #             'static': self.__static_data,
-    #         }, fp)
-    #     print(f"Agent result saved to {path}.")
-
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the agent's series data, and returns associated metadata.'''
         os.mkdir(data_subdir_path := self.data_subdir(path))

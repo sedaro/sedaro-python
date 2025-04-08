@@ -283,27 +283,6 @@ class SedaroSeries(SedaroResultBase):
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    # def save(self, path: Union[str, Path]):
-    #     '''Save the series result to a directory with the specified path.'''
-    #     try:
-    #         os.makedirs(path)
-    #     except FileExistsError:
-    #         if not (os.path.isdir(path) and any(os.scandir(path))):
-    #             raise FileExistsError(
-    #                 f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-    #     with open(f"{path}/class.json", "w") as fp:
-    #         json.dump({'class': 'SedaroSeries'}, fp)
-    #     with open(f"{path}/meta.json", "w") as fp:
-    #         json.dump({
-    #             'name': self.__name,
-    #             'column_index': self.__column_index,
-    #             'prefix': self.__prefix,
-    #             'stats': self.__initial_stats,
-    #             'block_name': self.__block_name,
-    #         }, fp)
-    #     self.__series.to_parquet(f"{path}/data.parquet")
-    #     print(f"Series result saved to {path}.")
-
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the series data, and returns associated metadata.'''
         self.__series.to_parquet(f"{path}/{PQ_FILENAME_FOR_DISK}")

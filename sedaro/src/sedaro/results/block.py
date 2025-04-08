@@ -122,34 +122,6 @@ class SedaroBlockResult(SedaroResultBase):
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    # def save(self, path: Union[str, Path]):
-    #     '''Save the block result to a directory with the specified path.'''
-    #     try:
-    #         os.makedirs(path)
-    #     except FileExistsError:
-    #         if not (os.path.isdir(path) and any(os.scandir(path))):
-    #             raise FileExistsError(
-    #                 f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-    #     with open(f"{path}/class.json", "w") as fp:
-    #         json.dump({'class': 'SedaroBlockResult'}, fp)
-    #     os.mkdir(f"{path}/data")
-    #     parquet_files = []
-    #     for engine in self.__series:
-    #         engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-    #         parquet_files.append(pname)
-    #         df: 'dd' = self.__series[engine]
-    #         df.to_parquet(engine_parquet_path)
-    #     with open(f"{path}/meta.json", "w") as fp:
-    #         json.dump({
-    #             'structure': self.__structure,
-    #             'column_index': self.__column_index,
-    #             'prefix': self.__prefix,
-    #             'parquet_files': parquet_files,
-    #             'stats': self.__stats,
-    #             'static': self.__static_data,
-    #         }, fp)
-    #     print(f"Block result saved to {path}.")
-
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the block's series data, and returns associated metadata.'''
         os.mkdir(data_subdir_path := self.data_subdir(path))
