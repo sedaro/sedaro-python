@@ -1,6 +1,7 @@
 import json
 import math
-from os import listdir
+import os
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Union
 
@@ -183,7 +184,7 @@ def get_column_names(column_index, prefix):
 
 
 def get_parquets(path: str):
-    paths = listdir(path)
+    paths = os.listdir(path)
     return [parquet for parquet in paths if not parquet.startswith('.')]
 
 
@@ -251,7 +252,7 @@ def get_static_data_engines(static_data: dict):
         return [ENGINE_MAP_CASED[ENGINE_MAP[stream_id[-1]]] for stream_id in static_data.keys()]
 
 
-class FromFileAndToFileAreDeprecated:
+class SedaroResultBase(ABC):
     @classmethod
     def from_file(self, filename: Union[str, Path]):
         print("Warning: `from_file` is deprecated. Use `load` instead. Calling `load`.")
@@ -260,3 +261,41 @@ class FromFileAndToFileAreDeprecated:
     def to_file(self, filename: Union[str, Path]):
         print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
         return self.save(filename)
+
+    def data_subdir(self, root_path: Union[str, Path]):
+        '''Return the subdirectory where the data is stored.'''
+        return f"{root_path}/data"
+
+    def save(self, path: Union[str, Path]):
+        '''Save the {class_name}'s data to a directory with the specified path.'''
+        try:
+            os.makedirs(path)
+        except FileExistsError:
+            if not (os.path.isdir(path) and any(os.scandir(path))):
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': self.__class__.__name__}, fp)
+        metadata_to_save = self.do_save(path)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump(metadata_to_save, fp)
+        print(f"{self.__class__.__name__} saved to {path}.")
+
+    # def load(self, path: Union[str, Path]):
+    #     '''Load a {class_name}'s data from the specified path.'''
+
+    @abstractmethod
+    def do_save(self, path: Union[str, Path]) -> dict:
+        '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
+        pass
+
+    # @abstractmethod
+    # def do_load(self, path: Union[str, Path]):
+    #     pass
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if cls.save.__doc__:
+            cls.save.__doc__ = cls.save.__doc__.format(class_name=cls.__name__)
+        # if cls.load.__doc__:
+        #     cls.load.__doc__ = cls.load.__doc__.format(class_name=cls.__name__)

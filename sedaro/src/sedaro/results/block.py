@@ -4,26 +4,25 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Generator, Union
 
 from .series import SedaroSeries
-from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
-                    FromFileAndToFileAreDeprecated, get_column_names,
-                    get_parquets, get_static_data, get_static_data_engines, hfill)
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL, SedaroResultBase, get_column_names, get_parquets,
+                    get_static_data, get_static_data_engines, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
 
 
-class SedaroBlockResult(FromFileAndToFileAreDeprecated):
+class SedaroBlockResult(SedaroResultBase):
 
     def __init__(
-            self,
-            structure,
-            series: dict,
-            stats: dict,
-            column_index: dict,
-            prefix: str,
-            stats_to_plot: list = None,
-            static_data: dict[str: dict] = None,
-        ):
+        self,
+        structure,
+        series: dict,
+        stats: dict,
+        column_index: dict,
+        prefix: str,
+        stats_to_plot: list = None,
+        static_data: dict[str: dict] = None,
+    ):
         '''Initialize a new block result.
 
         Block results are typically created through the .block method of
@@ -123,33 +122,51 @@ class SedaroBlockResult(FromFileAndToFileAreDeprecated):
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def save(self, path: Union[str, Path]):
-        '''Save the block result to a directory with the specified path.'''
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(
-                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SedaroBlockResult'}, fp)
-        os.mkdir(f"{path}/data")
+    # def save(self, path: Union[str, Path]):
+    #     '''Save the block result to a directory with the specified path.'''
+    #     try:
+    #         os.makedirs(path)
+    #     except FileExistsError:
+    #         if not (os.path.isdir(path) and any(os.scandir(path))):
+    #             raise FileExistsError(
+    #                 f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+    #     with open(f"{path}/class.json", "w") as fp:
+    #         json.dump({'class': 'SedaroBlockResult'}, fp)
+    #     os.mkdir(f"{path}/data")
+    #     parquet_files = []
+    #     for engine in self.__series:
+    #         engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
+    #         parquet_files.append(pname)
+    #         df: 'dd' = self.__series[engine]
+    #         df.to_parquet(engine_parquet_path)
+    #     with open(f"{path}/meta.json", "w") as fp:
+    #         json.dump({
+    #             'structure': self.__structure,
+    #             'column_index': self.__column_index,
+    #             'prefix': self.__prefix,
+    #             'parquet_files': parquet_files,
+    #             'stats': self.__stats,
+    #             'static': self.__static_data,
+    #         }, fp)
+    #     print(f"Block result saved to {path}.")
+
+    def do_save(self, path: Union[str, Path]):
+        '''Called by base class's `save` method. Saves the block's series data, and returns associated metadata.'''
+        os.mkdir(data_subdir_path := self.data_subdir(path))
         parquet_files = []
         for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-            parquet_files.append(pname)
+            engine_parquet_path = f"{data_subdir_path}/{(pq_filename := engine.replace('/', '.'))}"
+            parquet_files.append(pq_filename)
             df: 'dd' = self.__series[engine]
             df.to_parquet(engine_parquet_path)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({
-                'structure': self.__structure,
-                'column_index': self.__column_index,
-                'prefix': self.__prefix,
-                'parquet_files': parquet_files,
-                'stats': self.__stats,
-                'static': self.__static_data,
-            }, fp)
-        print(f"Block result saved to {path}.")
+        return {
+            'structure': self.__structure,
+            'column_index': self.__column_index,
+            'prefix': self.__prefix,
+            'parquet_files': parquet_files,
+            'stats': self.__stats,
+            'static': self.__static_data,
+        }
 
     @classmethod
     def load(cls, path: Union[str, Path]):
