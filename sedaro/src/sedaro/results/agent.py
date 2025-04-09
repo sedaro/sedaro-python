@@ -112,34 +112,6 @@ class SedaroAgentResult(SedaroResultBase):
             'static': self.__static_data,
         }
 
-    # @classmethod
-    # def load(cls, path: Union[str, Path]):
-    #     '''Load an agent result from the specified path.'''
-    #     import dask.dataframe as dd
-
-    #     with open(f"{path}/class.json", "r") as fp:
-    #         archive_type = json.load(fp)['class']
-    #         if archive_type != 'SedaroAgentResult':
-    #             raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-    #     with open(f"{path}/meta.json", "r") as fp:
-    #         meta = json.load(fp)
-    #         name = meta['name']
-    #         block_structures = meta['block_structures']
-    #         initial_state = meta['initial_state']
-    #         column_index = meta['column_index']
-    #         stats = meta['stats'] if 'stats' in meta else {}
-    #         static_data = meta['static'] if 'static' in meta else {}
-    #     engines = {}
-    #     try:
-    #         for engine in meta['parquet_files']:
-    #             df = dd.read_parquet(f"{path}/data/{engine}")
-    #             engines[engine.replace('.', '/')] = df
-    #     except KeyError:
-    #         for engine in get_parquets(f"{path}/data/"):
-    #             df = dd.read_parquet(f"{path}/data/{engine}")
-    #             engines[engine.replace('.', '/')] = df
-    #     return cls(name, block_structures, engines, column_index, initial_state, stats, static_data=static_data)
-
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroAgentResult':
         '''Load an agent's data from the specified path and return a SedaroAgentResult object.'''

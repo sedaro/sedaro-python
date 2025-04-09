@@ -186,32 +186,6 @@ class SimulationResult(SedaroResultBase):
             'parquet_files': parquet_files,
         }
 
-    # @classmethod
-    # def load(cls, path: Union[str, Path]):
-    #     '''Load a simulation result from the specified path.'''
-    #     import dask.dataframe as dd
-    #     with open(f"{path}/class.json", "r") as fp:
-    #         archive_type = json.load(fp)['class']
-    #         if archive_type != 'SimulationResult':
-    #             raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-    #     data = {}
-    #     with open(f"{path}/meta.json", "r") as fp:
-    #         contents = json.load(fp)
-    #         simulation = contents['simulation']
-    #         data['meta'] = contents['meta']
-    #         data['stats'] = contents['stats'] if 'stats' in contents else {}
-    #         data['static'] = contents['static'] if 'static' in contents else {}
-    #     data['series'] = {}
-    #     try:
-    #         for agent in contents['parquet_files']:
-    #             df = dd.read_parquet(f"{path}/data/{agent}")
-    #             data['series'][agent.replace('.', '/')] = df
-    #     except KeyError:
-    #         for agent in get_parquets(f"{path}/data/"):
-    #             df = dd.read_parquet(f"{path}/data/{agent}")
-    #             data['series'][agent.replace('.', '/')] = df
-    #     return cls(simulation, data)
-
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SimulationResult':
         '''Load a simulation result's data from the specified path and return a SimulationResult object.'''

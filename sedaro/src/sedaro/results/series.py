@@ -294,25 +294,6 @@ class SedaroSeries(SedaroResultBase):
             'block_name': self.__block_name,
         }
 
-    # @classmethod
-    # def load(cls, path: Union[str, Path]):
-    #     '''Load a series result from the specified path.'''
-    #     import dask.dataframe as dd
-
-    #     with open(f"{path}/class.json", "r") as fp:
-    #         archive_type = json.load(fp)['class']
-    #         if archive_type != 'SedaroSeries':
-    #             raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-    #     with open(f"{path}/meta.json", "r") as fp:
-    #         meta = json.load(fp)
-    #         name = meta['name']
-    #         column_index = meta['column_index']
-    #         prefix = meta['prefix']
-    #         stats = meta['stats'] if 'stats' in meta else {}
-    #         block_name = meta['block_name'] if 'block_name' in meta else None
-    #     data = dd.read_parquet(f"{path}/data.parquet")
-    #     return cls(name, data, stats, column_index, prefix, block_name=block_name)
-
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroSeries':
         '''Load a series's data from the specified path and return a SedaroSeries object.'''
