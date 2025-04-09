@@ -264,10 +264,37 @@ class SedaroResultBase(ABC):
         print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
         return self.save(filename)
 
-    @classmethod
-    def data_subdir(self, root_path: Union[str, Path]):
+    @staticmethod
+    def data_subdir(root_path: Union[str, Path]):
         '''Return the subdirectory where the data is stored.'''
         return f"{root_path}/data"
+
+    @staticmethod
+    def agent_name_for_filename(agent_name: str):
+        '''Convert agent name to a format that can be used as a file name.'''
+        return agent_name.replace('/', '.')
+
+    @staticmethod
+    def agent_name_from_filename(filename: str):
+        '''Convert a file name back to the original agent name.'''
+        return filename.replace('.', '/')
+
+    def save_parquets(self, data: dict, path: Union[str, Path]):
+        '''Save the DataFrames as Parquet files in their proper location given the specified save path.'''
+        import dask.dataframe as dd
+        os.mkdir(data_subdir_path := self.data_subdir(path))
+        parquet_files = []
+        for agent in data:
+            agent_parquet_path = f"{data_subdir_path}/{(pq_filename := self.agent_name_for_filename(agent))}"
+            parquet_files.append(pq_filename)
+            df: 'dd' = data[agent]
+            df.to_parquet(agent_parquet_path)
+        return parquet_files
+
+    @classmethod
+    def load_parquets(cls, path: Union[str, Path], metadata: dict) -> dict:
+        '''Load Parquet files from the specified save path and return a dictionary of DataFrames.'''
+        pass
 
     def save(self, path: Union[str, Path]):
         '''Save the {class_name}'s data to a directory with the specified path.'''
@@ -284,6 +311,11 @@ class SedaroResultBase(ABC):
             json.dump(metadata_to_save, fp)
         print(f"{self.__class__.__name__} saved to {path}.")
 
+    @abstractmethod
+    def do_save(self, path: Union[str, Path]) -> dict:
+        '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
+        pass
+
     @classmethod
     def load(cls: type[T], path: Union[str, Path]) -> T:
         '''Load a {class_name}'s data from the specified path.'''
@@ -294,11 +326,6 @@ class SedaroResultBase(ABC):
         with open(f"{path}/meta.json", "r") as fp:
             metadata_dict = json.load(fp)
         return cls.do_load(path, metadata_dict)
-
-    @abstractmethod
-    def do_save(self, path: Union[str, Path]) -> dict:
-        '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
-        pass
 
     @classmethod
     @abstractmethod

@@ -171,13 +171,7 @@ class SimulationResult(SedaroResultBase):
 
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the simulation result's series data, and returns associated metadata.'''
-        os.mkdir(data_subdir_path := self.data_subdir(path))
-        parquet_files = []
-        for agent in self.__data['series']:
-            agent_parquet_path = f"{data_subdir_path}/{(pq_filename := agent.replace('/', '.'))}"
-            parquet_files.append(pq_filename)
-            df: 'dd' = self.__data['series'][agent]
-            df.to_parquet(agent_parquet_path)
+        parquet_files = self.save_parquets(self.__data['series'], path)
         return {
             'meta': self.__data['meta'],
             'simulation': self.__simulation,

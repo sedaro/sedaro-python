@@ -95,13 +95,7 @@ class SedaroAgentResult(SedaroResultBase):
 
     def do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the agent's series data, and returns associated metadata.'''
-        os.mkdir(data_subdir_path := self.data_subdir(path))
-        parquet_files = []
-        for engine in self.__series:
-            engine_parquet_path = f"{data_subdir_path}/{(pq_filename := engine.replace('/', '.'))}"
-            parquet_files.append(pq_filename)
-            df: 'dd' = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
+        parquet_files = self.save_parquets(self.__series, path)
         return {
             'name': self.__name,
             'initial_state': self.__initial_state,
