@@ -140,32 +140,57 @@ class SedaroBlockResult(SedaroResultBase):
             'static': self.__static_data,
         }
 
-    @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load a block result from the specified path.'''
-        import dask.dataframe as dd
+    # @classmethod
+    # def load(cls, path: Union[str, Path]):
+    #     '''Load a block result from the specified path.'''
+    #     import dask.dataframe as dd
 
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SedaroBlockResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/meta.json", "r") as fp:
-            meta = json.load(fp)
-            structure = meta['structure']
-            column_index = meta['column_index']
-            prefix = meta['prefix']
-            stats = meta['stats'] if 'stats' in meta else {}
-            static_data = meta['static'] if 'static' in meta else {}
+    #     with open(f"{path}/class.json", "r") as fp:
+    #         archive_type = json.load(fp)['class']
+    #         if archive_type != 'SedaroBlockResult':
+    #             raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
+    #     with open(f"{path}/meta.json", "r") as fp:
+    #         meta = json.load(fp)
+    #         structure = meta['structure']
+    #         column_index = meta['column_index']
+    #         prefix = meta['prefix']
+    #         stats = meta['stats'] if 'stats' in meta else {}
+    #         static_data = meta['static'] if 'static' in meta else {}
+    #     engines = {}
+    #     try:
+    #         for agent in meta['parquet_files']:
+    #             df = dd.read_parquet(f"{path}/data/{agent}")
+    #             engines[agent.replace('.', '/')] = df
+    #     except KeyError:
+    #         for agent in get_parquets(f"{path}/data/"):
+    #             df = dd.read_parquet(f"{path}/data/{agent}")
+    #             engines[agent.replace('.', '/')] = df
+    #     return cls(structure, engines, stats, column_index, prefix, static_data=static_data)
+
+    @classmethod
+    def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroBlockResult':
+        '''Load a block's data from the specified path and return a SedaroBlockResult object.'''
+        import dask.dataframe as dd
+        subdir_path = cls.data_subdir(path)
+        # Load the data
         engines = {}
         try:
-            for agent in meta['parquet_files']:
-                df = dd.read_parquet(f"{path}/data/{agent}")
+            for agent in metadata['parquet_files']:
+                df = dd.read_parquet(f"{subdir_path}/{agent}")
                 engines[agent.replace('.', '/')] = df
         except KeyError:
-            for agent in get_parquets(f"{path}/data/"):
-                df = dd.read_parquet(f"{path}/data/{agent}")
+            for agent in get_parquets(f"{subdir_path}/"):
+                df = dd.read_parquet(f"{subdir_path}/{agent}")
                 engines[agent.replace('.', '/')] = df
-        return cls(structure, engines, stats, column_index, prefix, static_data=static_data)
+        # build the block result
+        return cls(
+            metadata['structure'],
+            engines,
+            metadata['stats'] if 'stats' in metadata else {},
+            metadata['column_index'],
+            metadata['prefix'],
+            static_data=metadata['static'] if 'static' in metadata else {},
+        )
 
     def __has_stats(self, variable: str) -> bool:
         for engine in self.__stats:

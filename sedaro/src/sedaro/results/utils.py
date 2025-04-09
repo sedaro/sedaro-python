@@ -3,7 +3,9 @@ import math
 import os
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Union
+from typing import TypeVar, Union
+
+T = TypeVar('T', bound='SedaroResultBase')
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -262,6 +264,7 @@ class SedaroResultBase(ABC):
         print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
         return self.save(filename)
 
+    @classmethod
     def data_subdir(self, root_path: Union[str, Path]):
         '''Return the subdirectory where the data is stored.'''
         return f"{root_path}/data"
@@ -281,21 +284,32 @@ class SedaroResultBase(ABC):
             json.dump(metadata_to_save, fp)
         print(f"{self.__class__.__name__} saved to {path}.")
 
-    # def load(self, path: Union[str, Path]):
-    #     '''Load a {class_name}'s data from the specified path.'''
+    @classmethod
+    def load(cls: type[T], path: Union[str, Path]) -> T:
+        '''Load a {class_name}'s data from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != cls.__name__:
+                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
+        with open(f"{path}/meta.json", "r") as fp:
+            metadata_dict = json.load(fp)
+        return cls.do_load(path, metadata_dict)
 
     @abstractmethod
     def do_save(self, path: Union[str, Path]) -> dict:
         '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
         pass
 
-    # @abstractmethod
-    # def do_load(self, path: Union[str, Path]):
-    #     pass
+    @classmethod
+    @abstractmethod
+    def do_load(cls: type[T], path: Union[str, Path], metadata_dict: dict) -> T:
+        '''Given the metadata dict and the path from which to load data, load the data and return an instance of the class.'''
+        pass
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         if cls.save.__doc__:
             cls.save.__doc__ = cls.save.__doc__.format(class_name=cls.__name__)
-        # if cls.load.__doc__:
-        #     cls.load.__doc__ = cls.load.__doc__.format(class_name=cls.__name__)
+        if cls.load.__doc__:
+            # since `load` is a classmethod, use `__func__.__doc__` to get the docstring
+            cls.load.__func__.__doc__ = cls.load.__doc__.format(class_name=cls.__name__)
