@@ -109,18 +109,7 @@ class SedaroAgentResult(SedaroResultBase):
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroAgentResult':
         '''Load an agent's data from the specified path and return a SedaroAgentResult object.'''
-        import dask.dataframe as dd
-        data_subdir_path = cls.data_subdir(path)
-        # Load the data
-        engines = {}
-        try:
-            for engine in metadata['parquet_files']:
-                df = dd.read_parquet(f"{data_subdir_path}/{engine}")
-                engines[engine.replace('.', '/')] = df
-        except KeyError:
-            for engine in get_parquets(data_subdir_path):
-                df = dd.read_parquet(f"{data_subdir_path}/{engine}")
-                engines[engine.replace('.', '/')] = df
+        engines = cls.load_parquets(path, metadata)
         # Build the agent result
         return cls(
             metadata['name'],

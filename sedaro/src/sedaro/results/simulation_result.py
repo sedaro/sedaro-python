@@ -183,24 +183,13 @@ class SimulationResult(SedaroResultBase):
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SimulationResult':
         '''Load a simulation result's data from the specified path and return a SimulationResult object.'''
-        data = {}
-        data['meta'] = metadata['meta']
-        data['stats'] = metadata['stats'] if 'stats' in metadata else {}
-        data['static'] = metadata['static'] if 'static' in metadata else {}
-        data['series'] = {}
-        simulation = metadata['simulation']
-
-        import dask.dataframe as dd
-        data_subdir_path = cls.data_subdir(path)
-        try:
-            for agent in metadata['parquet_files']:
-                df = dd.read_parquet(f"{data_subdir_path}/{agent}")
-                data['series'][agent.replace('.', '/')] = df
-        except KeyError:
-            for agent in get_parquets(f"{data_subdir_path}/"):
-                df = dd.read_parquet(f"{data_subdir_path}/{agent}")
-                data['series'][agent.replace('.', '/')] = df
-        return cls(simulation, data)
+        data = {
+            'meta': metadata['meta'],
+            'stats': metadata['stats'] if 'stats' in metadata else {},
+            'static': metadata['static'] if 'static' in metadata else {},
+            'series': cls.load_parquets(path, metadata),
+        }
+        return cls(metadata['simulation'], data)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

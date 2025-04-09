@@ -137,18 +137,7 @@ class SedaroBlockResult(SedaroResultBase):
     @classmethod
     def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroBlockResult':
         '''Load a block's data from the specified path and return a SedaroBlockResult object.'''
-        import dask.dataframe as dd
-        subdir_path = cls.data_subdir(path)
-        # Load the data
-        engines = {}
-        try:
-            for agent in metadata['parquet_files']:
-                df = dd.read_parquet(f"{subdir_path}/{agent}")
-                engines[agent.replace('.', '/')] = df
-        except KeyError:
-            for agent in get_parquets(f"{subdir_path}/"):
-                df = dd.read_parquet(f"{subdir_path}/{agent}")
-                engines[agent.replace('.', '/')] = df
+        engines = cls.load_parquets(path, metadata)
         # build the block result
         return cls(
             metadata['structure'],

@@ -294,7 +294,17 @@ class SedaroResultBase(ABC):
     @classmethod
     def load_parquets(cls, path: Union[str, Path], metadata: dict) -> dict:
         '''Load Parquet files from the specified save path and return a dictionary of DataFrames.'''
-        pass
+        import dask.dataframe as dd
+        data_subdir_path = cls.data_subdir(path)
+        data = {}
+        try:
+            parquet_files = metadata['parquet_files']
+        except KeyError:
+            parquet_files = get_parquets(data_subdir_path)
+        for agent in parquet_files:
+            df = dd.read_parquet(f"{data_subdir_path}/{agent}")
+            data[cls.agent_name_from_filename(agent)] = df
+        return data
 
     def save(self, path: Union[str, Path]):
         '''Save the {class_name}'s data to a directory with the specified path.'''
@@ -338,5 +348,5 @@ class SedaroResultBase(ABC):
         if cls.save.__doc__:
             cls.save.__doc__ = cls.save.__doc__.format(class_name=cls.__name__)
         if cls.load.__doc__:
-            # since `load` is a classmethod, use `__func__.__doc__` to get the docstring
+            # since `load` is a classmethod, use `__func__.__doc__` to update the docstring
             cls.load.__func__.__doc__ = cls.load.__doc__.format(class_name=cls.__name__)
