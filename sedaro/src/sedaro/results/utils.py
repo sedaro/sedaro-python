@@ -383,13 +383,13 @@ class SedaroResultBase(ABC):
                     f"A file or non-empty directory already exists at {path}. Please specify a different path.")
         with open(f"{path}/class.json", "w") as fp:
             json.dump({'class': self.__class__.__name__}, fp)
-        metadata_to_save = self.do_save(path)
+        metadata_to_save = self._do_save(path)
         with open(f"{path}/meta.json", "w") as fp:
             json.dump(metadata_to_save, fp)
         print(f"{self.__class__.__name__} saved to {path}.")
 
     @abstractmethod
-    def do_save(self, path: Union[str, Path]) -> dict:
+    def _do_save(self, path: Union[str, Path]) -> dict:
         '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
         pass
 
@@ -402,11 +402,11 @@ class SedaroResultBase(ABC):
                 raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
         with open(f"{path}/meta.json", "r") as fp:
             metadata_dict = json.load(fp)
-        return cls.do_load(path, metadata_dict)
+        return cls._do_load(path, metadata_dict)
 
     @classmethod
     @abstractmethod
-    def do_load(cls: type[T], path: Union[str, Path], metadata_dict: dict) -> T:
+    def _do_load(cls: type[T], path: Union[str, Path], metadata_dict: dict) -> T:
         '''Given the metadata dict and the path from which to load data, load the data and return an instance of the class.'''
         pass
 

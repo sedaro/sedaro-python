@@ -283,7 +283,7 @@ class SedaroSeries(SedaroResultBase):
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def do_save(self, path: Union[str, Path]):
+    def _do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the series data, and returns associated metadata.'''
         self.__series.to_parquet(f"{path}/{PQ_FILENAME_FOR_DISK}")
         return {
@@ -295,7 +295,7 @@ class SedaroSeries(SedaroResultBase):
         }
 
     @classmethod
-    def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroSeries':
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroSeries':
         '''Load a series's data from the specified path and return a SedaroSeries object.'''
         import dask.dataframe as dd
         data = dd.read_parquet(f"{path}/{PQ_FILENAME_FOR_DISK}")

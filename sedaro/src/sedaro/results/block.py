@@ -122,7 +122,7 @@ class SedaroBlockResult(SedaroResultBase):
         '''Query a particular variable by name.'''
         return self.__getattr__(name)
 
-    def do_save(self, path: Union[str, Path]):
+    def _do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the block's series data, and returns associated metadata.'''
         parquet_files = self.save_parquets(self.__series, path)
         return {
@@ -135,7 +135,7 @@ class SedaroBlockResult(SedaroResultBase):
         }
 
     @classmethod
-    def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroBlockResult':
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroBlockResult':
         '''Load a block's data from the specified path and return a SedaroBlockResult object.'''
         engines = cls.load_parquets(path, metadata)
         # build the block result

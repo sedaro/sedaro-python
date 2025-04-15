@@ -93,7 +93,7 @@ class SedaroAgentResult(SedaroResultBase):
         return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_],
             prefix, self.stats_to_plot, static_data_for_block)
 
-    def do_save(self, path: Union[str, Path]):
+    def _do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the agent's series data, and returns associated metadata.'''
         parquet_files = self.save_parquets(self.__series, path)
         return {
@@ -107,7 +107,7 @@ class SedaroAgentResult(SedaroResultBase):
         }
 
     @classmethod
-    def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroAgentResult':
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroAgentResult':
         '''Load an agent's data from the specified path and return a SedaroAgentResult object.'''
         engines = cls.load_parquets(path, metadata)
         # Build the agent result

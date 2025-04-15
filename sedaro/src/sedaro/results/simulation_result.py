@@ -169,7 +169,7 @@ class SimulationResult(SedaroResultBase):
             static_data=filtered_static_data,
         )
 
-    def do_save(self, path: Union[str, Path]):
+    def _do_save(self, path: Union[str, Path]):
         '''Called by base class's `save` method. Saves the simulation result's series data, and returns associated metadata.'''
         parquet_files = self.save_parquets(self.__data['series'], path)
         return {
@@ -181,7 +181,7 @@ class SimulationResult(SedaroResultBase):
         }
 
     @classmethod
-    def do_load(cls, path: Union[str, Path], metadata: dict) -> 'SimulationResult':
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SimulationResult':
         '''Load a simulation result's data from the specified path and return a SimulationResult object.'''
         data = {
             'meta': metadata['meta'],
