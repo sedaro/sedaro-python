@@ -5,13 +5,14 @@ from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING, Union
 
-from .utils import (HFILL, FromFileAndToFileAreDeprecated, bsearch,
-                    get_column_names, hfill, value_from_df, values_from_df)
+from .utils import HFILL, SedaroResultBase, bsearch, get_column_names, hfill, value_from_df, values_from_df
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
 
-class SedaroSeries(FromFileAndToFileAreDeprecated):
+PQ_FILENAME_FOR_DISK = 'data.parquet'
+
+class SedaroSeries(SedaroResultBase):
 
     def __init__(self, name, data, stats, column_index, prefix, stats_to_plot: list = None, block_name: str = None):
         '''Initialize a new time series.
@@ -127,7 +128,7 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 computed_columns = {nonprefixed_column_name(
                     column_name): values_from_df(
                         self.__series[column_name].compute().tolist(), name=column_name
-                    ) for column_name in self.__series.columns
+                ) for column_name in self.__series.columns
                 }
                 vals = []
                 num_indexes = -1
@@ -209,10 +210,14 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                     if show:
                         for box in self.stats_to_plot:
                             plt.plot([box['pos'], box['pos']], [box['min'], box['max']], color='black', linewidth=1.5)
-                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['min'], box['min']], color='black', linewidth=1.5)
-                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['max'], box['max']], color='black', linewidth=1.5)
-                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']], color='#2D56A0', linestyle='dotted', linewidth=1.5)
-                        plt.xticks([box['pos'] for box in self.stats_to_plot], [box['label'] for box in self.stats_to_plot], rotation=15)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3],
+                                     [box['min'], box['min']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3],
+                                     [box['max'], box['max']], color='black', linewidth=1.5)
+                            plt.plot([box['pos'] - 0.3, box['pos'] + 0.3], [box['avg'], box['avg']],
+                                     color='#2D56A0', linestyle='dotted', linewidth=1.5)
+                        plt.xticks([box['pos'] for box in self.stats_to_plot], [box['label']
+                                   for box in self.stats_to_plot], rotation=15)
                         plt.tight_layout()
                         plt.show()
                         self.stats_to_plot.clear()
@@ -241,7 +246,8 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
                 if index < 0:
                     raise_error()
             else:
-                return value_from_df(self.values_interpolant(mjd).tolist(), name=self.__name)  # casts from nparr(x) to x
+                # casts from nparr(x) to x
+                return value_from_df(self.values_interpolant(mjd).tolist(), name=self.__name)
             return value_from_df(self.__series.head(index + 1).tail(1).values[0][0], name=self.__name)
 
     def plot(self, show=True, ylabel=None, elapsed_time=True, height=None, xlim=None, ylim=None, **kwargs):
@@ -277,45 +283,30 @@ class SedaroSeries(FromFileAndToFileAreDeprecated):
             raise ValueError(
                 "The data type of this series does not support plotting or the keyword arguments passed were unrecognized.")
 
-    def save(self, path: Union[str, Path]):
-        '''Save the series result to a directory with the specified path.'''
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(
-                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SedaroSeries'}, fp)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({
-                'name': self.__name,
-                'column_index': self.__column_index,
-                'prefix': self.__prefix,
-                'stats': self.__initial_stats,
-                'block_name': self.__block_name,
-            }, fp)
-        self.__series.to_parquet(f"{path}/data.parquet")
-        print(f"Series result saved to {path}.")
+    def _do_save(self, path: Union[str, Path]):
+        '''Called by base class's `save` method. Saves the series data, and returns associated metadata.'''
+        self.__series.to_parquet(f"{path}/{PQ_FILENAME_FOR_DISK}")
+        return {
+            'name': self.__name,
+            'column_index': self.__column_index,
+            'prefix': self.__prefix,
+            'stats': self.__initial_stats,
+            'block_name': self.__block_name,
+        }
 
     @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load a series result from the specified path.'''
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroSeries':
+        '''Load a series's data from the specified path and return a SedaroSeries object.'''
         import dask.dataframe as dd
-
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SedaroSeries':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/meta.json", "r") as fp:
-            meta = json.load(fp)
-            name = meta['name']
-            column_index = meta['column_index']
-            prefix = meta['prefix']
-            stats = meta['stats'] if 'stats' in meta else {}
-            block_name = meta['block_name'] if 'block_name' in meta else None
-        data = dd.read_parquet(f"{path}/data.parquet")
-        return cls(name, data, stats, column_index, prefix, block_name=block_name)
+        data = dd.read_parquet(f"{path}/{PQ_FILENAME_FOR_DISK}")
+        return cls(
+            metadata['name'],
+            data,
+            metadata['stats'] if 'stats' in metadata else {},
+            metadata['column_index'],
+            metadata['prefix'],
+            block_name=metadata['block_name'] if 'block_name' in metadata else None,
+        )
 
     def summarize(self):
         hfill()

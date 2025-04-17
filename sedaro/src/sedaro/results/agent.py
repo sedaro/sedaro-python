@@ -6,26 +6,25 @@ from typing import TYPE_CHECKING, Dict, Generator, List, Union
 from pydash import merge
 
 from .block import SedaroBlockResult
-from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL,
-                    FromFileAndToFileAreDeprecated, bsearch, get_parquets,
-                    get_static_data, hfill, get_static_data_engines)
+from .utils import (ENGINE_EXPANSION, ENGINE_MAP, HFILL, SedaroResultBase, bsearch, get_parquets, get_static_data,
+                    get_static_data_engines, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
 
 
-class SedaroAgentResult(FromFileAndToFileAreDeprecated):
+class SedaroAgentResult(SedaroResultBase):
     def __init__(
-            self,
-            name: str,
-            block_structures: dict,
-            series: dict,
-            column_index: dict,
-            initial_state: dict = None,
-            stats: dict = None,
-            stats_to_plot: list = None,
-            static_data: dict[str: dict] = None,
-        ):
+        self,
+        name: str,
+        block_structures: dict,
+        series: dict,
+        column_index: dict,
+        initial_state: dict = None,
+        stats: dict = None,
+        stats_to_plot: list = None,
+        static_data: dict[str: dict] = None,
+    ):
         '''Initialize a new agent result.
 
         Agent results are typically created through the .agent method of
@@ -89,68 +88,38 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
                 block_streams[stream] = self.__series[stream]
         static_data_for_block = {}
         for stream in self.__static_data:
-            static_data_for_block[stream] = {k: v for k, v in self.__static_data[stream].items() if k.startswith(prefix)}
+            static_data_for_block[stream] = {k: v for k,
+                v in self.__static_data[stream].items() if k.startswith(prefix)}
         return SedaroBlockResult(block_structure, block_streams, self.__stats, self.__column_index[id_],
             prefix, self.stats_to_plot, static_data_for_block)
 
-    def save(self, path: Union[str, Path]):
-        '''Save the agent result to a directory with the specified path.'''
-        import dask.dataframe as dd
-
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(
-                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SedaroAgentResult'}, fp)
-        os.mkdir(f"{path}/data")
-        parquet_files = []
-        for engine in self.__series:
-            engine_parquet_path = f"{path}/data/{(pname := engine.replace('/', '.'))}"
-            parquet_files.append(pname)
-            df: dd = self.__series[engine]
-            df.to_parquet(engine_parquet_path)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({
-                'name': self.__name,
-                'initial_state': self.__initial_state,
-                'block_structures': self.__block_structures,
-                'column_index': self.__column_index,
-                'parquet_files': parquet_files,
-                'stats': self.__stats,
-                'static': self.__static_data,
-            }, fp)
-        print(f"Agent result saved to {path}.")
+    def _do_save(self, path: Union[str, Path]):
+        '''Called by base class's `save` method. Saves the agent's series data, and returns associated metadata.'''
+        parquet_files = self.save_parquets(self.__series, path)
+        return {
+            'name': self.__name,
+            'initial_state': self.__initial_state,
+            'block_structures': self.__block_structures,
+            'column_index': self.__column_index,
+            'parquet_files': parquet_files,
+            'stats': self.__stats,
+            'static': self.__static_data,
+        }
 
     @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load an agent result from the specified path.'''
-        import dask.dataframe as dd
-
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SedaroAgentResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        with open(f"{path}/meta.json", "r") as fp:
-            meta = json.load(fp)
-            name = meta['name']
-            block_structures = meta['block_structures']
-            initial_state = meta['initial_state']
-            column_index = meta['column_index']
-            stats = meta['stats'] if 'stats' in meta else {}
-            static_data = meta['static'] if 'static' in meta else {}
-        engines = {}
-        try:
-            for engine in meta['parquet_files']:
-                df = dd.read_parquet(f"{path}/data/{engine}")
-                engines[engine.replace('.', '/')] = df
-        except KeyError:
-            for engine in get_parquets(f"{path}/data/"):
-                df = dd.read_parquet(f"{path}/data/{engine}")
-                engines[engine.replace('.', '/')] = df
-        return cls(name, block_structures, engines, column_index, initial_state, stats, static_data=static_data)
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SedaroAgentResult':
+        '''Load an agent's data from the specified path and return a SedaroAgentResult object.'''
+        engines = cls.load_parquets(path, metadata)
+        # Build the agent result
+        return cls(
+            metadata['name'],
+            metadata['block_structures'],
+            engines,
+            metadata['column_index'],
+            metadata['initial_state'],
+            metadata['stats'] if 'stats' in metadata else {},
+            static_data=metadata['static'] if 'static' in metadata else {},
+        )
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''
@@ -165,7 +134,7 @@ class SedaroAgentResult(FromFileAndToFileAreDeprecated):
 
         print("\n📦 Available Blocks")
         print('    ' + '-' * 91)
-        print('    |' + 'id'.center(30) + 'type'.center(24)+ 'name'.center(35) + '|')
+        print('    |' + 'id'.center(30) + 'type'.center(24) + 'name'.center(35) + '|')
         print('    ' + '-' * 91)
         for block_id in self.__block_ids:
             if block_id != 'root':

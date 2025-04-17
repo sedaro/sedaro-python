@@ -1,23 +1,23 @@
 import datetime as dt
 import json
 import os
-from pathlib import Path
 import time
+from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Union
 
-from ..settings import STATUS, SUCCEEDED
 from ..branches.scenario_branch.utils import _get_stats_for_sim_id
+from ..settings import STATUS, SUCCEEDED
 from .agent import SedaroAgentResult
-from .utils import (HFILL, STATUS_ICON_MAP, FromFileAndToFileAreDeprecated,
-                    _block_type_in_supers, _get_agent_id_name_map,
+from .utils import (HFILL, STATUS_ICON_MAP, SedaroResultBase, _block_type_in_supers, _get_agent_id_name_map,
                     _restructure_data, get_parquets, hfill)
 
 if TYPE_CHECKING:
     import dask.dataframe as dd
+
     from ..sedaro_api_client import SedaroApiClient
 
 
-class SimulationResult(FromFileAndToFileAreDeprecated):
+class SimulationResult(SedaroResultBase):
 
     def __init__(self, simulation: dict, data: dict, _sedaro: 'SedaroApiClient' = None, stats_fetched: bool = False):
         '''Initialize a new Simulation Result using methods on the `simulation` property of a `ScenarioBranch`.
@@ -35,7 +35,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
         self.__branch = simulation['branch']
         self.__data = data
         self.__meta: dict = data['meta']
-        self.__stats_fetched = ('stats_fetched' in data and data['meta']['stats_fetched']) or ('stats' in data and data['stats'])
+        self.__stats_fetched = ('stats_fetched' in data and data['meta']['stats_fetched']) or (
+            'stats' in data and data['stats'])
         self.__stats = data['stats'] if 'stats' in data else {}
         self.__static_data: dict = data['static'] if 'static' in data else {}
         self.stats_to_plot = []
@@ -147,7 +148,8 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             try:
                 agent_id, name = self.__agent_id_from_name(id_or_name), id_or_name
             except ValueError:
-                raise ValueError(f"Agent with `id` or `name` '{id_or_name}' not found in data set. If an expected agent is missing, the simulation may have terminated early.")
+                raise ValueError(
+                    f"Agent with `id` or `name` '{id_or_name}' not found in data set. If an expected agent is missing, the simulation may have terminated early.")
         agent_dataframes = {}
         for stream_id in self.__data['series']:
             if stream_id.startswith(agent_id):
@@ -167,53 +169,27 @@ class SimulationResult(FromFileAndToFileAreDeprecated):
             static_data=filtered_static_data,
         )
 
-    def save(self, path: Union[str, Path]):
-        '''Save the simulation result to a directory with the specified path.'''
-        try:
-            os.makedirs(path)
-        except FileExistsError:
-            if not (os.path.isdir(path) and any(os.scandir(path))):
-                raise FileExistsError(
-                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
-        with open(f"{path}/class.json", "w") as fp:
-            json.dump({'class': 'SimulationResult'}, fp)
-        os.mkdir(f"{path}/data")
-        parquet_files = []
-        for agent in self.__data['series']:
-            agent_parquet_path = f"{path}/data/{(pname := agent.replace('/', '.'))}"
-            parquet_files.append(pname)
-            df: 'dd' = self.__data['series'][agent]
-            df.to_parquet(agent_parquet_path)
-        with open(f"{path}/meta.json", "w") as fp:
-            json.dump({'meta': self.__data['meta'], 'simulation': self.__simulation,
-                      'stats': self.__stats, 'static': self.__static_data, 'parquet_files': parquet_files}, fp)
-        print(f"Simulation result saved to {path}.")
+    def _do_save(self, path: Union[str, Path]):
+        '''Called by base class's `save` method. Saves the simulation result's series data, and returns associated metadata.'''
+        parquet_files = self.save_parquets(self.__data['series'], path)
+        return {
+            'meta': self.__data['meta'],
+            'simulation': self.__simulation,
+            'stats': self.__stats,
+            'static': self.__static_data,
+            'parquet_files': parquet_files,
+        }
 
     @classmethod
-    def load(cls, path: Union[str, Path]):
-        '''Load a simulation result from the specified path.'''
-        import dask.dataframe as dd
-        with open(f"{path}/class.json", "r") as fp:
-            archive_type = json.load(fp)['class']
-            if archive_type != 'SimulationResult':
-                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
-        data = {}
-        with open(f"{path}/meta.json", "r") as fp:
-            contents = json.load(fp)
-            simulation = contents['simulation']
-            data['meta'] = contents['meta']
-            data['stats'] = contents['stats'] if 'stats' in contents else {}
-            data['static'] = contents['static'] if 'static' in contents else {}
-        data['series'] = {}
-        try:
-            for agent in contents['parquet_files']:
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                data['series'][agent.replace('.', '/')] = df
-        except KeyError:
-            for agent in get_parquets(f"{path}/data/"):
-                df = dd.read_parquet(f"{path}/data/{agent}")
-                data['series'][agent.replace('.', '/')] = df
-        return cls(simulation, data)
+    def _do_load(cls, path: Union[str, Path], metadata: dict) -> 'SimulationResult':
+        '''Load a simulation result's data from the specified path and return a SimulationResult object.'''
+        data = {
+            'meta': metadata['meta'],
+            'stats': metadata['stats'] if 'stats' in metadata else {},
+            'static': metadata['static'] if 'static' in metadata else {},
+            'series': cls.load_parquets(path, metadata),
+        }
+        return cls(metadata['simulation'], data)
 
     def summarize(self) -> None:
         '''Summarize these results in the console.'''

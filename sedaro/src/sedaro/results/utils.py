@@ -1,8 +1,14 @@
 import json
 import math
-from os import listdir
+import os
+from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Union
+from typing import TYPE_CHECKING, TypeVar, Union
+
+if TYPE_CHECKING:
+    import dask.dataframe as dd
+
+T = TypeVar('T', bound='SedaroResultBase')
 
 DEFAULT_HOST = 'https://api.sedaro.com'
 ENGINE_MAP = {
@@ -183,7 +189,7 @@ def get_column_names(column_index, prefix):
 
 
 def get_parquets(path: str):
-    paths = listdir(path)
+    paths = os.listdir(path)
     return [parquet for parquet in paths if not parquet.startswith('.')]
 
 
@@ -251,7 +257,61 @@ def get_static_data_engines(static_data: dict):
         return [ENGINE_MAP_CASED[ENGINE_MAP[stream_id[-1]]] for stream_id in static_data.keys()]
 
 
-class FromFileAndToFileAreDeprecated:
+def df_schema_for_pyarrow(error: ValueError) -> dict:
+    '''
+    For columns for which PyArrow failed at schema inference, build a manual schema dict.
+    This is necessary because, according to the dask.dataframe.to_parquet documentation [REF 1],
+    inferring the PyArrow schema based on the Dask DataFrame metadata "is usually sufficient
+    for common schemas, but notably will fail for object dtype columns that contain things other than strings."
+    The error message raised by PyArrow has a predictable format [REF 2], containing all the information needed,
+    so we can parse it to build a schema dict.
+    REF 1: https://docs.dask.org/en/stable/generated/dask.dataframe.to_parquet.html
+    REF 2: https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L786-L798
+    '''
+    class Column:
+        def __init__(self, expected: str):
+            self.expected = expected
+
+        def set_received(self, received: str):
+            self.received = received
+
+        def needs_updating(self):
+            return self.expected != self.received
+
+    error_message = str(error)
+    lines = error_message.splitlines()[3:-3]  # exclude header and footer information, irrelevant for our purposes
+    fields: dict[str, Column] = {}
+    for line in lines:
+        # first, the expected schema is listed, with a line in format `    <column_name>: <type> ` for each column
+        # then, the same is done for the received schema
+        if line in ['Expected partition schema:', 'Received partition schema:']:
+            continue
+        # remove all whitespace (including the space after the colon) from line
+        line = line.replace(' ', '')
+        if line == '':
+            continue
+        # split the line into column name and type
+        try:
+            column_name, column_type = line.split(':')
+        except ValueError:
+            raise ValueError(f"PyArrow schema harmonization: error parsing message line: {line}")
+        # if the column is not in `fields`, add it and its expected type
+        if column_name not in fields:
+            fields[column_name] = Column(column_type)
+        # if the column is already in `fields`, set its received type
+        else:
+            fields[column_name].set_received(column_type)
+    # now, we can build the schema dict
+    schema = {}
+    for field_name in fields:
+        field = fields[field_name]
+        # if the received type is different from the expected type, add it to the schema dict
+        if field.needs_updating():
+            schema[field_name] = field.received
+    return schema
+
+
+class SedaroResultBase(ABC):
     @classmethod
     def from_file(self, filename: Union[str, Path]):
         print("Warning: `from_file` is deprecated. Use `load` instead. Calling `load`.")
@@ -260,3 +320,100 @@ class FromFileAndToFileAreDeprecated:
     def to_file(self, filename: Union[str, Path]):
         print("Warning: `to_file` is deprecated. Use `save` instead. Calling `save`.")
         return self.save(filename)
+
+    @staticmethod
+    def data_subdir(root_path: Union[str, Path]):
+        '''Return the subdirectory where the data is stored.'''
+        return f"{root_path}/data"
+
+    @staticmethod
+    def agent_name_for_filename(agent_name: str):
+        '''Convert agent name to a format that can be used as a file name.'''
+        return agent_name.replace('/', '.')
+
+    @staticmethod
+    def agent_name_from_filename(filename: str):
+        '''Convert a file name back to the original agent name.'''
+        return filename.replace('.', '/')
+
+    def save_parquets(self, data: dict, path: Union[str, Path]):
+        '''Save the DataFrames as Parquet files in their proper location given the specified save path.'''
+        if TYPE_CHECKING:
+            import dask.dataframe as dd
+        os.mkdir(data_subdir_path := self.data_subdir(path))
+        parquet_files = []
+        for agent in data:
+            agent_parquet_path = f"{data_subdir_path}/{(pq_filename := self.agent_name_for_filename(agent))}"
+            parquet_files.append(pq_filename)
+            df: dd = data[agent]
+            try:
+                df.to_parquet(agent_parquet_path)
+            except ValueError as e:
+                # the ValueError contains details on the schema mismatch, in a predictable format
+                # REF: https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L786-L798
+                if str(e).startswith("Failed to convert partition to expected pyarrow schema:"):
+                    harmonized_df_schema = df_schema_for_pyarrow(e)
+                    df.to_parquet(agent_parquet_path, schema=harmonized_df_schema)
+                else:
+                    raise e
+        return parquet_files
+
+    @classmethod
+    def load_parquets(cls, path: Union[str, Path], metadata: dict) -> dict:
+        '''Load Parquet files from the specified save path and return a dictionary of DataFrames.'''
+        import dask.dataframe as dd
+        data_subdir_path = cls.data_subdir(path)
+        data = {}
+        try:
+            parquet_files = metadata['parquet_files']
+        except KeyError:
+            parquet_files = get_parquets(data_subdir_path)
+        for agent in parquet_files:
+            df = dd.read_parquet(f"{data_subdir_path}/{agent}")
+            data[cls.agent_name_from_filename(agent)] = df
+        return data
+
+    def save(self, path: Union[str, Path]):
+        '''Save the {class_name}'s data to a directory with the specified path.'''
+        try:
+            os.makedirs(path)
+        except FileExistsError:
+            if not (os.path.isdir(path) and any(os.scandir(path))):
+                raise FileExistsError(
+                    f"A file or non-empty directory already exists at {path}. Please specify a different path.")
+        with open(f"{path}/class.json", "w") as fp:
+            json.dump({'class': self.__class__.__name__}, fp)
+        metadata_to_save = self._do_save(path)
+        with open(f"{path}/meta.json", "w") as fp:
+            json.dump(metadata_to_save, fp)
+        print(f"{self.__class__.__name__} saved to {path}.")
+
+    @abstractmethod
+    def _do_save(self, path: Union[str, Path]) -> dict:
+        '''Save the data to the specified path. Return a metadata dict to be saved alongside it.'''
+        pass
+
+    @classmethod
+    def load(cls: type[T], path: Union[str, Path]) -> T:
+        '''Load a {class_name}'s data from the specified path.'''
+        with open(f"{path}/class.json", "r") as fp:
+            archive_type = json.load(fp)['class']
+            if archive_type != cls.__name__:
+                raise ValueError(f"Archive at {path} is a {archive_type}. Please use {archive_type}.load instead.")
+        with open(f"{path}/meta.json", "r") as fp:
+            metadata_dict = json.load(fp)
+        return cls._do_load(path, metadata_dict)
+
+    @classmethod
+    @abstractmethod
+    def _do_load(cls: type[T], path: Union[str, Path], metadata_dict: dict) -> T:
+        '''Given the metadata dict and the path from which to load data, load the data and return an instance of the class.'''
+        pass
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if cls.save.__doc__:
+            cls.save.__doc__ = cls.save.__doc__.format(class_name=cls.__name__)
+        if cls.load.__doc__:
+            # since `load` is a classmethod, use `__func__.__doc__` to update the docstring
+            cls.load.__func__.__doc__ = cls.load.__doc__.format(class_name=cls.__name__)
