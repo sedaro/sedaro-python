@@ -4,6 +4,8 @@ import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import sleep
+from unittest import TestCase
+from unittest.mock import patch
 
 import uuid6
 from config import API_KEY, HOST, SUPERDOVE_SCENARIO_ID, WILDFIRE_SCENARIO_ID
@@ -536,6 +538,64 @@ def test_utils():
     assert values_from_df(test_df_availableTransmitters_data, 'availableTransmitters') == [
         ['a', 'b'], ['c', 'd'], ['e', 'f']]
 
+def test_pyarrow_error_message_format():
+    '''
+    Our `df_schema_for_pyarrow` method depends on the error message generated on Dask->Pyarrow schema mismatches
+    being in a specific format. This test ensures that the error message format is as expected, protecting against
+    changes in the Dask codebase that may change it.
+    '''
+    import pyarrow as pa
+    import dask.dataframe as dd
+    from dask.dataframe.io.parquet.arrow import ArrowDatasetEngine
+
+    class MockedPyArrowTable:
+        @staticmethod
+        def from_pandas(*args, **kwargs):
+            raise pa.ArrowException("SomeInternalExceptionHere")
+
+    class MockedPyArrowSchema:
+        @staticmethod
+        def from_pandas(*args, **kwargs):
+            return pa.schema([
+                ('a', pa.int64()),
+                ('b', pa.float64()),
+                ('c', pa.string()),
+            ])
+
+    my_dict = {
+        'a': [1, 2, 45647647453],
+        'b': [1.5, 1.5, 1.52323456366342342],
+        'c': ['a', 'b', 'c'],
+    }
+    my_df = dd.from_dict(my_dict, npartitions=1)
+    bad_schema = pa.schema([
+        ('a', pa.int64()),
+        ('b', pa.string()),
+        ('c', pa.string()),
+    ])
+
+    expected_exception_str = ""\
+        "Failed to convert partition to expected pyarrow schema:\n" \
+        "    `ArrowException('SomeInternalExceptionHere')`\n" \
+        "\n" \
+        "Expected partition schema:\n" \
+        "    a: int64\n" \
+        "    b: string\n" \
+        "    c: string\n" \
+        "\n" \
+        "Received partition schema:\n" \
+        "    a: int64\n" \
+        "    b: double\n" \
+        "    c: string\n" \
+        "\n" \
+        "This error *may* be resolved by passing in schema information for\n" \
+        "the mismatched column(s) using the `schema` keyword in `to_parquet`."
+
+    with patch("dask.dataframe.io.parquet.arrow.pa.Table", new=MockedPyArrowTable), \
+         patch("dask.dataframe.io.parquet.arrow.pa.Schema", new=MockedPyArrowSchema):
+        with TestCase().assertRaises(ValueError) as cm:
+            ArrowDatasetEngine._pandas_to_arrow_table(my_df, schema=bad_schema)
+        assert str(cm.exception) == expected_exception_str
 
 def run_tests():
     test_query_terminated()
@@ -546,3 +606,4 @@ def run_tests():
     test_series_values()
     test_stats()
     test_utils()
+    test_pyarrow_error_message_format()
