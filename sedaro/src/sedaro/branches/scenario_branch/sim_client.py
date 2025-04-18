@@ -308,41 +308,6 @@ class Simulation:
             ctoken = process_parsed_page(page, download_manager)
             is_first_page = False
 
-        # page = get_and_parse_page_with_retry(fast_fetcher, url, download_manager)
-        # download_manager.ingest(page['series'])
-        # download_manager.update_metadata(page['meta'])
-        # if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
-        #     has_nonempty_ctoken = True
-        #     ctoken = page['meta']['continuationToken']
-        # if 'stats' in page:
-        #     download_manager.update_stats(page['stats'])
-        # if 'derived' in page:
-        #     if 'series' in page['derived']:
-        #         download_manager.ingest_derived(page['derived']['series'])
-        #     if 'static' in page['derived']:
-        #         download_manager.update_static_data(page['derived']['static'])
-
-        # if has_nonempty_ctoken:  # need to fetch more pages
-        #     while has_nonempty_ctoken:
-        #         # fetch page
-        #         next_page_url = f'/data/{id}?&continuationToken={ctoken}'
-        #         page = get_and_parse_page_with_retry(fast_fetcher, next_page_url, download_manager)
-        #         download_manager.ingest(page['series'])
-        #         download_manager.update_metadata(page['meta'])
-        #         if 'stats' in page:
-        #             download_manager.update_stats(page['stats'])
-        #         if 'derived' in page:
-        #             if 'series' in page['derived']:
-        #                 download_manager.ingest_derived(page['derived']['series'])
-        #             if 'static' in page['derived']:
-        #                 download_manager.update_static_data(page['derived']['static'])
-        #         # check for continuation token
-        #         if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
-        #             has_nonempty_ctoken = True
-        #             ctoken = page['meta']['continuationToken']
-        #         else:
-        #             has_nonempty_ctoken = False
-
     def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:
             start = params['start']
