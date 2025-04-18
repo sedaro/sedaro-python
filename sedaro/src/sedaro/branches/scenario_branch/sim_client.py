@@ -283,42 +283,65 @@ class Simulation:
                 reason=f"Failed to successfully fetch data at {request_url} after {max_retries} attempts."
             )
 
-        # fetch and process initial page
-        has_nonempty_ctoken = False
-        page = get_and_parse_page_with_retry(fast_fetcher, url, download_manager)
-        download_manager.ingest(page['series'])
-        download_manager.add_metadata(page['meta'])
-        if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
-            has_nonempty_ctoken = True
-            ctoken = page['meta']['continuationToken']
-        if 'stats' in page:
-            download_manager.update_stats(page['stats'])
-        if 'derived' in page:
-            if 'series' in page['derived']:
-                download_manager.ingest_derived(page['derived']['series'])
-            if 'static' in page['derived']:
-                download_manager.update_static_data(page['derived']['static'])
+        def process_parsed_page(parsed_page: dict, download_manager: DownloadWorker):
+            download_manager.update_metadata(parsed_page['meta'])
+            download_manager.ingest(parsed_page['series'])
+            if 'stats' in parsed_page:
+                download_manager.update_stats(parsed_page['stats'])
+            if 'derived' in parsed_page:
+                if 'series' in parsed_page['derived']:
+                    download_manager.ingest_derived(parsed_page['derived']['series'])
+                if 'static' in parsed_page['derived']:
+                    download_manager.update_static_data(parsed_page['derived']['static'])
+            if 'continuationToken' in parsed_page['meta'] and parsed_page['meta']['continuationToken'] is not None:
+                return parsed_page['meta']['continuationToken']
+            else:
+                return None
 
-        if has_nonempty_ctoken:  # need to fetch more pages
-            while has_nonempty_ctoken:
-                # fetch page
-                next_page_url = f'/data/{id}?&continuationToken={ctoken}'
-                page = get_and_parse_page_with_retry(fast_fetcher, next_page_url, download_manager)
-                download_manager.ingest(page['series'])
-                download_manager.update_metadata(page['meta'])
-                if 'stats' in page:
-                    download_manager.update_stats(page['stats'])
-                if 'derived' in page:
-                    if 'series' in page['derived']:
-                        download_manager.ingest_derived(page['derived']['series'])
-                    if 'static' in page['derived']:
-                        download_manager.update_static_data(page['derived']['static'])
-                # check for continuation token
-                if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
-                    has_nonempty_ctoken = True
-                    ctoken = page['meta']['continuationToken']
-                else:
-                    has_nonempty_ctoken = False
+        # fetch one page of data at a time, until end, and process data as it comes in
+        is_first_page = True
+        ctoken = None
+        while is_first_page or ctoken is not None:
+            if ctoken is not None:
+                url = f'/data/{id}?&continuationToken={ctoken}'
+            page = get_and_parse_page_with_retry(fast_fetcher, url, download_manager)
+            ctoken = process_parsed_page(page, download_manager)
+            is_first_page = False
+
+        # page = get_and_parse_page_with_retry(fast_fetcher, url, download_manager)
+        # download_manager.ingest(page['series'])
+        # download_manager.update_metadata(page['meta'])
+        # if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
+        #     has_nonempty_ctoken = True
+        #     ctoken = page['meta']['continuationToken']
+        # if 'stats' in page:
+        #     download_manager.update_stats(page['stats'])
+        # if 'derived' in page:
+        #     if 'series' in page['derived']:
+        #         download_manager.ingest_derived(page['derived']['series'])
+        #     if 'static' in page['derived']:
+        #         download_manager.update_static_data(page['derived']['static'])
+
+        # if has_nonempty_ctoken:  # need to fetch more pages
+        #     while has_nonempty_ctoken:
+        #         # fetch page
+        #         next_page_url = f'/data/{id}?&continuationToken={ctoken}'
+        #         page = get_and_parse_page_with_retry(fast_fetcher, next_page_url, download_manager)
+        #         download_manager.ingest(page['series'])
+        #         download_manager.update_metadata(page['meta'])
+        #         if 'stats' in page:
+        #             download_manager.update_stats(page['stats'])
+        #         if 'derived' in page:
+        #             if 'series' in page['derived']:
+        #                 download_manager.ingest_derived(page['derived']['series'])
+        #             if 'static' in page['derived']:
+        #                 download_manager.update_static_data(page['derived']['static'])
+        #         # check for continuation token
+        #         if 'continuationToken' in page['meta'] and page['meta']['continuationToken'] is not None:
+        #             has_nonempty_ctoken = True
+        #             ctoken = page['meta']['continuationToken']
+        #         else:
+        #             has_nonempty_ctoken = False
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:
