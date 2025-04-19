@@ -253,62 +253,62 @@ class Simulation:
             url += f'&continuationToken={continuationToken}'
         url += '&encoding=msgpack'
 
-        self.dmlog(download_manager, f"Calling URL: {url}")
-        response = fast_fetcher.get(url)
-        self.dmlog(download_manager, f"Got response from {url} -- status: {response.status}. Parsing response...")
-        _response = None
-        has_nonempty_ctoken = False
-        try:
-            _response = response.parse()
-            self.dmlog(download_manager, f"Parsed response from {url}")
-            if response.status != 200:
-                raise Exception()
-            else:
-                download_manager.ingest(_response['series'])
-                download_manager.add_metadata(_response['meta'])
-                if 'continuationToken' in _response['meta'] and _response['meta']['continuationToken'] is not None:
-                    has_nonempty_ctoken = True
-                    ctoken = _response['meta']['continuationToken']
-                if 'stats' in _response:
-                    download_manager.update_stats(_response['stats'])
-                if 'derived' in _response:
-                    if 'series' in _response['derived']:
-                        download_manager.ingest_derived(_response['derived']['series'])
-                    if 'static' in _response['derived']:
-                        download_manager.update_static_data(_response['derived']['static'])
-        except Exception as e:
-            reason = _response['error']['message'] if _response and 'error' in _response else 'An unknown error occurred.'
-            raise SedaroApiException(status=response.status, reason=reason)
-        if has_nonempty_ctoken:  # need to fetch more pages
-            while has_nonempty_ctoken:
-                # fetch page
-                request_url = f'/data/{id}?&continuationToken={ctoken}'
+        def get_and_parse_page_with_retry(
+            fetcher: FastFetcher,
+            request_url: str,
+            download_manager: DownloadWorker,
+            max_retries: int = 5,
+        ):
+            for attempt in range(max_retries):
                 self.dmlog(download_manager, f"Calling URL: {request_url}")
-                page = fast_fetcher.get(request_url)
+                raw_response = fetcher.get(request_url)
+                if raw_response.status == 500:
+                    # retry on 500 error
+                    self.dmlog(download_manager,
+                        f"Attempt #{attempt+1}/{max_retries}: received 500 error from {request_url}. Retrying...")
+                    time.sleep(1.5 ** attempt)
+                    continue
+                elif raw_response.status != 200:
+                    error_response = raw_response.parse()
+                    # raise an exception for any other error
+                    raise SedaroApiException(
+                        status=raw_response.status,
+                        reason=error_response['error']['message'] if 'error' in error_response else 'An unknown error occurred.'
+                    )
                 self.dmlog(download_manager,
-                           f"Got response from {request_url} -- status: {page.status}. Parsing response...")
-                _page = page.parse()
+                    f"Got response from {request_url} -- status: {raw_response.status}. Parsing response...")
+                parsed_response = raw_response.parse()
                 self.dmlog(download_manager, f"Parsed response from {request_url}")
-                download_manager.ingest(_page['series'])
-                download_manager.update_metadata(_page['meta'])
-                try:
-                    if 'stats' in _page:
-                        download_manager.update_stats(_page['stats'])
-                    if 'derived' in _page:
-                        if 'series' in _page['derived']:
-                            download_manager.ingest_derived(_page['derived']['series'])
-                        if 'static' in _page['derived']:
-                            download_manager.update_static_data(_page['derived']['static'])
-                    if 'continuationToken' in _page['meta'] and _page['meta']['continuationToken'] is not None:
-                        has_nonempty_ctoken = True
-                        ctoken = _page['meta']['continuationToken']
-                    else:
-                        has_nonempty_ctoken = False
-                    if page.status != 200:
-                        raise Exception()
-                except Exception as e:
-                    reason = _page['error']['message'] if _page and 'error' in _page else 'An unknown error occurred.'
-                    raise SedaroApiException(status=page.status, reason=reason)
+                return parsed_response
+            raise SedaroApiException(
+                status=500,
+                reason=f"Failed to successfully fetch data at {request_url} after {max_retries} attempts."
+            )
+
+        def process_parsed_page(parsed_page: dict, download_manager: DownloadWorker):
+            download_manager.update_metadata(parsed_page['meta'])
+            download_manager.ingest(parsed_page['series'])
+            if 'stats' in parsed_page:
+                download_manager.update_stats(parsed_page['stats'])
+            if 'derived' in parsed_page:
+                if 'series' in parsed_page['derived']:
+                    download_manager.ingest_derived(parsed_page['derived']['series'])
+                if 'static' in parsed_page['derived']:
+                    download_manager.update_static_data(parsed_page['derived']['static'])
+            if 'continuationToken' in parsed_page['meta'] and parsed_page['meta']['continuationToken'] is not None:
+                return parsed_page['meta']['continuationToken']
+            else:
+                return None
+
+        # fetch one page of data at a time, until end, and process data as it comes in
+        is_first_page = True
+        ctoken = None
+        while is_first_page or ctoken is not None:
+            if ctoken is not None:
+                url = f'/data/{id}?&continuationToken={ctoken}'
+            page = get_and_parse_page_with_retry(fast_fetcher, url, download_manager)
+            ctoken = process_parsed_page(page, download_manager)
+            is_first_page = False
 
     def __downloadInParallel(self, sim_id, streams, params, download_manager: DownloadWorker, usesStreamTokens):
         try:

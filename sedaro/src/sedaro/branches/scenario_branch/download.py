@@ -67,7 +67,8 @@ class StreamManager:
         else:
             self.dataframe = dd.concat([self.dataframe, dd.from_dict(core_data, npartitions=1)], axis=0)
         self.keys.update(core_data.keys())
-        self.download_bar.update(stream_id, core_data['time'][-1])
+        if core_data['time']:
+            self.download_bar.update(stream_id, core_data['time'][-1])
 
     def ingest(self, stream_id, stream_data):
         core_data = stream_data[1][stream_id.split('/')[0]]
@@ -115,6 +116,7 @@ class DownloadWorker:
         self.stats = {}
         self.derived_streams: dict[str: StreamManager] = {}
         self.derived_static = {}
+        self.metadata = None
 
     def log(self, msg):
         if FETCH_LOGGING:
@@ -189,14 +191,14 @@ class DownloadWorker:
             self.update_stats(other.stats)
         return self.stats
 
-    def add_metadata(self, metadata: dict):
-        self.metadata = metadata
-
     def update_metadata(self, new_metadata):
-        for k in new_metadata['counts']:
-            if k not in self.metadata['counts']:
-                self.metadata['counts'][k] = 0
-            self.metadata['counts'][k] += new_metadata['counts'][k]
+        if self.metadata is None:
+            self.metadata = new_metadata
+        else:
+            for k in new_metadata['counts']:
+                if k not in self.metadata['counts']:
+                    self.metadata['counts'][k] = 0
+                self.metadata['counts'][k] += new_metadata['counts'][k]
 
     def finalize_metadata(self, others: "list[DownloadWorker]"):
         for other in others:
