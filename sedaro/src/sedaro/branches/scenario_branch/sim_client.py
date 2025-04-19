@@ -264,7 +264,9 @@ class Simulation:
                 raw_response = fetcher.get(request_url)
                 if raw_response.status == 500:
                     # retry on 500 error
-                    self.dmlog(download_manager, f"Received 500 error from {request_url}. Retrying...")
+                    self.dmlog(download_manager,
+                        f"Attempt #{attempt+1}/{max_retries}: received 500 error from {request_url}. Retrying...")
+                    time.sleep(1.5 ** attempt)
                     continue
                 elif raw_response.status != 200:
                     error_response = raw_response.parse()
