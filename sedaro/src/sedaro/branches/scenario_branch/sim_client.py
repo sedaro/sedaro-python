@@ -392,7 +392,7 @@ class Simulation:
                 if e is not None:
                     raise e
         else:
-            self.__downloadInParallel(sim_id, None, params, download_managers[0], usesTokens)
+            self.__downloadInParallel(sim_id, filtered_streams, params, download_managers[0], usesTokens)
         download_bar.complete()
         print("Processing downloaded data...")
         for download_manager in download_managers:
