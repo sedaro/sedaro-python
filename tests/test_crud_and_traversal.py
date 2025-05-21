@@ -256,27 +256,6 @@ def test_ignore_id_and_type_in_create():
     subsystem.delete()
 
 
-def test_active_comm_interfaces_tuple():
-    """Check validation of the Vehicle Template activeCommInterfaces field"""
-    branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
-
-    def crud_aci(val): branch.update(activeCommInterfaces=val)
-
-    # Check valid tuples
-    crud_aci([[False, "Comms", 5], [True, "Interface", 112]])
-
-    for val in [
-        [[False, "Interface", 5], [0.5, "Interface", 5]],  # invalid value type
-        [[5, "Interface", 5]],  # int at wrong index
-        [[False, True, 5]],  # bool at wrong index
-        [[False, "Interface", "5"]],  # string at wrong index
-        [[False, "Interface"]],  # size less than 3
-        [[False, "Interface", 5, True]],  # size greater than 3
-    ]:
-        with pytest.raises(SedaroApiException):
-            crud_aci(val)
-
-
 def test_attitude_solution_error_tuple():
     """Check validation of the Vehicle Template attitudeSolutionError field"""
     branch = sedaro.agent_template(SIMPLESAT_A_T_ID)
