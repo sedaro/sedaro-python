@@ -52,6 +52,9 @@ class SedaroApiClient(ApiClient):
 
         if host[-1] == '/':
             host = host[:-1]  # remove trailing forward slash
+        if not host.startswith('http'):
+            host = f"https://{host}"
+            print(f'Warning: `host` should start with "http" or "https". Defaulting to "{host}".')
 
         self._api_host = host
         self._grpc_host = grpc_host or f"grpc.{extract_host(host)}:50031"
