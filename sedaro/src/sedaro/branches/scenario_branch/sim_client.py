@@ -976,7 +976,7 @@ class SimulationHandle:
         host = sedaro._api_host
         grpc_host = grpc_host or sedaro._grpc_host
 
-        status = self._sim_client.status()
+        status = self._sim_client.status(job_id=self._job['id'])
         address = status.get("clusterAddr")
         job_id = status.get("id")
 
