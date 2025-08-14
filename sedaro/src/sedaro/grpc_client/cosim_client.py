@@ -218,7 +218,7 @@ class CosimClient:
             response = await self._send_simulation_action(
                 simulation_action,
             )
-            logging.info(f"Produced message with index {index}: {response}")
+            logging.debug(f"Produced message with index {index}: {response}")
             return response
         except Exception as e:
             logging.error(f"Produce operation failed for index {index}: {e}")
@@ -248,7 +248,7 @@ class CosimClient:
             response = await self._send_simulation_action(
                 simulation_action,
             )
-            logging.info(f"Consumed message with index {index}: {response}")
+            logging.debug(f"Consumed message with index {index}: {response}")
             return tuple(serdes(v) for v in json.loads(response)["payload"])
         except Exception as e:
             logging.error(f"Consume operation failed for index {index}: {e}")
