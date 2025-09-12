@@ -31,8 +31,8 @@ def serdes(v):
     return v
 
 
-def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
-    '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
+def parse_urllib_response(response: "HTTPResponse") -> "Union[dict, list[dict]]":
+    '''Parses a json response from urllib3.response.HTTPResponse into a dictionary or list'''
     data = response.data
     try:
         return orjson.loads(data)
@@ -48,7 +48,7 @@ def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
         except json.JSONDecodeError as e:
             if data.lstrip().lower().startswith('<!doctype html') or re.search(r'<html\b', data, re.IGNORECASE):
                 max_len = 1_000
-                preview = data[:max_len] + "...\n(long html truncated)" if len(data) > max_len else data
+                preview = data[:max_len] + "...\n\n(long html truncated)" if len(data) > max_len else data
                 data = f"HTML content detected. This may indicate a proxy, firewall, or server error page.\n\n{preview}"
             raise SedaroApiException(
                 status=response.status,
