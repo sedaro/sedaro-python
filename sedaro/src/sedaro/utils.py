@@ -31,6 +31,11 @@ def serdes(v):
     return v
 
 
+def is_likely_html(content: str) -> bool:
+    """Check if the given content (str) is likely HTML."""
+    return content.lstrip().lower().startswith('<!doctype html') or re.search(r'<html\b', content, re.IGNORECASE)
+
+
 def parse_urllib_response(response: "HTTPResponse") -> "Union[dict, list[dict]]":
     '''Parses a json response from urllib3.response.HTTPResponse into a dictionary or list'''
     data = response.data
@@ -46,7 +51,7 @@ def parse_urllib_response(response: "HTTPResponse") -> "Union[dict, list[dict]]"
         try:
             return json.loads(data)
         except json.JSONDecodeError as e:
-            if data.lstrip().lower().startswith('<!doctype html') or re.search(r'<html\b', data, re.IGNORECASE):
+            if is_likely_html(data):  # not parsable and looks like html
                 max_len = 1_000
                 preview = data[:max_len] + "...\n\n(long html truncated)" if len(data) > max_len else data
                 data = f"HTML content detected. This may indicate a proxy, firewall, or server error page.\n\n{preview}"
