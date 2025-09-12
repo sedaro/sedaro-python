@@ -33,13 +33,23 @@ def serdes(v):
 
 def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
     '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
+    data = response.data
     try:
-        return orjson.loads(response.data)
+        return orjson.loads(data)
     except:
-        data = response.data.decode('utf-8')
+        if not data:
+            raise SedaroApiException(status=response.status, reason="Empty response cannot be parsed as JSON")
+        try:
+            data = data.decode('utf-8')
+        except UnicodeDecodeError:
+            raise SedaroApiException(status=response.status, reason=f"Binary data cannot be parsed as JSON")
         try:
             return json.loads(data)
         except json.JSONDecodeError as e:
+            if data.lstrip().lower().startswith('<!doctype html') or re.search(r'<html\b', data, re.IGNORECASE):
+                max_len = 1_000
+                preview = data[:max_len] + "...\n(long html truncated)" if len(data) > max_len else data
+                data = f"HTML content detected. This may indicate a proxy, firewall, or server error page.\n\n{preview}"
             raise SedaroApiException(
                 status=response.status,
                 reason=f"Failed to parse response as JSON: {e}\n\nResponse content:\n\n{data}"
