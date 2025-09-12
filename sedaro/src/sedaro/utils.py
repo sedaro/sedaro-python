@@ -13,6 +13,8 @@ from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
 if TYPE_CHECKING:
+    from sedaro_base_client.api_client import ApiResponseWithoutDeserialization
+
     from .branches.branch import Branch
 
 
@@ -34,7 +36,14 @@ def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
     try:
         return orjson.loads(response.data)
     except:
-        return json.loads(response.data.decode('utf-8'))
+        data = response.data.decode('utf-8')
+        try:
+            return json.loads(data)
+        except json.JSONDecodeError as e:
+            raise SedaroApiException(
+                status=response.status,
+                reason=f"Failed to parse response as JSON: {e}\n\nResponse content:\n\n{data}"
+            ) from e
 
 
 def check_for_res_error(response: 'dict'):
@@ -67,7 +76,7 @@ def enforce_id_in_branch(branch: 'Branch', id: str):
         raise KeyError(f'There is no Block with id "{id}" in this Branch.')
 
 
-def body_from_res(res):
+def body_from_res(res: "ApiResponseWithoutDeserialization"):
     """
     Returns `res.body` unless `skip_deserialization` is true, then parses body from `res.response` Should be used when
     `COMMON_API_KWARGS` is spread in auto-generated HTTP request methods.
