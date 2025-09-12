@@ -23,7 +23,7 @@ def test_parse_urllib_response_json_fallback():
     response.data = b'{"foo": "bar"}'
 
     # Mock orjson.loads to fail, forcing json fallback
-    with patch('sedaro.utils.orjson.loads', side_effect=Exception("orjson failed")):
+    with patch('orjson.loads', side_effect=Exception("orjson failed")):
         result = parse_urllib_response(response)
 
     assert result == {"foo": "bar"}
@@ -97,11 +97,12 @@ def test_parse_urllib_response_long_html():
     """Test HTML truncation for very long HTML content"""
     # Generate HTML longer than 1000 characters
     long_content = "x" * 500  # 500 chars of content
+    paragraphs = ''.join([f'<p>Paragraph {i}: {long_content}</p>' for i in range(10)])
     html_content = f"""<!DOCTYPE html>
 <html>
 <head><title>Long Page</title></head>
 <body>
-<div>{''.join(f'<p>Paragraph {i}: {long_content}</p>' for i in range(10))}</div>
+<div>{paragraphs}</div>
 </body>
 </html>"""
 
