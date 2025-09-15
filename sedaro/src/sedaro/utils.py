@@ -13,6 +13,8 @@ from .exceptions import SedaroApiException
 from .settings import BLOCKS, COMMON_API_KWARGS, STATUS
 
 if TYPE_CHECKING:
+    from sedaro_base_client.api_client import ApiResponseWithoutDeserialization
+
     from .branches.branch import Branch
 
 
@@ -29,12 +31,34 @@ def serdes(v):
     return v
 
 
-def parse_urllib_response(response: HTTPResponse) -> Union[dict, list[dict]]:
-    '''Parses the response from urllib3.response.HTTPResponse into a dictionary'''
+def is_likely_html(content: str) -> bool:
+    """Check if the given content (str) is likely HTML."""
+    return content.lstrip().lower().startswith('<!doctype html') or re.search(r'<html\b', content, re.IGNORECASE)
+
+
+def parse_urllib_response(response: "HTTPResponse") -> "Union[dict, list[dict]]":
+    '''Parses a json response from urllib3.response.HTTPResponse into a dictionary or list'''
+    data = response.data
     try:
-        return orjson.loads(response.data)
+        return orjson.loads(data)
     except:
-        return json.loads(response.data.decode('utf-8'))
+        if not data:
+            raise SedaroApiException(status=response.status, reason="Empty response cannot be parsed as JSON")
+        try:
+            data = data.decode('utf-8')
+        except UnicodeDecodeError:
+            raise SedaroApiException(status=response.status, reason=f"Binary data cannot be parsed as JSON")
+        try:
+            return json.loads(data)
+        except json.JSONDecodeError as e:
+            if is_likely_html(data):  # not parsable and looks like html
+                max_len = 1_000
+                preview = data[:max_len] + "...\n\n(long html truncated)" if len(data) > max_len else data
+                data = f"HTML content detected. This may indicate a proxy, firewall, or server error page.\n\n{preview}"
+            raise SedaroApiException(
+                status=response.status,
+                reason=f"Failed to parse response as JSON: {e}\n\nResponse content:\n\n{data}"
+            ) from e
 
 
 def check_for_res_error(response: 'dict'):
@@ -67,7 +91,7 @@ def enforce_id_in_branch(branch: 'Branch', id: str):
         raise KeyError(f'There is no Block with id "{id}" in this Branch.')
 
 
-def body_from_res(res):
+def body_from_res(res: "ApiResponseWithoutDeserialization"):
     """
     Returns `res.body` unless `skip_deserialization` is true, then parses body from `res.response` Should be used when
     `COMMON_API_KWARGS` is spread in auto-generated HTTP request methods.
