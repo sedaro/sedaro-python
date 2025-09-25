@@ -32,6 +32,12 @@ class SedaroApiClient(ApiClient):
         proxy_headers: Dict[str, str] = None,
         suppress_insecure_transport_warnings: bool = False,
         additional_headers: Dict[str, str] = None,
+        debug: bool = False,
+        verify_ssl: bool = True,
+        ssl_ca_cert: str = None,
+        cert_file: str = None,
+        key_file: str = None,
+        retries: int = None
     ):
         '''Instantiate a SedaroApiClient. Either `api_key` or `auth_handle` must be provided.
 
@@ -43,6 +49,12 @@ class SedaroApiClient(ApiClient):
             proxy_headers (Dict[str, str], optional): Headers to send to the proxy server
             suppress_insecure_transport_warnings (bool, optional): Suppress warnings for insecure transport
             additional_headers (Dict[str, str], optional): Additional headers to send with each request
+            debug (bool, optional): Enable debug logging
+            verify_ssl (bool, optional): Verify SSL certificates
+            ssl_ca_cert (str, optional): Path to SSL CA certificate
+            cert_file (str, optional): Path to client certificate file
+            key_file (str, optional): Path to client key file
+            retries (int, optional): Number of retries for failed requests
 
         Note: for proxy kwargs, refer to https://urllib3.readthedocs.io/en/stable/reference/urllib3.poolmanager.html#urllib3.ProxyManager
         '''
@@ -66,9 +78,15 @@ class SedaroApiClient(ApiClient):
 
         self._proxy_url = proxy_url
         self._proxy_headers = proxy_headers
-        self._verify_ssl = True
+        self._verify_ssl = verify_ssl
         if self._proxy_url and not self._proxy_url.startswith('https'):
             self._verify_ssl = False
+
+        self._debug = debug
+        self._ssl_ca_cert = ssl_ca_cert
+        self._cert_file = cert_file
+        self._key_file = key_file
+        self._retries = retries
 
         # Optionally suppress insecure transport warning if a proxy is being used
         if not self._verify_ssl and suppress_insecure_transport_warnings:
@@ -90,6 +108,11 @@ class SedaroApiClient(ApiClient):
         configuration.proxy_headers = self._proxy_headers
         if self._proxy_url:
             configuration.verify_ssl = self._verify_ssl
+        configuration.debug = self._debug
+        configuration.ssl_ca_cert = self._ssl_ca_cert
+        configuration.cert_file = self._cert_file
+        configuration.key_file = self._key_file
+        configuration.retries = self._retries
 
         with ApiClient(
             configuration=configuration,
