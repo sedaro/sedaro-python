@@ -25,8 +25,8 @@ python3 tests
 Install the python version you want to use if it isn't already installed:
 
 ```zsh
-brew install python@3.9
 brew install python@3.10
+brew install python@3.11
 ...etc
 ```
 
@@ -47,10 +47,10 @@ python3 -V
 ### Option #2 (manual)
 
 - Create and activate virtual environment (first `deactivate` current virtual environment and delete `.venv` directory if already exists):
+  - Switch out "3.10" for desired version
 
-  - Switch out "3.9" for desired version
   ```zsh
-  python3.9 -m venv ./.venv
+  python3.10 -m venv ./.venv
   source .venv/bin/activate
   ```
 
