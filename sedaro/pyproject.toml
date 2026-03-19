@@ -7,12 +7,20 @@ name = "sedaro"
 version = "0.0.0"
 description = "A python client to interact with the Sedaro API."
 readme = "README.md"
-requires-python = ">=3.9"
-classifiers = [ "Programming Language :: Python :: 3.9", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Operating System :: OS Independent", "Topic :: Software Development",]
+requires-python = ">=3.10"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = [
   "certifi >= 14.5.14",
   "dask[dataframe] ~= 2024.5",
-  "flatdict ~= 4.0.1",
+  "flatdict ~= 4.1.0",
   "frozendict ~= 2.3.4",
   "msgpack ~= 1.1.0",
   "python-dateutil ~= 2.7",
